@@ -1,0 +1,27 @@
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation"
+    >
+    <string name="app_name">智通OA(sl)</string>
+
+    <string name="tab_message">通知</string>
+    <string name="tab_communication">消息</string>
+    <string name="tab_group">综合</string>
+    <string name="tab_me">我的</string>
+    <string name="tab_business_card">通讯录</string>
+
+    <string name="pwd_format_tips">密码格式不正确，建议6–12位字母和数字</string>
+    <string name="double_click_exit_tips">再点一次退出</string>
+
+    <string name="feedback_hint">请输入您的反馈信息，如果您有任何建议可以告诉我们，也可以留下您的联系方式。</string>
+
+    <string name="pickerview_cancel">取消</string>
+    <string name="pickerview_submit">确认</string>
+    <string name="pickerview_year">年</string>
+    <string name="pickerview_month">月</string>
+    <string name="pickerview_day">日</string>
+    <string name="pickerview_hours">时</string>
+    <string name="pickerview_minutes">分</string>
+    <string name="pickerview_seconds">秒</string>
+    <string name="edittext_cancle">取消</string>
+</resources>

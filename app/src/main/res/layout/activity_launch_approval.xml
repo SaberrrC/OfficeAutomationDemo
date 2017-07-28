@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/layout_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#F2F2F2"
+              android:orientation="vertical">
+
+    <include layout="@layout/toolbar"/>
+
+    <include layout="@layout/toolbar_shadow"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_approval_container"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+
+
+            <RelativeLayout
+                android:id="@+id/rl_spplies"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_launch_approval_supplies"
+                    style="@style/home_page_icon_style"
+                    android:src="@drawable/icon_launch_approval_supplies"
+                    />
+
+                <TextView
+                    style="@style/common_text_style"
+                    android:layout_below="@+id/iv_launch_approval_supplies"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:text="办公用品"
+                    android:textSize="@dimen/text_common_icon_tips"/>
+
+
+            </RelativeLayout>
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/grid_layout_line_color"
+                />
+            <RelativeLayout
+                android:id="@+id/rl_leave"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_launch_approval_leave"
+                    style="@style/home_page_icon_style"
+                    android:visibility="gone"
+                    android:src="@drawable/icon_launch_approval_leave"
+                    />
+
+                <TextView
+                    style="@style/common_text_style"
+                    android:layout_below="@+id/iv_launch_approval_leave"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:text="请假申请"
+                    android:visibility="gone"
+                    android:textSize="@dimen/text_common_icon_tips"/>
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/grid_layout_line_color"
+
+                />
+
+            <RelativeLayout
+                android:id="@+id/rl_travel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_launch_approval_travel"
+                    style="@style/home_page_icon_style"
+                    android:visibility="gone"
+                    android:src="@drawable/icon_launch_approval_travel"
+                    />
+
+                <TextView
+                    style="@style/common_text_style"
+                    android:layout_below="@+id/iv_launch_approval_travel"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:text="差旅申请"
+                    android:visibility="gone"
+                    android:textSize="@dimen/text_common_icon_tips"/>
+
+
+            </RelativeLayout>
+
+
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/grid_layout_line_color"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/grid_layout_line_color"
+            />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+
+            <RelativeLayout
+                android:id="@+id/rl_bleave"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_launch_approval_bleave"
+                    style="@style/home_page_icon_style"
+                    android:visibility="gone"
+                    android:src="@drawable/icon_launch_approval_bleave"
+                    />
+
+                <TextView
+                    style="@style/common_text_style"
+                    android:layout_below="@+id/iv_launch_approval_bleave"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:text="公出申请"
+                    android:visibility="gone"
+                    android:textSize="@dimen/text_common_icon_tips"/>
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/grid_layout_line_color"
+                />
+
+            <RelativeLayout
+                android:id="@+id/rl_overtime"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_launch_approval_overtime"
+                    style="@style/home_page_icon_style"
+                    android:visibility="gone"
+                    android:src="@drawable/icon_launch_approval_overtimel"
+                    />
+
+                <TextView
+                    style="@style/common_text_style"
+                    android:layout_below="@+id/iv_launch_approval_overtime"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:text="加班申请"
+                    android:visibility="gone"
+                    android:textSize="@dimen/text_common_icon_tips"/>
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/grid_layout_line_color"
+                />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"/>
+
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/grid_layout_line_color"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/grid_layout_line_color"
+            />
+    </LinearLayout>
+</LinearLayout>

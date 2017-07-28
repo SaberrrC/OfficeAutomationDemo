@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/layout_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#f2f2f2"
+              android:orientation="vertical"
+
+    >
+
+    <include layout="@layout/toolbar"/>
+
+    <include layout="@layout/toolbar_shadow"/>
+
+    <RelativeLayout
+        android:id="@+id/empty_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="50dp"
+                >
+
+
+                <RelativeLayout
+                    android:id="@+id/rl_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="20dp"
+                    >
+
+                    <LinearLayout
+                        android:id="@+id/ll_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="类型 : "
+                            android:textColor="@color/text_common_color"
+                            android:textSize="@dimen/text_fourteen_dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_event_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="11dp"
+                            android:textColor="@color/text_common_color"
+                            android:textSize="@dimen/text_fourteen_dp"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_approval_travla_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ll_type"
+                        android:layout_marginTop="@dimen/text_common_margin_top"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        >
+
+                        <include
+                            layout="@layout/travel_entry_detail_single"
+                            />
+                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/iv_top_status"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_alignRight="@+id/ll_type"
+                        android:layout_below="@+id/ll_type"
+                        android:layout_marginRight="60dp"
+                        android:src="@drawable/approval_top_state_passed_image"
+                        />
+                    <LinearLayout
+                        android:id="@+id/ll_traval_days"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ll_approval_travla_container"
+                        android:layout_marginTop="@dimen/text_common_margin_top"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="出差天数 : "
+                            android:textColor="@color/text_common_color"
+                            android:textSize="@dimen/text_common_dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_approval_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="11dp"
+                            android:textColor="@color/text_common_color"
+                            android:textSize="@dimen/text_common_dp"
+                            />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_approval_reson_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ll_traval_days"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginTop="@dimen/text_common_margin_top"
+                        android:text="出差事由 : "
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_common_dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_approval_reson_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_approval_reson_title"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginTop="@dimen/text_common_margin_top"
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_common_dp"
+                        />
+
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_approval_process_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl_detail"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    >
+
+                    <LinearLayout
+                        android:id="@+id/ll_approval_state_iv_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:id="@+id/iv_approval_state_launch_image"
+                            android:layout_width="43dp"
+                            android:layout_height="43dp"
+                            android:src="@drawable/approval_state_launch_image"
+                            />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_approval_info_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:orientation="vertical"
+                        >
+
+                        <include
+                            android:id="@+id/ll_approval_launcher_info_layout"
+                            layout="@layout/approval_process_item_info_layout"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_not_approval_operate_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ll_approval_process_layout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:orientation="vertical"
+                    >
+
+                    <Button
+                        android:id="@+id/iv_approval_pass"
+                        android:clickable="true"
+                        android:layout_width="216dp"
+                        android:layout_height="34dp"
+                        android:textColor="@color/white"
+                        android:text="通过"
+                        android:background="@drawable/btn_blue_round_bg"
+                        />
+
+                    <Button
+                        android:id="@+id/iv_approval_reject"
+                        android:clickable="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_width="216dp"
+                        android:layout_height="34dp"
+                        android:textColor="@color/white"
+                        android:text="驳回"
+                        android:background="@drawable/btn_red_round_bg"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
+</LinearLayout>

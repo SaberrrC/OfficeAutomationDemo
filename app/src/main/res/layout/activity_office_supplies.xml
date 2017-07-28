@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/layout_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+    >
+
+    <include layout="@layout/toolbar"/>
+
+    <include layout="@layout/toolbar_shadow"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="32dp"
+            >
+
+
+            <TextView
+                android:id="@+id/tv_leave_reason_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="35dp"
+                android:text="申请内容"
+                android:textColor="@color/text_common_blue_color"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+            <EditText
+                android:id="@+id/et_office_supplies_reason_content"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_below="@+id/tv_leave_reason_tips"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="21dp"
+                android:layout_marginRight="21dp"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/edittext_input_square_bg"
+                android:gravity="left"
+                android:hint="请输入内容(例如：笔记本X3;水笔X2)"
+                android:minHeight="140dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:paddingTop="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="#9a9090"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+
+            <Button
+                android:id="@+id/btn_voice_input"
+                android:layout_width="216dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/et_office_supplies_reason_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_blue_round_bg"
+                android:gravity="center"
+                android:paddingBottom="2dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="2dp"
+                android:text="点击进行语音录入"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_approval_date_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_voice_input"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="20dp"
+                android:text="申领时间 : "
+                android:textColor="@color/text_common_color"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_select_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_voice_input"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/tv_approval_date_tips"
+                android:clickable="true"
+                android:text="点击选择时间"
+                android:textColor="@color/text_common_blue_color"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_approval_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_select_date"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:text="审批人 ( 管理员预设 )"
+                android:textColor="@color/text_common_color"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+            <LinearLayout
+                android:id="@+id/ll_approval_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_approval_tips"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dp"
+                >
+
+                <include
+                    layout="@layout/travel_entry_approvel_single"/>
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/parting_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/ll_approval_container"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="16dp"
+                android:background="#e3e3e3"
+                />
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="216dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/parting_line"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_blue_round_bg"
+                android:gravity="center"
+                android:text="提 交"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="darkgray">#cdcdcd</color>
+    <color name="color_white">#ffffff</color>
+    <color name="colorPrimary">#FF000000</color>
+    <color name="colorPrimaryDark">#FF000000</color>
+    <color name="colorAccent">#666666</color>
+    <color name="page_bg">#f2f2f2</color>
+
+    <color name="tab_bar_text_gray">#999999</color>
+    <color name="tab_bar_text_light">#0ea7ed</color>
+
+    <color name="list_box_bg_light">#f4f4f4</color>
+    <color name="list_contacts_bg_light">#f4f7f9</color>
+
+    <color name="btn_text_color">#0EA7ED</color>
+    <color name="btn_text_logout">#9a9090</color>
+    <color name="text_common_light_color">#333333</color>
+    <color name="text_common_color">#333333</color>
+    <color name="text_common_dark_color">#999999</color>
+    <color name="text_common_blue_color">#0EA7ED</color>
+    <color name="part_lint_color">#e3e3e3</color>
+    <color name="text_red_color">#C1272D</color>
+
+    <color name="add_pic_border_color">#2d9dff</color>
+
+    <color name="grid_layout_line_color">#e3e3e3</color>
+    <color name="common_line_color">#e3e3e3</color>
+
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="popBg">#ebebec</color>
+
+    <color name="position_button">#fa1a25</color>
+    <color name="negative_button">#1a9afa</color>
+
+    <color name="text_color_no_read">#565656</color>
+    <color name="text_color_had_read">#bfbaba</color>
+
+    <color name="pie_ring_one_level">#23A7F1</color>
+    <color name="pie_ring_two_level">#F9BF3A</color>
+    <color name="pie_ring_three_level">#F99406</color>
+    <color name="pie_ring_four_level">#26A65B</color>
+    <color name="pie_ring_five_level">#D91E19</color>
+
+    <color name="pickerview_timebtn_nor">#057dff</color>
+    <color name="pickerview_timebtn_pre">#c2daf5</color>
+    <color name="pickerview_bg_topbar">#f5f5f5</color>
+    <color name="pickerview_topbar_title">#000000</color>
+    <color name="pickerview_wheelview_textcolor_out">#a8a8a8</color>
+    <color name="pickerview_wheelview_textcolor_center">#2a2a2a</color>
+    <color name="pickerview_wheelview_textcolor_divider">#d5d5d5</color>
+    <!--覆盖颜色-->
+    <color name="bgColor_overlay">#60000000</color>
+    <color name="lineColor">#babdbf</color>
+</resources>

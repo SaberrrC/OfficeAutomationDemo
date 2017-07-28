@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.itcrm.GroupInformationPlatform.views.KeyboardLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_shadow"
+        >
+
+        <ScrollView
+            android:id="@+id/login_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar">
+
+
+
+                <RelativeLayout
+                    android:id="@+id/login_rl_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    >
+
+                    <ImageView
+                        android:id="@+id/iv_logo"
+                        android:layout_width="79dp"
+                        android:layout_height="79dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="180dp"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/login_logo"/>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_middle_content"
+                        android:layout_width="302dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/iv_logo"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="38dp"
+                        android:background="@drawable/view_blue_square_border">
+
+
+                        <EditText
+                            android:id="@+id/user_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="@null"
+                            android:drawableLeft="@drawable/icon_login_user"
+                            android:drawablePadding="10dp"
+                            android:gravity="center_vertical"
+                            android:hint="请输入您的邮箱帐号或员工号"
+                            android:inputType="textEmailAddress"
+                            android:paddingLeft="20dp"
+                            android:textColor="#333333"
+                            android:textColorHint="@color/text_common_dark_color"
+                            android:textSize="@dimen/text_common_dp"/>
+
+                        <View
+                            android:id="@+id/part_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/user_email"
+                            android:background="@color/text_common_blue_color"
+                            />
+
+                        <EditText
+                            android:id="@+id/user_pwd"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_below="@+id/part_line"
+                            android:background="@null"
+                            android:drawableLeft="@drawable/icon_login_pwd"
+                            android:drawablePadding="10dp"
+                            android:gravity="center_vertical"
+                            android:hint="请输入您的密码"
+                            android:inputType="textPassword"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="2dp"
+                            android:textColor="#333333"
+                            android:textColorHint="@color/text_common_dark_color"
+                            android:textSize="@dimen/text_common_dp"/>
+
+                    </RelativeLayout>
+
+
+                    <Button
+                        android:id="@+id/btn_login"
+                        android:layout_width="302dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="20dp"
+                        android:text="登录"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_common_dp"
+                        android:layout_below="@id/rl_middle_content"
+                        android:background="@drawable/btn_blue_round_bg"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_auto_login"
+                        android:layout_width="302dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btn_login"
+                        android:layout_marginTop="20dp"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_auto_login"
+                            style="@style/CustomCheckboxTheme"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginTop="2dp"
+                            />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="下次自动登录"
+                            android:textColor="@color/text_common_dark_color"
+                            android:textSize="@dimen/text_common_dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_find_pwd"
+                            android:layout_width="wrap_content"
+
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:gravity="center_vertical"
+                            android:text="找回密码"
+                            android:textColor="@color/text_common_blue_color"
+                            android:textSize="@dimen/text_common_dp"
+                            />
+
+                    </LinearLayout>
+
+
+
+                </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+
+</com.itcrm.GroupInformationPlatform.views.KeyboardLayout>

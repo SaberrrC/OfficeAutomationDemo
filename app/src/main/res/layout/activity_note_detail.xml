@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/layout_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+
+    <include layout="@layout/toolbar"/>
+
+    <include
+        layout="@layout/toolbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_note_delete"
+        android:layout_below="@+id/toolbar_shadow"
+        >
+
+        <RelativeLayout
+            android:id="@+id/rl_root_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            >
+
+
+            <TextView
+                android:id="@+id/tv_note_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/text_common_color"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_content_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_note_date"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="40dp"
+                android:text="内容"
+                android:textColor="@color/text_common_color"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_note_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_content_tips"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+                android:layout_marginTop="15dp"
+                android:gravity="left"
+                android:textColor="@color/text_common_color"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_note_delete"
+        android:layout_width="216dp"
+        android:layout_height="34dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_red_round_bg"
+        android:text="删 除"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_common_dp"
+        />
+</RelativeLayout>
