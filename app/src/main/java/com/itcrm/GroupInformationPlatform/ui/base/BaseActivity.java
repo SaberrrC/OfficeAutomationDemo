@@ -320,10 +320,15 @@ public class BaseActivity extends AppCompatActivity {
                             deniedPermissions.add(permission);
                         }
                     }
+                    //TODO 相机拍完相片不能发送 - 待解决,暂时缓解相机崩溃问题
                     if (deniedPermissions.isEmpty()) {
-                        mlistener.onGranted();
+                        if (mlistener != null) {
+                            mlistener.onGranted();
+                        }
                     } else {
-                        mlistener.onDenied();
+                        if (mlistener != null) {
+                            mlistener.onDenied();
+                        }
                     }
                 }
                 break;

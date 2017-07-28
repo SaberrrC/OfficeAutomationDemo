@@ -31,7 +31,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.baidu.platform.comapi.map.E;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
@@ -996,7 +995,10 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         cameraFile = new File(PathUtil.getInstance().getImagePath(), EMClient.getInstance().getCurrentUser()
                 + System.currentTimeMillis() + ".jpg");
         //noinspection ResultOfMethodCallIgnored
-        cameraFile.getParentFile().mkdirs();
+
+        //TODO 相机拍完相片不能发送 - 待解决,暂时缓解相机崩溃问题
+        //cameraFile.getParentFile().mkdirs();
+
 
         requestRunTimePermission(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
             @Override
