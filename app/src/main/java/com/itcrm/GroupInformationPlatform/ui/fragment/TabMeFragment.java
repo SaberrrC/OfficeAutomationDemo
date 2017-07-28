@@ -157,7 +157,8 @@ public class TabMeFragment extends BaseFragment {
             }
 
         } else {
-            PgyUpdateManager.register(getActivity(), "com.itcrm.GroupInformationPlatform.fileprovider");
+            PgyUpdateManager.register(getActivity(),
+                    "com.itcrm.GroupInformationPlatform.fileprovider");
         }
     }
 

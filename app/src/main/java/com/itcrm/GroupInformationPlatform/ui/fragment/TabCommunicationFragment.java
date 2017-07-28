@@ -22,7 +22,7 @@ import com.itcrm.GroupInformationPlatform.utils.LogUtils;
 import butterknife.ButterKnife;
 
 /**
- * <h3>Description: 首页通讯列表页面</h3>
+ * <h3>Description: 首页消息列表页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
 public class TabCommunicationFragment extends BaseFragment {

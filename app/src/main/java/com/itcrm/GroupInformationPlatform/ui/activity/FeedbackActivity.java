@@ -57,6 +57,9 @@ public class FeedbackActivity extends BaseActivity {
 
     @OnClick(R.id.toolbar_text_btn)
     public void onClick() {
+        String s = feedbackText.getText().toString();
+        byte[] bytes = s.getBytes();
+
         if (feedbackText.getText().toString().equals("")) {
             showToast("提交内容不能为空");
         } else {

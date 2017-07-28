@@ -12,6 +12,13 @@
         <activity android:name=".ui.VoiceCallActivity"/>
 
         <activity android:name=".ui.EaseShowBigImageActivity"/>
+        <!-- 自定义的contextmenu -->
+        <activity
+            android:name=".ui.ContextMenuActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyle" />
 
     </application>
+
+
 </manifest>

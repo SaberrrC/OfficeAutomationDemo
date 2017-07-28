@@ -32,6 +32,7 @@
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="c_cc">#CCCCCC</color>
 
     <color name="popBg">#ebebec</color>
 

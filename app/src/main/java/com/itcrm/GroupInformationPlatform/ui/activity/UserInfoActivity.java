@@ -2,13 +2,20 @@ package com.itcrm.GroupInformationPlatform.ui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -32,6 +39,7 @@ import com.itcrm.GroupInformationPlatform.ui.base.BaseActivity;
 import com.itcrm.GroupInformationPlatform.utils.BitmapUtils;
 import com.itcrm.GroupInformationPlatform.utils.FileUtils;
 import com.itcrm.GroupInformationPlatform.utils.LogUtils;
+import com.itcrm.GroupInformationPlatform.views.BottomPushPopupWindow;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,9 +48,11 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import butterknife.Bind;
@@ -57,7 +67,7 @@ import cn.jpush.android.api.TagAliasCallback;
  */
 public class UserInfoActivity extends BaseActivity {
 
-    public static final int UPDATE_PHONE = 1;//修改电话
+    public static final int UPDATE_PHONE = 0x4;//修改电话
     public static final int UPDATE_PROTRAIT = 2;//修改头像
     @Bind(R.id.tv_title)
     TextView tvTitle;
@@ -80,8 +90,20 @@ public class UserInfoActivity extends BaseActivity {
     @Bind(R.id.user_jopnumber)
     TextView user_jopnumber;
 
-    public static final int PHOTO_REQUEST_CUT = 3;// 裁剪结果
-    private String mtyb;//手机品牌
+    private BottomPushPopupWindow mPop;
+    private static final int CODE_GALLERY_REQUEST = 0x1;//相册
+    private static final int CODE_CAMERA_REQUEST = 0x2;//拍照
+    private static final int CROP_PICTURE_REQUEST = 0x3;//图片路径
+
+    private static final String TEMP_FILE_NAME = "temp_icon.jpg";
+
+    /**
+     * Save the path of photo cropping is completed
+     */
+    private Uri icon_path;
+    private Uri camera_path;
+//    public static final int PHOTO_REQUEST_CUT = 3;// 裁剪结果
+//    private String mtyb;//手机品牌
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +112,20 @@ public class UserInfoActivity extends BaseActivity {
         ButterKnife.bind(this);
         initToolBar();
         setTranslucentStatus(this);
-
         initData();
+
+        File dir = getExternalFilesDir("user_icon");
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            icon_path = FileProvider.getUriForFile(getApplicationContext(),
+                    "com.itcrm.zhitongoa.sl.file_provider", new File(dir, TEMP_FILE_NAME));
+            camera_path = FileProvider.getUriForFile(getApplicationContext(),
+                    "com.itcrm.zhitongoa.sl.file_provider", new File(dir, "camera_pic.jpg"));
+
+        } else {
+            icon_path = Uri.fromFile(new File(dir, TEMP_FILE_NAME));
+            camera_path = Uri.fromFile(new File(dir, "camera_pic.jpg"));
+        }
+
     }
 
     private void initData() {
@@ -120,8 +154,8 @@ public class UserInfoActivity extends BaseActivity {
             case R.id.user_post_box:
                 break;
             case R.id.user_phone_box://修改电话
-                startActivityForResult(
-                        new Intent(UserInfoActivity.this, ModifyPhoneActivity.class), UPDATE_PHONE);
+                startActivityForResult(new Intent(UserInfoActivity.this,
+                        ModifyPhoneActivity.class), UPDATE_PHONE);
                 break;
             case R.id.user_date_box:
                 break;
@@ -131,15 +165,17 @@ public class UserInfoActivity extends BaseActivity {
         }
     }
 
+    //修改头像方法
     private void selectPortrait() {
+
         requestRunTimePermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission
                 .CAMERA}, new PermissionListener() {
             @Override
             public void onGranted() {
-                Intent intent = new Intent(UserInfoActivity.this,
-                        PublicImageSelectorActivity.class);
-                intent.putExtra("text", "选择头像");
-                startActivityForResult(intent, UPDATE_PROTRAIT);
+
+                mPop = new BottomPopAvatar(UserInfoActivity.this);
+                mPop.show(UserInfoActivity.this);
+
             }
 
             @Override
@@ -151,80 +187,93 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     /**
-     * 剪切图片
-     *
-     * @param uri uri
+     * 头像弹出框：拍照、相册、取消
      */
-    private void crop(Uri uri) {
-        // 裁剪图片意图
-        Intent intent = new Intent("com.android.camera.action.CROP");
+    private class BottomPopAvatar extends BottomPushPopupWindow<Void> {
 
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");
-        // 裁剪框的比例，1：1
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        // 裁剪后输出图片的尺寸大小
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
-        //缩放开启，避免黑边
-        intent.putExtra("scale", true);
-        intent.putExtra("scaleUpIfNeeded", true);
-//        // 图片格式
-//        if (!FileUtils.isFileExist(Constants.FileUrl.TEMP)) {
-//            FileUtils.createSDDir(Constants.FileUrl.TEMP);
-//        }
-//        File file = new File(Constants.FileUrl.TEMP +
-//                Calendar.getInstance().getTimeInMillis() + ".jpg"); // 以时间秒为文件名
-//        intent.putExtra("output", Uri.fromFile(file));  // 专入目标文件
-//        intent.putExtra("output", uri);  // 专入目标文件
-//        intent.putExtra("outputFormat", "JPEG");
-//        intent.putExtra("noFaceDetection", true);// 取消人脸识别
-        //需要判断版本号：6.0以上不返回data，否则null指针异常
-        //21版本,小米5.0开始不使用返回uri的方式，其他手机6.0以上才不使用
-        mtyb = android.os.Build.BRAND;// 手机品牌
-        if (mtyb.equals("Xiaomi")) {
-            intent.putExtra("return-data", true);// true:不返回uri，false：返回uri
-        } else {
-            intent.putExtra("return-data", false);// true:不返回uri，false：返回uri
+        public BottomPopAvatar(Context context) {
+            super(context, null);
         }
-        startActivityForResult(intent, PHOTO_REQUEST_CUT);
+
+        @Override
+        protected View generateCustomView(Void data) {
+            View root = View.inflate(context, R.layout.layout_menu_2, null);
+            TextView menuBtn1 = (TextView) root.findViewById(R.id.menuBtn1);
+            TextView menuBtn2 = (TextView) root.findViewById(R.id.menuBtn2);
+            menuBtn1.setText("拍照");
+            menuBtn1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                    fromCamera();
+                }
+            });
+            menuBtn2.setText("从相册选取");
+            menuBtn2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                    fromGallery();
+                }
+            });
+            View cancelView = root.findViewById(R.id.cancel);
+            cancelView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+            return root;
+        }
+    }
+
+    /**
+     * Select images from a local photo album
+     */
+    private void fromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, CODE_GALLERY_REQUEST);
+    }
+
+    /**
+     * Start the phone camera photos
+     */
+    private void fromCamera() {
+        Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, camera_path);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            intentFromCapture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        startActivityForResult(intentFromCapture, CODE_CAMERA_REQUEST);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent intent) {
 
-        if (resultCode == RESULT_OK && requestCode ==
-                UPDATE_PROTRAIT) {
-            if (data != null) {
-                LogUtils.e("data.getStringExtra(\"data\")->"+data.getStringExtra("data"));
-                crop(Uri.parse(data.getStringExtra("data")));
-//                crop(BitmapUtils.getImageContentUri(this,data.getStringExtra("data")));
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
 
+        switch (requestCode) {
 
-            }
-        } else if (requestCode == PHOTO_REQUEST_CUT) {
-            if (data != null) {
-                /****http://blog.csdn.net/qq_30379689/article/details/52171215*****/
-                Bitmap bitmap = null;
-
-                if (mtyb.equals("Xiaomi")) {
-                    bitmap = data.getExtras().getParcelable("data");
-
-                } else {
-                    Uri uri = data.getData();
-                    if (uri==null) {
-                        return;
-                    }
-                    LogUtils.e("裁剪后Uri:" + uri.toString());
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            case CODE_GALLERY_REQUEST:
+                if (intent == null) {
+                    return;
                 }
 
-                /************************/
+                cropImage(intent.getData(), 450, 450, CROP_PICTURE_REQUEST);
+
+                break;
+
+            case CODE_CAMERA_REQUEST:
+
+                cropImage(camera_path, 450, 450, CROP_PICTURE_REQUEST);
+                break;
+            case CROP_PICTURE_REQUEST:
+
+                Bitmap bitmap = decodeUriAsBitmap(icon_path);
+                //userPortrait.setImageBitmap(bitmap);
                 if (!FileUtils.isFileExist(Constants.FileUrl.TEMP)) {
                     FileUtils.createSDDir(Constants.FileUrl.TEMP);
                 }
@@ -241,14 +290,190 @@ public class UserInfoActivity extends BaseActivity {
                     e.printStackTrace();
                 }
                 upLoadingPortrait(file);
-            }
 
-        } else if (resultCode == RESULT_OK && requestCode == UPDATE_PHONE) {
-            initData();
+                break;
+            case UPDATE_PHONE:
+                userPhone.setText(AppConfig.getAppConfig(UserInfoActivity.this).get(
+                        AppConfig.PREF_KEY_PHONE));
+                break;
+
         }
 
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, intent);
+
     }
+
+
+    /**
+     * According to the incoming a length-width ratio began to cut out pictures
+     *
+     * @param uri Image source
+     */
+    private void cropImage(Uri uri, int outputX, int outputY, int requestCode) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        // Set the cutting
+        intent.putExtra("crop", "true");
+        // aspectX , aspectY :In proportion to the width of high
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX , outputY : High cutting image width
+        intent.putExtra("outputX", outputX);
+        intent.putExtra("outputY", outputY);
+        intent.putExtra("scale", true);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, icon_path);
+        intent.putExtra("return-data", false);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true); // no face detection
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            addurlPram(this, intent, camera_path, icon_path);
+        }
+        startActivityForResult(intent, requestCode);
+    }
+
+    private void addurlPram(Activity activity, Intent intent, Uri... uris) {
+        List<ResolveInfo> resInfoList = activity.getPackageManager().queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            for (Uri uri : uris) {
+                activity.grantUriPermission(packageName, uri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION |
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+        }
+    }
+
+    private Bitmap decodeUriAsBitmap(Uri uri) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return bitmap;
+    }
+//    private void selectPortrait() {
+//        requestRunTimePermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission
+//                .CAMERA}, new PermissionListener() {
+//            @Override
+//            public void onGranted() {
+//                Intent intent = new Intent(UserInfoActivity.this,
+//                        PublicImageSelectorActivity.class);
+//                intent.putExtra("text", "选择头像");
+//                startActivityForResult(intent, UPDATE_PROTRAIT);
+//            }
+//
+//            @Override
+//            public void onDenied() {
+//                showToast("权限被拒绝！请手动设置");
+//            }
+//        });
+//
+//    }
+
+//    /**
+//     * 剪切图片
+//     *
+//     * @param uri uri
+//     */
+//    private void crop(Uri uri) {
+//        // 裁剪图片意图
+//        Intent intent = new Intent("com.android.camera.action.CROP");
+//
+//        intent.setDataAndType(uri, "image/*");
+//        intent.putExtra("crop", "true");
+//        // 裁剪框的比例，1：1
+//        intent.putExtra("aspectX", 1);
+//        intent.putExtra("aspectY", 1);
+//        // 裁剪后输出图片的尺寸大小
+//        intent.putExtra("outputX", 200);
+//        intent.putExtra("outputY", 200);
+//        //缩放开启，避免黑边
+//        intent.putExtra("scale", true);
+//        intent.putExtra("scaleUpIfNeeded", true);
+////        // 图片格式
+////        if (!FileUtils.isFileExist(Constants.FileUrl.TEMP)) {
+////            FileUtils.createSDDir(Constants.FileUrl.TEMP);
+////        }
+////        File file = new File(Constants.FileUrl.TEMP +
+////                Calendar.getInstance().getTimeInMillis() + ".jpg"); // 以时间秒为文件名
+////        intent.putExtra("output", Uri.fromFile(file));  // 专入目标文件
+////        intent.putExtra("output", uri);  // 专入目标文件
+////        intent.putExtra("outputFormat", "JPEG");
+////        intent.putExtra("noFaceDetection", true);// 取消人脸识别
+//        //需要判断版本号：6.0以上不返回data，否则null指针异常
+//        //21版本,小米5.0开始不使用返回uri的方式，其他手机6.0以上才不使用
+//        mtyb = android.os.Build.BRAND;// 手机品牌
+//        if (mtyb.equals("Xiaomi")) {
+//            intent.putExtra("return-data", true);// true:不返回uri，false：返回uri
+//        } else {
+//            intent.putExtra("return-data", false);// true:不返回uri，false：返回uri
+//        }
+//        startActivityForResult(intent, PHOTO_REQUEST_CUT);
+//    }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//
+//        if (resultCode == RESULT_OK && requestCode ==
+//                UPDATE_PROTRAIT) {
+//            if (data != null) {
+//                LogUtils.e("data.getStringExtra(\"data\")->"+data.getStringExtra("data"));
+//                crop(Uri.parse(data.getStringExtra("data")));
+////                crop(BitmapUtils.getImageContentUri(this,data.getStringExtra("data")));
+//
+//
+//            }
+//        } else if (requestCode == PHOTO_REQUEST_CUT) {
+//            if (data != null) {
+//                /****http://blog.csdn.net/qq_30379689/article/details/52171215*****/
+//                Bitmap bitmap = null;
+//
+//                if (mtyb.equals("Xiaomi")) {
+//                    bitmap = data.getExtras().getParcelable("data");
+//
+//                } else {
+//                    Uri uri = data.getData();
+//                    if (uri==null) {
+//                        return;
+//                    }
+//                    LogUtils.e("裁剪后Uri:" + uri.toString());
+//                    try {
+//                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                /************************/
+//                if (!FileUtils.isFileExist(Constants.FileUrl.TEMP)) {
+//                    FileUtils.createSDDir(Constants.FileUrl.TEMP);
+//                }
+//                //将要保存图片的路径
+//                File file = new File(Constants.FileUrl.TEMP +
+//                        "Cut_image_" + Calendar.getInstance().getTimeInMillis() + ".jpg");
+//                LogUtils.e("file->" + file.getAbsolutePath().toString());
+//                try {
+//                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+//                    bos.flush();
+//                    bos.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                upLoadingPortrait(file);
+//            }
+//
+//        } else if (resultCode == RESULT_OK && requestCode == UPDATE_PHONE) {
+//            initData();
+//        }
+//
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
     /**
      * 上传头像

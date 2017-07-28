@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -447,7 +448,7 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
                     }
                 } else {
                     if (checkDateIsRight()) {
-                        sendToBackground();
+                            sendToBackground();
                     } else {
                         showToast("请设置正确的开始结束时间");
                     }
@@ -528,7 +529,9 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
             picBuilder.append(entry.getValue().replace("http://", "")).append(",");
         }
         LogUtils.e("picBuilder-->" + picBuilder.toString());
-        params.put("upload_path", picBuilder.toString().substring(0, picBuilder.length() - 1));
+        //params.put("upload_path", picBuilder.toString().substring(picBuilder.length()-1));
+        //修复上传图片picBuilder长度为0时下标越界问提
+        params.put("upload_path", picBuilder.toString().substring(0, picBuilder.length()==0?0: picBuilder.length()-1));
 
 
         initKjHttp().post(Api.REPORT_SEND_TO_BACKGROUND, params, new HttpCallBack() {

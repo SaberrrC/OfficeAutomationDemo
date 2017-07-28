@@ -90,6 +90,7 @@ public class LoginActivity extends BaseActivity {
         LogUtils.e("LoginActivity:initView");
         mCbAutoLogin.setChecked(true);
         AppConfig.getAppConfig(LoginActivity.this).setAutoLogin(true);
+        userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
         mTvFindPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

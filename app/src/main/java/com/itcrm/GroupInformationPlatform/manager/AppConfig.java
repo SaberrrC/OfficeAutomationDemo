@@ -214,6 +214,7 @@ public class AppConfig {
         editor.putString(PREF_KEY_YX_TOKEN, DEFAULT_ARGUMENTS_VALUE);
         editor.putBoolean(IS_AUTO_LOGIN, false);
         //关心存入结果则使用commit如果不关心存入结果则使用apply
-        editor.apply();
+        //editor.apply();
+        editor.commit();
     }
 }

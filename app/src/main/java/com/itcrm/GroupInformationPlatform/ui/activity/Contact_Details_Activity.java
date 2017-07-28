@@ -1,19 +1,26 @@
 package com.itcrm.GroupInformationPlatform.ui.activity;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.itcrm.GroupInformationPlatform.R;
 import com.itcrm.GroupInformationPlatform.common.Constants;
+import com.itcrm.GroupInformationPlatform.manager.AppConfig;
 import com.itcrm.GroupInformationPlatform.model.Contacts;
 import com.itcrm.GroupInformationPlatform.model.User;
+import com.itcrm.GroupInformationPlatform.ui.PermissionListener;
 import com.itcrm.GroupInformationPlatform.ui.base.BaseActivity;
 import com.itcrm.GroupInformationPlatform.utils.Utils;
 
@@ -23,7 +30,9 @@ import butterknife.OnClick;
 
 import static com.itcrm.GroupInformationPlatform.manager.AppManager.mContext;
 
-
+/**
+ * 搜索联系人详情页
+ */
 public class Contact_Details_Activity extends BaseActivity {
     @Bind(R.id.btn_back)
     ImageView btn_back;
@@ -47,6 +56,11 @@ public class Contact_Details_Activity extends BaseActivity {
     TextView tv_mails;
     @Bind(R.id.iv_phone)
     ImageView iv_phone;
+
+    @Bind(R.id.send_message)
+    ImageView send_message;
+    @Bind(R.id.send_voice)
+    ImageView send_voice;
 
     private User user;
 
@@ -74,66 +88,119 @@ public class Contact_Details_Activity extends BaseActivity {
         tv_duties.setText(user.getPostName());
         tv_sex.setText(user.getSex());
 
-
-        if (user.getPhone() == null||user.getPhone().equals("")) {
-            tv_phone_number.setText("-");
-        } else {
+        if (user.getIsshow().equals("1")) {
             tv_phone_number.setText(user.getPhone());
         }
+        else  if (user.getPhone() == null||user.getPhone().equals("")){
+            tv_phone_number.setText("-");
+        }
+//        if (user.getPhone() == null||user.getPhone().equals("")) {
+//            tv_phone_number.setText("-");
+//        } else {
+//            tv_phone_number.setText(user.getPhone());
+//        }
+//
         if (user.getEmail() == null||user.getEmail().equals("")){
             tv_mails.setText("-");
         }else{
             tv_mails.setText(user.getEmail());
         }
+//判断是否有权限打电话
+        if (user.getUsername().equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+            Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
+            iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
 
-        //判断是否有权限打电话
-        if (user.getIsshow().equals("1")) {
-            //可以打电话
-        }else if(user.getPhone().equals("")){
-            iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
-        }else{
-            iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+        } else {
+            if (user.getIsshow().equals("1")) {
+                iv_phone.setImageResource(R.mipmap.ico_phone);
+                //可以打电话
+                rel_phone_call.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
+                            @Override
+                            public void onGranted() {
+                                Intent intent = new Intent(Intent.ACTION_CALL,
+                                        Uri.parse("tel:" + user.getPhone()));
+
+                                if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    return;
+                                }
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onDenied() {
+                                showToast("拨打电话权限被拒绝，请手动设置");
+                            }
+                        });
+                    }
+                });
+            } else if (user.getPhone().equals("")) {
+                iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+            } else {
+                iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+            }
+
         }
 
-        rel_send_message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean availabl = Utils.isNetworkAvailabl(mContext);
-                if (!availabl) {
-                    showToast("网络不稳定，请重试");
-                    return;
+        if (user.getUsername().equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+            Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
+            send_message.setImageResource(R.mipmap.ico_message_disabled);
+
+        } else {
+            rel_send_message.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean availabl = Utils.isNetworkAvailabl(mContext);
+                    if (!availabl) {
+                        showToast("网络不稳定，请重试");
+                        return;
+                    }
+
+                    addOrUpdateFriendInfo(user);
+
+
+                    startActivity(new Intent(mContext, EaseChatMessageActivity.class)
+                            .putExtra("usernike", user.getUsername())
+                            .putExtra("user_pic", user.getPortraits())
+                            .putExtra("u_id", Constants.CID + "_" + user.getCode()));
+
                 }
+            });
+        }
+        if (user.getUsername().equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+            Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
+            send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
 
-                addOrUpdateFriendInfo(user);
+        } else {
+            rel_voice_call.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean availabl = Utils.isNetworkAvailabl(mContext);
+                    if (!availabl) {
+                        showToast("网络不稳定，请重试");
+                        return;
+                    }
 
+                    addOrUpdateFriendInfo(user);
 
-                startActivity(new Intent(mContext, EaseChatMessageActivity.class)
-                        .putExtra("usernike", user.getUsername())
-                        .putExtra("user_pic", user.getPortraits())
-                        .putExtra("u_id", Constants.CID + "_" + user.getCode()));
+                    startActivity(new Intent(mContext, VoiceCallActivity.class)
+                            .putExtra("username", Constants.CID + "_" + user.getCode())
+                            .putExtra("nike", user.getUsername())
+                            .putExtra("portrait", user.getPortraits())
+                            .putExtra("isComingCall", false));
 
-            }
-        });
-        rel_voice_call.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean availabl = Utils.isNetworkAvailabl(mContext);
-                if (!availabl) {
-                    showToast("网络不稳定，请重试");
-                    return;
                 }
-
-                addOrUpdateFriendInfo(user);
-
-                startActivity(new Intent(mContext, VoiceCallActivity.class)
-                        .putExtra("username", Constants.CID + "_" + user.getCode())
-                        .putExtra("nike", user.getUsername())
-                        .putExtra("portrait", user.getPortraits())
-                        .putExtra("isComingCall", false));
-
-            }
-        });
-
+            });
+        }
     }
 
     @OnClick(R.id.btn_back)

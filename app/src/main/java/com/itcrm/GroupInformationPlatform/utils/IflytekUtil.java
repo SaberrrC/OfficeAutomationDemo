@@ -79,7 +79,10 @@ public class IflytekUtil {
                     content.replace("，", ",");
                     mEtContent.setText(content);
 
-                    mEtContent.setSelection(builderResult.toString().length() - 1);
+                    //mEtContent.setSelection(builderResult.toString().length() - 1);
+
+                    //修复光标越界跟光标显示不准
+                    mEtContent.setSelection(content.length());
                 }
             } else {
                 showToast("recognizer result : null");

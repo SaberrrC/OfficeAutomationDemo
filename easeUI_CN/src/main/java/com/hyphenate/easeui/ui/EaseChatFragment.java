@@ -3,11 +3,14 @@ package com.hyphenate.easeui.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,6 +31,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.baidu.platform.comapi.map.E;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
@@ -63,6 +68,7 @@ import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 /**
@@ -77,6 +83,10 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected static final int REQUEST_CODE_MAP = 1;
     protected static final int REQUEST_CODE_CAMERA = 2;
     protected static final int REQUEST_CODE_LOCAL = 3;
+    private static final int REQUEST_CODE_CONTEXT_MENU = 14;
+    private static final int REQUEST_CODE_SELECT_VIDEO = 11;
+    private static final int REQUEST_CODE_SELECT_FILE = 12;
+    private static final int REQUEST_CODE_SELECT_AT_USER = 15;
     private static final int PERMISSIONS_REQUECT_TAKE_PIC_AND_SDCARD = 4;
 
     /**
@@ -158,6 +168,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
      * init view
      */
     protected void initView() {
+
         // hold to record voice
         //noinspection ConstantConditions
         voiceRecorderView = (EaseVoiceRecorderView) getView().findViewById(R.id.voice_recorder);
@@ -195,6 +206,64 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             public void onBigExpressionClicked(EaseEmojicon emojicon) {
                 sendBigExpressionMessage(emojicon.getName(), emojicon.getIdentityCode());
             }
+        });
+
+
+        /**
+         * 长按消息监听，用于复制消息
+         */
+        setChatFragmentListener(new EaseChatFragmentHelper(){
+            @Override
+            public void onSetMessageAttributes(EMMessage message) {
+                Log.i("easechat","onSetMessageAttributes");
+            }
+
+            @Override
+            public void onEnterToChatDetails() {
+                Log.i("easechat","onEnterToChatDetails");
+            }
+
+            @Override
+            public void onAvatarClick(String username) {
+                Log.i("easechat","onAvatarClick"+username);
+            }
+
+            @Override
+            public void onAvatarLongClick(String username) {
+                Log.i("easechat","onAvatarLongClick");
+            }
+
+            @Override
+            public boolean onMessageBubbleClick(EMMessage message) {
+                Log.i("easechat","onMessageBubbleClick");
+                return false;
+            }
+
+            @Override
+            public void onMessageBubbleLongClick(EMMessage message) {
+                // no message forward when in chat room
+                try {
+                    startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message",message)
+                                    .putExtra("ischatroom", chatType == EaseConstant.CHATTYPE_CHATROOM),
+                            REQUEST_CODE_CONTEXT_MENU);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public boolean onExtendMenuItemClick(int itemId, View view) {
+                Log.i("easechat","onExtendMenuItemClick");
+                return false;
+            }
+
+            @Override
+            public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
+                Log.i("easechat","EaseCustomChatRowProvider");
+                return null;
+            }
+
         });
 
         swipeRefreshLayout = messageList.getSwipeRefreshLayout();
@@ -404,40 +473,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //REQUEST_CODE_LOCAL
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE_CAMERA) { // capture new image
-                if (cameraFile != null && cameraFile.exists())
-                    sendImageMessage(cameraFile.getAbsolutePath());
-            } else if (requestCode == REQUEST_CODE_LOCAL) { // send local image
-                if (data != null) {
-                    Uri selectedImage = data.getData();
-
-                    if (selectedImage != null) {
-                        try {
-                            //TODO 如果手机使用谷歌的照片管理器，会有问题，暂时try catch了
-                            sendPicByUri(selectedImage);
-                        } catch (Exception e) {
-                        }
-                    }
-
-                }
-            } else if (requestCode == REQUEST_CODE_MAP) { // location
-                double latitude = data.getDoubleExtra("latitude", 0);
-                double longitude = data.getDoubleExtra("longitude", 0);
-                String locationAddress = data.getStringExtra("address");
-                if (locationAddress != null && !locationAddress.equals("")) {
-                    sendLocationMessage(latitude, longitude, locationAddress);
-                } else {
-                    showToast("无法获取到您的位置信息");
-                }
-
-            }
-        }
-    }
 
 
     @Override
@@ -1181,6 +1216,106 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
          * @return
          */
         EaseCustomChatRowProvider onSetCustomChatRowProvider();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_CAMERA) { // capture new image
+                if (cameraFile != null && cameraFile.exists())
+                    sendImageMessage(cameraFile.getAbsolutePath());
+            } else if (requestCode == REQUEST_CODE_LOCAL) { // send local image
+                if (data != null) {
+                    Uri selectedImage = data.getData();
+
+                    if (selectedImage != null) {
+                        try {
+                            //TODO 如果手机使用谷歌的照片管理器，会有问题，暂时try catch了
+                            sendPicByUri(selectedImage);
+                        } catch (Exception e) {
+                        }
+                    }
+
+                }
+            } else if (requestCode == REQUEST_CODE_MAP) { // location
+                double latitude = data.getDoubleExtra("latitude", 0);
+                double longitude = data.getDoubleExtra("longitude", 0);
+                String locationAddress = data.getStringExtra("address");
+                if (locationAddress != null && !locationAddress.equals("")) {
+                    sendLocationMessage(latitude, longitude, locationAddress);
+                } else {
+                    showToast("无法获取到您的位置信息");
+                }
+
+            }
+        }
+
+        /**
+         * 回调复制删除转发
+         */
+
+
+        if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
+            switch (resultCode) {
+                case ContextMenuActivity.RESULT_CODE_COPY: // copy
+                    clipboard.setPrimaryClip(ClipData.newPlainText(null,
+                            ((EMTextMessageBody) contextMenuMessage.getBody()).getMessage()));
+                    break;
+                case ContextMenuActivity.RESULT_CODE_DELETE: // delete
+                    conversation.removeMessage(contextMenuMessage.getMsgId());
+                    messageList.refresh();
+                    break;
+
+                case ContextMenuActivity.RESULT_CODE_FORWARD: // forward
+//                    Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
+//                    intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
+//                    startActivity(intent);
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        if(resultCode == Activity.RESULT_OK){
+            switch (requestCode) {
+                case REQUEST_CODE_SELECT_VIDEO: //send the video
+                    if (data != null) {
+                        int duration = data.getIntExtra("dur", 0);
+                        String videoPath = data.getStringExtra("path");
+                        File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
+                        try {
+                            FileOutputStream fos = new FileOutputStream(file);
+                            Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+                            ThumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                            fos.close();
+                            sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case REQUEST_CODE_SELECT_FILE: //send the file
+                    if (data != null) {
+                        Uri uri = data.getData();
+                        if (uri != null) {
+                            sendFileByUri(uri);
+                        }
+                    }
+                    break;
+                case REQUEST_CODE_SELECT_AT_USER:
+                    if(data != null){
+                        String username = data.getStringExtra("username");
+                        inputAtUsername(username, false);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
 }
