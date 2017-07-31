@@ -11,9 +11,11 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.itcrm.GroupInformationPlatform.R;
 import com.itcrm.GroupInformationPlatform.common.Constants;
 import com.itcrm.GroupInformationPlatform.manager.AppConfig;
@@ -29,7 +31,7 @@ import butterknife.ButterKnife;
  * Author:Created by Tsui on Date:2016/12/16 15:10
  * Description:聊天界面 com.hyphenate.easeui.widget.EaseChatMessageList
  */
-public class EaseChatMessageActivity extends BaseActivity {
+public class EaseChatMessageActivity extends BaseActivity implements EaseChatFragment.EaseChatFragmentHelper {
 
 
     @Bind(R.id.tv_title)
@@ -142,5 +144,47 @@ public class EaseChatMessageActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+
+
+    @Override
+    public void onSetMessageAttributes(EMMessage message) {
+
+    }
+
+    @Override
+    public void onEnterToChatDetails() {
+
+    }
+
+    @Override
+    public void onAvatarClick(String username) {
+
+    }
+
+    @Override
+    public void onAvatarLongClick(String username) {
+
+    }
+
+    @Override
+    public boolean onMessageBubbleClick(EMMessage message) {
+        return false;
+    }
+
+    @Override
+    public void onMessageBubbleLongClick(EMMessage message) {
+
+    }
+
+    @Override
+    public boolean onExtendMenuItemClick(int itemId, View view) {
+        return false;
+    }
+
+    @Override
+    public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
+        return null;
     }
 }
