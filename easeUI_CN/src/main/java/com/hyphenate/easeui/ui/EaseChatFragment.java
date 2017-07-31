@@ -208,62 +208,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         });
 
 
-        /**
-         * 长按消息监听，用于复制消息
-         */
-        setChatFragmentListener(new EaseChatFragmentHelper(){
-            @Override
-            public void onSetMessageAttributes(EMMessage message) {
-                Log.i("easechat","onSetMessageAttributes");
-            }
 
-            @Override
-            public void onEnterToChatDetails() {
-                Log.i("easechat","onEnterToChatDetails");
-            }
-
-            @Override
-            public void onAvatarClick(String username) {
-                Log.i("easechat","onAvatarClick"+username);
-            }
-
-            @Override
-            public void onAvatarLongClick(String username) {
-                Log.i("easechat","onAvatarLongClick");
-            }
-
-            @Override
-            public boolean onMessageBubbleClick(EMMessage message) {
-                Log.i("easechat","onMessageBubbleClick");
-                return false;
-            }
-
-            @Override
-            public void onMessageBubbleLongClick(EMMessage message) {
-                // no message forward when in chat room
-                try {
-                    startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message",message)
-                                    .putExtra("ischatroom", chatType == EaseConstant.CHATTYPE_CHATROOM),
-                            REQUEST_CODE_CONTEXT_MENU);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public boolean onExtendMenuItemClick(int itemId, View view) {
-                Log.i("easechat","onExtendMenuItemClick");
-                return false;
-            }
-
-            @Override
-            public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
-                Log.i("easechat","EaseCustomChatRowProvider");
-                return null;
-            }
-
-        });
 
         swipeRefreshLayout = messageList.getSwipeRefreshLayout();
         swipeRefreshLayout.setColorSchemeColors(Color.parseColor("#0EA7ED"),
@@ -667,7 +612,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             if (username.equals(toChatUsername) || message.getTo().equals(toChatUsername)) {
                 messageList.refreshSelectLast();
                 EaseUI.getInstance().getNotifier().vibrateAndPlayTone(message);
-                conversation.markMessageAsRead(message.getMsgId());
             } else {
                 EaseUI.getInstance().getNotifier().onNewMsg(message);
             }
@@ -1319,6 +1263,13 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             }
         }
 
+    }
+
+    public int getType(){
+        return chatType;
+    }
+    public int getBackCode(){
+        return REQUEST_CODE_CONTEXT_MENU;
     }
 
 }
