@@ -14,5 +14,6 @@ final class LoopViewGestureListener extends android.view.GestureDetector.SimpleO
     public final boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         loopView.scrollBy(velocityY);
         return true;
+
     }
 }
