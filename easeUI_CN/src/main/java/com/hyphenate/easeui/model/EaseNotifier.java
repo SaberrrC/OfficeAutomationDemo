@@ -131,6 +131,7 @@ public class EaseNotifier {
             EMLog.d(TAG, "app is running in backgroud");
             sendNotification(message, false);
         } else {
+
             sendNotification(message, true);
 
         }

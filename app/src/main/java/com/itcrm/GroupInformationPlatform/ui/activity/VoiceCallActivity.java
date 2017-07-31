@@ -283,6 +283,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                 String st10 = getResources().getString(R.string.Has_been_cancelled);
                                 String st11 = getResources().getString(R.string.hang_up);
 
+
                                 if (fError == CallError.REJECTED) {
                                     callingState = CallingState.BEREFUSED;
                                     callStateTextView.setText(st2);
@@ -325,6 +326,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                         }
                                     }
                                 }
+                                Toast.makeText(VoiceCallActivity.this, callStateTextView.getText(), Toast.LENGTH_SHORT).show();
                                 postDelayedCloseMsg();
                             }
 

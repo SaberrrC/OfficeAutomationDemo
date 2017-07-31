@@ -1,7 +1,6 @@
 package com.itcrm.GroupInformationPlatform.ui.activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,9 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.media.AudioManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -84,7 +80,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
-import cn.jpush.android.data.JPushLocalNotification;
 import q.rorbin.badgeview.QBadgeView;
 /**
  * ━━━━━━神兽出没━━━━━━
@@ -706,44 +701,25 @@ public class MainController extends BaseActivity implements EMMessageListener {
     }
 
 
-    AudioManager audioManager;
     @Override
     public void onMessageReceived(final List<EMMessage> list) {
 
         refreshCommCount();
-        /**
-         * 提示声音
-         */
-//        Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-//        audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-//        audioManager.setSpeakerphoneOn(true);
-//        if (audioManager.isSpeakerphoneOn())
-//            audioManager.setSpeakerphoneOn(false);
-//            audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-//        Ringtone ringtone = RingtoneManager.getRingtone(this, ringUri);
-//        ringtone.play();
-        // notify new message
 
-        /**
-         * em通知，具有通知功能
-         */
-        for (EMMessage message : list) {
+        for (EMMessage message: list){
             EaseUI easeUI = EaseUI.getInstance();
             easeUI.getNotifier().onNewMsg(message);
         }
 
-
-
-        //本地推送-调用极光推送，来完成通知-声音和震动
-//        JPushLocalNotification ln = new JPushLocalNotification();
-//        ln.setBuilderId(0);
-//        ln.setContent("您有新消息，请查收！");
-//        ln.setTitle(getString(R.string.app_name));
-//        ln.setNotificationId(11111111) ;
-//        ln.setBroadcastTime(System.currentTimeMillis());
-//        ln.setExtras("");
-//        JPushInterface.addLocalNotification(getApplicationContext(), ln);
+        //由于IM内部集成了推送功能->注释掉本地推送-调用极光推送，来完成通知-声音和震动
+        //JPushLocalNotification ln = new JPushLocalNotification();
+        //ln.setBuilderId(0);
+        //ln.setContent("您有新消息，请查收！");
+        //ln.setTitle(getString(R.string.app_name));
+        //ln.setNotificationId(11111111) ;
+        //ln.setBroadcastTime(System.currentTimeMillis());
+        //ln.setExtras("");
+        //JPushInterface.addLocalNotification(getApplicationContext(), ln);
     }
 
     @Override

@@ -13,14 +13,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -45,6 +44,7 @@ import com.itcrm.GroupInformationPlatform.ui.adapter.TabContactsAdapter;
 import com.itcrm.GroupInformationPlatform.ui.base.BaseFragment;
 import com.itcrm.GroupInformationPlatform.utils.LogUtils;
 import com.itcrm.GroupInformationPlatform.views.ClearEditText;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,10 +54,14 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * <h3>Description: 名片页面</h3>
@@ -151,92 +155,182 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
             }
         });
 
-        search_et_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                switch (i) {
-                    case EditorInfo.IME_ACTION_SEARCH:
-                        final String uid = AppConfig.getAppConfig(AppManager.mContext)
-                                .get(AppConfig.PREF_KEY_USER_UID);
-                        String token = AppConfig.getAppConfig(AppManager.mContext)
-                                .get(AppConfig.PREF_KEY_TOKEN);
-                        String departmentId = AppConfig.getAppConfig(AppManager.mContext)
-                                .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
-                        String isleader = AppConfig.getAppConfig(AppManager.mContext)
-                                .get(AppConfig.PREF_KEY_IS_LEADER);
 
-                        HttpParams params = new HttpParams();
-                        params.put("uid", uid);
-                        params.put("token", token);
-                        params.put("oid", departmentId);
-                        params.put("isleader", isleader);
-                        params.put("name", search_et_input.getText().toString());
+        //监听软键盘确认键,触发搜索功能,为匹配IOS 此功能注释掉
+//        search_et_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+//                switch (i) {
+//                    case EditorInfo.IME_ACTION_SEARCH:
+//                        final String uid = AppConfig.getAppConfig(AppManager.mContext)
+//                                .get(AppConfig.PREF_KEY_USER_UID);
+//                        String token = AppConfig.getAppConfig(AppManager.mContext)
+//                                .get(AppConfig.PREF_KEY_TOKEN);
+//                        String departmentId = AppConfig.getAppConfig(AppManager.mContext)
+//                                .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
+//                        String isleader = AppConfig.getAppConfig(AppManager.mContext)
+//                                .get(AppConfig.PREF_KEY_IS_LEADER);
+//
+//                        HttpParams params = new HttpParams();
+//                        params.put("uid", uid);
+//                        params.put("token", token);
+//                        params.put("oid", departmentId);
+//                        params.put("isleader", isleader);
+//                        params.put("name", search_et_input.getText().toString());
+//
+//                        initKjHttp().post(Api.PHONEBOOK_SEARCHPHONEBOOK, params, new HttpCallBack() {
+//                            @Override
+//                            public void onFinish() {
+//                                super.onFinish();
+//                                hideLoadingView();
+//                            }
+//
+//                            @Override
+//                            public void onSuccess(String t) {
+//                                super.onSuccess(t);
+//                                System.out.println(t);
+//                                LogUtils.e("联系人返回数据-》" + t);
+//
+//                                if (userList == null) {
+//                                    userList = new ArrayList<User>();
+//                                } else {
+//                                    userList.clear();
+//                                }
+//                                try {
+//                                    JSONObject jo = new JSONObject(t);
+//                                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
+//                                        JSONArray jDepartment = jo.getJSONArray("data");
+//                                        for (int i = 0; i < jDepartment.length(); i++) {
+//                                            JSONObject jsonObject = jDepartment.getJSONObject(i);
+//                                            Log.e("", "-------" + jsonObject.getString("username") + "----" + jsonObject.getString("department_name"));
+//                                            User user = new User(jsonObject.getString("username"),
+//                                                    jsonObject.getString("phone"),
+//                                                    jsonObject.getString("portrait"),
+//                                                    jsonObject.getString("sex"),
+//                                                    jsonObject.getString("post_id"),
+//                                                    jsonObject.getString("CODE"),
+//                                                    jsonObject.getString("department_id"),
+//                                                    jsonObject.getString("post_title"),
+//                                                    jsonObject.getString("department_name"),
+//                                                    jsonObject.getString("email"),
+//                                                    jsonObject.getString("isshow"));
+//                                            userList.add(user);
+//                                        }
+//                                        inputManager.hideSoftInputFromWindow(
+//                                                getActivity().getCurrentFocus().getWindowToken(),
+//                                                InputMethodManager.HIDE_NOT_ALWAYS);
+//                                        recyclerViewSearchResult.setVisibility(View.VISIBLE);
+//                                        SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
+//                                        recyclerViewSearchResult.setAdapter(adapter);
+//                                    } else {
+//                                        showToast(Api.getInfo(jo));
+//                                    }
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onFailure(int errorNo, String strMsg) {
+//                                LogUtils.e(errorNo + "--" + strMsg);
+//                                catchWarningByCode(errorNo);
+//                                super.onFailure(errorNo, strMsg);
+//                            }
+//                        });
+//
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
 
-                        initKjHttp().post(Api.PHONEBOOK_SEARCHPHONEBOOK, params, new HttpCallBack() {
-                            @Override
-                            public void onFinish() {
-                                super.onFinish();
-                                hideLoadingView();
-                            }
+        //EditText 自动搜索,间隔->输入停止1秒后自动搜索
+        RxTextView.textChanges(search_et_input)
+                .debounce(1000, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
+                        if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())){
+                            final String uid = AppConfig.getAppConfig(AppManager.mContext)
+                                    .get(AppConfig.PREF_KEY_USER_UID);
+                            String token = AppConfig.getAppConfig(AppManager.mContext)
+                                    .get(AppConfig.PREF_KEY_TOKEN);
+                            String departmentId = AppConfig.getAppConfig(AppManager.mContext)
+                                    .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
+                            String isleader = AppConfig.getAppConfig(AppManager.mContext)
+                                    .get(AppConfig.PREF_KEY_IS_LEADER);
 
-                            @Override
-                            public void onSuccess(String t) {
-                                super.onSuccess(t);
-                                System.out.println(t);
-                                LogUtils.e("联系人返回数据-》" + t);
+                            HttpParams params = new HttpParams();
+                            params.put("uid", uid);
+                            params.put("token", token);
+                            params.put("oid", departmentId);
+                            params.put("isleader", isleader);
+                            params.put("name", search_et_input.getText().toString());
 
-                                if (userList == null) {
-                                    userList = new ArrayList<User>();
-                                } else {
-                                    userList.clear();
+                            initKjHttp().post(Api.PHONEBOOK_SEARCHPHONEBOOK, params, new HttpCallBack() {
+                                @Override
+                                public void onFinish() {
+                                    super.onFinish();
+                                    hideLoadingView();
                                 }
-                                try {
-                                    JSONObject jo = new JSONObject(t);
-                                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                                        JSONArray jDepartment = jo.getJSONArray("data");
-                                        for (int i = 0; i < jDepartment.length(); i++) {
-                                            JSONObject jsonObject = jDepartment.getJSONObject(i);
-                                            Log.e("", "-------" + jsonObject.getString("username") + "----" + jsonObject.getString("department_name"));
-                                            User user = new User(jsonObject.getString("username"),
-                                                    jsonObject.getString("phone"),
-                                                    jsonObject.getString("portrait"),
-                                                    jsonObject.getString("sex"),
-                                                    jsonObject.getString("post_id"),
-                                                    jsonObject.getString("CODE"),
-                                                    jsonObject.getString("department_id"),
-                                                    jsonObject.getString("post_title"),
-                                                    jsonObject.getString("department_name"),
-                                                    jsonObject.getString("email"),
-                                                    jsonObject.getString("isshow"));
-                                            userList.add(user);
-                                        }
-                                        inputManager.hideSoftInputFromWindow(
-                                                getActivity().getCurrentFocus().getWindowToken(),
-                                                InputMethodManager.HIDE_NOT_ALWAYS);
-                                        recyclerViewSearchResult.setVisibility(View.VISIBLE);
-                                        SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
-                                        recyclerViewSearchResult.setAdapter(adapter);
+
+                                @Override
+                                public void onSuccess(String t) {
+                                    super.onSuccess(t);
+                                    System.out.println(t);
+                                    LogUtils.e("联系人返回数据-》" + t);
+
+                                    if (userList == null) {
+                                        userList = new ArrayList<User>();
                                     } else {
-                                        showToast(Api.getInfo(jo));
+                                        userList.clear();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    try {
+                                        JSONObject jo = new JSONObject(t);
+                                        if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
+                                            JSONArray jDepartment = jo.getJSONArray("data");
+                                            for (int i = 0; i < jDepartment.length(); i++) {
+                                                JSONObject jsonObject = jDepartment.getJSONObject(i);
+                                                Log.e("", "-------" + jsonObject.getString("username") + "----" + jsonObject.getString("department_name"));
+                                                User user = new User(jsonObject.getString("username"),
+                                                        jsonObject.getString("phone"),
+                                                        jsonObject.getString("portrait"),
+                                                        jsonObject.getString("sex"),
+                                                        jsonObject.getString("post_id"),
+                                                        jsonObject.getString("CODE"),
+                                                        jsonObject.getString("department_id"),
+                                                        jsonObject.getString("post_title"),
+                                                        jsonObject.getString("department_name"),
+                                                        jsonObject.getString("email"),
+                                                        jsonObject.getString("isshow"));
+                                                userList.add(user);
+                                            }
+                                            inputManager.hideSoftInputFromWindow(
+                                                    getActivity().getCurrentFocus().getWindowToken(),
+                                                    InputMethodManager.HIDE_NOT_ALWAYS);
+                                            recyclerViewSearchResult.setVisibility(View.VISIBLE);
+                                            SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
+                                            recyclerViewSearchResult.setAdapter(adapter);
+                                        } else {
+                                            showToast(Api.getInfo(jo));
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(int errorNo, String strMsg) {
-                                LogUtils.e(errorNo + "--" + strMsg);
-                                catchWarningByCode(errorNo);
-                                super.onFailure(errorNo, strMsg);
-                            }
-                        });
-
-                        break;
-                }
-                return true;
-            }
-        });
+                                @Override
+                                public void onFailure(int errorNo, String strMsg) {
+                                    LogUtils.e(errorNo + "--" + strMsg);
+                                    catchWarningByCode(errorNo);
+                                    super.onFailure(errorNo, strMsg);
+                                }
+                            });
+                        }
+                    }
+                });
     }
 
 

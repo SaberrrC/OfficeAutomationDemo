@@ -81,6 +81,8 @@ dependencies {
     compile 'com.tencent.bugly:nativecrashreport:3.1.2'
     //小红点提示
     compile 'q.rorbin:badgeview:1.0.5'
+    //RxBinding
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     //内存分析检测
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
