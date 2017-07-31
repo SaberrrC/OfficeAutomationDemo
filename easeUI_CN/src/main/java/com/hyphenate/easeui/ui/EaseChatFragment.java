@@ -289,19 +289,28 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
 
     protected void onConversationInit() {
+        Log.i("chatcache","onConversationInit:");
         conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
         conversation.markAllMessagesAsRead();
         // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
         // you can change this number
         final List<EMMessage> msgs = conversation.getAllMessages();
         int msgCount = msgs != null ? msgs.size() : 0;
+        int allMsgCount = conversation.getAllMsgCount();
+        List<EMMessage> allMessages = conversation.getAllMessages();
+
         if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
             String msgId = null;
             if (msgs != null && msgs.size() > 0) {
                 msgId = msgs.get(0).getMsgId();
             }
             conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+            Log.i("chatcache","msgId:"+msgId);
         }
+
+        Log.i("chatcache","pagesize:"+pagesize);
+        Log.i("chatcache","msgCount:"+msgCount);
+        Log.i("chatcache","allMsgCount:"+allMsgCount);
 
     }
 
@@ -836,6 +845,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (isMessageListInited) {
             messageList.refreshSelectLast();
         }
+
     }
 
 
