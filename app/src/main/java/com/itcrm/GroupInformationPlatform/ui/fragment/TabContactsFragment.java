@@ -252,6 +252,9 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                 .subscribe(new Consumer<CharSequence>() {
                     @Override
                     public void accept(CharSequence charSequence) throws Exception {
+                        if (search_et_input == null){
+                            return;
+                        }
                         if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())){
                             final String uid = AppConfig.getAppConfig(AppManager.mContext)
                                     .get(AppConfig.PREF_KEY_USER_UID);
