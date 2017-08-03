@@ -158,11 +158,11 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
                 if (isChecked) {
                     //将设置是否播放其他用户的语音数据。
                     if(currentCreateAccount != null){
-                        AVChatManager.getInstance().muteRemoteAudio("sl_010109224", true);
+                        AVChatManager.getInstance().muteRemoteAudio(currentCreateAccount, true);
                     }
                 } else {
                         if (currentCreateAccount != null){
-                            AVChatManager.getInstance().muteRemoteAudio("sl_010109224", false);
+                            AVChatManager.getInstance().muteRemoteAudio(currentCreateAccount, false);
                         }
                 }
             }
