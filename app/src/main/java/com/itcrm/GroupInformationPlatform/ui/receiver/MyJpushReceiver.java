@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.itcrm.GroupInformationPlatform.R;
 import com.itcrm.GroupInformationPlatform.manager.AppConfig;
@@ -47,7 +48,7 @@ public class MyJpushReceiver extends BroadcastReceiver {
         mContext = AppManager.mContext;
         Bundle bundle = intent.getExtras();
         LogUtils.d("onReceive - " + intent.getAction());
-        LogUtils.e("bundle：" + bundle.toString());
+        LogUtils.e("bundleaaa：" + bundle.toString());
 
 //        LogUtils.e("收到了通知:" + bundle.getString(JPushInterface.EXTRA_EXTRA));
         //{"ap_type":2,"type":7,"id":2}
