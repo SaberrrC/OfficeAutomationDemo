@@ -83,8 +83,7 @@ public class ScheduleActivity extends BaseActivity {
     private List<ScheduleRvItemData> scheduleRvDataList;
     private ArrayList<CalendarInfo> CalendarInfoList;
     private LinearLayoutManager linearLayoutManager;
-    int TempAddDate=0;
-
+    int TempAddDate = 0;
 
 
     @Override
@@ -99,8 +98,6 @@ public class ScheduleActivity extends BaseActivity {
         handleIntent(getIntent());
         loadData(dataPrefix);
     }
-
-
 
     private void handleIntent(Intent intent) {
 
@@ -157,7 +154,7 @@ public class ScheduleActivity extends BaseActivity {
 //                            // TODO 为演示做的演示界面
 //                            intent.setClass(ScheduleActivity.this, MeetingInfoVideoActivity.class);
 //                        } else {
-                            intent.setClass(ScheduleActivity.this, MeetingInfoActivity.class);
+                        intent.setClass(ScheduleActivity.this, MeetingInfoActivity.class);
 //                        }
                         break;
                     case 2:
@@ -195,7 +192,7 @@ public class ScheduleActivity extends BaseActivity {
                 String strMonth = String.valueOf(intMonth);
 
                 String date = year + "-" + SubStringMonth(strMonth);
-                LogUtils.e("leftMove->"+"date:"+date+",dataPrefix:"+dataPrefix);
+                LogUtils.e("leftMove->" + "date:" + date + ",dataPrefix:" + dataPrefix);
 
                 dataPrefix = date;
                 loadData(date);
@@ -238,7 +235,7 @@ public class ScheduleActivity extends BaseActivity {
                     strDay = String.valueOf(day);
                 }
                 currentDate = year + "-" + strMonth + "-" + strDay;
-                LogUtils.e("onClickOnDate->currentDate:"+currentDate);
+                LogUtils.e("onClickOnDate->currentDate:" + currentDate);
                 refreshData();
             }
         });
@@ -311,7 +308,7 @@ public class ScheduleActivity extends BaseActivity {
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             currentMonthJA = Api.getDataToJSONObject(jo);
-                            LogUtils.e("onSuccess->currentMonthJA:"+currentMonthJA);
+                            LogUtils.e("onSuccess->currentMonthJA:" + currentMonthJA);
                             initData();
                             break;
                         case Api.RESPONSES_CODE_DATA_EMPTY:
@@ -387,7 +384,7 @@ public class ScheduleActivity extends BaseActivity {
                 String isred = jsonObject.getString("isred");
 
                 if (key.equals(currentDate)) {
-                    LogUtils.e("key:"+key+",currentDate:"+currentDate);
+                    LogUtils.e("key:" + key + ",currentDate:" + currentDate);
 
                     if (isred.equals("1")) {
 
@@ -403,7 +400,13 @@ public class ScheduleActivity extends BaseActivity {
                                 data.setCf_id(jsonObject2.getString("cf_id"));
                                 data.setRoomname(jsonObject2.getString("roomname"));
                                 data.setTime(jsonObject2.getString("time"));
-                                data.setTheme(jsonObject2.getString("theme"));
+                                //截取字符串,防止创建房间417问题
+                                int length = jsonObject2.getString("theme").trim().length();
+                                if (length > 32) {
+                                    length -= 32;
+                                }
+                                String roomName = jsonObject2.getString("theme").trim().substring(0, length);
+                                data.setTheme(roomName);
                                 scheduleRvDataList.add(data);
                             }
                         } else if (showDataType.equals("2")) {
@@ -413,7 +416,13 @@ public class ScheduleActivity extends BaseActivity {
                                 data.setCf_id(jsonObject1.getString("cf_id"));
                                 data.setRoomname(jsonObject1.getString("roomname"));
                                 data.setTime(jsonObject1.getString("time"));
-                                data.setTheme(jsonObject1.getString("theme"));
+                                //截取字符串,防止创建房间417问题
+                                int length = jsonObject1.getString("theme").trim().length();
+                                if (length > 32) {
+                                    length -= 32;
+                                }
+                                String roomName = jsonObject1.getString("theme").trim().substring(0, length);
+                                data.setTheme(roomName);
                                 scheduleRvDataList.add(data);
                             }
                         } else if (showDataType.equals("3")) {

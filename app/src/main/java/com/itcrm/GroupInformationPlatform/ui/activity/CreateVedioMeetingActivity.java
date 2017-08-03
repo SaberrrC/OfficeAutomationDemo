@@ -35,6 +35,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -471,7 +472,8 @@ public class CreateVedioMeetingActivity extends BaseActivity {
         params.put("date", currentDate);
         params.put("roomid", 0);
         params.put("attentees", copy.toString());
-        params.put("theme", mEtMeetingTheme.getText().toString().trim());
+        String roomName =  mEtMeetingTheme.getText().toString().trim() + UUID.randomUUID().toString().replaceAll("-", "");
+        params.put("theme", roomName);
         params.put("type", meetingType);
         params.put("begintime", begintime);
         params.put("endtime", endtime);

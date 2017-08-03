@@ -262,22 +262,30 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
 
 
     private void leaveRoom() {
-        AVChatManager.getInstance().leaveRoom2(roomName, new AVChatCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                LogUtils.e("成功离开房间");
-            }
+        try {
 
-            @Override
-            public void onFailed(int code) {
-                LogUtils.e("离开房间失败");
-            }
+            AVChatManager.getInstance().leaveRoom2(roomName, new AVChatCallback<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    LogUtils.e("成功离开房间");
+                }
 
-            @Override
-            public void onException(Throwable exception) {
-                LogUtils.e("离开房间失败");
-            }
-        });
+                @Override
+                public void onFailed(int code) {
+                    LogUtils.e("离开房间失败"+code);
+                }
+
+                @Override
+                public void onException(Throwable exception) {
+                    exception.printStackTrace();
+                    LogUtils.e("离开房间失败");
+                }
+            });
+            AVChatManager.getInstance().stopVideoPreview();
+            AVChatManager.getInstance().disableRtc();
+        }catch (Throwable e){
+            e.printStackTrace();
+        }
     }
 
 
