@@ -318,9 +318,13 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                                                         jsonObject.getString("isshow"));
                                                 userList.add(user);
                                             }
-                                            inputManager.hideSoftInputFromWindow(
-                                                    getActivity().getCurrentFocus().getWindowToken(),
-                                                    InputMethodManager.HIDE_NOT_ALWAYS);
+                                            try {
+                                                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                                                        InputMethodManager.HIDE_NOT_ALWAYS);
+                                            }catch (Exception e){
+                                                e.printStackTrace();
+                                            }
+
                                             recyclerViewSearchResult.setVisibility(View.VISIBLE);
                                             SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
                                             recyclerViewSearchResult.setAdapter(adapter);
