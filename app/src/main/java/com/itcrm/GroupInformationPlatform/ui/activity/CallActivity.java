@@ -395,7 +395,6 @@ public class CallActivity extends BaseActivity {
         // save
         try {
             EMClient.getInstance().chatManager().saveMessage(message);
-
         } catch (Exception e) {
             LogUtils.e(e.toString());
         }

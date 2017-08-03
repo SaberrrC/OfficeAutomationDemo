@@ -50,7 +50,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
     private Button hangupBtn;
     private Button refuseBtn;
     private Button answerBtn;
-    
+
     private ImageView muteImage;
     private ImageView handsFreeImage;
 
@@ -115,7 +115,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
 
         //扩展信息，发送给对方自己的名字和头像url
-        sideInfo =getIntent().getStringExtra("meUsername") + "&" +getIntent().getStringExtra("meUserPortrait");
+        sideInfo = getIntent().getStringExtra("meUsername") + "&" + getIntent().getStringExtra("meUserPortrait");
         if (null != nickName) {
             nickTextView.setText(nickName);
         }
@@ -280,20 +280,26 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                 String st10 = getResources().getString(R.string.Has_been_cancelled);
                                 String st11 = getResources().getString(R.string.hang_up);
 
+                                String str = null;
                                 if (fError == CallError.REJECTED) {
                                     callingState = CallingState.BEREFUSED;
                                     callStateTextView.setText(st2);
+                                    str = st2;
                                 } else if (fError == CallError.ERROR_TRANSPORT) {
                                     callStateTextView.setText(st3);
+                                    str = st3;
                                 } else if (fError == CallError.ERROR_UNAVAILABLE) {
                                     callingState = CallingState.OFFLINE;
                                     callStateTextView.setText(st4);
+                                    str = st4;
                                 } else if (fError == CallError.ERROR_BUSY) {
                                     callingState = CallingState.BUSY;
                                     callStateTextView.setText(st5);
+                                    str = st5;
                                 } else if (fError == CallError.ERROR_NORESPONSE) {
                                     callingState = CallingState.NO_RESPONSE;
                                     callStateTextView.setText(st6);
+                                    str = st6;
                                 } else if (fError == CallError.ERROR_LOCAL_SDK_VERSION_OUTDATED || fError == CallError.ERROR_REMOTE_SDK_VERSION_OUTDATED) {
                                     callingState = CallingState.VERSION_NOT_SAME;
                                     callStateTextView.setText("Both call version are inconsistent");
@@ -301,26 +307,33 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                     if (isRefused) {
                                         callingState = CallingState.REFUSED;
                                         callStateTextView.setText(st1);
+                                        str = st1;
                                     } else if (isAnswered) {
                                         callingState = CallingState.NORMAL;
                                         if (endCallTriggerByMe) {
 //                                        callStateTextView.setText(st7);
                                         } else {
                                             callStateTextView.setText(st8);
+                                            str = st8;
                                         }
                                     } else {
                                         if (isInComingCall) {
                                             callingState = CallingState.UNANSWERED;
                                             callStateTextView.setText(st9);
+                                            str = st9;
                                         } else {
                                             if (callingState != CallingState.NORMAL) {
                                                 callingState = CallingState.CANCELLED;
                                                 callStateTextView.setText(st10);
+                                                str = st10;
                                             } else {
                                                 callStateTextView.setText(st11);
                                             }
                                         }
                                     }
+                                }
+                                if (str != null) {
+                                    Toast.makeText(VoiceCallActivity.this, str, Toast.LENGTH_SHORT).show();
                                 }
                                 postDelayedCloseMsg();
                             }
