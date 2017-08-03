@@ -157,13 +157,13 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //将设置是否播放其他用户的语音数据。
-                    if (currentCreateAccount != null) {
-                        AVChatManager.getInstance().muteRemoteAudio(currentCreateAccount, true);
+                    if(currentCreateAccount != null){
+                        AVChatManager.getInstance().muteRemoteAudio("sl_010109224", true);
                     }
                 } else {
-                    if (currentCreateAccount != null) {
-                        AVChatManager.getInstance().muteRemoteAudio(currentCreateAccount, false);
-                    }
+                        if (currentCreateAccount != null){
+                            AVChatManager.getInstance().muteRemoteAudio("sl_010109224", false);
+                        }
                 }
             }
         });
@@ -242,7 +242,6 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
         AVChatManager.getInstance().joinRoom2(roomName, AVChatType.VIDEO, new AVChatCallback<AVChatData>() {
             @Override
             public void onSuccess(AVChatData avChatData) {
-                currentCreateAccount = avChatData.getAccount();
                 LogUtils.e("joinRoom成功。。。");
             }
 
@@ -550,6 +549,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      */
     @Override
     public void onUserJoined(String account) {
+        currentCreateAccount = account;
         addMember(account);
         showMemberVideo(account);
     }
