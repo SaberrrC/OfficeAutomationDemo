@@ -107,7 +107,7 @@ import q.rorbin.badgeview.QBadgeView;
  * <h3>Description: 首页控制器 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br />
  */
-public class MainController extends BaseActivity implements EMMessageListener {
+public class MainController extends BaseActivity {
 
     @Bind(R.id.controller)
     ViewPager mController;
@@ -186,13 +186,13 @@ public class MainController extends BaseActivity implements EMMessageListener {
 
     private AbortableFuture<LoginInfo> loginRequest;
 
-
     public static MainController instance = null;
+    private EaseUI easeUI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance=this;
+        instance = this;
         setContentView(R.layout.activity_main_controller);
         ButterKnife.bind(this);
         setTranslucentStatus(this);
@@ -220,12 +220,12 @@ public class MainController extends BaseActivity implements EMMessageListener {
 
     private void initWidget() {
         initColor();
-        mBorderimageViews = new ImageView[]{tabGroupIcon, tabContactsIcon, tabHomeIcon,  tabMessageIcon,
+        mBorderimageViews = new ImageView[]{tabGroupIcon, tabContactsIcon, tabHomeIcon, tabMessageIcon,
                 tabMeIcon};
         mContentImageViews = new ImageView[]{tabGroupIconLight, tabContactsIconLight, tabHomeIconLight,
-                 tabMessageIconLight, tabMeIconLight};
+                tabMessageIconLight, tabMeIconLight};
 
-        mTextViews = new TextView[]{tabGroupText, tabContactsText, tabHomeText,  tabMessageText, tabMeText
+        mTextViews = new TextView[]{tabGroupText, tabContactsText, tabHomeText, tabMessageText, tabMeText
         };
     }
 
@@ -256,7 +256,7 @@ public class MainController extends BaseActivity implements EMMessageListener {
         Button btnSetPwd = (Button) dialogView.findViewById(R.id.btn_set_pwd);
         btnSetPwd.setOnClickListener(new View.OnClickListener() {
             @Override
-                public void onClick(View v) {
+            public void onClick(View v) {
                 Intent intent = new Intent(MainController.this, ModifyPwdActivity.class);
                 startActivity(intent);
                 dialog.dismiss();
@@ -287,7 +287,6 @@ public class MainController extends BaseActivity implements EMMessageListener {
             }
         }
     }
-
 
 
     /**
@@ -397,32 +396,33 @@ public class MainController extends BaseActivity implements EMMessageListener {
         try {
             LogUtils.e("登录Im，工号->" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
             EMClient.getInstance().login(Constants.CID + "_" +
-                            AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE),
-                    "123456", new EMCallBack() {//回调
+                    AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE), "123456", new EMCallBack() {//回调
 
-                        @Override
-                        public void onSuccess() {
-                            EMClient.getInstance().groupManager().loadAllGroups();
-                            EMClient.getInstance().chatManager().loadAllConversations();
-                            LogUtils.e("登录聊天服务器成功！");
-                            String u_id = Constants.CID + "_" + AppConfig.getAppConfig(MainController.this).getPrivateCode();
-                            String u_name = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_USERNAME);
-                            String u_pic = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_PORTRAITS);
-                            FriendsInfoCacheSvc.getInstance(MainController.this)
-                                    .addOrUpdateFriends(new Friends(u_id,u_name,u_pic));
-                        }
+                @Override
+                public void onSuccess() {
+                    EMClient.getInstance().groupManager().loadAllGroups();
+                    EMClient.getInstance().chatManager().loadAllConversations();
+                    LogUtils.e("登录聊天服务器成功！");
+                    String u_id = Constants.CID + "_" + AppConfig.getAppConfig(MainController.this).getPrivateCode();
+                    String u_name = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_USERNAME);
+                    String u_pic = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_PORTRAITS);
+                    FriendsInfoCacheSvc.getInstance(MainController.this)
+                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic));
+                }
 
-                        @Override
-                        public void onProgress(int progress, String status) {
+                @Override
+                public void onProgress(int progress, String status) {
 
-                        }
+                }
 
-                        @Override
-                        public void onError(int code, String message) {
-                            LogUtils.e("登录聊天服务器失败！"+"code:"+code+","+message);
-                        }
-                    });
-        }catch (Exception e){}
+                @Override
+                public void onError(int code, String message) {
+                    LogUtils.e("登录聊天服务器失败！" + "code:" + code + "," + message);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     class PageChangeListener implements ViewPager.OnPageChangeListener {
@@ -534,7 +534,8 @@ public class MainController extends BaseActivity implements EMMessageListener {
      * 初始化数据
      */
     private void initData() {
-
+        //检测推送页面
+        easeUI = EaseUI.getInstance();
         //极光推送设置别名和部门
         String uid = AppConfig.getAppConfig(this).getPrivateUid();
         if (uid != null) {
@@ -549,7 +550,6 @@ public class MainController extends BaseActivity implements EMMessageListener {
             JPushInterface.setTags(this, set, null);
         }
         mTabs = new ArrayList<>();
-
 
 
         TabCommunicationFragment tabCommunicationFragment = new TabCommunicationFragment();
@@ -596,7 +596,7 @@ public class MainController extends BaseActivity implements EMMessageListener {
     protected void onResume() {
         judeIsInitPwd();
         //添加环信监听
-        EMClient.getInstance().chatManager().addMessageListener(this);
+        EMClient.getInstance().chatManager().addMessageListener(messageListener);
         refreshCommCount();
         refreshUnReadMsgCount();
         super.onResume();
@@ -700,47 +700,50 @@ public class MainController extends BaseActivity implements EMMessageListener {
         //doubleClickExitHelper.onBackPressed();
     }
 
+    EMMessageListener messageListener = new EMMessageListener() {
+        @Override
+        public void onMessageReceived(final List<EMMessage> list) {
+            /**
+             * im通知，具有通知功能
+             */
+            for (EMMessage message : list) {
+                //判断推送在哪个页面
+                if (!easeUI.hasForegroundActivies()){
+                    EaseUI.getInstance().getNotifier().onNewMsg(message);
+                }
+            }
+            refreshCommCount();
 
-    @Override
-    public void onMessageReceived(final List<EMMessage> list) {
-
-        refreshCommCount();
-
-        for (EMMessage message: list){
-            EaseUI easeUI = EaseUI.getInstance();
-            easeUI.getNotifier().onNewMsg(message);
+            //JPushLocalNotification ln = new JPushLocalNotification();
+            //ln.setBuilderId(0);
+            //ln.setContent("您有新消息，请查收！");
+            //ln.setTitle(getString(R.string.app_name));
+            //ln.setNotificationId(11111111) ;
+            //ln.setBroadcastTime(System.currentTimeMillis());
+            //ln.setExtras("");
+            //JPushInterface.addLocalNotification(getApplicationContext(), ln);
         }
 
-        //由于IM内部集成了推送功能->注释掉本地推送-调用极光推送，来完成通知-声音和震动
-        //JPushLocalNotification ln = new JPushLocalNotification();
-        //ln.setBuilderId(0);
-        //ln.setContent("您有新消息，请查收！");
-        //ln.setTitle(getString(R.string.app_name));
-        //ln.setNotificationId(11111111) ;
-        //ln.setBroadcastTime(System.currentTimeMillis());
-        //ln.setExtras("");
-        //JPushInterface.addLocalNotification(getApplicationContext(), ln);
-    }
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> list) {
 
-    @Override
-    public void onCmdMessageReceived(List<EMMessage> list) {
+        }
 
-    }
+        @Override
+        public void onMessageReadAckReceived(List<EMMessage> list) {
 
-    @Override
-    public void onMessageReadAckReceived(List<EMMessage> list) {
+        }
 
-    }
+        @Override
+        public void onMessageDeliveryAckReceived(List<EMMessage> list) {
 
-    @Override
-    public void onMessageDeliveryAckReceived(List<EMMessage> list) {
+        }
 
-    }
+        @Override
+        public void onMessageChanged(EMMessage emMessage, Object o) {
 
-    @Override
-    public void onMessageChanged(EMMessage emMessage, Object o) {
-
-    }
+        }
+    };
 
     protected List<EMConversation> loadConversationList() {
         // get all conversations
@@ -844,7 +847,7 @@ public class MainController extends BaseActivity implements EMMessageListener {
     protected void onDestroy() {
         ButterKnife.unbind(this);
         unregisterReceiver(callReceiver);
-        EMClient.getInstance().chatManager().removeMessageListener(this);
+        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
         super.onDestroy();
     }
 

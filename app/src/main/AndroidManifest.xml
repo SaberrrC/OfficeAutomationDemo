@@ -503,10 +503,20 @@
             android:name=".ui.activity.SelectMeetingRoomActivity"
             android:screenOrientation="portrait"
             />
+        <!--搜索联系人返回结果=联系人详情页-->
         <activity android:name=".ui.activity.Contact_Details_Activity"/>
+        <!--正常点击部门列表的联系人详情页-->
         <activity android:name=".ui.activity.Contact_Details_Activity2"/>
-
-
+        <!--创建视频会议——新版-->
+        <activity android:name=".ui.activity.SelectVedioMeetingRoomActivity"/>
+        <!--创建视频会议——完成-->
+        <activity android:name=".ui.activity.CreateVedioMeetingActivity"/>
+        <!-- 请选择会议室 -->
+        <activity android:name=".ui.activity.SelectOrdinaryMeetingRoomActivity" />
+        <!-- 今日安排 -->
+        <activity android:name=".ui.activity.ViewTheMeetingScheduleActivity" />
+        <!-- 创建普通会议 -->
+        <activity android:name=".ui.activity.CreateOridinryMeetingActivity"/>
     </application>
 
 </manifest>

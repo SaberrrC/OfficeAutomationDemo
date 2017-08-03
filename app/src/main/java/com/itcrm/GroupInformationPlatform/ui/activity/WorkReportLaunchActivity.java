@@ -10,9 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,6 +27,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.itcrm.GroupInformationPlatform.R;
@@ -40,7 +39,6 @@ import com.itcrm.GroupInformationPlatform.ui.PermissionListener;
 import com.itcrm.GroupInformationPlatform.ui.base.BaseActivity;
 import com.itcrm.GroupInformationPlatform.ui.draft.LaunchWorkReportDraft;
 import com.itcrm.GroupInformationPlatform.utils.AndroidAdjustResizeBugFix;
-import com.itcrm.GroupInformationPlatform.utils.BitmapUtils;
 import com.itcrm.GroupInformationPlatform.utils.FileUtils;
 import com.itcrm.GroupInformationPlatform.utils.IflytekUtil;
 import com.itcrm.GroupInformationPlatform.utils.LogUtils;
@@ -219,7 +217,7 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
             String copyId = launchWorkReportDraft.getDraft(this, "copyId");
             List<String> copyIds = Arrays.asList(copyId.split(","));
             for (int i = 0; i < copyIds.size(); i++) {
-                contactsList.add(new Child("", "", "", copyIds.get(i),"", "", "", "", true));
+                contactsList.add(new Child("", "", "", copyIds.get(i), "", "", "", "", true));
             }
 
             List<String> pics = Arrays.asList(picUrl.split(","));
@@ -259,6 +257,16 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                //判断上级联系人不存在
+                String[] strings = t.split(":");
+                if (strings.length > 2) {
+                    LogUtils.e(strings[2]);
+                    if (strings[2].contains("返回结果为空")) {
+                        Toast.makeText(WorkReportLaunchActivity.this, "上级申批人不存在", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+
                 try {
                     JSONObject object = new JSONObject(t);
                     JSONObject reportInfo = Api.getDataToJSONObject(object);
@@ -448,7 +456,7 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
                     }
                 } else {
                     if (checkDateIsRight()) {
-                            sendToBackground();
+                        sendToBackground();
                     } else {
                         showToast("请设置正确的开始结束时间");
                     }
@@ -530,8 +538,8 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
         }
         LogUtils.e("picBuilder-->" + picBuilder.toString());
         //params.put("upload_path", picBuilder.toString().substring(picBuilder.length()-1));
-        //修复上传图片picBuilder长度为0时下标越界问提
-        params.put("upload_path", picBuilder.toString().substring(0, picBuilder.length()==0?0: picBuilder.length()-1));
+        //修复上传图片picBuilder崩溃问题
+        params.put("upload_path", picBuilder.toString().substring(0, picBuilder.length() == 0 ? 0 : picBuilder.length() - 1));
 
 
         initKjHttp().post(Api.REPORT_SEND_TO_BACKGROUND, params, new HttpCallBack() {
@@ -590,7 +598,7 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
                     LogUtils.e("UPDATE_PROTRAIT返回后：" + uri.toString());
                     try {
 
-                          bitmap=  getThumbnail(uri,300);
+                        bitmap = getThumbnail(uri, 300);
                         if (null == bitmap) {
                             return;
                         }
@@ -652,13 +660,13 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
         LogUtils.e("getThumbnail:3->");
         onlyBoundsOptions.inJustDecodeBounds
                 = true;
-        LogUtils.e("getThumbnail:4->onlyBoundsOptions.outWidth:"+onlyBoundsOptions.outWidth);
+        LogUtils.e("getThumbnail:4->onlyBoundsOptions.outWidth:" + onlyBoundsOptions.outWidth);
         onlyBoundsOptions.inDither = true;//optional
 
         onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_4444;//optional
 
         BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
-        LogUtils.e("getThumbnail:5->onlyBoundsOptions.outWidth:"+onlyBoundsOptions.outWidth);
+        LogUtils.e("getThumbnail:5->onlyBoundsOptions.outWidth:" + onlyBoundsOptions.outWidth);
         input.close();
 
         if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))

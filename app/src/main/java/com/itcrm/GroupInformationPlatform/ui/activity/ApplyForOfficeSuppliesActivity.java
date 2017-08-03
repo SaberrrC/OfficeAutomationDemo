@@ -137,14 +137,11 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
             try {
                 String username = ja.getJSONObject(i).getString("username");
                 String portrait = ja.getJSONObject(i).getString("portrait");
-                View view = LayoutInflater.from(this).inflate(R.layout.travel_entry_approvel_single
-                        , null);
+                View view = LayoutInflater.from(this).inflate(R.layout.travel_entry_approvel_single, null);
                 SimpleDraweeView sdv = (SimpleDraweeView) view.findViewById(R.id.user_portrait);
                 sdv.setImageURI("http://"+Uri.parse(portrait));
                 TextView tvLeader = (TextView) view.findViewById(R.id.tv_leader_name);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout
-                        .LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(40, 0, 0, 0);
                 params.gravity = Gravity.CENTER;
                 tvLeader.setText(username);

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <include
+        android:id="@+id/toolbar_shadow"
+        layout="@layout/toolbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"/>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_shadow"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
+
+            <EditText
+                android:id="@+id/et_meeting_theme"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="42dp"
+                android:layout_marginRight="42dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/work_report_reply_et_bg"
+                android:hint="请输入会议主题"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/text_common_color"
+                android:textColorHint="#979797"
+                android:textSize="14dp"
+                />
+            <TextView
+                android:id="@+id/tv_meet_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="会议日期:"
+                android:layout_marginLeft="42dp"
+                android:layout_marginTop="23dp"
+                android:textColor="@color/text_common_color"
+                android:layout_below="@+id/et_meeting_theme"
+                />
+            <TextView
+                android:id="@+id/tv_ordiny_meet_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/et_meeting_theme"
+                android:layout_marginLeft="130dp"
+                android:layout_marginTop="23dp"
+                android:text="请选择会议日期"
+                android:textColor="@color/text_common_blue_color"
+                />
+            <TextView
+                android:id="@+id/tv_meeting_time_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_meet_date"
+                android:layout_marginLeft="42dp"
+                android:layout_marginTop="23dp"
+                android:text="会议时间 : "
+                android:textColor="@color/text_common_color"
+                />
+
+            <TextView
+                android:id="@+id/tv_meet_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请选择会议时间"
+                android:textColor="@color/text_common_blue_color"
+                android:layout_alignBaseline="@+id/tv_meeting_time_tips"
+                android:layout_alignBottom="@+id/tv_meeting_time_tips"
+                android:layout_alignLeft="@+id/tv_select_meeting_room"
+                android:layout_alignStart="@+id/tv_select_meeting_room" />
+
+            <TextView
+                android:id="@+id/tv_meeting_room_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_meet_time"
+                android:layout_marginLeft="42dp"
+                android:layout_marginTop="20dp"
+                android:text="会议室 : "
+                android:textColor="@color/text_common_color"
+                />
+
+            <TextView
+                android:id="@+id/tv_select_meeting_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_meet_time"
+                android:layout_marginLeft="130dp"
+                android:layout_marginTop="20dp"
+                android:text="第一会议室"
+                android:textColor="@color/text_common_blue_color"
+                />
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_meeting_room_type"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/tv_meeting_room_tips"-->
+                <!--android:layout_marginLeft="42dp"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--android:text="会议室类型 :"-->
+                <!--android:textColor="@color/text_common_color"-->
+                <!--/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_selected_meeting_room_type"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/tv_meeting_room_tips"-->
+                <!--android:layout_marginLeft="130dp"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--android:textColor="@color/text_common_color"-->
+                <!--/>-->
+
+            <TextView
+                android:id="@+id/tv_meeting_people_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_select_meeting_room"
+                android:layout_marginLeft="42dp"
+                android:layout_marginTop="20dp"
+                android:text="参会人 :"
+                android:textColor="@color/text_common_color"
+                />
+
+            <LinearLayout
+                android:id="@+id/join_people_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_select_meeting_room"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="130dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                >
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_join_people_tips"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingRight="20dp"-->
+                    <!--android:text="发起人"-->
+                    <!--android:textColor="@color/text_common_color"-->
+                    <!--/>-->
+
+                <LinearLayout
+                    android:id="@+id/ll_join_people_container"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:scrollbars="vertical"
+                    android:visibility="gone"
+                    />
+
+                <ImageView
+                    android:id="@+id/report_iv_add_person"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right|bottom"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/send_add_bg"/>
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/part_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/join_people_tips"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="#e3e3e3"
+                />
+
+            <Button
+                android:id="@+id/btn_create_meeting"
+                android:layout_width="204dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/part_line"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_blue_round_bg"
+                android:text="创建"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

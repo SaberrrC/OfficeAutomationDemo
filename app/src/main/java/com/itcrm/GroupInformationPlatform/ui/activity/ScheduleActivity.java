@@ -495,7 +495,7 @@ public class ScheduleActivity extends BaseActivity {
             tvMeeting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ScheduleActivity.this, SelectMeetingRoomActivity.class);
+                    Intent intent = new Intent(ScheduleActivity.this, SelectOrdinaryMeetingRoomActivity.class);
                     intent.putExtra("meetingType", "1");
                     startActivity(intent);
                     popupWindow.dismiss();
@@ -504,7 +504,7 @@ public class ScheduleActivity extends BaseActivity {
             tvVideoMeeting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ScheduleActivity.this, SelectMeetingRoomActivity.class);
+                    Intent intent = new Intent(ScheduleActivity.this, SelectVedioMeetingRoomActivity.class);
                     intent.putExtra("meetingType", "2");
                     startActivity(intent);
                     popupWindow.dismiss();

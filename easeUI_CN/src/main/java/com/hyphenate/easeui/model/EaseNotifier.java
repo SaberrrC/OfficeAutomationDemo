@@ -122,6 +122,7 @@ public class EaseNotifier {
             return;
         }
         EaseSettingsProvider settingsProvider = EaseUI.getInstance().getSettingsProvider();
+
         if(!settingsProvider.isMsgNotifyAllowed(message)){
             return;
         }
@@ -131,9 +132,7 @@ public class EaseNotifier {
             EMLog.d(TAG, "app is running in backgroud");
             sendNotification(message, false);
         } else {
-
             sendNotification(message, true);
-
         }
         
         vibrateAndPlayTone(message);
@@ -286,6 +285,7 @@ public class EaseNotifier {
      * vibrate and  play tone
      */
     public void vibrateAndPlayTone(EMMessage message) {
+
         if(message != null){
             if(EMClient.getInstance().chatManager().isSilentMessage(message)){
                 return;
@@ -296,7 +296,7 @@ public class EaseNotifier {
             // received new messages within 2 seconds, skip play ringtone
             return;
         }
-        
+
         try {
             lastNotifiyTime = System.currentTimeMillis();
             

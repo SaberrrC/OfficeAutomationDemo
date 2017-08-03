@@ -102,10 +102,17 @@ public class Api {
      */
     public static final String PUBLIC_COPY_CONTACTS = "report/cclist";
     /**
+     * 选择会议室新接口
+     */
+    public static final String CONFERENCE_SELECTMEETINGROOMNEW="conference/selectmeetingroomnew";
+    /**
      * 选择参加人
      */
     public static final String CONFERENCE_CCLIST = "conference/cclist";
-
+    /**
+     * 根据开始时间获取可使用时间
+     */
+    public static final String  CONFERENCE_GETOCCUPYTIMEBYBEGINTIME="conference/getoccupytimebybegintime";
     /**
      * 获取我发起的工作汇报
      */
@@ -157,6 +164,10 @@ public class Api {
      * 工作汇报上传照片
      */
     public static final String PIC_UPLOAD = "upload/ossupload";
+    /**
+     * 根据日期获取当天可使用时间接口
+     */
+    public static final String  CONFERENCE_GETOCCUPYTIME="conference/getoccupytime";
     /**
      * 头像
      */
@@ -248,6 +259,10 @@ public class Api {
      * 待我审批：通过（公出）
      */
     public static final String APPROVAL_ACCESS_BUSINESS = "approval/accessbusiness";
+    /**
+     * 会议室详情接口
+     */
+    public static final String  CONFERENCE_CONFERENCEINFO="conference/conferenceinfo";
     /**
      * 获取审批人
      */

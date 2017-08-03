@@ -24,8 +24,8 @@ android {
         multiDexEnabled true
 
         //pwd:13579
-        versionCode 61
-        versionName "v1.1.6"
+        versionCode 62
+        versionName "v1.1.7"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64', "arm64-v8a"
         }
@@ -90,13 +90,13 @@ dependencies {
     //内存分析end
 
     // 网易云信start:基础 (必需)
-    compile 'com.netease.nimlib:basesdk:3.3.0'
+    compile 'com.netease.nimlib:basesdk:4.0.0'
     // 音视频需要
-    compile 'com.netease.nimlib:avchat:3.3.0'
+    compile 'com.netease.nimlib:avchat:4.0.0'
     // 聊天室需要
-    compile 'com.netease.nimlib:chatroom:3.3.0'
+    compile 'com.netease.nimlib:chatroom:4.0.0'
     // 实时会话服务需要
-    compile 'com.netease.nimlib:rts:3.3.0'
+    compile 'com.netease.nimlib:rts:4.0.0'
     // 网易云信end
     //底部弹出框
     compile 'com.flipboard:bottomsheet-core:1.5.3'

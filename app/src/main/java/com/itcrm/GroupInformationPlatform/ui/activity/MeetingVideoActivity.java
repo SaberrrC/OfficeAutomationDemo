@@ -42,11 +42,17 @@ import com.netease.nimlib.sdk.avchat.AVChatCallback;
 import com.netease.nimlib.sdk.avchat.AVChatManager;
 import com.netease.nimlib.sdk.avchat.AVChatStateObserver;
 import com.netease.nimlib.sdk.avchat.constant.AVChatType;
+import com.netease.nimlib.sdk.avchat.constant.AVChatUserRole;
+import com.netease.nimlib.sdk.avchat.constant.AVChatVideoCropRatio;
 import com.netease.nimlib.sdk.avchat.constant.AVChatVideoScalingType;
 import com.netease.nimlib.sdk.avchat.model.AVChatAudioFrame;
+import com.netease.nimlib.sdk.avchat.model.AVChatCameraCapturer;
 import com.netease.nimlib.sdk.avchat.model.AVChatChannelInfo;
 import com.netease.nimlib.sdk.avchat.model.AVChatData;
-import com.netease.nimlib.sdk.avchat.model.AVChatOptionalConfig;
+import com.netease.nimlib.sdk.avchat.model.AVChatNetworkStats;
+import com.netease.nimlib.sdk.avchat.model.AVChatParameters;
+import com.netease.nimlib.sdk.avchat.model.AVChatSessionStats;
+import com.netease.nimlib.sdk.avchat.model.AVChatVideoCapturerFactory;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoRender;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
@@ -105,12 +111,12 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     private List<JoinVideoMember> mRealityLists = new ArrayList<>();//当前加入会议的人员
     private boolean isCanHand = true;//判断当前是否能举手
     private String myAccount;//当前自己的账号
+    private String currentCreateAccount;//当前创建者的账号
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_video);
-
         //保持屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         ButterKnife.bind(this);
@@ -151,24 +157,24 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //将设置是否播放其他用户的语音数据。
-                    AVChatManager.getInstance().muteRemoteAudio(currentSpeakerMember, true);
+                    if (currentCreateAccount != null) {
+                        AVChatManager.getInstance().muteRemoteAudio(currentCreateAccount, true);
+                    }
                 } else {
-                    AVChatManager.getInstance().muteRemoteAudio(currentSpeakerMember, false);
+                    if (currentCreateAccount != null) {
+                        AVChatManager.getInstance().muteRemoteAudio(currentCreateAccount, false);
+                    }
                 }
             }
         });
     }
 
     private void initData() {
-
         myAccount = Constants.CID + "_" + AppConfig.getAppConfig(this).getPrivateCode();
-
         initIntentData();
         //默认加载会议创建人的视频
-
         AVChatManager.getInstance().muteLocalVideo(true);
         CheckPermission();
-
     }
 
     /**
@@ -179,7 +185,6 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
                 .RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
             @Override
             public void onGranted() {
-                showLoadingView();
                 LogUtils.e("iscreate:" + isCreate);
                 if (isCreate) {
                     createRoom();
@@ -206,46 +211,51 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
 
                     @Override
                     public void onFailed(int code) {
-                        LogUtils.e("createRoom。。。");
+                        LogUtils.e("createRoom。。。" + code);
                     }
 
                     @Override
                     public void onException(Throwable exception) {
+                        exception.printStackTrace();
                         LogUtils.e("createRoom。。。");
                     }
                 });
     }
 
+    private AVChatCameraCapturer mVideoCapturer;
 
     /**
      * 加入会议
      */
     private void joinRoom() {
         LogUtils.e("正在加入房间。。。");
-        AVChatOptionalConfig avChatOptionalParam = new AVChatOptionalConfig();
+        // rtc init
+        AVChatManager.getInstance().enableRtc();
+        AVChatManager.getInstance().enableVideo();
         if (isCreate) {
-            avChatOptionalParam.enableAudienceRole(false);
-            avChatOptionalParam.enableLive(true);
-        } else {
-            avChatOptionalParam.enableAudienceRole(true);
+            mVideoCapturer = AVChatVideoCapturerFactory.createCameraCapturer();
+            AVChatManager.getInstance().setupVideoCapturer(mVideoCapturer);
         }
-        AVChatManager.getInstance().joinRoom(roomName, AVChatType.VIDEO, avChatOptionalParam, new AVChatCallback<AVChatData>() {
+        AVChatManager.getInstance().setParameter(AVChatParameters.KEY_SESSION_MULTI_MODE_USER_ROLE, AVChatUserRole.NORMAL);
+        AVChatManager.getInstance().setParameter(AVChatParameters.KEY_AUDIO_REPORT_SPEAKER, true);
+        AVChatManager.getInstance().setParameter(AVChatParameters.KEY_VIDEO_FIXED_CROP_RATIO, AVChatVideoCropRatio.CROP_RATIO_1_1);
+        AVChatManager.getInstance().joinRoom2(roomName, AVChatType.VIDEO, new AVChatCallback<AVChatData>() {
             @Override
             public void onSuccess(AVChatData avChatData) {
-                hideLoadingView();
+                currentCreateAccount = avChatData.getAccount();
                 LogUtils.e("joinRoom成功。。。");
-
             }
 
             @Override
             public void onFailed(int code) {
-                LogUtils.e("joinRoom失败。。。");
+                LogUtils.e("joinRoom失败。。。" + code);
                 showToast("加入会议失败，请重试");
                 finish();
             }
 
             @Override
             public void onException(Throwable exception) {
+                exception.printStackTrace();
                 LogUtils.e("joinRoom失败。。。");
             }
         });
@@ -253,7 +263,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
 
 
     private void leaveRoom() {
-        AVChatManager.getInstance().leaveRoom(new AVChatCallback<Void>() {
+        AVChatManager.getInstance().leaveRoom2(roomName, new AVChatCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 LogUtils.e("成功离开房间");
@@ -276,7 +286,6 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      * 获取Intent数据
      */
     private void initIntentData() {
-
         Intent intent = getIntent();
         isCreate = intent.getBooleanExtra("isCreate", false);
         roomName = intent.getStringExtra("roomName");
@@ -309,7 +318,6 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      * @return
      */
     private JoinVideoMember getJoinMeetingMemberInfo(String uid) {
-
         for (int i = 0; i < mLists.size(); i++) {
             if (mLists.get(i).getUid().equals(uid)) {
                 return mLists.get(i);
@@ -414,12 +422,19 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     private void showMemberVideo(String account) {
         LogUtils.e("account->" + account);
         AVChatVideoRender render = new AVChatVideoRender(AppManager.mContext);
-        AVChatManager.getInstance().setupVideoRender(account, render, true, AVChatVideoScalingType
-                .SCALE_ASPECT_FIT);
-        videoLayout.removeAllViews();
-        videoLayout.addView(render);
-        render.setZOrderMediaOverlay(true);
-
+        if (render != null && isCreate) {
+            AVChatManager.getInstance().setupLocalVideoRender(render, false, AVChatVideoScalingType.SCALE_ASPECT_FIT);
+            AVChatManager.getInstance().startVideoPreview();
+            videoLayout.removeAllViews();
+            videoLayout.addView(render);
+            render.setZOrderMediaOverlay(true);
+        } else if (render != null && !isCreate) {
+            AVChatManager.getInstance().setupRemoteVideoRender(account, render, false, AVChatVideoScalingType.SCALE_ASPECT_FIT);
+            AVChatManager.getInstance().startVideoPreview();
+            videoLayout.removeAllViews();
+            videoLayout.addView(render);
+            render.setZOrderMediaOverlay(true);
+        }
     }
 
     private void registerObservers(boolean register) {
@@ -484,7 +499,17 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     }
 
     @Override
-    public void onLocalRecordEnd(String[] files, int event) {
+    public void onAVRecordingCompletion(String account, String filePath) {
+
+    }
+
+    @Override
+    public void onAudioRecordingCompletion(String filePath) {
+
+    }
+
+    @Override
+    public void onLowStorageSpaceWarning(long availableSize) {
 
     }
 
@@ -495,6 +520,16 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     @Override
     public void onVideoFpsReported(String account, int fps) {
 
+    }
+
+    @Override
+    public boolean onVideoFrameFilter(AVChatVideoFrame frame, boolean maybeDualInput) {
+        return false;
+    }
+
+    @Override
+    public boolean onAudioFrameFilter(AVChatAudioFrame frame) {
+        return false;
     }
 
     @Override
@@ -515,15 +550,9 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      */
     @Override
     public void onUserJoined(String account) {
-        LogUtils.e("有用户加入:" + account);
         addMember(account);
-
-        if (createMen.equals(account)) {
-            showMemberVideo(account);
-        }
-
+        showMemberVideo(account);
     }
-
 
     /**
      * @param account // @param event   －1,用户超时离开  0,正常退出
@@ -531,7 +560,6 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      */
     @Override
     public void onUserLeave(String account, int event) {
-
         //如果是创建会议的人，那么，所有人也离开房间，否则，刷新界面
         if (account.equals(createMen)) {
             showToast("主持人结束了会议");
@@ -539,7 +567,6 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
         } else {
             removeMember(account);
         }
-
     }
 
     @Override
@@ -557,12 +584,13 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
 
     /**
      * @param user
-     * @param value 通话过程中网络状态发生变化，会回调 onNetworkQuality。
+     * @param quality 通话过程中网络状态发生变化，会回调 onNetworkQuality。
      */
     @Override
-    public void onNetworkQuality(String user, int value) {
+    public void onNetworkQuality(String user, int quality, AVChatNetworkStats stats) {
 
     }
+
 
     /**
      * 自己的音视频连接建立，会回调 onCallEstablished。音频切换到正在通话的界面，并开始计时等处理。视频则通过为用户
@@ -570,10 +598,11 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      */
     @Override
     public void onCallEstablished() {
-        LogUtils.e("createMen:" + createMen);
+        LogUtils.e("createMen:" + "createMen" + myAccount);
         String selfAccount = Constants.CID + "_" + AppConfig.getAppConfig(this).getPrivateCode();
-        if (selfAccount.equals(createMen)) {
-            showMemberVideo(createMen);
+        LogUtils.e("createMen:" + "selfAccount" + selfAccount);
+        if (selfAccount.equals(myAccount)) {
+            showMemberVideo(myAccount);
         }
     }
 
@@ -596,24 +625,12 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     }
 
     @Override
-    public int onVideoFrameFilter(AVChatVideoFrame frame) {
-
-        return 0;
-    }
-
-    @Override
-    public int onAudioFrameFilter(AVChatAudioFrame frame) {
-        return 0;
-    }
-
-    @Override
-    public void onAudioOutputDeviceChanged(int device) {
+    public void onAudioDeviceChanged(int device) {
 
     }
 
     @Override
     public void onReportSpeaker(Map<String, Integer> speakers, int mixedEnergy) {
-
         LogUtils.e("有人在说话：" + speakers.toString());
 
         Set<String> set =
@@ -626,17 +643,17 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     }
 
     @Override
-    public void onStartLiveResult(int code) {
-
-    }
-
-    @Override
-    public void onStopLiveResult(int code) {
-
-    }
-
-    @Override
     public void onAudioMixingEvent(int event) {
+
+    }
+
+    @Override
+    public void onSessionStats(AVChatSessionStats sessionStats) {
+
+    }
+
+    @Override
+    public void onLiveEvent(int event) {
 
     }
 
@@ -670,10 +687,10 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
                 LogUtils.e("收到更改视频画面的通知");
 
                 if (!myAccount.equals(customNotification.getFromAccount())) {
-                    LogUtils.e("当前不是我自己发送的通知。。。myAccount:"+myAccount+",getFromAccount:"+customNotification.getFromAccount());
+                    LogUtils.e("当前不是我自己发送的通知。。。myAccount:" + myAccount + ",getFromAccount:" + customNotification.getFromAccount());
                     changeRole();
                     isCanHand = true;
-                }else{
+                } else {
                     isCanHand = false;
                 }
 
@@ -738,7 +755,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
         AVChatManager.getInstance().muteLocalAudio(false);
         AVChatManager.getInstance().muteLocalVideo(false);
         //是否打开观众角色, 设置观众角色后所有的语音和视频数据的采集和发送会关闭，仅允许接收和播放远端其他用户的数据。
-        AVChatManager.getInstance().startLive();
+//        AVChatManager.getInstance().startLive();
         AVChatManager.getInstance().enableAudienceRole(false);
     }
 
@@ -797,8 +814,8 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
             case R.id.rl_handler://举手layout
 
                 if (isCreate) {
-                        sendNotificationTomuberChangeVideo();
-                        changeSelfToMaster();
+                    sendNotificationTomuberChangeVideo();
+                    changeSelfToMaster();
                 } else {
                     // 申请互动
                     if (isCanHand) {

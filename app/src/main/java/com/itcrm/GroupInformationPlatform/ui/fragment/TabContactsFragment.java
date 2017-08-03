@@ -155,6 +155,14 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
             }
         });
 
+        search_et_input.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                recyclerView.setVisibility(View.GONE);
+                tvCacle.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
 
         //监听软键盘确认键,触发搜索功能,为匹配IOS 此功能注释掉
 //        search_et_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -252,10 +260,10 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                 .subscribe(new Consumer<CharSequence>() {
                     @Override
                     public void accept(CharSequence charSequence) throws Exception {
-                        if (search_et_input == null){
+                        if (search_et_input == null) {
                             return;
                         }
-                        if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())){
+                        if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())) {
                             final String uid = AppConfig.getAppConfig(AppManager.mContext)
                                     .get(AppConfig.PREF_KEY_USER_UID);
                             String token = AppConfig.getAppConfig(AppManager.mContext)
@@ -340,7 +348,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+//        loadData();
     }
 
     /**

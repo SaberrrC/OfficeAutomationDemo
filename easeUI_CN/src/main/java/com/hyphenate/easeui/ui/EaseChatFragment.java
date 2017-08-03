@@ -158,7 +158,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         meId = fragmentArgs.getString("meId");
         userName = fragmentArgs.getString("userName");
         userPic = fragmentArgs.getString("userPic");
-        FriendsInfoCacheSvc.getInstance(getActivity()).addOrUpdateFriends(new Friends( meId, userName, userPic));
+        FriendsInfoCacheSvc.getInstance(getActivity()).addOrUpdateFriends(new Friends(meId, userName, userPic));
 
         super.onActivityCreated(savedInstanceState);
     }
@@ -167,7 +167,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
      * init view
      */
     protected void initView() {
-
         // hold to record voice
         //noinspection ConstantConditions
         voiceRecorderView = (EaseVoiceRecorderView) getView().findViewById(R.id.voice_recorder);
@@ -208,7 +207,63 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         });
 
 
+        /**
+         * 长按消息监听，用于复制消息
+         */
 
+        setChatFragmentListener(new EaseChatFragmentHelper() {
+
+            @Override
+            public void onSetMessageAttributes(EMMessage message) {
+                Log.i("easechat", "onSetMessageAttributes");
+            }
+
+            @Override
+            public void onEnterToChatDetails() {
+                Log.i("easechat", "onEnterToChatDetails");
+            }
+
+            @Override
+            public void onAvatarClick(String username) {
+                Log.i("easechat", "onAvatarClick" + username);
+            }
+
+            @Override
+            public void onAvatarLongClick(String username) {
+                Log.i("easechat", "onAvatarLongClick");
+            }
+
+            @Override
+            public boolean onMessageBubbleClick(EMMessage message) {
+                Log.i("easechat", "onMessageBubbleClick");
+                return false;
+            }
+
+            @Override
+            public void onMessageBubbleLongClick(EMMessage message) {
+
+                // no message forward when in chat room
+                try {
+                    startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message", message)
+                                    .putExtra("ischatroom", chatType == EaseConstant.CHATTYPE_CHATROOM),
+                            REQUEST_CODE_CONTEXT_MENU);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public boolean onExtendMenuItemClick(int itemId, View view) {
+                Log.i("easechat", "onExtendMenuItemClick");
+                return false;
+            }
+
+            @Override
+            public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
+                Log.i("easechat", "EaseCustomChatRowProvider");
+                return null;
+            }
+        });
 
         swipeRefreshLayout = messageList.getSwipeRefreshLayout();
         swipeRefreshLayout.setColorSchemeColors(Color.parseColor("#0EA7ED"),
@@ -289,28 +344,19 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
 
     protected void onConversationInit() {
-        Log.i("chatcache","onConversationInit:");
         conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
         conversation.markAllMessagesAsRead();
         // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
         // you can change this number
         final List<EMMessage> msgs = conversation.getAllMessages();
         int msgCount = msgs != null ? msgs.size() : 0;
-        int allMsgCount = conversation.getAllMsgCount();
-        List<EMMessage> allMessages = conversation.getAllMessages();
-
         if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
             String msgId = null;
             if (msgs != null && msgs.size() > 0) {
                 msgId = msgs.get(0).getMsgId();
             }
             conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
-            Log.i("chatcache","msgId:"+msgId);
         }
-
-        Log.i("chatcache","pagesize:"+pagesize);
-        Log.i("chatcache","msgCount:"+msgCount);
-        Log.i("chatcache","allMsgCount:"+allMsgCount);
 
     }
 
@@ -425,8 +471,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             }
         });
     }
-
-
 
     @Override
     public void onResume() {
@@ -585,9 +629,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     public void onMessageReceived(List<EMMessage> messages) {
 
         for (EMMessage message : messages) {
-
             LogUtils.e("收到消息-》" + message.toString());
-
             //获取自定义的名称和头像
             String conversationId = message.getStringAttribute("conversationId", "");
             String nickname = message.getStringAttribute("nickname", "");
@@ -596,15 +638,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             LogUtils.e("conversationId-》" + conversationId);
             LogUtils.e("nickname-》" + nickname);
             LogUtils.e("avatarURL-》" + avatarURL);
-
-
-//            UserApiModel apiModel = UserInfoCacheSvc.getByChatUserName(mContext, conversationId);
-//            if (apiModel == null || null == apiModel.getUsername() || null == apiModel.getHeadImg()) {
-//                boolean orUpdate = UserInfoCacheSvc.createOrUpdate(mContext, conversationId, nickname, avatarURL);
-//                if (orUpdate) {
-//                    LogUtils.e(nickname + "的数据缓存成功");
-//                }
-//            }
 
             FriendsInfoCacheSvc.getInstance(mContext).addOrUpdateFriends(new Friends(conversationId, nickname, avatarURL));
 
@@ -809,7 +842,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
         message.setAttribute("conversationId", meId);
         message.setAttribute("nickname", userName);
-            message.setAttribute("avatarURL", userPic);
+        message.setAttribute("avatarURL", userPic);
         LogUtils.e("发送扩展信息用户名和头像:");
         LogUtils.e("conversationId->" + meId);
         LogUtils.e("nickname->" + userName);
@@ -845,7 +878,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (isMessageListInited) {
             messageList.refreshSelectLast();
         }
-
     }
 
 
@@ -889,7 +921,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 return;
 
             }
-
             sendImageMessage(file.getAbsolutePath());
         }
 
@@ -953,7 +984,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
         //TODO 相机拍完相片不能发送 - 待解决,暂时缓解相机崩溃问题
         //cameraFile.getParentFile().mkdirs();
-
 
         requestRunTimePermission(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
             @Override
@@ -1175,7 +1205,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         EaseCustomChatRowProvider onSetCustomChatRowProvider();
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1208,17 +1237,13 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             }
         }
-
         /**
          * 回调复制删除转发
          */
-
-
         if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
             switch (resultCode) {
                 case ContextMenuActivity.RESULT_CODE_COPY: // copy
-                    clipboard.setPrimaryClip(ClipData.newPlainText(null,
-                            ((EMTextMessageBody) contextMenuMessage.getBody()).getMessage()));
+                    clipboard.setPrimaryClip(ClipData.newPlainText(null, ((EMTextMessageBody) contextMenuMessage.getBody()).getMessage()));
                     break;
                 case ContextMenuActivity.RESULT_CODE_DELETE: // delete
                     conversation.removeMessage(contextMenuMessage.getMsgId());
@@ -1226,17 +1251,15 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     break;
 
                 case ContextMenuActivity.RESULT_CODE_FORWARD: // forward
-//                    Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
-//                    intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
-//                    startActivity(intent);
-
+                    //Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
+                    //intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
+                    //startActivity(intent);
                     break;
-
                 default:
                     break;
             }
         }
-        if(resultCode == Activity.RESULT_OK){
+        if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_SELECT_VIDEO: //send the video
                     if (data != null) {
@@ -1263,7 +1286,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     }
                     break;
                 case REQUEST_CODE_SELECT_AT_USER:
-                    if(data != null){
+                    if (data != null) {
                         String username = data.getStringExtra("username");
                         inputAtUsername(username, false);
                     }
@@ -1275,10 +1298,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     }
 
-    public int getType(){
+    public int getType() {
         return chatType;
     }
-    public int getBackCode(){
+
+    public int getBackCode() {
         return REQUEST_CODE_CONTEXT_MENU;
     }
 

@@ -4,10 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import com.itcrm.GroupInformationPlatform.R;
+
 import com.bigkoo.pickerview.view.BasePickerView;
-import com.bigkoo.pickerview.model.IPickerViewData;
 import com.bigkoo.pickerview.view.WheelOptions;
+import com.itcrm.GroupInformationPlatform.R;
 
 import java.util.ArrayList;
 
@@ -22,6 +22,7 @@ public class OptionsPickerView<T> extends BasePickerView implements View.OnClick
     private OnOptionsSelectListener optionsSelectListener;
     private static final String TAG_SUBMIT = "submit";
     private static final String TAG_CANCEL = "cancel";
+    protected View clickView;//是通过哪个View弹出的
     public OptionsPickerView(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.pickerview_options, contentContainer);
@@ -37,6 +38,7 @@ public class OptionsPickerView<T> extends BasePickerView implements View.OnClick
         // ----转轮
         final View optionspicker = findViewById(R.id.optionspicker);
         wheelOptions = new WheelOptions(optionspicker);
+
     }
     public void setPicker(ArrayList<T> optionsItems) {
         wheelOptions.setPicker(optionsItems, null, null, false);
@@ -69,6 +71,7 @@ public class OptionsPickerView<T> extends BasePickerView implements View.OnClick
     public void setSelectOptions(int option1, int option2){
         wheelOptions.setCurrentItems(option1, option2, 0);
     }
+
     /**
      * 设置选中的item位置
      * @param option1 位置
@@ -128,15 +131,21 @@ public class OptionsPickerView<T> extends BasePickerView implements View.OnClick
             if(optionsSelectListener!=null)
             {
                 int[] optionsCurrentItems=wheelOptions.getCurrentItems();
-                optionsSelectListener.onOptionsSelect(optionsCurrentItems[0], optionsCurrentItems[1], optionsCurrentItems[2]);
+                optionsSelectListener.onOptionsSelect(optionsCurrentItems[0], optionsCurrentItems[1], optionsCurrentItems[2], clickView);
+//                optionsSelectListener.onOptionsSelect(optionsCurrentItems[0], optionsCurrentItems[1], optionsCurrentItems[2]);
             }
             dismiss();
             return;
         }
     }
 
+    public void returnData() {
+    }
+
     public interface OnOptionsSelectListener {
-        void onOptionsSelect(int options1, int option2, int options3);
+//        void onOptionsSelect(int options1, int option2, int options3);
+
+        void onOptionsSelect(int options1, int option2, int options3, View v);
     }
 
     public void setOnoptionsSelectListener(
@@ -146,5 +155,30 @@ public class OptionsPickerView<T> extends BasePickerView implements View.OnClick
 
     public void setTitle(String title){
         tvTitle.setText(title);
+    }
+
+    public static class Builder {
+        private Context context;
+        private int layoutRes = R.layout.pickerview_options;
+        private CustomListener customListener;
+        private boolean isDialog;//是否是对话框模式
+        public Builder(Context context, OnOptionsSelectListener onOptionsSelectListener) {
+            this.context=context;
+        }
+        public Builder setLayoutRes(int res, CustomListener listener) {
+            this.layoutRes = res;
+            this.customListener = listener;
+            return this;
+        }
+        public interface CustomListener {
+            void customLayout(View v);
+        }
+        public Builder isDialog(boolean isDialog) {
+            this.isDialog = isDialog;
+            return this;
+        }
+        public OptionsPickerView build() {
+            return new OptionsPickerView(context);
+        }
     }
 }

@@ -17,10 +17,11 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
-//import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.R;
+
+//import com.easemob.redpacketsdk.constant.RPConstant;
 //import com.hyphenate.chatuidemo.Constant;
 //import com.hyphenate.chatuidemo.R;
 

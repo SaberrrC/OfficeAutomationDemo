@@ -17,8 +17,5 @@
             android:name=".ui.ContextMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" />
-
     </application>
-
-
 </manifest>

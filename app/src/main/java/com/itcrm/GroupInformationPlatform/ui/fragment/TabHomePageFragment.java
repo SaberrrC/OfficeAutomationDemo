@@ -12,12 +12,12 @@ import android.widget.TextView;
 import com.itcrm.GroupInformationPlatform.R;
 import com.itcrm.GroupInformationPlatform.manager.AppConfig;
 import com.itcrm.GroupInformationPlatform.ui.activity.ApprovalListActivity;
-import com.itcrm.GroupInformationPlatform.ui.activity.CreateMeetingActivity;
 import com.itcrm.GroupInformationPlatform.ui.activity.CreateNoteActivity;
 import com.itcrm.GroupInformationPlatform.ui.activity.LaunchApprovalActivity;
 import com.itcrm.GroupInformationPlatform.ui.activity.MyMailActivity;
 import com.itcrm.GroupInformationPlatform.ui.activity.ScheduleActivity;
-import com.itcrm.GroupInformationPlatform.ui.activity.SelectMeetingRoomActivity;
+import com.itcrm.GroupInformationPlatform.ui.activity.SelectOrdinaryMeetingRoomActivity;
+import com.itcrm.GroupInformationPlatform.ui.activity.SelectVedioMeetingRoomActivity;
 import com.itcrm.GroupInformationPlatform.ui.activity.WorkReportLaunchActivity;
 import com.itcrm.GroupInformationPlatform.ui.activity.WorkReportListActivity;
 import com.itcrm.GroupInformationPlatform.ui.base.BaseFragment;
@@ -132,13 +132,21 @@ public class TabHomePageFragment extends BaseFragment {
                 intent.putExtra("whichId",3);
                 break;
             case R.id.rl_schedule_create_common_meeting:
-                intent=new Intent(mContext, SelectMeetingRoomActivity.class);
+                //创建普通会议-旧版
+//                intent=new Intent(mContext, SelectMeetingRoomActivity.class);
+//                intent.putExtra("meetingType","1");
+                //创建普通会议-新版
+                intent=new Intent(mContext, SelectOrdinaryMeetingRoomActivity.class);
                 intent.putExtra("meetingType","1");
+                //今日安排
+//                intent=new Intent(mContext, ViewTheMeetingScheduleActivity.class);
+//                intent.putExtra("meetingType","1");
                 break;
             case R.id.rl_schedule_create_video_meeting:
-                intent=new Intent(mContext, SelectMeetingRoomActivity.class);
+                intent=new Intent(mContext, SelectVedioMeetingRoomActivity.class);
                 intent.putExtra("meetingType","2");
                 break;
+
             case R.id.rl_schedule_create_note:
                 intent=new Intent(mContext, CreateNoteActivity.class);
                 break;

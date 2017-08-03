@@ -7,13 +7,6 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 22
-
-        //EventBus添加索引
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [eventBusIndex: defaultConfig.applicationId + '.eventbus.MyEventBusIndex']
-            }
-        }
     }
 
     buildTypes {
@@ -41,7 +34,4 @@ dependencies {
     //侧滑删除
     compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.5'
     apt 'com.zhy:mpermission-compiler:1.0.0'
-    //EventBus
-    compile "org.greenrobot:eventbus:3.0.0"
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:3.0.1"
 }

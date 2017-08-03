@@ -55,7 +55,7 @@ import butterknife.ButterKnife;
  * ProjectName: dev-beta-v1.0.1
  * PackageName: com.itcrm.GroupInformationPlatform.ui.fragment
  * Author:Created by Tsui on Date:2016/11/9 11:02
- * Description:通知列表fragment
+ * Description:消息列表fragment
  */
 public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 

@@ -74,13 +74,10 @@ public class IflytekUtil {
                 if (!b) {
                     builderResult.append(text).append(",");
                 } else {
-
                     content = mEtContent.getText().toString() + builderResult.toString();
                     content.replace("，", ",");
                     mEtContent.setText(content);
-
                     //mEtContent.setSelection(builderResult.toString().length() - 1);
-
                     //修复光标越界跟光标显示不准
                     mEtContent.setSelection(content.length());
                 }
@@ -88,7 +85,6 @@ public class IflytekUtil {
                 showToast("recognizer result : null");
             }
             LogUtils.e("识别结果：" + recognizerResult.getResultString());
-
         }
 
         @Override

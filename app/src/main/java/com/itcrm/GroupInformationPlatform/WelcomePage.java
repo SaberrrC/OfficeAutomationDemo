@@ -2,10 +2,10 @@ package com.itcrm.GroupInformationPlatform;
 
 import android.app.Activity;
 import android.app.Notification;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -35,7 +35,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import cn.jpush.android.api.BasicPushNotificationBuilder;
-import cn.jpush.android.api.CustomPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -46,6 +45,7 @@ public class WelcomePage extends Activity {
 
     private KJHttp kjHttp;
     private AlphaAnimation aa;
+    private boolean isTimeOut = false;//默认超时
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,8 @@ public class WelcomePage extends Activity {
         View view = new View(this);
         view.setBackgroundResource(R.drawable.welcome_page);
         setContentView(view);
+
+        checkTimeOut();
         //渐变展示启动屏
         aa = new AlphaAnimation(0.1f, 1.0f);
         view.startAnimation(aa);
@@ -67,14 +69,14 @@ public class WelcomePage extends Activity {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                boolean autoLogin = AppConfig.getAppConfig(AppManager.mContext).isAutoLogin();
-                if (autoLogin && !AppConfig.getAppConfig(AppManager.mContext)
-                        .get(AppConfig.PREF_KEY_USERNAME).equals(AppConfig.DEFAULT_ARGUMENTS_VALUE)) {
-                    startActivity(new Intent(AppManager.mContext, MainController.class));
-                } else {
-                    startActivity(new Intent(AppManager.mContext, LoginActivity.class));
-                }
-                finish();
+//                boolean autoLogin = AppConfig.getAppConfig(AppManager.mContext).isAutoLogin();
+//                if (autoLogin && !AppConfig.getAppConfig(AppManager.mContext)
+//                        .get(AppConfig.PREF_KEY_USERNAME).equals(AppConfig.DEFAULT_ARGUMENTS_VALUE)) {
+//                    startActivity(new Intent(AppManager.mContext, MainController.class));
+//                } else {
+//                    startActivity(new Intent(AppManager.mContext, LoginActivity.class));
+//                }
+//                finish();
             }
 
             @Override
@@ -148,7 +150,72 @@ public class WelcomePage extends Activity {
         }
         return null;
     }
+    /**
+     * 登录超时判断
+     */
+    public void checkTimeOut() {
+        HttpParams params = new HttpParams();
 
+        if (kjHttp == null) {
+            kjHttp = new KJHttp();
+        }
+        String uid = AppConfig.getAppConfig(AppManager.mContext)
+                .get(AppConfig.PREF_KEY_USER_UID);
+        String token = AppConfig.getAppConfig(AppManager.mContext)
+                .get(AppConfig.PREF_KEY_TOKEN);
+        params.put("uid", uid);
+        params.put("token", token);
+
+        kjHttp.post(AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.BASE_URL)+Api.SITE_TIMEOUT, params, new HttpCallBack() {
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                finish();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                LogUtils.e("---------------成功"+t);
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
+                        JSONObject data = jo.getJSONObject("data");
+                        String timeout = data.getString("timeout");
+                        Log.e("","---------timeout："+timeout);
+                        LogUtils.e("---------timeout"+timeout);
+                        if (timeout.equals("1")) {//超时
+                            isTimeOut = false;
+                        } else {
+                            isTimeOut = true;
+                        }
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (isTimeOut) {//不超时
+                    startActivity(new Intent(AppManager.mContext, MainController.class));
+                } else {
+                    startActivity(new Intent(AppManager.mContext, LoginActivity.class));
+                }
+//                finish();
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                LogUtils.e("-------onFailure" + strMsg);
+                if (isTimeOut) {//不超时
+                    startActivity(new Intent(AppManager.mContext, MainController.class));
+                } else {
+                    startActivity(new Intent(AppManager.mContext, LoginActivity.class));
+                }
+//                finish();
+            }
+        });
+    }
     /**
      * 请求公司ID
      */

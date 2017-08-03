@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,12 +23,6 @@ import com.itcrm.GroupInformationPlatform.model.User;
 import com.itcrm.GroupInformationPlatform.ui.PermissionListener;
 import com.itcrm.GroupInformationPlatform.ui.base.BaseActivity;
 import com.itcrm.GroupInformationPlatform.utils.Utils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.lang.ref.WeakReference;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -75,9 +68,6 @@ public class Contact_Details_Activity2 extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_details);
-//        if (!EventBus.getDefault().isRegistered(this)) {
-//            EventBus.getDefault().register(this);
-//        }
         ButterKnife.bind(this);
         init2();
     }
@@ -215,10 +205,4 @@ public class Contact_Details_Activity2 extends BaseActivity {
         }
 
     }
-
-//    //聊天列表跳详情页发送消息
-//    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-//    public void orderIdEventBus(String username) {
-//        Log.i("message", "休息已接受"+ username );
-//    }
 }
