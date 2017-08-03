@@ -16,7 +16,7 @@ import android.view.View;
 import com.bigkoo.pickerview.adapter.WheelAdapter;
 import com.bigkoo.pickerview.listener.OnItemSelectedListener;
 import com.bigkoo.pickerview.model.IPickerViewData;
-import com.itcrm.GroupInformationPlatform.R;
+import com.shanlin.oa.R;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

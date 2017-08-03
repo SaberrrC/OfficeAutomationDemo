@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.itcrm.GroupInformationPlatform">
+          package="com.shanlin.oa">
 
     <!--极光requried-->
     <permission
-        android:name="com.itcrm.GroupInformationPlatform.permission.JPUSH_MESSAGE"
+        android:name="com.shanlin.oa.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.itcrm.GroupInformationPlatform.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="com.shanlin.oa.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -89,10 +89,10 @@
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
     <!-- SDK 权限申明, 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
     <permission
-        android:name="com.itcrm.GroupInformationPlatform.permission.RECEIVE_MSG"
+        android:name="com.shanlin.oa.permission.RECEIVE_MSG"
         android:protectionLevel="signature"/>
     <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
-    <uses-permission android:name="com.itcrm.GroupInformationPlatform.permission.RECEIVE_MSG"/>
+    <uses-permission android:name="com.shanlin.oa.permission.RECEIVE_MSG"/>
 
 
 
@@ -106,7 +106,7 @@
     </meta-data>
 
     <provider android:name="android.support.v4.content.FileProvider"
-        android:authorities="com.itcrm.GroupInformationPlatform.fileprovider"
+        android:authorities="com.shanlin.oa.fileprovider"
         android:exported="false"
         android:grantUriPermissions="true">
         <meta-data
@@ -115,7 +115,7 @@
     </provider>
     <application
 
-        android:name=".manager.AppManager"
+        android:name="com.shanlin.oa.manager.AppManager"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -125,7 +125,7 @@
 
 
         <activity
-            android:name=".WelcomePage"
+            android:name="com.shanlin.oa.WelcomePage"
             android:screenOrientation="portrait"
             android:theme="@style/WeclomeActivityTheme">
             <intent-filter>
@@ -167,7 +167,7 @@
 
         <!-- 登录界面 -->
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name="com.shanlin.oa.ui.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <!-- 极光推送 开始-->
@@ -189,7 +189,7 @@
             android:exported="false">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
-                <category android:name="com.itcrm.GroupInformationPlatform"/>
+                <category android:name="com.shanlin.oa"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT"/>
@@ -206,7 +206,7 @@
             android:name="cn.jpush.android.service.AlarmReceiver"
             android:exported="false"/>
         <receiver
-            android:name="com.itcrm.GroupInformationPlatform.ui.receiver.MyJpushReceiver"
+            android:name="com.shanlin.oa.ui.receiver.MyJpushReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -217,7 +217,7 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/>
                 <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK"/>
                 <action android:name="cn.jpush.android.intent.CONNECTION"/>
-                <category android:name="com.itcrm.GroupInformationPlatform"/>
+                <category android:name="com.shanlin.oa"/>
             </intent-filter>
         </receiver>
         <!-- 极光推送 结束-->
@@ -252,7 +252,7 @@
 
         <!-- 申明本地电话状态（通话状态）的广播接收器，第三方APP集成时音视频模块时，
        如果需要网络通话与本地电话互斥，请加上此接收器 -->
-        <receiver android:name="com.itcrm.GroupInformationPlatform.ui.receiver.IncomingCallReceiver">
+        <receiver android:name="com.shanlin.oa.ui.receiver.IncomingCallReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
@@ -280,272 +280,272 @@
 
         <!-- 首页控制器 -->
         <activity
-            android:name=".ui.activity.MainController"
+            android:name="com.shanlin.oa.ui.activity.MainController"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <!-- 首页名片页面二级一下界面 -->
         <activity
-            android:name=".ui.activity.ContactsActivity"
+            android:name="com.shanlin.oa.ui.activity.ContactsActivity"
             android:screenOrientation="portrait"/>
         <!-- 用户信息 -->
         <activity
-            android:name=".ui.activity.UserInfoActivity"
+            android:name="com.shanlin.oa.ui.activity.UserInfoActivity"
             android:screenOrientation="portrait"/>
         <!-- 修改密码 -->
         <activity
-            android:name=".ui.activity.ModifyPwdActivity"
+            android:name="com.shanlin.oa.ui.activity.ModifyPwdActivity"
             android:screenOrientation="portrait"/>
         <!-- 找回密码 -->
         <activity
-            android:name=".ui.activity.FindPassWordActivity"
+            android:name="com.shanlin.oa.ui.activity.FindPassWordActivity"
             android:screenOrientation="portrait"/>
         <!-- 用户反馈 -->
         <activity
-            android:name=".ui.activity.FeedbackActivity"
+            android:name="com.shanlin.oa.ui.activity.FeedbackActivity"
             android:screenOrientation="portrait"/>
         <!-- 关于我们 -->
         <activity
-            android:name=".ui.activity.AboutUsActivity"
+            android:name="com.shanlin.oa.ui.activity.AboutUsActivity"
             android:screenOrientation="portrait"/>
         <!-- 修改电话 -->
         <activity
-            android:name=".ui.activity.ModifyPhoneActivity"
+            android:name="com.shanlin.oa.ui.activity.ModifyPhoneActivity"
             android:screenOrientation="portrait"/>
         <!-- 工作汇报列表 -->
         <activity
-            android:name=".ui.activity.WorkReportListActivity"
+            android:name="com.shanlin.oa.ui.activity.WorkReportListActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <!-- 工作汇报详情页 -->
         <activity
-            android:name=".ui.activity.WorkReportSingleInfoActivity"
+            android:name="com.shanlin.oa.ui.activity.WorkReportSingleInfoActivity"
             android:screenOrientation="portrait"/>
         <!-- 发起工作汇报 -->
         <activity
-            android:name=".ui.activity.WorkReportLaunchActivity"
+            android:name="com.shanlin.oa.ui.activity.WorkReportLaunchActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
         <!--我的邮箱-->
-        <activity android:name=".ui.activity.MyMailActivity"
+        <activity android:name="com.shanlin.oa.ui.activity.MyMailActivity"
             android:screenOrientation="portrait"
             />
         <!-- 选择联系人 -->
         <activity
-            android:name=".ui.activity.SelectContactsActivity"
+            android:name="com.shanlin.oa.ui.activity.SelectContactsActivity"
             android:screenOrientation="portrait"/>
         <!-- 公用选择头像 -->
         <activity
-            android:name=".ui.activity.PublicImageSelectorActivity"
+            android:name="com.shanlin.oa.ui.activity.PublicImageSelectorActivity"
             android:screenOrientation="portrait"/>
         <!-- 通知公告 -->
         <activity
-            android:name=".ui.activity.NoticeListActivity"
+            android:name="com.shanlin.oa.ui.activity.NoticeListActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <!-- 系统消息 -->
         <activity
-            android:name=".ui.activity.SystemNoticesActivity"
+            android:name="com.shanlin.oa.ui.activity.SystemNoticesActivity"
             android:screenOrientation="portrait"/>
         <!-- 使用帮助 -->
         <activity
-            android:name=".ui.activity.UsingHelpActivity"
+            android:name="com.shanlin.oa.ui.activity.UsingHelpActivity"
             android:screenOrientation="portrait"/>
         <!-- 单个公告通知 -->
         <activity
-            android:name=".ui.activity.NoticesSingleInfoActivity"
+            android:name="com.shanlin.oa.ui.activity.NoticesSingleInfoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
         <!-- 工作汇报回复 -->
         <activity
-            android:name=".ui.activity.WorkReportReplyActivity"
+            android:name="com.shanlin.oa.ui.activity.WorkReportReplyActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
         <!-- 审批列表 -->
         <activity
-            android:name=".ui.activity.ApprovalListActivity"
+            android:name="com.shanlin.oa.ui.activity.ApprovalListActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <!-- 发起审批 -->
         <activity
-            android:name=".ui.activity.LaunchApprovalActivity"
+            android:name="com.shanlin.oa.ui.activity.LaunchApprovalActivity"
             android:screenOrientation="portrait"/>
         <!-- 差旅申请 -->
         <activity
-            android:name=".ui.activity.ApplyForTravelActivity"
+            android:name="com.shanlin.oa.ui.activity.ApplyForTravelActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <!-- 公出申请申请 -->
         <activity
-            android:name=".ui.activity.ApplyForPublicOutActivity"
+            android:name="com.shanlin.oa.ui.activity.ApplyForPublicOutActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <!-- 请假申请 -->
         <activity
-            android:name=".ui.activity.ApplyForLeaveActivity"
+            android:name="com.shanlin.oa.ui.activity.ApplyForLeaveActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <!-- 办公用品申请 -->
         <activity
-            android:name=".ui.activity.ApplyForOfficeSuppliesActivity"
+            android:name="com.shanlin.oa.ui.activity.ApplyForOfficeSuppliesActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <!--加班申请 -->
         <activity
-            android:name=".ui.activity.ApplyForOverTimeActivity"
+            android:name="com.shanlin.oa.ui.activity.ApplyForOverTimeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <!-- 待我审批 (请假)-->
         <activity
-            android:name=".ui.activity.WaitApprovalLeaveActivity"
+            android:name="com.shanlin.oa.ui.activity.WaitApprovalLeaveActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             />
         <!-- 待我审批 （办公用品）-->
         <activity
-            android:name=".ui.activity.WaitApprovalOfficesSuppliesActivity"
+            android:name="com.shanlin.oa.ui.activity.WaitApprovalOfficesSuppliesActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             />
         <!-- 待我审批 （差旅）-->
         <activity
-            android:name=".ui.activity.WaitApprovaltravalActivity"
+            android:name="com.shanlin.oa.ui.activity.WaitApprovaltravalActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             />
         <!-- 待我审批 （公告）-->
         <activity
-            android:name=".ui.activity.WaitApprovalNoticeActivity"
+            android:name="com.shanlin.oa.ui.activity.WaitApprovalNoticeActivity"
             android:screenOrientation="portrait"
             />
         <!-- 我发起的 (请假)-->
         <activity
-            android:name=".ui.activity.MeLaunchLeaveActivity"
+            android:name="com.shanlin.oa.ui.activity.MeLaunchLeaveActivity"
             android:screenOrientation="portrait"
             />
         <!-- 我发起的 (办公用品)-->
         <activity
-            android:name=".ui.activity.MeLaunchOfficesSuppliesActivity"
+            android:name="com.shanlin.oa.ui.activity.MeLaunchOfficesSuppliesActivity"
             android:screenOrientation="portrait"
             />
         <!-- 我发起的 (办公用品)-->
         <activity
-            android:name=".ui.activity.MeLaunchTravalActivity"
+            android:name="com.shanlin.oa.ui.activity.MeLaunchTravalActivity"
             android:screenOrientation="portrait"
             />
         <!-- 我发起的 (加班)-->
         <activity
-            android:name=".ui.activity.MeLaunchOverTimeActivity"
+            android:name="com.shanlin.oa.ui.activity.MeLaunchOverTimeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
         <!-- 我发起的 (加班)-->
         <activity
-            android:name=".ui.activity.MeLaunchPublicOutActivity"
+            android:name="com.shanlin.oa.ui.activity.MeLaunchPublicOutActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
         <!-- 待我审批回复 -->
         <activity
-            android:name=".ui.activity.WaitApprovalReplyActivity"
+            android:name="com.shanlin.oa.ui.activity.WaitApprovalReplyActivity"
             android:screenOrientation="portrait"
             />
         <!-- 单个图片activity -->
         <activity
-            android:name=".ui.activity.ShowPictureActivity"
+            android:name="com.shanlin.oa.ui.activity.ShowPictureActivity"
             android:screenOrientation="portrait"
             />
         <!-- 名片(联系人)  -->
         <activity
-            android:name=".ui.activity.TabContactsActivity"
+            android:name="com.shanlin.oa.ui.activity.TabContactsActivity"
             android:screenOrientation="portrait"
             />
         <!-- 推送列表  -->
         <activity
-            android:name=".ui.activity.PushListActivity"
+            android:name="com.shanlin.oa.ui.activity.PushListActivity"
             android:screenOrientation="portrait"
             />
         <!-- 日程安排  -->
         <activity
-            android:name=".ui.activity.ScheduleActivity"
+            android:name="com.shanlin.oa.ui.activity.ScheduleActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             />
         <!-- 创建会议  -->
         <activity
-            android:name=".ui.activity.CreateMeetingActivity"
+            android:name="com.shanlin.oa.ui.activity.CreateMeetingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
         <!-- 创建记事本 -->
         <activity
-            android:name=".ui.activity.CreateNoteActivity"
+            android:name="com.shanlin.oa.ui.activity.CreateNoteActivity"
             android:screenOrientation="portrait"
             />
         <!--  记事本详情-->
         <activity
-            android:name=".ui.activity.NoteDetailActivity"
+            android:name="com.shanlin.oa.ui.activity.NoteDetailActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             />
         <!-- 选择抄送人-->
         <activity
-            android:name=".ui.activity.SelectJoinPeopleActivity"
+            android:name="com.shanlin.oa.ui.activity.SelectJoinPeopleActivity"
             android:screenOrientation="portrait"
             />
         <!-- 会议详情-->
         <activity
-            android:name=".ui.activity.MeetingInfoActivity"
+            android:name="com.shanlin.oa.ui.activity.MeetingInfoActivity"
             android:screenOrientation="portrait"
             />
         <!-- 视频会议详情-->
         <activity
-            android:name=".ui.activity.MeetingInfoVideoActivity"
+            android:name="com.shanlin.oa.ui.activity.MeetingInfoVideoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             />
         <!-- 视频会议-->
         <activity
-            android:name=".ui.activity.MeetingVideoActivity"
+            android:name="com.shanlin.oa.ui.activity.MeetingVideoActivity"
             android:screenOrientation="portrait"
             />
         <!-- 聊天activity -->
         <activity
-            android:name=".ui.activity.EaseChatMessageActivity"
+            android:name="com.shanlin.oa.ui.activity.EaseChatMessageActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             />
         <!-- 语音聊天activity -->
         <activity
-            android:name=".ui.activity.VoiceCallActivity"
+            android:name="com.shanlin.oa.ui.activity.VoiceCallActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             />
         <!-- 上传图片的 activity -->
         <activity
-            android:name=".ui.activity.AffirmPictureActivity"
+            android:name="com.shanlin.oa.ui.activity.AffirmPictureActivity"
             android:screenOrientation="portrait"
             />
         <!-- 选择会议室 activity -->
         <activity
-            android:name=".ui.activity.SelectMeetingRoomActivity"
+            android:name="com.shanlin.oa.ui.activity.SelectMeetingRoomActivity"
             android:screenOrientation="portrait"
             />
         <!--搜索联系人返回结果=联系人详情页-->
-        <activity android:name=".ui.activity.Contact_Details_Activity"/>
+        <activity android:name="com.shanlin.oa.ui.activity.Contact_Details_Activity"/>
         <!--正常点击部门列表的联系人详情页-->
-        <activity android:name=".ui.activity.Contact_Details_Activity2"/>
+        <activity android:name="com.shanlin.oa.ui.activity.Contact_Details_Activity2"/>
         <!--创建视频会议——新版-->
-        <activity android:name=".ui.activity.SelectVedioMeetingRoomActivity"/>
+        <activity android:name="com.shanlin.oa.ui.activity.SelectVedioMeetingRoomActivity"/>
         <!--创建视频会议——完成-->
-        <activity android:name=".ui.activity.CreateVedioMeetingActivity"/>
+        <activity android:name="com.shanlin.oa.ui.activity.CreateVedioMeetingActivity"/>
         <!-- 请选择会议室 -->
-        <activity android:name=".ui.activity.SelectOrdinaryMeetingRoomActivity" />
+        <activity android:name="com.shanlin.oa.ui.activity.SelectOrdinaryMeetingRoomActivity" />
         <!-- 今日安排 -->
-        <activity android:name=".ui.activity.ViewTheMeetingScheduleActivity" />
+        <activity android:name="com.shanlin.oa.ui.activity.ViewTheMeetingScheduleActivity" />
         <!-- 创建普通会议 -->
-        <activity android:name=".ui.activity.CreateOridinryMeetingActivity"/>
+        <activity android:name="com.shanlin.oa.ui.activity.CreateOridinryMeetingActivity"/>
     </application>
 
 </manifest>

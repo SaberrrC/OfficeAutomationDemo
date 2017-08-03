@@ -6,7 +6,7 @@ import android.view.View;
 import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
 import com.bigkoo.pickerview.lib.WheelView;
 import com.bigkoo.pickerview.listener.OnItemSelectedListener;
-import com.itcrm.GroupInformationPlatform.R;
+import com.shanlin.oa.R;
 
 public class WheelOptions<T> {
 	private View view;

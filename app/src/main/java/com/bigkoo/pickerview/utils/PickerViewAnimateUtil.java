@@ -2,7 +2,7 @@ package com.bigkoo.pickerview.utils;
 
 import android.view.Gravity;
 
-import com.itcrm.GroupInformationPlatform.R;
+import com.shanlin.oa.R;
 
 
 /**

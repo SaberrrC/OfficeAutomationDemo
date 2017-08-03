@@ -15,7 +15,7 @@ android {
         javaMaxHeapSize "4g"
     }
     defaultConfig {
-        applicationId "com.itcrm.GroupInformationPlatform"
+        applicationId "com.shanlin.oa"
         minSdkVersion 16
         targetSdkVersion 24
 
@@ -30,10 +30,17 @@ android {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64', "arm64-v8a"
         }
         manifestPlaceholders = [
-                JPUSH_PKGNAME: "com.itcrm.GroupInformationPlatform",
-                JPUSH_APPKEY : "3bf9508a316ff2277a8a5585", //JPush上注册的包名对应的appkey.
+                JPUSH_PKGNAME: "com.shanlin.oa",
+                JPUSH_APPKEY : "30c048e2af974fbc6634690e", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
         ]
+
+        //EventBus添加索引
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: defaultConfig.applicationId + '.eventbus.MyEventBusIndex']
+            }
+        }
     }
     buildTypes {
         release {
@@ -103,5 +110,9 @@ dependencies {
     compile 'com.flipboard:bottomsheet-commons:1.5.3' // optional
     //蒲公英
     compile 'com.pgyersdk:sdk:2.5.6'
+
+    //EventBus
+    compile "org.greenrobot:eventbus:3.0.0"
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:3.0.1"
 
 }

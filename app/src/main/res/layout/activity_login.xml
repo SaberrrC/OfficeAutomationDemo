@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.itcrm.GroupInformationPlatform.views.KeyboardLayout
+<com.shanlin.oa.views.KeyboardLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
@@ -153,4 +153,4 @@
     </RelativeLayout>
 
 
-</com.itcrm.GroupInformationPlatform.views.KeyboardLayout>
+</com.shanlin.oa.views.KeyboardLayout>

@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.bigkoo.pickerview.view.BasePickerView;
 import com.bigkoo.pickerview.view.WheelOptions;
-import com.itcrm.GroupInformationPlatform.R;
+import com.shanlin.oa.R;
 
 import java.util.ArrayList;
 

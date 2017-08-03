@@ -29,7 +29,7 @@
             android:paddingRight="12dp"
             android:visibility="visible" />
 
-        <com.itcrm.GroupInformationPlatform.views.MyChronometer
+        <com.shanlin.oa.views.MyChronometer
             android:visibility="invisible"
             android:id="@+id/chronometer"
             android:layout_marginTop="5dp"

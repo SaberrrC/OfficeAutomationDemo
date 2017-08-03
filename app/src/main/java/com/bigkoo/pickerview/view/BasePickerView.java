@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
 
 import com.bigkoo.pickerview.utils.PickerViewAnimateUtil;
 import com.bigkoo.pickerview.listener.OnDismissListener;
-import com.itcrm.GroupInformationPlatform.R;
+import com.shanlin.oa.R;
 
 /**
  * Created by Sai on 15/11/22.
