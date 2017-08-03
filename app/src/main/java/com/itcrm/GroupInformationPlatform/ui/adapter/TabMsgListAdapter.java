@@ -1,15 +1,12 @@
 package com.itcrm.GroupInformationPlatform.ui.adapter;
 
 import android.view.View;
+import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.itcrm.GroupInformationPlatform.R;
 import com.itcrm.GroupInformationPlatform.model.PushMsg;
-import com.itcrm.GroupInformationPlatform.utils.BitmapUtils;
-import com.itcrm.GroupInformationPlatform.utils.LogUtils;
-
-import android.widget.ImageView;
 
 import java.util.List;
 
@@ -70,11 +67,15 @@ public class TabMsgListAdapter extends BaseQuickAdapter<PushMsg> {
                 break;
         }
 
+        //截取字符串,防止创建房间417问题
+        int length = pushMsg.getContent().trim().length();
+        if (length > 32) {
+            length -= 32;
+        }
+        String roomName = pushMsg.getContent().trim().substring(0, length);
 
         holder.setText(R.id.tv_item_time, pushMsg.getCreated())
                 .setText(R.id.tv_item_type, typeStr).
-                setText(R.id.tv_title, pushMsg.getContent());
-
-
+                setText(R.id.tv_title, roomName);
     }
 }
