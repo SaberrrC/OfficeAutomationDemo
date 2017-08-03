@@ -114,7 +114,6 @@ public class AppManager extends Application {
         SpeechUtility.createUtility(AppManager.mContext, SpeechConstant.APPID + "=5819a625");
 
         //极光初始化+
-
         BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(
                 AppManager.mContext);
         builder.statusBarDrawable = R.drawable.login_logo;

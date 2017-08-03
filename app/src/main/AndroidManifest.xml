@@ -187,7 +187,6 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/>
                 <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK"/>
                 <action android:name="cn.jpush.android.intent.CONNECTION"/>
-
                 <category android:name="${applicationId}"/>
             </intent-filter>
         </receiver>
@@ -223,22 +222,22 @@
 
         <!-- 申明本地电话状态（通话状态）的广播接收器，第三方APP集成时音视频模块时，
        如果需要网络通话与本地电话互斥，请加上此接收器 -->
-        <receiver android:name="com.netease.nimlib.receiver.IncomingCallReceiver">
+        <receiver android:name="com.itcrm.GroupInformationPlatform.ui.receiver.IncomingCallReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.netease.cosine.core.CosineService"
-            android:process=":cosine">
-        </service>
+        <!--<service-->
+            <!--android:name="com.netease.cosine.core.CosineService"-->
+            <!--android:process=":cosine">-->
+        <!--</service>-->
 
-        <receiver
-            android:name="com.netease.cosine.target.CosineReceiver"
-            android:exported="true"
-            android:process=":cosine">
-        </receiver>
+        <!--<receiver-->
+            <!--android:name="com.netease.cosine.target.CosineReceiver"-->
+            <!--android:exported="true"-->
+            <!--android:process=":cosine">-->
+        <!--</receiver>-->
 
         <meta-data
             android:name="com.netease.cosine.target"
