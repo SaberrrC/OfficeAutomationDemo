@@ -214,7 +214,7 @@ public class LoginActivity extends BaseActivity {
             showToast("密码错误，请重试");
             return false;
         }
-        if (0 != NetWorkUtils.getAPNType(this)) {
+        if (0 == NetWorkUtils.getAPNType(this)) {
             Toast.makeText(this,"请检测网络，当前网络不可用!",Toast.LENGTH_SHORT).show();
             return false;
         }
