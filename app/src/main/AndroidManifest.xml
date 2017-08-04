@@ -540,6 +540,11 @@
         <activity android:name="com.shanlin.oa.ui.activity.ViewTheMeetingScheduleActivity" />
         <!-- 创建普通会议 -->
         <activity android:name="com.shanlin.oa.ui.activity.CreateOridinryMeetingActivity"/>
+
+        <!--点击聊天图片进入大图片查看-->
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>
