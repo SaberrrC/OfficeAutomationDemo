@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
@@ -26,6 +27,7 @@ import com.shanlin.oa.model.User;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.AndroidAdjustResizeBugFix;
 import com.shanlin.oa.utils.LogUtils;
+import com.shanlin.oa.utils.NetWorkUtils;
 import com.shanlin.oa.utils.Utils;
 import com.shanlin.oa.views.KeyboardLayout;
 
@@ -210,6 +212,10 @@ public class LoginActivity extends BaseActivity {
         }
         if (!Utils.isRegex(Constants.Regex.REGEX_PASSWORD, userPwd.getText().toString())) {
             showToast("密码错误，请重试");
+            return false;
+        }
+        if (0 != NetWorkUtils.getAPNType(this)) {
+            Toast.makeText(this,"请检测网络，当前网络不可用!",Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
