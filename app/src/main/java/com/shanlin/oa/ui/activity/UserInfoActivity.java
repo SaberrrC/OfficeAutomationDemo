@@ -113,16 +113,21 @@ public class UserInfoActivity extends BaseActivity {
         initData();
 
         File dir = getExternalFilesDir("user_icon");
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            icon_path = FileProvider.getUriForFile(getApplicationContext(),
-                    "com.itcrm.zhitongoa.sl.file_provider", new File(dir, TEMP_FILE_NAME));
-            camera_path = FileProvider.getUriForFile(getApplicationContext(),
-                    "com.itcrm.zhitongoa.sl.file_provider", new File(dir, "camera_pic.jpg"));
+        try{
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                icon_path = FileProvider.getUriForFile(getApplicationContext(),
+                        "com.itcrm.zhitongoa.sl.file_provider", new File(dir, TEMP_FILE_NAME));
+                camera_path = FileProvider.getUriForFile(getApplicationContext(),
+                        "com.itcrm.zhitongoa.sl.file_provider", new File(dir, "camera_pic.jpg"));
 
-        } else {
-            icon_path = Uri.fromFile(new File(dir, TEMP_FILE_NAME));
-            camera_path = Uri.fromFile(new File(dir, "camera_pic.jpg"));
+            } else {
+                icon_path = Uri.fromFile(new File(dir, TEMP_FILE_NAME));
+                camera_path = Uri.fromFile(new File(dir, "camera_pic.jpg"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
 
     }
 
