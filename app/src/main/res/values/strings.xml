@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="day_arrangement">会议安排</string>
     <string name="select_meet_room">请选择会议室</string>
-    <string name="app_name">智通OA(sl)</string>
+    <string name="app_name">善林OA</string>
 
     <string name="tab_message">通知</string>
     <string name="tab_communication">消息</string>

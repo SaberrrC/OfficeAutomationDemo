@@ -548,6 +548,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                     if (selectedContacts.get(i).getUid().equals(
                             searchGroup.get(groupPosition).getChildItem(childPosition).getUid())) {
                         isExist = true;
+                        Toast.makeText(SelectJoinPeopleActivity.this, R.string.selectJoinPeopleHint, Toast.LENGTH_SHORT).show();
                     }
                 }
                 if (!isExist) {
