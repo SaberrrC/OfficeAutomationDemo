@@ -431,8 +431,11 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         });
     }
 
+    boolean isResume;
+
     @Override
     public void onResume() {
+        isResume = true;
         currentPage = 1;
         reFresUnRedCount();
         if (!isFirst) {
@@ -443,6 +446,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onPause() {
+        isResume = false;
         isFirst = false;
         super.onPause();
     }
@@ -475,7 +479,8 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             mSwipeRefreshLayout.setRefreshing(true);
             changeLoadState();
         }
-        if (!isPull && !loadMore) {
+        if (!isPull && !loadMore && isResume) {
+            isResume = false;
             showLoadingView();
             changeLoadState();
         }

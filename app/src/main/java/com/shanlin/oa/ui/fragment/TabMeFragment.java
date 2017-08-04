@@ -206,6 +206,7 @@ public class TabMeFragment extends BaseFragment {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                hideLoadingView();
                 LogUtils.e("onSuccess-->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
@@ -233,6 +234,7 @@ public class TabMeFragment extends BaseFragment {
                 super.onFailure(errorNo, strMsg);
                 LogUtils.e(errorNo + strMsg);
                 catchWarningByCode(errorNo);
+                hideLoadingView();
             }
         });
     }
