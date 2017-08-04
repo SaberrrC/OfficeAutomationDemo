@@ -278,6 +278,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.shanlin.oa.R;
@@ -573,6 +574,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                     if (selectedContacts.get(i).getUid().equals(
                             groups.get(groupPosition).getChildItem(childPosition).getUid())) {
                         isExist = true;
+                        Toast.makeText(SelectJoinPeopleActivity.this, R.string.selectJoinPeopleHint, Toast.LENGTH_SHORT).show();
                     }
                 }
                 if (!isExist) {
@@ -744,6 +746,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         super.onDestroy();
         ButterKnife.unbind(this);
     }
+
     /**
      * 自己实现 Handler 处理消息更新UI
      *
@@ -753,7 +756,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            qty.setText(msg.what+"");
+            qty.setText(msg.what + "");
         }
     }
 }

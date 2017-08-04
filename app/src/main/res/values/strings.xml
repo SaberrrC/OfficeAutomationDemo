@@ -1,7 +1,4 @@
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation"
-    >
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="day_arrangement">会议安排</string>
     <string name="select_meet_room">请选择会议室</string>
     <string name="app_name">智通OA(sl)</string>
@@ -64,4 +61,6 @@
     <string name="nrtc_setting_voe_high_quality">高清语音</string>
     <string name="nrtc_setting_voe_dtx_key">nrtc_setting_voe_dtx_key</string>
     <string name="nrtc_setting_voe_dtx">人声检测</string>
+    <!-- 会议搜索界面,提示功能 -->
+    <string name="selectJoinPeopleHint">已选择</string>
 </resources>
