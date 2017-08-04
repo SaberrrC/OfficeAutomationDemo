@@ -172,8 +172,15 @@ public class MeetingInfoActivity extends BaseActivity {
         mRootView.setVisibility(View.VISIBLE);
         try {
             LogUtils.e("setDataForMeetingRoom:jsonObject->" + jsonObject.toString());
+
             meetingTheme = jsonObject.getString("theme");
-            tvMeetingTheme.setText(meetingTheme);
+            //截取字符串,防止创建房间417问题
+            int length = meetingTheme.trim().length();
+            if (length > 32) {
+                length -= 32;
+            }
+            String roomName = meetingTheme.trim().substring(0, length);
+            tvMeetingTheme.setText(roomName);
             date = jsonObject.getString("date");
             begintime = jsonObject.getString("begintime");
             endtime = jsonObject.getString("endtime");
