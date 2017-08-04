@@ -31,11 +31,20 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-//import com.hyphenate.chatuidemo.db.Friends;
-//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
-//import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
 import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.SDKOptions;
+import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlin.oa.R;
 import com.shanlin.oa.WelcomePage;
 import com.shanlin.oa.common.Api;
@@ -55,16 +64,6 @@ import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.ScreenUtils;
 import com.shanlin.oa.utils.SharedPreferenceUtil;
 import com.shanlin.oa.utils.Utils;
-import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.SDKOptions;
-import com.netease.nimlib.sdk.StatusBarNotificationConfig;
-import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
-import com.pgyersdk.update.PgyUpdateManager;
 
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
@@ -82,6 +81,10 @@ import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import q.rorbin.badgeview.QBadgeView;
+
+//import com.hyphenate.chatuidemo.db.Friends;
+//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
+//import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
 /**
  * ━━━━━━神兽出没━━━━━━
  * 　　　┏┓　　┏┓
@@ -407,8 +410,8 @@ public class MainController extends BaseActivity {
                     String u_id = Constants.CID + "_" + AppConfig.getAppConfig(MainController.this).getPrivateCode();
                     String u_name = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_USERNAME);
                     String u_pic = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_PORTRAITS);
-//                    FriendsInfoCacheSvc.getInstance(MainController.this)
-//                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic));
+                    FriendsInfoCacheSvc.getInstance(MainController.this)
+                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic));
                 }
 
                 @Override
@@ -708,6 +711,15 @@ public class MainController extends BaseActivity {
              * im通知，具有通知功能
              */
             for (EMMessage message : list) {
+                //获取自定义的名称和头像
+                String conversationId = message.getStringAttribute("conversationId", "");
+                String nickname = message.getStringAttribute("nickname", "");
+                String avatarURL = message.getStringAttribute("avatarURL", "");
+                if (avatarURL.equals("http://")) {
+                    avatarURL="";
+                }
+                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
+                        Friends(conversationId, nickname, avatarURL));
                 //判断推送在哪个页面
                 if (!easeUI.hasForegroundActivies()){
                     EaseUI.getInstance().getNotifier().onNewMsg(message);

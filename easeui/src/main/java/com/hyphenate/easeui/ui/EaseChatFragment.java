@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.Gravity;
@@ -39,6 +40,8 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.domain.VoiceCallBean;
@@ -118,7 +121,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     private String meId;
     private String toChatUsernike;
     private String toChatUserpic;
-
+    private FragmentActivity mContext;
     //麦克风权限请求码
     private static final int REQUEST_RECORD_AUDIO = 100;
 
@@ -131,7 +134,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-
+        mContext = getActivity();
         fragmentArgs = getArguments();
         // check if single chat or group chat
         chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
@@ -146,7 +149,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         meId = fragmentArgs.getString("meId");
         userName = fragmentArgs.getString("userName");
         userPic = fragmentArgs.getString("userPic");
-
+        FriendsInfoCacheSvc.getInstance(getActivity()).addOrUpdateFriends(new Friends( meId, userName, userPic));
 
         super.onActivityCreated(savedInstanceState);
     }
@@ -591,7 +594,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 // single chat message
                 username = message.getFrom();
             }
-
+            //获取自定义的名称和头像
+            String conversationId = message.getStringAttribute("conversationId", "");
+            String nickname = message.getStringAttribute("nickname", "");
+            String avatarURL = message.getStringAttribute("avatarURL", "");
+            FriendsInfoCacheSvc.getInstance(mContext).addOrUpdateFriends(new Friends(conversationId, nickname, avatarURL));
             // if the message is for current conversation
             if (username.equals(toChatUsername) || message.getTo().equals(toChatUsername)) {
                 messageList.refreshSelectLast();
@@ -761,6 +768,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     protected void sendMessage(EMMessage message) {
+        //给对方发送自己的扩展信息用户名和头像
+        message.setAttribute("conversationId", meId);
+        message.setAttribute("nickname", userName);
+        message.setAttribute("avatarURL", userPic);
+        FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(toChatUsername,
+                toChatUsernike, toChatUserpic));
         if (message == null) {
             return;
         }

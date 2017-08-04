@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.VoiceCallBean;
 import com.hyphenate.easeui.onVoiceCallListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
@@ -90,7 +91,7 @@ public class EaseChatMessageActivity extends BaseActivity implements onVoiceCall
         } else {
             if (!StringUtils.isBlank(String.valueOf(u_id))) {
 
-//                tvTitle.setText(FriendsInfoCacheSvc.getInstance(this).getNickName(u_id));
+                tvTitle.setText(FriendsInfoCacheSvc.getInstance(this).getNickName(u_id));
             } else {
                 tvTitle.setText(u_id);
             }

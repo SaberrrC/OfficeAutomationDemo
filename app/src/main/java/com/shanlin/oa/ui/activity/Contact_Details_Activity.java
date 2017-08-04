@@ -13,8 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.hyphenate.chatuidemo.db.Friends;
-//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.huanxin.EaseChatMessageActivity;
@@ -30,6 +30,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.shanlin.oa.manager.AppManager.mContext;
+
+//import com.hyphenate.chatuidemo.db.Friends;
+//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
 
 /**
  * 搜索联系人详情页
@@ -76,11 +79,11 @@ public class Contact_Details_Activity extends BaseActivity {
         init();
     }
     private void addOrUpdateFriendInfo(User user) {
-//        Friends friend = new Friends();
-//        friend.setUser_id(Constants.CID + "_" + user.getCode());
-//        friend.setNickname(user.getUsername());
-//        friend.setPortrait(user.getPortraits());
-//        FriendsInfoCacheSvc.getInstance(mContext).addOrUpdateFriends(friend);
+        Friends friend = new Friends();
+        friend.setUser_id(Constants.CID + "_" + user.getCode());
+        friend.setNickname(user.getUsername());
+        friend.setPortrait(user.getPortraits());
+        FriendsInfoCacheSvc.getInstance(mContext).addOrUpdateFriends(friend);
     }
     public void init() {
         user = (User) this.getIntent().getSerializableExtra("user");

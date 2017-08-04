@@ -99,7 +99,7 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
                 avatarView.setRadius(avatarOptions.getAvatarRadius());
         }
 
-        EaseUserUtils.setUserNick(username, holder.nameView);
+        EaseUserUtils.setUserNick(getContext(),username, holder.nameView);
         EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
         
        
