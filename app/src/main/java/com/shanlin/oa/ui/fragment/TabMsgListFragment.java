@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,12 +124,11 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, inflater.inflate(R.layout.tab_msg_list, container,
                 false));
-        if(!EventBus.getDefault().isRegistered(this)){
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
         return mRootView;
     }
-
 
 
     @Override
@@ -227,7 +225,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                 // 0屏幕停止滚动；1:滚动且用户仍在触碰或手指还在屏幕上2：随用户的操作，屏幕上产生的惯性滑动；
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (newState == 0 && list.size() > 9) {
-                    hasMore=true;
+                    hasMore = true;
                     // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
                     int lastPosition = layoutManager.findLastVisibleItemPosition();
                     if (lastPosition == list.size() - 1) {
@@ -493,12 +491,12 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         params.put("token", AppConfig.getAppConfig(mContext).getPrivateToken());
         params.put("department_id", AppConfig.getAppConfig(mContext).getDepartmentId());
 
-        LogUtils.e("limit"+ limit);
-        LogUtils.e("time"+time);
-        LogUtils.e("where"+ where);
-        LogUtils.e("page"+ currentPage);
-        LogUtils.e("uid"+AppConfig.getAppConfig(mContext).getPrivateUid());
-        LogUtils.e("department_id"+AppConfig.getAppConfig(mContext).getDepartmentId());
+        LogUtils.e("limit" + limit);
+        LogUtils.e("time" + time);
+        LogUtils.e("where" + where);
+        LogUtils.e("page" + currentPage);
+        LogUtils.e("uid" + AppConfig.getAppConfig(mContext).getPrivateUid());
+        LogUtils.e("department_id" + AppConfig.getAppConfig(mContext).getDepartmentId());
 
         initKjHttp().post(Api.MESSAGE_PUSHS, params, new HttpCallBack() {
 
@@ -512,6 +510,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 LogUtils.e(t);
+                hideLoadingView();
                 removeEmptyView(mContentView);
                 try {
                     JSONObject jo = new JSONObject(t);
@@ -551,6 +550,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                 }
             }
 
+
             @Override
             public void onFinish() {
                 super.onFinish();
@@ -563,7 +563,8 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                LogUtils.e("onFailure->"+errorNo+strMsg);
+                hideLoadingView();
+                LogUtils.e("onFailure->" + errorNo + strMsg);
                 catchWarningByCode(errorNo);
             }
         });
@@ -580,9 +581,10 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void RefreashData(EventMessage eventMessage) {
-        if(eventMessage.getStr().equals("reFreash")){
-            loadData(false,false,"", "");
-            initWidget();
+        if (eventMessage.getStr().equals("reFreash")) {
+            loadData(false, false, "", "");
+            //刷新通知
+            reFresUnRedCount();
         }
     }
 
@@ -591,7 +593,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         super.onDestroyView();
         ButterKnife.unbind(this);
         handler.removeCallbacksAndMessages(null);
-        if(EventBus.getDefault().isRegistered(this)){
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }
