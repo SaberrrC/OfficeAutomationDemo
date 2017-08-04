@@ -1,5 +1,6 @@
 package com.shanlin.oa.huanxin;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.domain.VoiceCallBean;
+import com.hyphenate.easeui.onVoiceCallListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Constants;
@@ -28,7 +31,7 @@ import butterknife.ButterKnife;
  * Author:Created by Tsui on Date:2016/12/16 15:10
  * Description:聊天界面 com.hyphenate.easeui.widget.EaseChatMessageList
  */
-public class EaseChatMessageActivity extends BaseActivity {
+public class EaseChatMessageActivity extends BaseActivity implements onVoiceCallListener {
 
 
     @Bind(R.id.tv_title)
@@ -107,6 +110,7 @@ public class EaseChatMessageActivity extends BaseActivity {
         args.putString("userPic", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
 
         chatFragment = new EaseChatFragment();
+        chatFragment.setListener(this);
         chatFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }
@@ -137,5 +141,15 @@ public class EaseChatMessageActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void voiceCallListener(VoiceCallBean bean) {
+        startActivity(new Intent(this, VoiceCallActivity.class)
+                .putExtra("username", bean.getUsername())
+                .putExtra("nike", bean.getNike())
+                .putExtra("meUsername", bean.getMeUsername())
+                .putExtra("meUserPortrait", bean.getMeUserPortrait())
+                .putExtra("isComingCall", bean.getIsComingCall()));
     }
 }

@@ -45,7 +45,7 @@ import java.util.UUID;
  * 语音通话页面
  * 
  */
-public class VoiceCallActivity extends CallActivity implements OnClickListener {
+public class VoiceCallActivity extends CallActivity implements OnClickListener{
 	private LinearLayout comingBtnContainer;
 	private Button hangupBtn;
 	private Button refuseBtn;
