@@ -11,12 +11,12 @@
         android:layout_above="@+id/input_menu"
         android:layout_below="@id/toolbar" >
 
-        <com.hyphenate.easeui.widget.EaseChatMessageList
+        <com.hyphenate.chatuidemo.widget.EaseChatMessageList
             android:id="@+id/message_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.hyphenate.easeui.widget.EaseVoiceRecorderView
+        <com.hyphenate.chatuidemo.widget.EaseVoiceRecorderView
             android:id="@+id/voice_recorder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:visibility="invisible" />
     </RelativeLayout>
 
-    <com.hyphenate.easeui.widget.EaseChatInputMenu
+    <com.hyphenate.chatuidemo.widget.EaseChatInputMenu
         android:id="@+id/input_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

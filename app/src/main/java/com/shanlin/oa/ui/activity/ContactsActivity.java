@@ -15,8 +15,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.hyphenate.easeui.db.Friends;
-import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
@@ -347,13 +345,6 @@ public class ContactsActivity extends BaseActivity {
 //        popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
 //    }
 
-    private void addOrUpdateFriendInfo(Contacts contacts) {
-        Friends friend = new Friends();
-        friend.setUser_id(Constants.CID + "_" + contacts.getCode());
-        friend.setNickname(contacts.getUsername());
-        friend.setPortrait(contacts.getPortraits());
-        FriendsInfoCacheSvc.getInstance(ContactsActivity.this).addOrUpdateFriends(friend);
-    }
 
 
     private void showEmptyView() {

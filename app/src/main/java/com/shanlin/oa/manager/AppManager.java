@@ -11,15 +11,17 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.hyphenate.chat.EMOptions;
-import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.EaseUI;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.shanlin.oa.R;
 import com.shanlin.oa.WelcomePage;
+import com.shanlin.oa.huanxin.DemoHelper;
 import com.shanlin.oa.ui.activity.SelectContactsActivity;
 import com.shanlin.oa.ui.activity.SelectJoinPeopleActivity;
 import com.shanlin.oa.utils.ScreenUtils;
@@ -125,10 +127,11 @@ public class AppManager extends Application {
         JPushInterface.setDebugMode(true);
         JPushInterface.init(AppManager.mContext);
 
-        //使用EaseUI 相关
-        EMOptions options = new EMOptions();
-        options.setAutoLogin(true);
-        EaseUI.getInstance().init(AppManager.mContext, options);
+
+        //环信初始化,init demo helper
+        MultiDex.install(this);
+        DemoHelper.getInstance().init(mContext);
+
 
         //腾讯bugly初始化，第二个参数为AppId,第三个参数为log：建议在测试阶段建议设置成true，发布时设置为false。
         //CrashReportInfo是日志过滤的
@@ -357,5 +360,11 @@ public class AppManager extends Application {
         if (activity != null) {
             activityStack.remove(activity);
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

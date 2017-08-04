@@ -22,6 +22,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.dsw.calendar.component.MonthView;
 import com.dsw.calendar.entity.CalendarInfo;
 import com.dsw.calendar.inter.ListenerMove;
+import com.dsw.calendar.views.CircleCalendarView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
@@ -55,7 +56,7 @@ public class ScheduleActivity extends BaseActivity {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.circlecalendarview)
-    com.dsw.calendar.views.CircleCalendarView mCalendar;
+    CircleCalendarView mCalendar;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.rg_bottom_tips)

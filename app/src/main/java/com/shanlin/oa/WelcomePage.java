@@ -11,12 +11,14 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
-import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.EaseUI;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
+import com.shanlin.oa.huanxin.DemoHelper;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.ui.activity.LoginActivity;
@@ -107,7 +109,10 @@ public class WelcomePage extends Activity {
         JPushInterface.init(AppManager.mContext);
 
 
-        //使用EaseUI 相关
+        //环信和使用EaseUI 相关
+        DemoHelper.getInstance().initHandler(this.getMainLooper());
+        EMClient.getInstance().chatManager().loadAllConversations();
+        EMClient.getInstance().groupManager().loadAllGroups();
         EMOptions options = new EMOptions();
         options.setAutoLogin(true);
         EaseUI.getInstance().init(AppManager.mContext, options);

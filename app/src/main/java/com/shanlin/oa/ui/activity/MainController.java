@@ -31,9 +31,10 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.easeui.db.Friends;
-import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+//import com.hyphenate.chatuidemo.db.Friends;
+//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
+//import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
+import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.shanlin.oa.R;
 import com.shanlin.oa.WelcomePage;
@@ -406,8 +407,8 @@ public class MainController extends BaseActivity {
                     String u_id = Constants.CID + "_" + AppConfig.getAppConfig(MainController.this).getPrivateCode();
                     String u_name = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_USERNAME);
                     String u_pic = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_PORTRAITS);
-                    FriendsInfoCacheSvc.getInstance(MainController.this)
-                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic));
+//                    FriendsInfoCacheSvc.getInstance(MainController.this)
+//                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic));
                 }
 
                 @Override
@@ -730,14 +731,15 @@ public class MainController extends BaseActivity {
         }
 
         @Override
-        public void onMessageReadAckReceived(List<EMMessage> list) {
+        public void onMessageRead(List<EMMessage> list) {
 
         }
 
         @Override
-        public void onMessageDeliveryAckReceived(List<EMMessage> list) {
+        public void onMessageDelivered(List<EMMessage> list) {
 
         }
+
 
         @Override
         public void onMessageChanged(EMMessage emMessage, Object o) {

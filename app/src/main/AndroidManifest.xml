@@ -510,18 +510,12 @@
             />
         <!-- 聊天activity -->
         <activity
-            android:name="com.shanlin.oa.ui.activity.EaseChatMessageActivity"
+            android:name="com.shanlin.oa.huanxin.EaseChatMessageActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             />
         <!-- 语音聊天activity -->
-        <activity
-            android:name="com.shanlin.oa.ui.activity.VoiceCallActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            />
         <!-- 上传图片的 activity -->
         <activity
             android:name="com.shanlin.oa.ui.activity.AffirmPictureActivity"

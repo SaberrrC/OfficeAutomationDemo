@@ -22,7 +22,7 @@ public class TabCommunicationAdapter extends BaseQuickAdapter<EMConversation> {
     @Override
     protected void convert(BaseViewHolder holder, EMConversation emConversation) {
         //TODO you 了好友列表后还得继续修改
-        holder.setText(R.id.name, emConversation.getUserName())
+        holder.setText(R.id.name, emConversation.conversationId())
                 .setText(R.id.tv_last_content, emConversation.getLastMessage().toString())
                 .setText(R.id.tv_last_time, emConversation.getLastMessage().toString());
         SimpleDraweeView portrait = holder.getView(R.id.opposite_portrait);

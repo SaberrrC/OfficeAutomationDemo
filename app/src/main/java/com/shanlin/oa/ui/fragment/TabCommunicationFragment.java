@@ -10,9 +10,10 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.hyphenate.chat.EMConversation;
+//import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.shanlin.oa.R;
-import com.shanlin.oa.ui.activity.EaseChatMessageActivity;
+import com.shanlin.oa.huanxin.EaseChatMessageActivity;
 import com.shanlin.oa.ui.activity.MainController;
 import com.shanlin.oa.ui.base.BaseFragment;
 import com.shanlin.oa.utils.LogUtils;
@@ -56,7 +57,7 @@ public class TabCommunicationFragment extends BaseFragment {
                     @Override
                     public void onListItemClicked(EMConversation conversation) {
                         startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
-                                .putExtra("u_id", conversation.getUserName())
+                                .putExtra("u_id", conversation.conversationId())
                                 .putExtra("nike_name", ""));
                     }
                 });
