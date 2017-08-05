@@ -57,7 +57,6 @@ import com.shanlin.oa.ui.fragment.TabContactsFragment;
 import com.shanlin.oa.ui.fragment.TabHomePageFragment;
 import com.shanlin.oa.ui.fragment.TabMeFragment;
 import com.shanlin.oa.ui.fragment.TabMsgListFragment;
-import com.shanlin.oa.ui.receiver.CallReceiver;
 import com.shanlin.oa.utils.BadgeUtil;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.ScreenUtils;
@@ -167,7 +166,6 @@ public class MainController extends BaseActivity {
     private static final int TAB_ME = 4;
     private DoubleClickExitHelper doubleClickExitHelper;
     private EaseConversationListFragment conversationListFragment;
-    private CallReceiver callReceiver;
     //灰色以及相对应的RGB值
     private int mGrayColor;
     private int mGrayRed;
@@ -846,7 +844,6 @@ public class MainController extends BaseActivity {
     @Override
     protected void onDestroy() {
         ButterKnife.unbind(this);
-        unregisterReceiver(callReceiver);
         EMClient.getInstance().chatManager().removeMessageListener(messageListener);
         super.onDestroy();
     }

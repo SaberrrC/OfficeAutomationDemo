@@ -24,6 +24,7 @@ import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 import com.shanlin.oa.R;
 import com.shanlin.oa.ui.base.BaseActivity;
+import com.shanlin.oa.utils.LogUtils;
 
 @SuppressLint("Registered")
 public class CallActivity extends BaseActivity {
@@ -326,7 +327,7 @@ public class CallActivity extends BaseActivity {
         @SuppressWarnings("UnusedAssignment") EMTextMessageBody txtBody = null;
         if (!isInComingCall) { // outgoing call
             message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-            message.setTo(username);
+            message.setFrom(username);
         } else {
             message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
             message.setFrom(username);
@@ -341,33 +342,33 @@ public class CallActivity extends BaseActivity {
         String st7 = getResources().getString(R.string.did_not_answer);
         String st8 = getResources().getString(R.string.Has_been_cancelled);
         switch (callingState) {
-        case NORMAL:
-            txtBody = new EMTextMessageBody(st1 + callDruationText);
-            break;
-        case REFUSED:
-            txtBody = new EMTextMessageBody(st2);
-            break;
-        case BEREFUSED:
-            txtBody = new EMTextMessageBody(st3);
-            break;
-        case OFFLINE:
-            txtBody = new EMTextMessageBody(st4);
-            break;
-        case BUSY:
-            txtBody = new EMTextMessageBody(st5);
-            break;
-        case NO_RESPONSE:
-            txtBody = new EMTextMessageBody(st6);
-            break;
-        case UNANSWERED:
-            txtBody = new EMTextMessageBody(st7);
-            break;
-        case VERSION_NOT_SAME:
-            txtBody = new EMTextMessageBody(getString(R.string.call_version_inconsistent));
-            break;
-        default:
-            txtBody = new EMTextMessageBody(st8);
-            break;
+            case NORMAL:
+                txtBody = new EMTextMessageBody(st1 + callDruationText);
+                break;
+            case REFUSED:
+                txtBody = new EMTextMessageBody(st2);
+                break;
+            case BEREFUSED:
+                txtBody = new EMTextMessageBody(st3);
+                break;
+            case OFFLINE:
+                txtBody = new EMTextMessageBody(st4);
+                break;
+            case BUSY:
+                txtBody = new EMTextMessageBody(st5);
+                break;
+            case NO_RESPONSE:
+                txtBody = new EMTextMessageBody(st6);
+                break;
+            case UNANSWERED:
+                txtBody = new EMTextMessageBody(st7);
+                break;
+            case VERSION_NOT_SAME:
+                txtBody = new EMTextMessageBody(getString(R.string.call_version_inconsistent));
+                break;
+            default:
+                txtBody = new EMTextMessageBody(st8);
+                break;
         }
         // set message extension
         if(callType == 0)
@@ -381,7 +382,11 @@ public class CallActivity extends BaseActivity {
         message.setStatus(Status.SUCCESS);
 
         // save
-        EMClient.getInstance().chatManager().saveMessage(message);
+        try {
+            EMClient.getInstance().chatManager().saveMessage(message);
+        } catch (Exception e) {
+            LogUtils.e(e.toString());
+        }
     }
 
     enum CallingState {
