@@ -3,6 +3,7 @@ package com.shanlin.oa.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -64,6 +65,9 @@ public class ContactsActivity extends BaseActivity {
     private RelativeLayout view;
     @Bind(R.id.rl_recycler_view_container)
     RelativeLayout mRlRecyclerViewContainer;
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     /**
      * 页面加载数据所需部门ID
@@ -91,6 +95,7 @@ public class ContactsActivity extends BaseActivity {
     }
 
     private void initWidget() {
+        mSwipeRefreshLayout.setEnabled(false);
         mRLSearchView.setVisibility(View.GONE);
         btnBack.setVisibility(View.VISIBLE);
         pageMap = new ArrayList<>();

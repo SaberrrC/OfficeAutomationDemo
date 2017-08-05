@@ -120,6 +120,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
         mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#0EA7ED"),
                 Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setEnabled(true);
     }
 
     @OnClick({R.id.search_et_cancle})
@@ -129,6 +130,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                 recyclerView.setVisibility(View.VISIBLE);
                 tvCacle.setVisibility(View.GONE);
                 recyclerViewSearchResult.setVisibility(View.GONE);
+                reSetSwipRefreash();
                 search_et_input.setText("");
                 inputManager.hideSoftInputFromWindow(
                         getActivity().getCurrentFocus().getWindowToken(),
@@ -158,19 +160,12 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 recyclerView.setVisibility(View.GONE);
+                reSetSwipRefreash();
                 tvCacle.setVisibility(View.VISIBLE);
                 return false;
             }
         });
 
-        search_et_input.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                recyclerView.setVisibility(View.GONE);
-                tvCacle.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
 
         //监听软键盘确认键,触发搜索功能,为匹配IOS 此功能注释掉
 //        search_et_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -293,6 +288,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                                 public void onFinish() {
                                     super.onFinish();
                                     hideLoadingView();
+                                    mSwipeRefreshLayout.setRefreshing(false);
                                 }
 
                                 @Override
@@ -333,7 +329,9 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                                                 e.printStackTrace();
                                             }
 
+                                            hideEmptyView();
                                             recyclerViewSearchResult.setVisibility(View.VISIBLE);
+                                            reSetSwipRefreash();
                                             SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
                                             recyclerViewSearchResult.setAdapter(adapter);
                                         } else {
@@ -378,6 +376,9 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                 super.onPreStart();
                 if(!isPullRefreashing){
                     showLoadingView();
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerViewSearchResult.setVisibility(View.GONE);
+
                 }
 
             }
@@ -387,9 +388,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                 super.onFinish();
                 hideLoadingView();
                 isPullRefreashing=false;
-                if (null != mSwipeRefreshLayout) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
+                mSwipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -420,10 +419,12 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                                 items.add(c);
                             }
 
+                            hideEmptyView();
                             recyclerView.setAdapter(adapter);
+                            reSetSwipRefreash();
                             break;
                         case Api.RESPONSES_CODE_DATA_EMPTY:
-                            showEmptyView();
+                            showEmptyView(mRlRecyclerViewContainer, " ", 0, false);
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
@@ -437,9 +438,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 hideLoadingView();
-                if (null != mSwipeRefreshLayout) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
+                reSetSwipRefreash();
                 String info = "";
                 switch (errorNo) {
                     case Api.RESPONSES_CODE_NO_NETWORK:
@@ -450,9 +449,21 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                         break;
                 }
                 showEmptyView(mRlRecyclerViewContainer, info, 0, false);
+                reSetSwipRefreash();
                 super.onFailure(errorNo, strMsg);
             }
         });
+    }
+
+    public void reSetSwipRefreash(){
+        if(mSwipeRefreshLayout!=null){
+            if(recyclerView.getVisibility()==View.VISIBLE){
+                mSwipeRefreshLayout.setEnabled(true);
+            }else {
+                mSwipeRefreshLayout.setEnabled(false);
+            }
+        }
+
     }
 
     @Override
@@ -655,18 +666,30 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
 
     }
 
-    private void showEmptyView() {
-        @SuppressLint("InflateParams")
-        View empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        empty.setLayoutParams(lp);
-        ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
-        imageView.setImageResource(R.drawable.contacts_empty_icon);
-        TextView msg = (TextView) empty.findViewById(R.id.message);
-        msg.setText("很抱歉，您还没有通讯录好友");
-        mRlRecyclerViewContainer.addView(empty);
-    }
+
+//    @SuppressLint("InflateParams")
+//    View empty;
+//
+//    private void showEmptyView() {
+//        mSwipeRefreshLayout.setEnabled(true);
+//        if(empty==null) {
+//            empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
+//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+//                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            empty.setLayoutParams(lp);
+//            ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
+//            imageView.setImageResource(R.drawable.contacts_empty_icon);
+//            TextView msg = (TextView) empty.findViewById(R.id.message);
+//            msg.setText("很抱歉，您还没有通讯录好友");
+//        }
+//        mRlRecyclerViewContainer.addView(empty);
+//    }
+
+//    public void hideEmptyView(){
+//        if(empty!=null){
+//            empty.setVisibility(View.GONE);
+//        }
+//    }
 
     @Override
     public void onDestroyView() {

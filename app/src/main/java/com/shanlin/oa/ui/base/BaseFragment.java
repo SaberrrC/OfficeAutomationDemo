@@ -165,19 +165,28 @@ public class BaseFragment extends Fragment {
      * @param resId  图片资源id
      * @param isShow 是否显示图片
      */
+    @SuppressLint("InflateParams")
+    View empty;
     public void showEmptyView(ViewGroup view, String str, int resId, boolean isShow) {
-        @SuppressLint("InflateParams")
-        View empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        empty.setLayoutParams(lp);
-        if (isShow) {
-            ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
-            imageView.setImageResource(resId);
+        if(empty==null){
+            empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            empty.setLayoutParams(lp);
+            if (isShow) {
+                ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
+                imageView.setImageResource(resId);
+            }
+            TextView msg = (TextView) empty.findViewById(R.id.message);
+            msg.setText(str);
         }
-        TextView msg = (TextView) empty.findViewById(R.id.message);
-        msg.setText(str);
         view.addView(empty);
+    }
+
+    public void hideEmptyView(){
+        if(empty!=null){
+            empty.setVisibility(View.GONE);
+        }
     }
 
     /**
