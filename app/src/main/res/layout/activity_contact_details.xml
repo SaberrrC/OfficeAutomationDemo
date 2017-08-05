@@ -44,8 +44,8 @@
 
     <ImageView
         android:id="@+id/iv_img_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_below="@id/rl_top"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
@@ -58,7 +58,6 @@
         android:layout_below="@+id/iv_img_user"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="王刚"
         android:textSize="18dp" />
 
     <LinearLayout
@@ -183,7 +182,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:text="财务部"
             android:layout_centerVertical="true"
             android:textSize="16dp" />
 
@@ -211,7 +209,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:text="财务部经理"
             android:layout_centerVertical="true"
             android:textSize="16dp" />
 
@@ -239,7 +236,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:text="男"
             android:layout_centerVertical="true"
             android:textSize="16dp" />
 
