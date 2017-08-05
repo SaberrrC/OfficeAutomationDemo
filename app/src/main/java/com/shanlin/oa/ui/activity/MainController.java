@@ -555,7 +555,7 @@ public class MainController extends BaseActivity {
         mTabs = new ArrayList<>();
 
 
-         tabCommunicationFragment = new TabCommunicationFragment();
+        tabCommunicationFragment = new TabCommunicationFragment();
         mTabs.add(tabCommunicationFragment);
 
         TabContactsFragment tabContactsFragment = new TabContactsFragment();
@@ -698,14 +698,11 @@ public class MainController extends BaseActivity {
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(final List<EMMessage> list) {
-            if(tabCommunicationFragment!=null){
-                if(tabCommunicationFragment.myConversationListFragment!=null){
+            if (tabCommunicationFragment != null) {
+                if (tabCommunicationFragment.myConversationListFragment != null) {
                     tabCommunicationFragment.myConversationListFragment.refresh();
                 }
             }
-
-
-
             /**
              * im通知，具有通知功能
              */
@@ -719,7 +716,7 @@ public class MainController extends BaseActivity {
                 String nickname = message.getStringAttribute("nickname", "");
                 String avatarURL = message.getStringAttribute("avatarURL", "");
                 if (avatarURL.equals("http://")) {
-                    avatarURL="";
+                    avatarURL = "";
                 }
                 FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
                         Friends(conversationId, nickname, avatarURL));

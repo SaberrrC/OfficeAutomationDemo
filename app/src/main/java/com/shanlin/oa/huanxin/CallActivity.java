@@ -181,6 +181,8 @@ public class CallActivity extends BaseActivity {
                                     st2 = getResources().getString(R.string.The_other_is_on_the_phone);
                                 } else if (e.getErrorCode() == EMError.NETWORK_ERROR) {
                                     st2 = getResources().getString(R.string.can_not_connect_chat_server_connection);
+                                }else if (e.getMessage().equals("exception isConnected:false")){
+                                    st2 = getResources().getString(R.string.can_not_connect_chat_server_connection);
                                 }
                                 Toast.makeText(CallActivity.this, st2, Toast.LENGTH_LONG).show();
                                 finish();
