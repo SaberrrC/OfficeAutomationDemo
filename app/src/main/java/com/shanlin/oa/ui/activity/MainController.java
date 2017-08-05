@@ -51,6 +51,7 @@ import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.manager.DoubleClickExitHelper;
+import com.shanlin.oa.huanxin.receiver.CallReceiver;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.ui.fragment.TabCommunicationFragment;
 import com.shanlin.oa.ui.fragment.TabContactsFragment;

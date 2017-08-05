@@ -56,8 +56,8 @@ import com.shanlin.oa.huanxin.domain.RobotUser;
 import com.shanlin.oa.huanxin.parse.UserProfileManager;
 import com.shanlin.oa.huanxin.utils.PreferenceManager;
 import com.shanlin.oa.manager.AppManager;
+import com.shanlin.oa.huanxin.receiver.CallReceiver;
 import com.shanlin.oa.ui.activity.MainController;
-import com.shanlin.oa.ui.receiver.CallReceiver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
