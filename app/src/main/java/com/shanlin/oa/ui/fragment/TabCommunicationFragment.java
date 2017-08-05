@@ -13,6 +13,7 @@ import com.hyphenate.chat.EMConversation;
 //import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.shanlin.oa.R;
+import com.shanlin.oa.huanxin.ConversationListFragment;
 import com.shanlin.oa.huanxin.EaseChatMessageActivity;
 import com.shanlin.oa.ui.activity.MainController;
 import com.shanlin.oa.ui.base.BaseFragment;
@@ -26,7 +27,8 @@ import butterknife.ButterKnife;
  */
 public class TabCommunicationFragment extends BaseFragment {
 
-    private EaseConversationListFragment conversationListFragment;
+//    private EaseConversationListFragment conversationListFragment;
+    public ConversationListFragment myConversationListFragment;
     private RelativeLayout view;
 
     @Override
@@ -45,12 +47,12 @@ public class TabCommunicationFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (conversationListFragment == null) {
-            conversationListFragment = new EaseConversationListFragment();
+        if (myConversationListFragment == null) {
+            myConversationListFragment = new ConversationListFragment();
         }
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.easeConversationListFragment, conversationListFragment).commit();
-        conversationListFragment
+        transaction.replace(R.id.easeConversationListFragment, myConversationListFragment).commit();
+        myConversationListFragment
                 .setConversationListItemClickListener(new EaseConversationListFragment
                         .EaseConversationListItemClickListener() {
 

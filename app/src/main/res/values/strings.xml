@@ -71,5 +71,8 @@
     <string name="have_connected_with">已经和对方建立连接</string>
     <string name="at_your_in_group">%s在群聊中@了你</string>
     <string name="emojicon_test_name">示例</string>
+    <string name="delete_contact">删除联系人</string>
+
+    <string name="multi_device_logged_in_device_kick_item">将设备移除</string>
     <!-- 环信结束 -->
 </resources>

@@ -563,7 +563,7 @@ public class DemoHelper {
         //register group and contact event listener
         registerGroupAndContactListener();
         //register message event listener
-        registerMessageListener();
+//        registerMessageListener();
 
     }
 
@@ -1226,22 +1226,23 @@ public class DemoHelper {
 
             @Override
             public void onMessageReceived(List<EMMessage> messages) {
-                for (EMMessage message : messages) {
-                    // in background, do not refresh UI, notify it in notification bar
-                    if (!easeUI.hasForegroundActivies()) {
-                        getNotifier().onNewMsg(message);
-                    }
-                    EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
-                    //获取自定义的名称和头像
-                    String conversationId = message.getStringAttribute("conversationId", "");
-                    String nickname = message.getStringAttribute("nickname", "");
-                    String avatarURL = message.getStringAttribute("avatarURL", "");
-                    if (avatarURL.equals("http://")) {
-                        avatarURL="";
-                    }
-                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
-                            Friends(conversationId, nickname, avatarURL));
-                }
+
+//                for (EMMessage message : messages) {
+//                    // in background, do not refresh UI, notify it in notification bar
+//                    if (!easeUI.hasForegroundActivies()) {
+//                        getNotifier().onNewMsg(message);
+//                    }
+//                    EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+//                    //获取自定义的名称和头像
+//                    String conversationId = message.getStringAttribute("conversationId", "");
+//                    String nickname = message.getStringAttribute("nickname", "");
+//                    String avatarURL = message.getStringAttribute("avatarURL", "");
+//                    if (avatarURL.equals("http://")) {
+//                        avatarURL="";
+//                    }
+//                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
+//                            Friends(conversationId, nickname, avatarURL));
+//                }
             }
 
             @Override

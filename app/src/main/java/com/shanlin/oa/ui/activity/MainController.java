@@ -48,6 +48,7 @@ import com.shanlin.oa.R;
 import com.shanlin.oa.WelcomePage;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
+import com.shanlin.oa.huanxin.ConversationListFragment;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.manager.DoubleClickExitHelper;
@@ -167,6 +168,7 @@ public class MainController extends BaseActivity {
     private static final int TAB_ME = 4;
     private DoubleClickExitHelper doubleClickExitHelper;
     private EaseConversationListFragment conversationListFragment;
+
     //灰色以及相对应的RGB值
     private int mGrayColor;
     private int mGrayRed;
@@ -185,6 +187,7 @@ public class MainController extends BaseActivity {
     int tempMsgCount = 0;
     private QBadgeView qBadgeView;
     private AlertDialog dialog;
+    TabCommunicationFragment tabCommunicationFragment;
 
     private AbortableFuture<LoginInfo> loginRequest;
 
@@ -554,7 +557,7 @@ public class MainController extends BaseActivity {
         mTabs = new ArrayList<>();
 
 
-        TabCommunicationFragment tabCommunicationFragment = new TabCommunicationFragment();
+         tabCommunicationFragment = new TabCommunicationFragment();
         mTabs.add(tabCommunicationFragment);
 
         TabContactsFragment tabContactsFragment = new TabContactsFragment();
@@ -705,10 +708,22 @@ public class MainController extends BaseActivity {
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(final List<EMMessage> list) {
+            if(tabCommunicationFragment!=null){
+                if(tabCommunicationFragment.myConversationListFragment!=null){
+                    tabCommunicationFragment.myConversationListFragment.refresh();
+                }
+            }
+
+
+
             /**
              * im通知，具有通知功能
              */
             for (EMMessage message : list) {
+
+                if (!easeUI.hasForegroundActivies()) {
+                    easeUI.getNotifier().onNewMsg(message);
+                }
                 //获取自定义的名称和头像
                 String conversationId = message.getStringAttribute("conversationId", "");
                 String nickname = message.getStringAttribute("nickname", "");
@@ -848,5 +863,6 @@ public class MainController extends BaseActivity {
         EMClient.getInstance().chatManager().removeMessageListener(messageListener);
         super.onDestroy();
     }
+
 
 }
