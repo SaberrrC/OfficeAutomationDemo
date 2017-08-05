@@ -7,10 +7,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -67,7 +69,7 @@ import io.reactivex.schedulers.Schedulers;
  * <h3>Description: 名片页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class TabContactsFragment extends BaseFragment implements View.OnClickListener {
+public class TabContactsFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.title)
     TextView title;
@@ -83,6 +85,8 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
     ClearEditText search_et_input;
     @Bind(R.id.search_et_cancle)
     TextView tvCacle;
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     private Dialog dialog;
@@ -95,6 +99,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
 
     private InputMethodManager inputManager;
     private List<User> userList = null;
+    private boolean isPullRefreashing =false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -112,6 +117,9 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
         recyclerViewSearchResult.setVisibility(View.GONE);
         recyclerViewSearchResult.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewSearchResult.addOnItemTouchListener(new SearchResultItemClick());
+        mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#0EA7ED"),
+                Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @OnClick({R.id.search_et_cancle})
@@ -368,13 +376,21 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onPreStart() {
                 super.onPreStart();
-                showLoadingView();
+                if(!isPullRefreashing){
+                    showLoadingView();
+                }
+
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
                 hideLoadingView();
+                isPullRefreashing=false;
+                if (null != mSwipeRefreshLayout) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+
             }
 
             @Override
@@ -421,6 +437,9 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 hideLoadingView();
+                if (null != mSwipeRefreshLayout) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
                 String info = "";
                 switch (errorNo) {
                     case Api.RESPONSES_CODE_NO_NETWORK:
@@ -434,6 +453,12 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                 super.onFailure(errorNo, strMsg);
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        isPullRefreashing=true;
+        loadData();
     }
 
 
