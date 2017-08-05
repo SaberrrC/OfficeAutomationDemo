@@ -33,17 +33,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.shanlin.oa.R;
+import com.shanlin.oa.manager.AppManager;
 
 import java.util.UUID;
 
 /**
  * 语音通话页面
- *
  */
 public class VoiceCallActivity extends CallActivity implements OnClickListener {
     private LinearLayout comingBtnContainer;
@@ -52,10 +55,10 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
     private Button answerBtn;
     private ImageView muteImage;
     private ImageView handsFreeImage;
-
+    private SimpleDraweeView mSwingCard;
     private boolean isMuteState;
     private boolean isHandsfreeState;
-
+    public String sideInfo;
     private TextView callStateTextView;
     private boolean endCallTriggerByMe = false;
     private Chronometer chronometer;
@@ -63,6 +66,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
     private LinearLayout voiceContronlLayout;
     private TextView netwrokStatusVeiw;
     private boolean monitor = false;
+    private String nike;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         answerBtn = (Button) findViewById(R.id.btn_answer_call);
         hangupBtn = (Button) findViewById(R.id.btn_hangup_call);
         muteImage = (ImageView) findViewById(R.id.iv_mute);
+        mSwingCard = (SimpleDraweeView) findViewById(R.id.swing_card);
         handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
         TextView nickTextView = (TextView) findViewById(R.id.tv_nick);
@@ -102,9 +107,18 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         addCallStateListener();
         msgid = UUID.randomUUID().toString();
         username = getIntent().getStringExtra("username");
+        String nickName = FriendsInfoCacheSvc.getInstance(this).getNickName(username);
+        String portrait = FriendsInfoCacheSvc.getInstance(this).getPortrait(username);
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
-        if (null != username) {
-            nickTextView.setText(username);
+
+        //扩展信息，发送给对方自己的名字和头像url
+        sideInfo = getIntent().getStringExtra("meUsername") + "&" + getIntent().getStringExtra("meUserPortrait");
+        if (null != nickName) {
+            nickTextView.setText(nickName);
+        }
+        if (null != portrait) {
+            Glide.with(AppManager.mContext).load(portrait)
+                    .placeholder(R.drawable.ease_default_avatar).into(mSwingCard);
         }
         if (!isInComingCall) {// outgoing call
             soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
@@ -268,20 +282,26 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                 String st10 = getResources().getString(R.string.Has_been_cancelled);
                                 String st11 = getResources().getString(R.string.hang_up);
 
+                                String str = null;
                                 if (fError == CallError.REJECTED) {
                                     callingState = CallingState.BEREFUSED;
                                     callStateTextView.setText(st2);
+                                    str = st2;
                                 } else if (fError == CallError.ERROR_TRANSPORT) {
                                     callStateTextView.setText(st3);
+                                    str = st3;
                                 } else if (fError == CallError.ERROR_UNAVAILABLE) {
                                     callingState = CallingState.OFFLINE;
                                     callStateTextView.setText(st4);
+                                    str = st4;
                                 } else if (fError == CallError.ERROR_BUSY) {
                                     callingState = CallingState.BUSY;
                                     callStateTextView.setText(st5);
+                                    str = st5;
                                 } else if (fError == CallError.ERROR_NORESPONSE) {
                                     callingState = CallingState.NO_RESPONSE;
                                     callStateTextView.setText(st6);
+                                    str = st6;
                                 } else if (fError == CallError.ERROR_LOCAL_SDK_VERSION_OUTDATED || fError == CallError.ERROR_REMOTE_SDK_VERSION_OUTDATED) {
                                     callingState = CallingState.VERSION_NOT_SAME;
                                     callStateTextView.setText(R.string.call_version_inconsistent);
@@ -289,26 +309,33 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                     if (isRefused) {
                                         callingState = CallingState.REFUSED;
                                         callStateTextView.setText(st1);
+                                        str = st1;
                                     } else if (isAnswered) {
                                         callingState = CallingState.NORMAL;
                                         if (endCallTriggerByMe) {
 //                                        callStateTextView.setText(st7);
                                         } else {
                                             callStateTextView.setText(st8);
+                                            str = st8;
                                         }
                                     } else {
                                         if (isInComingCall) {
                                             callingState = CallingState.UNANSWERED;
                                             callStateTextView.setText(st9);
+                                            str = st9;
                                         } else {
                                             if (callingState != CallingState.NORMAL) {
                                                 callingState = CallingState.CANCELLED;
                                                 callStateTextView.setText(st10);
+                                                str = st10;
                                             } else {
                                                 callStateTextView.setText(st11);
                                             }
                                         }
                                     }
+                                }
+                                if (str != null) {
+                                    Toast.makeText(VoiceCallActivity.this, str, Toast.LENGTH_SHORT).show();
                                 }
                                 postDelayedCloseMsg();
                             }
