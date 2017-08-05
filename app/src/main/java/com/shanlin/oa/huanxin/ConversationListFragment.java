@@ -1,6 +1,8 @@
 package com.shanlin.oa.huanxin;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
@@ -26,6 +28,7 @@ import com.shanlin.oa.ui.activity.MainController;
 public class ConversationListFragment extends EaseConversationListFragment  {
 
     private TextView errorText;
+    private LinearLayout ll_error;
 
     @Override
     protected void initView() {
@@ -33,6 +36,22 @@ public class ConversationListFragment extends EaseConversationListFragment  {
         View errorView = (LinearLayout) View.inflate(getActivity(),R.layout.em_chat_neterror_item, null);
         errorItemContainer.addView(errorView);
         errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
+        ll_error=(LinearLayout)errorView.findViewById(R.id.ll_error);
+        ll_error.setEnabled(true);
+        ll_error.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if( !EMClient.getInstance().isConnected()){
+                    Log.i("ConversationList","重连");
+                    try {
+                        connectHuanXin();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Log.i("ConversationList","重连error"+e.toString());
+                    }
+                }
+            }
+        });
     }
     
     @Override
@@ -136,6 +155,11 @@ public class ConversationListFragment extends EaseConversationListFragment  {
         // update unread count
 //        ((MainController) getActivity()).updateUnreadLabel();
         return true;
+    }
+
+    public void connectHuanXin(){
+        MainController activity = (MainController)getActivity();
+        activity.LoginIm();
     }
 
 }

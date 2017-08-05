@@ -395,7 +395,7 @@ public class MainController extends BaseActivity {
         return options;
     }
 
-    private void LoginIm() {
+    public void LoginIm() {
         try {
             LogUtils.e("登录Im，工号->" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
             EMClient.getInstance().login(Constants.CID + "_" +
