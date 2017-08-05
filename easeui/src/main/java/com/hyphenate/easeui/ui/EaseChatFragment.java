@@ -3,11 +3,14 @@ package com.hyphenate.easeui.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.Gravity;
@@ -41,6 +45,7 @@ import com.hyphenate.chat.EMMessage.ChatType;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.PermissionListener;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -65,6 +70,8 @@ import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,12 +86,14 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected static final int REQUEST_CODE_MAP = 1;
     protected static final int REQUEST_CODE_CAMERA = 2;
     protected static final int REQUEST_CODE_LOCAL = 3;
-
+    private static final int REQUEST_CODE_SELECT_VIDEO = 11;
+    private static final int REQUEST_CODE_SELECT_FILE = 12;
+    private static final int REQUEST_CODE_SELECT_AT_USER = 15;
     /**
      * params to fragment
      */
     protected Bundle fragmentArgs;
-    protected int chatType;
+    public int chatType;
     protected String toChatUsername;
     protected EaseChatMessageList messageList;
     protected EaseChatInputMenu inputMenu;
@@ -151,9 +160,60 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         meId = fragmentArgs.getString("meId");
         userName = fragmentArgs.getString("userName");
         userPic = fragmentArgs.getString("userPic");
-        FriendsInfoCacheSvc.getInstance(getActivity()).addOrUpdateFriends(new Friends( meId, userName, userPic));
-
+        FriendsInfoCacheSvc.getInstance(getActivity()).addOrUpdateFriends(new Friends(meId, userName, userPic));
+        initData();
         super.onActivityCreated(savedInstanceState);
+    }
+
+    private void initData() {
+        setChatFragmentHelper(new EaseChatFragmentHelper() {
+            @Override
+            public void onSetMessageAttributes(EMMessage message) {
+
+            }
+
+            @Override
+            public void onEnterToChatDetails() {
+
+            }
+
+            @Override
+            public void onAvatarClick(String username) {
+
+            }
+
+            @Override
+            public void onAvatarLongClick(String username) {
+
+            }
+
+            @Override
+            public boolean onMessageBubbleClick(EMMessage message) {
+                return false;
+            }
+
+            @Override
+            public void onMessageBubbleLongClick(EMMessage message) {
+                // no message forward when in chat room
+                try {
+                    startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message", message)
+                                    .putExtra("ischatroom", chatType == EaseConstant.CHATTYPE_CHATROOM),
+                            REQUEST_CODE_CONTEXT_MENU);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public boolean onExtendMenuItemClick(int itemId, View view) {
+                return false;
+            }
+
+            @Override
+            public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
+                return null;
+            }
+        });
     }
 
     /**
@@ -391,34 +451,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE_CAMERA) { // capture new image
-                if (cameraFile != null && cameraFile.exists())
-                    sendImageMessage(cameraFile.getAbsolutePath());
-            } else if (requestCode == REQUEST_CODE_LOCAL) { // send local image
-                if (data != null) {
-                    Uri selectedImage = data.getData();
-                    if (selectedImage != null) {
-                        sendPicByUri(selectedImage);
-                    }
-                }
-            } else if (requestCode == REQUEST_CODE_MAP) { // location
-                double latitude = data.getDoubleExtra("latitude", 0);
-                double longitude = data.getDoubleExtra("longitude", 0);
-                String locationAddress = data.getStringExtra("address");
-                if (locationAddress != null && !locationAddress.equals("")) {
-                    sendLocationMessage(latitude, longitude, locationAddress);
-                } else {
-                    Toast.makeText(getActivity(), R.string.unable_to_get_loaction, Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        }
-    }
-
+    private static final int REQUEST_CODE_CONTEXT_MENU = 14;
 
     @Override
     public void onResume() {
@@ -494,7 +527,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                         } else {
                             titleBar.setTitle(toChatUsername);
                         }
-                        addChatRoomChangeListenr();
                         onConversationInit();
                         onMessageListInit();
                     }
@@ -512,74 +544,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     }
                 });
                 getActivity().finish();
-            }
-        });
-    }
-
-    protected void addChatRoomChangeListenr() {
-        /*
-        chatRoomChangeListener = new EMChatRoomChangeListener() {
-
-            @Override
-            public void onChatRoomDestroyed(String roomId, String roomName) {
-                if (roomId.equals(toChatUsername)) {
-                    showChatroomToast(" room : " + roomId + " with room name : " + roomName + " was destroyed");
-                    getActivity().finish();
-                }
-            }
-
-            @Override
-            public void onMemberJoined(String roomId, String participant) {
-                showChatroomToast("member : " + participant + " join the room : " + roomId);
-            }
-
-            @Override
-            public void onMemberExited(String roomId, String roomName, String participant) {
-                showChatroomToast("member : " + participant + " leave the room : " + roomId + " room name : " + roomName);
-            }
-
-            @Override
-            public void onRemovedFromChatRoom(String roomId, String roomName, String participant) {
-                if (roomId.equals(toChatUsername)) {
-                    String curUser = EMClient.getInstance().getCurrentUser();
-                    if (curUser.equals(participant)) {
-                    	EMClient.getInstance().chatroomManager().leaveChatRoom(toChatUsername);
-                        getActivity().finish();
-                    }else{
-                        showChatroomToast("member : " + participant + " was kicked from the room : " + roomId + " room name : " + roomName);
-                    }
-                }
-            }
-
-
-            // ============================= group_reform new add api begin
-            @Override
-            public void onMuteListAdded(String chatRoomId, Map<String, Long> mutes) {}
-
-            @Override
-            public void onMuteListRemoved(String chatRoomId, List<String> mutes) {}
-
-            @Override
-            public void onAdminAdded(String chatRoomId, String admin) {}
-
-            @Override
-            public void onAdminRemoved(String chatRoomId, String admin) {}
-
-            @Override
-            public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {}
-
-            // ============================= group_reform new add api end
-
-        };
-        
-        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomChangeListener);
-        */
-    }
-
-    protected void showChatroomToast(final String toastContent) {
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getActivity(), toastContent, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -765,7 +729,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         sendMessage(message);
     }
 
-    public void setListener(onVoiceCallListener listener){
+    public void setListener(onVoiceCallListener listener) {
         mListener = listener;
     }
 
@@ -892,10 +856,44 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         cameraFile = new File(PathUtil.getInstance().getImagePath(), EMClient.getInstance().getCurrentUser()
                 + System.currentTimeMillis() + ".jpg");
         //noinspection ResultOfMethodCallIgnored
-        cameraFile.getParentFile().mkdirs();
-        startActivityForResult(
-                new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
-                REQUEST_CODE_CAMERA);
+        //cameraFile.getParentFile().mkdirs();
+        requestRunTimePermission(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
+            @Override
+            public void onGranted() {
+                startActivityForResult(
+                        new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
+                        REQUEST_CODE_CAMERA);
+            }
+
+            @Override
+            public void onDenied() {
+                Toast.makeText(getContext(), "相机权限被拒绝！请手动设置", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    PermissionListener mlistener;
+
+    /**
+     * 6.0请求权限函数
+     *
+     * @param permissions
+     * @param listener
+     */
+    public void requestRunTimePermission(String[] permissions, PermissionListener listener) {
+        mlistener = listener;
+        List<String> permissionList = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(permission);
+            }
+        }
+        if (!permissionList.isEmpty()) {
+            ActivityCompat.requestPermissions(getActivity(), permissionList.toArray(new String[permissionList.size()]), 1);
+        } else {
+            //权限已经申请，doSomething
+            mlistener.onGranted();
+        }
     }
 
     /**
@@ -1115,7 +1113,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     }
 
-    protected EaseChatFragmentHelper chatFragmentHelper;
+    public EaseChatFragmentHelper chatFragmentHelper;
 
     public void setChatFragmentHelper(EaseChatFragmentHelper chatFragmentHelper) {
         this.chatFragmentHelper = chatFragmentHelper;
@@ -1181,6 +1179,96 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 Toast.makeText(getContext(), "授权成功", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "没有授权麦克风权限", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_CAMERA) { // capture new image
+                if (cameraFile != null && cameraFile.exists())
+                    sendImageMessage(cameraFile.getAbsolutePath());
+            } else if (requestCode == REQUEST_CODE_LOCAL) { // send local image
+                if (data != null) {
+                    Uri selectedImage = data.getData();
+
+                    if (selectedImage != null) {
+                        try {
+                            //TODO 如果手机使用谷歌的照片管理器，会有问题，暂时try catch了
+                            sendPicByUri(selectedImage);
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+            }
+//            else if (requestCode == REQUEST_CODE_MAP) { // location
+//                double latitude = data.getDoubleExtra("latitude", 0);
+//                double longitude = data.getDoubleExtra("longitude", 0);
+//                String locationAddress = data.getStringExtra("address");
+//                if (locationAddress != null && !locationAddress.equals("")) {
+//                    sendLocationMessage(latitude, longitude, locationAddress);
+//                } else {
+//                    Toast.("无法获取到您的位置信息");
+//                }
+//            }
+        }
+        /**
+         * 回调复制删除转发
+         */
+        if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
+            switch (resultCode) {
+                case ContextMenuActivity.RESULT_CODE_COPY: // copy
+                    clipboard.setPrimaryClip(ClipData.newPlainText(null, ((EMTextMessageBody) contextMenuMessage.getBody()).getMessage()));
+                    break;
+                case ContextMenuActivity.RESULT_CODE_DELETE: // delete
+                    conversation.removeMessage(contextMenuMessage.getMsgId());
+                    messageList.refresh();
+                    break;
+
+                case ContextMenuActivity.RESULT_CODE_FORWARD: // forward
+                    //Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
+                    //intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
+                    //startActivity(intent);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_SELECT_VIDEO: //send the video
+                    if (data != null) {
+                        int duration = data.getIntExtra("dur", 0);
+                        String videoPath = data.getStringExtra("path");
+                        File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
+                        try {
+                            FileOutputStream fos = new FileOutputStream(file);
+                            Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+                            ThumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                            fos.close();
+                            sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case REQUEST_CODE_SELECT_FILE: //send the file
+                    if (data != null) {
+                        Uri uri = data.getData();
+                        if (uri != null) {
+                            sendFileByUri(uri);
+                        }
+                    }
+                    break;
+                case REQUEST_CODE_SELECT_AT_USER:
+                    if (data != null) {
+                        String username = data.getStringExtra("username");
+                        inputAtUsername(username, false);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }

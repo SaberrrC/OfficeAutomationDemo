@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * Author:Created by Tsui on Date:2016/12/16 15:10
  * Description:聊天界面 com.hyphenate.easeui.widget.EaseChatMessageList
  */
-public class EaseChatMessageActivity extends BaseActivity implements onVoiceCallListener {
+public class EaseChatMessageActivity extends BaseActivity implements onVoiceCallListener{
 
 
     @Bind(R.id.tv_title)
@@ -45,6 +45,7 @@ public class EaseChatMessageActivity extends BaseActivity implements onVoiceCall
     private EaseChatFragment chatFragment;
     private String to_user_nike;
     private String to_user_pic;
+    private static final int REQUEST_CODE_CONTEXT_MENU = 14;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

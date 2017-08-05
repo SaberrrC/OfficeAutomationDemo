@@ -25,24 +25,28 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMClient;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.ui.PermissionListener;
 import com.shanlin.oa.ui.activity.LoginActivity;
+import com.shanlin.oa.ui.activity.MainController;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.ScreenUtils;
 import com.shanlin.oa.utils.netutil.MyKjHttp;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * <h3>Description: 基础Activity</h3>
@@ -120,6 +124,30 @@ public class BaseActivity extends AppCompatActivity {
         showToast("您的帐号已在其他设备上登录，请您及时查验！");
         JPushInterface.setAlias(this, null, null);
         JPushInterface.setTags(this, null, null);
+        if (EMClient.getInstance().isConnected()) {
+            try {
+                //退出环信登录
+                LogUtils.e("退出环信");
+
+                EMClient.getInstance().logout(true);
+
+                JPushInterface.setAlias(this, "", new TagAliasCallback() {
+                    @Override
+                    public void gotResult(int i, String s, Set<String> set) {
+                    }
+                });
+                JPushInterface.setTags(this, null, null);
+
+                AppConfig.getAppConfig(this).clearLoginInfo();
+                startActivity(new Intent(this, LoginActivity.class));
+                MainController.instance.finish();
+            } catch (Exception e) {
+                LogUtils.e("退出环信抛出异常" + e.toString());
+                AppConfig.getAppConfig(this).clearLoginInfo();
+                startActivity(new Intent(this, LoginActivity.class));
+                MainController.instance.finish();
+            }
+        }
         startActivity(new Intent(this, LoginActivity.class));
     }
 

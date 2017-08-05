@@ -48,11 +48,9 @@ import com.shanlin.oa.R;
 import com.shanlin.oa.WelcomePage;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
-import com.shanlin.oa.huanxin.ConversationListFragment;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.manager.DoubleClickExitHelper;
-import com.shanlin.oa.huanxin.receiver.CallReceiver;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.ui.fragment.TabCommunicationFragment;
 import com.shanlin.oa.ui.fragment.TabContactsFragment;
@@ -586,14 +584,6 @@ public class MainController extends BaseActivity {
                 return mTabs.size();
             }
         };
-//        try {
-//            //注册环信通话的广播接收
-//            IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager()
-//                    .getIncomingCallBroadcastAction());
-//            callReceiver = new CallReceiver();
-//            registerReceiver(callReceiver, callFilter);
-//        } catch (Exception e) {
-//        }
     }
 
 

@@ -11,9 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.shanlin.oa.huanxin;
-
-import com.hyphenate.easeui.EaseConstant;
+package com.hyphenate.easeui;
 
 public class Constant extends EaseConstant {
 	public static final String NEW_FRIENDS_USERNAME = "item_new_friends";

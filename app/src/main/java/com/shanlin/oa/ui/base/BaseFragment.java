@@ -20,11 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMClient;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.ui.PermissionListener;
 import com.shanlin.oa.ui.activity.LoginActivity;
+import com.shanlin.oa.ui.activity.MainController;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.netutil.MyKjHttp;
 
@@ -33,8 +35,10 @@ import org.kymjs.kjframe.http.HttpConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * <h3>Description: 基础Fragment</h3>
@@ -99,12 +103,36 @@ public class BaseFragment extends Fragment {
                 break;
         }
     }
-        //判断账号在不同设备上登录
+
+    //判断账号在不同设备上登录
     private void gotoLoginPage() {
         Toast.makeText(getActivity(), "您的帐号已在其他设备上登录，请您及时查验！",
                 Toast.LENGTH_LONG).show();
         JPushInterface.setAlias(mContext, null, null);
         JPushInterface.setTags(mContext, null, null);
+        if (EMClient.getInstance().isConnected()) {
+            try {
+                //退出环信登录
+                LogUtils.e("退出环信");
+                EMClient.getInstance().logout(true);
+
+                JPushInterface.setAlias(getContext(), "", new TagAliasCallback() {
+                    @Override
+                    public void gotResult(int i, String s, Set<String> set) {
+                    }
+                });
+                JPushInterface.setTags(getContext(), null, null);
+
+                AppConfig.getAppConfig(getContext()).clearLoginInfo();
+                startActivity(new Intent(getContext(), LoginActivity.class));
+                MainController.instance.finish();
+            } catch (Exception e) {
+                LogUtils.e("退出环信抛出异常" + e.toString());
+                AppConfig.getAppConfig(getContext()).clearLoginInfo();
+                startActivity(new Intent(getContext(), LoginActivity.class));
+                MainController.instance.finish();
+            }
+        }
         startActivity(new Intent(getActivity(), LoginActivity.class));
     }
 
@@ -254,6 +282,7 @@ public class BaseFragment extends Fragment {
                 break;
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
