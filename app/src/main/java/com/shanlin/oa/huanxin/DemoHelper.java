@@ -550,14 +550,16 @@ public class DemoHelper {
                 }
             }
         };
-
-        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
-        if (callReceiver == null) {
-            callReceiver = new CallReceiver();
+        try {
+            IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
+            if (callReceiver == null) {
+                callReceiver = new CallReceiver();
+            }
+            //register incoming call receiver
+            appContext.registerReceiver(callReceiver, callFilter);
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
-
-        //register incoming call receiver
-        appContext.registerReceiver(callReceiver, callFilter);
         //register connection listener
         EMClient.getInstance().addConnectionListener(connectionListener);
         //register group and contact event listener
@@ -1237,7 +1239,7 @@ public class DemoHelper {
                     String nickname = message.getStringAttribute("nickname", "");
                     String avatarURL = message.getStringAttribute("avatarURL", "");
                     if (avatarURL.equals("http://")) {
-                        avatarURL="";
+                        avatarURL = "";
                     }
                     FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
                             Friends(conversationId, nickname, avatarURL));
