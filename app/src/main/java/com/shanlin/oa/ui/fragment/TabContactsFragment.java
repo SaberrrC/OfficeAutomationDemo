@@ -667,30 +667,6 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
     }
 
 
-//    @SuppressLint("InflateParams")
-//    View empty;
-//
-//    private void showEmptyView() {
-//        mSwipeRefreshLayout.setEnabled(true);
-//        if(empty==null) {
-//            empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
-//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-//                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//            empty.setLayoutParams(lp);
-//            ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
-//            imageView.setImageResource(R.drawable.contacts_empty_icon);
-//            TextView msg = (TextView) empty.findViewById(R.id.message);
-//            msg.setText("很抱歉，您还没有通讯录好友");
-//        }
-//        mRlRecyclerViewContainer.addView(empty);
-//    }
-
-//    public void hideEmptyView(){
-//        if(empty!=null){
-//            empty.setVisibility(View.GONE);
-//        }
-//    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
