@@ -720,21 +720,8 @@ public class MainController extends BaseActivity {
                 }
                 FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
                         Friends(conversationId, nickname, avatarURL));
-                //判断推送在哪个页面
-                if (!easeUI.hasForegroundActivies()){
-                    EaseUI.getInstance().getNotifier().onNewMsg(message);
-                }
             }
             refreshCommCount();
-
-            //JPushLocalNotification ln = new JPushLocalNotification();
-            //ln.setBuilderId(0);
-            //ln.setContent("您有新消息，请查收！");
-            //ln.setTitle(getString(R.string.app_name));
-            //ln.setNotificationId(11111111) ;
-            //ln.setBroadcastTime(System.currentTimeMillis());
-            //ln.setExtras("");
-            //JPushInterface.addLocalNotification(getApplicationContext(), ln);
         }
 
         @Override

@@ -6,12 +6,14 @@ import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -1171,4 +1173,15 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         EaseCustomChatRowProvider onSetCustomChatRowProvider();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_RECORD_AUDIO) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(), "授权成功", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "没有授权麦克风权限", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }
