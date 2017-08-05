@@ -8,6 +8,9 @@ import com.hyphenate.easeui.domain.VoiceCallBean;
  * 描述：
  */
 
-public interface onVoiceCallListener {
+public interface onEaseUIFragmentListener {
+
     void voiceCallListener(VoiceCallBean bean);
+
+    void clickUserInfo(String userName);
 }

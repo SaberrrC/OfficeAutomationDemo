@@ -53,7 +53,7 @@ import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.domain.VoiceCallBean;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
-import com.hyphenate.easeui.onVoiceCallListener;
+import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.requestPermissionsListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
@@ -136,7 +136,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     //麦克风权限请求码
     private static final int REQUEST_RECORD_AUDIO = 100;
 
-    private onVoiceCallListener mListener;
+    private onEaseUIFragmentListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -179,7 +179,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             @Override
             public void onAvatarClick(String username) {
-
+                mListener.clickUserInfo(username);
             }
 
             @Override
@@ -729,7 +729,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         sendMessage(message);
     }
 
-    public void setListener(onVoiceCallListener listener) {
+    public void setListener(onEaseUIFragmentListener listener) {
         mListener = listener;
     }
 
@@ -1182,6 +1182,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             }
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

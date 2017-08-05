@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
@@ -20,6 +21,7 @@ import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.huanxin.EaseChatMessageActivity;
 import com.shanlin.oa.huanxin.VoiceCallActivity;
 import com.shanlin.oa.manager.AppConfig;
+import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.User;
 import com.shanlin.oa.ui.PermissionListener;
 import com.shanlin.oa.ui.base.BaseActivity;
@@ -65,10 +67,10 @@ public class Contact_Details_Activity extends BaseActivity {
     ImageView send_message;
     @Bind(R.id.send_voice)
     ImageView send_voice;
+    @Bind(R.id.iv_img_user)
+    ImageView ivImgUser;
 
     private User user;
-
-
 
 
     @Override
@@ -76,8 +78,79 @@ public class Contact_Details_Activity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_details);
         ButterKnife.bind(this);
-        init();
+        boolean session = this.getIntent().getBooleanExtra("isSession", false);
+        if (session) {
+            initSessionInfo();
+        } else {
+            init();
+        }
     }
+
+    String nickName;
+    String portrait;
+
+    private void initSessionInfo() {
+        final String userName = this.getIntent().getStringExtra("userName");
+
+        nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(userName);
+        portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(userName);
+
+        tv_user_name.setText(nickName);
+        Glide.with(AppManager.mContext).load(portrait)
+                .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+
+        //判断是否有权限打电话
+        if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+            Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
+            iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+        } else {
+            //TODO 获取不到手机号
+            iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+        }
+
+        if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+            Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
+            send_message.setImageResource(R.mipmap.ico_message_disabled);
+        } else {
+            rel_send_message.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean availabl = Utils.isNetworkAvailabl(mContext);
+                    if (!availabl) {
+                        showToast("网络不稳定，请重试");
+                        return;
+                    }
+
+                    startActivity(new Intent(mContext, EaseChatMessageActivity.class)
+                            .putExtra("usernike", nickName)
+                            .putExtra("user_pic", portrait)
+                            .putExtra("u_id", userName));
+                }
+            });
+        }
+        if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+            Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
+            send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
+        } else {
+            rel_voice_call.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean availabl = Utils.isNetworkAvailabl(mContext);
+                    if (!availabl) {
+                        showToast("网络不稳定，请重试");
+                        return;
+                    }
+
+                    startActivity(new Intent(mContext, VoiceCallActivity.class)
+                            .putExtra("username", userName)
+                            .putExtra("nike", nickName)
+                            .putExtra("portrait", portrait)
+                            .putExtra("isComingCall", false));
+                }
+            });
+        }
+    }
+
     private void addOrUpdateFriendInfo(User user) {
         Friends friend = new Friends();
         friend.setUser_id(Constants.CID + "_" + user.getCode());
@@ -85,6 +158,7 @@ public class Contact_Details_Activity extends BaseActivity {
         friend.setPortrait(user.getPortraits());
         FriendsInfoCacheSvc.getInstance(mContext).addOrUpdateFriends(friend);
     }
+
     public void init() {
         user = (User) this.getIntent().getSerializableExtra("user");
         tv_user_name.setText(user.getUsername());
@@ -94,8 +168,7 @@ public class Contact_Details_Activity extends BaseActivity {
 
         if (user.getIsshow().equals("1")) {
             tv_phone_number.setText(user.getPhone());
-        }
-        else  if (user.getPhone() == null||user.getPhone().equals("")){
+        } else if (user.getPhone() == null || user.getPhone().equals("")) {
             tv_phone_number.setText("-");
         }
 //        if (user.getPhone() == null||user.getPhone().equals("")) {
@@ -104,12 +177,12 @@ public class Contact_Details_Activity extends BaseActivity {
 //            tv_phone_number.setText(user.getPhone());
 //        }
 //
-        if (user.getEmail() == null||user.getEmail().equals("")){
+        if (user.getEmail() == null || user.getEmail().equals("")) {
             tv_mails.setText("-");
-        }else{
+        } else {
             tv_mails.setText(user.getEmail());
         }
-//判断是否有权限打电话
+        //判断是否有权限打电话
         if (user.getUsername().equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
             Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
             iv_phone.setImageResource(R.mipmap.ico_phone_disabled);

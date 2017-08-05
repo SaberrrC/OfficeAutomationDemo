@@ -15,11 +15,12 @@ import android.widget.TextView;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.VoiceCallBean;
-import com.hyphenate.easeui.onVoiceCallListener;
+import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
+import com.shanlin.oa.ui.activity.Contact_Details_Activity;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.StringUtils;
 
@@ -32,7 +33,7 @@ import butterknife.ButterKnife;
  * Author:Created by Tsui on Date:2016/12/16 15:10
  * Description:聊天界面 com.hyphenate.easeui.widget.EaseChatMessageList
  */
-public class EaseChatMessageActivity extends BaseActivity implements onVoiceCallListener{
+public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFragmentListener {
 
 
     @Bind(R.id.tv_title)
@@ -153,5 +154,13 @@ public class EaseChatMessageActivity extends BaseActivity implements onVoiceCall
                 .putExtra("meUsername", bean.getMeUsername())
                 .putExtra("meUserPortrait", bean.getMeUserPortrait())
                 .putExtra("isComingCall", bean.getIsComingCall()));
+    }
+
+    @Override
+    public void clickUserInfo(String userName) {
+        Intent intent = new Intent(this, Contact_Details_Activity.class);
+        intent.putExtra("userName", userName);
+        intent.putExtra("isSession", true);
+        startActivity(intent);
     }
 }
