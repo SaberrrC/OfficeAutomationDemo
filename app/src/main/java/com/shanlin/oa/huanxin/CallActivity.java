@@ -24,7 +24,6 @@ import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 import com.shanlin.oa.R;
 import com.shanlin.oa.ui.base.BaseActivity;
-import com.shanlin.oa.utils.LogUtils;
 
 @SuppressLint("Registered")
 public class CallActivity extends BaseActivity {
@@ -34,10 +33,8 @@ public class CallActivity extends BaseActivity {
     protected final int MSG_CALL_ANSWER = 2;
     protected final int MSG_CALL_REJECT = 3;
     protected final int MSG_CALL_END = 4;
-    protected final int MSG_CALL_RLEASE_HANDLER = 5;
+    protected final int MSG_CALL_RELEASE_HANDLER = 5;
     protected final int MSG_CALL_SWITCH_CAMERA = 6;
-
-    public String sideInfo;
 
     protected boolean isInComingCall;
     protected boolean isRefused = false;
@@ -155,47 +152,47 @@ public class CallActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             EMLog.d("EMCallManager CallActivity", "handleMessage ---enter block--- msg.what:" + msg.what);
             switch (msg.what) {
-                case MSG_CALL_MAKE_VIDEO:
-                case MSG_CALL_MAKE_VOICE:
-                    try {
-                        if (msg.what == MSG_CALL_MAKE_VIDEO) {
-                            EMClient.getInstance().callManager().makeVideoCall(username);
-                        } else {
-                            EMClient.getInstance().callManager().makeVoiceCall(username, sideInfo);
-                        }
-                    } catch (final EMServiceNotReadyException e) {
-                        e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                String st2 = e.getMessage();
-                                if (e.getErrorCode() == EMError.CALL_REMOTE_OFFLINE) {
-                                    st2 = getResources().getString(R.string.The_other_is_not_online);
-                                } else if (e.getErrorCode() == EMError.USER_NOT_LOGIN) {
-                                    st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
-                                } else if (e.getErrorCode() == EMError.INVALID_USER_NAME) {
-                                    st2 = getResources().getString(R.string.illegal_user_name);
-                                } else if (e.getErrorCode() == EMError.CALL_BUSY) {
-                                    st2 = getResources().getString(R.string.The_other_is_on_the_phone);
-                                } else if (e.getErrorCode() == EMError.NETWORK_ERROR) {
-                                    st2 = getResources().getString(R.string.can_not_connect_chat_server_connection);
-                                }
-                                Toast.makeText(CallActivity.this, st2, Toast.LENGTH_LONG).show();
-                                finish();
-                            }
-                        });
+            case MSG_CALL_MAKE_VIDEO:
+            case MSG_CALL_MAKE_VOICE:
+                try {
+                    if (msg.what == MSG_CALL_MAKE_VIDEO) {
+                        EMClient.getInstance().callManager().makeVideoCall(username);
+                    } else { 
+                        EMClient.getInstance().callManager().makeVoiceCall(username);
                     }
-                    break;
-                case MSG_CALL_ANSWER:
-                    EMLog.d(TAG, "MSG_CALL_ANSWER");
-                    if (ringtone != null)
-                        ringtone.stop();
-                    if (isInComingCall) {
-                        try {
-                            EMClient.getInstance().callManager().answerCall();
-                            isAnswered = true;
-                            // meizu MX5 4G, hasDataConnection(context) return status is incorrect
-                            // MX5 con.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected() return false in 4G
-                            // so we will not judge it, App can decide whether judge the network status
+                } catch (final EMServiceNotReadyException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        public void run() {                            
+                            String st2 = e.getMessage();
+                            if (e.getErrorCode() == EMError.CALL_REMOTE_OFFLINE) {
+                                st2 = getResources().getString(R.string.The_other_is_not_online);
+                            } else if (e.getErrorCode() == EMError.USER_NOT_LOGIN) {
+                                st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+                            } else if (e.getErrorCode() == EMError.INVALID_USER_NAME) {
+                                st2 = getResources().getString(R.string.illegal_user_name);
+                            } else if (e.getErrorCode() == EMError.CALL_BUSY) {
+                                st2 = getResources().getString(R.string.The_other_is_on_the_phone);
+                            } else if (e.getErrorCode() == EMError.NETWORK_ERROR) {
+                                st2 = getResources().getString(R.string.can_not_connect_chat_server_connection);
+                            }
+                            Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
+                }
+                break;
+            case MSG_CALL_ANSWER:
+                EMLog.d(TAG, "MSG_CALL_ANSWER");
+                if (ringtone != null)
+                    ringtone.stop();
+                if (isInComingCall) {
+                    try {
+                        EMClient.getInstance().callManager().answerCall();
+                        isAnswered = true;
+                        // meizu MX5 4G, hasDataConnection(context) return status is incorrect
+                        // MX5 con.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected() return false in 4G
+                        // so we will not judge it, App can decide whether judge the network status
 
 //                        if (NetUtils.hasDataConnection(CallActivity.this)) {
 //                            EMClient.getInstance().callManager().answerCall();
@@ -209,64 +206,65 @@ public class CallActivity extends BaseActivity {
 //                            });
 //                            throw new Exception();
 //                        }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            saveCallRecord();
-                            finish();
-                            return;
-                        }
-                    } else {
-                        EMLog.d(TAG, "answer call isInComingCall:false");
-                    }
-                    break;
-                case MSG_CALL_REJECT:
-                    if (ringtone != null)
-                        ringtone.stop();
-                    try {
-                        EMClient.getInstance().callManager().rejectCall();
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         saveCallRecord();
                         finish();
+                        return;
                     }
-                    callingState = CallingState.REFUSED;
-                    break;
-                case MSG_CALL_END:
-                    if (soundPool != null)
-                        soundPool.stop(streamID);
-                    try {
-                        EMClient.getInstance().callManager().endCall();
-                    } catch (Exception e) {
-                        saveCallRecord();
-                        finish();
-                    }
-
-                    break;
-                case MSG_CALL_RLEASE_HANDLER:
-                    try {
-                        EMClient.getInstance().callManager().endCall();
-                    } catch (Exception e) {
-                    }
-                    handler.removeCallbacks(timeoutHangup);
-                    handler.removeMessages(MSG_CALL_MAKE_VIDEO);
-                    handler.removeMessages(MSG_CALL_MAKE_VOICE);
-                    handler.removeMessages(MSG_CALL_ANSWER);
-                    handler.removeMessages(MSG_CALL_REJECT);
-                    handler.removeMessages(MSG_CALL_END);
-                    callHandlerThread.quit();
-                    break;
-                case MSG_CALL_SWITCH_CAMERA:
-                    EMClient.getInstance().callManager().switchCamera();
-                    break;
-                default:
-                    break;
+                } else {
+                    EMLog.d(TAG, "answer call isInComingCall:false");
+                }
+                break;
+            case MSG_CALL_REJECT:
+                if (ringtone != null)
+                    ringtone.stop();
+                try {
+                    EMClient.getInstance().callManager().rejectCall();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    saveCallRecord();
+                    finish();
+                }
+                callingState = CallingState.REFUSED;
+                break;
+            case MSG_CALL_END:
+                if (soundPool != null)
+                    soundPool.stop(streamID);
+                EMLog.d("EMCallManager", "soundPool stop MSG_CALL_END");
+                try {
+                    EMClient.getInstance().callManager().endCall();
+                } catch (Exception e) {
+                    saveCallRecord();
+                    finish();
+                }
+                
+                break;
+            case MSG_CALL_RELEASE_HANDLER:
+                try {
+                    EMClient.getInstance().callManager().endCall();
+                } catch (Exception e) {
+                }
+                handler.removeCallbacks(timeoutHangup);
+                handler.removeMessages(MSG_CALL_MAKE_VIDEO);
+                handler.removeMessages(MSG_CALL_MAKE_VOICE);
+                handler.removeMessages(MSG_CALL_ANSWER);
+                handler.removeMessages(MSG_CALL_REJECT);
+                handler.removeMessages(MSG_CALL_END);
+                callHandlerThread.quit();
+                break;
+            case MSG_CALL_SWITCH_CAMERA:
+                EMClient.getInstance().callManager().switchCamera();
+                break;
+            default:
+                break;
             }
             EMLog.d("EMCallManager CallActivity", "handleMessage ---exit block--- msg.what:" + msg.what);
         }
     };
     
     void releaseHandler() {
-        handler.sendEmptyMessage(MSG_CALL_RLEASE_HANDLER);
+        handler.sendEmptyMessage(MSG_CALL_RELEASE_HANDLER);
     }
     
     /**
@@ -276,7 +274,7 @@ public class CallActivity extends BaseActivity {
     protected int playMakeCallSounds() {
         try {
             audioManager.setMode(AudioManager.MODE_RINGTONE);
-            audioManager.setSpeakerphoneOn(false);
+            audioManager.setSpeakerphoneOn(true);
 
             // play
             int id = soundPool.play(outgoing, // sound resource
@@ -328,7 +326,7 @@ public class CallActivity extends BaseActivity {
         @SuppressWarnings("UnusedAssignment") EMTextMessageBody txtBody = null;
         if (!isInComingCall) { // outgoing call
             message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-            message.setFrom(username);
+            message.setTo(username);
         } else {
             message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
             message.setFrom(username);
@@ -383,11 +381,7 @@ public class CallActivity extends BaseActivity {
         message.setStatus(Status.SUCCESS);
 
         // save
-        try {
-            EMClient.getInstance().chatManager().saveMessage(message);
-        } catch (Exception e) {
-            LogUtils.e(e.toString());
-        }
+        EMClient.getInstance().chatManager().saveMessage(message);
     }
 
     enum CallingState {

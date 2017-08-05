@@ -3,6 +3,7 @@ package com.shanlin.oa.ui.activity;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -584,14 +585,14 @@ public class MainController extends BaseActivity {
                 return mTabs.size();
             }
         };
-//        try {
-//            //注册环信通话的广播接收
-//            IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager()
-//                    .getIncomingCallBroadcastAction());
-//            callReceiver = new CallReceiver();
-//            registerReceiver(callReceiver, callFilter);
-//        } catch (Exception e) {
-//        }
+        try {
+            //注册环信通话的广播接收
+            IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager()
+                    .getIncomingCallBroadcastAction());
+            callReceiver = new CallReceiver();
+            registerReceiver(callReceiver, callFilter);
+        } catch (Exception e) {
+        }
     }
 
 
