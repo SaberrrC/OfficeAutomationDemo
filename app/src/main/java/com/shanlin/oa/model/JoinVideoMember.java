@@ -20,6 +20,13 @@ public class JoinVideoMember {
         this.post = post;
     }
 
+    public JoinVideoMember(String uid, String code, String userName, String post) {
+        this.uid = uid;
+        this.code = code;
+        this.userName = userName;
+        this.post = post;
+    }
+
     @Override
     public String toString() {
         return "JoinVideoMember{" +

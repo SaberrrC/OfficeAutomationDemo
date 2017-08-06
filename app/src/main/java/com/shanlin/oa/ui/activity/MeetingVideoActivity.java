@@ -157,13 +157,13 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //将设置是否播放其他用户的语音数据。
-                    if(currentCreateAccount != null){
+                    if (currentCreateAccount != null) {
                         AVChatManager.getInstance().muteRemoteAudio(currentCreateAccount, true);
                     }
                 } else {
-                        if (currentCreateAccount != null){
-                            AVChatManager.getInstance().muteRemoteAudio(currentCreateAccount, false);
-                        }
+                    if (currentCreateAccount != null) {
+                        AVChatManager.getInstance().muteRemoteAudio(currentCreateAccount, false);
+                    }
                 }
             }
         });
@@ -272,7 +272,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
 
                 @Override
                 public void onFailed(int code) {
-                    LogUtils.e("离开房间失败"+code);
+                    LogUtils.e("离开房间失败" + code);
                 }
 
                 @Override
@@ -283,7 +283,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
             });
             AVChatManager.getInstance().stopVideoPreview();
             AVChatManager.getInstance().disableRtc();
-        }catch (Throwable e){
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }
@@ -306,6 +306,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      * 将自己添加到成员列表
      */
     private void addSelfToMemberList() {
+        String privateUid = AppConfig.getAppConfig(this).getPrivateUid();
         mRealityLists.add(getJoinMeetingMemberInfo(AppConfig.getAppConfig(this).getPrivateUid()));
         setTopMemberRatioAndRefreshMember();
     }
@@ -338,12 +339,13 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      * @param account 根据传入的用户名，查询预期参加成员列表，结果添加到视频下成员列表,1：互动 2：没有互动
      */
     private void addMember(String account) {
+
         int index = account.indexOf("_");
         String uid = account.substring(index + 1, account.length());
 
-
         for (int i = 0; i < mLists.size(); i++) {
-            if (mLists.get(i).getUid().equals(uid)) {
+            String uid1 = mLists.get(i).getCode();
+            if (uid1.equals(uid)) {
                 JoinVideoMember joinVideoMember = mLists.get(i);
 
                 //判断当前实际开会人的列表是否含有要加入的人，没有，添加
@@ -354,17 +356,13 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
                         break;
                     }
                 }
-
                 if (!isHas) {
                     mRealityLists.add(joinVideoMember);
                 }
                 setTopMemberRatioAndRefreshMember();
                 break;
             }
-
         }
-
-
     }
 
     /**
@@ -392,7 +390,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
         String uid = account.substring(index + 1, account.length());
         if (!mRealityLists.isEmpty()) {
             for (int i = 0; i < mRealityLists.size(); i++) {
-                if (mRealityLists.get(i).getUid().equals(uid)) {
+                if (mRealityLists.get(i).getCode().equals(uid)) {
                     mRealityLists.remove(i);
                 }
             }
@@ -410,7 +408,8 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
             String uid = ja.getJSONObject(i).getString("uid");
             String username = ja.getJSONObject(i).getString("username");
             String post = ja.getJSONObject(i).getString("post");
-            JoinVideoMember joinVideoMember = new JoinVideoMember(uid, username, post);
+            String code = ja.getJSONObject(i).getString("CODE");
+            JoinVideoMember joinVideoMember = new JoinVideoMember(uid, code, username, post);
             if (is_createman.equals("1")) {
                 createMen = Constants.CID + "_" + uid;
                 //默认通话的成员是主播
@@ -568,12 +567,17 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      */
     @Override
     public void onUserLeave(String account, int event) {
+        String userAccount = account.replace("sl_", "");
         //如果是创建会议的人，那么，所有人也离开房间，否则，刷新界面
-        if (account.equals(createMen)) {
-            showToast("主持人结束了会议");
-            finish();
-        } else {
-            removeMember(account);
+        for (int i = 0; i < mLists.size(); i++) {
+            if (mLists.get(i).getState().equals("1")) {
+                if (userAccount.equals(mLists.get(i).getCode())) {
+                    showToast("主持人结束了会议");
+                    finish();
+                }
+            } else if (userAccount.equals(mLists.get(i).getCode())) {
+                removeMember(account);
+            }
         }
     }
 
