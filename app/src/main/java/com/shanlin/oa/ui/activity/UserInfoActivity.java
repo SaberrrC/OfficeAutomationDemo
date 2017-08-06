@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,7 +115,7 @@ public class UserInfoActivity extends BaseActivity {
         initData();
 
         File dir = getExternalFilesDir("user_icon");
-        try{
+        try {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
                 icon_path = FileProvider.getUriForFile(getApplicationContext(),
                         "com.itcrm.zhitongoa.sl.file_provider", new File(dir, TEMP_FILE_NAME));
@@ -125,7 +126,7 @@ public class UserInfoActivity extends BaseActivity {
                 icon_path = Uri.fromFile(new File(dir, TEMP_FILE_NAME));
                 camera_path = Uri.fromFile(new File(dir, "camera_pic.jpg"));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -557,17 +558,17 @@ public class UserInfoActivity extends BaseActivity {
                     DemoHelper.getInstance().logout(true, new EMCallBack() {
                         @Override
                         public void onSuccess() {
-
+                            Log.d("退出环信", "退出环信成功！！");
                         }
 
                         @Override
                         public void onError(int i, String s) {
-
+                            Log.d("退出环信", i + s);
                         }
 
                         @Override
                         public void onProgress(int i, String s) {
-
+                            Log.d("退出环信", i + s);
                         }
                     });
 

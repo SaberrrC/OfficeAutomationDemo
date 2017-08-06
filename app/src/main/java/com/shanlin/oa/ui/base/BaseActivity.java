@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,12 +135,12 @@ public class BaseActivity extends AppCompatActivity {
                 DemoHelper.getInstance().logout(true, new EMCallBack() {
                     @Override
                     public void onSuccess() {
-
+                        Log.d("退出环信成功！！","退出环信成功！！");
                     }
 
                     @Override
                     public void onError(int i, String s) {
-
+                        Log.d("退出环信抛出异常", i + s);
                     }
 
                     @Override
@@ -349,6 +350,16 @@ public class BaseActivity extends AppCompatActivity {
             //权限已经申请，doSomething
             mlistener.onGranted();
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
