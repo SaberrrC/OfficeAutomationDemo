@@ -25,10 +25,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
+import com.shanlin.oa.huanxin.DemoHelper;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.ui.PermissionListener;
@@ -129,7 +131,22 @@ public class BaseActivity extends AppCompatActivity {
                 //退出环信登录
                 LogUtils.e("退出环信");
 
-                EMClient.getInstance().logout(true);
+                DemoHelper.getInstance().logout(true, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+
+                    }
+
+                    @Override
+                    public void onProgress(int i, String s) {
+
+                    }
+                });
 
                 JPushInterface.setAlias(this, "", new TagAliasCallback() {
                     @Override

@@ -28,10 +28,11 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.hyphenate.chat.EMClient;
+import com.hyphenate.EMCallBack;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
+import com.shanlin.oa.huanxin.DemoHelper;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.ui.PermissionListener;
 import com.shanlin.oa.ui.base.BaseActivity;
@@ -553,7 +554,22 @@ public class UserInfoActivity extends BaseActivity {
                     popupWindow.dismiss();
                     //退出环信登录
                     LogUtils.e("退出环信");
-                    EMClient.getInstance().logout(true);
+                    DemoHelper.getInstance().logout(true, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+
+                        }
+
+                        @Override
+                        public void onProgress(int i, String s) {
+
+                        }
+                    });
 
                     JPushInterface.setAlias(UserInfoActivity.this, "", new TagAliasCallback() {
                         @Override
