@@ -1,7 +1,6 @@
 package com.shanlin.oa.huanxin;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -21,11 +20,16 @@ import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.util.NetUtils;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.huanxin.db.InviteMessgeDao;
 import com.shanlin.oa.ui.activity.MainController;
 
-public class ConversationListFragment extends EaseConversationListFragment  {
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
+
+public class ConversationListFragment extends EaseConversationListFragment {
 
     private TextView errorText;
     private LinearLayout ll_error;
@@ -33,27 +37,32 @@ public class ConversationListFragment extends EaseConversationListFragment  {
     @Override
     protected void initView() {
         super.initView();
-        View errorView = (LinearLayout) View.inflate(getActivity(),R.layout.em_chat_neterror_item, null);
+        View errorView = (LinearLayout) View.inflate(getActivity(), R.layout.em_chat_neterror_item, null);
         errorItemContainer.addView(errorView);
         errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
-        ll_error=(LinearLayout)errorView.findViewById(R.id.ll_error);
+        ll_error = (LinearLayout) errorView.findViewById(R.id.ll_error);
         ll_error.setEnabled(true);
-        ll_error.setOnClickListener(new View.OnClickListener() {
+        RxView.clicks(ll_error).throttleFirst(2000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Object>() {
             @Override
-            public void onClick(View view) {
-                if( !EMClient.getInstance().isConnected()){
-                    Log.i("ConversationList","重连");
+            public void accept(Object o) throws Exception {
+                if (!EMClient.getInstance().isConnected()) {
+                    Log.i("ConversationList", "重连");
                     try {
                         connectHuanXin();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        Log.i("ConversationList","重连error"+e.toString());
+                        Log.i("ConversationList", "重连error" + e.toString());
                     }
                 }
             }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throwable.printStackTrace();
+            }
         });
     }
-    
+
     @Override
     protected void setUpView() {
         super.setUpView();
@@ -70,14 +79,14 @@ public class ConversationListFragment extends EaseConversationListFragment  {
                 else {
                     // start chat acitivity
                     Intent intent = new Intent(getActivity(), MainController.class);
-                    if(conversation.isGroup()){
-                        if(conversation.getType() == EMConversationType.ChatRoom){
+                    if (conversation.isGroup()) {
+                        if (conversation.getType() == EMConversationType.ChatRoom) {
                             // it's group chat
                             intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
-                        }else{
+                        } else {
                             intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
                         }
-                        
+
                     }
                     // it's single chat
                     intent.putExtra(Constant.EXTRA_USER_ID, username);
@@ -114,17 +123,19 @@ public class ConversationListFragment extends EaseConversationListFragment  {
     @Override
     protected void onConnectionDisconnected() {
         super.onConnectionDisconnected();
-        if (NetUtils.hasNetwork(getActivity())){
-         errorText.setText(R.string.can_not_connect_chat_server_connection);
+        if (NetUtils.hasNetwork(getActivity())) {
+            ll_error.setVisibility(View.VISIBLE);
+            errorText.setText(R.string.can_not_connect_chat_server_connection);
         } else {
-          errorText.setText(R.string.the_current_network);
+            ll_error.setVisibility(View.VISIBLE);
+            errorText.setText(R.string.the_current_network);
         }
     }
-    
-    
+
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-        getActivity().getMenuInflater().inflate(R.menu.em_delete_message, menu); 
+        getActivity().getMenuInflater().inflate(R.menu.em_delete_message, menu);
     }
 
     @Override
@@ -135,11 +146,11 @@ public class ConversationListFragment extends EaseConversationListFragment  {
         } else if (item.getItemId() == R.id.delete_conversation) {
             deleteMessage = false;
         }
-    	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-    	if (tobeDeleteCons == null) {
-    	    return true;
-    	}
-        if(tobeDeleteCons.getType() == EMConversationType.GroupChat){
+        EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+        if (tobeDeleteCons == null) {
+            return true;
+        }
+        if (tobeDeleteCons.getType() == EMConversationType.GroupChat) {
             EaseAtMessageHelper.get().removeAtMeGroup(tobeDeleteCons.conversationId());
         }
         try {
@@ -157,8 +168,8 @@ public class ConversationListFragment extends EaseConversationListFragment  {
         return true;
     }
 
-    public void connectHuanXin(){
-        MainController activity = (MainController)getActivity();
+    public void connectHuanXin() {
+        MainController activity = (MainController) getActivity();
         activity.LoginIm();
     }
 
