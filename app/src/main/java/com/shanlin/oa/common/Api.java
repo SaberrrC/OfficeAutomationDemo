@@ -30,6 +30,10 @@ public class Api {
      */
     public static final int RESPONSES_CODE_TOKEN_NO_MATCH = 304;
     /**
+     * 所有接口返回code=305表示UID为空
+     */
+    public static final int RESPONSES_CODE_UID_NULL = 305;
+    /**
      * 所有接口返回code=364表示审批详情不存在
      */
     public static final int APPROVAL_DETAIL_NOT_EXIST = 364;

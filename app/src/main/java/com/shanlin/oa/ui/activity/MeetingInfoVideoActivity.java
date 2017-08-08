@@ -108,6 +108,9 @@ public class MeetingInfoVideoActivity extends BaseActivity {
                 LogUtils.e("loadMeetingRoomData->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
+                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                        catchWarningByCode(Api.getCode(jo));
+                    }
                     JSONObject jsonObject = Api.getDataToJSONObject(jo);
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
@@ -185,6 +188,9 @@ public class MeetingInfoVideoActivity extends BaseActivity {
                 LogUtils.e("loadMeetingPeopleData->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
+                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                        catchWarningByCode(Api.getCode(jo));
+                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             JSONObject dataToJSONObject = Api.getDataToJSONObject(jo);
@@ -420,7 +426,9 @@ public class MeetingInfoVideoActivity extends BaseActivity {
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                         showToast("发送成功");
                         finish();
-                    } else {
+                    } else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                        catchWarningByCode(Api.getCode(jo));
+                    }else {
                         showToast(Api.getInfo(jo));
                     }
 
@@ -474,6 +482,8 @@ public class MeetingInfoVideoActivity extends BaseActivity {
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                         showToast("发送成功");
                         finish();
+                    }else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
                     }

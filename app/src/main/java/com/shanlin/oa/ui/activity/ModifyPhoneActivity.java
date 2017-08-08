@@ -89,7 +89,9 @@ public class ModifyPhoneActivity extends BaseActivity {
                             finish();
                         } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
                             catchWarningByCode(Api.getCode(jo));
-                        } else {
+                        } else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                            catchWarningByCode(Api.getCode(jo));
+                        }else {
                             showToast(Api.getInfo(jo));
                         }
 

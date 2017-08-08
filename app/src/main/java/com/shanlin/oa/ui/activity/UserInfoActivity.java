@@ -500,6 +500,9 @@ public class UserInfoActivity extends BaseActivity {
                 LogUtils.e("更改头像后返回数据..." + t);
                 try {
                     JSONObject jo = new JSONObject(t);
+                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                        catchWarningByCode(Api.getCode(jo));
+                    }
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
 
                         showToast("修改成功");

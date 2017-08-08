@@ -95,6 +95,12 @@ public class BaseFragment extends Fragment {
         switch (code) {
             case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                 AppConfig.getAppConfig(getActivity()).clearLoginInfo();
+                Toast.makeText(getActivity(), "您的帐号已在其他设备上登录，请您及时查验！", Toast.LENGTH_LONG).show();
+                gotoLoginPage();
+                break;
+            case Api.RESPONSES_CODE_UID_NULL:
+                AppConfig.getAppConfig(getActivity()).clearLoginInfo();
+                Toast.makeText(getActivity(), "您的帐号登录已失效，请重新登录！", Toast.LENGTH_LONG).show();
                 gotoLoginPage();
                 break;
             case Api.RESPONSES_CODE_NO_NETWORK:
@@ -108,8 +114,6 @@ public class BaseFragment extends Fragment {
 
     //判断账号在不同设备上登录
     private void gotoLoginPage() {
-        Toast.makeText(getActivity(), "您的帐号已在其他设备上登录，请您及时查验！",
-                Toast.LENGTH_LONG).show();
         JPushInterface.setAlias(mContext, null, null);
         JPushInterface.setTags(mContext, null, null);
         if (EMClient.getInstance().isConnected()) {

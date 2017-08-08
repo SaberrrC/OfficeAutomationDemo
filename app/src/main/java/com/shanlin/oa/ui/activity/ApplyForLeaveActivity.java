@@ -119,6 +119,9 @@ public class ApplyForLeaveActivity extends BaseActivity {
                 LogUtils.e("leaveEntryActivity-->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
+                    if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
+                        catchWarningByCode(Api.getCode(jo));
+                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             JSONArray ja = Api.getDataToJSONArray(jo);
@@ -163,7 +166,7 @@ public class ApplyForLeaveActivity extends BaseActivity {
                 View view = LayoutInflater.from(this).inflate(R.layout
                         .travel_entry_approvel_single, null);
                 SimpleDraweeView sdv = (SimpleDraweeView) view.findViewById(R.id.user_portrait);
-                sdv.setImageURI("http://"+Uri.parse(portrait));
+                sdv.setImageURI("http://" + Uri.parse(portrait));
                 LogUtils.e("头像url——》" + portrait);
                 TextView tvLeader = (TextView) view.findViewById(R.id.tv_leader_name);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout
@@ -274,6 +277,8 @@ public class ApplyForLeaveActivity extends BaseActivity {
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();
+                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
                     }

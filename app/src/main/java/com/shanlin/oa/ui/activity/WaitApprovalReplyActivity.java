@@ -249,7 +249,9 @@ public class WaitApprovalReplyActivity extends BaseActivity implements View.OnCl
                         intent.putExtra("whichList", 2);
                         startActivity(intent);
                         finish();
-                    } else {
+                    } else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                        catchWarningByCode(Api.getCode(jo));
+                    }else {
                         showToast(Api.getInfo(jo));
 
                     }

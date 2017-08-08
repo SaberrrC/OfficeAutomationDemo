@@ -103,6 +103,8 @@ public class FindPassWordActivity extends BaseActivity {
                             mEtReminder.setText("随机密码已经发送至您的邮箱，请登录后设置新的密码");
                             mBtnGetPwd.setClickable(false);
                             mBtnGetPwd.setBackgroundColor(Color.parseColor("#999999"));
+                        }else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                            catchWarningByCode(Api.getCode(jo));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

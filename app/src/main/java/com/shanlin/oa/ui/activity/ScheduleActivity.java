@@ -306,6 +306,9 @@ public class ScheduleActivity extends BaseActivity {
                 LogUtils.e("onSuccess->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
+                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                        catchWarningByCode(Api.getCode(jo));
+                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             currentMonthJA = Api.getDataToJSONObject(jo);

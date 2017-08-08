@@ -96,6 +96,9 @@ public class SelectVedioMeetingRoomActivity extends BaseActivity implements View
 
                 try {
                     JSONObject jo = new JSONObject(t);
+                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                        catchWarningByCode(Api.getCode(jo));
+                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             JSONArray jDepartment = jo.getJSONArray("data");

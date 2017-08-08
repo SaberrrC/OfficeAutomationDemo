@@ -106,6 +106,9 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
                 LogUtils.e(t);
                 try {
                     JSONObject jo = new JSONObject(t);
+                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
+                        catchWarningByCode(Api.getCode(jo));
+                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             JSONObject data = Api.getDataToJSONObject(jo);
