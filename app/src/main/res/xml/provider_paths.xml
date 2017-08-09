@@ -5,5 +5,5 @@
         path="Android/data/com/pgyersdk" />
     <external-path
         name="external_storage_root"
-        path="." />
+        path="."    />
 </paths>

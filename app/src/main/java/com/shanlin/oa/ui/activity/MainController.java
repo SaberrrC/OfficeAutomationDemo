@@ -816,7 +816,8 @@ public class MainController extends BaseActivity {
             }
 
         } else {
-            PgyUpdateManager.register(this, "com.itcrm.GroupInformationPlatform.fileprovider");
+//            PgyUpdateManager.setIsForced(true);
+            PgyUpdateManager.register(this, null);
         }
     }
 
@@ -836,7 +837,7 @@ public class MainController extends BaseActivity {
         switch (requestCode) {
             case 100:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    PgyUpdateManager.register(this, "com.itcrm.GroupInformationPlatform.fileprovider");
+                    PgyUpdateManager.register(this, null);
                 } else {
                     Toast.makeText(this, "该权限被禁用 无法更新！", Toast.LENGTH_SHORT).show();
                 }

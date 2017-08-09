@@ -19,13 +19,13 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.hyphenate.util.EMLog;
-import com.shanlin.oa.huanxin.DemoHelper;
 import com.shanlin.oa.huanxin.VoiceCallActivity;
 
 public class CallReceiver extends BroadcastReceiver{
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+
 //		if(!DemoHelper.getInstance().isLoggedIn())
 //		    return;
 		//username
