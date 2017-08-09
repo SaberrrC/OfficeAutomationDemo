@@ -98,9 +98,6 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
                 LogUtils.e(t);
                 try {
                     JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        catchWarningByCode(Api.getCode(jo));
-                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             JSONArray ja = Api.getDataToJSONArray(jo);
@@ -142,9 +139,9 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
                 String portrait = ja.getJSONObject(i).getString("portrait");
                 View view = LayoutInflater.from(this).inflate(R.layout.travel_entry_approvel_single, null);
                 SimpleDraweeView sdv = (SimpleDraweeView) view.findViewById(R.id.user_portrait);
-                sdv.setImageURI("http://" + Uri.parse(portrait));
+                sdv.setImageURI("http://"+Uri.parse(portrait));
                 TextView tvLeader = (TextView) view.findViewById(R.id.tv_leader_name);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(40, 0, 0, 0);
                 params.gravity = Gravity.CENTER;
                 tvLeader.setText(username);
@@ -225,9 +222,8 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
                 showDialog();
                 break;
             case R.id.btn_submit:
-                if (checkSubmitData()) {
-                    submit();
-                }
+                if (checkSubmitData()){
+                    submit();}
 
                 break;
 
@@ -254,10 +250,10 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
         params.put("article_name", mEtContent.getText().toString().trim());
         params.put("application_time", mTvSelectDate.getText().toString());
 
-        LogUtils.e("uid" + AppConfig.getAppConfig(this).getPrivateUid());
-        LogUtils.e("token" + AppConfig.getAppConfig(this).getPrivateToken());
-        LogUtils.e("article_name" + mEtContent.getText().toString().trim());
-        LogUtils.e("application_time" + mTvSelectDate.getText().toString().replace("/", "-"));
+        LogUtils.e("uid"+ AppConfig.getAppConfig(this).getPrivateUid());
+        LogUtils.e("token"+ AppConfig.getAppConfig(this).getPrivateToken());
+        LogUtils.e("article_name"+mEtContent.getText().toString().trim());
+        LogUtils.e("application_time"+mTvSelectDate.getText().toString().replace("/","-"));
 
         initKjHttp().post(Api.POSTOFFICE_APPROVAL, params, new HttpCallBack() {
 
@@ -276,9 +272,7 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();
-                    } else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                        catchWarningByCode(Api.getCode(jo));
-                    }else {
+                    } else {
                         showToast(Api.getInfo(jo));
 
                     }

@@ -302,14 +302,11 @@ public class WorkReportReplyActivity extends BaseActivity implements View.OnClic
                 hideLoadingView();
                 try {
                     JSONObject jo = new JSONObject(t);
-
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                         addPic("http://"+Api.getDataToJSONArray(jo).get(0));
 
 
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
-                        catchWarningByCode(Api.getCode(jo));
-                    }else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
                         catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
@@ -377,9 +374,6 @@ public class WorkReportReplyActivity extends BaseActivity implements View.OnClic
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(t);
-                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                        catchWarningByCode(Api.getCode(jo));
-                    }
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();

@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
@@ -36,6 +35,7 @@ import com.shanlin.oa.ui.base.BaseFragment;
 import com.shanlin.oa.utils.FileUtils;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.SharedPreferenceUtil;
+import com.pgyersdk.update.PgyUpdateManager;
 
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
@@ -109,12 +109,15 @@ public class TabMeFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), FeedbackActivity.class));
                 break;
             case R.id.btn_update://版本升级
-//                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                        != PackageManager.PERMISSION_GRANTED) {
-//                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 001);
-//                }
+               /* if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            001);
+                }*/
 //                getNewVersionInfo();
-//                applyPermission();
+
+                applyPermission();
+
                 break;
             case R.id.btn_about_us://关于我们
                 startActivity(new Intent(getActivity(), AboutUsActivity.class));
@@ -154,7 +157,8 @@ public class TabMeFragment extends BaseFragment {
             }
 
         } else {
-            PgyUpdateManager.register(getActivity(), "com.itcrm.GroupInformationPlatform.fileprovider");
+            PgyUpdateManager.register(getActivity(),
+                    "com.itcrm.GroupInformationPlatform.fileprovider");
         }
     }
 
@@ -206,9 +210,6 @@ public class TabMeFragment extends BaseFragment {
                 LogUtils.e("onSuccess-->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                        catchWarningByCode(Api.getCode(jo));
-                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             JSONObject data = Api.getDataToJSONObject(jo);

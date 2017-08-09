@@ -185,9 +185,6 @@ public class MeLaunchOverTimeActivity extends BaseActivity {
                 super.onSuccess(t);
                 try {
                     JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                        catchWarningByCode(Api.getCode(jo));
-                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             showToast("变更成功");
@@ -279,9 +276,6 @@ public class MeLaunchOverTimeActivity extends BaseActivity {
                 LogUtils.e("MeLaunchOverTimeActivity->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                        catchWarningByCode(Api.getCode(jo));
-                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             JSONObject data = Api.getDataToJSONObject(jo);

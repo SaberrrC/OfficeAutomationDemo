@@ -112,12 +112,6 @@ public class BaseActivity extends AppCompatActivity {
         switch (code) {
             case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                 AppConfig.getAppConfig(this).clearLoginInfo();
-                Toast.makeText(this, "您的帐号已在其他设备上登录，请您及时查验！", Toast.LENGTH_LONG).show();
-                gotoLoginPage();
-                break;
-            case Api.RESPONSES_CODE_UID_NULL:
-                AppConfig.getAppConfig(this).clearLoginInfo();
-                Toast.makeText(this, "您的帐号登录已失效，请重新登录！", Toast.LENGTH_LONG).show();
                 gotoLoginPage();
                 break;
             case Api.RESPONSES_CODE_NO_NETWORK:
@@ -130,6 +124,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void gotoLoginPage() {
+        showToast("您的帐号已在其他设备上登录，请您及时查验！");
         JPushInterface.setAlias(this, null, null);
         JPushInterface.setTags(this, null, null);
         if (EMClient.getInstance().isConnected()) {

@@ -57,9 +57,7 @@ android {
 }
 
 dependencies {
-    compile project(':calendarlibrary')
-    compile project(':easeui')
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.0'
     //    compile 'com.android.support:support-v4:24.2.0'
@@ -113,4 +111,6 @@ dependencies {
     //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:3.0.1"
+    compile project(':easeui')
+    compile project(':calendarlibrary')
 }

@@ -507,9 +507,6 @@ public class CreateVedioMeetingActivity extends BaseActivity {
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(t);
-                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                        catchWarningByCode(Api.getCode(jo));
-                    }
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
 
                         showToast("发送成功");

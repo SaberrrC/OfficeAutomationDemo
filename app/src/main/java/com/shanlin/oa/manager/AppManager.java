@@ -2,6 +2,7 @@ package com.shanlin.oa.manager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -11,24 +12,25 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.hyphenate.chat.EMOptions;
+import com.hyphenate.easeui.EaseUI;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.SDKOptions;
-import com.netease.nimlib.sdk.StatusBarNotificationConfig;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
-import com.pgyersdk.crash.PgyCrashManager;
 import com.shanlin.oa.R;
 import com.shanlin.oa.WelcomePage;
 import com.shanlin.oa.huanxin.DemoHelper;
 import com.shanlin.oa.ui.activity.SelectContactsActivity;
 import com.shanlin.oa.ui.activity.SelectJoinPeopleActivity;
 import com.shanlin.oa.utils.ScreenUtils;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.SDKOptions;
+import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.pgyersdk.crash.PgyCrashManager;
 import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -49,7 +51,7 @@ import cn.jpush.android.api.JPushInterface;
  * Created by KevinMeng on 2016/5/6.
  */
 
-public class AppManager extends MultiDexApplication {
+public class AppManager extends Application {
     // 共享变量
     private SelectContactsActivity.MyHandler handler = null;
 
@@ -95,7 +97,6 @@ public class AppManager extends MultiDexApplication {
 
     @Override
     public void onCreate() {
-        MultiDex.install(this);
         super.onCreate();
         instance = this;
         this.mContext = this;
@@ -128,7 +129,7 @@ public class AppManager extends MultiDexApplication {
 
 
         //环信初始化,init demo helper
-
+        MultiDex.install(this);
         DemoHelper.getInstance().init(mContext);
 
 

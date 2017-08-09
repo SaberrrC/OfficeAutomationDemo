@@ -94,9 +94,6 @@ public class NoteDetailActivity extends BaseActivity {
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        catchWarningByCode(Api.getCode(jo));
-                    }
                     JSONObject jsonObject = Api.getDataToJSONObject(jo);
                    /* //200;644记事ID不能为空;646选择的记事不存在
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
@@ -261,8 +258,6 @@ LogUtils.e("200-->"+jo.getString("time"));
                         showToast("删除成功");
                         startActivity(new Intent(NoteDetailActivity.this, ScheduleActivity.class));
                         finish();
-                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        catchWarningByCode(Api.getCode(jo));
                     }
 
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {

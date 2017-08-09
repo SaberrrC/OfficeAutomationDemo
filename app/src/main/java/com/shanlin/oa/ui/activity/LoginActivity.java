@@ -174,9 +174,7 @@ public class LoginActivity extends BaseActivity {
                             AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
                             startActivity(new Intent(LoginActivity.this, MainController.class));
                             finish();
-                        } else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                            catchWarningByCode(Api.getCode(jo));
-                        }else {
+                        } else {
 
                             showToast(Api.getInfo(jo));
                         }

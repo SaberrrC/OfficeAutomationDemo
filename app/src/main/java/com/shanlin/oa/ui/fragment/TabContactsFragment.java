@@ -23,15 +23,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.jakewharton.rxbinding2.widget.RxTextView;
+//import com.hyphenate.chatuidemo.db.Friends;
+//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
+import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.Contacts;
@@ -43,6 +46,7 @@ import com.shanlin.oa.ui.adapter.TabContactsAdapter;
 import com.shanlin.oa.ui.base.BaseFragment;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.views.ClearEditText;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,9 +64,6 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-
-//import com.hyphenate.chatuidemo.db.Friends;
-//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
 
 /**
  * <h3>Description: 名片页面</h3>
@@ -289,11 +290,13 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                                     hideLoadingView();
                                     mSwipeRefreshLayout.setRefreshing(false);
                                 }
+
                                 @Override
                                 public void onSuccess(String t) {
                                     super.onSuccess(t);
                                     System.out.println(t);
                                     LogUtils.e("联系人返回数据-》" + t);
+
                                     if (userList == null) {
                                         userList = new ArrayList<User>();
                                     } else {
@@ -325,27 +328,24 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                                             }catch (Exception e){
                                                 e.printStackTrace();
                                             }
+
                                             hideEmptyView();
                                             recyclerViewSearchResult.setVisibility(View.VISIBLE);
                                             reSetSwipRefreash();
                                             SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
                                             recyclerViewSearchResult.setAdapter(adapter);
-                                        } else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                                            catchWarningByCode(Api.getCode(jo));
-                                        } else if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                                            catchWarningByCode(Api.getCode(jo));
-                                        }else {
+                                        } else {
                                             showToast(Api.getInfo(jo));
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
+
                                 @Override
                                 public void onFailure(int errorNo, String strMsg) {
                                     LogUtils.e(errorNo + "--" + strMsg);
                                     catchWarningByCode(errorNo);
-                                    Log.d("76547447",errorNo+"");
                                     super.onFailure(errorNo, strMsg);
                                 }
                             });
@@ -399,9 +399,6 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                 LogUtils.e(t);
                 try {
                     JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                        catchWarningByCode(Api.getCode(jo));
-                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             if (items.size() > 0 || items != null) {

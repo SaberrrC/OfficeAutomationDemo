@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
+import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.model.Contacts;
 import com.shanlin.oa.ui.adapter.TabContactsAdapter;
@@ -133,9 +134,6 @@ public class ContactsActivity extends BaseActivity {
 
                 try {
                     JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) ==Api.RESPONSES_CODE_UID_NULL){
-                        catchWarningByCode(Api.getCode(jo));
-                    }
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             if (items.size() > 0 || items != null) {
