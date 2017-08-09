@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,8 @@ public class FeedbackActivity extends BaseActivity {
         ButterKnife.bind(this);
         initToolBar();
         setTranslucentStatus(this);
+        //限制EditText长度
+        feedbackText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(200)});
     }
 
     @OnClick(R.id.toolbar_text_btn)
