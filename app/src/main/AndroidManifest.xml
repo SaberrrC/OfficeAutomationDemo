@@ -98,15 +98,6 @@
     <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
     <uses-permission android:name="com.shanlin.oa.permission.RECEIVE_MSG" />
 
-
-    <!-- 可选-->
-    <activity android:name="com.pgyersdk.activity.FeedbackActivity" />
-
-    <!-- 必选-->
-    <meta-data
-        android:name="PGYER_APPID"
-        android:value="63dcc619bfc2e68a77ed0c530aad1a70"></meta-data>
-
     <provider
         android:name="android.support.v4.content.FileProvider"
         android:authorities="com.shanlin.oa.fileprovider"
@@ -135,6 +126,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 蒲公英 -->
+        <!-- 可选-->
+        <activity android:name="com.pgyersdk.activity.FeedbackActivity" />
+
+        <!-- 必选-->
+        <meta-data
+            android:name="PGYER_APPID"
+            android:value="62cc871963fb55bd3a3cb218e4f64689"></meta-data>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.file_provider"
@@ -144,7 +143,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
-        <!-- 设置环信开始 -->
+        <!-- 蒲公英 END -->
+
         <!-- 环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
