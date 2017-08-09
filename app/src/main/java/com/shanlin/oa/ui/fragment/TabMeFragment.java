@@ -223,6 +223,9 @@ public class TabMeFragment extends BaseFragment {
                                 showTips("当前为最新版本！");
                             }
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

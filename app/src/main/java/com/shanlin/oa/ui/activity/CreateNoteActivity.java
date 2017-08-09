@@ -76,9 +76,9 @@ public class CreateNoteActivity extends BaseActivity {
         intent = getIntent();
         note_id = intent.getStringExtra("note_id");
         noteDate = intent.getStringExtra("noteData");
-        if (null!=noteDate &&!noteDate.equals("")) {
+        if (null != noteDate && !noteDate.equals("")) {
             mTvNoteDate.setText(noteDate);
-        }else{
+        } else {
             mTvNoteDate.setText("点击选择日期");
 
         }
@@ -115,8 +115,8 @@ public class CreateNoteActivity extends BaseActivity {
             public void onClick(View v) {
                 if (mTvNoteDate.getText().toString().trim().equals("点击选择日期")) {
                     showToast("请选择日期");
-                }else{
-                createNote();
+                } else {
+                    createNote();
 
                 }
 
@@ -128,13 +128,13 @@ public class CreateNoteActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                if (null!=noteContent &&!noteContent.equals("")) {
+                if (null != noteContent && !noteContent.equals("")) {
                     if (!mEtNoteContent.getText().toString().trim().equals(noteContent)) {
                         showTip("是否放弃编辑", "确定", "取消");
-                    }else{
+                    } else {
                         finish();
                     }
-                }else{
+                } else {
                     if (!mEtNoteContent.getText().toString().trim().equals("")) {
                         showTip("是否放弃编辑", "确定", "取消");
                     } else {
@@ -189,13 +189,13 @@ public class CreateNoteActivity extends BaseActivity {
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (null!=noteContent &&!noteContent.equals("")) {
+                if (null != noteContent && !noteContent.equals("")) {
                     if (!mEtNoteContent.getText().toString().trim().equals(noteContent)) {
                         showTip("是否放弃编辑", "确定", "取消");
-                    }else{
+                    } else {
                         finish();
                     }
-                }else{
+                } else {
                     if (!mEtNoteContent.getText().toString().trim().equals("")) {
                         showTip("是否放弃编辑", "确定", "取消");
                     } else {
@@ -223,18 +223,18 @@ public class CreateNoteActivity extends BaseActivity {
         params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
         params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
         params.put("content", mEtNoteContent.getText().toString().trim());
-        params.put("time",mTvNoteDate.getText().toString().trim().replace("年","-")
-                .replace("月","-").replace("日","").trim());
+        params.put("time", mTvNoteDate.getText().toString().trim().replace("年", "-")
+                .replace("月", "-").replace("日", "").trim());
 
 
-        LogUtils.e("uid"+"->"+AppConfig.getAppConfig(this).getPrivateUid());
-        LogUtils.e("token"+"->"+AppConfig.getAppConfig(this).getPrivateToken());
-        LogUtils.e("department_id"+"->"+AppConfig.getAppConfig(this).getDepartmentId());
-        LogUtils.e("content"+"->"+mEtNoteContent.getText().toString().trim());
+        LogUtils.e("uid" + "->" + AppConfig.getAppConfig(this).getPrivateUid());
+        LogUtils.e("token" + "->" + AppConfig.getAppConfig(this).getPrivateToken());
+        LogUtils.e("department_id" + "->" + AppConfig.getAppConfig(this).getDepartmentId());
+        LogUtils.e("content" + "->" + mEtNoteContent.getText().toString().trim());
         //time->2016年12月20日
-        LogUtils.e("time"+"->"+mTvNoteDate.getText().toString().trim().replace("年","-")
-                .replace("月","-").replace("日","").trim());
-        LogUtils.e("nt_id"+"->"+note_id);
+        LogUtils.e("time" + "->" + mTvNoteDate.getText().toString().trim().replace("年", "-")
+                .replace("月", "-").replace("日", "").trim());
+        LogUtils.e("nt_id" + "->" + note_id);
 
         initKjHttp().post(url, params, new HttpCallBack() {
 
@@ -254,9 +254,11 @@ public class CreateNoteActivity extends BaseActivity {
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
 
                         showToast("发送成功");
-                        startActivity(new Intent(CreateNoteActivity.this,ScheduleActivity.class));
+                        startActivity(new Intent(CreateNoteActivity.this, ScheduleActivity.class));
                         CreateNoteActivity.this.finish();
 
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
                     }
@@ -295,10 +297,10 @@ public class CreateNoteActivity extends BaseActivity {
             @Override
             public void onDatePicked(String year, String month, String day) {
 
-               String currentDate = year + "-" + month + "-" + day;
-                if (DateUtils.judeDateOrderByDay(DateUtils.getTodayDate().replace("/","-"),currentDate)) {
-                    tv.setText(year + "年" + month + "月" + day+"日");
-                }else{
+                String currentDate = year + "-" + month + "-" + day;
+                if (DateUtils.judeDateOrderByDay(DateUtils.getTodayDate().replace("/", "-"), currentDate)) {
+                    tv.setText(year + "年" + month + "月" + day + "日");
+                } else {
                     showToast("不能选择过往的日期");
                 }
 

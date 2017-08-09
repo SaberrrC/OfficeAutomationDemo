@@ -195,6 +195,9 @@ public class MeLaunchOverTimeActivity extends BaseActivity {
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -294,6 +297,9 @@ public class MeLaunchOverTimeActivity extends BaseActivity {
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             showEmptyView(mRootView, "内容为空", 0, false);
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
+                        case Api.RESPONSES_CODE_UID_NULL:
                             catchWarningByCode(Api.getCode(jo));
                             break;
                     }

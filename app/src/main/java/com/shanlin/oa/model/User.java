@@ -23,6 +23,7 @@ public class User implements MultiItemEntity,Serializable {
     private String sex;//性别
     private String phone;
     private String isshow;
+    private String oid;
 
 
 
@@ -193,7 +194,13 @@ public class User implements MultiItemEntity,Serializable {
         this.code = code;
     }
 
+    public String getOid() {
+        return oid;
+    }
 
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     public User(JSONObject jsonObject) {
         try {
@@ -216,14 +223,12 @@ public class User implements MultiItemEntity,Serializable {
             email = jsonObject.getString("email");
             isleader = jsonObject.getString("isleader");
             yx_token = jsonObject.getString("yx_token");
+            oid = jsonObject.getString("oid");
         }catch (JSONException e) {
             e.printStackTrace();
             LogUtils.e("user解析异常-》"+e.toString());
         }
     }
-
-
-
 
 
     @Override
@@ -233,22 +238,24 @@ public class User implements MultiItemEntity,Serializable {
                 ", is_initial_pwd='" + is_initial_pwd + '\'' +
                 ", uid='" + uid + '\'' +
                 ", token='" + token + '\'' +
+                ", email='" + email + '\'' +
                 ", portraits='" + portraits + '\'' +
                 ", username='" + username + '\'' +
                 ", sex='" + sex + '\'' +
                 ", phone='" + phone + '\'' +
+                ", isshow='" + isshow + '\'' +
+                ", oid='" + oid + '\'' +
                 ", hiredate='" + hiredate + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", postId='" + postId + '\'' +
                 ", postName='" + postName + '\'' +
                 ", departmentId='" + departmentId + '\'' +
                 ", departmentName='" + departmentName + '\'' +
-                ", email='" + email + '\'' +
                 ", isleader='" + isleader + '\'' +
-                ", type='"   + '\'' +
                 ", code='" + code + '\'' +
                 '}';
     }
+
     @Override
     public int getItemType() {
         return 100;

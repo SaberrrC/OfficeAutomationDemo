@@ -118,6 +118,9 @@ public class SelectOrdinaryMeetingRoomActivity extends BaseActivity implements V
 
 
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     System.out.println(e.toString());

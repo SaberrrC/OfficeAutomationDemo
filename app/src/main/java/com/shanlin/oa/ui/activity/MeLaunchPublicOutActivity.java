@@ -138,6 +138,9 @@ public class MeLaunchPublicOutActivity extends BaseActivity {
                             showEmptyView(mRootView, "内容为空", 0, false);
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -164,8 +167,8 @@ public class MeLaunchPublicOutActivity extends BaseActivity {
         mLlApprovalProcessLayout.setVisibility(View.VISIBLE);
         final ApprovalPublicOut al = new ApprovalPublicOut(data);
         tvEventType.setText("公出");
-        tvTimeStart.setText(al.getInfo().getStart_time() );
-        tvTimeEnd.setText( al.getInfo().getEnd_time());
+        tvTimeStart.setText(al.getInfo().getStart_time());
+        tvTimeEnd.setText(al.getInfo().getEnd_time());
         tvDuration.setText(al.getInfo().getDay() + "小时");
         tvNoDidEvent.setText(al.getInfo().getRemark().replace("&nbsp;", " ").replace("<br/>", "\n"));
         // 1审批中 2通过 3驳回
@@ -217,7 +220,7 @@ public class MeLaunchPublicOutActivity extends BaseActivity {
 
     private void addRightInfo(int i, final ApprovalPublicOut.ApproversList approvers) {
         View view = View.inflate(this, R.layout.approval_process_item_info_layout, null);
-        TextView tvPostil=((TextView) view.findViewById(R.id.tv_postil));
+        TextView tvPostil = ((TextView) view.findViewById(R.id.tv_postil));
         switch (Integer.parseInt(approvers.getApprovalStatus())) {
             //状态 1审批中，2通过，3驳回
             case 1:
@@ -271,10 +274,11 @@ public class MeLaunchPublicOutActivity extends BaseActivity {
         });
         mLlApprovalInfoContainer.addView(view);
     }
+
     public void showDetailDialog(String status, String timeBefore, String timeAfter, String user, String reply) {
         View contentView = LayoutInflater.from(this).inflate(R.layout
                 .approval_popupwindow_content_view, null);
-        PopupWindow   popupWindow = new PopupWindow(contentView, Utils.dip2px(200), Utils.dip2px(200), false);
+        PopupWindow popupWindow = new PopupWindow(contentView, Utils.dip2px(200), Utils.dip2px(200), false);
         TextView topTips = (TextView) contentView.findViewById(R.id.tv_dialog_top_tips);
         TextView bottomTips = (TextView) contentView.findViewById(R.id.tv_dialog_bottom_tips);
         TextView tvDate = (TextView) contentView.findViewById(R.id.tv_dialog_date);
@@ -336,6 +340,7 @@ public class MeLaunchPublicOutActivity extends BaseActivity {
         popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
         popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
     }
+
     /**
      * 添加左侧状态图片
      *
@@ -414,9 +419,9 @@ public class MeLaunchPublicOutActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
-        if (popupWindow!=null) {
+        if (popupWindow != null) {
             popupWindow.dismiss();
-            popupWindow=null;
+            popupWindow = null;
         }
     }
 

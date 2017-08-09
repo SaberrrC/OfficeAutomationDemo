@@ -122,6 +122,9 @@ public class WaitApprovalOfficesSuppliesActivity extends BaseActivity {
                             showEmptyView(mRootView, "内容为空", 0, false);
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

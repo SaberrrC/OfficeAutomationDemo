@@ -553,6 +553,9 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
                         showToast("发送成功");
                         launchWorkReportDraft.setwhichDate(WorkReportLaunchActivity.this);
                         finish();
+                    }
+                    if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
 
@@ -740,6 +743,8 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
 
 
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
+                        catchWarningByCode(Api.getCode(jo));
+                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
                         catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
@@ -974,6 +979,8 @@ public class WorkReportLaunchActivity extends BaseActivity implements View.OnCli
                                 .replace("<br/>", "\n"));
 
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
+                        catchWarningByCode(Api.getCode(jo));
+                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
                         catchWarningByCode(Api.getCode(jo));
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_DATA_EMPTY) {
                         showToast("当前时间段没有周报");

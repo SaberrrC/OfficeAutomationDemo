@@ -572,6 +572,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 conversation.markMessageAsRead(message.getMsgId());
             } else {
                 EaseUI.getInstance().getNotifier().onNewMsg(message);
+                messageList.refreshSelectLast();
             }
         }
     }

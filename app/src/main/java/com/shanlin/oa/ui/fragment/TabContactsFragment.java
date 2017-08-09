@@ -23,18 +23,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-//import com.hyphenate.chatuidemo.db.Friends;
-//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
-import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.Contacts;
@@ -46,7 +43,6 @@ import com.shanlin.oa.ui.adapter.TabContactsAdapter;
 import com.shanlin.oa.ui.base.BaseFragment;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.views.ClearEditText;
-import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,11 +61,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+//import com.hyphenate.chatuidemo.db.Friends;
+//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
+
 /**
  * <h3>Description: 名片页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class TabContactsFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener {
+public class TabContactsFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.title)
     TextView title;
@@ -99,7 +98,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
 
     private InputMethodManager inputManager;
     private List<User> userList = null;
-    private boolean isPullRefreashing =false;
+    private boolean isPullRefreashing = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -325,7 +324,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                                             try {
                                                 inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                                                         InputMethodManager.HIDE_NOT_ALWAYS);
-                                            }catch (Exception e){
+                                            } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
 
@@ -334,6 +333,9 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                                             reSetSwipRefreash();
                                             SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
                                             recyclerViewSearchResult.setAdapter(adapter);
+                                        }
+                                        if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
+                                            catchWarningByCode(Api.getCode(jo));
                                         } else {
                                             showToast(Api.getInfo(jo));
                                         }
@@ -374,7 +376,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onPreStart() {
                 super.onPreStart();
-                if(!isPullRefreashing){
+                if (!isPullRefreashing) {
                     showLoadingView();
                     recyclerView.setVisibility(View.VISIBLE);
                     recyclerViewSearchResult.setVisibility(View.GONE);
@@ -387,7 +389,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
             public void onFinish() {
                 super.onFinish();
                 hideLoadingView();
-                isPullRefreashing=false;
+                isPullRefreashing = false;
                 mSwipeRefreshLayout.setRefreshing(false);
 
             }
@@ -455,11 +457,11 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
         });
     }
 
-    public void reSetSwipRefreash(){
-        if(mSwipeRefreshLayout!=null){
-            if(recyclerView.getVisibility()==View.VISIBLE){
+    public void reSetSwipRefreash() {
+        if (mSwipeRefreshLayout != null) {
+            if (recyclerView.getVisibility() == View.VISIBLE) {
                 mSwipeRefreshLayout.setEnabled(true);
-            }else {
+            } else {
                 mSwipeRefreshLayout.setEnabled(false);
             }
         }
@@ -468,7 +470,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onRefresh() {
-        isPullRefreashing=true;
+        isPullRefreashing = true;
         loadData();
     }
 

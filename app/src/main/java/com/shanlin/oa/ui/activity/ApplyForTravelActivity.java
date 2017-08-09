@@ -114,6 +114,9 @@ public class ApplyForTravelActivity extends BaseActivity {
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -147,7 +150,7 @@ public class ApplyForTravelActivity extends BaseActivity {
                         .travel_entry_approvel_single, null);
                 SimpleDraweeView sdv = (SimpleDraweeView) view.findViewById(R.id.user_portrait);
 
-                sdv.setImageURI("http://"+Uri.parse(portrait));
+                sdv.setImageURI("http://" + Uri.parse(portrait));
                 TextView tvLeader = (TextView) view.findViewById(R.id.tv_leader_name);
                 LinearLayout.LayoutParams params = new LinearLayout
                         .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -300,16 +303,16 @@ public class ApplyForTravelActivity extends BaseActivity {
         picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
             @Override
             public void onDatePicked(String year, String month, String day) {
-                String date=year + "/" + month + "/" + day;
+                String date = year + "/" + month + "/" + day;
                 tv.setText(date);
                 if (isEndDate) {
-                    totalDays=totalDays+DateUtils.getDayD_Value(tempStartDate,date);
+                    totalDays = totalDays + DateUtils.getDayD_Value(tempStartDate, date);
                     etTravelDuration.setText(String.valueOf(totalDays));
 
                     etTravelDuration.setSelection(String.valueOf(totalDays).length());
 
-                }else{
-                    tempStartDate=date;
+                } else {
+                    tempStartDate = date;
                 }
 
             }
@@ -351,6 +354,8 @@ public class ApplyForTravelActivity extends BaseActivity {
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         tsList.clear();
                         showToast(Api.getInfo(jo));

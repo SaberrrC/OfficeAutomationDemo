@@ -514,6 +514,8 @@ public class UserInfoActivity extends BaseActivity {
                         userPortrait.setImageURI(Uri.parse(portraitUri));
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
                         catchWarningByCode(Api.getCode(jo));
+                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
                     }

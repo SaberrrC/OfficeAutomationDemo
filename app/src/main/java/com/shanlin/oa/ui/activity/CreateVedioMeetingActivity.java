@@ -78,11 +78,11 @@ public class CreateVedioMeetingActivity extends BaseActivity {
     private String currentDate;//当前年月日
     private OptionsPickerView beginTimeView;
     private OptionsPickerView endTimeView;
-//    private ArrayList<String> beginTimes;
-    private String[] dataTimes = {"0:00","2:00","3:00","4:00","5:00","6:00","7:00","8:00","9:00","10:00","11:00","12:00",
-        "13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00","23:00"};
+    //    private ArrayList<String> beginTimes;
+    private String[] dataTimes = {"0:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00",
+            "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "23:00"};
     ArrayList<String> dataTimesList = new ArrayList<>(Arrays.asList(dataTimes));
-    private  ArrayList<String> beginTimeList;
+    private ArrayList<String> beginTimeList;
     private String begintime;//开始时间
     private String endtime;//结束时间
     private String meetingType;
@@ -102,18 +102,18 @@ public class CreateVedioMeetingActivity extends BaseActivity {
     private void showBeginTimeView() {
         beginTimeView = new OptionsPickerView.Builder(this,
                 new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                //返回的分别是三个级别的选中位置
+                    @Override
+                    public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                        //返回的分别是三个级别的选中位置
 //                String tx = beginTimes.get(options1);
 //                tvMeetTime.setText(beginTimes.get(options1));
 
-            }
-        }).isDialog(true).build();
+                    }
+                }).isDialog(true).build();
         beginTimeView.setTitle("请选择开始时间");
 
         beginTimeList = new ArrayList<>();
-        for (int i = 0 ; i < dataTimesList.size()-1 ; i++) {
+        for (int i = 0; i < dataTimesList.size() - 1; i++) {
             beginTimeList.add(dataTimesList.get(i));
         }
         beginTimeView.setPicker(beginTimeList);//添加数据
@@ -134,7 +134,7 @@ public class CreateVedioMeetingActivity extends BaseActivity {
 
     private ArrayList<String> markEndTimesForBegin(int position) {
         ArrayList<String> list = new ArrayList<>();
-        for (int i = position+1 ; i < dataTimesList.size() ; i++) {
+        for (int i = position + 1; i < dataTimesList.size(); i++) {
             list.add(dataTimesList.get(i));
         }
         return list;
@@ -142,7 +142,7 @@ public class CreateVedioMeetingActivity extends BaseActivity {
 
 
     private void showEndTimeView(final ArrayList<String> times) {
-        endTimeView= new OptionsPickerView.Builder(this,
+        endTimeView = new OptionsPickerView.Builder(this,
                 new OptionsPickerView.OnOptionsSelectListener() {
                     @Override
                     public void onOptionsSelect(int options1, int options2, int options3, View v) {
@@ -162,20 +162,21 @@ public class CreateVedioMeetingActivity extends BaseActivity {
         endTimeView.show();
     }
 
-    public void init(){
+    public void init() {
 //        beginTimes = new ArrayList<>();
 //        endTimes = new ArrayList<>();
 //        meetRoom = (MeetRoom) this.getIntent().getSerializableExtra("meetRoom");
 //        LogUtils.e("会议室名字："+meetRoom.getRoomname());
     }
+
     private void initData() {
         mLlJoinPeopleContainer.setVisibility(View.GONE);
         contactsList = new ArrayList<>();
         copy = new StringBuilder();
 
 
-            tvSelectMeetingRoom.setText("-");
-        
+        tvSelectMeetingRoom.setText("-");
+
 
         Intent intent = getIntent();
         meetingType = intent.getStringExtra("meetingType");
@@ -339,7 +340,7 @@ public class CreateVedioMeetingActivity extends BaseActivity {
             case R.id.tv_meet_time:
                 if (tvOridinyMeetDate.getText().toString().trim().equals("请选择会议日期")) {
                     showToast("请先选择日期");
-                }else{
+                } else {
                     showBeginTimeView();
                 }
                 break;
@@ -354,11 +355,11 @@ public class CreateVedioMeetingActivity extends BaseActivity {
                     showToast("会议主题不能为空");
                     return;
                 }
-                if (tvOridinyMeetDate.getText().toString().trim().equals("请选择会议日期")){
+                if (tvOridinyMeetDate.getText().toString().trim().equals("请选择会议日期")) {
                     showToast("会议日期不能为空!");
                     return;
                 }
-                if (tvMeetTime.getText().toString().trim().equals("请选择会议时间")){
+                if (tvMeetTime.getText().toString().trim().equals("请选择会议时间")) {
                     showToast("会议时间不能为空!");
                     return;
                 }
@@ -368,7 +369,7 @@ public class CreateVedioMeetingActivity extends BaseActivity {
                     return;
                 }
 
-               addMeeting();
+                addMeeting();
 
                 break;
         }
@@ -389,11 +390,11 @@ public class CreateVedioMeetingActivity extends BaseActivity {
             @Override
             public void onDatePicked(String year, String month, String day) {
                 currentDate = year + "-" + month + "-" + day;
-                LogUtils.e("DateUtils.getTodayDate()->"+ DateUtils.getTodayDate());
-                if (DateUtils.judeDateOrderByDay(DateUtils.getTodayDate().replace("/","-"),currentDate)) {
+                LogUtils.e("DateUtils.getTodayDate()->" + DateUtils.getTodayDate());
+                if (DateUtils.judeDateOrderByDay(DateUtils.getTodayDate().replace("/", "-"), currentDate)) {
                     tv.setText(currentDate);
 //                    sendData(currentDate);
-                }else{
+                } else {
                     showToast("不能选择过往的日期");
                 }
             }
@@ -401,7 +402,7 @@ public class CreateVedioMeetingActivity extends BaseActivity {
         picker.show();
     }
 
-//private  void sendBeginTime(){
+    //private  void sendBeginTime(){
 //    showLoadingView();
 //    HttpParams params = new HttpParams();
 //    params.put("begintime", String.valueOf(tvMeetTime.getText().toString().trim().substring(0,tvMeetTime.length()-3)));
@@ -472,14 +473,14 @@ public class CreateVedioMeetingActivity extends BaseActivity {
         params.put("date", currentDate);
         params.put("roomid", 0);
         params.put("attentees", copy.toString());
-        String roomName =  mEtMeetingTheme.getText().toString().trim() + UUID.randomUUID().toString().replaceAll("-", "");
+        String roomName = mEtMeetingTheme.getText().toString().trim() + UUID.randomUUID().toString().replaceAll("-", "");
         params.put("theme", roomName);
         params.put("type", meetingType);
         params.put("begintime", begintime);
         params.put("endtime", endtime);
 
-        LogUtils.e("开始时间-----"+begintime);
-        LogUtils.e("结束时间-----"+endtime);
+        LogUtils.e("开始时间-----" + begintime);
+        LogUtils.e("结束时间-----" + endtime);
 //        LogUtils.e("uid:"+AppConfig.getAppConfig(this).getPrivateUid());
 //        LogUtils.e("token"+ AppConfig.getAppConfig(this).getPrivateToken());
 //        LogUtils.e("begintime"+begintime);
@@ -489,7 +490,6 @@ public class CreateVedioMeetingActivity extends BaseActivity {
 //        LogUtils.e("attentees"+copy.toString());
 //        LogUtils.e("type"+meetingType);
 //        LogUtils.e("roomid"+roomId);
-
 
 
         initKjHttp().post(Api.CONFERENCE_SETCONF, params, new HttpCallBack() {
@@ -513,7 +513,10 @@ public class CreateVedioMeetingActivity extends BaseActivity {
                         startActivity(new Intent(CreateVedioMeetingActivity.this, ScheduleActivity.class));
                         finish();
 
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                        catchWarningByCode(Api.getCode(jo));
                     }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -535,9 +538,6 @@ public class CreateVedioMeetingActivity extends BaseActivity {
             }
         });
     }
-
-
-
 
 
 //    private void sendData(String date) {

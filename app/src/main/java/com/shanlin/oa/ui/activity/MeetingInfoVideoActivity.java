@@ -120,6 +120,9 @@ public class MeetingInfoVideoActivity extends BaseActivity {
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -196,6 +199,9 @@ public class MeetingInfoVideoActivity extends BaseActivity {
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -234,7 +240,7 @@ public class MeetingInfoVideoActivity extends BaseActivity {
                 String is_createman = jsonObject.getString("is_createman");
                 if (is_createman.equals("1")) {
                     tvStatus.setTextColor(Color.parseColor("#47cf38"));
-                }else{
+                } else {
                     if (status.equals("未查看")) {
                         tvStatus.setTextColor(Color.parseColor("#eb4a4a"));
 
@@ -345,7 +351,7 @@ public class MeetingInfoVideoActivity extends BaseActivity {
     private void goVideoActivity() {
         Intent intent = new Intent();
         intent.setClass(MeetingInfoVideoActivity.this, MeetingVideoActivity.class);
-        intent.putExtra("isCreate",true);
+        intent.putExtra("isCreate", true);
         startActivity(intent);
     }
 
@@ -420,6 +426,8 @@ public class MeetingInfoVideoActivity extends BaseActivity {
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                         showToast("发送成功");
                         finish();
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
                     }
@@ -474,6 +482,8 @@ public class MeetingInfoVideoActivity extends BaseActivity {
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                         showToast("发送成功");
                         finish();
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
                     }

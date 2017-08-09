@@ -133,6 +133,9 @@ public class WaitApprovalNoticeActivity extends BaseActivity {
                             showEmptyView(mRootView, "审批详情不存在", 0, false);
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

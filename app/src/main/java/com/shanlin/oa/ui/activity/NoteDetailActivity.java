@@ -127,6 +127,9 @@ LogUtils.e("200-->"+jo.getString("time"));
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -261,6 +264,8 @@ LogUtils.e("200-->"+jo.getString("time"));
                     }
 
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
+                        catchWarningByCode(Api.getCode(jo));
+                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
                         catchWarningByCode(Api.getCode(jo));
                     }
                 } catch (JSONException e) {

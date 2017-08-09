@@ -131,6 +131,9 @@ public class ApplyForOverTimeActivity extends BaseActivity {
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -164,7 +167,7 @@ public class ApplyForOverTimeActivity extends BaseActivity {
                 View view = LayoutInflater.from(this).inflate(R.layout
                         .travel_entry_approvel_single, null);
                 SimpleDraweeView sdv = (SimpleDraweeView) view.findViewById(R.id.user_portrait);
-                sdv.setImageURI("http://"+Uri.parse(portrait));
+                sdv.setImageURI("http://" + Uri.parse(portrait));
                 LogUtils.e("头像url——》" + portrait);
                 TextView tvLeader = (TextView) view.findViewById(R.id.tv_leader_name);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout
@@ -256,6 +259,8 @@ public class ApplyForOverTimeActivity extends BaseActivity {
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
                     }
@@ -281,10 +286,11 @@ public class ApplyForOverTimeActivity extends BaseActivity {
 
     private boolean checkDate() {
         if (tvOverTimeStartTime.getText().toString().trim().equals("点击选择时间")
-                ||tvOverTimeEndTime.getText().toString().trim().equals("点击选择时间")) {
+                || tvOverTimeEndTime.getText().toString().trim().equals("点击选择时间")) {
             showToast("请选择时间");
             return false;
-        }if(mEtOverTimeReson.getText().toString().trim().equals("")){
+        }
+        if (mEtOverTimeReson.getText().toString().trim().equals("")) {
             showToast("加班理由不能为空");
             return false;
         }

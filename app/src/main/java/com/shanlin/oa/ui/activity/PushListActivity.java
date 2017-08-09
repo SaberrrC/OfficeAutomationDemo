@@ -222,6 +222,9 @@ public class PushListActivity extends BaseActivity implements SwipeRefreshLayout
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -323,6 +326,9 @@ public class PushListActivity extends BaseActivity implements SwipeRefreshLayout
                             mAdapter.removeAllFooterView();
                             hasMore = false;
                             showToast("没有更多了");
+                            break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {

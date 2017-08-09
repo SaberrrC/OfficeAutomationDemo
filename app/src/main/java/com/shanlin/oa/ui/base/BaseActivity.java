@@ -114,6 +114,10 @@ public class BaseActivity extends AppCompatActivity {
                 AppConfig.getAppConfig(this).clearLoginInfo();
                 gotoLoginPage();
                 break;
+            case Api.RESPONSES_CODE_UID_NULL:
+                AppConfig.getAppConfig(this).clearLoginInfo();
+                gotoLoginPage();
+                break;
             case Api.RESPONSES_CODE_NO_NETWORK:
                 showTips("请确认是否已连接网络！");
                 break;
@@ -135,7 +139,7 @@ public class BaseActivity extends AppCompatActivity {
                 DemoHelper.getInstance().logout(true, new EMCallBack() {
                     @Override
                     public void onSuccess() {
-                        Log.d("退出环信成功！！","退出环信成功！！");
+                        Log.d("退出环信成功！！", "退出环信成功！！");
                     }
 
                     @Override

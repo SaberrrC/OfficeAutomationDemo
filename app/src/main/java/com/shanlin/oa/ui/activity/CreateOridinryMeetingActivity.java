@@ -94,24 +94,25 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
         initData();
 
     }
+
     /**
      * 选择开始时间并请求判断结束时间
      */
     private void showBeginTimeView() {
         beginTimeView = new OptionsPickerView.Builder(this,
                 new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                    @Override
+                    public void onOptionsSelect(int options1, int options2, int options3, View v) {
 
-            }
-        }).isDialog(true).build();
+                    }
+                }).isDialog(true).build();
         beginTimeView.setTitle("请选择开始时间");
         beginTimeView.setPicker(beginTimes);//添加数据
         beginTimeView.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 tvMeetTime.setText(beginTimes.get(options1));
-                begintime=beginTimes.get(options1);
+                begintime = beginTimes.get(options1);
                 sendBeginTime();
             }
         });
@@ -124,7 +125,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
      * 返回结束时间
      */
     private void showEndTimeView() {
-        endTimeView= new OptionsPickerView.Builder(this,
+        endTimeView = new OptionsPickerView.Builder(this,
                 new OptionsPickerView.OnOptionsSelectListener() {
                     @Override
                     public void onOptionsSelect(int options1, int options2, int options3, View v) {
@@ -135,27 +136,28 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
         endTimeView.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                tvMeetTime.setText(tvMeetTime.getText().toString()+"-"+endTimes.get(options1));
-                endtime=endTimes.get(options1);
+                tvMeetTime.setText(tvMeetTime.getText().toString() + "-" + endTimes.get(options1));
+                endtime = endTimes.get(options1);
             }
         });
         endTimeView.setCyclic(false);
         endTimeView.show();
     }
 
-    public void init(){
+    public void init() {
         beginTimes = new ArrayList<>();
         endTimes = new ArrayList<>();
         meetRoom = (MeetRoom) this.getIntent().getSerializableExtra("meetRoom");
-        LogUtils.e("会议室名字："+meetRoom.getRoomname());
+        LogUtils.e("会议室名字：" + meetRoom.getRoomname());
     }
+
     private void initData() {
         mLlJoinPeopleContainer.setVisibility(View.GONE);
         contactsList = new ArrayList<>();
         copy = new StringBuilder();
 
 
-            tvSelectMeetingRoom.setText(meetRoom.getRoomname());
+        tvSelectMeetingRoom.setText(meetRoom.getRoomname());
 
 
         Intent intent = getIntent();
@@ -317,7 +319,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
             case R.id.tv_meet_time:
                 if (tvOridinyMeetDate.getText().toString().trim().equals("请选择会议日期")) {
                     showToast("请先选择日期");
-                }else{
+                } else {
                     showBeginTimeView();
                 }
                 break;
@@ -332,11 +334,11 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
                     showToast("会议主题不能为空");
                     return;
                 }
-                if (tvOridinyMeetDate.getText().toString().trim().equals("请选择会议日期")){
+                if (tvOridinyMeetDate.getText().toString().trim().equals("请选择会议日期")) {
                     showToast("会议日期不能为空!");
                     return;
                 }
-                if (tvMeetTime.getText().toString().trim().equals("请选择会议时间")){
+                if (tvMeetTime.getText().toString().trim().equals("请选择会议时间")) {
                     showToast("会议时间不能为空!");
                     return;
                 }
@@ -346,7 +348,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
                     return;
                 }
 
-               addMeeting();
+                addMeeting();
 
                 break;
         }
@@ -369,11 +371,11 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
             @Override
             public void onDatePicked(String year, String month, String day) {
                 currentDate = year + "-" + month + "-" + day;
-                LogUtils.e("DateUtils.getTodayDate()->"+ DateUtils.getTodayDate());
-                if (DateUtils.judeDateOrderByDay(DateUtils.getTodayDate().replace("/","-"),currentDate)) {
+                LogUtils.e("DateUtils.getTodayDate()->" + DateUtils.getTodayDate());
+                if (DateUtils.judeDateOrderByDay(DateUtils.getTodayDate().replace("/", "-"), currentDate)) {
                     tv.setText(currentDate);
                     sendData(currentDate);
-                }else{
+                } else {
                     showToast("不能选择过往的日期");
                 }
             }
@@ -381,69 +383,74 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
         picker.show();
     }
 
-private  void sendBeginTime(){
-    showLoadingView();
-    HttpParams params = new HttpParams();
-    params.put("begintime", String.valueOf(tvMeetTime.getText().toString().trim().substring(0,tvMeetTime.length()-3)));
-    params.put("date",currentDate);
-    params.put("roomid", meetRoom.getRoom_id());
-    params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-    params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
+    private void sendBeginTime() {
+        showLoadingView();
+        HttpParams params = new HttpParams();
+        params.put("begintime", String.valueOf(tvMeetTime.getText().toString().trim().substring(0, tvMeetTime.length() - 3)));
+        params.put("date", currentDate);
+        params.put("roomid", meetRoom.getRoom_id());
+        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
+        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
 
-    LogUtils.e("--------时间："+String.valueOf(tvMeetTime.getText().toString().trim().substring(0,tvMeetTime.length()-3)));
-    LogUtils.e("---------roomId:"+meetRoom.getRoom_id());
-    LogUtils.e("---------日期："+currentDate);
-    LogUtils.e("------uid:"+ AppConfig.getAppConfig(this).getPrivateUid());
-    LogUtils.e("------token:"+ AppConfig.getAppConfig(this).getPrivateToken());
-    initKjHttp().post(Api.CONFERENCE_GETOCCUPYTIMEBYBEGINTIME, params, new HttpCallBack() {
+        LogUtils.e("--------时间：" + String.valueOf(tvMeetTime.getText().toString().trim().substring(0, tvMeetTime.length() - 3)));
+        LogUtils.e("---------roomId:" + meetRoom.getRoom_id());
+        LogUtils.e("---------日期：" + currentDate);
+        LogUtils.e("------uid:" + AppConfig.getAppConfig(this).getPrivateUid());
+        LogUtils.e("------token:" + AppConfig.getAppConfig(this).getPrivateToken());
+        initKjHttp().post(Api.CONFERENCE_GETOCCUPYTIMEBYBEGINTIME, params, new HttpCallBack() {
 
-        @Override
-        public void onPreStart() {
-            super.onPreStart();
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
 
-        }
-        @Override
-        public void onSuccess(String t) {
-
-            super.onSuccess(t);
-            LogUtils.e(t);
-            try {
-                JSONObject jo = new JSONObject(t);
-                switch (Api.getCode(jo)) {
-                    case Api.RESPONSES_CODE_OK:
-                        JSONObject data = Api.getDataToJSONObject(jo);
-                        JSONArray time = data.getJSONArray("time");
-                        for (int i = 0; i < time.length(); i++) {
-                            endTimes.add(time.getString(i));
-                        }
-                        showEndTimeView();
-
-                        break;
-                    case Api.RESPONSES_CODE_DATA_EMPTY:
-                        break;
-                    case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        catchWarningByCode(Api.getCode(jo));
-                        break;
-                }
-            } catch (JSONException e) {
-                System.out.println(e.toString());
             }
-        }
 
-        @Override
-        public void onFinish() {
-            super.onFinish();
-            hideLoadingView();
-        }
+            @Override
+            public void onSuccess(String t) {
 
-        @Override
-        public void onFailure(int errorNo, String strMsg) {
-            super.onFailure(errorNo, strMsg);
-            LogUtils.e("errorNo,strMsg--->" + errorNo + "," + strMsg);
-            catchWarningByCode(errorNo);
-        }
-    });
-}
+                super.onSuccess(t);
+                LogUtils.e(t);
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    switch (Api.getCode(jo)) {
+                        case Api.RESPONSES_CODE_OK:
+                            JSONObject data = Api.getDataToJSONObject(jo);
+                            JSONArray time = data.getJSONArray("time");
+                            for (int i = 0; i < time.length(); i++) {
+                                endTimes.add(time.getString(i));
+                            }
+                            showEndTimeView();
+
+                            break;
+                        case Api.RESPONSES_CODE_DATA_EMPTY:
+                            break;
+                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
+                    }
+                } catch (JSONException e) {
+                    System.out.println(e.toString());
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                hideLoadingView();
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                LogUtils.e("errorNo,strMsg--->" + errorNo + "," + strMsg);
+                catchWarningByCode(errorNo);
+            }
+        });
+    }
+
     private void addMeeting() {
         showLoadingView();
         HttpParams params = new HttpParams();
@@ -468,7 +475,6 @@ private  void sendBeginTime(){
 //        LogUtils.e("roomid"+roomId);
 
 
-
         initKjHttp().post(Api.CONFERENCE_SETCONF, params, new HttpCallBack() {
 
             @Override
@@ -490,7 +496,10 @@ private  void sendBeginTime(){
                         startActivity(new Intent(CreateOridinryMeetingActivity.this, ScheduleActivity.class));
                         finish();
 
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                        catchWarningByCode(Api.getCode(jo));
                     }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -514,9 +523,6 @@ private  void sendBeginTime(){
     }
 
 
-
-
-
     private void sendData(String date) {
 
         showLoadingView();
@@ -526,8 +532,8 @@ private  void sendBeginTime(){
         params.put("date", date);
         params.put("roomid", meetRoom.getRoom_id());
 
-        LogUtils.e("---------日期："+date);
-        LogUtils.e("---------roomId:"+meetRoom.getRoom_id());
+        LogUtils.e("---------日期：" + date);
+        LogUtils.e("---------roomId:" + meetRoom.getRoom_id());
         initKjHttp().post(Api.CONFERENCE_GETOCCUPYTIME, params, new HttpCallBack() {
 
             @Override
@@ -535,6 +541,7 @@ private  void sendBeginTime(){
                 super.onPreStart();
 
             }
+
             @Override
             public void onSuccess(String t) {
 
@@ -550,12 +557,15 @@ private  void sendBeginTime(){
                                 beginTimes.add(time.getString(i));
                                 //System.out.println(time.getString(i));
 
-                        }
+                            }
 
                             break;
                         case Api.RESPONSES_CODE_DATA_EMPTY:
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
+                        case Api.RESPONSES_CODE_UID_NULL:
                             catchWarningByCode(Api.getCode(jo));
                             break;
                     }

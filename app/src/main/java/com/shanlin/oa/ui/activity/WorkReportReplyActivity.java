@@ -82,6 +82,7 @@ public class WorkReportReplyActivity extends BaseActivity implements View.OnClic
     TextView mTvAddPicTips;
     private List<String> picUrls = new ArrayList<>();
     private File file;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -233,7 +234,7 @@ public class WorkReportReplyActivity extends BaseActivity implements View.OnClic
             if (resultCode == RESULT_OK && requestCode == AFFIRM_PICTURE_RESULT) {
 
                 addPicture(file);
-            }else if (resultCode == RESULT_OK && requestCode == UPDATE_PROTRAIT) {
+            } else if (resultCode == RESULT_OK && requestCode == UPDATE_PROTRAIT) {
                 if (data != null) {
                     /****http://www.jb51.net/article/56990.htm*****/
                     Bitmap bitmap = null;
@@ -276,7 +277,9 @@ public class WorkReportReplyActivity extends BaseActivity implements View.OnClic
                     startActivityForResult(intent, AFFIRM_PICTURE_RESULT);
                 }
 
-            }}}
+            }
+        }
+    }
 
     /**
      * @param file 添加图片
@@ -303,10 +306,12 @@ public class WorkReportReplyActivity extends BaseActivity implements View.OnClic
                 try {
                     JSONObject jo = new JSONObject(t);
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                        addPic("http://"+Api.getDataToJSONArray(jo).get(0));
+                        addPic("http://" + Api.getDataToJSONArray(jo).get(0));
 
 
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
+                        catchWarningByCode(Api.getCode(jo));
+                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
                         catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
@@ -331,6 +336,7 @@ public class WorkReportReplyActivity extends BaseActivity implements View.OnClic
             }
         });
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -377,6 +383,9 @@ public class WorkReportReplyActivity extends BaseActivity implements View.OnClic
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();
+                    }
+                    if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
 

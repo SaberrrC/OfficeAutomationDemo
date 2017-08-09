@@ -97,6 +97,10 @@ public class BaseFragment extends Fragment {
                 AppConfig.getAppConfig(getActivity()).clearLoginInfo();
                 gotoLoginPage();
                 break;
+            case Api.RESPONSES_CODE_UID_NULL:
+                AppConfig.getAppConfig(getActivity()).clearLoginInfo();
+                gotoLoginPage();
+                break;
             case Api.RESPONSES_CODE_NO_NETWORK:
                 showTips("请确认是否已连接网络！");
                 break;

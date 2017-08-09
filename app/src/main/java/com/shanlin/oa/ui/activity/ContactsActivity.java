@@ -18,7 +18,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
-import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.model.Contacts;
 import com.shanlin.oa.ui.adapter.TabContactsAdapter;
@@ -160,6 +159,9 @@ public class ContactsActivity extends BaseActivity {
                             showEmptyView(mRlRecyclerViewContainer, "您还没有联系人", 0, false);
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
+                        case Api.RESPONSES_CODE_UID_NULL:
                             catchWarningByCode(Api.getCode(jo));
                             break;
                     }
@@ -349,7 +351,6 @@ public class ContactsActivity extends BaseActivity {
 //        popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
 //        popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
 //    }
-
 
 
     private void showEmptyView() {

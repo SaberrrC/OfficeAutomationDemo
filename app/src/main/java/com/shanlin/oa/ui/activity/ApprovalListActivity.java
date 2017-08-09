@@ -393,7 +393,7 @@ public class ApprovalListActivity extends BaseActivity implements View.OnClickLi
                 // 0屏幕停止滚动；1:滚动且用户仍在触碰或手指还在屏幕上2：随用户的操作，屏幕上产生的惯性滑动；
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (newState == 0 && list.size() > 9) {
-                    hasMore=true;
+                    hasMore = true;
                     // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
                     int lastPosition = layoutManager.findLastVisibleItemPosition();
                     if (lastPosition == list.size() - 1) {
@@ -548,6 +548,9 @@ public class ApprovalListActivity extends BaseActivity implements View.OnClickLi
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -558,7 +561,7 @@ public class ApprovalListActivity extends BaseActivity implements View.OnClickLi
             public void onFinish() {
                 super.onFinish();
                 hideLoadingView();
-                if (null!=mSwipeRefreshLayout ) {
+                if (null != mSwipeRefreshLayout) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }

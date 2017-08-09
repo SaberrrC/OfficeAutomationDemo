@@ -227,6 +227,9 @@ public class NoticeListActivity extends BaseActivity implements SwipeRefreshLayo
                             mAdapter.removeAllFooterView();
                             showToast("没有更多了");
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

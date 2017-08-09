@@ -654,6 +654,9 @@ public class MainController extends BaseActivity {
                         case Api.RESPONSES_CODE_DATA_EMPTY:
                             tvMsgUnRead.setVisibility(View.GONE);
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
 
                 } catch (Exception e) {

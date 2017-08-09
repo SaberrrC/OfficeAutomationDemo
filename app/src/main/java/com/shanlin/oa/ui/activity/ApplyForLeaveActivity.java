@@ -130,6 +130,9 @@ public class ApplyForLeaveActivity extends BaseActivity {
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -274,7 +277,9 @@ public class ApplyForLeaveActivity extends BaseActivity {
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();
-                    } else {
+                    }else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)){
+                        catchWarningByCode(Api.getCode(jo));
+                    }else {
                         showToast(Api.getInfo(jo));
                     }
                 } catch (JSONException e) {

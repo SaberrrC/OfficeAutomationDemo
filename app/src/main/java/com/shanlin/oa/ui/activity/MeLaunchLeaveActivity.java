@@ -135,6 +135,9 @@ public class MeLaunchLeaveActivity extends BaseActivity {
                             showEmptyView(mRootView, "内容为空", 0, false);
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -161,8 +164,8 @@ public class MeLaunchLeaveActivity extends BaseActivity {
         mLlApprovalProcessLayout.setVisibility(View.VISIBLE);
         final ApprovalLeave al = new ApprovalLeave(data);
         tvEventType.setText(al.getInfo().getType());
-        tvTimeStart.setText(al.getInfo().getStart_time() );
-        tvTimeEnd.setText( al.getInfo().getEnd_time());
+        tvTimeStart.setText(al.getInfo().getStart_time());
+        tvTimeEnd.setText(al.getInfo().getEnd_time());
         tvDuration.setText(al.getInfo().getDay() + "小时");
         tvReason.setText(al.getInfo().getRemark().replace("&nbsp;", " ").replace("<br/>", "\n"));
         // 1审批中 2通过 3驳回
@@ -214,7 +217,7 @@ public class MeLaunchLeaveActivity extends BaseActivity {
 
     private void addRightInfo(int i, final ApprovalLeave.ApproversList approvers) {
         View view = View.inflate(this, R.layout.approval_process_item_info_layout, null);
-        TextView tvPostil=((TextView) view.findViewById(R.id.tv_postil));
+        TextView tvPostil = ((TextView) view.findViewById(R.id.tv_postil));
         switch (Integer.parseInt(approvers.getApprovalStatus())) {
             //状态 1审批中，2通过，3驳回
             case 1:
@@ -267,6 +270,7 @@ public class MeLaunchLeaveActivity extends BaseActivity {
         });
         mLlApprovalInfoContainer.addView(view);
     }
+
     public void showDetailDialog(String status, String timeBefore, String timeAfter, String user, String reply) {
         View contentView = LayoutInflater.from(this).inflate(R.layout
                 .approval_popupwindow_content_view, null);
@@ -327,7 +331,8 @@ public class MeLaunchLeaveActivity extends BaseActivity {
                 lp.alpha = 1f;
                 getWindow().setAttributes(lp);
             }
-        });popupWindow.setFocusable(true);
+        });
+        popupWindow.setFocusable(true);
 
         popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
         popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);

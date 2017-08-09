@@ -35,7 +35,10 @@ public class AppConfig {
      */
     public static final String BASE_URL = "base_url";
 
-
+    //oid
+    public static final String PREF_KEY_OID = "pref_key_user_uid";
+    //isleader
+    public static final String PREF_KEY_ISLEADER = "pref_key_user_uid";
     //user uuid
     public static final String PREF_KEY_USER_UID = "pref_key_user_uid";
     //user token
@@ -154,6 +157,8 @@ public class AppConfig {
         editor.putBoolean(IS_AUTO_LOGIN, isAutoLogin);
         editor.putString(PREF_KEY_IS_INIT_PWD, user.getIs_initial_pwd());
         editor.putString(PREF_KEY_YX_TOKEN, user.getYx_token());
+        editor.putString(PREF_KEY_ISLEADER, user.getIsleader());
+        editor.putString(PREF_KEY_OID, user.getOid());
         editor.apply();
     }
 

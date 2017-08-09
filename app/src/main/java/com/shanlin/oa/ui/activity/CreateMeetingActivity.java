@@ -363,6 +363,8 @@ public class CreateMeetingActivity extends BaseActivity {
                         startActivity(new Intent(CreateMeetingActivity.this, ScheduleActivity.class));
                         finish();
 
+                    }else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)){
+                        catchWarningByCode(Api.getCode(jo));
                     }
 
                 } catch (JSONException e) {

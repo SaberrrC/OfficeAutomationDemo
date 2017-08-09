@@ -411,6 +411,9 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                             catchWarningByCode(Api.getCode(jo));
                             break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -548,6 +551,9 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                             mAdapter.removeAllFooterView();
                             hasMore = false;
                             showToast("没有更多了");
+                            break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {

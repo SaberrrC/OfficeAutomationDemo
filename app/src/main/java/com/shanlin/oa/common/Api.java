@@ -30,6 +30,10 @@ public class Api {
      */
     public static final int RESPONSES_CODE_TOKEN_NO_MATCH = 304;
     /**
+     * 所有接口返回code=305表示Uid为空
+     */
+    public static final int RESPONSES_CODE_UID_NULL = 305;
+    /**
      * 所有接口返回code=364表示审批详情不存在
      */
     public static final int APPROVAL_DETAIL_NOT_EXIST = 364;
@@ -391,6 +395,11 @@ public class Api {
      * 变更加班申请
      */
     public static final String APPROVAL_EDITOVERTIME = "approval/editovertime";
+
+    /**
+     * 聊天个人信息
+     */
+    public static final String COMMUNICATION_USERINFO = "user/detail";
 
     //*****************************************************************//
 

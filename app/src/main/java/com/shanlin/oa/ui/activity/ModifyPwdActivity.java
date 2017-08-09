@@ -64,7 +64,6 @@ public class ModifyPwdActivity extends BaseActivity {
     }
 
 
-
     @OnClick(R.id.toolbar_text_btn)
     public void onClick() {
         //完成按钮
@@ -103,6 +102,8 @@ public class ModifyPwdActivity extends BaseActivity {
                         AppConfig.getAppConfig(ModifyPwdActivity.this).clearLoginInfo();
                         finish();
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
+                        catchWarningByCode(Api.getCode(jo));
+                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
                         catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
@@ -190,7 +191,6 @@ public class ModifyPwdActivity extends BaseActivity {
             }
         });
     }
-
 
 
     @Override

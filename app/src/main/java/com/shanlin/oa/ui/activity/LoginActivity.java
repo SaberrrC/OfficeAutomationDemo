@@ -174,6 +174,8 @@ public class LoginActivity extends BaseActivity {
                             AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
                             startActivity(new Intent(LoginActivity.this, MainController.class));
                             finish();
+                        } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                            catchWarningByCode(Api.getCode(jo));
                         } else {
 
                             showToast(Api.getInfo(jo));
@@ -215,7 +217,7 @@ public class LoginActivity extends BaseActivity {
             return false;
         }
         if (0 == NetWorkUtils.getAPNType(this)) {
-            Toast.makeText(this,"请检测网络，当前网络不可用!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请检测网络，当前网络不可用!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
