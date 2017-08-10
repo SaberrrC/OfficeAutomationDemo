@@ -162,6 +162,8 @@ public class DemoHelper {
      *
      * @param context application context
      */
+
+
     public void init(Context context) {
         demoModel = new DemoModel(context);
         EMOptions options = initChatOptions();
@@ -264,7 +266,7 @@ public class DemoHelper {
         //you need apply & set your own id if you want to use Mi push notification
         options.setMipushConfig("2882303761517604089", "5621760418089");
         //you need apply & set your own id if you want to use Huawei push notification
-        options.setHuaweiPushAppId("10492024");
+        options.setHuaweiPushAppId("100062817");
 
         //set custom servers, commonly used in private deployment
         if (demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
