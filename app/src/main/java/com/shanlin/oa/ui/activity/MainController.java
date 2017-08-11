@@ -820,7 +820,7 @@ public class MainController extends BaseActivity {
 
         } else {
 //            PgyUpdateManager.setIsForced(true);
-            PgyUpdateManager.register(this, null);
+            PgyUpdateManager.register(this, "com.shanlin.oa.provider.fileprovider");
         }
     }
 
@@ -840,7 +840,7 @@ public class MainController extends BaseActivity {
         switch (requestCode) {
             case 100:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    PgyUpdateManager.register(this, null);
+                    PgyUpdateManager.register(this, "com.shanlin.oa.provider.fileprovider");
                 } else {
                     Toast.makeText(this, "该权限被禁用 无法更新！", Toast.LENGTH_SHORT).show();
                 }

@@ -133,14 +133,13 @@
         <meta-data
             android:name="PGYER_APPID"
             android:value="62cc871963fb55bd3a3cb218e4f64689"></meta-data>
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.file_provider"
+        <provider android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.shanlin.oa.provider.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
+                android:resource="@xml/provider_paths"/>
         </provider>
         <!-- 蒲公英 END -->
 
