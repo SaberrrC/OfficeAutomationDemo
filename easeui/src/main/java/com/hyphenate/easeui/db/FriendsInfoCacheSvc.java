@@ -30,7 +30,6 @@ public class FriendsInfoCacheSvc {
     }
 
 
-
     /**
      * @param uuid 数据库中是否有该uuid好友
      * @return
@@ -88,14 +87,19 @@ public class FriendsInfoCacheSvc {
     }
 
     public String getNickName(String userId) {
-        Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
-        if (cursor.moveToFirst()) {
-            String nickName = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_NICKNAME));
-            cursor.close();
-            return nickName;
+        try {
+            Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
+            if (cursor.moveToFirst()) {
+                String nickName = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_NICKNAME));
+                cursor.close();
+                return nickName;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
         return null;
     }
+
     public String getPortrait(String userId) {
         Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
         if (cursor.moveToFirst()) {

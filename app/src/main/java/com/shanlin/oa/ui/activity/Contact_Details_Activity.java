@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
+import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.huanxin.EaseChatMessageActivity;
 import com.shanlin.oa.huanxin.VoiceCallActivity;
@@ -25,7 +27,13 @@ import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.User;
 import com.shanlin.oa.ui.PermissionListener;
 import com.shanlin.oa.ui.base.BaseActivity;
+import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.Utils;
+
+import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpParams;
+
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -94,10 +102,15 @@ public class Contact_Details_Activity extends BaseActivity {
 
         nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(userName);
         portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(userName);
-
-        tv_user_name.setText(nickName);
-        Glide.with(AppManager.mContext).load(portrait)
-                .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+        if (!TextUtils.isEmpty(nickName)) {
+            tv_user_name.setText(nickName);
+        } else {
+            tv_user_name.setText("");
+        }
+        if (!TextUtils.isEmpty(portrait)) {
+            Glide.with(AppManager.mContext).load(portrait)
+                    .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+        }
 
         //判断是否有权限打电话
         if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
@@ -149,6 +162,47 @@ public class Contact_Details_Activity extends BaseActivity {
                 }
             });
         }
+
+        //TODO个人详情
+        HttpParams params = new HttpParams();
+
+        final String oid = AppConfig.getAppConfig(AppManager.mContext)
+                .get(AppConfig.PREF_KEY_OID);
+        String isLeader = AppConfig.getAppConfig(AppManager.mContext)
+                .get(AppConfig.PREF_KEY_ISLEADER);
+        String code = AppConfig.getAppConfig(AppManager.mContext)
+                .get(AppConfig.PREF_KEY_CODE);
+        final String uid = AppConfig.getAppConfig(AppManager.mContext)
+                .get(AppConfig.PREF_KEY_USER_UID);
+        String token = AppConfig.getAppConfig(AppManager.mContext)
+                .get(AppConfig.PREF_KEY_TOKEN);
+
+        //TODO 聊天信息
+//        params.put("uid", uid);
+//        params.put("token", token);
+//        params.put("oid",oid);
+//        params.put("isleader",isLeader);
+        params.put("code", "010110027");
+//        params.put("code",code);
+        initKjHttp().get(Api.COMMUNICATION_USERINFO, params, new HttpCallBack() {
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+
+            @Override
+            public void onSuccess(Map<String, String> headers, byte[] t) {
+                super.onSuccess(headers, t);
+                System.out.println(t);
+                LogUtils.e("聊天个人信息-》" + t);
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                LogUtils.e("聊天个人信息失败-》" + errorNo + strMsg);
+            }
+        });
     }
 
     private void addOrUpdateFriendInfo(User user) {

@@ -20,6 +20,7 @@ import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,10 +114,10 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 
         //扩展信息，发送给对方自己的名字和头像url
         sideInfo = getIntent().getStringExtra("meUsername") + "&" + getIntent().getStringExtra("meUserPortrait");
-        if (null != nickName) {
+        if (!TextUtils.isEmpty(nickName)) {
             nickTextView.setText(nickName);
         }
-        if (null != portrait) {
+        if (!TextUtils.isEmpty(portrait)) {
             Glide.with(AppManager.mContext).load(portrait)
                     .placeholder(R.drawable.ease_default_avatar).into(mSwingCard);
         }

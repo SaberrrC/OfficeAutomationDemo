@@ -92,10 +92,7 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
             tvTitle.setText(to_user_nike);
         } else {
             if (!StringUtils.isBlank(String.valueOf(u_id))) {
-
                 tvTitle.setText(FriendsInfoCacheSvc.getInstance(this).getNickName(u_id));
-            } else {
-                tvTitle.setText(u_id);
             }
         }
 
