@@ -36,9 +36,9 @@ public class AppConfig {
     public static final String BASE_URL = "base_url";
 
     //oid
-    public static final String PREF_KEY_OID = "pref_key_user_uid";
+    public static final String PREF_KEY_OID = "pref_key_user_oid";
     //isleader
-    public static final String PREF_KEY_ISLEADER = "pref_key_user_uid";
+    public static final String PREF_KEY_ISLEADER = "pref_key_isLeader";
     //user uuid
     public static final String PREF_KEY_USER_UID = "pref_key_user_uid";
     //user token
