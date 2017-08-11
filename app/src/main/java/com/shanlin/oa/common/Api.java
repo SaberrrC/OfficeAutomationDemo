@@ -28,6 +28,10 @@ public class Api {
     /**
      * 所有接口返回code=304表示Token不匹配
      */
+    public static final int RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR = 303;
+    /**
+     * 所有接口返回code=304表示Token不匹配
+     */
     public static final int RESPONSES_CODE_TOKEN_NO_MATCH = 304;
     /**
      * 所有接口返回code=305表示Uid为空

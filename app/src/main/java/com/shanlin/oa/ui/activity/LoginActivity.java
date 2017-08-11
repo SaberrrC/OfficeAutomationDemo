@@ -176,8 +176,10 @@ public class LoginActivity extends BaseActivity {
                             finish();
                         } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
                             catchWarningByCode(Api.getCode(jo));
+                        } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR)) {
+                            userPwd.setText("");
+                            showToast(Api.getInfo(jo));
                         } else {
-
                             showToast(Api.getInfo(jo));
                         }
                     } catch (JSONException e) {
@@ -213,6 +215,7 @@ public class LoginActivity extends BaseActivity {
             return false;
         }
         if (!Utils.isRegex(Constants.Regex.REGEX_PASSWORD, userPwd.getText().toString())) {
+            userPwd.setText("");
             showToast("密码错误，请重试");
             return false;
         }
