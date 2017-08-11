@@ -188,8 +188,9 @@ public class BaseFragment extends Fragment {
      */
     @SuppressLint("InflateParams")
     View empty;
+
     public void showEmptyView(ViewGroup view, String str, int resId, boolean isShow) {
-        if(empty==null){
+//        if (empty == null) {
             empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -200,12 +201,12 @@ public class BaseFragment extends Fragment {
             }
             TextView msg = (TextView) empty.findViewById(R.id.message);
             msg.setText(str);
-        }
+//        }
         view.addView(empty);
     }
 
-    public void hideEmptyView(){
-        if(empty!=null){
+    public void hideEmptyView() {
+        if (empty != null) {
             empty.setVisibility(View.GONE);
         }
     }
@@ -214,9 +215,15 @@ public class BaseFragment extends Fragment {
      * @param view 移除空的view，如果有
      */
     public void removeEmptyView(ViewGroup view) {
+         // modify by lvdinghao 2017/8/10 之前view使用findviewbyid，始终是一个新的对象，无法把原来的view删除
         try {
-            View emptyView = view.findViewById(R.id.rl_empty_view);
-            view.removeView(emptyView);
+            for (int i = 0; i < view.getChildCount(); i++) {
+                LogUtils.d(view.getChildAt(i).getId() + "");
+                if (empty != null && view.getChildAt(i) == empty) {
+                    view.removeView(view.getChildAt(i));
+                    return;
+                }
+            }
         } catch (Exception e) {
             LogUtils.e("当前没有空的View");
         }

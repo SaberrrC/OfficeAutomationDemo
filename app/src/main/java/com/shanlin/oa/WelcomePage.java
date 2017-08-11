@@ -164,9 +164,9 @@ public class WelcomePage extends Activity {
         if (kjHttp == null) {
             kjHttp = new KJHttp();
         }
-        String uid = AppConfig.getAppConfig(AppManager.mContext)
+        final String uid = AppConfig.getAppConfig(AppManager.mContext)
                 .get(AppConfig.PREF_KEY_USER_UID);
-        String token = AppConfig.getAppConfig(AppManager.mContext)
+        final String token = AppConfig.getAppConfig(AppManager.mContext)
                 .get(AppConfig.PREF_KEY_TOKEN);
         params.put("uid", uid);
         params.put("token", token);
@@ -189,18 +189,14 @@ public class WelcomePage extends Activity {
                         String timeout = data.getString("timeout");
                         Log.e("","---------timeout："+timeout);
                         LogUtils.e("---------timeout"+timeout);
-                        if (timeout.equals("1")) {//超时
-                            isTimeOut = false;
-                        } else {
-                            isTimeOut = true;
-                        }
+                        isTimeOut = !timeout.equals("1");
 
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (isTimeOut) {//不超时
+                if (isTimeOut && !TextUtils.isEmpty(uid)) {//不超时
                     startActivity(new Intent(AppManager.mContext, MainController.class));
                 } else {
                     startActivity(new Intent(AppManager.mContext, LoginActivity.class));
@@ -212,7 +208,7 @@ public class WelcomePage extends Activity {
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 LogUtils.e("-------onFailure" + strMsg);
-                if (isTimeOut) {//不超时
+                if (!TextUtils.isEmpty(token)) { //token不为空，表明仍然是登录状态
                     startActivity(new Intent(AppManager.mContext, MainController.class));
                 } else {
                     startActivity(new Intent(AppManager.mContext, LoginActivity.class));
