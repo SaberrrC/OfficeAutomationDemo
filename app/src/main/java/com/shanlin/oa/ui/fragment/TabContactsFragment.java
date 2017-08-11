@@ -268,6 +268,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                         if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())) {
                             final String uid = AppConfig.getAppConfig(AppManager.mContext)
                                     .get(AppConfig.PREF_KEY_USER_UID);
+
                             String token = AppConfig.getAppConfig(AppManager.mContext)
                                     .get(AppConfig.PREF_KEY_TOKEN);
                             String departmentId = AppConfig.getAppConfig(AppManager.mContext)
@@ -281,7 +282,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                             params.put("oid", departmentId);
                             params.put("isleader", isleader);
                             params.put("name", search_et_input.getText().toString());
-
+                            
                             initKjHttp().post(Api.PHONEBOOK_SEARCHPHONEBOOK, params, new HttpCallBack() {
                                 @Override
                                 public void onFinish() {
@@ -333,8 +334,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                                             reSetSwipRefreash();
                                             SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
                                             recyclerViewSearchResult.setAdapter(adapter);
-                                        }
-                                        if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
+                                        } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
                                             catchWarningByCode(Api.getCode(jo));
                                         } else {
                                             showToast(Api.getInfo(jo));

@@ -241,7 +241,7 @@ public class DemoHelper {
             EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
 
             // Offline call push
-            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
+            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(true);
 
             setGlobalListeners();
             broadcastManager = LocalBroadcastManager.getInstance(appContext);

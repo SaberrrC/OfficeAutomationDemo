@@ -25,7 +25,11 @@ import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 import com.shanlin.oa.R;
 import com.shanlin.oa.ui.base.BaseActivity;
+import com.shanlin.oa.utils.BadgeUtil;
 import com.shanlin.oa.utils.LogUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @SuppressLint("Registered")
 public class CallActivity extends BaseActivity {
@@ -74,15 +78,23 @@ public class CallActivity extends BaseActivity {
 
             @Override
             public void onRemoteOffline(final String to) {
-
+                BadgeUtil.setBadgeCount(CallActivity.this, 1, R.drawable.ring_red);
                 //this function should exposed & move to Demo
                 EMLog.d(TAG, "onRemoteOffline, to:" + to);
 
-                final EMMessage message = EMMessage.createTxtSendMessage("You have an incoming call", to);
+                final EMMessage message = EMMessage.createTxtSendMessage("有人呼叫你,开启 APP 接听吧", to);
                 // set the user-defined extension field
                 message.setAttribute("em_apns_ext", true);
-
+                message.setAttribute("em_force_notification", true);
                 message.setAttribute("is_voice_call", callType == 0 ? true : false);
+                JSONObject extObj = new JSONObject();
+                try {
+                    extObj.put("em_push_title", "有人呼叫你，开启 APP 接听吧");
+                    extObj.put("extern", "定义推送扩展内容");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                message.setAttribute("em_apns_ext", extObj);
 
                 message.setMessageStatusCallback(new EMCallBack() {
 
