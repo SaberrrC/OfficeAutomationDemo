@@ -1,7 +1,6 @@
 package com.shanlin.oa.utils.netutil;
 
-import com.shanlin.oa.manager.AppConfig;
-import com.shanlin.oa.manager.AppManager;
+import com.shanlin.oa.BuildConfig;
 import com.shanlin.oa.utils.LogUtils;
 
 import org.kymjs.kjframe.KJHttp;
@@ -19,7 +18,9 @@ public class MyKjHttp extends KJHttp {
     private final String baseUrl;
 
     public MyKjHttp() {
-        baseUrl = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.BASE_URL);
+        //TODO 暂时废弃
+        //baseUrl = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.BASE_URL);
+        baseUrl = BuildConfig.BASE_URL;
     }
 
     @Override
