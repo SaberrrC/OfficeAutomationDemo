@@ -19,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Pair;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -692,10 +693,12 @@ public class MainController extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        moveTaskToBack(false);
-        super.onBackPressed();
-        //doubleClickExitHelper.onBackPressed();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            moveTaskToBack(false);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     EMMessageListener messageListener = new EMMessageListener() {
