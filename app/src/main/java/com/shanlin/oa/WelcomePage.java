@@ -86,7 +86,7 @@ public class WelcomePage extends Activity {
 
             }
         });
-        getCompanyId();
+        getDomain();
     }
 
     /**
@@ -160,7 +160,6 @@ public class WelcomePage extends Activity {
      */
     public void checkTimeOut() {
         HttpParams params = new HttpParams();
-
         if (kjHttp == null) {
             kjHttp = new KJHttp();
         }
@@ -218,9 +217,9 @@ public class WelcomePage extends Activity {
         });
     }
     /**
-     * 请求公司ID
+     * 请求接口的域名
      */
-    private void getCompanyId() {
+    private void getDomain() {
         HttpParams params = new HttpParams();
 
         if (kjHttp == null) {
@@ -253,6 +252,8 @@ public class WelcomePage extends Activity {
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                // TODO: 2017/8/15 域名请求失败，不需要给一个默认的域名吗？
+                AppConfig.getAppConfig(AppManager.mContext).set(AppConfig.BASE_URL, "http://api.sl.s1.zhitongoa.com/");
                 LogUtils.e("onFailure" + strMsg);
             }
         });
