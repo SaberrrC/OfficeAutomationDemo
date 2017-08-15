@@ -168,6 +168,8 @@ public class LoginActivity extends BaseActivity {
                         JSONObject jo = new JSONObject(t);
                         if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                             showToast(LoginActivity.this, "登录成功");
+                            //登录成功后清空原来的信息
+                            AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
                             //保存登录用户信息
                             User user = new User(Api.getDataToJSONObject(jo));
                             LogUtils.e("user->" + user);

@@ -35,6 +35,7 @@ import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.huanxin.DemoHelper;
 import com.shanlin.oa.manager.AppConfig;
+import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.ui.PermissionListener;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.FileUtils;
@@ -96,6 +97,7 @@ public class UserInfoActivity extends BaseActivity {
     private static final int CROP_PICTURE_REQUEST = 0x3;//图片路径
 
     private static final String TEMP_FILE_NAME = "temp_icon.jpg";
+    private static final String CAMERA_FILE_NAME = "camera_pic.jpg";
 
     /**
      * Save the path of photo cropping is completed
@@ -115,16 +117,26 @@ public class UserInfoActivity extends BaseActivity {
         initData();
 
         File dir = getExternalFilesDir("user_icon");
+        File fileIconPath = new File(dir, TEMP_FILE_NAME);
+        File fileCameraPath = new File(dir, CAMERA_FILE_NAME);
+
         try {
+            if (!fileIconPath.exists()){
+                fileIconPath.createNewFile();
+            }
+            if (!fileCameraPath.exists()){
+                fileCameraPath.createNewFile();
+            }
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                icon_path = FileProvider.getUriForFile(getApplicationContext(),
-                        "com.itcrm.zhitongoa.sl.file_provider", new File(dir, TEMP_FILE_NAME));
-                camera_path = FileProvider.getUriForFile(getApplicationContext(),
-                        "com.itcrm.zhitongoa.sl.file_provider", new File(dir, "camera_pic.jpg"));
+                // modify by lvdinghao 2017/8/15 修改名称和包名保持一致
+                icon_path = FileProvider.getUriForFile(AppManager.mContext,
+                        "com.shanlin.oa.fileprovider", fileIconPath);
+                camera_path = FileProvider.getUriForFile(AppManager.mContext,
+                        "com.shanlin.oa.fileprovider", fileCameraPath);
 
             } else {
-                icon_path = Uri.fromFile(new File(dir, TEMP_FILE_NAME));
-                camera_path = Uri.fromFile(new File(dir, "camera_pic.jpg"));
+                icon_path = Uri.fromFile(fileIconPath);
+                camera_path = Uri.fromFile(fileCameraPath);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -104,15 +104,7 @@
     <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
     <uses-permission android:name="com.shanlin.oa.permission.RECEIVE_MSG" />
 
-    <provider
-        android:name="android.support.v4.content.FileProvider"
-        android:authorities="com.shanlin.oa.fileprovider"
-        android:exported="false"
-        android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/provider_paths" />
-    </provider>
+
     <application
         android:name="com.shanlin.oa.manager.AppManager"
         android:allowBackup="true"
@@ -139,8 +131,9 @@
         <meta-data
             android:name="PGYER_APPID"
             android:value="62cc871963fb55bd3a3cb218e4f64689"></meta-data>
+
         <provider android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.shanlin.oa.provider.fileprovider"
+            android:authorities="com.shanlin.oa.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
