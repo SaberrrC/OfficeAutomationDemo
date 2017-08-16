@@ -57,7 +57,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 	public MyLocationListenner myListener = new MyLocationListenner();
 
 	Button sendButton = null;
-
+	
 	EditText indexText = null;
 	int index = 0;
 	// LocationData locData = null;
