@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
@@ -26,6 +27,7 @@ import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.User;
 import com.shanlin.oa.ui.PermissionListener;
 import com.shanlin.oa.ui.base.BaseActivity;
+import com.shanlin.oa.utils.GlideRoundTransformUtils;
 import com.shanlin.oa.utils.Utils;
 
 import butterknife.Bind;
@@ -94,10 +96,10 @@ public class Contact_Details_Activity extends BaseActivity {
     String sex;
     String phone;
     String email;
+    String departmentId;
 
     private void initSessionInfo() {
         final String userInfo = this.getIntent().getStringExtra("userInfo");
-
 
         nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(userInfo);
         portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(userInfo);
@@ -106,13 +108,17 @@ public class Contact_Details_Activity extends BaseActivity {
         sex = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getSex(userInfo);
         phone = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPhone(userInfo);
         email = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getEmail(userInfo);
+        departmentId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartmentId(userInfo);
         try {
             if (!TextUtils.isEmpty(nickName)) {
                 tv_user_name.setText(nickName);
             }
 
             if (!TextUtils.isEmpty(portrait)) {
-                Glide.with(AppManager.mContext).load(portrait)
+                Glide.with(AppManager.mContext)
+                        .load(portrait)
+                        .error(R.drawable.ease_default_avatar)
+                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                         .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
             }
 
@@ -128,7 +134,7 @@ public class Contact_Details_Activity extends BaseActivity {
                 tv_sex.setText(sex);
             }
 
-            if (!TextUtils.isEmpty(phone)) {
+            if (!TextUtils.isEmpty(phone) && departmentId.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT))) {
                 tv_phone_number.setText(phone);
             }
 
@@ -139,14 +145,43 @@ public class Contact_Details_Activity extends BaseActivity {
             e.printStackTrace();
         }
 
-
         //判断是否有权限打电话
         if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
             Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
             iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
         } else {
-            //TODO 获取不到手机号
-            if (!TextUtils.isEmpty(phone)) {
+            if (AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT).equals(departmentId)) {
+                iv_phone.setImageResource(R.mipmap.ico_phone);
+                //可以打电话
+                rel_phone_call.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
+                            @Override
+                            public void onGranted() {
+                                Intent intent = new Intent(Intent.ACTION_CALL,
+                                        Uri.parse("tel:" + phone));
+                                if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    return;
+                                }
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onDenied() {
+                                showToast("拨打电话权限被拒绝，请手动设置");
+                            }
+                        });
+                    }
+                });
+            } else if (!departmentId.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT))) {
                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
             } else {
                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
@@ -166,7 +201,6 @@ public class Contact_Details_Activity extends BaseActivity {
                         return;
                     }
                     try {
-
                         startActivity(new Intent(mContext, EaseChatMessageActivity.class)
                                 .putExtra("usernike", nickName)
                                 .putExtra("user_pic", portrait)
@@ -194,7 +228,6 @@ public class Contact_Details_Activity extends BaseActivity {
                         showToast("网络不稳定，请重试");
                         return;
                     }
-
                     startActivity(new Intent(mContext, VoiceCallActivity.class)
                             .putExtra("username", userInfo)
                             .putExtra("nike", nickName)
@@ -203,8 +236,6 @@ public class Contact_Details_Activity extends BaseActivity {
                 }
             });
         }
-
-
     }
 
     private void addOrUpdateFriendInfo(User user) {
@@ -223,7 +254,10 @@ public class Contact_Details_Activity extends BaseActivity {
         tv_sex.setText(user.getSex());
 
         if (!TextUtils.isEmpty(user.getPortraits())) {
-            Glide.with(AppManager.mContext).load(user.getPortraits())
+            Glide.with(AppManager.mContext)
+                    .load(user.getPortraits())
+                    .error(R.drawable.ease_default_avatar)
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
         }
 

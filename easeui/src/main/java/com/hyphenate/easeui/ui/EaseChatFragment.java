@@ -729,6 +729,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             object.put("userPost", getArguments().getString("userPost", "-"));
             object.put("userDepartment", getArguments().getString("userDepartment", "-"));
             object.put("userEmail", getArguments().getString("userEmail", "-"));
+            object.put("userDepartmentId", getArguments().getString("userDepartmentId", "-"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

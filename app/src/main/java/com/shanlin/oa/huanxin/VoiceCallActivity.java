@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
@@ -43,6 +44,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.shanlin.oa.R;
 import com.shanlin.oa.manager.AppManager;
+import com.shanlin.oa.utils.GlideRoundTransformUtils;
 
 import java.util.UUID;
 
@@ -117,7 +119,10 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
             nickTextView.setText(nickName);
         }
         if (!TextUtils.isEmpty(portrait)) {
-            Glide.with(AppManager.mContext).load(portrait)
+            Glide.with(AppManager.mContext)
+                    .load(portrait)
+                    .error(R.drawable.ease_default_avatar)
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .placeholder(R.drawable.ease_default_avatar).into(mSwingCard);
         }
         if (!isInComingCall) {// outgoing call

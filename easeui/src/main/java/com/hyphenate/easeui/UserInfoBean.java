@@ -16,5 +16,6 @@ public class UserInfoBean {
     public String userPost;
     public String userDepartment;
     public String userEmail;
+    public String userDepartmentId;
 
 }
