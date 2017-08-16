@@ -18,7 +18,7 @@ import com.shanlin.oa.ui.activity.SelectContactsActivity;
 import com.shanlin.oa.ui.adapter.SelectAdapter;
 
 import java.util.ArrayList;
-
+@SuppressLint("ValidFragment")
 public class MyFragment extends BottomSheetFragment{
 
     private ArrayList<Child> l_items;
@@ -31,7 +31,6 @@ public class MyFragment extends BottomSheetFragment{
     private SelectContactsActivity.MyHandler mHandler = null;
     //-------------
 
-    @SuppressLint("ValidFragment")
     public MyFragment(ArrayList<Child> items) {
         l_items = items;
     }

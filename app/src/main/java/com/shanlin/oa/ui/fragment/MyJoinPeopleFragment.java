@@ -19,6 +19,7 @@ import com.shanlin.oa.ui.adapter.SelectAdapter;
 
 import java.util.ArrayList;
 
+@SuppressLint("ValidFragment")
 public class MyJoinPeopleFragment extends BottomSheetFragment{
 
     private ArrayList<Child> l_items;
@@ -30,7 +31,6 @@ public class MyJoinPeopleFragment extends BottomSheetFragment{
     private AppManager appManager = null;
     private SelectJoinPeopleActivity.MyJoinHandler mJoinHandler = null;
 
-    @SuppressLint("ValidFragment")
     public MyJoinPeopleFragment(ArrayList<Child> items) {
         l_items = items;
     }

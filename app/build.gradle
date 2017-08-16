@@ -65,7 +65,6 @@ android {
         }
     }
 }
-
 def preAppName() {
     return "善林OA"
 }
@@ -80,6 +79,9 @@ def devAddress() {
 def devAppName() {
     return '善林OA-Dev版'
 }
+
+
+
 
 
 dependencies {

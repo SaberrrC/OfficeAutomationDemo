@@ -252,6 +252,7 @@ public class MainController extends BaseActivity {
     private void judeIsInitPwd() {
         //1初始密码，2已修改
         String isInitPwd = AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_IS_INIT_PWD);
+        // TODO: 2017/8/15 初始密码
         if (isInitPwd.equals("1")) {
             showSetPwdDialog();
         }

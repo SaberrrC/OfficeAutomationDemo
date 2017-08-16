@@ -270,10 +270,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
@@ -281,6 +279,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.manager.AppConfig;
@@ -301,10 +300,14 @@ import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * ProjectName: GroupInformationPlatform
@@ -328,6 +331,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
     ArrayList<Group> groups = new ArrayList<>();
     private ArrayList<Child> selectedContacts;//已经选择的联系人
     private SelectCopierAdapter mAdapter;
+    private boolean isFirstLoad = true;//刚进入页面，第一次加载数据
     //----------自己写的
     @Bind(R.id.search_et_input)
     ClearEditText search_et_input;
@@ -335,14 +339,11 @@ public class SelectJoinPeopleActivity extends BaseActivity {
     TextView tvCacle;
     @Bind(R.id.cC_num)
     TextView qty;
-    ArrayList<Group> searchGroup = new ArrayList<>();
-    @Bind(R.id.listViewsearch)
-    ExpandableListView listViewsearch;
     protected BottomSheetLayout bottomSheetLayout;
     //    //----------------------
     private AppManager appManager = null;
     private MyJoinHandler mJoinHandler = null;
-//    //----------------------
+    //    //----------------------
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -352,7 +353,6 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         setTranslucentStatus(this);
         initWeiget();
         loadData();
-        listViewsearch.setVisibility(View.GONE);
         search();
         //        //------------------------------------
         appManager = (AppManager) getApplication();
@@ -360,7 +360,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         mJoinHandler = appManager.getJoinhandler();
         appManager = (AppManager) getApplication();
         mJoinHandler = new MyJoinHandler();
-//        //--------------------------
+        //        //--------------------------
         //底部弹出框
         bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomsheet);
         findViewById(R.id.rel_choose_people_num).setOnClickListener(new View.OnClickListener() {
@@ -386,121 +386,29 @@ public class SelectJoinPeopleActivity extends BaseActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 mListView.setVisibility(View.GONE);
                 tvCacle.setVisibility(View.VISIBLE);
-
                 return false;
             }
         });
-        search_et_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                switch (i) {
-                    case EditorInfo.IME_ACTION_SEARCH:
-                        final String uid = AppConfig.getAppConfig(AppManager.mContext)
-                                .get(AppConfig.PREF_KEY_USER_UID);
-                        String token = AppConfig.getAppConfig(AppManager.mContext)
-                                .get(AppConfig.PREF_KEY_TOKEN);
+        //自动检索参会人
+        autoSearch();
+    }
 
-                        String department_id = AppConfig.getAppConfig(AppManager.mContext)
-                                .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
-                        HttpParams params = new HttpParams();
-                        params.put("uid", uid);
-                        params.put("token", token);
-                        params.put("search_name", search_et_input.getText().toString());
-
-                        initKjHttp().post(Api.CONFERENCE_CCLIST, params, new HttpCallBack() {
-                            @Override
-                            public void onFinish() {
-                                super.onFinish();
-                                hideLoadingView();
-                            }
-
-                            @Override
-                            public void onSuccess(String t) {
-                                super.onSuccess(t);
-                                System.out.println(t);
-                                LogUtils.e("搜索抄送人返回数据-》" + t);
-                                searchGroup.clear();
-                                try {
-                                    JSONObject jo = new JSONObject(t);
-                                    switch (Api.getCode(jo)) {
-                                        case Api.RESPONSES_CODE_OK:
-                                            list = new ArrayList<>();
-                                            JSONObject data = Api.getDataToJSONObject(jo);
-                                            JSONArray oname = data.getJSONArray("oname");
-                                            JSONArray users = data.getJSONArray("users");
-                                            for (int i = 0; i < oname.length(); i++) {
-                                                Group group = new Group(String.valueOf(i),
-                                                        oname.getString(i));
-
-                                                JSONArray usersArray = users.getJSONArray(i);
-                                                for (int j = 0; j < usersArray.length(); j++) {
-                                                    JSONObject joChild = usersArray.getJSONObject(j);
-                                                    //在这块做判断处理
-                                                    boolean isChecked = false;
-                                                    if (selectedContacts.size() > 0) {
-                                                        LogUtils.e("selectedContacts.size() > 0->" + selectedContacts.size());
-                                                        for (int k = 0; k < selectedContacts.size(); k++) {
-                                                            String uid = selectedContacts.get(k).getUid();
-
-                                                            if (joChild.getString("uid").equals(uid)) {
-                                                                isChecked = true;
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-
-                                                    Child child = new Child(joChild.getString("oname"),
-                                                            joChild.getString("portraits"),
-                                                            joChild.getString("post"),
-                                                            joChild.getString("uid"),
-                                                            joChild.getString("username"),
-                                                            joChild.getString("sex"),
-                                                            joChild.getString("department_id"),
-                                                            joChild.getString("CODE"), isChecked);
-                                                    LogUtils.e("selectedContacts.size() < 0->" + child.toString());
-
-                                                    group.addChildrenItem(child);
-                                                }
-                                                searchGroup.add(group);
-                                            }
-                                            searchForElv(searchGroup);
-                                            //隐藏软键盘
-                                            listViewsearch.setVisibility(View.VISIBLE);
-                                            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
-                                                    .hideSoftInputFromWindow(SelectJoinPeopleActivity.this
-                                                            .getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                                            break;
-                                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                                            mToolBarText.setVisibility(View.GONE);
-
-                                            showEmptyView(mRootView, "暂无可抄送对象，请联系管理员进行设置", 0, false);
-                                            break;
-                                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                                            catchWarningByCode(Api.getCode(jo));
-
-                                            break;
-                                        case Api.RESPONSES_CODE_UID_NULL:
-                                            catchWarningByCode(Api.getCode(jo));
-                                            break;
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(int errorNo, String strMsg) {
-                                LogUtils.e(errorNo + "--" + strMsg);
-                                catchWarningByCode(errorNo);
-                                super.onFailure(errorNo, strMsg);
-                            }
-                        });
-
-                        break;
-                }
-                return true;
-            }
-        });
+    private void autoSearch() {
+        //EditText 自动搜索,间隔->输入停止1秒后自动搜索
+        RxTextView.textChanges(search_et_input)
+                .debounce(1000, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
+                        if (isFirstLoad) {
+                            isFirstLoad = false;
+                            return;
+                        }
+                        loadData();
+                    }
+                });
     }
 
     @OnClick({R.id.search_et_cancle})
@@ -510,7 +418,6 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                 mListView.setVisibility(View.VISIBLE);
                 tvCacle.setVisibility(View.GONE);
                 search_et_input.setText("");
-                listViewsearch.setVisibility(View.GONE);
                 ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
                         .hideSoftInputFromWindow(SelectJoinPeopleActivity.this
                                 .getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -531,39 +438,32 @@ public class SelectJoinPeopleActivity extends BaseActivity {
 
     }
 
-    //搜索配置
-    private void searchForElv(ArrayList<Group> searchGroup) {
-        mAdapter = new SelectCopierAdapter(this, searchGroup);
-        listViewsearch.setAdapter(mAdapter);
-        listViewsearch.setOnChildClickListener(new GetSelectedSearchEmployee());
-
-    }
-
-    class GetSelectedSearchEmployee implements ExpandableListView.OnChildClickListener {
-        @Override
-        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                                    int childPosition, long id) {
-            if (selectedContacts.size() == 0) {
-                selectedContacts.add(searchGroup.get(groupPosition).getChildItem(childPosition));
-            } else {
-                boolean isExist = false;
-                for (int i = 0; i < selectedContacts.size(); i++) {
-                    if (selectedContacts.get(i).getUid().equals(
-                            searchGroup.get(groupPosition).getChildItem(childPosition).getUid())) {
-                        isExist = true;
-                        Toast.makeText(SelectJoinPeopleActivity.this, R.string.selectJoinPeopleHint, Toast.LENGTH_SHORT).show();
-                    }
-                }
-                if (!isExist) {
-                    selectedContacts.add(searchGroup.get(groupPosition).getChildItem(childPosition));
-                }
-            }
-
-            qty.setText(selectedContacts.size() + "");
-
-            return false;
-        }
-    }
+//
+//    class GetSelectedSearchEmployee implements ExpandableListView.OnChildClickListener {
+//        @Override
+//        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+//                                    int childPosition, long id) {
+//            if (selectedContacts.size() == 0) {
+//                selectedContacts.add(searchGroup.get(groupPosition).getChildItem(childPosition));
+//            } else {
+//                boolean isExist = false;
+//                for (int i = 0; i < selectedContacts.size(); i++) {
+//                    if (selectedContacts.get(i).getUid().equals(
+//                            searchGroup.get(groupPosition).getChildItem(childPosition).getUid())) {
+//                        isExist = true;
+//                        Toast.makeText(SelectJoinPeopleActivity.this, R.string.selectJoinPeopleHint, Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//                if (!isExist) {
+//                    selectedContacts.add(searchGroup.get(groupPosition).getChildItem(childPosition));
+//                }
+//            }
+//
+//            qty.setText(selectedContacts.size() + "");
+//
+//            return false;
+//        }
+//    }
 
 
     class GetSelectedEmployee implements ExpandableListView.OnChildClickListener {
@@ -595,12 +495,13 @@ public class SelectJoinPeopleActivity extends BaseActivity {
 
 
     private void loadData() {
-
-        showLoadingView("正在获取联系人列表");
+        if (isFirstLoad) {
+            showLoadingView("正在获取联系人列表");
+        }
         HttpParams params = new HttpParams();
         params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
         params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("search_name", "");
+        params.put("search_name", search_et_input.getText().toString().trim());
         initKjHttp().post(Api.CONFERENCE_CCLIST, params, new HttpCallBack() {
 
             @Override
@@ -612,7 +513,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 LogUtils.e("loadData-->" + t);
-
+                groups.clear();
                 try {
                     JSONObject jo = new JSONObject(t);
                     switch (Api.getCode(jo)) {
@@ -657,6 +558,8 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                                 }
                                 groups.add(group);
                             }
+                            hideEmptyView();
+                            mListView.setVisibility(View.VISIBLE);
                             mAdapter.notifyDataSetChanged();
                             break;
                         case Api.RESPONSES_CODE_DATA_EMPTY:

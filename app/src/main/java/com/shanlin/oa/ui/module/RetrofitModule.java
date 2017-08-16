@@ -1,13 +1,11 @@
 package com.shanlin.oa.ui.module;
 
-import com.hyphenate.easeui.Constant;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.net.Api;
 import com.shanlin.oa.net.CacheInterceptor;
 import com.shanlin.oa.net.HeadInterceptor;
 
-import java.io.File;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -26,7 +24,6 @@ import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -130,7 +127,7 @@ public class RetrofitModule {
                 .baseUrl(AppConfig.BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 

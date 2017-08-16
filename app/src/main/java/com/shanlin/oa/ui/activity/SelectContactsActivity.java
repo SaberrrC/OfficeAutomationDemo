@@ -9,16 +9,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.manager.AppConfig;
@@ -39,10 +38,14 @@ import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * ProjectName: GroupInformationPlatform
@@ -80,6 +83,7 @@ public class SelectContactsActivity extends BaseActivity {
     //----------------------
     private AppManager appManager = null;
     private MyHandler mHandler = null;
+    private boolean isFirstLoad = true;//第一次加载数据
     //----------------------
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +94,6 @@ public class SelectContactsActivity extends BaseActivity {
         setTranslucentStatus(this);
         initWeiget();
         loadData();
-        listViewsearch.setVisibility(View.GONE);
         search();
 //------------------------------------
         appManager = (AppManager) getApplication();
@@ -124,15 +127,26 @@ public class SelectContactsActivity extends BaseActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 mListView.setVisibility(View.GONE);
                 tvCacle.setVisibility(View.VISIBLE);
-
                 return false;
             }
         });
-        search_et_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                switch (i) {
-                    case EditorInfo.IME_ACTION_SEARCH:
+        autoSearch();
+    }
+
+
+    private void autoSearch() {
+        //EditText 自动搜索,间隔->输入停止1秒后自动搜索
+        RxTextView.textChanges(search_et_input)
+                .debounce(1000, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
+                        if (isFirstLoad) {
+                            isFirstLoad = false;
+                            return;
+                        }
                         final String uid = AppConfig.getAppConfig(AppManager.mContext)
                                 .get(AppConfig.PREF_KEY_USER_UID);
                         String token = AppConfig.getAppConfig(AppManager.mContext)
@@ -202,6 +216,7 @@ public class SelectContactsActivity extends BaseActivity {
                                             }
                                             searchForElv(searchGroup);
                                             listViewsearch.setVisibility(View.VISIBLE);
+                                            hideEmptyView();
                                             ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
                                                     .hideSoftInputFromWindow(SelectContactsActivity.this
                                                             .getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -232,11 +247,8 @@ public class SelectContactsActivity extends BaseActivity {
                             }
                         });
 
-                        break;
-                }
-                return true;
-            }
-        });
+                    }
+                });
     }
 
     @OnClick({R.id.search_et_cancle})
