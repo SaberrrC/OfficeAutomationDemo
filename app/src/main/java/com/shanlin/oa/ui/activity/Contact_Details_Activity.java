@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
-import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.huanxin.EaseChatMessageActivity;
 import com.shanlin.oa.huanxin.VoiceCallActivity;
@@ -27,13 +26,7 @@ import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.User;
 import com.shanlin.oa.ui.PermissionListener;
 import com.shanlin.oa.ui.base.BaseActivity;
-import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.Utils;
-
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
-
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -96,21 +89,56 @@ public class Contact_Details_Activity extends BaseActivity {
 
     String nickName;
     String portrait;
+    String department;
+    String post;
+    String sex;
+    String phone;
+    String email;
 
     private void initSessionInfo() {
-        final String userName = this.getIntent().getStringExtra("userName");
+        final String userInfo = this.getIntent().getStringExtra("userInfo");
 
-        nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(userName);
-        portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(userName);
-        if (!TextUtils.isEmpty(nickName)) {
-            tv_user_name.setText(nickName);
-        } else {
-            tv_user_name.setText("");
+
+        nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(userInfo);
+        portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(userInfo);
+        department = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartment(userInfo);
+        post = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPost(userInfo);
+        sex = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getSex(userInfo);
+        phone = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPhone(userInfo);
+        email = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getEmail(userInfo);
+        try {
+            if (!TextUtils.isEmpty(nickName)) {
+                tv_user_name.setText(nickName);
+            }
+
+            if (!TextUtils.isEmpty(portrait)) {
+                Glide.with(AppManager.mContext).load(portrait)
+                        .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+            }
+
+            if (!TextUtils.isEmpty(department)) {
+                tv_department.setText(department);
+            }
+
+            if (!TextUtils.isEmpty(post)) {
+                tv_duties.setText(post);
+            }
+
+            if (!TextUtils.isEmpty(sex)) {
+                tv_sex.setText(sex);
+            }
+
+            if (!TextUtils.isEmpty(phone)) {
+                tv_phone_number.setText(phone);
+            }
+
+            if (!TextUtils.isEmpty(email)) {
+                tv_mails.setText(email);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
-        if (!TextUtils.isEmpty(portrait)) {
-            Glide.with(AppManager.mContext).load(portrait)
-                    .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
-        }
+
 
         //判断是否有权限打电话
         if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
@@ -118,7 +146,11 @@ public class Contact_Details_Activity extends BaseActivity {
             iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
         } else {
             //TODO 获取不到手机号
-            iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+            if (!TextUtils.isEmpty(phone)) {
+                iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+            } else {
+                iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+            }
         }
 
         if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
@@ -133,11 +165,20 @@ public class Contact_Details_Activity extends BaseActivity {
                         showToast("网络不稳定，请重试");
                         return;
                     }
+                    try {
 
-                    startActivity(new Intent(mContext, EaseChatMessageActivity.class)
-                            .putExtra("usernike", nickName)
-                            .putExtra("user_pic", portrait)
-                            .putExtra("u_id", userName));
+                        startActivity(new Intent(mContext, EaseChatMessageActivity.class)
+                                .putExtra("usernike", nickName)
+                                .putExtra("user_pic", portrait)
+                                .putExtra("u_id", userInfo)
+                                .putExtra("department_name", department)
+                                .putExtra("post_name", post)
+                                .putExtra("sex", sex)
+                                .putExtra("phone", phone)
+                                .putExtra("email", email));
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -155,7 +196,7 @@ public class Contact_Details_Activity extends BaseActivity {
                     }
 
                     startActivity(new Intent(mContext, VoiceCallActivity.class)
-                            .putExtra("username", userName)
+                            .putExtra("username", userInfo)
                             .putExtra("nike", nickName)
                             .putExtra("portrait", portrait)
                             .putExtra("isComingCall", false));
@@ -163,46 +204,7 @@ public class Contact_Details_Activity extends BaseActivity {
             });
         }
 
-        //TODO个人详情
-        HttpParams params = new HttpParams();
 
-        final String oid = AppConfig.getAppConfig(AppManager.mContext)
-                .get(AppConfig.PREF_KEY_OID);
-        String isLeader = AppConfig.getAppConfig(AppManager.mContext)
-                .get(AppConfig.PREF_KEY_ISLEADER);
-        String code = AppConfig.getAppConfig(AppManager.mContext)
-                .get(AppConfig.PREF_KEY_CODE);
-        final String uid = AppConfig.getAppConfig(AppManager.mContext)
-                .get(AppConfig.PREF_KEY_USER_UID);
-        String token = AppConfig.getAppConfig(AppManager.mContext)
-                .get(AppConfig.PREF_KEY_TOKEN);
-
-        //TODO 聊天信息
-//        params.put("uid", uid);
-//        params.put("token", token);
-//        params.put("oid",oid);
-//        params.put("isleader",isLeader);
-        params.put("code", "010110027");
-//        params.put("code",code);
-        initKjHttp().get(Api.COMMUNICATION_USERINFO, params, new HttpCallBack() {
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
-
-            @Override
-            public void onSuccess(Map<String, String> headers, byte[] t) {
-                super.onSuccess(headers, t);
-                System.out.println(t);
-                LogUtils.e("聊天个人信息-》" + t);
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                LogUtils.e("聊天个人信息失败-》" + errorNo + strMsg);
-            }
-        });
     }
 
     private void addOrUpdateFriendInfo(User user) {
@@ -242,7 +244,7 @@ public class Contact_Details_Activity extends BaseActivity {
             iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
 
         } else {
-            if (user.getIsshow().equals("1")) {
+            if (!TextUtils.isEmpty(phone)) {
                 iv_phone.setImageResource(R.mipmap.ico_phone);
                 //可以打电话
                 rel_phone_call.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +254,7 @@ public class Contact_Details_Activity extends BaseActivity {
                             @Override
                             public void onGranted() {
                                 Intent intent = new Intent(Intent.ACTION_CALL,
-                                        Uri.parse("tel:" + user.getPhone()));
+                                        Uri.parse("tel:" + "18146696644"));
 
                                 if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                                     // TODO: Consider calling
@@ -274,19 +276,26 @@ public class Contact_Details_Activity extends BaseActivity {
                         });
                     }
                 });
-            } else if (user.getPhone().equals("")) {
-                iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
             } else {
                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
             }
 
+
         }
 
-        if (user.getUsername().equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+        if (user.getUsername().
+
+                equals(AppConfig.getAppConfig(this).
+
+                        get(AppConfig.PREF_KEY_USERNAME)))
+
+        {
             Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
             send_message.setImageResource(R.mipmap.ico_message_disabled);
 
-        } else {
+        } else
+
+        {
             rel_send_message.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -307,11 +316,19 @@ public class Contact_Details_Activity extends BaseActivity {
                 }
             });
         }
-        if (user.getUsername().equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+        if (user.getUsername().
+
+                equals(AppConfig.getAppConfig(this).
+
+                        get(AppConfig.PREF_KEY_USERNAME)))
+
+        {
             Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
             send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
 
-        } else {
+        } else
+
+        {
             rel_voice_call.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -332,6 +349,7 @@ public class Contact_Details_Activity extends BaseActivity {
                 }
             });
         }
+
     }
 
     @OnClick(R.id.btn_back)

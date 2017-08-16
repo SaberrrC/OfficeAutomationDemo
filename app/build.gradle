@@ -115,7 +115,11 @@ dependencies {
     compile 'com.pgyersdk:sdk:2.5.6'
     //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.parse:parse-android:1.13.1'
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:3.0.1"
+    //stetho
+    compile 'com.facebook.stetho:stetho:1.5.0'
+
     compile project(':easeui')
     compile project(':calendarlibrary')
 }

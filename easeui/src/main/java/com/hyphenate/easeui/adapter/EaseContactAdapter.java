@@ -37,9 +37,11 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
     private int res;
     private MyFilter myFilter;
     private boolean notiyfyByFilter;
+    private Context mContext;
 
     public EaseContactAdapter(Context context, int resource, List<EaseUser> objects) {
         super(context, resource, objects);
+        mContext = context;
         this.res = resource;
         this.userList = objects;
         copyUserList = new ArrayList<EaseUser>();
@@ -99,7 +101,10 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
                 avatarView.setRadius(avatarOptions.getAvatarRadius());
         }
 
-        EaseUserUtils.setUserNick(getContext(),username, holder.nameView);
+        //FriendsInfoCacheSvc.getInstance(mContext).getNickName(username)
+
+
+        EaseUserUtils.setUserNick(username, holder.nameView);
         EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
         
        

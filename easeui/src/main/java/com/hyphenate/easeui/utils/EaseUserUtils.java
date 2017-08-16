@@ -19,7 +19,9 @@ public class EaseUserUtils {
     static {
         userProvider = EaseUI.getInstance().getUserProfileProvider();
     }
-    
+
+    private static String nickName;
+
     /**
      * get EaseUser according username
      * @param username
@@ -28,46 +30,53 @@ public class EaseUserUtils {
     public static EaseUser getUserInfo(String username){
         if(userProvider != null)
             return userProvider.getUser(username);
+        
         return null;
     }
-    
+
     /**
      * set user avatar
      * @param username
      */
-    public static void setUserAvatar(Context context, String username, ImageView imageView) {
-        String portrait = FriendsInfoCacheSvc.getInstance(context).getPortrait(username);
-        Glide.with(context).load(portrait).diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.ease_default_avatar).into(imageView);
-
+    public static void setUserAvatar(Context context, String username, ImageView imageView){
+    	EaseUser user = getUserInfo(username);
+        String portrait = FriendsInfoCacheSvc.getInstance(context).getPortrait(user.getUsername());
+        if(user != null && user.getAvatar() != null){
+            try {
+                int avatarResId = Integer.parseInt(user.getAvatar());
+                Glide.with(context).load(portrait)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(imageView);
+            } catch (Exception e) {
+                //use default avatar
+                Glide.with(context).load(portrait)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(imageView);
+            }
+        }else{
+            Glide.with(context).load(portrait)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(imageView);
+        }
+        nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(user.getUsername());
     }
     
     /**
      * set user's nickname
      */
-    public static void setUserNick(Context context, String username, TextView textView) {
-        if (textView != null) {
-            String nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(username);
-            if (null!=nickName ) {
-                textView.setText(nickName);
-            } else {
-                textView.setText(username);
-            }
-        }
-    }
+    public static void setUserNick(String username,TextView textView){
+        if(textView != null){
+        	EaseUser user = getUserInfo(username);
 
-    /**
-     * get user's nickname
-     */
-    public static String getUserNick(String username) {
-        EaseUser user = getUserInfo(username);
-        String nikeName = "";
-        if (user != null && user.getNick() != null) {
-            nikeName = user.getNick();
-        } else {
-            nikeName = user.getNick();
+        	if(user != null && user.getNick() != null){
+        		textView.setText(nickName);
+        	}else{
+        		textView.setText(nickName);
+        	}
         }
-        return nikeName;
     }
     
 }

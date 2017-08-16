@@ -112,8 +112,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         String portrait = FriendsInfoCacheSvc.getInstance(this).getPortrait(username);
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
 
-        //扩展信息，发送给对方自己的名字和头像url
-        sideInfo = getIntent().getStringExtra("meUsername") + "&" + getIntent().getStringExtra("meUserPortrait");
+
         if (!TextUtils.isEmpty(nickName)) {
             nickTextView.setText(nickName);
         }

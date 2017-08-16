@@ -6,12 +6,10 @@
     android:animateLayoutChanges="true"
     android:background="#f2f0eb" >
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/input_menu"
-         >
+        android:layout_above="@+id/input_menu">
 
         <com.hyphenate.easeui.widget.EaseChatMessageList
             android:id="@+id/message_list"

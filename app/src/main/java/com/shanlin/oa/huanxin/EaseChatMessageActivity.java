@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.hyphenate.easeui.domain.VoiceCallBean;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlin.oa.R;
@@ -45,6 +44,11 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     private String u_id;
     private EaseChatFragment chatFragment;
     private String to_user_nike;
+    private String department_name;
+    private String post_name;
+    private String sex;
+    private String phone;
+    private String email;
     private String to_user_pic;
     private static final int REQUEST_CODE_CONTEXT_MENU = 14;
 
@@ -79,10 +83,14 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     }
 
     private void initData() {
-
         u_id = getIntent().getStringExtra("u_id");
         to_user_nike = getIntent().getStringExtra("usernike");
         to_user_pic = getIntent().getStringExtra("user_pic");
+        department_name = getIntent().getStringExtra("department_name");
+        post_name = getIntent().getStringExtra("post_name");
+        sex = getIntent().getStringExtra("sex");
+        phone = getIntent().getStringExtra("phone");
+        email = getIntent().getStringExtra("email");
         if ("http://".equals(to_user_pic)) {
             to_user_pic = "";
         }
@@ -99,19 +107,35 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
         //传入参数
         Bundle args = new Bundle();
         args.putInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
-        //对方的信息
-        args.putString(EaseConstant.EXTRA_USER_ID, u_id);
-        args.putString("to_user_nike", to_user_nike);
-        args.putString("to_user_pic", to_user_pic);
+        try {
 
-        //自己的信息
-        args.putString("meId", Constants.CID + "_" + AppConfig.getAppConfig(this).getPrivateCode());
-        args.putString("userName", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
-        args.putString("userPic", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
+            //对方的信息
+            args.putString(EaseConstant.EXTRA_USER_ID, u_id);
+            args.putString("to_user_nike", to_user_nike);
+            args.putString("to_user_pic", to_user_pic);
+            args.putString("to_user_department", getIntent().getStringExtra("department_name"));
+            args.putString("to_user_post", getIntent().getStringExtra("post_name"));
+            args.putString("to_user_sex", getIntent().getStringExtra("sex"));
+            args.putString("to_user_phone", getIntent().getStringExtra("phone"));
+            args.putString("to_user_email", getIntent().getStringExtra("email"));
 
+
+            //自己的信息
+            args.putString("meId", Constants.CID + "_" + AppConfig.getAppConfig(this).getPrivateCode());
+            args.putString("userName", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
+            args.putString("userPic", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
+            args.putString("userSex", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
+            args.putString("userPhone", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PHONE));
+            args.putString("userPost", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
+            args.putString("userDepartment", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
+            args.putString("userEmail", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
         chatFragment.setArguments(args);
+
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }
 
@@ -144,19 +168,16 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     }
 
     @Override
-    public void voiceCallListener(VoiceCallBean bean) {
+    public void voiceCallListener(String toChatUsername) {
         startActivity(new Intent(this, VoiceCallActivity.class)
-                .putExtra("username", bean.getUsername())
-                .putExtra("nike", bean.getNike())
-                .putExtra("meUsername", bean.getMeUsername())
-                .putExtra("meUserPortrait", bean.getMeUserPortrait())
-                .putExtra("isComingCall", bean.getIsComingCall()));
+                .putExtra("username", toChatUsername)
+                .putExtra("isComingCall", false));
     }
 
     @Override
-    public void clickUserInfo(String userName) {
+    public void clickUserInfo(String userInfo) {
         Intent intent = new Intent(this, Contact_Details_Activity.class);
-        intent.putExtra("userName", userName);
+        intent.putExtra("userInfo", userInfo);
         intent.putExtra("isSession", true);
         startActivity(intent);
     }
