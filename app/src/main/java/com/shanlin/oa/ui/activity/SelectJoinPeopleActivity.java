@@ -270,10 +270,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
@@ -281,6 +279,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.manager.AppConfig;
@@ -301,10 +300,14 @@ import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * ProjectName: GroupInformationPlatform
@@ -390,11 +393,22 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                 return false;
             }
         });
-        search_et_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                switch (i) {
-                    case EditorInfo.IME_ACTION_SEARCH:
+        //自动检索参会人
+        autoSearch();
+    }
+
+    private void autoSearch() {
+        if (search_et_input == null) {
+            return;
+        }
+        //EditText 自动搜索,间隔->输入停止1秒后自动搜索
+        RxTextView.textChanges(search_et_input)
+                .debounce(1000, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
                         final String uid = AppConfig.getAppConfig(AppManager.mContext)
                                 .get(AppConfig.PREF_KEY_USER_UID);
                         String token = AppConfig.getAppConfig(AppManager.mContext)
@@ -464,15 +478,15 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                                                 searchGroup.add(group);
                                             }
                                             searchForElv(searchGroup);
-                                            //隐藏软键盘
                                             listViewsearch.setVisibility(View.VISIBLE);
+                                            hideEmptyView();
+                                            //隐藏软键盘
                                             ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
                                                     .hideSoftInputFromWindow(SelectJoinPeopleActivity.this
                                                             .getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                                             break;
                                         case Api.RESPONSES_CODE_DATA_EMPTY:
                                             mToolBarText.setVisibility(View.GONE);
-
                                             showEmptyView(mRootView, "暂无可抄送对象，请联系管理员进行设置", 0, false);
                                             break;
                                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
@@ -496,11 +510,8 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                             }
                         });
 
-                        break;
-                }
-                return true;
-            }
-        });
+                    }
+                });
     }
 
     @OnClick({R.id.search_et_cancle})

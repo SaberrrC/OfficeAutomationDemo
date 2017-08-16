@@ -61,6 +61,7 @@ public class BaseActivity extends AppCompatActivity {
     private TextView msg;
     private KJHttp kjHttp;
     private Toast toast;
+    private View empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,8 +274,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param isShow 是否显示图片
      */
     public void showEmptyView(ViewGroup view, String str, int resId, boolean isShow) {
-        @SuppressLint("InflateParams")
-        View empty = LayoutInflater.from(this).inflate(R.layout.public_empty_view, null);
+        empty = LayoutInflater.from(this).inflate(R.layout.public_empty_view, null);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         empty.setLayoutParams(lp);
@@ -285,6 +285,12 @@ public class BaseActivity extends AppCompatActivity {
         TextView msg = (TextView) empty.findViewById(R.id.message);
         msg.setText(str);
         view.addView(empty);
+    }
+
+    public void hideEmptyView() {
+        if (empty != null) {
+            empty.setVisibility(View.GONE);
+        }
     }
 
     /**
