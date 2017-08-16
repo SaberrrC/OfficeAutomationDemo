@@ -18,6 +18,7 @@ public class Friends implements Serializable {
     public static final String COLUMNNAME_POST = "userPost";
     public static final String COLUMNNAME_DEOARTMENT = "userDepartment";
     public static final String COLUMNNAME_EMAIL = "userEmail";
+    public static final String COLUMNNAME_DEOARTMENTId = "userDepartmentId";
 
     public String user_id;
     public String nickname;
@@ -26,15 +27,15 @@ public class Friends implements Serializable {
     public String userPhone;
     public String userPost;
     public String userDepartment;
+    public String userDepartmentId;
     public String userEmail;
-
 
 
     public Friends() {
 
     }
 
-    public Friends(String user_id, String nickname, String portrait, String userSex, String userPhone, String userPost, String userDepartment, String userEmail) {
+    public Friends(String user_id, String nickname, String portrait, String userSex, String userPhone, String userPost, String userDepartment, String userEmail, String departmentId) {
         this.user_id = user_id;
         this.nickname = nickname;
         this.portrait = portrait;
@@ -43,6 +44,7 @@ public class Friends implements Serializable {
         this.userPost = userPost;
         this.userDepartment = userDepartment;
         this.userEmail = userEmail;
+        this.userDepartmentId = departmentId;
     }
 
     public Friends(String user_id, String nickname, String portrait) {
@@ -114,5 +116,13 @@ public class Friends implements Serializable {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getUserDepartmentId() {
+        return userDepartmentId;
+    }
+
+    public void setUserDepartmentId(String userDepartmentId) {
+        this.userDepartmentId = userDepartmentId;
     }
 }

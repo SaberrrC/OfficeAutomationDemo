@@ -19,11 +19,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
+import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.manager.UpdateHelper;
 import com.shanlin.oa.ui.PermissionListener;
 import com.shanlin.oa.ui.activity.AboutUsActivity;
@@ -33,9 +37,9 @@ import com.shanlin.oa.ui.activity.UserInfoActivity;
 import com.shanlin.oa.ui.activity.UsingHelpActivity;
 import com.shanlin.oa.ui.base.BaseFragment;
 import com.shanlin.oa.utils.FileUtils;
+import com.shanlin.oa.utils.GlideRoundTransformUtils;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.SharedPreferenceUtil;
-import com.pgyersdk.update.PgyUpdateManager;
 
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
@@ -77,9 +81,12 @@ public class TabMeFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         displayVersionName();
-
-        userPortrait.setImageURI(Uri.parse(
-                AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS)));
+        String s = AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS);
+        Glide.with(AppManager.mContext).load( AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
+                .placeholder(R.drawable.ease_default_avatar)
+                .error(R.drawable.ease_default_avatar)
+                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                .into(userPortrait);
         userName.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_USERNAME));
         position.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_POST_NAME));
 
@@ -88,8 +95,11 @@ public class TabMeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        userPortrait.setImageURI(Uri.parse(
-                AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS)));
+        Glide.with(AppManager.mContext).load( AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
+                .placeholder(R.drawable.ease_default_avatar)
+                .error(R.drawable.ease_default_avatar)
+                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                .into(userPortrait);
     }
 
     @OnClick({R.id.user_info, R.id.btn_modify_pwd, R.id.btn_usinghelp,
@@ -127,6 +137,7 @@ public class TabMeFragment extends BaseFragment {
                 break;
         }
     }
+
     //存储权限判断
     private void applyPermission() {
         if (ActivityCompat.checkSelfPermission(getActivity(),

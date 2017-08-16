@@ -417,8 +417,9 @@ public class MainController extends BaseActivity {
                     String post = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_POST_NAME);
                     String department = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
                     String email = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_USER_EMAIL);
+                    String departmentId = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_DEPARTMENT);
                     FriendsInfoCacheSvc.getInstance(MainController.this)
-                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic, sex, phone, post, department, email));
+                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic, sex, phone, post, department, email,departmentId));
                 }
 
                 @Override
@@ -730,7 +731,7 @@ public class MainController extends BaseActivity {
                 FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
                         Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic,
                         userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost,
-                        userInfoBean.userDepartment, userInfoBean.userEmail));
+                        userInfoBean.userDepartment, userInfoBean.userEmail,userInfoBean.userDepartmentId));
             }
             refreshCommCount();
         }

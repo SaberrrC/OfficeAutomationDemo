@@ -79,6 +79,9 @@ public class FriendsInfoCacheSvc {
         if (null != friends.getUserEmail()) {
             contentValues.put(Friends.COLUMNNAME_EMAIL, friends.getUserEmail());
         }
+        if (null != friends.getUserDepartmentId()) {
+            contentValues.put(Friends.COLUMNNAME_DEOARTMENTId, friends.getUserDepartmentId());
+        }
 
         if (queryIfIDExists(friends.getUser_id())) {
 
@@ -169,6 +172,16 @@ public class FriendsInfoCacheSvc {
         Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
         if (cursor.moveToFirst()) {
             String portrait = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_EMAIL));
+            cursor.close();
+            return portrait;
+        }
+        return null;
+    }
+
+    public String getDepartmentId(String userId) {
+        Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String portrait = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_DEOARTMENTId));
             cursor.close();
             return portrait;
         }

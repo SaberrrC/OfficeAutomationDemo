@@ -35,6 +35,8 @@ public class AppConfig {
      */
     public static final String BASE_URL = "base_url";
 
+    //department
+    public static final String PREF_KEY_DEPARTMENT = "pref_key_user_departmentId";
     //oid
     public static final String PREF_KEY_OID = "pref_key_user_oid";
     //isleader
@@ -151,7 +153,7 @@ public class AppConfig {
         editor.putString(PREF_KEY_HIREDATE, user.getHiredate());
         editor.putString(PREF_KEY_COMPANY_NAME, user.getCompanyName());
         editor.putString(PREF_KEY_DEPARTMENT_NAME, user.getDepartmentName());
-        editor.putString(PREF_KEY_PORTRAITS, "http://" + user.getPortraits());
+        editor.putString(PREF_KEY_PORTRAITS, user.getPortraits());
         editor.putString(PREF_KEY_POST_NAME, user.getPostName());
         editor.putString(PREF_KEY_IS_LEADER, user.getIsleader());
         editor.putBoolean(IS_AUTO_LOGIN, isAutoLogin);
@@ -159,6 +161,7 @@ public class AppConfig {
         editor.putString(PREF_KEY_YX_TOKEN, user.getYx_token());
         editor.putString(PREF_KEY_ISLEADER, user.getIsleader());
         editor.putString(PREF_KEY_OID, user.getOid());
+        editor.putString(PREF_KEY_DEPARTMENT, user.getDepartmentId());
         editor.apply();
     }
 

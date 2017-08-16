@@ -129,6 +129,7 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
             args.putString("userPost", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
             args.putString("userDepartment", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
             args.putString("userEmail", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
+            args.putString("userDepartmentId", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT));
         } catch (Throwable e) {
             e.printStackTrace();
         }

@@ -49,9 +49,14 @@ android {
             zipAlignEnabled true
             // 移除无用的resource文件
             shrinkResources false
+            buildConfigField "String", "BASE_URL", preAddress()
+            resValue "string", "app_name", preAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            buildConfigField "String", "BASE_URL", devAddress()
+            resValue "string", "app_name", devAppName()
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     sourceSets{
@@ -60,6 +65,22 @@ android {
         }
     }
 }
+
+def preAppName() {
+    return "善林OA"
+}
+def preAddress() {
+    return "\"http://api.sl.s1.zhitongoa.com/\""
+}
+
+def devAddress() {
+    return "\"http://106.15.205.215:30081/\""
+}
+
+def devAppName() {
+    return '善林OA-Dev版'
+}
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
