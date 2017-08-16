@@ -90,7 +90,7 @@ public class EaseMessageAdapter extends BaseAdapter{
 		toChatUsername = username;
 		this.conversation = EMClient.getInstance().chatManager().getConversation(username, EaseCommonUtils.getConversationType(chatType), true);
 	}
-	
+
 	Handler handler = new Handler() {
 		private void refreshList() {
 			// you should not call getAllMessages() in UI thread
@@ -108,13 +108,13 @@ public class EaseMessageAdapter extends BaseAdapter{
 				refreshList();
 				break;
 			case HANDLER_MESSAGE_SELECT_LAST:
-                if (messages.length > 0) {
-                    listView.setSelection(messages.length - 1);
+                if (messages != null && messages.length > 0) {
+	                listView.setSelection(messages.length - 1);
                 }
                 break;
             case HANDLER_MESSAGE_SEEK_TO:
-                int position = message.arg1;
-                listView.setSelection(position);
+	            int position = message.arg1;
+	            listView.setSelection(position);
                 break;
 			default:
 				break;
@@ -145,12 +145,8 @@ public class EaseMessageAdapter extends BaseAdapter{
      * refresh and seek to the position
      */
     public void refreshSeekTo(int position) {
-        handler.sendMessage(handler.obtainMessage(HANDLER_MESSAGE_REFRESH_LIST));
-        android.os.Message msg = handler.obtainMessage(HANDLER_MESSAGE_SEEK_TO);
-        msg.arg1 = position;
-        handler.sendMessage(msg);
+	    handler.sendMessage(handler.obtainMessage(HANDLER_MESSAGE_REFRESH_LIST));
     }
-	
 
 	public EMMessage getItem(int position) {
 		if (messages != null && position < messages.length) {

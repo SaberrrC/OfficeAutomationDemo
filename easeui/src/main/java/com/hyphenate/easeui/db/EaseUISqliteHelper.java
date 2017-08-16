@@ -38,7 +38,7 @@ public class EaseUISqliteHelper extends SQLiteOpenHelper {
     private void createTable(SQLiteDatabase db) {
         //创建t_friend表
         db.execSQL("create table " + FriendsInfoCacheSvc.TABLE_NAME + " (id integer PRIMARY KEY," +
-                "user_id text collate nocase,nickname text,portrait text)");
+                "user_id text collate nocase,nickname text,portrait text,userSex text,userPhone text,userPost text,userDepartment text,userEmail text)");
 
     }
 

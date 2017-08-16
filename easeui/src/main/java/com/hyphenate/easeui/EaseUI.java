@@ -6,16 +6,15 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import com.baidu.platform.comapi.map.E;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
-import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
+import com.hyphenate.easeui.domain.EaseAvatarOptions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -113,11 +112,7 @@ public final class EaseUI {
         if(options == null){
             EMClient.getInstance().init(context, initChatOptions());
         }else{
-            try {
-                EMClient.getInstance().init(context, options);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            EMClient.getInstance().init(context, options);
         }
         
         initNotifier();
@@ -165,6 +160,12 @@ public final class EaseUI {
             @Override
             public void onMessageDelivered(List<EMMessage> messages) {
             }
+
+            @Override
+            public void onMessageRecalled(List<EMMessage> messages) {
+
+            }
+
             @Override
             public void onMessageChanged(EMMessage message, Object change) {
                 
@@ -199,7 +200,7 @@ public final class EaseUI {
     
     /**
      * set user profile provider
-     * @param //provider
+     * @param provider
      */
     public void setUserProfileProvider(EaseUserProfileProvider userProvider){
         this.userProvider = userProvider;

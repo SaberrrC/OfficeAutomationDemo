@@ -15,22 +15,21 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.hyphenate.chat.EMOptions;
-import com.hyphenate.easeui.EaseUI;
+import com.facebook.stetho.Stetho;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
-import com.shanlin.oa.R;
-import com.shanlin.oa.WelcomePage;
-import com.shanlin.oa.huanxin.DemoHelper;
-import com.shanlin.oa.ui.activity.SelectContactsActivity;
-import com.shanlin.oa.ui.activity.SelectJoinPeopleActivity;
-import com.shanlin.oa.utils.ScreenUtils;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.pgyersdk.crash.PgyCrashManager;
+import com.shanlin.oa.R;
+import com.shanlin.oa.WelcomePage;
+import com.shanlin.oa.huanxin.DemoHelper;
+import com.shanlin.oa.ui.activity.SelectContactsActivity;
+import com.shanlin.oa.ui.activity.SelectJoinPeopleActivity;
+import com.shanlin.oa.utils.ScreenUtils;
 import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -103,7 +102,8 @@ public class AppManager extends Application {
 
         //注册Crash接口（必选）
         PgyCrashManager.register(this);
-
+        //查看数据库插件
+        Stetho.initializeWithDefaults(this);
 
         //初始化网易云信SDK
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）

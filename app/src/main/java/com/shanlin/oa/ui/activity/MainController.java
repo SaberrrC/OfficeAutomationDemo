@@ -26,12 +26,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
@@ -411,8 +413,13 @@ public class MainController extends BaseActivity {
                     String u_id = Constants.CID + "_" + AppConfig.getAppConfig(MainController.this).getPrivateCode();
                     String u_name = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_USERNAME);
                     String u_pic = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_PORTRAITS);
+                    String sex = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_SEX);
+                    String phone = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_PHONE);
+                    String post = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_POST_NAME);
+                    String department = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
+                    String email = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_USER_EMAIL);
                     FriendsInfoCacheSvc.getInstance(MainController.this)
-                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic));
+                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic, sex, phone, post, department, email));
                 }
 
                 @Override
@@ -718,15 +725,13 @@ public class MainController extends BaseActivity {
                 if (!easeUI.hasForegroundActivies()) {
                     easeUI.getNotifier().onNewMsg(message);
                 }
-                //获取自定义的名称和头像
-                String conversationId = message.getStringAttribute("conversationId", "");
-                String nickname = message.getStringAttribute("nickname", "");
-                String avatarURL = message.getStringAttribute("avatarURL", "");
-                if (avatarURL.equals("http://")) {
-                    avatarURL = "";
-                }
+                //获取个人信息
+                String userInfo = message.getStringAttribute("userInfo", "");
+                UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
                 FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
-                        Friends(conversationId, nickname, avatarURL));
+                        Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic,
+                        userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost,
+                        userInfoBean.userDepartment, userInfoBean.userEmail));
             }
             refreshCommCount();
         }
@@ -743,6 +748,11 @@ public class MainController extends BaseActivity {
 
         @Override
         public void onMessageDelivered(List<EMMessage> list) {
+
+        }
+
+        @Override
+        public void onMessageRecalled(List<EMMessage> list) {
 
         }
 

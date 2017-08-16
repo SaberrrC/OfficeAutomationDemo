@@ -64,6 +64,21 @@ public class FriendsInfoCacheSvc {
         if (null != friends.getPortrait()) {
             contentValues.put(Friends.COLUMNNAME_PORTRAIT, friends.getPortrait());
         }
+        if (null != friends.getUserSex()) {
+            contentValues.put(Friends.COLUMNNAME_SEX, friends.getUserSex());
+        }
+        if (null != friends.getUserPhone()) {
+            contentValues.put(Friends.COLUMNNAME_PHONE, friends.getUserPhone());
+        }
+        if (null != friends.getUserPost()) {
+            contentValues.put(Friends.COLUMNNAME_POST, friends.getUserPost());
+        }
+        if (null != friends.getUserDepartment()) {
+            contentValues.put(Friends.COLUMNNAME_DEOARTMENT, friends.getUserDepartment());
+        }
+        if (null != friends.getUserEmail()) {
+            contentValues.put(Friends.COLUMNNAME_EMAIL, friends.getUserEmail());
+        }
 
         if (queryIfIDExists(friends.getUser_id())) {
 
@@ -100,10 +115,60 @@ public class FriendsInfoCacheSvc {
         return null;
     }
 
+    public String getDepartment(String userId) {
+        Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String portrait = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_DEOARTMENT));
+            cursor.close();
+            return portrait;
+        }
+        return null;
+    }
+
+    public String getPost(String userId) {
+        Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String portrait = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_POST));
+            cursor.close();
+            return portrait;
+        }
+        return null;
+    }
+
+    public String getSex(String userId) {
+        Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String portrait = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_SEX));
+            cursor.close();
+            return portrait;
+        }
+        return null;
+    }
+
     public String getPortrait(String userId) {
         Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
         if (cursor.moveToFirst()) {
             String portrait = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_PORTRAIT));
+            cursor.close();
+            return portrait;
+        }
+        return null;
+    }
+
+    public String getPhone(String userId) {
+        Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String portrait = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_PHONE));
+            cursor.close();
+            return portrait;
+        }
+        return null;
+    }
+
+    public String getEmail(String userId) {
+        Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String portrait = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_EMAIL));
             cursor.close();
             return portrait;
         }

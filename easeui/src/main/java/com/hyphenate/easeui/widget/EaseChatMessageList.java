@@ -112,7 +112,7 @@ public class EaseChatMessageList extends RelativeLayout{
             messageAdapter.refreshSeekTo(position);
         }
     }
-    
+
 	public ListView getListView() {
 		return listView;
 	} 

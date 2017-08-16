@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public abstract class EaseBaseFragment extends Fragment{
@@ -19,7 +18,7 @@ public abstract class EaseBaseFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         //noinspection ConstantConditions
-        titleBar = (EaseTitleBar) getView().findViewById(R.id.title_bar);
+        //、titleBar = (EaseTitleBar) getView().findViewById(R.id.title_bar);
         
         initView();
         setUpView();
@@ -30,7 +29,7 @@ public abstract class EaseBaseFragment extends Fragment{
             titleBar.setVisibility(View.VISIBLE);
         }
     }
-    
+
     public void hideTitleBar(){
         if(titleBar != null){
             titleBar.setVisibility(View.GONE);
