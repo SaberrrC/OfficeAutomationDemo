@@ -91,7 +91,7 @@ public class User implements MultiItemEntity,Serializable {
     }
 
     public String getPortraits() {
-        return portraits;
+        return "http://"+portraits;
     }
 
     public void setPortraits(String portraits) {

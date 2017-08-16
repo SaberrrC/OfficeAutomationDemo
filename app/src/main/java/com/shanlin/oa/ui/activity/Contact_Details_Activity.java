@@ -222,6 +222,11 @@ public class Contact_Details_Activity extends BaseActivity {
         tv_duties.setText(user.getPostName());
         tv_sex.setText(user.getSex());
 
+        if (!TextUtils.isEmpty(user.getPortraits())) {
+            Glide.with(AppManager.mContext).load(user.getPortraits())
+                    .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+        }
+
         if (user.getIsshow().equals("1")) {
             tv_phone_number.setText(user.getPhone());
         } else if (user.getPhone() == null || user.getPhone().equals("")) {
@@ -244,7 +249,7 @@ public class Contact_Details_Activity extends BaseActivity {
             iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
 
         } else {
-            if (!TextUtils.isEmpty(phone)) {
+            if (user.getIsshow().equals("1")) {
                 iv_phone.setImageResource(R.mipmap.ico_phone);
                 //可以打电话
                 rel_phone_call.setOnClickListener(new View.OnClickListener() {
@@ -254,7 +259,7 @@ public class Contact_Details_Activity extends BaseActivity {
                             @Override
                             public void onGranted() {
                                 Intent intent = new Intent(Intent.ACTION_CALL,
-                                        Uri.parse("tel:" + "18146696644"));
+                                        Uri.parse("tel:" + user.getPhone()));
 
                                 if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                                     // TODO: Consider calling
@@ -276,26 +281,19 @@ public class Contact_Details_Activity extends BaseActivity {
                         });
                     }
                 });
+            } else if (user.getPhone().equals("")) {
+                iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
             } else {
                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
             }
 
-
         }
 
-        if (user.getUsername().
-
-                equals(AppConfig.getAppConfig(this).
-
-                        get(AppConfig.PREF_KEY_USERNAME)))
-
-        {
+        if (user.getUsername().equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
             Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
             send_message.setImageResource(R.mipmap.ico_message_disabled);
 
-        } else
-
-        {
+        } else {
             rel_send_message.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -316,19 +314,11 @@ public class Contact_Details_Activity extends BaseActivity {
                 }
             });
         }
-        if (user.getUsername().
-
-                equals(AppConfig.getAppConfig(this).
-
-                        get(AppConfig.PREF_KEY_USERNAME)))
-
-        {
+        if (user.getUsername().equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
             Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
             send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
 
-        } else
-
-        {
+        } else {
             rel_voice_call.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
