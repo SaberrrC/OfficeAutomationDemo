@@ -619,7 +619,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 EaseUI.getInstance().getNotifier().onNewMsg(message);
             }
         }
-        messageList.refresh();
+       messageList.refresh();
     }
 
     @Override
