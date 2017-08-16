@@ -57,7 +57,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 	public MyLocationListenner myListener = new MyLocationListenner();
 
 	Button sendButton = null;
-	
+
 	EditText indexText = null;
 	int index = 0;
 	// LocationData locData = null;
@@ -71,7 +71,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 			String s = intent.getAction();
 			String st1 = getResources().getString(R.string.Network_error);
 			if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR)) {
-				
+
 				String st2 = getResources().getString(R.string.please_check);
 				Toast.makeText(instance, st2, Toast.LENGTH_SHORT).show();
 			} else if (s.equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {
@@ -81,14 +81,14 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 	}
 
 	private BaiduSDKReceiver mBaiduReceiver;
-	
-	
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		instance = this;
 		//initialize SDK with context, should call this before setContentView
-        SDKInitializer.initialize(getApplicationContext());  
+        SDKInitializer.initialize(getApplicationContext());
 		setContentView(R.layout.ease_activity_baidumap);
 		mMapView = (MapView) findViewById(R.id.bmapView);
 		sendButton = (Button) findViewById(R.id.btn_location_send);
@@ -160,7 +160,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 
 		LocationClientOption option = new LocationClientOption();
 		option.setOpenGps(true);// open gps
-		// option.setCoorType("bd09ll"); 
+		// option.setCoorType("bd09ll");
 		// Johnson change to use gcj02 coordination. chinese national standard
 		// so need to conver to bd09 everytime when draw on baidu map
 		option.setCoorType("gcj02");
