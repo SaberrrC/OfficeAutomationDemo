@@ -14,15 +14,6 @@
 
     <string name="feedback_hint">请输入您的反馈信息，如果您有任何建议可以告诉我们，也可以留下您的联系方式。</string>
 
-    <string name="pickerview_cancel">取消</string>
-    <string name="pickerview_submit">确认</string>
-    <string name="pickerview_year">年</string>
-    <string name="pickerview_month">月</string>
-    <string name="pickerview_day">日</string>
-    <string name="pickerview_hours">时</string>
-    <string name="pickerview_minutes">分</string>
-    <string name="pickerview_seconds">秒</string>
-    <string name="edittext_cancle">取消</string>
 
     <!-- 云信视频 -->
     <string name="nrtc_setting_other_device_default_rotation_key">nrtc_setting_other_device_default_rotation_key</string>

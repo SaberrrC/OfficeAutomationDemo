@@ -2,7 +2,7 @@ package com.shanlin.oa.ui.component;
 
 import android.app.Activity;
 
-import com.shanlin.oa.WelcomePage;
+import com.shanlin.oa.ui.activity.WelcomePage;
 import com.shanlin.oa.ui.annotation.PerActivity;
 import com.shanlin.oa.ui.module.ActivityModule;
 

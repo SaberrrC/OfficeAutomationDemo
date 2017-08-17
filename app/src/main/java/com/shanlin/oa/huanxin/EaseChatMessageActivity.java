@@ -19,7 +19,7 @@ import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
-import com.shanlin.oa.ui.activity.Contact_Details_Activity;
+import com.shanlin.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.StringUtils;
 

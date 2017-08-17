@@ -19,7 +19,7 @@ public class PhonebookApi {
         params.put("oid",oid);
         params.put("isleader",isleader);
         params.put("name",name);
-        MyKjHttp.getInstance().post(Api.PHONEBOOK_SEARCHPHONEBOOK, params, new HttpCallBack() {
+        new MyKjHttp().post(Api.PHONEBOOK_SEARCHPHONEBOOK, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

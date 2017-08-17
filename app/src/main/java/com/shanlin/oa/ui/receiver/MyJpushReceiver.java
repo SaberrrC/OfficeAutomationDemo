@@ -12,12 +12,12 @@ import android.widget.RemoteViews;
 import com.shanlin.oa.R;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.EventMessage;
-import com.shanlin.oa.ui.activity.ApprovalListActivity;
-import com.shanlin.oa.ui.activity.NoticeListActivity;
-import com.shanlin.oa.ui.activity.PushListActivity;
-import com.shanlin.oa.ui.activity.ScheduleActivity;
-import com.shanlin.oa.ui.activity.SystemNoticesActivity;
-import com.shanlin.oa.ui.activity.WorkReportListActivity;
+import com.shanlin.oa.ui.activity.home.approval.ApprovalListActivity;
+import com.shanlin.oa.ui.activity.notice.NoticeListActivity;
+import com.shanlin.oa.ui.activity.push.PushListActivity;
+import com.shanlin.oa.ui.activity.home.schedule.ScheduleActivity;
+import com.shanlin.oa.ui.activity.push.SystemNoticesActivity;
+import com.shanlin.oa.ui.activity.home.workreport.WorkReportListActivity;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.StringUtils;
 

@@ -11,15 +11,15 @@ import android.widget.TextView;
 
 import com.shanlin.oa.R;
 import com.shanlin.oa.manager.AppConfig;
-import com.shanlin.oa.ui.activity.ApprovalListActivity;
-import com.shanlin.oa.ui.activity.CreateNoteActivity;
-import com.shanlin.oa.ui.activity.LaunchApprovalActivity;
-import com.shanlin.oa.ui.activity.MyMailActivity;
-import com.shanlin.oa.ui.activity.ScheduleActivity;
-import com.shanlin.oa.ui.activity.SelectOrdinaryMeetingRoomActivity;
-import com.shanlin.oa.ui.activity.SelectVedioMeetingRoomActivity;
-import com.shanlin.oa.ui.activity.WorkReportLaunchActivity;
-import com.shanlin.oa.ui.activity.WorkReportListActivity;
+import com.shanlin.oa.ui.activity.home.approval.ApprovalListActivity;
+import com.shanlin.oa.ui.activity.home.schedule.CreateNoteActivity;
+import com.shanlin.oa.ui.activity.home.approval.LaunchApprovalActivity;
+import com.shanlin.oa.ui.activity.home.schedule.MyMailActivity;
+import com.shanlin.oa.ui.activity.home.schedule.ScheduleActivity;
+import com.shanlin.oa.ui.activity.home.schedule.SelectOrdinaryMeetingRoomActivity;
+import com.shanlin.oa.ui.activity.home.schedule.SelectVedioMeetingRoomActivity;
+import com.shanlin.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
+import com.shanlin.oa.ui.activity.home.workreport.WorkReportListActivity;
 import com.shanlin.oa.ui.base.BaseFragment;
 
 import butterknife.Bind;

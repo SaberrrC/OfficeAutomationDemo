@@ -14,7 +14,7 @@ import com.flipboard.bottomsheet.commons.BottomSheetFragment;
 import com.shanlin.oa.R;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.selectContacts.Child;
-import com.shanlin.oa.ui.activity.SelectJoinPeopleActivity;
+import com.shanlin.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlin.oa.ui.adapter.SelectAdapter;
 
 import java.util.ArrayList;

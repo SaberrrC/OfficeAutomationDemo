@@ -35,11 +35,11 @@ import com.shanlin.oa.huanxin.DemoHelper;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.ui.PermissionListener;
-import com.shanlin.oa.ui.activity.LoginActivity;
+import com.shanlin.oa.ui.activity.login.LoginActivity;
 import com.shanlin.oa.ui.activity.MainController;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.ScreenUtils;
-import com.shanlin.oa.utils.netutil.MyKjHttp;
+import com.shanlin.oa.net.MyKjHttp;
 
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpConfig;

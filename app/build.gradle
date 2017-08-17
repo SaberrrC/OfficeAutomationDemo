@@ -81,9 +81,6 @@ def devAppName() {
 }
 
 
-
-
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -145,15 +142,13 @@ dependencies {
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:3.0.1"
     //stetho
     compile 'com.facebook.stetho:stetho:1.5.0'
-
     compile project(':easeui')
     compile project(':calendarlibrary')
+    compile project(':uilibrary')
     compile 'com.google.dagger:dagger:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-
     //rx
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.2'

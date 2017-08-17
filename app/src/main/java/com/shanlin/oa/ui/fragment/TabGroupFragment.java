@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shanlin.oa.R;
-import com.shanlin.oa.ui.activity.ApprovalListActivity;
-import com.shanlin.oa.ui.activity.ScheduleActivity;
-import com.shanlin.oa.ui.activity.WorkReportListActivity;
+import com.shanlin.oa.ui.activity.home.approval.ApprovalListActivity;
+import com.shanlin.oa.ui.activity.home.schedule.ScheduleActivity;
+import com.shanlin.oa.ui.activity.home.workreport.WorkReportListActivity;
 import com.shanlin.oa.ui.base.BaseFragment;
 
 import butterknife.ButterKnife;
