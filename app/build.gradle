@@ -81,22 +81,6 @@ def devAppName() {
 }
 
 
-def preAppName() {
-    return "善林OA"
-}
-def preAddress() {
-    return "\"http://api.sl.s1.zhitongoa.com/\""
-}
-
-def devAddress() {
-    return "\"http://106.15.205.215:30081/\""
-}
-
-def devAppName() {
-    return '善林OA-Dev版'
-}
-
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
