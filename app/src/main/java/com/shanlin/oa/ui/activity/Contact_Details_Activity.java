@@ -144,97 +144,100 @@ public class Contact_Details_Activity extends BaseActivity {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-
-        //判断是否有权限打电话
-        if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
-            Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
-            iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
-        } else {
-            if (AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT).equals(departmentId)) {
-                iv_phone.setImageResource(R.mipmap.ico_phone);
-                //可以打电话
-                rel_phone_call.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
-                            @Override
-                            public void onGranted() {
-                                Intent intent = new Intent(Intent.ACTION_CALL,
-                                        Uri.parse("tel:" + phone));
-                                if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                    // TODO: Consider calling
-                                    //    ActivityCompat#requestPermissions
-                                    // here to request the missing permissions, and then overriding
-                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                    //                                          int[] grantResults)
-                                    // to handle the case where the user grants the permission. See the documentation
-                                    // for ActivityCompat#requestPermissions for more details.
-                                    return;
-                                }
-                                startActivity(intent);
-                            }
-
-                            @Override
-                            public void onDenied() {
-                                showToast("拨打电话权限被拒绝，请手动设置");
-                            }
-                        });
-                    }
-                });
-            } else if (!departmentId.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT))) {
+        try {
+            //判断是否有权限打电话
+            if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+                Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
             } else {
-                iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
-            }
-        }
+                if (AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT).equals(departmentId)) {
+                    iv_phone.setImageResource(R.mipmap.ico_phone);
+                    //可以打电话
+                    rel_phone_call.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
+                                @Override
+                                public void onGranted() {
+                                    Intent intent = new Intent(Intent.ACTION_CALL,
+                                            Uri.parse("tel:" + phone));
+                                    if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                        // TODO: Consider calling
+                                        //    ActivityCompat#requestPermissions
+                                        // here to request the missing permissions, and then overriding
+                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                        //                                          int[] grantResults)
+                                        // to handle the case where the user grants the permission. See the documentation
+                                        // for ActivityCompat#requestPermissions for more details.
+                                        return;
+                                    }
+                                    startActivity(intent);
+                                }
 
-        if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
-            Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
-            send_message.setImageResource(R.mipmap.ico_message_disabled);
-        } else {
-            rel_send_message.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolean availabl = Utils.isNetworkAvailabl(mContext);
-                    if (!availabl) {
-                        showToast("网络不稳定，请重试");
-                        return;
-                    }
-                    try {
-                        startActivity(new Intent(mContext, EaseChatMessageActivity.class)
-                                .putExtra("usernike", nickName)
-                                .putExtra("user_pic", portrait)
-                                .putExtra("u_id", userInfo)
-                                .putExtra("department_name", department)
-                                .putExtra("post_name", post)
-                                .putExtra("sex", sex)
-                                .putExtra("phone", phone)
-                                .putExtra("email", email));
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
+                                @Override
+                                public void onDenied() {
+                                    showToast("拨打电话权限被拒绝，请手动设置");
+                                }
+                            });
+                        }
+                    });
+                } else if (!departmentId.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT))) {
+                    iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+                } else {
+                    iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
                 }
-            });
-        }
-        if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
-            Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
-            send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
-        } else {
-            rel_voice_call.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolean availabl = Utils.isNetworkAvailabl(mContext);
-                    if (!availabl) {
-                        showToast("网络不稳定，请重试");
-                        return;
+            }
+
+            if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+                Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
+                send_message.setImageResource(R.mipmap.ico_message_disabled);
+            } else {
+                rel_send_message.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean availabl = Utils.isNetworkAvailabl(mContext);
+                        if (!availabl) {
+                            showToast("网络不稳定，请重试");
+                            return;
+                        }
+                        try {
+                            startActivity(new Intent(mContext, EaseChatMessageActivity.class)
+                                    .putExtra("usernike", nickName)
+                                    .putExtra("user_pic", portrait)
+                                    .putExtra("u_id", userInfo)
+                                    .putExtra("department_name", department)
+                                    .putExtra("post_name", post)
+                                    .putExtra("sex", sex)
+                                    .putExtra("phone", phone)
+                                    .putExtra("email", email));
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
                     }
-                    startActivity(new Intent(mContext, VoiceCallActivity.class)
-                            .putExtra("username", userInfo)
-                            .putExtra("nike", nickName)
-                            .putExtra("portrait", portrait)
-                            .putExtra("isComingCall", false));
-                }
-            });
+                });
+            }
+            if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+                Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
+                send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
+            } else {
+                rel_voice_call.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean availabl = Utils.isNetworkAvailabl(mContext);
+                        if (!availabl) {
+                            showToast("网络不稳定，请重试");
+                            return;
+                        }
+                        startActivity(new Intent(mContext, VoiceCallActivity.class)
+                                .putExtra("username", userInfo)
+                                .putExtra("nike", nickName)
+                                .putExtra("portrait", portrait)
+                                .putExtra("isComingCall", false));
+                    }
+                });
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 

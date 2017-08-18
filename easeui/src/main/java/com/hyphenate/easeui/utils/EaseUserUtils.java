@@ -13,9 +13,9 @@ import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseUser;
 
 public class EaseUserUtils {
-    
+
     static EaseUserProfileProvider userProvider;
-    
+
     static {
         userProvider = EaseUI.getInstance().getUserProfileProvider();
     }
@@ -24,24 +24,26 @@ public class EaseUserUtils {
 
     /**
      * get EaseUser according username
+     *
      * @param username
      * @return
      */
-    public static EaseUser getUserInfo(String username){
-        if(userProvider != null)
+    public static EaseUser getUserInfo(String username) {
+        if (userProvider != null)
             return userProvider.getUser(username);
-        
+
         return null;
     }
 
     /**
      * set user avatar
+     *
      * @param username
      */
-    public static void setUserAvatar(Context context, String username, ImageView imageView){
-    	EaseUser user = getUserInfo(username);
+    public static void setUserAvatar(Context context, String username, ImageView imageView) {
+        EaseUser user = getUserInfo(username);
         String portrait = FriendsInfoCacheSvc.getInstance(context).getPortrait(user.getUsername());
-        if(user != null && user.getAvatar() != null){
+        if (user != null && user.getAvatar() != null) {
             try {
                 int avatarResId = Integer.parseInt(user.getAvatar());
                 Glide.with(context).load(portrait)
@@ -55,7 +57,7 @@ public class EaseUserUtils {
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
             }
-        }else{
+        } else {
             Glide.with(context).load(portrait)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.ease_default_avatar)
@@ -63,20 +65,22 @@ public class EaseUserUtils {
         }
         nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(user.getUsername());
     }
-    
+
     /**
      * set user's nickname
      */
-    public static void setUserNick(String username,TextView textView){
-        if(textView != null){
-        	EaseUser user = getUserInfo(username);
+    public static void setUserNick(String username, TextView textView) {
+        if (textView != null) {
+            EaseUser user = getUserInfo(username);
 
-        	if(user != null && user.getNick() != null){
-        		textView.setText(nickName);
-        	}else{
-        		textView.setText(nickName);
-        	}
+            if (user != null && user.getNick() != null) {
+                if (textView.getText().equals(""))
+                    textView.setText(nickName);
+            } else {
+                if (textView.getText().equals(""))
+                    textView.setText(nickName);
+            }
         }
     }
-    
+
 }

@@ -980,7 +980,18 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
      * select local image
      */
     protected void selectFroVoiceCall() {
-        mListener.voiceCallListener(toChatUsername);
+        requestRunTimePermission(new String[]{Manifest.permission.RECORD_AUDIO}, new PermissionListener() {
+            @Override
+            public void onGranted() {
+                   mListener.voiceCallListener(toChatUsername);
+            }
+
+            @Override
+            public void onDenied() {
+                Toast.makeText(getContext(), "语音权限被拒绝！请手动设置", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     /**

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.shanlin.oa">
+          xmlns:tools="http://schemas.android.com/tools"
+          xmlns:Android="http://schemas.android.com/apk/res-auto"
+          package="com.shanlin.oa">
 
     <!--极光requried-->
     <permission
@@ -13,6 +14,9 @@
         android:name="com.shanlin.oa.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
     <uses-permission android:name="com.shanlin.oa.permission.MIPUSH_RECEIVE" />
+
+    <uses-permission android:name="android.permission.DEVICE_POWER"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <uses-permission android:name="com.shanlin.oa.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />

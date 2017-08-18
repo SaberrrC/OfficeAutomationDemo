@@ -38,7 +38,8 @@ public class CallReceiver extends BroadcastReceiver{
 //                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 		}else{ //voice call
 		    context.startActivity(new Intent(context, VoiceCallActivity.class).
-		            putExtra("username", from).putExtra("isComingCall", true).
+		            putExtra("username", from)
+					.putExtra("isComingCall", true).
 		            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 		}
 		EMLog.d("CallReceiver", "app received a incoming call");
