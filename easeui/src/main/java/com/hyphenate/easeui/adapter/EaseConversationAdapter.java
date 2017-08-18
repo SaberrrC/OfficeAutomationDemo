@@ -13,8 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
-import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -23,7 +21,6 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
@@ -154,30 +151,33 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         if (conversation.getAllMsgCount() != 0) {
             // show the content of latest message
             EMMessage lastMessage = conversation.getLastMessage();
-            String userInfo = lastMessage.getStringAttribute("userInfo", "");
-            UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
-            try {
-                if (userInfoBean == null) {
-                    Glide.with(mContext)
-                            .load(mPic)
-                            .error(R.drawable.ease_default_avatar)
-                            .placeholder(R.drawable.ease_default_avatar).into(holder.avatar);
-//                    FriendsInfoCacheSvc.getInstance(mContext)
-//                            .addOrUpdateFriends(new Friends(null, mName, mPic, null, null, null, null, null, null));
-                } else {
-                    Glide.with(mContext)
-                            .load(userInfoBean.userPic)
-                            .error(R.drawable.ease_default_avatar)
-                            .placeholder(R.drawable.ease_default_avatar).into(holder.avatar);
-                }
-                if (userInfoBean == null) {
-                    holder.name.setText(mName);
-                } else {
-                    holder.name.setText(userInfoBean.userName);
-                }
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+            //存在BUG
+//            String userInfo = lastMessage.getStringAttribute("userInfo", "");
+//            Log.d("76547447", userInfo);
+//            UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
+//            try {
+//                if (userInfoBean == null) {
+//                    Glide.with(mContext)
+//                            .load(mPic)
+//                            .error(R.drawable.ease_default_avatar)
+//                            .placeholder(R.drawable.ease_default_avatar).into(holder.avatar);
+////                    FriendsInfoCacheSvc.getInstance(mContext)
+////                            .addOrUpdateFriends(new Friends(null, mName, mPic, null, null, null, null, null, null));
+//                } else {
+//                    Glide.with(mContext)
+//                            .load(userInfoBean.userPic)
+//                            .error(R.drawable.ease_default_avatar)
+//                            .placeholder(R.drawable.ease_default_avatar).into(holder.avatar);
+//                }
+//                if (userInfoBean == null) {
+//                    holder.name.setText(mName);
+//                } else {
+//                    holder.name.setText(userInfoBean.userName);
+//                }
+//            } catch (Throwable e) {
+//                e.printStackTrace();
+//            }
+
             String content = null;
             if (cvsListHelper != null) {
                 content = cvsListHelper.onSetItemSecondaryText(lastMessage);
