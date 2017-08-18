@@ -269,12 +269,13 @@
                     android:textSize="@dimen/text_common_dp"/>
 
 
-            </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#e3e3e3"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#d1d1d1"/>
+            </RelativeLayout>
 
 
         </LinearLayout>

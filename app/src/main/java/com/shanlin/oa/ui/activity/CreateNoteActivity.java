@@ -253,8 +253,8 @@ public class CreateNoteActivity extends BaseActivity {
                     jo = new JSONObject(t);
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
 
-                        showToast("发送成功");
-                        startActivity(new Intent(CreateNoteActivity.this, ScheduleActivity.class));
+                        showToast("创建记事成功");
+                        startActivity(new Intent(CreateNoteActivity.this, MainController.class));
                         CreateNoteActivity.this.finish();
 
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {

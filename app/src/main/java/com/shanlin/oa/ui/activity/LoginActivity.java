@@ -88,7 +88,7 @@ public class LoginActivity extends BaseActivity {
 
     private void initView() {
         LogUtils.e("LoginActivity:initView");
-        mCbAutoLogin.setChecked(true);
+        mCbAutoLogin.setChecked(AppConfig.getAppConfig(LoginActivity.this).get(AppConfig.PREF_KEY_PASSWORD_FLAG, false));
         AppConfig.getAppConfig(LoginActivity.this).setAutoLogin(true);
         userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
         mTvFindPwd.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +102,11 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        if (mCbAutoLogin.isChecked()) {
+            userPwd.setText(AppConfig.getAppConfig(LoginActivity.this).get(AppConfig.PREF_KEY_LOGIN_PASSWORD));
+        } else {
+            userPwd.setText("");
+        }
     }
 
     /**
@@ -132,10 +136,11 @@ public class LoginActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //TODO isChecked
                 if (isChecked) {
-                    isAutoLogin = true;
+                        AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, true);
+                        isAutoLogin = true;
                 } else {
+                    AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, false);
                     isAutoLogin = false;
-
                 }
             }
         });
@@ -143,6 +148,12 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.btn_login)
     public void onClick() {
+        if (mCbAutoLogin.isChecked()){
+            AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_LOGIN_PASSWORD, userPwd.getText().toString());
+        }else {
+            AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_LOGIN_PASSWORD, "");
+        }
+
         if (check()) {
             //cxp添加，检验通过，隐藏软键盘
             InputMethodManager imm =

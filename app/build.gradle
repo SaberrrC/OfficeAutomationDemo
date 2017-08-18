@@ -69,7 +69,7 @@ def preAppName() {
     return "善林OA"
 }
 def preAddress() {
-    return "\"http://api.sl.s1.zhitongoa.com/\""
+    return "\"http://api.oa.shanlinjinrong.com/\""
 }
 
 def devAddress() {

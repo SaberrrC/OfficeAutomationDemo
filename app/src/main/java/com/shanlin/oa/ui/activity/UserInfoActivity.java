@@ -121,10 +121,10 @@ public class UserInfoActivity extends BaseActivity {
         File fileCameraPath = new File(dir, CAMERA_FILE_NAME);
 
         try {
-            if (!fileIconPath.exists()){
+            if (!fileIconPath.exists()) {
                 fileIconPath.createNewFile();
             }
-            if (!fileCameraPath.exists()){
+            if (!fileCameraPath.exists()) {
                 fileCameraPath.createNewFile();
             }
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
@@ -521,8 +521,8 @@ public class UserInfoActivity extends BaseActivity {
                         //TODO 打包时候更改：善林的这样写
                         String portraitUri = Constants.SLPicBaseUrl + Api.getDataToJSONObject(jo).get("portrait");
 
-                        AppConfig.getAppConfig(UserInfoActivity.this).set(
-                                AppConfig.PREF_KEY_PORTRAITS, portraitUri);
+                        AppConfig.getAppConfig(UserInfoActivity.this).set(AppConfig.PREF_KEY_PORTRAITS, portraitUri);
+
                         userPortrait.setImageURI(Uri.parse(portraitUri));
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
                         catchWarningByCode(Api.getCode(jo));
