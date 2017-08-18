@@ -190,7 +190,6 @@ public class WelcomePage extends Activity {
                         Log.e("", "---------timeout：" + timeout);
                         LogUtils.e("---------timeout" + timeout);
                         isTimeOut = !timeout.equals("1");
-
                     }
 
                 } catch (JSONException e) {

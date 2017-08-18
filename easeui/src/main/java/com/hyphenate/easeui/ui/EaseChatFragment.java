@@ -256,7 +256,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                         //TODO 请求录音权限
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
                     }
-                },v, event, new EaseVoiceRecorderCallback() {
+                }, v, event, new EaseVoiceRecorderCallback() {
 
                     @Override
                     public void onVoiceRecordComplete(String voiceFilePath, int voiceTimeLength) {
@@ -619,7 +619,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 EaseUI.getInstance().getNotifier().onNewMsg(message);
             }
         }
-       messageList.refresh();
+        messageList.refresh();
     }
 
     @Override
@@ -749,9 +749,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
         } else {
-                EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
-                message.setAttribute("userInfo", string);
-                sendMessage(message);
+            EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
+            message.setAttribute("userInfo", string);
+            sendMessage(message);
         }
     }
 
@@ -983,7 +983,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         requestRunTimePermission(new String[]{Manifest.permission.RECORD_AUDIO}, new PermissionListener() {
             @Override
             public void onGranted() {
-                   mListener.voiceCallListener(toChatUsername);
+                mListener.voiceCallListener(toChatUsername);
             }
 
             @Override
@@ -1327,7 +1327,14 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                                 e.printStackTrace();
                                 getActivity().runOnUiThread(new Runnable() {
                                     public void run() {
-                                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        switch (e.getErrorCode()) {
+                                            case 303:
+                                                Toast.makeText(getActivity(), "服务器出错!", Toast.LENGTH_SHORT).show();
+                                                break;
+                                            default:
+                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                break;
+                                        }
                                     }
                                 });
                             }

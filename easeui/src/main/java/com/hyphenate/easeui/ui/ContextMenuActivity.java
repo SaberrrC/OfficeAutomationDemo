@@ -16,6 +16,7 @@ package com.hyphenate.easeui.ui;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.Constant;
@@ -31,11 +32,15 @@ public class ContextMenuActivity extends BaseActivity {
     public static final int RESULT_CODE_DELETE = 2;
     public static final int RESULT_CODE_FORWARD = 3;
     public static final int RESULT_CODE_RECALL = 4;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EMMessage message = getIntent().getParcelableExtra("message");
+
+        String userInfo = message.getTo();
+        String userName = message.getUserName();
         boolean isChatroom = getIntent().getBooleanExtra("ischatroom", false);
 
         int type = message.getType().ordinal();
@@ -50,6 +55,12 @@ public class ContextMenuActivity extends BaseActivity {
                 setContentView(R.layout.em_context_menu_for_image);
             } else {
                 setContentView(R.layout.em_context_menu_for_text);
+                linearLayout = (LinearLayout) findViewById(R.id.ll_recall_view);
+                if (userInfo.equals(userName)) {
+                    linearLayout.setVisibility(View.VISIBLE);
+                } else {linearLayout = (LinearLayout) findViewById(R.id.ll_recall_view);
+                    linearLayout.setVisibility(View.GONE);
+                }
             }
         } else if (type == EMMessage.Type.LOCATION.ordinal()) {
             setContentView(R.layout.em_context_menu_for_location);
