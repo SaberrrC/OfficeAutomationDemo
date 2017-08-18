@@ -30,7 +30,7 @@ import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.JoinVideoMember;
-import com.shanlin.oa.ui.PermissionListener;
+import com.shanlin.oa.listener.PermissionListener;
 import com.shanlin.oa.ui.activity.netease.MsgHelper;
 import com.shanlin.oa.ui.adapter.JoinVideoMeetingListAdapter;
 import com.shanlin.oa.ui.base.BaseActivity;

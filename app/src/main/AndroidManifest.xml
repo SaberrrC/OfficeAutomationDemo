@@ -164,14 +164,6 @@
         </receiver>
 
         <!-- 开机自启动服务 -->
-        <receiver android:name=".huanxin.receiver.StartServiceReceiver">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </receiver>
 
         <!-- gcm start -->
         <receiver
@@ -190,7 +182,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".huanxin.receiver.GCMPushBroadCast"
+            android:name=".thirdParty.huanxin.receiver.GCMPushBroadCast"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.hyphenate.sdk.push" />
@@ -345,7 +337,7 @@
             android:name="cn.jpush.android.service.AlarmReceiver"
             android:exported="false" />
         <receiver
-            android:name="com.shanlin.oa.ui.receiver.MyJpushReceiver"
+            android:name=".thirdParty.push.receiver.MyJpushReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -393,7 +385,7 @@
 
         <!-- 申明本地电话状态（通话状态）的广播接收器，第三方APP集成时音视频模块时，
        如果需要网络通话与本地电话互斥，请加上此接收器 -->
-        <receiver android:name="com.shanlin.oa.ui.receiver.IncomingCallReceiver">
+        <receiver android:name=".thirdParty.push.receiver.IncomingCallReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -627,7 +619,7 @@
             android:screenOrientation="portrait" />
         <!-- 聊天activity -->
         <activity
-            android:name="com.shanlin.oa.huanxin.EaseChatMessageActivity"
+            android:name=".ui.activity.message.EaseChatMessageActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
@@ -662,11 +654,11 @@
 
         <!--点击聊天图片进入大图片查看-->
         <activity
-            android:name="com.shanlin.oa.huanxin.VoiceCallActivity"
+            android:name=".ui.activity.message.VoiceCallActivity"
             android:screenOrientation="portrait" />
 
         <receiver
-            android:name="com.shanlin.oa.huanxin.receiver.GCMPushBroadCast"
+            android:name=".thirdParty.huanxin.receiver.GCMPushBroadCast"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.hyphenate.sdk.push" />

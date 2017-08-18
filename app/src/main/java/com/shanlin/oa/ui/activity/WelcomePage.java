@@ -19,7 +19,7 @@ import com.iflytek.cloud.SpeechUtility;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
-import com.shanlin.oa.huanxin.DemoHelper;
+import com.shanlin.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.ui.activity.login.LoginActivity;

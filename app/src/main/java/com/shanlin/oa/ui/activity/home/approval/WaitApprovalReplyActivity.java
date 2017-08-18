@@ -19,9 +19,9 @@ import android.widget.TextView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.manager.AppConfig;
-import com.shanlin.oa.ui.PermissionListener;
+import com.shanlin.oa.listener.PermissionListener;
 import com.shanlin.oa.ui.base.BaseActivity;
-import com.shanlin.oa.utils.IflytekUtil;
+import com.shanlin.oa.thirdParty.iflytek.IflytekUtil;
 import com.shanlin.oa.utils.LogUtils;
 
 import org.json.JSONException;

@@ -29,7 +29,7 @@ import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.helper.UpdateHelper;
-import com.shanlin.oa.ui.PermissionListener;
+import com.shanlin.oa.listener.PermissionListener;
 import com.shanlin.oa.ui.activity.my.AboutUsActivity;
 import com.shanlin.oa.ui.activity.my.FeedbackActivity;
 import com.shanlin.oa.ui.activity.my.ModifyPwdActivity;

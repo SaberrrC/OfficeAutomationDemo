@@ -17,11 +17,11 @@ import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Constants;
-import com.shanlin.oa.huanxin.EaseChatMessageActivity;
-import com.shanlin.oa.huanxin.VoiceCallActivity;
+import com.shanlin.oa.ui.activity.message.EaseChatMessageActivity;
+import com.shanlin.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.model.Contacts;
-import com.shanlin.oa.ui.PermissionListener;
+import com.shanlin.oa.listener.PermissionListener;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.Utils;
 

@@ -26,7 +26,7 @@ import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.pgyersdk.crash.PgyCrashManager;
 import com.shanlin.oa.R;
 import com.shanlin.oa.ui.activity.WelcomePage;
-import com.shanlin.oa.huanxin.DemoHelper;
+import com.shanlin.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlin.oa.ui.activity.home.schedule.SelectContactsActivity;
 import com.shanlin.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlin.oa.utils.ScreenUtils;
