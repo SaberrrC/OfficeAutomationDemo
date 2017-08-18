@@ -102,7 +102,7 @@ public class WelcomePage extends Activity {
         BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(AppManager.mContext);
         builder.statusBarDrawable = R.drawable.login_logo;
         builder.notificationFlags = Notification.FLAG_AUTO_CANCEL;  //设置为自动消失
-        builder.notificationDefaults = Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE|Notification.DEFAULT_LIGHTS;
+        builder.notificationDefaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS;
         JPushInterface.setPushNotificationBuilder(1, builder);
         // 设置为铃声与震动都要
         JPushInterface.setDebugMode(true);
@@ -155,6 +155,7 @@ public class WelcomePage extends Activity {
         }
         return null;
     }
+
     /**
      * 登录超时判断
      */
@@ -170,7 +171,7 @@ public class WelcomePage extends Activity {
         params.put("uid", uid);
         params.put("token", token);
 
-        kjHttp.post(AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.BASE_URL)+Api.SITE_TIMEOUT, params, new HttpCallBack() {
+        kjHttp.post(AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.BASE_URL) + Api.SITE_TIMEOUT, params, new HttpCallBack() {
             @Override
             public void onFinish() {
                 super.onFinish();
@@ -180,14 +181,14 @@ public class WelcomePage extends Activity {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                LogUtils.e("---------------成功"+t);
+                LogUtils.e("---------------成功" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                         JSONObject data = jo.getJSONObject("data");
                         String timeout = data.getString("timeout");
-                        Log.e("","---------timeout："+timeout);
-                        LogUtils.e("---------timeout"+timeout);
+                        Log.e("", "---------timeout：" + timeout);
+                        LogUtils.e("---------timeout" + timeout);
                         isTimeOut = !timeout.equals("1");
 
                     }
@@ -195,7 +196,7 @@ public class WelcomePage extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (isTimeOut && !TextUtils.isEmpty(uid)) {//不超时
+                if (!TextUtils.isEmpty(uid) && !TextUtils.isEmpty(token)) {//不超时
                     startActivity(new Intent(AppManager.mContext, MainController.class));
                 } else {
                     startActivity(new Intent(AppManager.mContext, LoginActivity.class));
@@ -207,7 +208,7 @@ public class WelcomePage extends Activity {
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 LogUtils.e("-------onFailure" + strMsg);
-                if (!TextUtils.isEmpty(token)) { //token不为空，表明仍然是登录状态
+                if (!TextUtils.isEmpty(uid) && !TextUtils.isEmpty(token)) { //token不为空，表明仍然是登录状态
                     startActivity(new Intent(AppManager.mContext, MainController.class));
                 } else {
                     startActivity(new Intent(AppManager.mContext, LoginActivity.class));
@@ -216,6 +217,7 @@ public class WelcomePage extends Activity {
             }
         });
     }
+
     /**
      * 请求接口的域名
      */
