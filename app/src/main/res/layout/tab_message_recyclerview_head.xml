@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab_msg_recyclerView_head"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_tab_msg_recycler_head_notice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tab_contacts_selector_bg_x"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/tab_msg_notice_iv"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="22dp"
+            android:src="@drawable/tab_message_notice" />
+
+        <RelativeLayout
+            android:id="@+id/tab_notice_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tab_msg_notice_iv"
+            android:padding="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="22dp"
+                android:layout_marginTop="16dp"
+
+                >
+
+                <TextView
+                    android:id="@+id/tab_msg_notice_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#767676"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tab_msg_notice_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tab_msg_notice_title"
+                    android:textColor="#c84c4c"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tab_msg_notice_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tab_msg_notice_title"
+                    android:layout_below="@+id/tab_msg_notice_title"
+                    android:layout_marginTop="10dp"
+                    android:singleLine="true"
+                    android:textColor="#767676"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tab_msg_notice_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="#767676"
+                    android:textSize="14dp" />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tab_notice_rl"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="14dp"
+            android:background="#dfdfdf" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_tab_msg_recycler_head_sys_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tab_contacts_selector_bg_x"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/tab_msg_sys_msg_iv"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="22dp"
+            android:src="@drawable/tab_message_sys_msg" />
+
+        <RelativeLayout
+            android:id="@+id/tab_sys_msg_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tab_msg_sys_msg_iv">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="22dp"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:id="@+id/tab_msg_sys_msg_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:textColor="#767676"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tab_msg_sys_msg_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tab_msg_sys_msg_title"
+                    android:textColor="#c84c4c"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tab_msg_sys_msg_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tab_msg_sys_msg_title"
+                    android:layout_below="@+id/tab_msg_sys_msg_title"
+                    android:layout_marginTop="10dp"
+                    android:singleLine="true"
+                    android:textColor="#767676"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tab_msg_sys_msg_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="#767676"
+                    android:textSize="14dp" />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/tab_msg_rv_head_bottom_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tab_sys_msg_rl"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="14dp"
+            android:background="#dfdfdf" />
+    </RelativeLayout>
+
+</LinearLayout>

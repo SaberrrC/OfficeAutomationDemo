@@ -1,0 +1,78 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="day_arrangement">会议安排</string>
+    <string name="select_meet_room">请选择会议室</string>
+    <!--<string name="app_name">善林OA</string>-->
+
+    <string name="tab_message">通知</string>
+    <string name="tab_communication">消息</string>
+    <string name="tab_group">综合</string>
+    <string name="tab_me">我的</string>
+    <string name="tab_business_card">通讯录</string>
+
+    <string name="pwd_format_tips">密码格式不正确，建议6–12位字母和数字</string>
+    <string name="double_click_exit_tips">再点一次退出</string>
+
+    <string name="feedback_hint">请输入您的反馈信息，如果您有任何建议可以告诉我们，也可以留下您的联系方式。</string>
+
+    <string name="pickerview_cancel">取消</string>
+    <string name="pickerview_submit">确认</string>
+    <string name="pickerview_year">年</string>
+    <string name="pickerview_month">月</string>
+    <string name="pickerview_day">日</string>
+    <string name="pickerview_hours">时</string>
+    <string name="pickerview_minutes">分</string>
+    <string name="pickerview_seconds">秒</string>
+    <string name="edittext_cancle">取消</string>
+
+    <!-- 云信视频 -->
+    <string name="nrtc_setting_other_device_default_rotation_key">nrtc_setting_other_device_default_rotation_key</string>
+    <string name="nrtc_setting_other_device_default_rotation">设备默认旋转角度(特殊设备使用)</string>
+    <string name="nrtc_setting_other_device_rotation_fixed_offset_key">nrtc_setting_other_device_rotation_fixed_offset_key</string>
+    <string name="nrtc_setting_other_device_rotation_fixed_offset">设备旋转角度修正偏移量(特殊设备使用)</string>
+    <string name="nrtc_setting_vie_rotation_key">nrtc_setting_vie_rotation_key</string>
+    <string name="nrtc_setting_vie_rotation">画面旋转</string>
+    <string name="nrtc_setting_vie_default_front_camera_key">nrtc_setting_vie_default_front_camera_key</string>
+    <string name="nrtc_setting_vie_default_front_camera">默认前置摄像头</string>
+    <string name="nrtc_setting_vie_hw_encoder_key">nrtc_setting_vie_hw_encoder_key</string>
+    <string name="nrtc_setting_vie_hw_encoder">硬件编码(仅部分设备支持)</string>
+    <string name="nrtc_setting_vie_hw_decoder_key">nrtc_setting_vie_hw_decoder_key</string>
+    <string name="nrtc_setting_vie_hw_decoder">硬件解码(仅部分设备支持)</string>
+    <string name="nrtc_setting_other_server_record_audio_key">nrtc_setting_other_server_record_audio_key</string>
+    <string name="nrtc_setting_other_server_record_audio">音频服务器录制</string>
+    <string name="nrtc_setting_other_webrtc_compat_key">setting_other_webrtc_compat_key</string>
+    <string name="nrtc_setting_other_webrtc_compat">WebRTC兼容</string>
+    <string name="nrtc_setting_other_server_record_video_key">nrtc_setting_other_server_record_video_key</string>
+    <string name="nrtc_setting_other_server_record_video">视频服务器录制</string>
+    <string name="nrtc_setting_voe_call_proximity_key">nrtc_setting_voe_call_proximity_key</string>
+    <string name="nrtc_setting_voe_call_proximity">通话期间关闭屏幕</string>
+    <string name="nrtc_setting_voe_muted_key">nrtc_setting_voe_muted_key</string>
+    <string name="nrtc_setting_voe_muted">语音流静音处理</string>
+    <string name="nrtc_setting_vie_muted_key">nrtc_setting_vie_muted_key</string>
+    <string name="nrtc_setting_vie_muted">视频流静音处理</string>
+    <string name="nrtc_setting_vie_fps_reported_key">nrtc_setting_vie_fps_reported_key</string>
+    <string name="nrtc_setting_vie_fps_reported">帧率汇报</string>
+    <string name="nrtc_setting_vie_max_bitrate_key">nrtc_setting_vie_max_bitrate_key</string>
+    <string name="nrtc_setting_vie_max_bitrate">码率(Kbps)</string>
+    <string name="nrtc_setting_voe_audio_aec_key">nrtc_setting_voe_audio_aec_key</string>
+    <string name="nrtc_setting_voe_audio_aec">回音消除</string>
+    <string name="nrtc_setting_voe_audio_ns_key">nrtc_setting_voe_audio_ns_key</string>
+    <string name="nrtc_setting_voe_audio_ns">降噪</string>
+    <string name="nrtc_setting_voe_high_quality_key">nrtc_setting_voe_high_quality_key</string>
+    <string name="nrtc_setting_voe_high_quality">高清语音</string>
+    <string name="nrtc_setting_voe_dtx_key">nrtc_setting_voe_dtx_key</string>
+    <string name="nrtc_setting_voe_dtx">人声检测</string>
+    <!-- 会议搜索界面,提示功能 -->
+    <string name="selectJoinPeopleHint">已选择</string>
+
+    <!-- 环信开始 -->
+    <string name="call_version_inconsistent">通话协议版本不一致</string>
+    <string name="no_call_data">没有通话数据</string>
+    <string name="network_unstable">网络不稳定</string>
+    <string name="have_connected_with">已经和对方建立连接</string>
+    <string name="at_your_in_group">%s在群聊中@了你</string>
+    <string name="emojicon_test_name">示例</string>
+    <string name="delete_contact">删除联系人</string>
+
+    <string name="multi_device_logged_in_device_kick_item">将设备移除</string>
+    <!-- 环信结束 -->
+</resources>

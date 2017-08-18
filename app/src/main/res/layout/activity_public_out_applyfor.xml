@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/layout_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+    >
+
+    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar_shadow"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:id="@+id/ll_travel_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+
+
+
+                    <LinearLayout
+                        android:layout_width="240dp"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="开始时间 :"
+                            android:textColor="@color/text_common_color"
+                            android:textSize="@dimen/text_common_dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_travel_start_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="点击选择时间"
+                            android:textColor="#06A7ED"
+                            android:textSize="@dimen/text_common_dp"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="240dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="结束时间"
+                            android:textColor="@color/text_common_color"
+                            android:textSize="@dimen/text_common_dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_travel_end_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="点击选择时间"
+                            android:textColor="#06A7ED"
+                            android:textSize="@dimen/text_common_dp"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="240dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="时长(小时) :"
+                            android:textColor="@color/text_common_color"
+                            android:textSize="@dimen/text_common_dp"
+
+                            />
+
+                        <EditText
+                            android:id="@+id/tv_leave_days"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:background="@drawable/edittext_input_square_bg"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="10dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="#9a9090"
+                            android:textSize="@dimen/text_common_dp"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_leave_reason_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_travel_list"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="待办事项 :"
+                android:textColor="@color/text_common_color"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+
+            <EditText
+                android:id="@+id/et_leave_reason_content"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_below="@+id/tv_leave_reason_tips"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="21dp"
+                android:layout_marginRight="21dp"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/edittext_input_square_bg"
+                android:gravity="left"
+                android:hint="请输入内容(最多100字)"
+                android:paddingBottom="10dp"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:paddingTop="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="#9a9090"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+
+            <Button
+                android:id="@+id/btn_voice_input"
+                android:layout_width="216dp"
+                android:layout_height="34dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/et_leave_reason_content"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/btn_blue_round_bg"
+                android:gravity="center"
+                android:paddingBottom="2dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="2dp"
+                android:text="点击进行语音录入"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+
+
+
+
+            <TextView
+                android:id="@+id/tv_approval_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_voice_input"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="26dp"
+                android:text="审批人 ( 管理员预设 )"
+                android:textColor="@color/text_common_color"
+                android:textSize="@dimen/text_common_dp"
+                />
+
+            <LinearLayout
+                android:id="@+id/ll_approval_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_approval_tips"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="20dp"
+                >
+
+                <include
+                layout="@layout/travel_entry_approvel_single"/>
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/parting_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/ll_approval_container"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="16dp"
+                android:background="#e3e3e3"
+                />
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="216dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/ll_approval_container"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="36dp"
+                android:background="@drawable/btn_blue_round_bg"
+                android:text="提 交"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/text_common_dp"
+                android:layout_marginBottom="50dp"
+                />
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

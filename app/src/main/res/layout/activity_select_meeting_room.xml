@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/layout_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rl_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp">
+
+        <include layout="@layout/toolbar"/>
+
+        <include
+            layout="@layout/toolbar_shadow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"/>
+
+        <TextView
+            android:id="@+id/tv_select_meeting_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar_shadow"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/select_meeting_room_tv_bg"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="点击选择开会日期"
+            android:textColor="#999999"
+            android:textSize="@dimen/dp_14"
+            />
+
+
+        <CheckBox
+            android:id="@+id/cb_need_meeting_room"
+            style="@style/selectMeetingRoomCustomCheckboxTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_select_meeting_room"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:text="需要会议室"
+            android:textColor="#999999"
+            android:textSize="@dimen/dp_14"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_top_layout"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_meeting_Layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+
+            <include
+                layout="@layout/select_metting_room_left_time_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                />
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scrollbarSize="4dp"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_meeting_room_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    >
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_no_meeting_room_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="尚未配置任何会议室"
+        android:textColor="@color/text_common_dark_color"
+        android:textSize="14dp"
+        android:visibility="gone"
+        />
+</RelativeLayout>

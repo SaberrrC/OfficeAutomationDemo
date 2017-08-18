@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.dsw.calendar.views.CircleCalendarView
+        android:id="@+id/circlecalendarview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e3e3e3" />
+
+    <RadioGroup
+        android:id="@+id/rg_bottom_tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_meeting_plan"
+            android:layout_width="90dp"
+            android:layout_height="35dp"
+            android:background="@drawable/schedule_rb_textcolor_bg"
+            android:button="@null"
+            android:gravity="center"
+            android:text="会议安排"
+            android:textColor="#999999"
+            android:textSize="@dimen/text_common_dp" />
+
+        <RadioButton
+            android:id="@+id/rb_me_launch"
+            android:layout_width="90dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/schedule_rb_textcolor_bg"
+            android:button="@null"
+            android:gravity="center"
+            android:text="我发起的"
+            android:textColor="#999999"
+            android:textSize="@dimen/text_common_dp" />
+
+        <RadioButton
+            android:id="@+id/rb_note"
+            android:layout_width="90dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/schedule_rb_textcolor_bg"
+            android:button="@null"
+            android:gravity="center"
+            android:text="记事本"
+            android:textColor="#999999"
+            android:textSize="@dimen/text_common_dp" />
+
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#e3e3e3" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" />
+</LinearLayout>

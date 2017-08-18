@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.hyphenate.easeui">
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="25"/>
+    <application>
+        <!-- 自定义的contextmenu -->
+        <activity
+            android:name=".ui.ContextMenuActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyle" />
+    </application>
+</manifest>

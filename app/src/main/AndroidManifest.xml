@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          xmlns:Android="http://schemas.android.com/apk/res-auto"
+          package="com.shanlin.oa">
+
+    <!--极光requried-->
+    <permission
+        android:name="com.shanlin.oa.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <!--小米推送-->
+    <permission
+        android:name="com.shanlin.oa.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.shanlin.oa.permission.MIPUSH_RECEIVE" />
+
+    <uses-permission android:name="android.permission.DEVICE_POWER"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <uses-permission android:name="com.shanlin.oa.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Optional. Required for location feature -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+
+    <!-- 腾讯bugly required-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 讯飞required-->
+    <!--连接网络权限，用于执行云端语音能力 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!--读取网络信息状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--获取当前wifi状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--允许程序改变网络连接状态 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <!--读取手机信息权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--读取联系人权限，上传联系人需要用到此权限 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- Base Permission -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_APN_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- 环信Required -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+
+    <!-- 可选-->
+    <uses-permission android:name="android.permission.READ_LOGS" /> <!-- 获取logcat日志 -->
+
+
+    <!-- 网易云信Required -->
+    <!-- 控制呼吸灯，振动器等，用于新消息提醒 -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+    <!-- SDK 权限申明, 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
+    <permission
+        android:name="com.shanlin.oa.permission.RECEIVE_MSG"
+        android:protectionLevel="signature" />
+    <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
+    <uses-permission android:name="com.shanlin.oa.permission.RECEIVE_MSG" />
+
+
+    <application
+        android:name="com.shanlin.oa.manager.AppManager"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+
+        <activity
+            android:name="com.shanlin.oa.WelcomePage"
+            android:screenOrientation="portrait"
+            android:theme="@style/WeclomeActivityTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- 蒲公英 -->
+        <!-- 可选-->
+        <activity android:name="com.pgyersdk.activity.FeedbackActivity" />
+
+        <!-- 必选-->
+        <meta-data
+            android:name="PGYER_APPID"
+            android:value="62cc871963fb55bd3a3cb218e4f64689"></meta-data>
+
+        <provider android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.shanlin.oa.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+        <!-- 蒲公英 END -->
+
+        <!-- 环信应用的AppKey -->
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="1149161031178682#ezhitongoasl" />
+        <!-- 声明SDK所需的service SDK核心功能-->
+        <service
+            android:name="com.hyphenate.chat.EMChatService"
+            android:exported="true" />
+        <!-- 声明SDK所需的receiver -->
+        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+            <!-- 可选filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 开机自启动服务 -->
+        <receiver android:name=".huanxin.receiver.StartServiceReceiver">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
+        <!-- gcm start -->
+        <receiver
+            android:name="com.hyphenate.chat.EMGCMBroadcastReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.hyphenate.chatuidemo" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.hyphenate.chat.EMGCMListenerService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".huanxin.receiver.GCMPushBroadCast"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.hyphenate.sdk.push" />
+
+                <category android:name="com.hyphenate.chatuidemo" />
+            </intent-filter>
+        </receiver>
+        <!-- gcm end -->
+
+        <!-- mi push -->
+        <service
+            android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedService" />
+        <service
+            android:name="com.xiaomi.mipush.sdk.MessageHandleService"
+            android:enabled="true" />
+
+        <receiver
+            android:name="com.hyphenate.chat.EMMipushReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.ERROR" />
+            </intent-filter>
+        </receiver>
+        <!-- mi push end -->
+
+        <!-- huawei push 第三方相关 :接收Push消息（注册、Push消息、Push连接状态、标签，LBS上报结果）广播 -->
+        <receiver
+            android:name="com.hyphenate.chat.EMHuaweiPushReceiver"
+            android:exported="true">
+            <intent-filter>
+
+                <!-- 必须,用于接收token -->
+                <action android:name="com.huawei.android.push.intent.REGISTRATION" />
+                <!-- 必须，用于接收消息 -->
+                <action android:name="com.huawei.android.push.intent.RECEIVE" />
+            </intent-filter>
+            />
+            <meta-data
+                android:name="CS_cloud_ablitity"
+                android:value="successRateAnalytics" />
+        </receiver>
+
+        <!-- PushSDK:PushSDK接收外部请求事件入口 -->
+        <receiver
+            android:name="com.hyphenate.chat.EMHuaweiPushReceiver"
+            android:exported="true">
+            <intent-filter>
+
+                <!-- 必须,用于接收token -->
+                <action android:name="com.huawei.android.push.intent.REGISTRATION" />
+                <!-- 必须，用于接收消息 -->
+                <action android:name="com.huawei.android.push.intent.RECEIVE" />
+            </intent-filter>
+            />
+            <meta-data
+                android:name="CS_cloud_ablitity"
+                android:value="successRateAnalytics" />
+        </receiver>
+        <!-- PushSDK:PushSDK接收外部请求事件入口 -->
+        <receiver
+            android:name="com.huawei.android.pushagent.PushEventReceiver"
+            android:exported="true"
+            android:process=":pushservice">
+            <intent-filter>
+                <action android:name="com.huawei.android.push.intent.REFRESH_PUSH_CHANNEL" />
+                <action android:name="com.huawei.intent.action.PUSH" />
+                <action android:name="com.huawei.intent.action.PUSH_ON" />
+                <action android:name="com.huawei.android.push.PLUGIN" />
+            </intent-filter>
+        </receiver>
+        <!-- PushSDK:Push服务 -->
+        <service
+            android:name="com.huawei.android.pushagent.PushService"
+            android:process=":pushservice" />
+        <!-- huawei push end -->
+
+        <!-- 声明sdk所需的service -->
+        <service
+            android:name="com.hyphenate.chat.EMChatService"
+            android:exported="true"
+            tools:ignore="ExportedService" />
+        <service
+            android:name="com.hyphenate.chat.EMJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <!-- 声明sdk所需的receiver -->
+        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <!-- 可选filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+
+        <!-- 设置环信结束 -->
+
+        <!-- 登录界面 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- 极光推送 开始-->
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTER" />
+                <action android:name="cn.jpush.android.intent.REPORT" />
+                <action android:name="cn.jpush.android.intent.PushService" />
+                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+                <category android:name="com.shanlin.oa" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="cn.jpush.android.service.AlarmReceiver"
+            android:exported="false" />
+        <receiver
+            android:name="com.shanlin.oa.ui.receiver.MyJpushReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <action android:name="cn.jpush.android.intent.UNREGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" />
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+
+                <category android:name="com.shanlin.oa" />
+            </intent-filter>
+        </receiver>
+        <!-- 极光推送 结束-->
+
+        <!-- 网易云信开始-->
+        <!-- APP key, 可以在这里设置，也可以在 SDKOptions 中提供。
+           如果 SDKOptions 中提供了，取 SDKOptions 中的值。 -->
+        <meta-data
+            android:name="com.netease.nim.appKey"
+            android:value="c5cb21ebaeea46a2cdf9071e02626ba2" />
+        <!-- 声明云信后台服务，如需保持后台推送，使用独立进程效果会更好。 -->
+        <service
+            android:name="com.netease.nimlib.service.NimService"
+            android:process=":core" />
+        <!-- 声明云信后台服务，如需保持后台推送，使用独立进程效果会更好。 -->
+        <service
+            android:name="com.netease.nimlib.service.NimService$Aux"
+            android:process=":core" />
+        <!-- 云信SDK的监视系统启动和网络变化的广播接收器，用户开机自启动以及网络变化时候重新登录，
+           保持和 NimService 同一进程 -->
+        <receiver
+            android:name="com.netease.nimlib.service.NimReceiver"
+            android:exported="false"
+            android:process=":core">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 云信进程间通信 Receiver -->
+        <receiver android:name="com.netease.nimlib.service.ResponseReceiver" />
+
+        <!-- 申明本地电话状态（通话状态）的广播接收器，第三方APP集成时音视频模块时，
+       如果需要网络通话与本地电话互斥，请加上此接收器 -->
+        <receiver android:name="com.shanlin.oa.ui.receiver.IncomingCallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
+        <!--<service-->
+        <!--android:name="com.netease.cosine.core.CosineService"-->
+        <!--android:process=":cosine">-->
+        <!--</service>-->
+
+        <!--<receiver-->
+        <!--android:name="com.netease.cosine.target.CosineReceiver"-->
+        <!--android:exported="true"-->
+        <!--android:process=":cosine">-->
+        <!--</receiver>-->
+
+        <meta-data
+            android:name="com.netease.cosine.target"
+            android:value="" />
+        <meta-data
+            android:name="com.netease.cosine.target.receiver"
+            android:value="com.netease.nimlib.service.NimReceiver" />
+        <!-- 网易云信结束-->
+
+
+        <!-- 首页控制器 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MainController"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- 首页名片页面二级一下界面 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ContactsActivity"
+            android:screenOrientation="portrait" />
+        <!-- 用户信息 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.UserInfoActivity"
+            android:screenOrientation="portrait" />
+        <!-- 修改密码 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ModifyPwdActivity"
+            android:screenOrientation="portrait" />
+        <!-- 找回密码 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.FindPassWordActivity"
+            android:screenOrientation="portrait" />
+        <!-- 用户反馈 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <!-- 关于我们 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.AboutUsActivity"
+            android:screenOrientation="portrait" />
+        <!-- 修改电话 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ModifyPhoneActivity"
+            android:screenOrientation="portrait" />
+        <!-- 工作汇报列表 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.WorkReportListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- 工作汇报详情页 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.WorkReportSingleInfoActivity"
+            android:screenOrientation="portrait" />
+        <!-- 发起工作汇报 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.WorkReportLaunchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <!--我的邮箱-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MyMailActivity"
+            android:screenOrientation="portrait" />
+        <!-- 选择联系人 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.SelectContactsActivity"
+            android:screenOrientation="portrait" />
+        <!-- 公用选择头像 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.PublicImageSelectorActivity"
+            android:screenOrientation="portrait" />
+        <!-- 通知公告 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.NoticeListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- 系统消息 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.SystemNoticesActivity"
+            android:screenOrientation="portrait" />
+        <!-- 使用帮助 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.UsingHelpActivity"
+            android:screenOrientation="portrait" />
+        <!-- 单个公告通知 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.NoticesSingleInfoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <!-- 工作汇报回复 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.WorkReportReplyActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <!-- 审批列表 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ApprovalListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- 发起审批 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.LaunchApprovalActivity"
+            android:screenOrientation="portrait" />
+        <!-- 差旅申请 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ApplyForTravelActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- 公出申请申请 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ApplyForPublicOutActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- 请假申请 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ApplyForLeaveActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- 办公用品申请 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ApplyForOfficeSuppliesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!--加班申请 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ApplyForOverTimeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- 待我审批 (请假)-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.WaitApprovalLeaveActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <!-- 待我审批 （办公用品）-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.WaitApprovalOfficesSuppliesActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <!-- 待我审批 （差旅）-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.WaitApprovaltravalActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <!-- 待我审批 （公告）-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.WaitApprovalNoticeActivity"
+            android:screenOrientation="portrait" />
+        <!-- 我发起的 (请假)-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MeLaunchLeaveActivity"
+            android:screenOrientation="portrait" />
+        <!-- 我发起的 (办公用品)-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MeLaunchOfficesSuppliesActivity"
+            android:screenOrientation="portrait" />
+        <!-- 我发起的 (办公用品)-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MeLaunchTravalActivity"
+            android:screenOrientation="portrait" />
+        <!-- 我发起的 (加班)-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MeLaunchOverTimeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- 我发起的 (加班)-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MeLaunchPublicOutActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- 待我审批回复 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.WaitApprovalReplyActivity"
+            android:screenOrientation="portrait" />
+        <!-- 单个图片activity -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ShowPictureActivity"
+            android:screenOrientation="portrait" />
+        <!-- 名片(联系人)  -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.TabContactsActivity"
+            android:screenOrientation="portrait" />
+        <!-- 推送列表  -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.PushListActivity"
+            android:screenOrientation="portrait" />
+        <!-- 日程安排  -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.ScheduleActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- 创建会议  -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.CreateMeetingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- 创建记事本 -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.CreateNoteActivity"
+            android:screenOrientation="portrait" />
+        <!--  记事本详情-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.NoteDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <!-- 选择抄送人-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.SelectJoinPeopleActivity"
+            android:screenOrientation="portrait" />
+        <!-- 会议详情-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MeetingInfoActivity"
+            android:screenOrientation="portrait" />
+        <!-- 视频会议详情-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MeetingInfoVideoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <!-- 视频会议-->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.MeetingVideoActivity"
+            android:screenOrientation="portrait" />
+        <!-- 聊天activity -->
+        <activity
+            android:name="com.shanlin.oa.huanxin.EaseChatMessageActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <!-- 语音聊天activity -->
+        <!-- 上传图片的 activity -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.AffirmPictureActivity"
+            android:screenOrientation="portrait" />
+        <!-- 选择会议室 activity -->
+        <activity
+            android:name="com.shanlin.oa.ui.activity.SelectMeetingRoomActivity"
+            android:screenOrientation="portrait" />
+        <!--搜索联系人返回结果=联系人详情页-->
+        <activity android:name="com.shanlin.oa.ui.activity.Contact_Details_Activity" />
+        <!--正常点击部门列表的联系人详情页-->
+        <activity android:name="com.shanlin.oa.ui.activity.Contact_Details_Activity2" />
+        <!--创建视频会议——新版-->
+        <activity android:name="com.shanlin.oa.ui.activity.SelectVedioMeetingRoomActivity" />
+        <!--创建视频会议——完成-->
+        <activity android:name="com.shanlin.oa.ui.activity.CreateVedioMeetingActivity" />
+        <!-- 请选择会议室 -->
+        <activity android:name="com.shanlin.oa.ui.activity.SelectOrdinaryMeetingRoomActivity" />
+        <!-- 今日安排 -->
+        <activity android:name="com.shanlin.oa.ui.activity.ViewTheMeetingScheduleActivity" />
+        <!-- 创建普通会议 -->
+        <activity android:name="com.shanlin.oa.ui.activity.CreateOridinryMeetingActivity" />
+
+        <!--点击聊天图片进入大图片查看-->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
+            android:screenOrientation="portrait" />
+
+        <!--点击聊天图片进入大图片查看-->
+        <activity
+            android:name="com.shanlin.oa.huanxin.VoiceCallActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver
+            android:name="com.shanlin.oa.huanxin.receiver.GCMPushBroadCast"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.hyphenate.sdk.push" />
+
+                <category android:name="com.hyphenate.chatuidemo" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
