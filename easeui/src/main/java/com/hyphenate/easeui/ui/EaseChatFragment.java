@@ -241,10 +241,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             @Override
             public void onSendMessage(String content) {
-                // TODO: 2017/8/15 测试发送两万条
-//                for (int i = 0; i < 20100; i++) {
-//                    sendTextMessage(content);
-//                }
                 sendTextMessage(content);
             }
 
@@ -719,6 +715,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     //send message
     protected void sendTextMessage(String content) {
+        //TODO TEXT 携带消息
         JSONObject object = new JSONObject();
         try {
             object.put("userId", getArguments().getString("meId", "-"));
@@ -734,17 +731,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             e.printStackTrace();
         }
         String string = object.toString();
-
-
-        //对方的信息
-//        String to_user_id = getArguments().getString("userId", "-");
-//        String to_user_nike = getArguments().getString("to_user_nike", "-");
-//        String to_user_pic = getArguments().getString("to_user_pic", "-");
-//        String to_user_department = getArguments().getString("to_user_department", "-");
-//        String to_user_post = getArguments().getString("to_user_post", "-");
-//        String to_user_sex = getArguments().getString("to_user_sex", "-");
-//        String to_user_phone = getArguments().getString("to_user_phone", "-");
-//        String to_user_email = getArguments().getString("to_user_email", "-");
 
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
@@ -786,6 +772,23 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     protected void sendVoiceMessage(String filePath, int length) {
         EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, toChatUsername);
+        //TODO 语音携带消息
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userId", getArguments().getString("meId", "-"));
+            object.put("userName", getArguments().getString("userName", "-"));
+            object.put("userPic", getArguments().getString("userPic", "-"));
+            object.put("userSex", getArguments().getString("userSex", "-"));
+            object.put("userPhone", getArguments().getString("userPhone", "-"));
+            object.put("userPost", getArguments().getString("userPost", "-"));
+            object.put("userDepartment", getArguments().getString("userDepartment", "-"));
+            object.put("userEmail", getArguments().getString("userEmail", "-"));
+            object.put("userDepartmentId", getArguments().getString("userDepartmentId", "-"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String string = object.toString();
+        message.setAttribute("userInfo", string);
         sendMessage(message);
     }
 
