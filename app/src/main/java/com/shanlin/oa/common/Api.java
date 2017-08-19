@@ -74,7 +74,7 @@ public class Api {
     /***
      * 找回密码
      ***/
-    public static final int SEND_FAILD_TRY_AGIN = 621;
+    public static final int SEND_FAILD_TRY_AGIN = 631;
 
     //审批驳回失败
     public static final int REJECT_FAIL = 373;

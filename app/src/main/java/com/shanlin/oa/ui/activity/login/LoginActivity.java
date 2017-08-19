@@ -224,4 +224,9 @@ public class LoginActivity extends MyBaseActivity<LoginActivityPresenter> implem
     public void requestFinish() {
         hideLoadingView();
     }
+
+    @Override
+    public void uidNull(int code) {
+
+    }
 }

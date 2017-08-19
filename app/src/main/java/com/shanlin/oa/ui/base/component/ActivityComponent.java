@@ -1,5 +1,6 @@
 package com.shanlin.oa.ui.base.component;
 
+import com.shanlin.oa.ui.activity.login.FindPassWordActivity;
 import com.shanlin.oa.ui.activity.login.LoginActivity;
 import com.shanlin.oa.ui.activity.main.MainController;
 import com.shanlin.oa.ui.annotation.PerActivity;
@@ -14,5 +15,8 @@ import dagger.Component;
 @Component(dependencies = AppComponent.class, modules = ActivityModule.class)
 public interface ActivityComponent {
     void inject(MainController activity);
+
     void inject(LoginActivity activity);
+
+    void inject(FindPassWordActivity activity);
 }

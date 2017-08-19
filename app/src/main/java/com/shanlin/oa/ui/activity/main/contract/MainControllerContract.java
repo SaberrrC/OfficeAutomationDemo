@@ -21,8 +21,6 @@ public interface MainControllerContract {
 
         void loadUnReadMsgEmpty(); //加载未读消息条数为0
 
-        void uidNull(int code); //uid为空
-
         void bindBadgeView(int msgCount);
 
         void startAppSetting();

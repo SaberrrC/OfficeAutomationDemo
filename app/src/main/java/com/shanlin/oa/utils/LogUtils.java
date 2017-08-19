@@ -2,6 +2,8 @@ package com.shanlin.oa.utils;
 
 import android.util.Log;
 
+import com.shanlin.oa.BuildConfig;
+
 /**
  * ProjectName: GroupInformationPlatform
  * PackageName: com.itcrm.GroupInformationPlatform.utils
@@ -42,7 +44,7 @@ public class LogUtils {
     /**
      * 是否允许输出log
      */
-    private static int mDebuggable = LEVEL_ERROR;
+    private static int mDebuggable = BuildConfig.DEBUG ? LEVEL_ERROR : LEVEL_VERBOSE;
 
     /**
      * @param isLogOut 是否输出log

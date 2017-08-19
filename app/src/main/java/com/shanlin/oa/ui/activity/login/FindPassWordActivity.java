@@ -9,17 +9,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shanlin.oa.R;
-import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
-import com.shanlin.oa.ui.base.BaseActivity;
+import com.shanlin.oa.ui.activity.login.contract.FindPassWordContract;
+import com.shanlin.oa.ui.activity.login.presenter.FindPasswordPresenter;
+import com.shanlin.oa.ui.base.MyBaseActivity;
 import com.shanlin.oa.utils.AndroidAdjustResizeBugFix;
-import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,7 +27,7 @@ import butterknife.OnClick;
  * Author:Created by Tsui on Date:2016/11/9 15:59
  * Description:
  */
-public class FindPassWordActivity extends BaseActivity {
+public class FindPassWordActivity extends MyBaseActivity<FindPasswordPresenter> implements FindPassWordContract.View {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.tv_title)
@@ -53,6 +48,11 @@ public class FindPassWordActivity extends BaseActivity {
         //CXP添加,修复软键盘adjustResize属性的bug
         AndroidAdjustResizeBugFix.assistActivity(this);
         setTranslucentStatus(this);
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initToolBar() {
@@ -81,46 +81,7 @@ public class FindPassWordActivity extends BaseActivity {
     public void onClick() {
         if (check()) {
             showLoadingView();
-            HttpParams params = new HttpParams();
-            params.put("email", mEtEmail.getText().toString().trim());
-            initKjHttp().post(Api.FIND_PASSWORD, params, new HttpCallBack() {
-                @Override
-                public void onFinish() {
-                    super.onFinish();
-                    hideLoadingView();
-                }
-
-                @Override
-                public void onSuccess(String t) {
-                    super.onSuccess(t);
-                    hideLoadingView();
-                    JSONObject jo = null;
-                    LogUtils.e(t.toString());
-                    try {
-                        jo = new JSONObject(t);
-                        if (Api.getCode(jo) == Api.SEND_FAILD_TRY_AGIN) {
-                            mEtReminder.setText("邮件发送失败,请重试");
-                        } else if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                            mEtReminder.setText("随机密码已经发送至您的邮箱，请登录后设置新的密码");
-                            mBtnGetPwd.setClickable(false);
-                            mBtnGetPwd.setBackgroundColor(Color.parseColor("#999999"));
-                        } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                            catchWarningByCode(Api.getCode(jo));
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-                @Override
-                public void onFailure(int errorNo, String strMsg) {
-                    hideLoadingView();
-                    LogUtils.e(strMsg);
-                    super.onFailure(errorNo, strMsg);
-                }
-            });
+            mPresenter.findPassword(mEtEmail.getText().toString().trim());
         }
 
     }
@@ -136,5 +97,27 @@ public class FindPassWordActivity extends BaseActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public void findSuccess() {
+        mEtReminder.setText("随机密码已经发送至您的邮箱，请登录后设置新的密码");
+        mBtnGetPwd.setClickable(false);
+        mBtnGetPwd.setBackgroundColor(Color.parseColor("#999999"));
+    }
+
+    @Override
+    public void findFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void findFailed() {
+        mEtReminder.setText("邮件发送失败,请重试");
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 }
