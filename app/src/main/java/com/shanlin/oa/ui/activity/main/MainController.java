@@ -1,23 +1,17 @@
-package com.shanlin.oa.ui.activity;
+package com.shanlin.oa.ui.activity.main;
 
-import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.util.Pair;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,53 +21,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.SDKOptions;
-import com.netease.nimlib.sdk.StatusBarNotificationConfig;
-import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlin.oa.R;
-import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
-import com.shanlin.oa.helper.DoubleClickExitHelper;
-import com.shanlin.oa.ui.base.BaseActivity;
+import com.shanlin.oa.ui.activity.main.contract.MainControllerContract;
+import com.shanlin.oa.ui.activity.main.presenter.MainControllerPresenter;
+import com.shanlin.oa.ui.activity.my.ModifyPwdActivity;
+import com.shanlin.oa.ui.base.MyBaseActivity;
 import com.shanlin.oa.ui.fragment.TabCommunicationFragment;
 import com.shanlin.oa.ui.fragment.TabContactsFragment;
 import com.shanlin.oa.ui.fragment.TabHomePageFragment;
 import com.shanlin.oa.ui.fragment.TabMeFragment;
 import com.shanlin.oa.ui.fragment.TabMsgListFragment;
-import com.shanlin.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlin.oa.utils.BadgeUtil;
-import com.shanlin.oa.utils.LogUtils;
-import com.shanlin.oa.utils.ScreenUtils;
-import com.shanlin.oa.utils.SharedPreferenceUtil;
 import com.shanlin.oa.utils.Utils;
-
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import butterknife.Bind;
@@ -112,7 +88,7 @@ import q.rorbin.badgeview.QBadgeView;
  * <h3>Description: 首页控制器 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br />
  */
-public class MainController extends BaseActivity {
+public class MainController extends MyBaseActivity<MainControllerPresenter> implements MainControllerContract.View {
 
     @Bind(R.id.controller)
     ViewPager mController;
@@ -167,8 +143,6 @@ public class MainController extends BaseActivity {
     private static final int TAB_HOME = 2;
     private static final int TAB_GROUP = 3;
     private static final int TAB_ME = 4;
-    private DoubleClickExitHelper doubleClickExitHelper;
-    private EaseConversationListFragment conversationListFragment;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -204,19 +178,23 @@ public class MainController extends BaseActivity {
         setTranslucentStatus(this);
         initWidget();
         initData();
-        LoginIm();
-        initEaseData();
-        initmControllerAndSetAdapter();
-        doubleClickExitHelper = new DoubleClickExitHelper(this);
+        LoginIm();//登录环信
+        initEaseData();//初始化登录云信
+        initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
-        applyPermission();//判断是否有更新
+        mPresenter.applyPermission(this);//判断是否有更新
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
 
     /**
      * 初始化viewPager控制器并设置适配器
      */
-    private void initmControllerAndSetAdapter() {
+    private void initControllerAndSetAdapter() {
         mController.setAdapter(mAdapter);
         mController.addOnPageChangeListener(new PageChangeListener());
         setSelection(TAB_HOME);
@@ -252,7 +230,6 @@ public class MainController extends BaseActivity {
     private void judeIsInitPwd() {
         //1初始密码，2已修改
         String isInitPwd = AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_IS_INIT_PWD);
-        // TODO: 2017/8/15 初始密码
         if (isInitPwd.equals("1")) {
             showSetPwdDialog();
         }
@@ -300,146 +277,75 @@ public class MainController extends BaseActivity {
      * 初始化云信视频的相关数据
      */
     private void initEaseData() {
+        String account = Constants.CID + "_" + AppConfig.getAppConfig(
+                MainController.this).get(AppConfig.PREF_KEY_CODE);
+        String token = AppConfig.getAppConfig(MainController.this).get(
+                AppConfig.PREF_KEY_YX_TOKEN);
+        mPresenter.initEase(loginRequest, account, token);
+    }
+
+
+    //登录环信
+    public void LoginIm() {
+        mPresenter.loginIm(this);
+    }
+
+    public void refreshCommCount() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                // 登录
-                String account = Constants.CID + "_" + AppConfig.getAppConfig(
-                        MainController.this).get(AppConfig.PREF_KEY_CODE);
-                String token = AppConfig.getAppConfig(MainController.this).get(
-                        AppConfig.PREF_KEY_YX_TOKEN);
-                LogUtils.e("account:" + account + ",token:" + token);
-                if (loginRequest == null) {
-                    loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(
-                            account, token));
-
-                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
-                        @Override
-                        public void onSuccess(LoginInfo param) {
-                            LogUtils.e("云信login success。。。");
-                            loginRequest = null;
-                        }
-
-                        @Override
-                        public void onFailed(int code) {
-                            loginRequest = null;
-                            LogUtils.e("云信login Failed。。。" + code);
-                        }
-
-                        @Override
-                        public void onException(Throwable exception) {
-                            loginRequest = null;
-                            LogUtils.e("云信login Failed。。。" + exception);
-                        }
-                    });
-                }
+//                try {
+                mPresenter.loadConversationList();
+//                } catch (Exception e) {
+//                    LogUtils.e("加载环信抛异常了");
+//                }
             }
-        }
-        ).start();
+        }).start();
     }
 
-    // 如果返回值为 null，则全部使用默认参数。
-    private SDKOptions options() {
-        SDKOptions options = new SDKOptions();
-
-        // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
-        StatusBarNotificationConfig config = new StatusBarNotificationConfig();
-        config.notificationEntrance = WelcomePage.class; // 点击通知栏跳转到该Activity
-        config.notificationSmallIconId = R.mipmap.ic_launcher;
-        // 呼吸灯配置
-        config.ledARGB = Color.GREEN;
-        config.ledOnMs = 1000;
-        config.ledOffMs = 1500;
-        // 通知铃声的uri字符串
-        config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";
-        options.statusBarNotificationConfig = config;
-
-        // 配置保存图片，文件，log 等数据的目录
-        // 如果 options 中没有设置这个值，SDK 会使用下面代码示例中的位置作为 SDK 的数据目录。
-        // 该目录目前包含 log, file, image, audio, video, thumb 这6个目录。
-        // 如果第三方 APP 需要缓存清理功能， 清理这个目录下面个子目录的内容即可。
-        String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim";
-        options.sdkStorageRootPath = sdkPath;
-
-        // 配置是否需要预下载附件缩略图，默认为 true
-        options.preloadAttach = true;
-
-        // 配置附件缩略图的尺寸大小。表示向服务器请求缩略图文件的大小
-        // 该值一般应根据屏幕尺寸来确定， 默认值为 Screen.width / 2
-        options.thumbnailSize = ScreenUtils.getScreenWidth(this) / 2;
-
-        // 用户资料提供者, 目前主要用于提供用户资料，用于新消息通知栏中显示消息来源的头像和昵称
-        options.userInfoProvider = new UserInfoProvider() {
+    public void refreshUnReadMsgCount() {
+        new Thread(new Runnable() {
             @Override
-            public UserInfo getUserInfo(String account) {
-                return null;
+            public void run() {
+                mPresenter.loadUnReadMsg();
             }
-
-            @Override
-            public int getDefaultIconResId() {
-                return R.mipmap.ic_launcher;
-            }
-
-            @Override
-            public Bitmap getTeamIcon(String tid) {
-                return null;
-            }
-
-            @Override
-            public Bitmap getAvatarForMessageNotifier(String account) {
-                return null;
-            }
-
-            @Override
-            public String getDisplayNameForMessageNotifier(String account, String sessionId,
-                                                           SessionTypeEnum sessionType) {
-                return null;
-            }
-        };
-        return options;
+        }).start();
     }
 
-    public void LoginIm() {
-        try {
-            LogUtils.e("登录Im，工号->" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
-            EMClient.getInstance().login(Constants.CID + "_" +
-                    AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE), "123456", new EMCallBack() {//回调
-
-                @Override
-                public void onSuccess() {
-                    EMClient.getInstance().groupManager().loadAllGroups();
-                    EMClient.getInstance().chatManager().loadAllConversations();
-                    LogUtils.e("登录聊天服务器成功！");
-                    String u_id = Constants.CID + "_" + AppConfig.getAppConfig(MainController.this).getPrivateCode();
-                    String u_name = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_USERNAME);
-                    String u_pic = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_PORTRAITS);
-                    String sex = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_SEX);
-                    String phone = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_PHONE);
-                    String post = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_POST_NAME);
-                    String department = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
-                    String email = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_USER_EMAIL);
-                    String departmentId = AppConfig.getAppConfig(MainController.this).get(AppConfig.PREF_KEY_DEPARTMENT);
-                    FriendsInfoCacheSvc.getInstance(MainController.this)
-                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic, sex, phone, post, department, email,departmentId));
-                }
-
-                @Override
-                public void onProgress(int progress, String status) {
-
-                }
-
-                @Override
-                public void onError(int code, String message) {
-                    LogUtils.e("登录聊天服务器失败！" + "code:" + code + "," + message);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void loadUnReadMsgOk(String num) {
+        tvMsgUnRead.setVisibility(View.VISIBLE);
+        tvMsgUnRead.setText(num);
     }
+
+    @Override
+    public void loadUnReadMsgEmpty() {
+        tvMsgUnRead.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void bindBadgeView(int msgCount) {
+        tempMsgCount = msgCount;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //绑定小红点
+                if (qBadgeView == null) {
+                    qBadgeView = new QBadgeView(AppManager.mContext);
+                }
+                qBadgeView.setBadgeGravity(Gravity.CENTER);
+                qBadgeView.bindTarget(communicationRedSupport).setBadgeNumber(tempMsgCount);
+            }
+        });
+    }
+
 
     class PageChangeListener implements ViewPager.OnPageChangeListener {
-
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -605,85 +511,6 @@ public class MainController extends BaseActivity {
         refreshCommCount();
         refreshUnReadMsgCount();
         super.onResume();
-
-    }
-
-    /**
-     * 刷新通讯小红点现实的数量
-     */
-    public void refreshCommCount() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-//                try {
-                loadConversationList();
-//                } catch (Exception e) {
-//                    LogUtils.e("加载环信抛异常了");
-//                }
-            }
-        }).start();
-    }
-
-    /**
-     * 刷新消息小红点现实的数量
-     */
-    public void refreshUnReadMsgCount() {
-        LogUtils.e("刷新msg的小红点方法执行");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loadUnReadMsg();
-            }
-        }).start();
-
-    }
-
-    /**
-     * 获取未读消息数量
-     */
-    private void loadUnReadMsg() {
-//
-        HttpParams params = new HttpParams();
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        initKjHttp().post(Api.TAB_UN_READ_MSG_COUNT, params, new HttpCallBack() {
-            @Override
-            public void onSuccess(String t) {
-                LogUtils.e(t);
-                super.onSuccess(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            JSONObject jsonObject = Api.getDataToJSONObject(jo);
-                            String num = jsonObject.getString("num");
-                            tvMsgUnRead.setVisibility(View.VISIBLE);
-                            tvMsgUnRead.setText(num);
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            tvMsgUnRead.setVisibility(View.GONE);
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-
-                } catch (Exception e) {
-                }
-            }
-        });
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -732,7 +559,7 @@ public class MainController extends BaseActivity {
                 FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
                         Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic,
                         userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost,
-                        userInfoBean.userDepartment, userInfoBean.userEmail,userInfoBean.userDepartmentId));
+                        userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
             }
             refreshCommCount();
         }
@@ -764,87 +591,17 @@ public class MainController extends BaseActivity {
         }
     };
 
-    protected List<EMConversation> loadConversationList() {
-        // get all conversations
-        Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
-        if (conversations.isEmpty()) {
-
-        }
-        List<Pair<Long, EMConversation>> sortList = new ArrayList<>();
-        synchronized (conversations) {
-            for (EMConversation conversation : conversations.values()) {
-                if (conversation.getAllMessages().size() != 0) {
-                    //java.lang.NullPointerException: Attempt to invoke virtual method
-                    // 'long com.hyphenate.chat.EMMessage.getMsgTime()' on a null object reference
-                    sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
-                }
-            }
-        }
-        List<EMConversation> list = new ArrayList<EMConversation>();
-        for (Pair<Long, EMConversation> sortItem : sortList) {
-            list.add(sortItem.second);
-        }
-        int tempCount = 0;
-        for (int i = 0; i < list.size(); i++) {
-            int size = list.get(i).getUnreadMsgCount();
-            tempCount = tempCount + size;
-        }
-        tempMsgCount = tempCount;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //绑定小红点
-                if (qBadgeView == null) {
-                    qBadgeView = new QBadgeView(AppManager.mContext);
-                }
-                qBadgeView.setBadgeGravity(Gravity.CENTER);
-                qBadgeView.bindTarget(communicationRedSupport).setBadgeNumber(tempMsgCount);
-            }
-        });
-        return list;
-    }
-
-    //存储权限判断
-    private void applyPermission() {
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (SharedPreferenceUtil.getShouldAskPermission(this, "firstshould") &&
-                    ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) == false) {//第一次已被拒绝
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("权限开启");
-                builder.setMessage("更新功能无法正常使用，去权限列表开启该权限");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startAppSettig();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).show();
-            } else {//
-                SharedPreferenceUtil.setShouldAskPermission(this, "firstshould",
-                        ActivityCompat.shouldShowRequestPermissionRationale(this,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE));
-                ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
-            }
-
-        } else {
-//            PgyUpdateManager.setIsForced(true);
-            PgyUpdateManager.register(this, "com.shanlin.oa.provider.fileprovider");
-        }
-    }
-
     //开启权限列表
-    private void startAppSettig() {
+    public void startAppSetting() {
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         i.setData(uri);
         startActivityForResult(i, 100);
+    }
+
+    @Override
+    public void easeInitFinish(AbortableFuture<LoginInfo> loginRequest) {
+        this.loginRequest = loginRequest;
     }
 
     //位置权限回调
@@ -869,6 +626,5 @@ public class MainController extends BaseActivity {
         EMClient.getInstance().chatManager().removeMessageListener(messageListener);
         super.onDestroy();
     }
-
 
 }

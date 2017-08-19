@@ -25,10 +25,14 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.pgyersdk.crash.PgyCrashManager;
 import com.shanlin.oa.R;
-import com.shanlin.oa.ui.activity.WelcomePage;
 import com.shanlin.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlin.oa.ui.activity.home.schedule.SelectContactsActivity;
 import com.shanlin.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
+import com.shanlin.oa.ui.activity.main.WelcomePage;
+import com.shanlin.oa.ui.base.component.AppComponent;
+import com.shanlin.oa.ui.base.component.DaggerAppComponent;
+import com.shanlin.oa.ui.base.module.AppManagerModule;
+import com.shanlin.oa.ui.base.module.KjHttpModule;
 import com.shanlin.oa.utils.ScreenUtils;
 import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -63,6 +67,7 @@ public class AppManager extends Application {
     public SelectContactsActivity.MyHandler getHandler() {
         return handler;
     }
+
     // 共享变量
     private SelectJoinPeopleActivity.MyJoinHandler joinhandler = null;
 
@@ -75,10 +80,12 @@ public class AppManager extends Application {
     public SelectJoinPeopleActivity.MyJoinHandler getJoinhandler() {
         return joinhandler;
     }
+
     private static Stack<Activity> activityStack;
     private static AppManager instance;
     public static Context mContext;
 
+    private AppComponent appComponent;
 
     //内存检测start
     public static RefWatcher getRefWatcher(Context context) {
@@ -86,6 +93,7 @@ public class AppManager extends Application {
                 .getApplicationContext();
         return application.refWatcher;
     }
+
     private RefWatcher refWatcher;
     //内存检测end
 
@@ -120,7 +128,7 @@ public class AppManager extends Application {
                 AppManager.mContext);
         builder.statusBarDrawable = R.drawable.login_logo;
         builder.notificationFlags = Notification.FLAG_AUTO_CANCEL;  //设置为自动消失
-        builder.notificationDefaults = Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE |
+        builder.notificationDefaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE |
                 Notification.DEFAULT_LIGHTS;
         JPushInterface.setPushNotificationBuilder(1, builder);
         // 设置为铃声与震动都要
@@ -155,7 +163,10 @@ public class AppManager extends Application {
             StrictMode.VmPolicy.Builder vmPolicyBuilder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(vmPolicyBuilder.build());
         }
+
+        initAppComponent();
     }
+
     // 如果返回值为 null，则全部使用默认参数。
     private SDKOptions options() {
         SDKOptions options = new SDKOptions();
@@ -255,6 +266,18 @@ public class AppManager extends Application {
             instance = new AppManager();
         }
         return instance;
+    }
+
+    public AppComponent getAppComponent() {
+        return appComponent;
+    }
+
+    private void initAppComponent() {
+        appComponent = DaggerAppComponent
+                .builder()
+                .appManagerModule(new AppManagerModule(this))
+                .kjHttpModule(new KjHttpModule())
+                .build();
     }
 
     /**

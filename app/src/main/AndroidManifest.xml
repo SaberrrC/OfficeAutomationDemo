@@ -115,7 +115,7 @@
 
 
         <activity
-            android:name="com.shanlin.oa.ui.activity.WelcomePage"
+            android:name="com.shanlin.oa.ui.activity.main.WelcomePage"
             android:screenOrientation="portrait"
             android:theme="@style/WeclomeActivityTheme">
             <intent-filter>
@@ -413,7 +413,7 @@
 
         <!-- 首页控制器 -->
         <activity
-            android:name="com.shanlin.oa.ui.activity.MainController"
+            android:name="com.shanlin.oa.ui.activity.main.MainController"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <!-- 首页名片页面二级一下界面 -->

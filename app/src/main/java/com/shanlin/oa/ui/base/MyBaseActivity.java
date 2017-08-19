@@ -28,22 +28,20 @@ import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.iflytek.cloud.thirdparty.T;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.listener.PermissionListener;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
-import com.shanlin.oa.net.MyKjHttp;
 import com.shanlin.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlin.oa.ui.activity.login.LoginActivity;
 import com.shanlin.oa.ui.activity.main.MainController;
+import com.shanlin.oa.ui.base.component.ActivityComponent;
+import com.shanlin.oa.ui.base.component.DaggerActivityComponent;
+import com.shanlin.oa.ui.base.module.ActivityModule;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.ScreenUtils;
-
-import org.kymjs.kjframe.KJHttp;
-import org.kymjs.kjframe.http.HttpConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +56,10 @@ import cn.jpush.android.api.TagAliasCallback;
  * <h3>Description: 基础Activity</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class MyBaseActivity<T extends BasePresenter> extends AppCompatActivity implements BaseView {
 
     private AlertDialog loadingDialog;
     private TextView msg;
-    private KJHttp kjHttp;
     private Toast toast;
     private View empty;
 
@@ -79,8 +76,29 @@ public class BaseActivity extends AppCompatActivity {
         View loading = LayoutInflater.from(this).inflate(R.layout.public_dialog_loading, null);
         msg = (TextView) loading.findViewById(R.id.message);
         initLoadingDialog(loading);
+
+        initInject();
+
+        if (mPresenter != null) {
+            mPresenter.attachView(this);
+        }
+
     }
 
+
+    protected abstract void initInject();
+
+
+    protected ActivityComponent getActivityComponent() {
+        return DaggerActivityComponent.builder()
+                .appComponent(AppManager.sharedInstance().getAppComponent())
+                .activityModule(getActivityModule())
+                .build();
+    }
+
+    protected ActivityModule getActivityModule() {
+        return new ActivityModule(this);
+    }
 
     private void initLoadingDialog(View loading) {
         loadingDialog = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Loading).create();
@@ -88,23 +106,7 @@ public class BaseActivity extends AppCompatActivity {
         loadingDialog.setCancelable(false);
     }
 
-    public KJHttp initKjHttp() {
-        if (kjHttp == null) {
-            kjHttp = new MyKjHttp();
-            HttpConfig config = new HttpConfig();
-            HttpConfig.TIMEOUT = 10000;
-            kjHttp.setConfig(config);
-        } else {
-            kjHttp.cleanCache();
-            kjHttp.cancelAll();
-        }
-        return kjHttp;
-    }
 
-
-    public void cancleAllRequest() {
-        initKjHttp().cancelAll();
-    }
 
     public void showLoadingView() {
         loadingDialog.show();
@@ -418,7 +420,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        initKjHttp().cancelAll();
         AppManager.sharedInstance().removeActivity(this);
+        if (mPresenter != null)
+            mPresenter.detachView();
     }
 }

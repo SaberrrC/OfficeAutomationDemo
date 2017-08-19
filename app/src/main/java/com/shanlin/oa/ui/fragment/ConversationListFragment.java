@@ -23,7 +23,7 @@ import com.hyphenate.util.NetUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.thirdParty.huanxin.db.InviteMessgeDao;
-import com.shanlin.oa.ui.activity.MainController;
+import com.shanlin.oa.ui.activity.main.MainController;
 
 import java.util.concurrent.TimeUnit;
 

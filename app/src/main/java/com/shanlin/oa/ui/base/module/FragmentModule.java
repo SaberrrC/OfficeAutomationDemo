@@ -1,4 +1,4 @@
-package com.shanlin.oa.ui.module;
+package com.shanlin.oa.ui.base.module;
 
 
 import android.app.Activity;
@@ -9,7 +9,6 @@ import dagger.Provides;
 
 @Module
 public class FragmentModule {
-
 
     private Fragment fragment;
 

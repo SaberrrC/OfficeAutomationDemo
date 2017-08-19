@@ -19,23 +19,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlin.oa.R;
-import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
-import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.helper.DoubleClickExitHelper;
+import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.model.User;
-import com.shanlin.oa.ui.activity.MainController;
-import com.shanlin.oa.ui.base.BaseActivity;
+import com.shanlin.oa.ui.activity.login.contract.LoginActivityContract;
+import com.shanlin.oa.ui.activity.login.presenter.LoginActivityPresenter;
+import com.shanlin.oa.ui.activity.main.MainController;
+import com.shanlin.oa.ui.base.MyBaseActivity;
 import com.shanlin.oa.utils.AndroidAdjustResizeBugFix;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.NetWorkUtils;
 import com.shanlin.oa.utils.Utils;
 import com.shanlin.oa.views.KeyboardLayout;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,9 +43,7 @@ import butterknife.OnClick;
  * <h3>Description: 登录界面 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/30.<br />
  */
-public class LoginActivity extends BaseActivity {
-
-
+public class LoginActivity extends MyBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View {
     @Bind(R.id.user_email)
     EditText userEmail;
     @Bind(R.id.user_pwd)
@@ -86,6 +82,10 @@ public class LoginActivity extends BaseActivity {
         doubleClickExitHelper = new DoubleClickExitHelper(this);
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
 
     private void initView() {
         LogUtils.e("LoginActivity:initView");
@@ -111,7 +111,6 @@ public class LoginActivity extends BaseActivity {
      * 给根view添加布局大小改变的监听
      */
     private void setListenerForWidget() {
-
         mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -128,6 +127,7 @@ public class LoginActivity extends BaseActivity {
                 mHandler.sendEmptyMessage(UPDATE_RECYCLERVIEW_POSITION);
             }
         });
+
         mCbAutoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -150,53 +150,7 @@ public class LoginActivity extends BaseActivity {
                     (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(userEmail.getWindowToken(), 0);
             showLoadingView();
-            HttpParams params = new HttpParams();
-            params.put("email", userEmail.getText().toString());
-            params.put("pwd", userPwd.getText().toString());
-            initKjHttp().post(Api.LOGIN, params, new HttpCallBack() {
-                @Override
-                public void onFinish() {
-                    super.onFinish();
-                    hideLoadingView();
-                }
-
-                @Override
-                public void onSuccess(String t) {
-                    super.onSuccess(t);
-                    System.out.println(t);
-                    LogUtils.e("登录返回数据-》" + t);
-                    try {
-                        JSONObject jo = new JSONObject(t);
-                        if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                            showToast(LoginActivity.this, "登录成功");
-                            //登录成功后清空原来的信息
-                            AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
-                            //保存登录用户信息
-                            User user = new User(Api.getDataToJSONObject(jo));
-                            LogUtils.e("user->" + user);
-                            AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
-                            startActivity(new Intent(LoginActivity.this, MainController.class));
-                            finish();
-                        } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                            catchWarningByCode(Api.getCode(jo));
-                        } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR)) {
-                            userPwd.setText("");
-                            showToast(Api.getInfo(jo));
-                        } else {
-                            showToast(Api.getInfo(jo));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(int errorNo, String strMsg) {
-                    LogUtils.e(errorNo + "--" + strMsg);
-                    catchWarningByCode(errorNo);
-                    super.onFailure(errorNo, strMsg);
-                }
-            });
+            mPresenter.login(userEmail.getText().toString(), userPwd.getText().toString());
         }
     }
 
@@ -240,8 +194,34 @@ public class LoginActivity extends BaseActivity {
         ButterKnife.unbind(this);
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
-
     }
 
+    @Override
+    public void loginSuccess(JSONObject userInfo) {
+        showToast(LoginActivity.this, "登录成功");
+        //登录成功后清空原来的信息
+        AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
+        //保存登录用户信息
+        User user = new User(userInfo);
+        LogUtils.e("user->" + user);
+        AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
+        startActivity(new Intent(LoginActivity.this, MainController.class));
+        finish();
+    }
 
+    @Override
+    public void loginFailed(int errorCode) {
+        catchWarningByCode(errorCode);
+    }
+
+    @Override
+    public void accountOrPswError(String msg) {
+        userPwd.setText("");
+        showToast(msg);
+    }
+
+    @Override
+    public void requestFinish() {
+        hideLoadingView();
+    }
 }

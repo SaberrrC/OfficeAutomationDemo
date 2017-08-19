@@ -13,8 +13,8 @@ import com.hyphenate.chat.EMConversation;
 //import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.shanlin.oa.R;
+import com.shanlin.oa.ui.activity.main.MainController;
 import com.shanlin.oa.ui.activity.message.EaseChatMessageActivity;
-import com.shanlin.oa.ui.activity.MainController;
 import com.shanlin.oa.ui.base.BaseFragment;
 import com.shanlin.oa.utils.LogUtils;
 

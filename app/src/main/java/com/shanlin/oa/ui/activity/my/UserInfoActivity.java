@@ -38,7 +38,7 @@ import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.listener.PermissionListener;
 import com.shanlin.oa.ui.activity.login.LoginActivity;
-import com.shanlin.oa.ui.activity.MainController;
+import com.shanlin.oa.ui.activity.main.MainController;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.FileUtils;
 import com.shanlin.oa.utils.LogUtils;

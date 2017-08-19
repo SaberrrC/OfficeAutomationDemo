@@ -32,7 +32,7 @@ import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.model.EventMessage;
 import com.shanlin.oa.model.PushMsg;
 import com.shanlin.oa.ui.activity.home.approval.ApprovalListActivity;
-import com.shanlin.oa.ui.activity.MainController;
+import com.shanlin.oa.ui.activity.main.MainController;
 import com.shanlin.oa.ui.activity.home.schedule.MeetingInfoActivity;
 import com.shanlin.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlin.oa.ui.activity.home.workreport.WorkReportListActivity;

@@ -1,7 +1,9 @@
-package com.shanlin.oa.ui.module;
+package com.shanlin.oa.ui.base.module;
 
 import android.app.Activity;
+
 import com.shanlin.oa.ui.annotation.PerActivity;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -22,6 +24,4 @@ public class ActivityModule {
     public Activity provideActivity() {
         return mActivity;
     }
-
-
 }

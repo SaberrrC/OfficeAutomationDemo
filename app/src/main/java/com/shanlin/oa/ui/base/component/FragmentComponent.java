@@ -1,9 +1,9 @@
-package com.shanlin.oa.ui.component;
+package com.shanlin.oa.ui.base.component;
 
 import android.app.Activity;
 
 import com.shanlin.oa.ui.annotation.PerFragment;
-import com.shanlin.oa.ui.module.FragmentModule;
+import com.shanlin.oa.ui.base.module.FragmentModule;
 import dagger.Component;
 
 /**

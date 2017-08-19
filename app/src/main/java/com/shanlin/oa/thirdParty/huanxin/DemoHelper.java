@@ -55,7 +55,7 @@ import com.shanlin.oa.thirdParty.huanxin.domain.RobotUser;
 import com.shanlin.oa.thirdParty.huanxin.manager.UserProfileManager;
 import com.shanlin.oa.thirdParty.huanxin.receiver.CallReceiver;
 import com.shanlin.oa.thirdParty.huanxin.manager.PreferenceManager;
-import com.shanlin.oa.ui.activity.MainController;
+import com.shanlin.oa.ui.activity.main.MainController;
 import com.shanlin.oa.ui.activity.message.VoiceCallActivity;
 
 import java.util.ArrayList;
