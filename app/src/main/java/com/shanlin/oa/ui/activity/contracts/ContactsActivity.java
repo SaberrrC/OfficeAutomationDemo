@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -18,17 +17,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
-import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.model.Contacts;
+import com.shanlin.oa.ui.activity.contracts.contract.ContractActivityContract;
+import com.shanlin.oa.ui.activity.contracts.presenter.ContractActivityPresenter;
 import com.shanlin.oa.ui.adapter.TabContactsAdapter;
-import com.shanlin.oa.ui.base.BaseActivity;
-import com.shanlin.oa.utils.LogUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
+import com.shanlin.oa.ui.base.MyBaseActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +36,7 @@ import butterknife.OnClick;
  * <h3>Description: 首页名片页面二级一下界面 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/9/22.<br />
  */
-public class ContactsActivity extends BaseActivity {
+public class ContactsActivity extends MyBaseActivity<ContractActivityPresenter> implements ContractActivityContract.View {
 
 
     @Bind(R.id.recycler_view)
@@ -88,9 +81,13 @@ public class ContactsActivity extends BaseActivity {
         setContentView(view);
         ButterKnife.bind(this);
         setTranslucentStatus(this);
-
         initWidget();
         loadData(pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID));
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initWidget() {
@@ -115,77 +112,51 @@ public class ContactsActivity extends BaseActivity {
     private void loadData(String departmentId) {
         title.setText(pageMap.get(pageMap.size() - 1).get(PAGE_MAP_TITLE));
         showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("department_id", departmentId);
-        initKjHttp().post(Api.GET_CONTACTS, params, new HttpCallBack() {
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
+        mPresenter.loadData(departmentId);
+    }
 
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t.toString());
+    @Override
+    public void loadDataSuccess(List<Contacts> contacts) {
+        if (items.size() > 0 || items != null) {
+            items.clear();
+        }
+        items = contacts;
+        adapter = new TabContactsAdapter(items);
+        recyclerView.setAdapter(adapter);
+    }
 
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            if (items.size() > 0 || items != null) {
-                                items.clear();
-                            }
-                            JSONArray jDepartment = Api.getDataToJSONObject(jo)
-                                    .getJSONArray("department");
-                            for (int i = 0; i < jDepartment.length(); i++) {
-                                JSONObject d = jDepartment.getJSONObject(i);
-                                Contacts c = new Contacts(d);
-                                items.add(c);
-                            }
-                            JSONArray jEmployee = Api.getDataToJSONObject(jo)
-                                    .getJSONArray("employee");
-                            for (int i = 0; i < jEmployee.length(); i++) {
-                                JSONObject e = jEmployee.getJSONObject(i);
-                                Contacts c = new Contacts(e);
-                                items.add(c);
-                            }
-                            adapter = new TabContactsAdapter(items);
-                            recyclerView.setAdapter(adapter);
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            showEmptyView(mRlRecyclerViewContainer, "您还没有联系人", 0, false);
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    System.out.println(e.toString());
-                }
-            }
+    @Override
+    public void loadDataFailed(int errorNo, String strMsg) {
+        String info = "";
+        switch (errorNo) {
+            case Api.RESPONSES_CODE_NO_NETWORK:
+                info = "请确认是否已连接网络！";
+                break;
+            case Api.RESPONSES_CODE_NO_RESPONSE:
+                info = "网络不稳定，请重试！";
+                break;
+        }
+        showEmptyView(mRlRecyclerViewContainer, info, 0, false);
+    }
 
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                hideLoadingView();
-                String info = "";
-                switch (errorNo) {
-                    case Api.RESPONSES_CODE_NO_NETWORK:
-                        info = "请确认是否已连接网络！";
-                        break;
-                    case Api.RESPONSES_CODE_NO_RESPONSE:
-                        info = "网络不稳定，请重试！";
-                        break;
-                }
-                showEmptyView(mRlRecyclerViewContainer, info, 0, false);
-                super.onFailure(errorNo, strMsg);
-            }
-        });
+    @Override
+    public void loadDataEmpty() {
+        showEmptyView(mRlRecyclerViewContainer, "您还没有联系人", 0, false);
+    }
+
+    @Override
+    public void loadDataFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void loadDataTokenNoMatch(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 
     class ItemClick extends OnItemClickListener {
@@ -228,8 +199,8 @@ public class ContactsActivity extends BaseActivity {
         bundle.putSerializable("contacts", contacts);
         intent.putExtras(bundle);
         startActivity(intent);
-
     }
+
 //    @SuppressLint("SetTextI18n")
 //    private void showContactsInfo(final Contacts contacts) {
 //
@@ -351,20 +322,6 @@ public class ContactsActivity extends BaseActivity {
 //        popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
 //        popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
 //    }
-
-
-    private void showEmptyView() {
-        @SuppressLint("InflateParams")
-        View empty = LayoutInflater.from(this).inflate(R.layout.public_empty_view, null);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        empty.setLayoutParams(lp);
-        ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
-        imageView.setImageResource(R.drawable.contacts_empty_icon);
-        TextView msg = (TextView) empty.findViewById(R.id.message);
-        msg.setText("很抱歉，您还没有通讯录好友");
-        view.addView(empty);
-    }
 
     @OnClick({R.id.btn_back, R.id.title})
     public void onClick(View view) {

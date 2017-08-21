@@ -20,12 +20,12 @@ import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Constants;
-import com.shanlin.oa.ui.activity.message.EaseChatMessageActivity;
-import com.shanlin.oa.ui.activity.message.VoiceCallActivity;
+import com.shanlin.oa.listener.PermissionListener;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.User;
-import com.shanlin.oa.listener.PermissionListener;
+import com.shanlin.oa.ui.activity.message.EaseChatMessageActivity;
+import com.shanlin.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.GlideRoundTransformUtils;
 import com.shanlin.oa.utils.Utils;
@@ -74,7 +74,14 @@ public class Contact_Details_Activity extends BaseActivity {
     ImageView ivImgUser;
 
     private User user;
-
+    String nickName;
+    String portrait;
+    String department;
+    String post;
+    String sex;
+    String phone;
+    String email;
+    String departmentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,14 +96,7 @@ public class Contact_Details_Activity extends BaseActivity {
         }
     }
 
-    String nickName;
-    String portrait;
-    String department;
-    String post;
-    String sex;
-    String phone;
-    String email;
-    String departmentId;
+
 
     private void initSessionInfo() {
         final String userInfo = this.getIntent().getStringExtra("userInfo");

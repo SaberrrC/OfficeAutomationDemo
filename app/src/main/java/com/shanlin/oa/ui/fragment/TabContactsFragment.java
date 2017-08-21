@@ -16,7 +16,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,15 +39,10 @@ import com.shanlin.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlin.oa.ui.activity.contracts.ContactsActivity;
 import com.shanlin.oa.ui.adapter.SearchUserResultAdapter;
 import com.shanlin.oa.ui.adapter.TabContactsAdapter;
-import com.shanlin.oa.ui.base.BaseFragment;
-import com.shanlin.oa.utils.LogUtils;
+import com.shanlin.oa.ui.base.MyBaseFragment;
+import com.shanlin.oa.ui.fragment.contract.TabContractsFragmentContract;
+import com.shanlin.oa.ui.fragment.presenter.TabContractsFragmentPresenter;
 import com.shanlin.oa.views.ClearEditText;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +62,7 @@ import io.reactivex.schedulers.Schedulers;
  * <h3>Description: 名片页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class TabContactsFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabContractsFragmentContract.View {
 
     @Bind(R.id.title)
     TextView title;
@@ -90,7 +84,6 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
 
     private Dialog dialog;
     private List<Contacts> items = new ArrayList<>();
-    private TabContactsAdapter adapter;
     private RelativeLayout view;
     private RelativeLayout mRlRecyclerViewContainer;
     private Window window;
@@ -146,10 +139,8 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
         viewBack.setVisibility(View.GONE);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new TabContactsAdapter(items);
         //在初始化是为RecyclerView添加点击事件，这样可以防止重复点击问题
         recyclerView.addOnItemTouchListener(new ItemClick());
-
 
 //        title.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_COMPANY_NAME));
         loadData();
@@ -166,94 +157,6 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
         });
 
 
-        //监听软键盘确认键,触发搜索功能,为匹配IOS 此功能注释掉
-//        search_et_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-//                switch (i) {
-//                    case EditorInfo.IME_ACTION_SEARCH:
-//                        final String uid = AppConfig.getAppConfig(AppManager.mContext)
-//                                .get(AppConfig.PREF_KEY_USER_UID);
-//                        String token = AppConfig.getAppConfig(AppManager.mContext)
-//                                .get(AppConfig.PREF_KEY_TOKEN);
-//                        String departmentId = AppConfig.getAppConfig(AppManager.mContext)
-//                                .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
-//                        String isleader = AppConfig.getAppConfig(AppManager.mContext)
-//                                .get(AppConfig.PREF_KEY_IS_LEADER);
-//
-//                        HttpParams params = new HttpParams();
-//                        params.put("uid", uid);
-//                        params.put("token", token);
-//                        params.put("oid", departmentId);
-//                        params.put("isleader", isleader);
-//                        params.put("name", search_et_input.getText().toString());
-//
-//                        initKjHttp().post(Api.PHONEBOOK_SEARCHPHONEBOOK, params, new HttpCallBack() {
-//                            @Override
-//                            public void onFinish() {
-//                                super.onFinish();
-//                                hideLoadingView();
-//                            }
-//
-//                            @Override
-//                            public void onSuccess(String t) {
-//                                super.onSuccess(t);
-//                                System.out.println(t);
-//                                LogUtils.e("联系人返回数据-》" + t);
-//
-//                                if (userList == null) {
-//                                    userList = new ArrayList<User>();
-//                                } else {
-//                                    userList.clear();
-//                                }
-//                                try {
-//                                    JSONObject jo = new JSONObject(t);
-//                                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-//                                        JSONArray jDepartment = jo.getJSONArray("data");
-//                                        for (int i = 0; i < jDepartment.length(); i++) {
-//                                            JSONObject jsonObject = jDepartment.getJSONObject(i);
-//                                            Log.e("", "-------" + jsonObject.getString("username") + "----" + jsonObject.getString("department_name"));
-//                                            User user = new User(jsonObject.getString("username"),
-//                                                    jsonObject.getString("phone"),
-//                                                    jsonObject.getString("portrait"),
-//                                                    jsonObject.getString("sex"),
-//                                                    jsonObject.getString("post_id"),
-//                                                    jsonObject.getString("CODE"),
-//                                                    jsonObject.getString("department_id"),
-//                                                    jsonObject.getString("post_title"),
-//                                                    jsonObject.getString("department_name"),
-//                                                    jsonObject.getString("email"),
-//                                                    jsonObject.getString("isshow"));
-//                                            userList.add(user);
-//                                        }
-//                                        inputManager.hideSoftInputFromWindow(
-//                                                getActivity().getCurrentFocus().getWindowToken(),
-//                                                InputMethodManager.HIDE_NOT_ALWAYS);
-//                                        recyclerViewSearchResult.setVisibility(View.VISIBLE);
-//                                        SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
-//                                        recyclerViewSearchResult.setAdapter(adapter);
-//                                    } else {
-//                                        showToast(Api.getInfo(jo));
-//                                    }
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onFailure(int errorNo, String strMsg) {
-//                                LogUtils.e(errorNo + "--" + strMsg);
-//                                catchWarningByCode(errorNo);
-//                                super.onFailure(errorNo, strMsg);
-//                            }
-//                        });
-//
-//                        break;
-//                }
-//                return true;
-//            }
-//        });
-
         //EditText 自动搜索,间隔->输入停止1秒后自动搜索
         RxTextView.textChanges(search_et_input)
                 .debounce(1000, TimeUnit.MILLISECONDS)
@@ -266,94 +169,20 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                             return;
                         }
                         if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())) {
-                            final String uid = AppConfig.getAppConfig(AppManager.mContext)
-                                    .get(AppConfig.PREF_KEY_USER_UID);
-
-                            String token = AppConfig.getAppConfig(AppManager.mContext)
-                                    .get(AppConfig.PREF_KEY_TOKEN);
                             String departmentId = AppConfig.getAppConfig(AppManager.mContext)
                                     .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
                             String isleader = AppConfig.getAppConfig(AppManager.mContext)
                                     .get(AppConfig.PREF_KEY_IS_LEADER);
+                            mPresenter.autoSearch(departmentId, isleader, search_et_input.getText().toString().trim());
 
-                            HttpParams params = new HttpParams();
-                            params.put("uid", uid);
-                            params.put("token", token);
-                            params.put("oid", departmentId);
-                            params.put("isleader", isleader);
-                            params.put("name", search_et_input.getText().toString());
-                            
-                            initKjHttp().post(Api.PHONEBOOK_SEARCHPHONEBOOK, params, new HttpCallBack() {
-                                @Override
-                                public void onFinish() {
-                                    super.onFinish();
-                                    hideLoadingView();
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                }
-
-                                @Override
-                                public void onSuccess(String t) {
-                                    super.onSuccess(t);
-                                    System.out.println(t);
-                                    LogUtils.e("联系人返回数据-》" + t);
-
-                                    if (userList == null) {
-                                        userList = new ArrayList<User>();
-                                    } else {
-                                        userList.clear();
-                                    }
-                                    try {
-                                        JSONObject jo = new JSONObject(t);
-                                        if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                                            JSONArray jDepartment = jo.getJSONArray("data");
-                                            for (int i = 0; i < jDepartment.length(); i++) {
-                                                JSONObject jsonObject = jDepartment.getJSONObject(i);
-                                                Log.e("", "-------" + jsonObject.getString("username") + "----" + jsonObject.getString("department_name"));
-                                                User user = new User(jsonObject.getString("username"),
-                                                        jsonObject.getString("phone"),
-                                                        jsonObject.getString("portrait"),
-                                                        jsonObject.getString("sex"),
-                                                        jsonObject.getString("post_id"),
-                                                        jsonObject.getString("CODE"),
-                                                        jsonObject.getString("department_id"),
-                                                        jsonObject.getString("post_title"),
-                                                        jsonObject.getString("department_name"),
-                                                        jsonObject.getString("email"),
-                                                        jsonObject.getString("isshow"));
-                                                userList.add(user);
-                                            }
-                                            try {
-                                                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                                                        InputMethodManager.HIDE_NOT_ALWAYS);
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-
-                                            hideEmptyView();
-                                            recyclerViewSearchResult.setVisibility(View.VISIBLE);
-                                            reSetSwipRefreash();
-                                            SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
-                                            recyclerViewSearchResult.setAdapter(adapter);
-                                        } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                                            catchWarningByCode(Api.getCode(jo));
-                                        } else {
-                                            showToast(Api.getInfo(jo));
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(int errorNo, String strMsg) {
-                                    LogUtils.e(errorNo + "--" + strMsg);
-                                    catchWarningByCode(errorNo);
-                                    super.onFailure(errorNo, strMsg);
-                                }
-                            });
                         }
                     }
                 });
+    }
+
+    @Override
+    protected void initInject() {
+        getFragmentComponent().inject(this);
     }
 
 
@@ -367,94 +196,7 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
      * 加载通讯录数据
      */
     private void loadData() {
-
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(getActivity()).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(getActivity()).getPrivateToken());
-        params.put("department_id", "");
-        initKjHttp().post(Api.GET_CONTACTS, params, new HttpCallBack() {
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-                if (!isPullRefreashing) {
-                    showLoadingView();
-                    recyclerView.setVisibility(View.VISIBLE);
-                    recyclerViewSearchResult.setVisibility(View.GONE);
-
-                }
-
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-                isPullRefreashing = false;
-                mSwipeRefreshLayout.setRefreshing(false);
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                //System.out.println(t);
-                LogUtils.e(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            if (items.size() > 0 || items != null) {
-                                items.clear();
-                            }
-                            JSONArray jDepartment = Api.getDataToJSONObject(jo)
-                                    .getJSONArray("department");
-                            for (int i = 0; i < jDepartment.length(); i++) {
-                                JSONObject d = jDepartment.getJSONObject(i);
-                                Contacts c = new Contacts(d);
-                                items.add(c);
-                            }
-                            JSONArray jEmployee = Api.getDataToJSONObject(jo)
-                                    .getJSONArray("employee");
-                            for (int i = 0; i < jEmployee.length(); i++) {
-                                JSONObject e = jEmployee.getJSONObject(i);
-                                Contacts c = new Contacts(e);
-                                items.add(c);
-                            }
-
-                            hideEmptyView();
-                            recyclerView.setAdapter(adapter);
-                            reSetSwipRefreash();
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            showEmptyView(mRlRecyclerViewContainer, " ", 0, false);
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    System.out.println(e.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                hideLoadingView();
-                reSetSwipRefreash();
-                String info = "";
-                switch (errorNo) {
-                    case Api.RESPONSES_CODE_NO_NETWORK:
-                        info = "请确认是否已连接网络！";
-                        break;
-                    case Api.RESPONSES_CODE_NO_RESPONSE:
-                        info = "网络不稳定，请重试！";
-                        break;
-                }
-                showEmptyView(mRlRecyclerViewContainer, info, 0, false);
-                reSetSwipRefreash();
-                super.onFailure(errorNo, strMsg);
-            }
-        });
+        mPresenter.loadData();
     }
 
     public void reSetSwipRefreash() {
@@ -474,6 +216,106 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
         loadData();
     }
 
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void autoSearchSuccess(List<User> users) {
+        if (userList == null) {
+            userList = new ArrayList<>();
+        } else {
+            userList.clear();
+        }
+
+        userList = users;
+
+        try {
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        hideEmptyView();
+        recyclerViewSearchResult.setVisibility(View.VISIBLE);
+        reSetSwipRefreash();
+        SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
+        recyclerViewSearchResult.setAdapter(adapter);
+    }
+
+    @Override
+    public void autoSearchFailed(int errCode, String errMsg) {
+//        catchWarningByCode(errCode);
+    }
+
+    @Override
+    public void autoSearchOther(String msg) {
+        showToast(msg);
+    }
+
+    @Override
+    public void autoSearchFinish() {
+        hideLoadingView();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void loadDataStart() {
+        if (!isPullRefreashing) {
+            showLoadingView();
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerViewSearchResult.setVisibility(View.GONE);
+
+        }
+    }
+
+    @Override
+    public void loadDataSuccess(List<Contacts> contacts) {
+        if (items.size() > 0 || items != null) {
+            items.clear();
+        }
+        items = contacts;
+        hideEmptyView();
+        recyclerView.setAdapter(new TabContactsAdapter(items));
+        reSetSwipRefreash();
+    }
+
+    @Override
+    public void loadDataFailed(int code, String msg) {
+        hideLoadingView();
+        reSetSwipRefreash();
+        String info = "";
+        switch (code) {
+            case Api.RESPONSES_CODE_NO_NETWORK:
+                info = "请确认是否已连接网络！";
+                break;
+            case Api.RESPONSES_CODE_NO_RESPONSE:
+                info = "网络不稳定，请重试！";
+                break;
+        }
+        showEmptyView(mRlRecyclerViewContainer, info, 0, false);
+        reSetSwipRefreash();
+    }
+
+    @Override
+    public void loadDataEmpty() {
+        showEmptyView(mRlRecyclerViewContainer, " ", 0, false);
+    }
+
+    @Override
+    public void loadDataFinish() {
+        hideLoadingView();
+        isPullRefreashing = false;
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void loadDataTokenNoMatch(int code) {
+        catchWarningByCode(code);
+    }
+
 
     class ItemClick extends OnItemClickListener {
         @Override
@@ -490,7 +332,6 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
                     break;
                 case Contacts.EMPLOYEE:
 //                    showContactsInfo(items.get(i));
-
 
                     break;
             }
@@ -512,7 +353,6 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
         bundle.putSerializable("user", user);
         intent.putExtras(bundle);
         startActivity(intent);
-
     }
 
 //    @SuppressLint("SetTextI18n")
@@ -665,7 +505,6 @@ public class TabContactsFragment extends BaseFragment implements View.OnClickLis
             return;
         }
         startActivity(intent);
-
     }
 
 

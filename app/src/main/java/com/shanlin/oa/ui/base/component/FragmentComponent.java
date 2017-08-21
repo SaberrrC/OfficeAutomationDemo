@@ -1,9 +1,9 @@
 package com.shanlin.oa.ui.base.component;
 
-import android.app.Activity;
-
 import com.shanlin.oa.ui.annotation.PerFragment;
 import com.shanlin.oa.ui.base.module.FragmentModule;
+import com.shanlin.oa.ui.fragment.TabContactsFragment;
+
 import dagger.Component;
 
 /**
@@ -12,5 +12,6 @@ import dagger.Component;
 @PerFragment
 @Component(dependencies = AppComponent.class, modules = FragmentModule.class)
 public interface FragmentComponent {
-    Activity getActivity();
+
+    void inject(TabContactsFragment contactsFragment);
 }

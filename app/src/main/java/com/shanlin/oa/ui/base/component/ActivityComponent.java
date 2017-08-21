@@ -1,5 +1,6 @@
 package com.shanlin.oa.ui.base.component;
 
+import com.shanlin.oa.ui.activity.contracts.ContactsActivity;
 import com.shanlin.oa.ui.activity.login.FindPassWordActivity;
 import com.shanlin.oa.ui.activity.login.LoginActivity;
 import com.shanlin.oa.ui.activity.main.MainController;
@@ -19,4 +20,6 @@ public interface ActivityComponent {
     void inject(LoginActivity activity);
 
     void inject(FindPassWordActivity activity);
+
+    void inject(ContactsActivity activity);
 }
