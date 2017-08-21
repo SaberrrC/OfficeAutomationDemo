@@ -17,6 +17,7 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="android:listDivider">@drawable/divider_bg</item>
     </style>
+
     <style name="WeclomeActivityTheme" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
@@ -51,7 +52,7 @@
         <item name="android:textSize">12dp</item>
     </style>
 
-    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog"/>
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog" />
 
     <style name="AppTheme.CustomDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -104,9 +105,32 @@
         <item name="android:windowEnterAnimation">@anim/top_filter_pop_in_anim</item>
         <item name="android:windowExitAnimation">@anim/top_filter_pop_out_anim</item>
     </style>
+
     <style name="dialog_pop_anim_style">
         <item name="android:windowEnterAnimation">@anim/dialog_pop_in_anim</item>
         <item name="android:windowExitAnimation">@anim/dialog_pop_out_anim</item>
     </style>
 
+
+    <!--发起工作汇报页面左侧字体样式-->
+    <style name="work_report_launch_left_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginLeft">@dimen/common_margin_left</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black_333333</item>
+    </style>
+
+    <!--发起工作汇报页面左侧字体样式-->
+    <style name="work_report_launch_right_text_style">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginLeft">@dimen/common_margin_right</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/work_report_launch_activity_right_text_color</item>
+    </style>
 </resources>

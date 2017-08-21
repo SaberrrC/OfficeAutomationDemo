@@ -33,6 +33,7 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="c_cc">#CCCCCC</color>
+    <color name="black_333333">#333333</color>
 
     <color name="popBg">#ebebec</color>
 
@@ -51,4 +52,7 @@
     <!--覆盖颜色-->
     <color name="bgColor_overlay">#60000000</color>
     <color name="lineColor">#babdbf</color>
+
+    <!--driver line color-->
+    <color name="gray_E5E5E5">#E5E5E5</color>
 </resources>

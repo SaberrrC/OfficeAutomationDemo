@@ -6,11 +6,11 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shanlin.uilibrary.R;
+
 
 /**
  * Created by 丁 on 2017/8/18.
@@ -23,8 +23,6 @@ public class CommonTopBar extends LinearLayout {
     private TextView mLeftTextBtn; // 左侧文字按钮
     private TextView mRightTextBtn; // 右侧文字按钮
     private TextView mTitle; // 标题
-    private ImageButton mLeftImageBtn; // 左侧图片按钮
-    private ImageButton mRightImageBtn; // 右侧图片按钮
 
 
     private int mTitleSize; //标题文字大小
@@ -56,11 +54,9 @@ public class CommonTopBar extends LinearLayout {
     }
 
     private void initView(Context context) {
-        View rootView = LayoutInflater.from(context).inflate(R.layout.common_title_bar, this, false);
+        View rootView = LayoutInflater.from(context).inflate(R.layout.common_top_bar, this, false);
         mLeftTextBtn = (TextView) rootView.findViewById(R.id.left_text_btn);
         mRightTextBtn = (TextView) rootView.findViewById(R.id.right_text_btn);
-        mLeftImageBtn = (ImageButton) rootView.findViewById(R.id.left_image_btn);
-        mRightImageBtn = (ImageButton) rootView.findViewById(R.id.right_image_btn);
         mTitle = (TextView) rootView.findViewById(R.id.title);
     }
 

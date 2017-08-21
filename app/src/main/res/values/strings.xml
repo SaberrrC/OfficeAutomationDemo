@@ -66,4 +66,13 @@
 
     <string name="multi_device_logged_in_device_kick_item">将设备移除</string>
     <!-- 环信结束 -->
+
+    <!--发起日报-->
+    <string name="work_report_launch_title">发起工作日报</string>
+    <string name="work_report_right_btn_text">发起</string>
+    <string name="work_report_select_date_text">请选择需要填写的时间</string>
+    <string name="work_report_please_select">请选择</string>
+    <string name="work_report_tomorrow_plan">明日计划</string>
+    <string name="work_report_please_write_tomorrow_plan">请在此填写您的明日计划.</string>
+    <string name="work_report_receiver">接收人</string>
 </resources>
