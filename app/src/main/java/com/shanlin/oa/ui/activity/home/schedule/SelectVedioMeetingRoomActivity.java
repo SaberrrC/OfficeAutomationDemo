@@ -142,7 +142,7 @@ public class SelectVedioMeetingRoomActivity extends BaseActivity implements View
                         info = "网络不稳定，请重试！";
                         break;
                 }
-                showEmptyView(null, info, 0, false);
+                //showEmptyView(null, info, 0, false);
                 super.onFailure(errorNo, strMsg);
             }
         });

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 
 import com.shanlin.oa.R;
+import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.ui.activity.login.LoginActivity;
 import com.shanlin.oa.ui.activity.main.component.DaggerWelcomePageComponent;
@@ -25,6 +26,9 @@ import javax.inject.Inject;
 public class WelcomePage extends Activity implements WelcomePageContract.View {
     @Inject
     public WelcomePageContract.Presenter mPresenter;
+    private String uid;
+    private String token;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +38,13 @@ public class WelcomePage extends Activity implements WelcomePageContract.View {
         setContentView(view);
         startAnimation(view);
         getComponent().inject(this);
-        mPresenter.checkoutTimeOut();
+        uid = AppConfig.getAppConfig(AppManager.mContext)
+                .get(AppConfig.PREF_KEY_USER_UID);
+        token = AppConfig.getAppConfig(AppManager.mContext)
+                .get(AppConfig.PREF_KEY_TOKEN);
+        mPresenter.checkoutTimeOut(uid, token);
         mPresenter.getDomain();
+
     }
 
     private WelcomePageComponent getComponent() {
@@ -52,8 +61,8 @@ public class WelcomePage extends Activity implements WelcomePageContract.View {
 
 
     @Override
-    public void checkTimeOutSuccess(boolean isTimeOut, String uid) {
-        if (isTimeOut && !TextUtils.isEmpty(uid)) {//不超时
+    public void checkTimeOutSuccess() {
+        if (!TextUtils.isEmpty(uid) && !TextUtils.isEmpty(token)) {//不超时
             startActivity(new Intent(AppManager.mContext, MainController.class));
         } else {
             Log.e("ding", "checkTimeOutSuccess" + "login");
@@ -62,9 +71,8 @@ public class WelcomePage extends Activity implements WelcomePageContract.View {
     }
 
     @Override
-    public void checkTimeOutFailed(String token) {
-        if (!TextUtils.isEmpty(token)) { //token不为空，表明仍然是登录状态
-            startActivity(new Intent(AppManager.mContext, MainController.class));
+    public void checkTimeOutFailed() {
+        if (!TextUtils.isEmpty(uid) && !TextUtils.isEmpty(token)) { //token不为空，表明仍然是登录状态            startActivity(new Intent(AppManager.mContext, MainController.class));
         } else {
             Log.e("ding", "checkTimeOutFailed" + "token" + ":null");
             startActivity(new Intent(AppManager.mContext, LoginActivity.class));

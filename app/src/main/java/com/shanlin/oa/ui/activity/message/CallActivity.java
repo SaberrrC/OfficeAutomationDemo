@@ -21,6 +21,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.Status;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.Constant;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 import com.shanlin.oa.R;
@@ -42,6 +43,7 @@ public class CallActivity extends BaseActivity {
     protected final int MSG_CALL_RLEASE_HANDLER = 5;
     protected final int MSG_CALL_SWITCH_CAMERA = 6;
     public String sideInfo;
+    protected String myAccount;
     protected boolean isInComingCall;
     protected boolean isRefused = false;
     protected String username;
@@ -175,7 +177,10 @@ public class CallActivity extends BaseActivity {
                         if (msg.what == MSG_CALL_MAKE_VIDEO) {
                             EMClient.getInstance().callManager().makeVideoCall(username);
                         } else {
-                            EMClient.getInstance().callManager().makeVoiceCall(username, sideInfo);
+                            String nickName = FriendsInfoCacheSvc.getInstance(CallActivity.this).getNickName("SL_"+myAccount);
+                            String portrait = FriendsInfoCacheSvc.getInstance(CallActivity.this).getPortrait("SL_" + myAccount);
+
+                            EMClient.getInstance().callManager().makeVoiceCall(username, nickName+"|"+portrait);
                         }
                     } catch (final EMServiceNotReadyException e) {
                         e.printStackTrace();

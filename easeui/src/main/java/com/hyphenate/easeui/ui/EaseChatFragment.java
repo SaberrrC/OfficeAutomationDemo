@@ -20,7 +20,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -242,10 +241,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             @Override
             public void onSendMessage(String content) {
-                // TODO: 2017/8/15 测试发送两万条
-//                for (int i = 0; i < 20100; i++) {
-//                    sendTextMessage(content);
-//                }
                 sendTextMessage(content);
             }
 
@@ -257,7 +252,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                         //TODO 请求录音权限
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
                     }
-                },v, event, new EaseVoiceRecorderCallback() {
+                }, v, event, new EaseVoiceRecorderCallback() {
 
                     @Override
                     public void onVoiceRecordComplete(String voiceFilePath, int voiceTimeLength) {
@@ -620,12 +615,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 EaseUI.getInstance().getNotifier().onNewMsg(message);
             }
         }
-       messageList.refresh();
+        messageList.refresh();
     }
 
     @Override
     public void onCmdMessageReceived(List<EMMessage> messages) {
-        Log.e("dingd","dfdfsfsdf");
+
     }
 
     @Override
@@ -720,6 +715,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     //send message
     protected void sendTextMessage(String content) {
+        //TODO TEXT 携带消息
         JSONObject object = new JSONObject();
         try {
             object.put("userId", getArguments().getString("meId", "-"));
@@ -736,23 +732,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         }
         String string = object.toString();
 
-
-        //对方的信息
-//        String to_user_id = getArguments().getString("userId", "-");
-//        String to_user_nike = getArguments().getString("to_user_nike", "-");
-//        String to_user_pic = getArguments().getString("to_user_pic", "-");
-//        String to_user_department = getArguments().getString("to_user_department", "-");
-//        String to_user_post = getArguments().getString("to_user_post", "-");
-//        String to_user_sex = getArguments().getString("to_user_sex", "-");
-//        String to_user_phone = getArguments().getString("to_user_phone", "-");
-//        String to_user_email = getArguments().getString("to_user_email", "-");
-
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
         } else {
-                EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
-                message.setAttribute("userInfo", string);
-                sendMessage(message);
+            EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
+            message.setAttribute("userInfo", string);
+            sendMessage(message);
         }
     }
 
@@ -787,6 +772,23 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     protected void sendVoiceMessage(String filePath, int length) {
         EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, toChatUsername);
+        //TODO 语音携带消息
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userId", getArguments().getString("meId", "-"));
+            object.put("userName", getArguments().getString("userName", "-"));
+            object.put("userPic", getArguments().getString("userPic", "-"));
+            object.put("userSex", getArguments().getString("userSex", "-"));
+            object.put("userPhone", getArguments().getString("userPhone", "-"));
+            object.put("userPost", getArguments().getString("userPost", "-"));
+            object.put("userDepartment", getArguments().getString("userDepartment", "-"));
+            object.put("userEmail", getArguments().getString("userEmail", "-"));
+            object.put("userDepartmentId", getArguments().getString("userDepartmentId", "-"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String string = object.toString();
+        message.setAttribute("userInfo", string);
         sendMessage(message);
     }
 
@@ -981,7 +983,18 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
      * select local image
      */
     protected void selectFroVoiceCall() {
-        mListener.voiceCallListener(toChatUsername);
+        requestRunTimePermission(new String[]{Manifest.permission.RECORD_AUDIO}, new PermissionListener() {
+            @Override
+            public void onGranted() {
+                mListener.voiceCallListener(toChatUsername);
+            }
+
+            @Override
+            public void onDenied() {
+                Toast.makeText(getContext(), "语音权限被拒绝！请手动设置", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     /**
@@ -1317,7 +1330,14 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                                 e.printStackTrace();
                                 getActivity().runOnUiThread(new Runnable() {
                                     public void run() {
-                                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        switch (e.getErrorCode()) {
+                                            case 303:
+                                                Toast.makeText(getActivity(), "服务器出错!", Toast.LENGTH_SHORT).show();
+                                                break;
+                                            default:
+                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                break;
+                                        }
                                     }
                                 });
                             }

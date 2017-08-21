@@ -14,11 +14,17 @@
 
 package com.shanlin.oa.ui.activity.message;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,19 +45,23 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.adapter.EaseConversationAdapter;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.exceptions.EMNoActiveCallException;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.shanlin.oa.R;
+import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.utils.GlideRoundTransformUtils;
 
 import java.util.UUID;
 
+
 /**
  * 语音通话页面
  */
-public class VoiceCallActivity extends CallActivity implements OnClickListener {
+public class VoiceCallActivity extends CallActivity implements OnClickListener, SensorEventListener {
     private LinearLayout comingBtnContainer;
     private Button hangupBtn;
     private Button refuseBtn;
@@ -61,6 +71,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
     private SimpleDraweeView mSwingCard;
     private boolean isMuteState;
     private boolean isHandsfreeState;
+    TextView nickTextView;
     public String sideInfo;
     private TextView callStateTextView;
     private boolean endCallTriggerByMe = false;
@@ -83,6 +94,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 //		DemoHelper.getInstance().isVoiceCalling = true;
         callType = 0;
 
+        myAccount = AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE);
+
         comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
         refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
         answerBtn = (Button) findViewById(R.id.btn_answer_call);
@@ -91,7 +104,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         mSwingCard = (SimpleDraweeView) findViewById(R.id.swing_card);
         handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
-        TextView nickTextView = (TextView) findViewById(R.id.tv_nick);
+        nickTextView = (TextView) findViewById(R.id.tv_nick);
         TextView durationTextView = (TextView) findViewById(R.id.tv_calling_duration);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
         voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
@@ -150,6 +163,85 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         final int MAKE_CALL_TIMEOUT = 50 * 1000;
         handler.removeCallbacks(timeoutHangup);
         handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
+
+        mManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        //获取系统服务POWER_SERVICE，返回一个PowerManager对象
+        localPowerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+        localWakeLock = this.localPowerManager.newWakeLock(32, "MyPower");//第一个参数为电源锁级别，第二个是日志tag
+    }
+
+
+    //TODO 三星C700 存在Bug
+    //调用距离传感器，控制屏幕
+    private SensorManager mManager;//传感器管理对象
+    //屏幕开关
+    private PowerManager localPowerManager = null;//电源管理对象
+    private PowerManager.WakeLock localWakeLock = null;//电源锁
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float[] its = event.values;
+        //Log.d(TAG,"its array:"+its+"sensor type :"+event.sensor.getType()+" proximity type:"+Sensor.TYPE_PROXIMITY);
+        if (its != null && event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+            //经过测试，当手贴近距离感应器的时候its[0]返回值为0.0，当手离开时返回1.0
+            if (its[0] == 0.0) {
+                // 贴近手机
+                if (localWakeLock.isHeld()) {
+                    return;
+                } else {
+                    localWakeLock.acquire();// 申请设备电源锁
+                }
+            } else {
+                // 远离手机
+                if (localWakeLock.isHeld()) {
+                    return;
+                } else {
+                    localWakeLock.setReferenceCounted(false);
+                    // 释放设备电源锁
+                    localWakeLock.release();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            String userName = null;
+            String pic = null;
+
+            String callExt = EMClient.getInstance().callManager().getCurrentCallSession().getExt();
+            for (int i = 0; i < callExt.length(); i++) {
+                char charAt = callExt.charAt(i);
+                String string = new String(String.valueOf(charAt));
+                if (string.equals("|")) {
+                    userName = callExt.substring(0, i);
+                    pic = callExt.substring(i + 1, callExt.length());
+                    break;
+                }
+            }
+            EaseConversationAdapter.requestNamePic(userName, pic);
+
+            if (!TextUtils.isEmpty(userName))
+                nickTextView.setText(userName);
+            if (!TextUtils.isEmpty(pic))
+                Glide.with(AppManager.mContext)
+                        .load(pic)
+                        .error(R.drawable.ease_default_avatar)
+                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(mSwingCard);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        mManager.registerListener((SensorEventListener) this, mManager.getDefaultSensor(Sensor.TYPE_PROXIMITY),// 距离感应器
+                SensorManager.SENSOR_DELAY_NORMAL);//注册传感器，第一个参数为距离监听器，第二个是传感器类型，第三个是延迟类型
     }
 
     /**
@@ -174,8 +266,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                         });
                         break;
                     case CONNECTED:
+                        //获取扩展内容
                         runOnUiThread(new Runnable() {
-
                             @Override
                             public void run() {
                                 String st3 = getResources().getString(R.string.have_connected_with);
@@ -429,6 +521,21 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 //        DemoHelper.getInstance().isVoiceCalling = false;
         stopMonitor();
         super.onDestroy();
+        try {
+            if (mManager != null) {
+                //释放电源锁
+                localWakeLock.release();
+                //注销传感器监听
+                mManager.unregisterListener(this);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        try {
+            EMClient.getInstance().callManager().endCall();
+        } catch (EMNoActiveCallException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

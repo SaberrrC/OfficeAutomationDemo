@@ -16,6 +16,7 @@ import android.text.TextUtils;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
+import com.github.moduth.blockcanary.BlockCanary;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.netease.nimlib.sdk.NIMClient;
@@ -33,7 +34,9 @@ import com.shanlin.oa.ui.base.component.AppComponent;
 import com.shanlin.oa.ui.base.component.DaggerAppComponent;
 import com.shanlin.oa.ui.base.module.AppManagerModule;
 import com.shanlin.oa.ui.base.module.KjHttpModule;
+import com.shanlin.oa.utils.AppBlockCanaryContext;
 import com.shanlin.oa.utils.ScreenUtils;
+import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -163,6 +166,12 @@ public class AppManager extends Application {
             StrictMode.VmPolicy.Builder vmPolicyBuilder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(vmPolicyBuilder.build());
         }
+        //leakCanary
+        if (!LeakCanary.isInAnalyzerProcess(this)) {
+            LeakCanary.install(this);
+        }
+        //blockCanary
+        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
         initAppComponent();
     }

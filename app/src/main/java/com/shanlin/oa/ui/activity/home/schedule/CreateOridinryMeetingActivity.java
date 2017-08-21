@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -15,6 +16,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.manager.AppConfig;
@@ -110,14 +113,32 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
         beginTimeView.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                tvMeetTime.setText(beginTimes.get(options1));
+                String RoomName = getRoomName();
                 begintime = beginTimes.get(options1);
+                if (begintime.equals("24:00")) {
+                    Toast.makeText(CreateOridinryMeetingActivity.this, RoomName + "  "+ currentDate + "会议排期时间已到上限!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                tvMeetTime.setText(beginTimes.get(options1));
                 sendBeginTime();
             }
         });
         beginTimeView.setCyclic(false);
         beginTimeView.show();
 
+    }
+
+    @NonNull
+    private String getRoomName() {
+        String RoomName = "";
+        for (int j = 0; j < meetRoom.getRoomname().length(); j++) {
+            char charAt = meetRoom.getRoomname().charAt(j);
+            if ("（".equals(String.valueOf(charAt))) {
+                break;
+            }
+            RoomName +=  charAt;
+        }
+        return RoomName;
     }
 
     /**
@@ -347,6 +368,11 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
                     return;
                 }
 
+                if (tvMeetTime.getText().toString().trim().length() <= 8) {
+                    showToast("会议室结束时间未选择!");
+                    return;
+                }
+
                 addMeeting();
 
                 break;
@@ -550,9 +576,11 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
                     JSONObject jo = new JSONObject(t);
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
+                            beginTimes.clear();
                             JSONObject data = Api.getDataToJSONObject(jo);
                             JSONArray time = data.getJSONArray("time");
                             for (int i = 0; i < time.length(); i++) {
+
                                 beginTimes.add(time.getString(i));
                                 //System.out.println(time.getString(i));
 

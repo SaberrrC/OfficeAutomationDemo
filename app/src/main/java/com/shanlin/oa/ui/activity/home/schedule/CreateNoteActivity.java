@@ -18,11 +18,12 @@ import android.widget.TextView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.common.Constants;
-import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.listener.PermissionListener;
+import com.shanlin.oa.manager.AppConfig;
+import com.shanlin.oa.thirdParty.iflytek.IflytekUtil;
+import com.shanlin.oa.ui.activity.main.MainController;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.DateUtils;
-import com.shanlin.oa.thirdParty.iflytek.IflytekUtil;
 import com.shanlin.oa.utils.LogUtils;
 
 import org.json.JSONException;
@@ -253,8 +254,8 @@ public class CreateNoteActivity extends BaseActivity {
                     jo = new JSONObject(t);
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
 
-                        showToast("发送成功");
-                        startActivity(new Intent(CreateNoteActivity.this, ScheduleActivity.class));
+                        showToast("创建记事成功");
+                        startActivity(new Intent(CreateNoteActivity.this, MainController.class));
                         CreateNoteActivity.this.finish();
 
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {

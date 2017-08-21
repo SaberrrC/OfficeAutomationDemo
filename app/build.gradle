@@ -69,7 +69,7 @@ def preAppName() {
     return "善林OA"
 }
 def preAddress() {
-    return "\"http://api.sl.s1.zhitongoa.com/\""
+    return "\"http://api.oa.shanlinjinrong.com/\""
 }
 
 def devAddress() {
@@ -142,6 +142,11 @@ dependencies {
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:3.0.1"
     //stetho
     compile 'com.facebook.stetho:stetho:1.5.0'
+    //leakCanary 检测内存泄露
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.2'
+    //blockCanary 检测ANR
+    compile 'com.github.markzhai:blockcanary-android:1.5.0'
+
     compile project(':easeui')
     compile project(':calendarlibrary')
     compile project(':uilibrary')

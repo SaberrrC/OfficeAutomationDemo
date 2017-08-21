@@ -65,6 +65,10 @@ public class AppConfig {
     public static final String PREF_KEY_POST_NAME = "pref_key_private_post_name";
     //岗位工号
     public static final String PREF_KEY_CODE = "pref_key_private_code";
+    //登录密码
+    public static final String PREF_KEY_LOGIN_PASSWORD = "pref_key_private_login_password";
+    //记住密码
+    public static final String PREF_KEY_PASSWORD_FLAG = "pref_key_private_password_flag";
     //部门名称
     public static final String PREF_KEY_DEPARTMENT_NAME = "pref_key_private_department_name";
     //是否是原始密码
@@ -101,6 +105,17 @@ public class AppConfig {
     public String get(String key) {
         return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE)
                 .getString(key, DEFAULT_ARGUMENTS_VALUE);
+    }
+
+    /**
+     * 根据key获取参数值
+     *
+     * @param key eg:PREF_KEY_PRIVATE_TOKEN, PREF_KEY_USER_UID
+     * @return 参数值
+     */
+    public boolean get(String key,boolean b) {
+        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE)
+                .getBoolean(key, b);
     }
 
 
@@ -175,6 +190,18 @@ public class AppConfig {
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
                 Context.MODE_PRIVATE).edit();
         editor.putString(key, value);
+        editor.apply();
+    }
+    /**
+     * 保存配置信息
+     *
+     * @param key   eg:PREF_KEY_PRIVATE_TOKEN PREF_KEY_USER_UUID
+     * @param value
+     */
+    public void set(String key, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
+                Context.MODE_PRIVATE).edit();
+        editor.putBoolean(key, value);
         editor.apply();
     }
 

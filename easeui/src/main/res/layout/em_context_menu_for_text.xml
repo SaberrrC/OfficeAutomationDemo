@@ -36,24 +36,29 @@
         android:text="@string/delete_message"
         android:textColor="@android:color/black"
         android:textSize="20sp" />
-	 <View
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@android:color/darker_gray" />
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/ll_recall_view"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/em_context_menu_item_bg"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:onClick="recall"
-        android:padding="10dp"
-        android:text="@string/recall_message"
-        android:textColor="@android:color/black"
-        android:textSize="20sp" />
-	 <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@android:color/darker_gray" />
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/em_context_menu_item_bg"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:onClick="recall"
+            android:padding="10dp"
+            android:text="@string/recall_message"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@android:color/darker_gray" /></LinearLayout>
 
 </LinearLayout>

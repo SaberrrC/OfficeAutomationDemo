@@ -169,7 +169,7 @@ public class TabMeFragment extends BaseFragment {
 
         } else {
             PgyUpdateManager.register(getActivity(),
-                    "com.shanlin.oa.provider.fileprovider");
+                    "com.shanlin.oa.fileprovider");
         }
     }
 
@@ -189,7 +189,7 @@ public class TabMeFragment extends BaseFragment {
         switch (requestCode) {
             case 100:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    PgyUpdateManager.register(getActivity(), "com.shanlin.oa.provider.fileprovider");
+                    PgyUpdateManager.register(getActivity(), "com.shanlin.oa.fileprovider");
                 } else {
                     Toast.makeText(getActivity(), "该权限被禁用 无法更新！", Toast.LENGTH_SHORT).show();
                 }

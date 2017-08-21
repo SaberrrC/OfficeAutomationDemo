@@ -34,12 +34,8 @@ public class WelcomePagePresenter implements WelcomePageContract.Presenter {
      * 登录超时判断
      */
     @Override
-    public void checkoutTimeOut() {
+    public void checkoutTimeOut(String uid,String token) {
         HttpParams params = new HttpParams();
-        final String uid = AppConfig.getAppConfig(AppManager.mContext)
-                .get(AppConfig.PREF_KEY_USER_UID);
-        final String token = AppConfig.getAppConfig(AppManager.mContext)
-                .get(AppConfig.PREF_KEY_TOKEN);
         params.put("uid", uid);
         params.put("token", token);
 
@@ -57,10 +53,10 @@ public class WelcomePagePresenter implements WelcomePageContract.Presenter {
                 try {
                     JSONObject jo = new JSONObject(t);
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                        JSONObject data = jo.getJSONObject("data");
-                        String timeout = data.getString("timeout");
-                        boolean isTimeOut = !timeout.equals("1");
-                        mView.checkTimeOutSuccess(isTimeOut, uid);
+//                        JSONObject data = jo.getJSONObject("data");
+//                        String timeout = data.getString("timeout");
+//                        boolean isTimeOut = !timeout.equals("1");
+                        mView.checkTimeOutSuccess();
                     }
 
                 } catch (JSONException e) {
@@ -71,7 +67,7 @@ public class WelcomePagePresenter implements WelcomePageContract.Presenter {
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.checkTimeOutFailed(token);
+                mView.checkTimeOutFailed();
             }
         });
     }

@@ -82,7 +82,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
 
         } else {
 //            PgyUpdateManager.setIsForced(true);
-            PgyUpdateManager.register(context, "com.shanlin.oa.provider.fileprovider");
+            PgyUpdateManager.register(context, "com.shanlin.oa.fileprovider");
         }
     }
 

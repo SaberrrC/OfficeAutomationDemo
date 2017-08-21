@@ -2,7 +2,8 @@
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path
         name="files_root"
-        path="Android/data/com.shanlin.oa" />
+        path="Android/data/com/pgyersdk"/>
+        <!--path="Android/data/com.shanlin.oa" -->
     <external-path
         name="external_storage_root"
         path="." />
