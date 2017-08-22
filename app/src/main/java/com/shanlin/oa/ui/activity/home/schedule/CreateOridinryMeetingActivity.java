@@ -125,7 +125,6 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
         });
         beginTimeView.setCyclic(false);
         beginTimeView.show();
-
     }
 
     @NonNull

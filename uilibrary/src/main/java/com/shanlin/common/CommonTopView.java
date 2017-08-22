@@ -1,9 +1,9 @@
 package com.shanlin.common;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -51,7 +51,7 @@ public class CommonTopView extends RelativeLayout {
             if (mContext == null) {
                 return;
             }
-            ((FragmentActivity) mContext).onBackPressed();
+            ((Activity) mContext).onBackPressed();
         }
     };
     private OnClickListener mRightAction;

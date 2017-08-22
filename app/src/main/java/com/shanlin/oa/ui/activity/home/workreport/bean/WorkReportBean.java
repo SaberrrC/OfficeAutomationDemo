@@ -48,6 +48,9 @@ public class WorkReportBean {
     private String workThree;//	实际工作11-12
     private String workTwo;//	实际工作10-11
 
+    public WorkReportBean() {
+    }
+
     public String getSelfDedicated() {
         return selfDedicated;
     }

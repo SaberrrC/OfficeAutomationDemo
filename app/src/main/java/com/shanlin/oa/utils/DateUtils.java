@@ -71,6 +71,20 @@ public class DateUtils {
      */
     public static String getDisplayDateByTimestamp(long timestamp) {
         @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        return sdf.format(new Date(timestamp * 1000));
+        return sdf.format(timestamp);
+    }
+
+
+    /**
+     * 格式化日期显示 <br/>
+     *
+     * @param timestamp 时间戳
+     * @return 2016/01/01
+     */
+    public static String getDefDisplayDateByTimestamp(long timestamp) {
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 //        return sdf.format(new Date(timestamp * 1000));
         return sdf.format(timestamp);
@@ -93,8 +107,16 @@ public class DateUtils {
      * @return 获得当天的日期
      */
     public static String getTodayDate() {
-        return getDisplayDateByTimestamp(System.currentTimeMillis());
+        return getTodayDate(true);
     }
+
+    public static String getTodayDate(boolean isDef) {
+        if (isDef)
+            return getDefDisplayDateByTimestamp(System.currentTimeMillis());
+        else
+            return getDisplayDateByTimestamp(System.currentTimeMillis());
+    }
+
 
     /**
      * 根据传入的日期获取 yyyy-MM-dd HH:mm格式的时间
@@ -109,6 +131,7 @@ public class DateUtils {
 
     /**
      * 得到天数为单位的时间差
+     *
      * @param beginDate
      * @param endDate
      * @return
@@ -127,8 +150,10 @@ public class DateUtils {
         }
         return 0;
     }
+
     /**
      * 得到小时为单位的时间差
+     *
      * @param beginDate
      * @param endDate
      * @return
@@ -140,15 +165,17 @@ public class DateUtils {
         try {
             from = simpleFormat.parse(beginDate).getTime();
             long to = simpleFormat.parse(endDate).getTime();
-            int hours = (int) ((to - from)/(1000 * 60 * 60));
+            int hours = (int) ((to - from) / (1000 * 60 * 60));
             return hours;
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return 0;
     }
+
     /**
      * 得到分钟为单位的时间差
+     *
      * @param beginDate
      * @param endDate
      * @return
@@ -161,8 +188,8 @@ public class DateUtils {
         try {
             from = simpleFormat.parse(fromDate).getTime();
             long to = simpleFormat.parse(toDate).getTime();
-            int minutes  = (int) ((to - from)/(1000 * 60));
-            return minutes ;
+            int minutes = (int) ((to - from) / (1000 * 60));
+            return minutes;
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -172,17 +199,17 @@ public class DateUtils {
     /**
      * @return 判断时间先后顺序 True,是正确的先后时间
      */
-    public static boolean judeDateOrder(String beginTime,String EndTime){
+    public static boolean judeDateOrder(String beginTime, String EndTime) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
             Date date1 = sdf.parse(beginTime);
             Date date2 = sdf.parse(EndTime);
-            LogUtils.e("date1："+date1);
-            LogUtils.e("date2："+date2);
-            LogUtils.e("时间差："+String.valueOf(date2.getTime()-date1.getTime()));
-            if(date2.getTime()-date1.getTime()>0) {
-               return true;
-            }else{
+            LogUtils.e("date1：" + date1);
+            LogUtils.e("date2：" + date2);
+            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
+            if (date2.getTime() - date1.getTime() > 0) {
+                return true;
+            } else {
                 return false;
             }
         } catch (Exception ex) {
@@ -190,21 +217,22 @@ public class DateUtils {
         }
         return false;
     }
+
     /**
      * @return 精确到天，判断时间先后顺序 True,是正确的先后时间,
      */
-    public static boolean judeDateOrderByDay(String beginTime,String EndTime){
-        LogUtils.e("judeDateOrderByDay->beginTime:"+beginTime+"endTime:"+EndTime);
+    public static boolean judeDateOrderByDay(String beginTime, String EndTime) {
+        LogUtils.e("judeDateOrderByDay->beginTime:" + beginTime + "endTime:" + EndTime);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date1 = sdf.parse(beginTime);
             Date date2 = sdf.parse(EndTime);
-            LogUtils.e("date1："+date1);
-            LogUtils.e("date2："+date2);
-            LogUtils.e("时间差："+String.valueOf(date2.getTime()-date1.getTime()));
-            if(date2.getTime()-date1.getTime()>=0) {
+            LogUtils.e("date1：" + date1);
+            LogUtils.e("date2：" + date2);
+            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
+            if (date2.getTime() - date1.getTime() >= 0) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         } catch (Exception ex) {

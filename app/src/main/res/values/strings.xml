@@ -75,4 +75,25 @@
     <string name="work_report_tomorrow_plan">明日计划</string>
     <string name="work_report_please_write_tomorrow_plan">请在此填写您的明日计划.</string>
     <string name="work_report_receiver">接收人</string>
+    <string name="work_report_no_write">未填写</string>
+    <string name="work_report_has_write">已填写</string>
+    <string name="work_report_click_write">点击输入</string>
+    <string name="work_report_professional_qualities">职业素养</string>
+    <string name="work_report_personal_behavior">个人行为</string>
+    <string name="work_report_environmental_hygiene">环境卫生</string>
+    <string name="work_report_save">节约    </string>
+    <string name="work_report_communication_skills">沟通能力</string>
+    <string name="work_report_appearance">仪容仪表</string>
+    <string name="work_report_work_discipline">工作纪律</string>
+    <string name="work_report_teamwork">团队合作</string>
+    <string name="work_report_initiative">主动性  </string>
+    <string name="work_report_cooperation">合作性  </string>
+    <string name="work_report_dedication">敬业精神</string>
+    <string name="work_report_obey">服从安排</string>
+
+    <!--填写日报-->
+    <string name="work_report_plan_work">计划工作</string>
+    <string name="work_report_real_work">实际工作</string>
+    <string name="work_report_self_evaluate">自评</string>
+    <string name="work_report_write_work_plan">请在此填写您的计划工作.</string>
 </resources>

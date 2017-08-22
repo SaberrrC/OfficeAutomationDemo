@@ -22,6 +22,6 @@ public class AllRecyclerView extends RecyclerView {
     protected void onMeasure(int widthSpec, int heightSpec) {
         int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
                 MeasureSpec.AT_MOST);
-        super.onMeasure(widthSpec, heightSpec);
+        super.onMeasure(widthSpec, expandSpec);
     }
 }
