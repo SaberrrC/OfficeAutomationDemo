@@ -1,9 +1,13 @@
 package com.shanlin.oa.ui.activity.home.workreport.presenter;
 
+import com.shanlin.oa.common.Api;
 import com.shanlin.oa.net.MyKjHttp;
 import com.shanlin.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
 import com.shanlin.oa.ui.base.HttpPresenter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -22,8 +26,7 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
 
     @Override
     public void launchWorkReport(HttpParams params) {
-
-        mKjHttp.post("dailyreport", params, new HttpCallBack() {
+        mKjHttp.post(true, "dailyreport", params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -39,7 +42,47 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.reportFinish();
+                mView.requestFinish();
+            }
+        });
+    }
+
+    @Override
+    public void getDefaultReceiver() {
+        mKjHttp.get(true, "user/getCurrentLeader", new HttpParams(), new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    switch (Api.getCode(jo)) {
+                        case Api.RESPONSES_CODE_OK:
+                            JSONArray data = jo.getJSONArray("data");
+                            mView.getDefaultReceiverSuccess(data.getString(0), data.getString(1), data.getString(2));
+                            break;
+                        case Api.RESPONSES_CODE_DATA_EMPTY:
+                            mView.getDefaultReceiverEmpty(Api.getInfo(jo));
+                            break;
+                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            mView.uidNull(Api.getCode(jo));
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.getDefaultReceiverFailed(errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.requestFinish();
             }
         });
     }

@@ -12,9 +12,7 @@ import android.widget.LinearLayout;
 
 import com.flipboard.bottomsheet.commons.BottomSheetFragment;
 import com.shanlin.oa.R;
-import com.shanlin.oa.manager.AppManager;
 import com.shanlin.oa.model.selectContacts.Child;
-import com.shanlin.oa.ui.activity.home.schedule.SelectContactsActivity;
 import com.shanlin.oa.ui.adapter.SelectAdapter;
 
 import java.util.ArrayList;
@@ -26,9 +24,6 @@ public class MyFragment extends BottomSheetFragment{
     private RecyclerView recyclerView;
     private SelectAdapter selectAdapter;
     private LinearLayout lin_bottom;
-    //-----------------
-    private AppManager appManager = null;
-    private SelectContactsActivity.MyHandler mHandler = null;
     //-------------
 
     public MyFragment(ArrayList<Child> items) {
@@ -45,9 +40,7 @@ public class MyFragment extends BottomSheetFragment{
         selectAdapter = new SelectAdapter(getActivity(),l_items,onDeleteClickListener);
         recyclerView.setAdapter(selectAdapter);
         //------------------------
-        appManager = (AppManager)getActivity().getApplication();
-        // 获得该共享变量实例
-        mHandler = appManager.getHandler();
+
         //---------------------
         return view;
     }
@@ -57,8 +50,6 @@ public class MyFragment extends BottomSheetFragment{
        public void onDeleteClick(View view, int position) {
            l_items.remove(position);
            //--------------工作汇报抄送人
-           mHandler.sendEmptyMessage(l_items.size());
-           //--------------
            selectAdapter = new SelectAdapter(getActivity(),l_items,onDeleteClickListener);
            recyclerView.setAdapter(selectAdapter);
        }

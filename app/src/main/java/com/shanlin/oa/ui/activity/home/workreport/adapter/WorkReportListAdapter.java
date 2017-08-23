@@ -61,8 +61,13 @@ public class WorkReportListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         } else if (holder instanceof WriteCellHolder) {
             WriteCellHolder writeHolder = (WriteCellHolder) holder;
             writeHolder.mLeftTitle.setText(title);
-            if (!TextUtils.isEmpty(content) && (int)writeHolder.mEdit.getTag() == position)
-                writeHolder.mEdit.setText(content);
+            Object tag = writeHolder.mEdit.getTag();
+            if (tag != null) {
+                int tagPos = (int) tag;
+                if (!TextUtils.isEmpty(content) && tagPos == position)
+                    writeHolder.mEdit.setText(content);
+            }
+
             writeHolder.mEdit.addTextChangedListener(new WriteTextWatcher(writeHolder));
             writeHolder.mEdit.setTag(position);
         }

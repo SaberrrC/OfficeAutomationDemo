@@ -54,7 +54,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "BASE_URL", preAddress()
+            buildConfigField "String", "BASE_URL", devAddress()
             resValue "string", "app_name", devAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -75,6 +75,7 @@ def preAddress() {
 def devAddress() {
     return "\"http://106.15.205.215:30081/\""
 }
+
 
 def devAppName() {
     return '善林OA-Dev版'

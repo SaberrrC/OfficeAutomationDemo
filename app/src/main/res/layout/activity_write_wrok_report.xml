@@ -34,13 +34,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="@string/work_report_plan_work" />
+                    android:text="@string/work_report_plan_work"
+                    android:textColor="@color/black_333333"
+                    android:textSize="@dimen/common_text_size" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2px"
                     android:layout_marginLeft="@dimen/common_margin_left"
-                    android:background="@color/black_333333" />
+                    android:background="@color/driver_line" />
 
                 <EditText
                     android:id="@+id/et_plan_work"
@@ -49,7 +51,9 @@
                     android:background="@color/transparent"
                     android:gravity="top"
                     android:hint="@string/work_report_write_work_plan"
-                    android:padding="12dp" />
+                    android:maxLength="50"
+                    android:padding="12dp"
+                    android:textSize="@dimen/common_text_size" />
 
             </LinearLayout>
 
@@ -64,13 +68,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="@string/work_report_real_work" />
+                    android:text="@string/work_report_real_work"
+                    android:textColor="@color/black_333333"
+                    android:textSize="@dimen/common_text_size" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2px"
                     android:layout_marginLeft="@dimen/common_margin_left"
-                    android:background="@color/black_333333" />
+                    android:background="@color/driver_line" />
 
                 <EditText
                     android:id="@+id/et_real_work"
@@ -79,7 +85,10 @@
                     android:background="@color/transparent"
                     android:gravity="top"
                     android:hint="@string/work_report_write_work_plan"
-                    android:padding="12dp" />
+                    android:maxLength="50"
+                    android:padding="12dp"
+
+                    android:textSize="@dimen/common_text_size" />
 
             </LinearLayout>
 
@@ -95,13 +104,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="@string/work_report_self_evaluate" />
+                    android:text="@string/work_report_self_evaluate"
+                    android:textColor="@color/black_333333"
+                    android:textSize="@dimen/common_text_size" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2px"
                     android:layout_marginLeft="@dimen/common_margin_left"
-                    android:background="@color/black_333333" />
+                    android:background="@color/driver_line" />
 
                 <EditText
                     android:id="@+id/et_self_evaluate"
@@ -110,10 +121,10 @@
                     android:background="@color/transparent"
                     android:gravity="top"
                     android:hint="@string/work_report_write_work_plan"
-                    android:padding="12dp" />
+                    android:maxLength="50"
+                    android:padding="12dp"
+                    android:textSize="@dimen/common_text_size" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-
 </LinearLayout>

@@ -12,12 +12,6 @@
         <attr name="pickerview_dividerColor" format="color" />
     </declare-styleable>
 
-    <declare-styleable name="CommonTopBar">
-        <attr name="button_padding" format="dimension" />
-        <attr name="bar_background" format="color" />
-    </declare-styleable>
-
-
     <declare-styleable name="commonTopView">
 
         <!-- Left View Attributes-->

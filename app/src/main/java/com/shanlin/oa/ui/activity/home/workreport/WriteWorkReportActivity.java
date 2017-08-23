@@ -1,11 +1,16 @@
 package com.shanlin.oa.ui.activity.home.workreport;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.shanlin.common.CommonTopView;
 import com.shanlin.oa.R;
@@ -31,8 +36,6 @@ public class WriteWorkReportActivity extends Activity {
     @Bind(R.id.top_view)
     CommonTopView mTopView;
 
-
-    private String mTopTitle; //标题
     private int mPosition; //条目位置
 
 
@@ -60,13 +63,51 @@ public class WriteWorkReportActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (TextUtils.isEmpty(mPlanWork.getText().toString()) || TextUtils.isEmpty(mRealWork.getText().toString()) ||
+        if (TextUtils.isEmpty(mPlanWork.getText().toString()) && TextUtils.isEmpty(mRealWork.getText().toString()) &&
                 TextUtils.isEmpty(mSelfEvaluate.getText().toString())) {
-            Toast.makeText(this, "数据填写不完整", Toast.LENGTH_SHORT).show();
-            return;
+            super.onBackPressed();
+        } else if (!TextUtils.isEmpty(mPlanWork.getText().toString()) && !TextUtils.isEmpty(mRealWork.getText().toString()) &&
+                !TextUtils.isEmpty(mSelfEvaluate.getText().toString())) {
+            setFinishResult();
+        } else {
+            showTip("是否放弃编辑", "确定", "取消");
         }
-        setFinishResult();
     }
+
+
+    public void showTip(String msg, final String posiStr, String negaStr) {
+        @SuppressLint("InflateParams")
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
+        TextView title = (TextView) dialogView.findViewById(R.id.title);
+        title.setText("提示");
+        TextView message = (TextView) dialogView.findViewById(R.id.message);
+        message.setText(msg);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this,
+                R.style.AppTheme_Dialog).create();
+        alertDialog.setView(dialogView);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, posiStr,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        alertDialog.show();
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                getResources().getColor(R.color.btn_text_logout));
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                getResources().getColor(R.color.btn_text_logout));
+    }
+
 
     /**
      * 设置回调数据

@@ -15,10 +15,18 @@ public interface WorkReportLaunchActivityContract {
 
         void reportFailed(int errCode, String errMsg);
 
-        void reportFinish();
+        void requestFinish();
+
+        void getDefaultReceiverSuccess(String id, String name, String post);
+
+        void getDefaultReceiverFailed(int errCode, String errMsg);
+
+        void getDefaultReceiverEmpty(String msg);
     }
 
     interface Presenter extends BasePresenter<View> {
         void launchWorkReport(HttpParams params);
+
+        void getDefaultReceiver();//获取默认接收人
     }
 }

@@ -14,6 +14,8 @@
     <color name="list_box_bg_light">#f4f4f4</color>
     <color name="list_contacts_bg_light">#f4f7f9</color>
 
+    <color name="driver_line">#f4f4f4</color>
+
     <color name="btn_text_color">#0EA7ED</color>
     <color name="btn_text_logout">#9a9090</color>
     <color name="text_common_light_color">#333333</color>

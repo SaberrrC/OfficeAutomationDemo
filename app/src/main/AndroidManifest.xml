@@ -475,7 +475,7 @@
             android:screenOrientation="portrait" />
         <!-- 选择联系人 -->
         <activity
-            android:name="com.shanlin.oa.ui.activity.home.schedule.SelectContactsActivity"
+            android:name="com.shanlin.oa.ui.activity.home.workreport.SelectContactActivity"
             android:screenOrientation="portrait" />
         <!-- 公用选择头像 -->
         <activity

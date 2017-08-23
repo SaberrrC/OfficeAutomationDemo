@@ -6,6 +6,7 @@ import com.shanlin.oa.manager.AppManager;
 
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.http.HttpParams;
 import org.kymjs.kjframe.http.Request;
 
@@ -16,25 +17,46 @@ import org.kymjs.kjframe.http.Request;
  * Description:
  */
 public class MyKjHttp extends KJHttp {
-    private final String baseUrl;
+    private String baseUrl;
+
 
     public MyKjHttp() {
         //TODO 暂时废弃
         //baseUrl = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.BASE_URL);
         baseUrl = BuildConfig.BASE_URL;
+        HttpConfig.TIMEOUT = 10000;
     }
 
-    @Override
+
     public Request<byte[]> post(String url, HttpParams params, HttpCallBack callback) {
         params.put("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.put("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         return super.post(baseUrl + url, params, callback);
     }
 
-    @Override
+
     public Request<byte[]> get(String url, HttpParams params, HttpCallBack callback) {
         params.put("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.put("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         return super.get(baseUrl + url, params, callback);
+    }
+
+
+    public Request<byte[]> post(boolean newUrl, String url, HttpParams params, HttpCallBack callback) {
+        if (newUrl) {
+            params.put("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
+            params.put("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+            return super.post("http://106.15.205.215:8084/" + url, params, callback);
+        }
+        return post(url, params, callback);
+    }
+
+    public Request<byte[]> get(boolean newUrl, String url, HttpParams params, HttpCallBack callback) {
+        if (newUrl) {
+            params.put("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
+            params.put("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+            return super.get("http://106.15.205.215:8084/" + url, params, callback);
+        }
+        return get(url, params, callback);
     }
 }

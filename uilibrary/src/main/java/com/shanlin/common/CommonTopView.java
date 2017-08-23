@@ -91,14 +91,14 @@ public class CommonTopView extends RelativeLayout {
         mLeftText = a.getString(R.styleable.commonTopView_leftText);
         mLeftTextColor = a.getColor(R.styleable.commonTopView_leftTextColor, ResourcesCompat.getColor(getResources(), R.color.black, null));
         mLeftTextSize = (int) a.getDimension(R.styleable.commonTopView_leftTextSize, mLeftTextSize);
-        mLeftMargin = (int) a.getDimension(R.styleable.commonTopView_leftTextMargin, DeviceUtil.dip2px(mContext, 15));
+        mLeftMargin = (int) a.getDimension(R.styleable.commonTopView_leftTextMargin, DeviceUtil.dip2px(mContext, 12));
         mLeftDrawable = a.getDrawable(R.styleable.commonTopView_leftDrawable);
 
         //右侧样式
         mRightText = a.getString(R.styleable.commonTopView_rightText);
         mRightTextColor = a.getColor(R.styleable.commonTopView_rightTextColor, ResourcesCompat.getColor(getResources(), R.color.black, null));
         mRightTextSize = (int) a.getDimension(R.styleable.commonTopView_rightTextSize, mRightTextSize);
-        mRightMargin = (int) a.getDimension(R.styleable.commonTopView_rightTextMargin, DeviceUtil.dip2px(mContext, 15));
+        mRightMargin = (int) a.getDimension(R.styleable.commonTopView_rightTextMargin, DeviceUtil.dip2px(mContext, 12));
         mRightDrawable = a.getDrawable(R.styleable.commonTopView_rightDrawable);
 
 
@@ -346,7 +346,7 @@ public class CommonTopView extends RelativeLayout {
             titleView.setEllipsize(TextUtils.TruncateAt.END);
             LayoutParams lp = new LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(DeviceUtil.dip2px(mContext, 70), 0, DeviceUtil.dip2px(mContext, 70), 0);
+//            lp.setMargins(DeviceUtil.dip2px(mContext, 70), 0, DeviceUtil.dip2px(mContext, 70), 0);
             lp.addRule(RelativeLayout.CENTER_IN_PARENT);
             addView(titleView, lp);
         } else {

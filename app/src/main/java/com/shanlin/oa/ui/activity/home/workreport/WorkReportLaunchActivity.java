@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.shanlin.common.CommonTopView;
 import com.shanlin.oa.R;
-import com.shanlin.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlin.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlin.oa.ui.activity.home.workreport.adapter.WorkReportListAdapter;
 import com.shanlin.oa.ui.activity.home.workreport.bean.HourReportBean;
@@ -48,6 +47,8 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     public static final int REQUEST_CODE_MULTIPLE = 1;//多选，接收人
 
     public static final int WRITE_REPORT_OK = 100;//填写日报
+    public static final int SELECT_OK = 101;//选择成功，requestcode
+
 
     @Bind(R.id.work_report_list)
     AllRecyclerView mWorkReportList;
@@ -76,6 +77,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
 
     private String currentDate;//当前年月日
     private WorkReportListAdapter mWorkReportListAdapter;
+    private String mReceiverId; //接收人ID
 
 
     @Override
@@ -84,6 +86,12 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         setContentView(R.layout.activity_work_report);
         ButterKnife.bind(this);
         initView();
+        initDefaultReceiver();
+    }
+
+    private void initDefaultReceiver() {
+        showLoadingView();
+        mPresenter.getDefaultReceiver();
     }
 
     private void initView() {
@@ -98,14 +106,12 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
 
         mDate.setText(DateUtils.getTodayDate(false));
 
+        mTopView.setTopViewFocus();
         mTopView.setRightAction(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (ItemBean ben : mWorkReportListData) {
-                    Log.i("WorkReport", "WorkReportLaunchActivity : + onClick" + ben.getContent());
-                }
-                if (mHourReportData.isEmpty() || mHourReportData.size() < 8) {
-                    Toast.makeText(WorkReportLaunchActivity.this, "时报填写未完成", Toast.LENGTH_SHORT).show();
+                if (!checkDataIsFull()) {
+                    Toast.makeText(WorkReportLaunchActivity.this, "数据不完整", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showLoadingView();
@@ -116,8 +122,6 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
 
     /**
      * 构建请求数据
-     *
-     * @return
      */
     @NonNull
     private HttpParams createHttpParams() {
@@ -155,7 +159,6 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         params.put("workSeven", mHourReportData.get("6").getRealWork());
         params.put("workEigth", mHourReportData.get("7").getRealWork());
 
-
         //职业素养
         params.put("selfBehavior", mWorkReportListData.get(8).getContent()); // 个人言行
         params.put("selfEnvironMental", mWorkReportListData.get(9).getContent());//	环境卫生
@@ -173,10 +176,29 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
 
         params.put("supervisor", ""); //监督人
         params.put("supervisorId", "");//监督人id
-        params.put("thereCipientId", mReceiver.getText().toString());//接收人
+        params.put("thereCipientId", mReceiverId);//接收人
         params.put("time", mDate.getText().toString());//时间
         params.put("tomorrowPlan", mTomorrowPlan.getText().toString());//明日计划
         return params;
+    }
+
+    //检测数据是否完整
+    private boolean checkDataIsFull() {
+        for (int i = 0; i < mWorkReportListData.size(); i++) {
+            if (mWorkReportListData.get(i).getContent().equals("")) {
+                return false;
+            }
+        }
+        if (TextUtils.isEmpty(mReceiverId) || TextUtils.isEmpty(mTomorrowPlan.getText().toString())) {
+            Toast.makeText(this, "数据不完整", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (mHourReportData.isEmpty() || mHourReportData.size() < 8) {
+            return false;
+        }
+
+        return true;
     }
 
     private List<ItemBean> initListData() {
@@ -229,7 +251,8 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     private void toWriteHourData(int position) {
         Intent intent = new Intent(WorkReportLaunchActivity.this, WriteWorkReportActivity.class);
         Bundle extras = new Bundle();
-        extras.putString("title", mWorkReportListData.get(position).getTitle());
+        String title = DateUtils.getBiDisplayDateByTimestamp(System.currentTimeMillis()) + " " + mWorkReportListData.get(position).getTitle() + "日报";
+        extras.putString("title", title);
         extras.putInt("position", position);
         extras.putParcelable("hour_report", mHourReportData.get(position + ""));
         intent.putExtras(extras);
@@ -239,13 +262,20 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == WRITE_REPORT_OK) {
+        if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
-            int position = bundle.getInt("position");
-            HourReportBean hourReportBean = bundle.getParcelable("hour_report");
-            mHourReportData.put(position + "", hourReportBean);
-            mWorkReportListData.get(position).setContent(getString(R.string.work_report_has_write));
-            mWorkReportListAdapter.notifyDataSetChanged();
+            if (bundle == null)
+                return;
+            if (requestCode == WRITE_REPORT_OK) {
+                int position = bundle.getInt("position");
+                HourReportBean hourReportBean = bundle.getParcelable("hour_report");
+                mHourReportData.put(position + "", hourReportBean);
+                mWorkReportListData.get(position).setContent(getString(R.string.work_report_has_write));
+                mWorkReportListAdapter.notifyItemChanged(position);
+            } else if (requestCode == SELECT_OK) {
+                mReceiver.setText(data.getStringExtra("name") + "-" + data.getStringExtra("post"));
+                mReceiverId = data.getStringExtra("uid");
+            }
         }
     }
 
@@ -280,9 +310,8 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
                 showDoneDatePicker(mDate);
                 break;
             case R.id.ll_select_receiver:
-                Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
-                intent.putParcelableArrayListExtra("selectedContacts", null);
-                startActivityForResult(intent, 100);
+                Intent intent = new Intent(this, SelectContactActivity.class);
+                startActivityForResult(intent, SELECT_OK);
                 break;
         }
     }
@@ -303,7 +332,25 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     }
 
     @Override
-    public void reportFinish() {
+    public void requestFinish() {
         hideLoadingView();
+    }
+
+    @Override
+    public void getDefaultReceiverSuccess(String id, String name, String post) {
+        mReceiverId = id;
+        mReceiver.setText(name + "-" + post);
+    }
+
+
+    @Override
+    public void getDefaultReceiverFailed(int errCode, String errMsg) {
+//        onBackPressed();
+        Toast.makeText(this, errMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getDefaultReceiverEmpty(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

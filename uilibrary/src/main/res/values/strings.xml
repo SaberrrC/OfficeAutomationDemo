@@ -11,4 +11,6 @@
     <string name="pickerview_minutes">分</string>
     <string name="pickerview_seconds">秒</string>
     <string name="edittext_cancle">取消</string>
+    <string name="common_text_no">取消</string>
+    <string name="common_text_yes">确定</string>
 </resources>

@@ -26,7 +26,6 @@ import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.pgyersdk.crash.PgyCrashManager;
 import com.shanlin.oa.R;
 import com.shanlin.oa.thirdParty.huanxin.DemoHelper;
-import com.shanlin.oa.ui.activity.home.schedule.SelectContactsActivity;
 import com.shanlin.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlin.oa.ui.activity.main.WelcomePage;
 import com.shanlin.oa.ui.base.component.AppComponent;
@@ -56,19 +55,6 @@ import cn.jpush.android.api.JPushInterface;
  */
 
 public class AppManager extends Application {
-    // 共享变量
-    private SelectContactsActivity.MyHandler handler = null;
-
-    // set方法
-    public void setHandler(SelectContactsActivity.MyHandler handler) {
-        this.handler = handler;
-    }
-
-    // get方法
-    public SelectContactsActivity.MyHandler getHandler() {
-        return handler;
-    }
-
     // 共享变量
     private SelectJoinPeopleActivity.MyJoinHandler joinhandler = null;
 

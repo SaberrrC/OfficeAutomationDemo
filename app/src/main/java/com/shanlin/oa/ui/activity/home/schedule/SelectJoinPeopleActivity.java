@@ -565,7 +565,6 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                             break;
                         case Api.RESPONSES_CODE_DATA_EMPTY:
                             mToolBarText.setVisibility(View.GONE);
-
                             showEmptyView(mRootView, "暂无可抄送对象，请联系管理员进行设置", 0, false);
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:

@@ -1,6 +1,7 @@
 package com.shanlin.oa.ui.base.component;
 
 import com.shanlin.oa.ui.activity.contracts.ContactsActivity;
+import com.shanlin.oa.ui.activity.home.workreport.SelectContactActivity;
 import com.shanlin.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlin.oa.ui.activity.login.FindPassWordActivity;
 import com.shanlin.oa.ui.activity.login.LoginActivity;
@@ -25,4 +26,6 @@ public interface ActivityComponent {
     void inject(ContactsActivity activity);
 
     void inject(WorkReportLaunchActivity activity);
+
+    void inject(SelectContactActivity activity);
 }

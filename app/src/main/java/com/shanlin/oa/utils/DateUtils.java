@@ -59,7 +59,7 @@ public class DateUtils {
      */
     public static String getBiDisplayDateByTimestamp(long timestamp) {
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
         return sdf.format(new Date(timestamp));
     }
 

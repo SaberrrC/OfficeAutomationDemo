@@ -86,7 +86,7 @@
     <string name="work_report_appearance">仪容仪表</string>
     <string name="work_report_work_discipline">工作纪律</string>
     <string name="work_report_teamwork">团队合作</string>
-    <string name="work_report_initiative">主动性  </string>
+    <string name="work_report_initiative">主动性</string>
     <string name="work_report_cooperation">合作性  </string>
     <string name="work_report_dedication">敬业精神</string>
     <string name="work_report_obey">服从安排</string>
@@ -95,5 +95,5 @@
     <string name="work_report_plan_work">计划工作</string>
     <string name="work_report_real_work">实际工作</string>
     <string name="work_report_self_evaluate">自评</string>
-    <string name="work_report_write_work_plan">请在此填写您的计划工作.</string>
+    <string name="work_report_write_work_plan">请在此填写您的计划工作.\n1\n2</string>
 </resources>
