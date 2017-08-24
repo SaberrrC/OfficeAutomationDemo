@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
@@ -44,6 +45,7 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     private String u_id;
     private EaseChatFragment chatFragment;
     private String to_user_nike;
+    private String to_code;
     private String department_name;
     private String post_name;
     private String sex;
@@ -83,14 +85,15 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     }
 
     private void initData() {
-        u_id = getIntent().getStringExtra("u_id");
         to_user_nike = getIntent().getStringExtra("usernike");
         to_user_pic = getIntent().getStringExtra("user_pic");
+        u_id = getIntent().getStringExtra("u_id");
         department_name = getIntent().getStringExtra("department_name");
         post_name = getIntent().getStringExtra("post_name");
         sex = getIntent().getStringExtra("sex");
         phone = getIntent().getStringExtra("phone");
         email = getIntent().getStringExtra("email");
+        to_code = getIntent().getStringExtra("code");
         if ("http://".equals(to_user_pic)) {
             to_user_pic = "";
         }
@@ -108,19 +111,25 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
         Bundle args = new Bundle();
         args.putInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         try {
-
-            //对方的信息
+            String code = getIntent().getStringExtra("code");
             args.putString(EaseConstant.EXTRA_USER_ID, u_id);
+            //对方的信息
+            args.putString("to_user_code", getIntent().getStringExtra("code"));
             args.putString("to_user_nike", to_user_nike);
             args.putString("to_user_pic", to_user_pic);
-            args.putString("to_user_department", getIntent().getStringExtra("department_name"));
-            args.putString("to_user_post", getIntent().getStringExtra("post_name"));
-            args.putString("to_user_sex", getIntent().getStringExtra("sex"));
-            args.putString("to_user_phone", getIntent().getStringExtra("phone"));
-            args.putString("to_user_email", getIntent().getStringExtra("email"));
+            args.putString("to_user_department", department_name);
+            args.putString("to_user_post", post_name);
+            args.putString("to_user_sex", sex);
+            args.putString("to_user_phone", phone);
+            args.putString("to_user_email", email);
 
+            userInfo_self = getIntent().getStringExtra("userInfo_self");
+            userInfo = getIntent().getStringExtra("userInfo");
+            args.putString("userInfo", userInfo);
+            args.putString("userInfo_self", userInfo_self);
 
             //自己的信息
+            args.putString("user_code", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
             args.putString("meId", Constants.CID + "_" + AppConfig.getAppConfig(this).getPrivateCode());
             args.putString("userName", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
             args.putString("userPic", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
@@ -130,6 +139,7 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
             args.putString("userDepartment", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
             args.putString("userEmail", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
             args.putString("userDepartmentId", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT));
+
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -175,11 +185,20 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
                 .putExtra("isComingCall", false));
     }
 
+    String userInfo_self;
+    String userInfo;
+
     @Override
-    public void clickUserInfo(String userInfo) {
+    public void clickUserInfo(String userinfo, EMMessage emMessage) {
         Intent intent = new Intent(this, Contact_Details_Activity.class);
-        intent.putExtra("userInfo", userInfo);
+        intent.putExtra("user_code", userinfo);
         intent.putExtra("isSession", true);
+        userInfo_self = emMessage.getStringAttribute("userInfo", "");
+        userInfo = emMessage.getStringAttribute("userInfo_self", "");
+        intent.putExtra("userInfo_self", userInfo_self);
+        intent.putExtra("userInfo", userInfo);
         startActivity(intent);
     }
+
+
 }

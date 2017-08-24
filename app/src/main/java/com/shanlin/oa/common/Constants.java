@@ -11,7 +11,7 @@ public class Constants {
     //TODO 当前版本为测试环境，baseurl写死了，没用，先放这
     public final static String GETBASEURLCID = "6";
 
-    public final static String CID = "SL";//公司ID
+    public final static String CID = "sl";//公司ID
 
     //TODO 打包时候更改 善林图片前缀:public.sl.s1.zhitongoa.com
     public final static String SLPicBaseUrl = "http://";

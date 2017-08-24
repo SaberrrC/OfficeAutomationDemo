@@ -194,7 +194,14 @@ public class Contact_Details_Activity2 extends BaseActivity {
                     startActivity(new Intent(Contact_Details_Activity2.this, EaseChatMessageActivity.class)
                             .putExtra("usernike", constants.getUsername())
                             .putExtra("user_pic", constants.getPortraits())
-                            .putExtra("u_id", Constants.CID + "_" + constants.getCode()));
+                            .putExtra("u_id", Constants.CID + "_" + constants.getCode())
+                            .putExtra("department_name", constants.getDepartmentName())
+                            .putExtra("post_name", constants.getPostTitle())
+                            .putExtra("sex", constants.getSex())
+                            .putExtra("phone", constants.getPhone())
+                            .putExtra("code", constants.getCode())
+                            .putExtra("uid", constants.getUid())
+                            .putExtra("email", constants.getEmail()));
                 }
             });
         }

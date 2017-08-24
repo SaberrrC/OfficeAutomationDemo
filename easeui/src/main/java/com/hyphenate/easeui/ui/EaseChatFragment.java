@@ -180,7 +180,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             @Override
             public void onAvatarClick(String username) {
-                mListener.clickUserInfo(username);
+                mListener.clickUserInfo(username, mEmMessage);
             }
 
             @Override
@@ -315,10 +315,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (!isRoaming) {
             final List<EMMessage> msgs = conversation.getAllMessages();
             int msgCount = msgs != null ? msgs.size() : 0;
-            if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
+            if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
                 String msgId = null;
                 if (msgs != null && msgs.size() > 0) {
                     msgId = msgs.get(0).getMsgId();
+                    mEmMessage = msgs.get(0);
                 }
                 conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
             }
@@ -331,12 +332,13 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                                 toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, "");
                         final List<EMMessage> msgs = conversation.getAllMessages();
                         int msgCount = msgs != null ? msgs.size() : 0;
-                        if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
+                        if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
                             String msgId = null;
                             if (msgs != null && msgs.size() > 0) {
                                 msgId = msgs.get(0).getMsgId();
                             }
-                            conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+                            List<EMMessage> emMessages = conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+                            mEmMessage = emMessages.get(0);
                         }
                         messageList.refreshSelectLast();
                     } catch (HyphenateException e) {
@@ -477,6 +479,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                         EMClient.getInstance().chatManager().fetchHistoryMessages(
                                 toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize,
                                 (messages != null && messages.size() > 0) ? messages.get(0).getMsgId() : "");
+                        mEmMessage = (messages != null && messages.size() > 0) ? messages.get(0) : null;
                     } catch (HyphenateException e) {
                         e.printStackTrace();
                     } finally {
@@ -590,13 +593,15 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         });
     }
 
-    String userInfo;
+    EMMessage mEmMessage;
+
 
     // implement methods in EMMessageListener
     @Override
     public void onMessageReceived(List<EMMessage> messages) {
         for (EMMessage message : messages) {
-            userInfo = message.getStringAttribute("userInfo", "");
+            mEmMessage = message;
+
             String username = null;
             // group message
             if (message.getChatType() == ChatType.GroupChat || message.getChatType() == ChatType.ChatRoom) {
@@ -712,31 +717,62 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         inputAtUsername(username, true);
     }
 
+    String userInfo_self;
+    String userInfo;
 
     //send message
     protected void sendTextMessage(String content) {
+
         //TODO TEXT 携带消息
+        //TODO TEXT 携带消息
+        JSONObject object_self = new JSONObject();
         JSONObject object = new JSONObject();
         try {
-            object.put("userId", getArguments().getString("meId", "-"));
-            object.put("userName", getArguments().getString("userName", "-"));
-            object.put("userPic", getArguments().getString("userPic", "-"));
-            object.put("userSex", getArguments().getString("userSex", "-"));
-            object.put("userPhone", getArguments().getString("userPhone", "-"));
-            object.put("userPost", getArguments().getString("userPost", "-"));
-            object.put("userDepartment", getArguments().getString("userDepartment", "-"));
-            object.put("userEmail", getArguments().getString("userEmail", "-"));
-            object.put("userDepartmentId", getArguments().getString("userDepartmentId", "-"));
+//            userInfo_self = mEmMessage.getStringAttribute("userInfo_self", "");
+//            userInfo = mEmMessage.getStringAttribute("userInfo", "");
+            userInfo_self = getArguments().getString("userInfo_self", "");
+            userInfo = getArguments().getString("userInfo", "");
+            String user_code = getArguments().getString("user_code", "-");
+            if (!user_code.equals("-")) {
+                object_self.put("CODE_self", getArguments().getString("user_code", "-"));
+                object_self.put("phone_self", getArguments().getString("userPhone", "-"));
+                object_self.put("sex_self", getArguments().getString("userSex", "-"));
+                object_self.put("post_title_self", getArguments().getString("userPost", "-"));
+                object_self.put("username_self", getArguments().getString("userName", "-"));
+                object_self.put("portrait_self", getArguments().getString("userPic", "-"));
+                object_self.put("email_self", getArguments().getString("userEmail", "-"));
+                object_self.put("department_name_self", getArguments().getString("userDepartment", "-"));
+                // object_self.put("uid_self", getArguments().getString("meId", "-"));
+                //  object_self.put("userDepartmentId", getArguments().getString("userDepartmentId", "-"));
+                userInfo_self = object_self.toString();
+            } else {
+                userInfo_self = mEmMessage.getStringAttribute("userInfo_self", "");
+            }
+            String to_user_code = getArguments().getString("to_user_code", "-");
+            if (!to_user_code.equals("-")) {
+                object.put("CODE", getArguments().getString("to_user_code", "-"));
+                object.put("phone", getArguments().getString("to_user_phone", "-"));
+                object.put("sex", getArguments().getString("to_user_sex", "-"));
+                object.put("post_title", getArguments().getString("to_user_post", "-"));
+                object.put("username", getArguments().getString("to_user_nike", "-"));
+                object.put("portrait", getArguments().getString("to_user_pic", "-"));
+                object.put("email", getArguments().getString("to_user_email", "-"));
+                object.put("department_name", getArguments().getString("to_user_department", "-"));
+                //  object.put("uid", getArguments().getString("uid", "-"));
+                //object.put("userDepartmentId", getArguments().getString("userDepartmentId", "-"));
+                userInfo = object.toString();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String string = object.toString();
 
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
         } else {
             EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
-            message.setAttribute("userInfo", string);
+            message.setAttribute("userInfo_self", userInfo_self);
+            message.setAttribute("userInfo", userInfo);
+            mEmMessage = message;
             sendMessage(message);
         }
     }
@@ -815,6 +851,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     public void setListener(onEaseUIFragmentListener listener) {
         mListener = listener;
     }
+
 
     protected void sendMessage(EMMessage message) {
         //给对方发送自己的扩展信息用户名和头像

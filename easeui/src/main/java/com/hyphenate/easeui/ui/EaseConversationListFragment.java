@@ -171,7 +171,8 @@ public class EaseConversationListFragment extends EaseBaseFragment{
     		handler.sendEmptyMessage(MSG_REFRESH);
     	}
     }
-    
+
+
     /**
      * load conversation list
      * 
@@ -250,6 +251,9 @@ public class EaseConversationListFragment extends EaseBaseFragment{
         if (!hidden) {
             refresh();
         }
+        conversationList.clear();
+        conversationList.addAll(loadConversationList());
+        conversationListView.refresh();
     }
     
     @Override

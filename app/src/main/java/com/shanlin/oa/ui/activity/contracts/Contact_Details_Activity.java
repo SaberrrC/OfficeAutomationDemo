@@ -16,10 +16,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.google.gson.Gson;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlin.oa.R;
 import com.shanlin.oa.common.Constants;
+import com.shanlin.oa.data.UserInfoDetailsBean;
+import com.shanlin.oa.data.UserInfoSelfDetailsBean;
 import com.shanlin.oa.listener.PermissionListener;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.manager.AppManager;
@@ -74,14 +77,7 @@ public class Contact_Details_Activity extends BaseActivity {
     ImageView ivImgUser;
 
     private User user;
-    String nickName;
-    String portrait;
-    String department;
-    String post;
-    String sex;
-    String phone;
-    String email;
-    String departmentId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,60 +93,91 @@ public class Contact_Details_Activity extends BaseActivity {
     }
 
 
-
     private void initSessionInfo() {
-        final String userInfo = this.getIntent().getStringExtra("userInfo");
-
-        nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(userInfo);
-        portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(userInfo);
-        department = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartment(userInfo);
-        post = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPost(userInfo);
-        sex = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getSex(userInfo);
-        phone = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPhone(userInfo);
-        email = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getEmail(userInfo);
-        departmentId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartmentId(userInfo);
+        String userCode = this.getIntent().getStringExtra("user_code");
+        String userInfo = this.getIntent().getStringExtra("userInfo");
+        String userInfo_self = this.getIntent().getStringExtra("userInfo_self");
+        final UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
+        final UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
         try {
-            if (!TextUtils.isEmpty(nickName)) {
-                tv_user_name.setText(nickName);
-            }
+            if (userCode.equals("sl_"+userInfoDetailsBean.CODE_self)) {
+                if (!TextUtils.isEmpty(userInfoDetailsBean.username_self)) {
+                    tv_user_name.setText(userInfoDetailsBean.username_self);
+                }
 
-            if (!TextUtils.isEmpty(portrait)) {
-                Glide.with(AppManager.mContext)
-                        .load(portrait)
-                        .error(R.drawable.ease_default_avatar)
-                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                        .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
-            }
+                if (!TextUtils.isEmpty(userInfoDetailsBean.portrait_self)) {
+                    Glide.with(AppManager.mContext)
+                            .load(userInfoDetailsBean.portrait_self)
+                            .error(R.drawable.ease_default_avatar)
+                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                            .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+                }
 
-            if (!TextUtils.isEmpty(department)) {
-                tv_department.setText(department);
-            }
+                if (!TextUtils.isEmpty(userInfoDetailsBean.department_name_self)) {
+                    tv_department.setText(userInfoDetailsBean.department_name_self);
+                }
 
-            if (!TextUtils.isEmpty(post)) {
-                tv_duties.setText(post);
-            }
+                if (!TextUtils.isEmpty(userInfoDetailsBean.post_title_self)) {
+                    tv_duties.setText(userInfoDetailsBean.post_title_self);
+                }
 
-            if (!TextUtils.isEmpty(sex)) {
-                tv_sex.setText(sex);
-            }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   if (!TextUtils.isEmpty(userInfoDetailsBean.sex_self)) {
+                    tv_sex.setText(userInfoDetailsBean.sex_self);
+                }
 
-            if (!TextUtils.isEmpty(phone) && departmentId.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT))) {
-                tv_phone_number.setText(phone);
-            }
+                 if (!TextUtils.isEmpty(userInfoDetailsBean.phone_self)) {
+                    tv_phone_number.setText(userInfoDetailsBean.phone_self);
+                } else {
+                    tv_phone_number.setText("-");
+                }
 
-            if (!TextUtils.isEmpty(email)) {
-                tv_mails.setText(email);
+                if (!TextUtils.isEmpty(userInfoDetailsBean.email_self)) {
+                    tv_mails.setText(userInfoDetailsBean.email_self);
+                }
+            } else {
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.username)) {
+                    tv_user_name.setText(userInfoSelfDetailsBean.username);
+                }
+
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.portrait)) {
+                    Glide.with(AppManager.mContext)
+                            .load(userInfoSelfDetailsBean.portrait)
+                            .error(R.drawable.ease_default_avatar)
+                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                            .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+                }
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.department_name)) {
+                    tv_department.setText(userInfoSelfDetailsBean.department_name);
+                }
+
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.post_title)) {
+                    tv_duties.setText(userInfoSelfDetailsBean.post_title);
+                }
+
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.sex)) {
+                    tv_sex.setText(userInfoSelfDetailsBean.sex);
+                }
+
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.phone)) {
+                    tv_phone_number.setText(userInfoSelfDetailsBean.phone);
+                } else {
+                    tv_phone_number.setText("-");
+                }
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.email)) {
+                    tv_mails.setText(userInfoSelfDetailsBean.email);
+                }
+
             }
         } catch (Throwable e) {
             e.printStackTrace();
         }
         try {
             //判断是否有权限打电话
-            if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+            if (userInfoDetailsBean.username_self.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
                 Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
             } else {
-                if (AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT).equals(departmentId)) {
+                if (AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT).equals(userInfoDetailsBean.department_name_self)) {
                     iv_phone.setImageResource(R.mipmap.ico_phone);
                     //可以打电话
                     rel_phone_call.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +187,7 @@ public class Contact_Details_Activity extends BaseActivity {
                                 @Override
                                 public void onGranted() {
                                     Intent intent = new Intent(Intent.ACTION_CALL,
-                                            Uri.parse("tel:" + phone));
+                                            Uri.parse("tel:" + userInfoDetailsBean.phone_self));
                                     if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                                         // TODO: Consider calling
                                         //    ActivityCompat#requestPermissions
@@ -181,14 +208,14 @@ public class Contact_Details_Activity extends BaseActivity {
                             });
                         }
                     });
-                } else if (!departmentId.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT))) {
+                } else if (TextUtils.isEmpty(userInfoDetailsBean.phone_self)) {
                     iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
                 } else {
                     iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
                 }
             }
 
-            if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+            if (userInfoDetailsBean.username_self.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
                 Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
                 send_message.setImageResource(R.mipmap.ico_message_disabled);
             } else {
@@ -202,21 +229,22 @@ public class Contact_Details_Activity extends BaseActivity {
                         }
                         try {
                             startActivity(new Intent(mContext, EaseChatMessageActivity.class)
-                                    .putExtra("usernike", nickName)
-                                    .putExtra("user_pic", portrait)
-                                    .putExtra("u_id", userInfo)
-                                    .putExtra("department_name", department)
-                                    .putExtra("post_name", post)
-                                    .putExtra("sex", sex)
-                                    .putExtra("phone", phone)
-                                    .putExtra("email", email));
+                                    .putExtra("usernike", userInfoDetailsBean.username_self)
+                                    .putExtra("user_pic", userInfoDetailsBean.portrait_self)
+                                    .putExtra("u_id", Constants.CID + "_" + user.getCode())
+                                    .putExtra("department_name", userInfoDetailsBean.department_name_self)
+                                    .putExtra("post_name", userInfoDetailsBean.post_title_self)
+                                    .putExtra("sex", userInfoDetailsBean.sex_self)
+//                                    .putExtra("uid", constants.getUid())
+                                    .putExtra("phone", userInfoDetailsBean.phone_self)
+                                    .putExtra("email", userInfoDetailsBean.email_self));
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }
                     }
                 });
             }
-            if (nickName.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
+            if (userInfoDetailsBean.username_self.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
                 Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
                 send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
             } else {
@@ -229,9 +257,9 @@ public class Contact_Details_Activity extends BaseActivity {
                             return;
                         }
                         startActivity(new Intent(mContext, VoiceCallActivity.class)
-                                .putExtra("username", userInfo)
-                                .putExtra("nike", nickName)
-                                .putExtra("portrait", portrait)
+                                .putExtra("username", userInfoDetailsBean.CODE_self)
+                                .putExtra("nike", userInfoDetailsBean.username_self)
+                                .putExtra("portrait", userInfoDetailsBean.portrait_self)
                                 .putExtra("isComingCall", false));
                     }
                 });
@@ -239,6 +267,7 @@ public class Contact_Details_Activity extends BaseActivity {
         } catch (Throwable e) {
             e.printStackTrace();
         }
+
     }
 
     private void addOrUpdateFriendInfo(User user) {
@@ -346,7 +375,15 @@ public class Contact_Details_Activity extends BaseActivity {
                     startActivity(new Intent(mContext, EaseChatMessageActivity.class)
                             .putExtra("usernike", user.getUsername())
                             .putExtra("user_pic", user.getPortraits())
-                            .putExtra("u_id", Constants.CID + "_" + user.getCode()));
+                            .putExtra("u_id", Constants.CID + "_" + user.getCode())
+                            .putExtra("code", user.getCode())
+
+
+                            .putExtra("department_name", user.getDepartmentName())
+                            .putExtra("post_name", user.getPostName())
+                            .putExtra("sex", user.getSex())
+                            .putExtra("phone", user.getPhone())
+                            .putExtra("email", user.getEmail()));
 
                 }
             });
@@ -371,7 +408,13 @@ public class Contact_Details_Activity extends BaseActivity {
                             .putExtra("username", Constants.CID + "_" + user.getCode())
                             .putExtra("nike", user.getUsername())
                             .putExtra("portrait", user.getPortraits())
-                            .putExtra("isComingCall", false));
+                            .putExtra("isComingCall", false)
+                            .putExtra("u_id", user.getUid())
+                            .putExtra("department_name", user.getDepartmentName())
+                            .putExtra("post_name", user.getPostName())
+                            .putExtra("sex", user.getSex())
+                            .putExtra("phone", user.getPhone())
+                            .putExtra("email", user.getEmail()));
 
                 }
             });

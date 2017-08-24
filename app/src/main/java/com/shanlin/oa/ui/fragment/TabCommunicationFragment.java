@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.hyphenate.chat.EMConversation;
 //import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.shanlin.oa.R;
 import com.shanlin.oa.ui.activity.main.MainController;
@@ -29,6 +30,8 @@ public class TabCommunicationFragment extends BaseFragment  {
 //    private EaseConversationListFragment conversationListFragment;
     public ConversationListFragment myConversationListFragment;
     private RelativeLayout view;
+    String userInfo_self;
+    String userInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -60,8 +63,13 @@ public class TabCommunicationFragment extends BaseFragment  {
 
                     @Override
                     public void onListItemClicked(EMConversation conversation) {
+                        EMMessage lastMessage = conversation.getLastMessage();
+                        userInfo = lastMessage.getStringAttribute("userInfo", "");
+                        userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
                         startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
                                 .putExtra("u_id", conversation.conversationId())
+                                .putExtra("userInfo_self",userInfo_self)
+                                .putExtra("userInfo", userInfo)
                                 .putExtra("nike_name", ""));
                     }
                 });
