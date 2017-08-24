@@ -18,12 +18,14 @@ import org.kymjs.kjframe.http.Request;
  */
 public class MyKjHttp extends KJHttp {
     private String baseUrl;
+    private String baseJavaUrl;
 
 
     public MyKjHttp() {
         //TODO 暂时废弃
         //baseUrl = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.BASE_URL);
         baseUrl = BuildConfig.BASE_URL;
+        baseJavaUrl = BuildConfig.BASE_JAVA_URL;
         HttpConfig.TIMEOUT = 10000;
     }
 
@@ -46,7 +48,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> jsonPost(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-        return super.jsonPost("http://106.15.205.215:8084/" + url, params, callback);
+        return super.jsonPost(baseJavaUrl + url, params, callback);
 
     }
 
@@ -54,7 +56,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> jsonGet(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-        return super.jsonGet("http://106.15.205.215:8084/" + url, params, callback);
+        return super.jsonGet(baseJavaUrl + url, params, callback);
     }
 
 }

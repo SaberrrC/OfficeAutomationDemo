@@ -50,11 +50,13 @@ android {
             // 移除无用的resource文件
             shrinkResources false
             buildConfigField "String", "BASE_URL", devAddress()
+            buildConfigField "String", "BASE_JAVA_URL", preJavaAddress()
             resValue "string", "app_name", preAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             buildConfigField "String", "BASE_URL", devAddress()
+            buildConfigField "String", "BASE_JAVA_URL", devJavaAddress()
             resValue "string", "app_name", devAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -74,6 +76,14 @@ def preAddress() {
 
 def devAddress() {
     return "\"http://106.15.205.215:30081/\""
+}
+
+def preJavaAddress() {
+    return "\"http://172.16.201.205:8080/\""
+}
+
+def devJavaAddress() {
+    return "\"http://106.15.205.215:8084/\""
 }
 
 
