@@ -15,7 +15,7 @@ android {
         javaMaxHeapSize "4g"
     }
     defaultConfig {
-        applicationId "com.shanlin.oa"
+        applicationId "com.shanlinjinrong.oa"
         minSdkVersion 16
         targetSdkVersion 24
 

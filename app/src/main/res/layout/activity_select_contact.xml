@@ -7,7 +7,7 @@
     android:background="@color/page_bg"
     android:orientation="vertical">
 
-    <com.shanlin.common.CommonTopView
+    <com.shanlinjinrong.common.CommonTopView
         android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="44dp"
@@ -22,7 +22,7 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical">
 
-        <com.shanlin.oa.views.ClearEditText
+        <com.shanlinjinrong.oa.views.ClearEditText
             android:id="@+id/et_search"
             android:layout_width="match_parent"
             android:layout_height="30dp"

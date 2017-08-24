@@ -23,7 +23,7 @@
             android:textSize="16sp"
             android:visibility="gone" />
 
-        <com.shanlin.oa.views.ClearEditText
+        <com.shanlinjinrong.oa.views.ClearEditText
             android:id="@+id/search_et_input"
             android:layout_width="match_parent"
             android:layout_height="30dp"

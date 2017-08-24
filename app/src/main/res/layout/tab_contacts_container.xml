@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/TabContactsFragment"
-        android:name="com.shanlin.oa.ui.fragment.TabContactsFragment"
+        android:name="com.shanlinjinrong.oa.ui.fragment.TabContactsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </FrameLayout>

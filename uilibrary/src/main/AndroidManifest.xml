@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.shanlin.uilibrary">
+    package="com.shanlinjinrong.uilibrary">
 
     <application
         android:allowBackup="true"
