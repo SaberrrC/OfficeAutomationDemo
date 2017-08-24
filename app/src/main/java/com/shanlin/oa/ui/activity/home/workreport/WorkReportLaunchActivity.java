@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.shanlin.common.CommonTopView;
 import com.shanlin.oa.R;
 import com.shanlin.oa.ui.activity.home.workreport.adapter.DecorationLine;
@@ -126,59 +127,62 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     @NonNull
     private HttpParams createHttpParams() {
         HttpParams params = new HttpParams();
-        params.put("checkman", "");
-        params.put("checkmanId", "");
+        JSONObject jsonObject = new JSONObject();
+//        params.put("checkman", "");
+//        params.put("checkmanId", "");
 
         //自评
-        params.put("selfRatingOne", mHourReportData.get("0").getSelfEvaluate());
-        params.put("selfRatingTwo", mHourReportData.get("1").getSelfEvaluate());
-        params.put("selfRatingThree", mHourReportData.get("2").getSelfEvaluate());
-        params.put("selfRatingFour", mHourReportData.get("3").getSelfEvaluate());
-        params.put("selfRatingFive", mHourReportData.get("4").getSelfEvaluate());
-        params.put("selfRatingSix", mHourReportData.get("5").getSelfEvaluate());
-        params.put("selfRatingSeven", mHourReportData.get("6").getSelfEvaluate());
-        params.put("selfRatingEigth", mHourReportData.get("7").getSelfEvaluate());
+        jsonObject.put("selfRatingOne", mHourReportData.get("0").getSelfEvaluate());
+        jsonObject.put("selfRatingTwo", mHourReportData.get("1").getSelfEvaluate());
+        jsonObject.put("selfRatingThree", mHourReportData.get("2").getSelfEvaluate());
+        jsonObject.put("selfRatingFour", mHourReportData.get("3").getSelfEvaluate());
+        jsonObject.put("selfRatingFive", mHourReportData.get("4").getSelfEvaluate());
+        jsonObject.put("selfRatingSix", mHourReportData.get("5").getSelfEvaluate());
+        jsonObject.put("selfRatingSeven", mHourReportData.get("6").getSelfEvaluate());
+        jsonObject.put("selfRatingEigth", mHourReportData.get("7").getSelfEvaluate());
 
         //计划工作
-        params.put("workPlanOne", mHourReportData.get("0").getWorkPlan());
-        params.put("workPlanTwo", mHourReportData.get("1").getWorkPlan());
-        params.put("workPlanThree", mHourReportData.get("2").getWorkPlan());
-        params.put("workPlanFour", mHourReportData.get("3").getWorkPlan());
-        params.put("workPlanFive", mHourReportData.get("4").getWorkPlan());
-        params.put("workPlanSix", mHourReportData.get("5").getWorkPlan());
-        params.put("workPlanSeven", mHourReportData.get("6").getWorkPlan());
-        params.put("workPlanEigth", mHourReportData.get("7").getWorkPlan());
+        jsonObject.put("workPlanOne", mHourReportData.get("0").getWorkPlan());
+        jsonObject.put("workPlanTwo", mHourReportData.get("1").getWorkPlan());
+        jsonObject.put("workPlanThree", mHourReportData.get("2").getWorkPlan());
+        jsonObject.put("workPlanFour", mHourReportData.get("3").getWorkPlan());
+        jsonObject.put("workPlanFive", mHourReportData.get("4").getWorkPlan());
+        jsonObject.put("workPlanSix", mHourReportData.get("5").getWorkPlan());
+        jsonObject.put("workPlanSeven", mHourReportData.get("6").getWorkPlan());
+        jsonObject.put("workPlanEigth", mHourReportData.get("7").getWorkPlan());
 
         //实际工作
-        params.put("workOne", mHourReportData.get("0").getRealWork());
-        params.put("workTwo", mHourReportData.get("1").getRealWork());
-        params.put("workThree", mHourReportData.get("2").getRealWork());
-        params.put("workFour", mHourReportData.get("3").getRealWork());
-        params.put("workFive", mHourReportData.get("4").getRealWork());
-        params.put("workSix", mHourReportData.get("5").getRealWork());
-        params.put("workSeven", mHourReportData.get("6").getRealWork());
-        params.put("workEigth", mHourReportData.get("7").getRealWork());
+        jsonObject.put("workOne", mHourReportData.get("0").getRealWork());
+        jsonObject.put("workTwo", mHourReportData.get("1").getRealWork());
+        jsonObject.put("workThree", mHourReportData.get("2").getRealWork());
+        jsonObject.put("workFour", mHourReportData.get("3").getRealWork());
+        jsonObject.put("workFive", mHourReportData.get("4").getRealWork());
+        jsonObject.put("workSix", mHourReportData.get("5").getRealWork());
+        jsonObject.put("workSeven", mHourReportData.get("6").getRealWork());
+        jsonObject.put("workEigth", mHourReportData.get("7").getRealWork());
 
         //职业素养
-        params.put("selfBehavior", mWorkReportListData.get(8).getContent()); // 个人言行
-        params.put("selfEnvironMental", mWorkReportListData.get(9).getContent());//	环境卫生
-        params.put("selfSave", mWorkReportListData.get(10).getContent()); //节约
-        params.put("selfCommunication", mWorkReportListData.get(11).getContent());// 沟通协调能力
-        params.put("selfAppearance", mWorkReportListData.get(12).getContent());// 仪容仪表
-        params.put("selfDiscipline", mWorkReportListData.get(13).getContent());// 工作纪律
+        jsonObject.put("selfBehavior", mWorkReportListData.get(8).getContent()); // 个人言行
+        jsonObject.put("selfEnvironMental", mWorkReportListData.get(9).getContent());//	环境卫生
+        jsonObject.put("selfSave", mWorkReportListData.get(10).getContent()); //节约
+        jsonObject.put("selfCommunication", mWorkReportListData.get(11).getContent());// 沟通协调能力
+        jsonObject.put("selfAppearance", mWorkReportListData.get(12).getContent());// 仪容仪表
+        jsonObject.put("selfDiscipline", mWorkReportListData.get(13).getContent());// 工作纪律
 
         //团队合作
-        params.put("selfJobInitiative", mWorkReportListData.get(14).getContent());//	工作主动性
-        params.put("selfCooperation", mWorkReportListData.get(15).getContent());// 合作性
-        params.put("selfDedicated", mWorkReportListData.get(16).getContent());//	 敬业精神
-        params.put("selfOrganization", mWorkReportListData.get(17).getContent());//服从组织安排
+        jsonObject.put("selfJobInitiative", mWorkReportListData.get(14).getContent());//	工作主动性
+        jsonObject.put("selfCooperation", mWorkReportListData.get(15).getContent());// 合作性
+        jsonObject.put("selfDedicated", mWorkReportListData.get(16).getContent());//	 敬业精神
+        jsonObject.put("selfOrganization", mWorkReportListData.get(17).getContent());//服从组织安排
 
 
-        params.put("supervisor", ""); //监督人
-        params.put("supervisorId", "");//监督人id
-        params.put("thereCipientId", mReceiverId);//接收人
-        params.put("time", mDate.getText().toString());//时间
-        params.put("tomorrowPlan", mTomorrowPlan.getText().toString());//明日计划
+//        params.put("supervisor", ""); //监督人
+//        params.put("supervisorId", "");//监督人id
+        jsonObject.put("thereCipientId", mReceiverId);//接收人
+        jsonObject.put("time", mDate.getText().toString());//时间
+        jsonObject.put("tomorrowPlan", mTomorrowPlan.getText().toString());//明日计划
+
+        params.putJsonParams(jsonObject.toString());
         return params;
     }
 
@@ -322,8 +326,9 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     }
 
     @Override
-    public void reportSuccess() {
-        Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show();
+    public void reportSuccess(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        onBackPressed();
     }
 
     @Override

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:paddingLeft="20dp"
-              android:paddingRight="20dp"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,8 +22,7 @@
             android:gravity="center"
             android:text="zhangsna"
             android:textColor="@color/text_common_light_color"
-            android:textSize="@dimen/text_common_dp">
-        </TextView>
+            android:textSize="@dimen/text_common_dp"/>
 
         <TextView
             android:id="@+id/tvPost"
@@ -34,8 +32,7 @@
             android:gravity="center"
             android:text="hr"
             android:textColor="@color/text_common_light_color"
-            android:textSize="@dimen/text_common_dp">
-        </TextView>
+            android:textSize="@dimen/text_common_dp"></TextView>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -46,13 +43,13 @@
             android:paddingRight="20dp">
 
             <!--<CheckBox-->
-                <!--android:id="@+id/cbChild"-->
-                <!--android:layout_width="20dp"-->
-                <!--android:layout_height="20dp"-->
-                <!--android:button="@drawable/select_contact_cb_bg"-->
-                <!--android:clickable="false"-->
-                <!--android:focusable="false"-->
-                <!--/>-->
+            <!--android:id="@+id/cbChild"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:button="@drawable/select_contact_cb_bg"-->
+            <!--android:clickable="false"-->
+            <!--android:focusable="false"-->
+            <!--/>-->
         </LinearLayout>
 
 
@@ -61,6 +58,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E9E9E9"
-        />
+        android:background="#E9E9E9" />
 </LinearLayout>

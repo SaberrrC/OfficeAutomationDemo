@@ -18,7 +18,7 @@ import com.shanlin.oa.model.selectContacts.Child;
 import com.shanlin.oa.model.selectContacts.Group;
 import com.shanlin.oa.ui.activity.home.workreport.contract.SelectContactActivityContract;
 import com.shanlin.oa.ui.activity.home.workreport.presenter.SelectContactActivityPresenter;
-import com.shanlin.oa.ui.adapter.SelectCopierAdapter;
+import com.shanlin.oa.ui.adapter.ContactAdapter;
 import com.shanlin.oa.ui.base.MyBaseActivity;
 import com.shanlin.oa.views.ClearEditText;
 
@@ -58,8 +58,7 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
 
     private Child mSelectChild;//已选择
 
-    private SelectCopierAdapter mAdapter;
-    private boolean isFirstLoad = true;
+    private ContactAdapter mAdapter;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +137,7 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
     public void loadDataSuccess(ArrayList<Group> groups) {
         hideEmptyView();
         this.groups = groups;
-        mAdapter = new SelectCopierAdapter(this, groups);
+        mAdapter = new ContactAdapter(this, groups);
         mContactList.setAdapter(mAdapter);
     }
 
@@ -164,6 +163,7 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                     int childPosition, long id) {
             mSelectChild = groups.get(groupPosition).getChildItem(childPosition);
+            setFinishResult();
             return false;
         }
     }

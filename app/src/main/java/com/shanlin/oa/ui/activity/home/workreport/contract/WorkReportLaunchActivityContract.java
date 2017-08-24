@@ -11,7 +11,7 @@ import org.kymjs.kjframe.http.HttpParams;
  */
 public interface WorkReportLaunchActivityContract {
     interface View extends BaseView {
-        void reportSuccess();
+        void reportSuccess(String msg);
 
         void reportFailed(int errCode, String errMsg);
 

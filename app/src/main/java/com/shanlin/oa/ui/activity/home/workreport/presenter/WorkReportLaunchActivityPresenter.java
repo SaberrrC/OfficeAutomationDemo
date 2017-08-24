@@ -26,11 +26,24 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
 
     @Override
     public void launchWorkReport(HttpParams params) {
-        mKjHttp.post(true, "dailyreport", params, new HttpCallBack() {
+        mKjHttp.jsonPost("dailyreport", params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                mView.reportSuccess();
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    switch (jo.getString("code")) {
+                        case "000000":
+                            mView.reportSuccess(jo.getString("message"));
+                            break;
+                        default:
+                            mView.reportFailed(0, jo.getString("message"));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
@@ -49,7 +62,7 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
 
     @Override
     public void getDefaultReceiver() {
-        mKjHttp.get(true, "user/getCurrentLeader", new HttpParams(), new HttpCallBack() {
+        mKjHttp.jsonGet("user/getCurrentLeader", new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -67,6 +80,8 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(Api.getCode(jo));
                             break;
+                        default:
+                            mView.getDefaultReceiverFailed(Api.getCode(jo), jo.getString("message"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

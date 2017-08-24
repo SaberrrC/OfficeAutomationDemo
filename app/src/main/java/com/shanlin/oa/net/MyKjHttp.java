@@ -42,21 +42,19 @@ public class MyKjHttp extends KJHttp {
     }
 
 
-    public Request<byte[]> post(boolean newUrl, String url, HttpParams params, HttpCallBack callback) {
-        if (newUrl) {
-            params.put("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
-            params.put("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-            return super.post("http://106.15.205.215:8084/" + url, params, callback);
-        }
-        return post(url, params, callback);
+    @Override
+    public Request<byte[]> jsonPost(String url, HttpParams params, HttpCallBack callback) {
+        params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
+        params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        return super.jsonPost("http://106.15.205.215:8084/" + url, params, callback);
+
     }
 
-    public Request<byte[]> get(boolean newUrl, String url, HttpParams params, HttpCallBack callback) {
-        if (newUrl) {
-            params.put("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
-            params.put("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-            return super.get("http://106.15.205.215:8084/" + url, params, callback);
-        }
-        return get(url, params, callback);
+    @Override
+    public Request<byte[]> jsonGet(String url, HttpParams params, HttpCallBack callback) {
+        params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
+        params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        return super.jsonGet("http://106.15.205.215:8084/" + url, params, callback);
     }
+
 }

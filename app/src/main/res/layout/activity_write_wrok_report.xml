@@ -40,7 +40,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2px"
+                    android:layout_height="@dimen/driver_height"
                     android:layout_marginLeft="@dimen/common_margin_left"
                     android:background="@color/driver_line" />
 
@@ -74,7 +74,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2px"
+                    android:layout_height="@dimen/driver_height"
                     android:layout_marginLeft="@dimen/common_margin_left"
                     android:background="@color/driver_line" />
 
@@ -84,12 +84,10 @@
                     android:layout_height="84dp"
                     android:background="@color/transparent"
                     android:gravity="top"
-                    android:hint="@string/work_report_write_work_plan"
+                    android:hint="@string/work_report_write_real_work"
                     android:maxLength="50"
                     android:padding="12dp"
-
                     android:textSize="@dimen/common_text_size" />
-
             </LinearLayout>
 
 
@@ -110,7 +108,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2px"
+                    android:layout_height="@dimen/driver_height"
                     android:layout_marginLeft="@dimen/common_margin_left"
                     android:background="@color/driver_line" />
 
@@ -120,7 +118,7 @@
                     android:layout_height="84dp"
                     android:background="@color/transparent"
                     android:gravity="top"
-                    android:hint="@string/work_report_write_work_plan"
+                    android:hint="@string/work_report_write_self_evaluate"
                     android:maxLength="50"
                     android:padding="12dp"
                     android:textSize="@dimen/common_text_size" />
