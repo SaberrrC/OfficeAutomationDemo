@@ -81,7 +81,6 @@ public class TabMeFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         displayVersionName();
-        String s = AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS);
         Glide.with(AppManager.mContext).load( AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
                 .placeholder(R.drawable.ease_default_avatar)
                 .error(R.drawable.ease_default_avatar)
@@ -169,7 +168,7 @@ public class TabMeFragment extends BaseFragment {
 
         } else {
             PgyUpdateManager.register(getActivity(),
-                    "com.shanlin.oa.fileprovider");
+                    "com.shanlinjinrong.oa.fileprovider");
         }
     }
 
@@ -189,7 +188,7 @@ public class TabMeFragment extends BaseFragment {
         switch (requestCode) {
             case 100:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    PgyUpdateManager.register(getActivity(), "com.shanlin.oa.fileprovider");
+                    PgyUpdateManager.register(getActivity(), "com.shanlinjinrong.oa.fileprovider");
                 } else {
                     Toast.makeText(getActivity(), "该权限被禁用 无法更新！", Toast.LENGTH_SHORT).show();
                 }

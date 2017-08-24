@@ -59,9 +59,6 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import q.rorbin.badgeview.QBadgeView;
 
-//import com.hyphenate.chatuidemo.db.Friends;
-//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
-//import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
 /**
  * ━━━━━━神兽出没━━━━━━
  * 　　　┏┓　　┏┓
@@ -612,7 +609,7 @@ public class MainController extends MyBaseActivity<MainControllerPresenter> impl
         switch (requestCode) {
             case 100:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    PgyUpdateManager.register(this, "com.shanlin.oa.fileprovider");
+                    PgyUpdateManager.register(this, "com.shanlinjinrong.oa.fileprovider");
                 } else {
                     Toast.makeText(this, "该权限被禁用 无法更新！", Toast.LENGTH_SHORT).show();
                 }
