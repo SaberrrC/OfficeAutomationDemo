@@ -49,7 +49,7 @@ android {
             zipAlignEnabled true
             // 移除无用的resource文件
             shrinkResources false
-            buildConfigField "String", "BASE_URL", devAddress()
+            buildConfigField "String", "BASE_URL", preAddress()
             buildConfigField "String", "BASE_JAVA_URL", preJavaAddress()
             resValue "string", "app_name", preAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -70,8 +70,14 @@ android {
 def preAppName() {
     return "善林OA"
 }
+
+def devAppName() {
+    return '善林OA-Dev版'
+}
+
+
 def preAddress() {
-    return "\"http://api.oa.shanlinjinrong.com/\""
+    return "\"http://api.testoa.shanlinjinrong.com/\""
 }
 
 def devAddress() {
@@ -87,9 +93,7 @@ def devJavaAddress() {
 }
 
 
-def devAppName() {
-    return '善林OA-Dev版'
-}
+
 
 
 dependencies {

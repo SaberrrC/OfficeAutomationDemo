@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.presenter;
 
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -26,7 +27,7 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
 
     @Override
     public void launchWorkReport(HttpParams params) {
-        mKjHttp.jsonPost("dailyreport", params, new HttpCallBack() {
+        mKjHttp.jsonPost(ApiJava.DAILY_REPORT, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -62,7 +63,7 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
 
     @Override
     public void getDefaultReceiver() {
-        mKjHttp.jsonGet("user/getCurrentLeader", new HttpParams(), new HttpCallBack() {
+        mKjHttp.jsonGet(ApiJava.GET_CURRENT_LEADER, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
