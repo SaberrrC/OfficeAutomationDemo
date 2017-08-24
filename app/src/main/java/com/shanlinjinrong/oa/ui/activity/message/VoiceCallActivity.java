@@ -46,7 +46,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.adapter.EaseConversationAdapter;
-import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.exceptions.EMNoActiveCallException;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
@@ -123,14 +122,16 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         addCallStateListener();
         msgid = UUID.randomUUID().toString();
         username = getIntent().getStringExtra("username");
-        String nickName = FriendsInfoCacheSvc.getInstance(this).getNickName(username);
-        String portrait = FriendsInfoCacheSvc.getInstance(this).getPortrait(username);
+        String nike = getIntent().getStringExtra("nike");
+        String portrait = getIntent().getStringExtra("portrait");
+//        String nickName = FriendsInfoCacheSvc.getInstance(this).getNickName(username);
+//        String portrait = FriendsInfoCacheSvc.getInstance(this).getPortrait(username);
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
 
-
-        if (!TextUtils.isEmpty(nickName)) {
-            nickTextView.setText(nickName);
+        if (!TextUtils.isEmpty(nike)) {
+            nickTextView.setText(nike);
         }
+
         if (!TextUtils.isEmpty(portrait)) {
             Glide.with(AppManager.mContext)
                     .load(portrait)

@@ -193,8 +193,8 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
         Intent intent = new Intent(this, Contact_Details_Activity.class);
         intent.putExtra("user_code", userinfo);
         intent.putExtra("isSession", true);
-        userInfo_self = emMessage.getStringAttribute("userInfo", "");
-        userInfo = emMessage.getStringAttribute("userInfo_self", "");
+        userInfo = emMessage.getStringAttribute("userInfo", "");
+        userInfo_self = emMessage.getStringAttribute("userInfo_self", "");
         intent.putExtra("userInfo_self", userInfo_self);
         intent.putExtra("userInfo", userInfo);
         startActivity(intent);
