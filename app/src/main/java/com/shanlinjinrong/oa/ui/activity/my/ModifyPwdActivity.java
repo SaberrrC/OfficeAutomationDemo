@@ -7,22 +7,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPswActivityContract;
+import com.shanlinjinrong.oa.ui.activity.my.presenter.ModifyPswActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,7 +27,7 @@ import butterknife.OnClick;
  * <h3>Description: 修改密码 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/31.<br />
  */
-public class ModifyPwdActivity extends BaseActivity {
+public class ModifyPwdActivity extends MyBaseActivity<ModifyPswActivityPresenter> implements ModifyPswActivityContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;
@@ -64,6 +59,11 @@ public class ModifyPwdActivity extends BaseActivity {
         setTranslucentStatus(this);
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
 
     @OnClick(R.id.toolbar_text_btn)
     public void onClick() {
@@ -75,51 +75,12 @@ public class ModifyPwdActivity extends BaseActivity {
 
     private void modifyPwd() {
         showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        params.put("oldpassword", oldPwd.getText().toString());
-        params.put("newpassword", newPwd.getText().toString());
-        params.put("confirmpassword", newPwdConfirm.getText().toString());
-        params.put("email", AppConfig.getAppConfig(ModifyPwdActivity.this).get(
-                AppConfig.PREF_KEY_USER_EMAIL));
-        initKjHttp().post(Api.PASSWORD_UPDATE, params, new HttpCallBack() {
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.d("data-->" + t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                        showToast("修改密码成功,请重新登录！");
-                        startActivity(new Intent(ModifyPwdActivity.this, LoginActivity.class));
-                        AppConfig.getAppConfig(ModifyPwdActivity.this).clearLoginInfo();
-                        finish();
-                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
-                        catchWarningByCode(Api.getCode(jo));
-                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        catchWarningByCode(Api.getCode(jo));
-                    } else {
-                        showToast(Api.getInfo(jo));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                LogUtils.e(errorNo + "-->" + strMsg);
-                super.onFailure(errorNo, strMsg);
-            }
-        });
+        mPresenter.modifyPsw(AppConfig.getAppConfig(this).getDepartmentId(),
+                oldPwd.getText().toString(),
+                newPwd.getText().toString(),
+                newPwdConfirm.getText().toString(),
+                AppConfig.getAppConfig(ModifyPwdActivity.this).get(
+                        AppConfig.PREF_KEY_USER_EMAIL));
     }
 
     private boolean check() {
@@ -181,7 +142,6 @@ public class ModifyPwdActivity extends BaseActivity {
                 Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         tvTitle.setLayoutParams(lp);
-
         toolbarTextBtn.setText("完成");
         toolbarTextBtn.setVisibility(View.VISIBLE);
         toolbar.setNavigationIcon(R.drawable.toolbar_back);
@@ -198,5 +158,28 @@ public class ModifyPwdActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void modifySuccess() {
+        showToast("修改密码成功,请重新登录！");
+        startActivity(new Intent(ModifyPwdActivity.this, LoginActivity.class));
+        AppConfig.getAppConfig(ModifyPwdActivity.this).clearLoginInfo();
+        finish();
+    }
+
+    @Override
+    public void modifyFailed(int errorCode, String msg) {
+        showToast(msg);
+    }
+
+    @Override
+    public void modifyFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 }

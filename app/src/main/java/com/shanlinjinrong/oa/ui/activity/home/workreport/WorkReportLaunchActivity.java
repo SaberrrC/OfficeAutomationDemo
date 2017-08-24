@@ -86,6 +86,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_report);
         ButterKnife.bind(this);
+        setTranslucentStatus(this);
         initView();
         initDefaultReceiver();
     }

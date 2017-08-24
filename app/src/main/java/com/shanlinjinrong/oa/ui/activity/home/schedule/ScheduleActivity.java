@@ -24,20 +24,18 @@ import com.dsw.calendar.entity.CalendarInfo;
 import com.dsw.calendar.inter.ListenerMove;
 import com.dsw.calendar.views.CircleCalendarView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.ScheduleRvItemData;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.ScheduleActivityContract;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.presenter.ScheduleActivityPresenter;
 import com.shanlinjinrong.oa.ui.adapter.CalendarRvAdapter;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,7 +50,7 @@ import butterknife.ButterKnife;
  * Author:Created by Tsui on Date:2016/12/7 15:37
  * Description:日程安排
  */
-public class ScheduleActivity extends BaseActivity {
+public class ScheduleActivity extends MyBaseActivity<ScheduleActivityPresenter> implements ScheduleActivityContract.View {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.circlecalendarview)
@@ -92,16 +90,19 @@ public class ScheduleActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
         ButterKnife.bind(this);
-        initToolBar();
         setTranslucentStatus(this);
+        initToolBar();
         initWidget();
-
         handleIntent(getIntent());
         loadData(dataPrefix);
     }
 
-    private void handleIntent(Intent intent) {
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
 
+    private void handleIntent(Intent intent) {
         int whichId = intent.getIntExtra("whichId", 1);
         switch (whichId) {
             case 1:
@@ -126,7 +127,6 @@ public class ScheduleActivity extends BaseActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
         handleIntent(intent);
     }
 
@@ -185,7 +185,6 @@ public class ScheduleActivity extends BaseActivity {
 //        mCalendar.setWeekTheme(new MyIWeekTheme());  CircleCaclendarView
 
         mCalendar.setListenerMove(new ListenerMove() {
-
             @Override
             public void leftMove(String year, String month) {
                 TempAddDate--;
@@ -286,58 +285,7 @@ public class ScheduleActivity extends BaseActivity {
 
     private void loadData(String date) {
         showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("date", date);
-//        LogUtils.e("加载"+date+"的数据");
-        initKjHttp().post(Api.AGENDA_INDEX, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                hideLoadingView();
-                LogUtils.e("onSuccess->" + t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            currentMonthJA = Api.getDataToJSONObject(jo);
-                            LogUtils.e("onSuccess->currentMonthJA:" + currentMonthJA);
-                            initData();
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.loadData(date);
     }
 
     private void initData() {
@@ -378,24 +326,17 @@ public class ScheduleActivity extends BaseActivity {
     private void refreshData() {
         try {
             scheduleRvDataList.clear();
-
             Iterator<String> keys = currentMonthJA.keys();
             while (keys.hasNext()) {
                 String key = keys.next();
                 JSONObject jsonObject = currentMonthJA.getJSONObject(key);
-
-
                 String isred = jsonObject.getString("isred");
-
                 if (key.equals(currentDate)) {
                     LogUtils.e("key:" + key + ",currentDate:" + currentDate);
-
                     if (isred.equals("1")) {
-
                         JSONArray icreate = jsonObject.getJSONArray("icreate");
                         JSONArray meeting = jsonObject.getJSONArray("meeting");
                         JSONArray note = jsonObject.getJSONArray("note");
-
                         //添加数据
                         if (showDataType.equals("1")) {
                             for (int j = 0; j < meeting.length(); j++) {
@@ -439,9 +380,7 @@ public class ScheduleActivity extends BaseActivity {
                                 //在adapter里边用来区分三种状态的，下面设置的3
                                 data.setRoomname("");
                                 data.setTime("");
-
                                 scheduleRvDataList.add(data);
-
                             }
                         }
 
@@ -458,9 +397,7 @@ public class ScheduleActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
             LogUtils.e("抛异常了。。。。。。" + e.toString());
-
         }
-
     }
 
 
@@ -576,4 +513,25 @@ public class ScheduleActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void loadDataSuccess(JSONObject jsonData) {
+        LogUtils.e("onSuccess->currentMonthJA:" + currentMonthJA);
+        currentMonthJA = jsonData;
+        initData();
+    }
+
+    @Override
+    public void loadDataFailed(int errCode, String msg) {
+
+    }
+
+    @Override
+    public void loadDataFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
 }

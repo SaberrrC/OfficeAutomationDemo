@@ -15,15 +15,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.utils.LogUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
+import com.shanlinjinrong.oa.ui.activity.my.contract.FeedbackActivityContract;
+import com.shanlinjinrong.oa.ui.activity.my.presenter.FeedbackActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,7 +28,7 @@ import butterknife.OnClick;
  * <h3>Description: 用户反馈</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class FeedbackActivity extends BaseActivity {
+public class FeedbackActivity extends MyBaseActivity<FeedbackActivityPresenter> implements FeedbackActivityContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;
@@ -55,6 +50,11 @@ public class FeedbackActivity extends BaseActivity {
         feedbackText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(200)});
     }
 
+    @Override
+    protected void initInject() {
+         getActivityComponent().inject(this);
+    }
+
     @OnClick(R.id.toolbar_text_btn)
     public void onClick() {
         if (feedbackText.getText().toString().equals("")) {
@@ -66,46 +66,7 @@ public class FeedbackActivity extends BaseActivity {
 
     private void sendFeedback() {
         showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        params.put("content", feedbackText.getText().toString());
-        initKjHttp().post(Api.FEEDBACK, params, new HttpCallBack() {
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.d("data-->" + t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                        showToast("感谢您的反馈");
-                        finish();
-                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
-                        catchWarningByCode(Api.getCode(jo));
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                        catchWarningByCode(Api.getCode(jo));
-                    } else {
-                        showToast(Api.getInfo(jo));
-                    }
-                } catch (JSONException e) {
-                    LogUtils.e(e.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                catchWarningByCode(errorNo);
-                LogUtils.e(errorNo + "-->" + strMsg);
-                super.onFailure(errorNo, strMsg);
-            }
-        });
+        mPresenter.sendFeedback(AppConfig.getAppConfig(this).getDepartmentId(),feedbackText.getText().toString());
     }
 
     private void initToolBar() {
@@ -182,5 +143,26 @@ public class FeedbackActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void feedbackSuccess() {
+        showToast("感谢您的反馈");
+        finish();
+    }
+
+    @Override
+    public void feedbackFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void feedbackFailed(int errorNo, String strMsg) {
+        showToast(strMsg);
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 }

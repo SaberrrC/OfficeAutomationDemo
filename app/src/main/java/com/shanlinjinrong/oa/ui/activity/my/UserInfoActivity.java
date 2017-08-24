@@ -31,23 +31,19 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.EMCallBack;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
+import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.listener.PermissionListener;
+import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.activity.my.contract.UserInfoActivityContract;
+import com.shanlinjinrong.oa.ui.activity.my.presenter.UserInfoActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.FileUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.views.BottomPushPopupWindow;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -68,7 +64,7 @@ import cn.jpush.android.api.TagAliasCallback;
  * <h3>Description: 用户信息 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/31.<br />
  */
-public class UserInfoActivity extends BaseActivity {
+public class UserInfoActivity extends MyBaseActivity<UserInfoActivityPresenter> implements UserInfoActivityContract.View {
 
     public static final int UPDATE_PHONE = 0x4;//修改电话
     public static final int UPDATE_PROTRAIT = 2;//修改头像
@@ -132,9 +128,9 @@ public class UserInfoActivity extends BaseActivity {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
                 // modify by lvdinghao 2017/8/15 修改名称和包名保持一致
                 icon_path = FileProvider.getUriForFile(AppManager.mContext,
-                        "com.shanlin.oa.fileprovider", fileIconPath);
+                        "com.shanlinjinrong.oa.fileprovider", fileIconPath);
                 camera_path = FileProvider.getUriForFile(AppManager.mContext,
-                        "com.shanlin.oa.fileprovider", fileCameraPath);
+                        "com.shanlinjinrong.oa.fileprovider", fileCameraPath);
 
             } else {
                 icon_path = Uri.fromFile(fileIconPath);
@@ -145,6 +141,11 @@ public class UserInfoActivity extends BaseActivity {
         }
 
 
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initData() {
@@ -186,15 +187,12 @@ public class UserInfoActivity extends BaseActivity {
 
     //修改头像方法
     private void selectPortrait() {
-
         requestRunTimePermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission
                 .CAMERA}, new PermissionListener() {
             @Override
             public void onGranted() {
-
                 mPop = new BottomPopAvatar(UserInfoActivity.this);
                 mPop.show(UserInfoActivity.this);
-
             }
 
             @Override
@@ -203,6 +201,30 @@ public class UserInfoActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void upLoadSuccess(String portrait) {
+        showToast("修改成功");
+        //上传成功，设置用户头像
+        String portraitUri = Constants.SLPicBaseUrl + portrait;
+        AppConfig.getAppConfig(UserInfoActivity.this).set(AppConfig.PREF_KEY_PORTRAITS, portraitUri);
+        userPortrait.setImageURI(Uri.parse(portraitUri));
+    }
+
+    @Override
+    public void upLoadFailed(int errorCode, String msg) {
+        showToast(msg);
+    }
+
+    @Override
+    public void upLoadFinish() {
+        hideLoadingView();
     }
 
     /**
@@ -269,28 +291,20 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent intent) {
-
         if (resultCode == RESULT_CANCELED) {
             return;
         }
-
         switch (requestCode) {
-
             case CODE_GALLERY_REQUEST:
                 if (intent == null) {
                     return;
                 }
-
                 cropImage(intent.getData(), 450, 450, CROP_PICTURE_REQUEST);
-
                 break;
-
             case CODE_CAMERA_REQUEST:
-
                 cropImage(camera_path, 450, 450, CROP_PICTURE_REQUEST);
                 break;
             case CROP_PICTURE_REQUEST:
-
                 Bitmap bitmap = decodeUriAsBitmap(icon_path);
                 //userPortrait.setImageBitmap(bitmap);
                 if (!FileUtils.isFileExist(Constants.FileUrl.TEMP)) {
@@ -309,15 +323,12 @@ public class UserInfoActivity extends BaseActivity {
                     e.printStackTrace();
                 }
                 upLoadingPortrait(file);
-
                 break;
             case UPDATE_PHONE:
                 userPhone.setText(AppConfig.getAppConfig(UserInfoActivity.this).get(
                         AppConfig.PREF_KEY_PHONE));
                 break;
-
         }
-
         super.onActivityResult(requestCode, resultCode, intent);
 
     }
@@ -375,187 +386,16 @@ public class UserInfoActivity extends BaseActivity {
         }
         return bitmap;
     }
-//    private void selectPortrait() {
-//        requestRunTimePermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission
-//                .CAMERA}, new PermissionListener() {
-//            @Override
-//            public void onGranted() {
-//                Intent intent = new Intent(UserInfoActivity.this,
-//                        PublicImageSelectorActivity.class);
-//                intent.putExtra("text", "选择头像");
-//                startActivityForResult(intent, UPDATE_PROTRAIT);
-//            }
-//
-//            @Override
-//            public void onDenied() {
-//                showToast("权限被拒绝！请手动设置");
-//            }
-//        });
-//
-//    }
-
-//    /**
-//     * 剪切图片
-//     *
-//     * @param uri uri
-//     */
-//    private void crop(Uri uri) {
-//        // 裁剪图片意图
-//        Intent intent = new Intent("com.android.camera.action.CROP");
-//
-//        intent.setDataAndType(uri, "image/*");
-//        intent.putExtra("crop", "true");
-//        // 裁剪框的比例，1：1
-//        intent.putExtra("aspectX", 1);
-//        intent.putExtra("aspectY", 1);
-//        // 裁剪后输出图片的尺寸大小
-//        intent.putExtra("outputX", 200);
-//        intent.putExtra("outputY", 200);
-//        //缩放开启，避免黑边
-//        intent.putExtra("scale", true);
-//        intent.putExtra("scaleUpIfNeeded", true);
-////        // 图片格式
-////        if (!FileUtils.isFileExist(Constants.FileUrl.TEMP)) {
-////            FileUtils.createSDDir(Constants.FileUrl.TEMP);
-////        }
-////        File file = new File(Constants.FileUrl.TEMP +
-////                Calendar.getInstance().getTimeInMillis() + ".jpg"); // 以时间秒为文件名
-////        intent.putExtra("output", Uri.fromFile(file));  // 专入目标文件
-////        intent.putExtra("output", uri);  // 专入目标文件
-////        intent.putExtra("outputFormat", "JPEG");
-////        intent.putExtra("noFaceDetection", true);// 取消人脸识别
-//        //需要判断版本号：6.0以上不返回data，否则null指针异常
-//        //21版本,小米5.0开始不使用返回uri的方式，其他手机6.0以上才不使用
-//        mtyb = android.os.Build.BRAND;// 手机品牌
-//        if (mtyb.equals("Xiaomi")) {
-//            intent.putExtra("return-data", true);// true:不返回uri，false：返回uri
-//        } else {
-//            intent.putExtra("return-data", false);// true:不返回uri，false：返回uri
-//        }
-//        startActivityForResult(intent, PHOTO_REQUEST_CUT);
-//    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-//        if (resultCode == RESULT_OK && requestCode ==
-//                UPDATE_PROTRAIT) {
-//            if (data != null) {
-//                LogUtils.e("data.getStringExtra(\"data\")->"+data.getStringExtra("data"));
-//                crop(Uri.parse(data.getStringExtra("data")));
-////                crop(BitmapUtils.getImageContentUri(this,data.getStringExtra("data")));
-//
-//
-//            }
-//        } else if (requestCode == PHOTO_REQUEST_CUT) {
-//            if (data != null) {
-//                /****http://blog.csdn.net/qq_30379689/article/details/52171215*****/
-//                Bitmap bitmap = null;
-//
-//                if (mtyb.equals("Xiaomi")) {
-//                    bitmap = data.getExtras().getParcelable("data");
-//
-//                } else {
-//                    Uri uri = data.getData();
-//                    if (uri==null) {
-//                        return;
-//                    }
-//                    LogUtils.e("裁剪后Uri:" + uri.toString());
-//                    try {
-//                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                /************************/
-//                if (!FileUtils.isFileExist(Constants.FileUrl.TEMP)) {
-//                    FileUtils.createSDDir(Constants.FileUrl.TEMP);
-//                }
-//                //将要保存图片的路径
-//                File file = new File(Constants.FileUrl.TEMP +
-//                        "Cut_image_" + Calendar.getInstance().getTimeInMillis() + ".jpg");
-//                LogUtils.e("file->" + file.getAbsolutePath().toString());
-//                try {
-//                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-//                    bos.flush();
-//                    bos.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                upLoadingPortrait(file);
-//            }
-//
-//        } else if (resultCode == RESULT_OK && requestCode == UPDATE_PHONE) {
-//            initData();
-//        }
-//
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
 
     /**
      * 上传头像
      */
     private void upLoadingPortrait(final File file) {
-
-        HttpParams params = new HttpParams();
-
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        params.put("file", "portrait");
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("portrait", file);
-
-
-        initKjHttp().post(Api.PERSON_UPLOAD, params, new HttpCallBack() {
-            @Override
-            public void onSuccess(String t) {
-                LogUtils.e("更改头像后返回数据..." + t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-
-                        showToast("修改成功");
-                        //上传成功，设置用户头像
-                        //TODO 打包时候更改：智汇的这样写
-//                        String portraitUri = "http://" + Api.getDataToJSONObject(jo).get("portrait");
-                        //TODO 打包时候更改：善林的这样写
-                        String portraitUri = Constants.SLPicBaseUrl + Api.getDataToJSONObject(jo).get("portrait");
-
-                        AppConfig.getAppConfig(UserInfoActivity.this).set(AppConfig.PREF_KEY_PORTRAITS, portraitUri);
-
-                        userPortrait.setImageURI(Uri.parse(portraitUri));
-                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
-                        catchWarningByCode(Api.getCode(jo));
-                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        catchWarningByCode(Api.getCode(jo));
-                    } else {
-                        showToast(Api.getInfo(jo));
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                super.onSuccess(t);
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                LogUtils.e("上传图片失败" + errorNo + strMsg);
-                catchWarningByCode(errorNo);
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
-        });
+        showLoadingView();
+        mPresenter.upLoadPortrait(AppConfig.getAppConfig(this).getDepartmentId(), "portrait", file);
     }
 
     public void showLogoutTips() {
-
         @SuppressLint("InflateParams")
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_logout, null);
         final PopupWindow popupWindow = new PopupWindow(dialogView, LinearLayoutCompat.LayoutParams

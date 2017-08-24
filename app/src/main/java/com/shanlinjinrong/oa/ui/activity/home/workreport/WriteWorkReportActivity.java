@@ -47,6 +47,7 @@ public class WriteWorkReportActivity extends Activity {
         initView();
     }
 
+
     private void initView() {
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
@@ -122,4 +123,5 @@ public class WriteWorkReportActivity extends Activity {
         setResult(RESULT_OK, intent);
         finish();
     }
+
 }

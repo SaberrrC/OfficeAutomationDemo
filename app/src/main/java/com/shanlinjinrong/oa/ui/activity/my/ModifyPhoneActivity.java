@@ -9,17 +9,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPhoneActivityContract;
+import com.shanlinjinrong.oa.ui.activity.my.presenter.ModifyPhoneActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,7 +24,7 @@ import butterknife.OnClick;
  * <h3>Description: 修改电话 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/31.<br />
  */
-public class ModifyPhoneActivity extends BaseActivity {
+public class ModifyPhoneActivity extends MyBaseActivity<ModifyPhoneActivityPresenter> implements ModifyPhoneActivityContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;
@@ -53,11 +48,14 @@ public class ModifyPhoneActivity extends BaseActivity {
         userPhone.setSelection(userPhone.getText().length());
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
     @OnClick(R.id.toolbar_text_btn)
     public void onClick() {
-
         tvTips.setText("");
-
         final String newNumber = userPhone.getText().toString();
         //如果号码与之前的一样，不去访问网络
         if (newNumber.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PHONE))) {
@@ -66,57 +64,12 @@ public class ModifyPhoneActivity extends BaseActivity {
         }
         //修改按钮
         if (check()) {
-            HttpParams params = new HttpParams();
-            params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-            params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-            params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-            params.put("phone", newNumber);
-            initKjHttp().post(Api.PHONENUMBER_UPDATE, params, new HttpCallBack() {
-                @Override
-                public void onSuccess(String t) {
-                    JSONObject jo = null;
-                    LogUtils.e(t);
-                    try {
-                        jo = new JSONObject(t);
-                        int code = Api.getCode(jo);
-
-                        if (code == Api.RESPONSES_CODE_OK) {
-
-                            showToast("修改成功");
-                            AppConfig.getAppConfig(ModifyPhoneActivity.this).set(
-                                    AppConfig.PREF_KEY_PHONE, newNumber);
-                            setResult(RESULT_OK);
-                            finish();
-                        } else if (Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH) {
-                            catchWarningByCode(Api.getCode(jo));
-                        } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                            catchWarningByCode(Api.getCode(jo));
-                        } else {
-                            showToast(Api.getInfo(jo));
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    super.onSuccess(t);
-                }
-
-                @Override
-                public void onFailure(int errorNo, String strMsg) {
-                    super.onFailure(errorNo, strMsg);
-                    catchWarningByCode(errorNo);
-                }
-
-                @Override
-                public void onFinish() {
-                    super.onFinish();
-                }
-            });
+            showLoadingView();
+            mPresenter.modifyPhone(AppConfig.getAppConfig(this).getDepartmentId(), newNumber);
         }
     }
 
     private boolean check() {
-
         if (userPhone.getText().toString().equals("")) {
             tvTips.setText("请输入您的电话号码");
             return false;
@@ -156,5 +109,29 @@ public class ModifyPhoneActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void modifySuccess(String newNumber) {
+        showToast("修改成功");
+        AppConfig.getAppConfig(ModifyPhoneActivity.this).set(
+                AppConfig.PREF_KEY_PHONE, newNumber);
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void modifyFailed(int errorCode, String msg) {
+        showToast(msg);
+    }
+
+    @Override
+    public void modifyFinish() {
+        hideLoadingView();
     }
 }
