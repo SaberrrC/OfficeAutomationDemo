@@ -15,15 +15,15 @@ import android.widget.Toast;
 
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
-import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
+import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.Contacts;
-import com.shanlinjinrong.oa.listener.PermissionListener;
+import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
+import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
+import com.shanlinjinrong.oa.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

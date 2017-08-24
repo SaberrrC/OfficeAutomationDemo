@@ -19,10 +19,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.google.gson.Gson;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.data.UserInfoDetailsBean;
-import com.shanlinjinrong.oa.data.UserInfoSelfDetailsBean;
+import com.hyphenate.easeui.model.UserInfoDetailsBean;
+import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -32,6 +31,7 @@ import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.Utils;
+import com.shanlinjinrong.oa.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -100,71 +100,71 @@ public class Contact_Details_Activity extends BaseActivity {
         final UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
         final UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
         try {
-            if (userCode.equals("sl_"+userInfoDetailsBean.CODE_self)) {
-                if (!TextUtils.isEmpty(userInfoDetailsBean.username_self)) {
-                    tv_user_name.setText(userInfoDetailsBean.username_self);
+            if (userCode.equals("sl_" + userInfoDetailsBean.CODE)) {
+                if (!TextUtils.isEmpty(userInfoDetailsBean.username)) {
+                    tv_user_name.setText(userInfoDetailsBean.username);
                 }
 
-                if (!TextUtils.isEmpty(userInfoDetailsBean.portrait_self)) {
+                if (!TextUtils.isEmpty(userInfoDetailsBean.portrait)) {
                     Glide.with(AppManager.mContext)
-                            .load(userInfoDetailsBean.portrait_self)
+                            .load(userInfoDetailsBean.portrait)
                             .error(R.drawable.ease_default_avatar)
                             .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                             .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
                 }
 
-                if (!TextUtils.isEmpty(userInfoDetailsBean.department_name_self)) {
-                    tv_department.setText(userInfoDetailsBean.department_name_self);
+                if (!TextUtils.isEmpty(userInfoDetailsBean.department_name)) {
+                    tv_department.setText(userInfoDetailsBean.department_name);
                 }
 
-                if (!TextUtils.isEmpty(userInfoDetailsBean.post_title_self)) {
-                    tv_duties.setText(userInfoDetailsBean.post_title_self);
+                if (!TextUtils.isEmpty(userInfoDetailsBean.post_title)) {
+                    tv_duties.setText(userInfoDetailsBean.post_title);
                 }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   if (!TextUtils.isEmpty(userInfoDetailsBean.sex_self)) {
-                    tv_sex.setText(userInfoDetailsBean.sex_self);
+                if (!TextUtils.isEmpty(userInfoDetailsBean.sex)) {
+                    tv_sex.setText(userInfoDetailsBean.sex);
                 }
 
-                 if (!TextUtils.isEmpty(userInfoDetailsBean.phone_self)) {
-                    tv_phone_number.setText(userInfoDetailsBean.phone_self);
+                if (!TextUtils.isEmpty(userInfoDetailsBean.phone)) {
+                    tv_phone_number.setText(userInfoDetailsBean.phone);
                 } else {
                     tv_phone_number.setText("-");
                 }
 
-                if (!TextUtils.isEmpty(userInfoDetailsBean.email_self)) {
-                    tv_mails.setText(userInfoDetailsBean.email_self);
+                if (!TextUtils.isEmpty(userInfoDetailsBean.email)) {
+                    tv_mails.setText(userInfoDetailsBean.email);
                 }
-            } else {
-                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.username)) {
-                    tv_user_name.setText(userInfoSelfDetailsBean.username);
+            } else if (userCode.equals("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.username_self)) {
+                    tv_user_name.setText(userInfoSelfDetailsBean.username_self);
                 }
 
-                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.portrait)) {
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.portrait_self)) {
                     Glide.with(AppManager.mContext)
-                            .load(userInfoSelfDetailsBean.portrait)
+                            .load(userInfoSelfDetailsBean.portrait_self)
                             .error(R.drawable.ease_default_avatar)
                             .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                             .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
                 }
-                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.department_name)) {
-                    tv_department.setText(userInfoSelfDetailsBean.department_name);
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.department_name_self)) {
+                    tv_department.setText(userInfoSelfDetailsBean.department_name_self);
                 }
 
-                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.post_title)) {
-                    tv_duties.setText(userInfoSelfDetailsBean.post_title);
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.post_title_self)) {
+                    tv_duties.setText(userInfoSelfDetailsBean.post_title_self);
                 }
 
-                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.sex)) {
-                    tv_sex.setText(userInfoSelfDetailsBean.sex);
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.sex_self)) {
+                    tv_sex.setText(userInfoSelfDetailsBean.sex_self);
                 }
 
-                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.phone)) {
-                    tv_phone_number.setText(userInfoSelfDetailsBean.phone);
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.phone_self)) {
+                    tv_phone_number.setText(userInfoSelfDetailsBean.phone_self);
                 } else {
                     tv_phone_number.setText("-");
                 }
-                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.email)) {
-                    tv_mails.setText(userInfoSelfDetailsBean.email);
+                if (!TextUtils.isEmpty(userInfoSelfDetailsBean.email_self)) {
+                    tv_mails.setText(userInfoSelfDetailsBean.email_self);
                 }
 
             }
@@ -172,97 +172,180 @@ public class Contact_Details_Activity extends BaseActivity {
             e.printStackTrace();
         }
         try {
-            //判断是否有权限打电话
-            if (userInfoDetailsBean.username_self.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
-                Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
-                iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
-            } else {
-                if (AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT).equals(userInfoDetailsBean.department_name_self)) {
-                    iv_phone.setImageResource(R.mipmap.ico_phone);
-                    //可以打电话
-                    rel_phone_call.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
-                                @Override
-                                public void onGranted() {
-                                    Intent intent = new Intent(Intent.ACTION_CALL,
-                                            Uri.parse("tel:" + userInfoDetailsBean.phone_self));
-                                    if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                        // TODO: Consider calling
-                                        //    ActivityCompat#requestPermissions
-                                        // here to request the missing permissions, and then overriding
-                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                        //                                          int[] grantResults)
-                                        // to handle the case where the user grants the permission. See the documentation
-                                        // for ActivityCompat#requestPermissions for more details.
-                                        return;
-                                    }
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void onDenied() {
-                                    showToast("拨打电话权限被拒绝，请手动设置");
-                                }
-                            });
-                        }
-                    });
-                } else if (TextUtils.isEmpty(userInfoDetailsBean.phone_self)) {
+            if (userCode.equals("sl_"+userInfoDetailsBean.CODE)) {
+                //判断是否有权限打电话
+                if (userCode.equals("sl_" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE))) {
+                    Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
                     iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
                 } else {
-                    iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
-                }
-            }
+                    if (AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME).equals(userInfoDetailsBean.department_name)) {
+                        iv_phone.setImageResource(R.mipmap.ico_phone);
+                        //可以打电话
+                        rel_phone_call.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
+                                    @Override
+                                    public void onGranted() {
+                                        Intent intent = new Intent(Intent.ACTION_CALL,
+                                                Uri.parse("tel:" + userInfoDetailsBean.phone));
+                                        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                            return;
+                                        }
+                                        startActivity(intent);
+                                    }
 
-            if (userInfoDetailsBean.username_self.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
-                Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
-                send_message.setImageResource(R.mipmap.ico_message_disabled);
-            } else {
-                rel_send_message.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        boolean availabl = Utils.isNetworkAvailabl(mContext);
-                        if (!availabl) {
-                            showToast("网络不稳定，请重试");
-                            return;
-                        }
-                        try {
-                            startActivity(new Intent(mContext, EaseChatMessageActivity.class)
-                                    .putExtra("usernike", userInfoDetailsBean.username_self)
-                                    .putExtra("user_pic", userInfoDetailsBean.portrait_self)
-                                    .putExtra("u_id", Constants.CID + "_" + user.getCode())
-                                    .putExtra("department_name", userInfoDetailsBean.department_name_self)
-                                    .putExtra("post_name", userInfoDetailsBean.post_title_self)
-                                    .putExtra("sex", userInfoDetailsBean.sex_self)
+                                    @Override
+                                    public void onDenied() {
+                                        showToast("拨打电话权限被拒绝，请手动设置");
+                                    }
+                                });
+                            }
+                        });
+                    } else if (TextUtils.isEmpty(userInfoDetailsBean.phone)) {
+                        iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+                    } else {
+                        iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+                    }
+                }
+
+                if (userCode.equals("sl_" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE))) {
+                    Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
+                    send_message.setImageResource(R.mipmap.ico_message_disabled);
+                } else {
+                    rel_send_message.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            boolean availabl = Utils.isNetworkAvailabl(mContext);
+                            if (!availabl) {
+                                showToast("网络不稳定，请重试");
+                                return;
+                            }
+                            try {
+                                startActivity(new Intent(mContext, EaseChatMessageActivity.class)
+                                        .putExtra("usernike", userInfoDetailsBean.username)
+                                        .putExtra("user_pic", userInfoDetailsBean.portrait)
+                                        .putExtra("u_id", Constants.CID + "_" + userInfoDetailsBean.CODE)
+                                        .putExtra("department_name", userInfoDetailsBean.department_name)
+                                        .putExtra("post_name", userInfoDetailsBean.post_title)
+                                        .putExtra("sex", userInfoDetailsBean.sex)
 //                                    .putExtra("uid", constants.getUid())
-                                    .putExtra("phone", userInfoDetailsBean.phone_self)
-                                    .putExtra("email", userInfoDetailsBean.email_self));
-                        } catch (Throwable e) {
-                            e.printStackTrace();
+                                        .putExtra("phone", userInfoDetailsBean.phone)
+                                        .putExtra("email", userInfoDetailsBean.email));
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
-            }
-            if (userInfoDetailsBean.username_self.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME))) {
-                Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
-                send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
-            } else {
-                rel_voice_call.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        boolean availabl = Utils.isNetworkAvailabl(mContext);
-                        if (!availabl) {
-                            showToast("网络不稳定，请重试");
-                            return;
+                    });
+                }
+
+                if (userCode.equals("sl_" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE))) {
+                    Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
+                    send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
+                } else {
+                    rel_voice_call.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            boolean availabl = Utils.isNetworkAvailabl(mContext);
+                            if (!availabl) {
+                                showToast("网络不稳定，请重试");
+                                return;
+                            }
+                            startActivity(new Intent(mContext, VoiceCallActivity.class)
+                                    .putExtra("username", userInfoDetailsBean.CODE)
+                                    .putExtra("nike", userInfoDetailsBean.username)
+                                    .putExtra("portrait", userInfoDetailsBean.portrait)
+                                    .putExtra("isComingCall", false));
                         }
-                        startActivity(new Intent(mContext, VoiceCallActivity.class)
-                                .putExtra("username", userInfoDetailsBean.CODE_self)
-                                .putExtra("nike", userInfoDetailsBean.username_self)
-                                .putExtra("portrait", userInfoDetailsBean.portrait_self)
-                                .putExtra("isComingCall", false));
+                    });
+                }
+            } else if (userCode.equals("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+                //判断是否有权限打电话
+                if (userCode.equals("sl_" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE))) {
+                    Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
+                    iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+                } else {
+                    if (AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME).equals(userInfoSelfDetailsBean.department_name_self)) {
+                        iv_phone.setImageResource(R.mipmap.ico_phone);
+                        //可以打电话
+                        rel_phone_call.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
+                                    @Override
+                                    public void onGranted() {
+                                        Intent intent = new Intent(Intent.ACTION_CALL,
+                                                Uri.parse("tel:" + userInfoSelfDetailsBean.phone_self));
+                                        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                            return;
+                                        }
+                                        startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onDenied() {
+                                        showToast("拨打电话权限被拒绝，请手动设置");
+                                    }
+                                });
+                            }
+                        });
+                    } else if (TextUtils.isEmpty(userInfoSelfDetailsBean.phone_self)) {
+                        iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
+                    } else {
+                        iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
                     }
-                });
+                }
+
+                if (userCode.equals("sl_" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE))) {
+                    Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
+                    send_message.setImageResource(R.mipmap.ico_message_disabled);
+                } else {
+                    rel_send_message.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            boolean availabl = Utils.isNetworkAvailabl(mContext);
+                            if (!availabl) {
+                                showToast("网络不稳定，请重试");
+                                return;
+                            }
+                            try {
+                                startActivity(new Intent(mContext, EaseChatMessageActivity.class)
+                                        .putExtra("usernike", userInfoSelfDetailsBean.username_self)
+                                        .putExtra("user_pic", userInfoSelfDetailsBean.portrait_self)
+                                        .putExtra("u_id", Constants.CID + "_" + userInfoSelfDetailsBean.CODE_self)
+                                        .putExtra("department_name", userInfoSelfDetailsBean.department_name_self)
+                                        .putExtra("post_name", userInfoSelfDetailsBean.post_title_self)
+                                        .putExtra("sex", userInfoSelfDetailsBean.sex_self)
+//                                      .putExtra("uid", constants.getUid())
+                                        .putExtra("phone", userInfoSelfDetailsBean.phone_self)
+                                        .putExtra("email", userInfoSelfDetailsBean.email_self));
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+
+                if (userCode.equals("sl_" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE))) {
+                    Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
+                    send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
+                } else {
+                    rel_voice_call.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            boolean availabl = Utils.isNetworkAvailabl(mContext);
+                            if (!availabl) {
+                                showToast("网络不稳定，请重试");
+                                return;
+                            }
+                            startActivity(new Intent(mContext, VoiceCallActivity.class)
+                                    .putExtra("username", userInfoSelfDetailsBean.CODE_self)
+                                    .putExtra("nike", userInfoSelfDetailsBean.username_self)
+                                    .putExtra("portrait", userInfoSelfDetailsBean.portrait_self)
+                                    .putExtra("isComingCall", false));
+                        }
+                    });
+                }
             }
         } catch (Throwable e) {
             e.printStackTrace();
