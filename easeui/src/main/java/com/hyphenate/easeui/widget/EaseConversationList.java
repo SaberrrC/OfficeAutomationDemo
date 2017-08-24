@@ -95,7 +95,8 @@ public class EaseConversationList extends ListView{
     public EMConversation getItem(int position) {
         return (EMConversation)adapter.getItem(position);
     }
-    
+
+
     public void refresh() {
     	if(!handler.hasMessages(MSG_REFRESH_ADAPTER_DATA)){
     		handler.sendEmptyMessage(MSG_REFRESH_ADAPTER_DATA);

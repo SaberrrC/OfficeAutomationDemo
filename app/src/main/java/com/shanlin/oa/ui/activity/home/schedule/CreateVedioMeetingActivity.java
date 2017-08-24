@@ -21,6 +21,7 @@ import com.shanlin.oa.common.Api;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.model.MeetRoom;
 import com.shanlin.oa.model.selectContacts.Child;
+import com.shanlin.oa.ui.activity.main.MainController;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.DateUtils;
 import com.shanlin.oa.utils.LogUtils;
@@ -510,7 +511,7 @@ public class CreateVedioMeetingActivity extends BaseActivity {
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
 
                         showToast("发送成功");
-                        startActivity(new Intent(CreateVedioMeetingActivity.this, ScheduleActivity.class));
+                        startActivity(new Intent(CreateVedioMeetingActivity.this, MainController.class));
                         finish();
 
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {

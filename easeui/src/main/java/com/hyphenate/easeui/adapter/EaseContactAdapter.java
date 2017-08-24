@@ -19,7 +19,6 @@ import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.EMLog;
 
@@ -104,8 +103,8 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
         //FriendsInfoCacheSvc.getInstance(mContext).getNickName(username)
 
 
-        EaseUserUtils.setUserNick(username, holder.nameView);
-        EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
+       // EaseUserUtils.setUserNick(username, holder.nameView);
+        //EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
         
        
         if(primaryColor != 0)

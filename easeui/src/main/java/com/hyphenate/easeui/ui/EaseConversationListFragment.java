@@ -103,6 +103,7 @@ public class EaseConversationListFragment extends EaseBaseFragment{
                 return false;
             }
         });
+       refresh();
     }
     
     
@@ -138,6 +139,7 @@ public class EaseConversationListFragment extends EaseBaseFragment{
             case MSG_REFRESH:
 	            {
 	            	conversationList.clear();
+
 	                conversationList.addAll(loadConversationList());
 	                conversationListView.refresh();
 	                break;

@@ -20,6 +20,7 @@ import com.shanlin.oa.R;
 import com.shanlin.oa.common.Api;
 import com.shanlin.oa.manager.AppConfig;
 import com.shanlin.oa.model.selectContacts.Child;
+import com.shanlin.oa.ui.activity.main.MainController;
 import com.shanlin.oa.ui.base.BaseActivity;
 import com.shanlin.oa.utils.LogUtils;
 import com.shanlin.oa.utils.StringUtils;
@@ -360,7 +361,7 @@ public class CreateMeetingActivity extends BaseActivity {
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
 
                         showToast("发送成功");
-                        startActivity(new Intent(CreateMeetingActivity.this, ScheduleActivity.class));
+                        startActivity(new Intent(CreateMeetingActivity.this, MainController.class));
                         finish();
 
                     }else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)){

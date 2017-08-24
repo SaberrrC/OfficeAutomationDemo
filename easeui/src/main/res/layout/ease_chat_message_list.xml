@@ -20,5 +20,4 @@
             android:scrollbarStyle="outsideOverlay"
             android:transcriptMode="normal" />
     </android.support.v4.widget.SwipeRefreshLayout>
-
 </RelativeLayout>

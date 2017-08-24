@@ -13,10 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+import com.google.gson.Gson;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
@@ -24,6 +24,8 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
+import com.hyphenate.easeui.model.UserInfoDetailsBean;
+import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
@@ -52,6 +54,9 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     protected int secondarySize;
     protected float timeSize;
     protected Context mContext;
+    UserInfoDetailsBean userInfoDetailsBean;
+    UserInfoSelfDetailsBean userInfoSelfDetailsBean;
+    EMMessage lastMessage;
 
     public EaseConversationAdapter(Context context, int resource,
                                    List<EMConversation> objects) {
@@ -106,27 +111,6 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         // get username or group id
         String username = conversation.conversationId();
 
-        if (conversation.getType() == EMConversationType.GroupChat) {
-            String groupId = conversation.conversationId();
-            if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
-                holder.motioned.setVisibility(View.VISIBLE);
-            } else {
-                holder.motioned.setVisibility(View.GONE);
-            }
-            // group message, show group avatar
-            holder.avatar.setImageResource(R.drawable.ease_group_icon);
-            EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
-            holder.name.setText(group != null ? group.getGroupName() : username);
-        } else if (conversation.getType() == EMConversationType.ChatRoom) {
-            holder.avatar.setImageResource(R.drawable.ease_group_icon);
-            EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
-            holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
-            holder.motioned.setVisibility(View.GONE);
-        } else {
-            EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
-            EaseUserUtils.setUserNick(username, holder.name);
-            holder.motioned.setVisibility(View.GONE);
-        }
 
         EaseAvatarOptions avatarOptions = EaseUI.getInstance().getAvatarOptions();
         if (avatarOptions != null && holder.avatar instanceof EaseImageView) {
@@ -147,36 +131,9 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         } else {
             holder.unreadLabel.setVisibility(View.INVISIBLE);
         }
-
         if (conversation.getAllMsgCount() != 0) {
             // show the content of latest message
-            EMMessage lastMessage = conversation.getLastMessage();
-            //存在BUG
-//            String userInfo = lastMessage.getStringAttribute("userInfo", "");
-//            Log.d("76547447", userInfo);
-//            UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
-//            try {
-//                if (userInfoBean == null) {
-//                    Glide.with(mContext)
-//                            .load(mPic)
-//                            .error(R.drawable.ease_default_avatar)
-//                            .placeholder(R.drawable.ease_default_avatar).into(holder.avatar);
-////                    FriendsInfoCacheSvc.getInstance(mContext)
-////                            .addOrUpdateFriends(new Friends(null, mName, mPic, null, null, null, null, null, null));
-//                } else {
-//                    Glide.with(mContext)
-//                            .load(userInfoBean.userPic)
-//                            .error(R.drawable.ease_default_avatar)
-//                            .placeholder(R.drawable.ease_default_avatar).into(holder.avatar);
-//                }
-//                if (userInfoBean == null) {
-//                    holder.name.setText(mName);
-//                } else {
-//                    holder.name.setText(userInfoBean.userName);
-//                }
-//            } catch (Throwable e) {
-//                e.printStackTrace();
-//            }
+            lastMessage = conversation.getLastMessage();
 
             String content = null;
             if (cvsListHelper != null) {
@@ -193,6 +150,52 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             } else {
                 holder.msgState.setVisibility(View.GONE);
             }
+        }
+        try {
+            String user_Info_self = lastMessage.getStringAttribute("userInfo_self", "");
+            String user_Info = lastMessage.getStringAttribute("userInfo", "");
+            userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
+            userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
+            if (username.equals("sl_" + userInfoDetailsBean.CODE)) {
+                if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
+                    String groupId = conversation.conversationId();
+                    if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
+                        holder.motioned.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.motioned.setVisibility(View.GONE);
+                    }
+                    // group message, show group avatar
+                    holder.avatar.setImageResource(R.drawable.ease_group_icon);
+                    EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
+                    holder.name.setText(group != null ? group.getGroupName() : username);
+                } else if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
+                    holder.avatar.setImageResource(R.drawable.ease_group_icon);
+                    EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
+                    holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
+                    holder.motioned.setVisibility(View.GONE);
+                } else {
+//                EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
+//                EaseUserUtils.setUserNick(username, holder.name);
+//                holder.motioned.setVisibility(View.GONE);
+                    EaseUserUtils.setUserAvatarBean(getContext(), userInfoDetailsBean, holder.avatar);
+//                EaseUserUtils.setUserNick(username, holder.name);
+                    EaseUserUtils.setUserNickBean(userInfoDetailsBean, holder.name);
+                    holder.name.setText(userInfoDetailsBean.username);
+                    holder.motioned.setVisibility(View.GONE);
+                }
+            } else if (username.equals("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+                try {
+                    EaseUserUtils.setUserAvatarBeanSelf(getContext(), userInfoSelfDetailsBean, holder.avatar);
+//                    EaseUserUtils.setUserNick(username, holder.name);
+//                    EaseUserUtils.setUserNickSelfBean(userInfoSelfDetailsBean, holder.name);
+                    holder.name.setText(userInfoSelfDetailsBean.username_self);
+                    holder.motioned.setVisibility(View.GONE);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
 
         //set property

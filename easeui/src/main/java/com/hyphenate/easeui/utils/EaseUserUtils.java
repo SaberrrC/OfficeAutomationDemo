@@ -11,6 +11,8 @@ import com.hyphenate.easeui.EaseUI.EaseUserProfileProvider;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.UserInfoDetailsBean;
+import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 
 public class EaseUserUtils {
 
@@ -63,7 +65,63 @@ public class EaseUserUtils {
                     .placeholder(R.drawable.ease_default_avatar)
                     .into(imageView);
         }
-        nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(user.getUsername());
+    }
+
+    /**
+     * set user avatar
+     *
+     */
+    public static void setUserAvatarBean(Context context, UserInfoDetailsBean bean, ImageView imageView) {
+        if (bean != null) {
+            try {
+                Glide.with(context).load(bean.portrait)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(imageView);
+            } catch (Exception e) {
+                //use default avatar
+                Glide.with(context).load(bean.portrait)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(imageView);
+            }
+        } else {
+            Glide.with(context).load(bean.portrait)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(imageView);
+        }
+        nickName = bean.username;
+    }
+
+    /**
+     * set user avatar
+     *
+     */
+    public static void setUserAvatarBeanSelf(Context context, UserInfoSelfDetailsBean bean, ImageView imageView) {
+        if (bean != null) {
+            try {
+                String portrait = bean.portrait_self.replace("_self", "");
+                Glide.with(context).load(portrait)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(imageView);
+            } catch (Exception e) {
+                //use default avatar
+                String portrait = bean.portrait_self.replace("_self", "");
+                Glide.with(context).load(portrait)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(imageView);
+            }
+        } else {
+            String portrait = bean.portrait_self.replace("_self", "");
+            Glide.with(context).load(portrait)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(imageView);
+        }
+        nickName = bean.username_self;
     }
 
     /**
@@ -79,6 +137,36 @@ public class EaseUserUtils {
             } else {
                 if (textView.getText().equals(""))
                     textView.setText(nickName);
+            }
+        }
+    }
+
+    /**
+     * set user's nickname
+     */
+    public static void setUserNickBean(UserInfoDetailsBean bean, TextView textView) {
+        if (textView != null) {
+            if (bean != null) {
+                if (textView.getText().equals(""))
+                    textView.setText(nickName);
+            } else {
+                if (textView.getText().equals(""))
+                    textView.setText("");
+            }
+        }
+    }
+
+    /**
+     * set user's nickname
+     */
+    public static void setUserNickSelfBean(UserInfoSelfDetailsBean bean, TextView textView) {
+        if (textView != null) {
+            if (bean != null) {
+                if (textView.getText().equals(""))
+                    textView.setText(nickName);
+            } else {
+                if (textView.getText().equals(""))
+                    textView.setText("");
             }
         }
     }
