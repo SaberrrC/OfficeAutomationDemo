@@ -59,6 +59,7 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
     private Child mSelectChild;//已选择
 
     private ContactAdapter mAdapter;
+    private String mSelectChildId;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +91,16 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
             }
         });
 
-        mContactList.setOnChildClickListener(new GetSelectedContact());
+
+        mContactList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                mSelectChild = groups.get(groupPosition).getChildItem(childPosition);
+                handleClick(childPosition, groupPosition);
+                return false;
+            }
+        });
+
 
         mSearchEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -100,6 +110,25 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
                 }
             }
         });
+
+        mSelectChildId = getIntent().getStringExtra("childId");
+    }
+
+    public void handleClick(int childPosition, int groupPosition) {
+        int childrenCount = groups.get(groupPosition).getChildrenCount();
+        Child currentChild = groups.get(groupPosition).getChildItem(childPosition);
+        for (int i = 0; i < childrenCount; i++) {
+            if (i == childPosition) {
+                if (currentChild.getChecked())
+                    mSelectChild = null;
+                currentChild.setChecked(!currentChild.getChecked());
+            } else {
+                //清除其他的checkbox的状态
+                groups.get(groupPosition).getChildItem(i).setChecked(false);
+            }
+
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     private void setFinishResult() {
@@ -139,6 +168,7 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
         this.groups = groups;
         mAdapter = new ContactAdapter(this, groups);
         mContactList.setAdapter(mAdapter);
+        mContactList.expandGroup(0);
     }
 
     @Override
@@ -157,23 +187,11 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
         showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);
     }
 
-    class GetSelectedContact implements ExpandableListView.OnChildClickListener {
-
-        @Override
-        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                                    int childPosition, long id) {
-            mSelectChild = groups.get(groupPosition).getChildItem(childPosition);
-            setFinishResult();
-            return false;
-        }
-    }
-
-
     private void loadData(String name) {
         showLoadingView("正在获取联系人列表");
         String department_id = AppConfig.getAppConfig(AppManager.mContext)
                 .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
-        mPresenter.loadData(department_id, name);
+        mPresenter.loadData(department_id, name, mSelectChildId);
     }
 
 

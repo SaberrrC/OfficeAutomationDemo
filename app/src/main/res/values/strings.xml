@@ -98,4 +98,9 @@
     <string name="work_report_write_work_plan">请在此填写您的计划工作.\n1\n2</string>
     <string name="work_report_write_real_work">请在此填写您的实际工作.\n1\n2</string>
     <string name="work_report_write_self_evaluate">请在此填写您的自评.\n1\n2</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="work_report_write_next">填写下一项</string>
+    <string name="work_report_return_last">返回上一项</string>
 </resources>

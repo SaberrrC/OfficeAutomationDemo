@@ -29,7 +29,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
     }
 
     @Override
-    public void loadData(String departmentId, String searchName) {
+    public void loadData(String departmentId, String searchName, final String selectChildId) {
         HttpParams params = new HttpParams();
         params.put("department_id", departmentId);
         params.put("search_name", searchName);
@@ -58,6 +58,9 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                                             joChild.getString("uid"),
                                             joChild.getString("username"), "", "", "",
                                             false);
+                                    if (joChild.getString("uid").equals(selectChildId)) {
+                                        child.setChecked(true);
+                                    }
                                     group.addChildrenItem(child);
                                 }
                                 groups.add(group);

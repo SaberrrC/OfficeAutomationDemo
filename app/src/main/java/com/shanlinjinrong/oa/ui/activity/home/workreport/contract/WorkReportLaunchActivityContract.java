@@ -13,13 +13,13 @@ public interface WorkReportLaunchActivityContract {
     interface View extends BaseView {
         void reportSuccess(String msg);
 
-        void reportFailed(int errCode, String errMsg);
+        void reportFailed(String errMsg);
 
         void requestFinish();
 
         void getDefaultReceiverSuccess(String id, String name, String post);
 
-        void getDefaultReceiverFailed(int errCode, String errMsg);
+        void getDefaultReceiverFailed(String errMsg);
 
         void getDefaultReceiverEmpty(String msg);
     }

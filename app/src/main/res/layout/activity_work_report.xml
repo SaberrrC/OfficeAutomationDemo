@@ -27,13 +27,13 @@
         android:layout_marginTop="@dimen/common_margin_top"
         android:background="@color/page_bg"
         android:overScrollMode="never"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:transitionGroup="true">
 
         <LinearLayout
             android:id="@+id/report_content_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -107,7 +107,8 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="24dp" />
+                android:layout_height="20dp"
+                android:fitsSystemWindows="true" />
 
         </LinearLayout>
     </ScrollView>

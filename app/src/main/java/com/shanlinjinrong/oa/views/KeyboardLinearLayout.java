@@ -47,7 +47,7 @@ public class KeyboardLinearLayout extends LinearLayout {
             } else {
                 mShowKeyboard = false;
             }
-            mChangedListener.onChanged(mShowKeyboard);
+            mChangedListener.onChanged(mShowKeyboard, h);
         }
     }
 
@@ -57,6 +57,6 @@ public class KeyboardLinearLayout extends LinearLayout {
 
     public interface onSizeChangedListener {
 
-        void onChanged(boolean showKeyboard);
+        void onChanged(boolean showKeyboard, int h);
     }
 }

@@ -3,12 +3,14 @@ package com.shanlinjinrong.oa.ui.activity.home.workreport;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,14 +26,13 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportLau
 import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
+import com.shanlinjinrong.oa.views.KeyboardLinearLayout;
 
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,8 +70,14 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     @Bind(R.id.et_tomorrow_plan)
     EditText mTomorrowPlan;//明日计划
 
+    @Bind(R.id.report_scroll_view)
+    ScrollView mScroll;
 
-    private Map<String, HourReportBean> mHourReportData;
+
+    @Bind(R.id.layout_root)
+    KeyboardLinearLayout mRootLayout;
+
+    private List<HourReportBean> mHourReportData;
 
     private List<ItemBean> mWorkReportListData;//日报列表数据
 
@@ -79,6 +86,8 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     private String currentDate;//当前年月日
     private WorkReportListAdapter mWorkReportListAdapter;
     private String mReceiverId; //接收人ID
+    private String mReceiverName; //接收人名称
+    private String mReceiverPost; //接收人ID
 
 
     @Override
@@ -104,11 +113,12 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         mWorkReportListAdapter.setItemClickListener(this);
         mWorkReportList.addItemDecoration(new DecorationLine(this, mWorkReportListData));
 
-        mHourReportData = new HashMap<>();
+        mHourReportData = initHourReportData();
 
         mDate.setText(DateUtils.getTodayDate(false));
 
         mTopView.setTopViewFocus();
+
         mTopView.setRightAction(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +130,22 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
                 mPresenter.launchWorkReport(createHttpParams());
             }
         });
+
+        mRootLayout.setOnSizeChangedListener(new KeyboardLinearLayout.onSizeChangedListener() {
+            @Override
+            public void onChanged(boolean showKeyboard, int height) {
+//                mScroll.h
+            }
+        });
+    }
+
+    private List<HourReportBean> initHourReportData() {
+        List<HourReportBean> list = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            HourReportBean hourReport = new HourReportBean("", "", "");
+            list.add(hourReport);
+        }
+        return list;
     }
 
     /**
@@ -129,38 +155,39 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     private HttpParams createHttpParams() {
         HttpParams params = new HttpParams();
         JSONObject jsonObject = new JSONObject();
-//        params.put("checkman", "");
-//        params.put("checkmanId", "");
+
+        jsonObject.put("checkman", mReceiverName);
+        jsonObject.put("checkmanId", Integer.valueOf(mReceiverId));
 
         //自评
-        jsonObject.put("selfRatingOne", mHourReportData.get("0").getSelfEvaluate());
-        jsonObject.put("selfRatingTwo", mHourReportData.get("1").getSelfEvaluate());
-        jsonObject.put("selfRatingThree", mHourReportData.get("2").getSelfEvaluate());
-        jsonObject.put("selfRatingFour", mHourReportData.get("3").getSelfEvaluate());
-        jsonObject.put("selfRatingFive", mHourReportData.get("4").getSelfEvaluate());
-        jsonObject.put("selfRatingSix", mHourReportData.get("5").getSelfEvaluate());
-        jsonObject.put("selfRatingSeven", mHourReportData.get("6").getSelfEvaluate());
-        jsonObject.put("selfRatingEigth", mHourReportData.get("7").getSelfEvaluate());
+        jsonObject.put("selfRatingOne", mHourReportData.get(0).getSelfEvaluate());
+        jsonObject.put("selfRatingTwo", mHourReportData.get(1).getSelfEvaluate());
+        jsonObject.put("selfRatingThree", mHourReportData.get(2).getSelfEvaluate());
+        jsonObject.put("selfRatingFour", mHourReportData.get(3).getSelfEvaluate());
+        jsonObject.put("selfRatingFive", mHourReportData.get(4).getSelfEvaluate());
+        jsonObject.put("selfRatingSix", mHourReportData.get(5).getSelfEvaluate());
+        jsonObject.put("selfRatingSeven", mHourReportData.get(6).getSelfEvaluate());
+        jsonObject.put("selfRatingEigth", mHourReportData.get(7).getSelfEvaluate());
 
         //计划工作
-        jsonObject.put("workPlanOne", mHourReportData.get("0").getWorkPlan());
-        jsonObject.put("workPlanTwo", mHourReportData.get("1").getWorkPlan());
-        jsonObject.put("workPlanThree", mHourReportData.get("2").getWorkPlan());
-        jsonObject.put("workPlanFour", mHourReportData.get("3").getWorkPlan());
-        jsonObject.put("workPlanFive", mHourReportData.get("4").getWorkPlan());
-        jsonObject.put("workPlanSix", mHourReportData.get("5").getWorkPlan());
-        jsonObject.put("workPlanSeven", mHourReportData.get("6").getWorkPlan());
-        jsonObject.put("workPlanEigth", mHourReportData.get("7").getWorkPlan());
+        jsonObject.put("workPlanOne", mHourReportData.get(0).getWorkPlan());
+        jsonObject.put("workPlanTwo", mHourReportData.get(1).getWorkPlan());
+        jsonObject.put("workPlanThree", mHourReportData.get(2).getWorkPlan());
+        jsonObject.put("workPlanFour", mHourReportData.get(3).getWorkPlan());
+        jsonObject.put("workPlanFive", mHourReportData.get(4).getWorkPlan());
+        jsonObject.put("workPlanSix", mHourReportData.get(5).getWorkPlan());
+        jsonObject.put("workPlanSeven", mHourReportData.get(6).getWorkPlan());
+        jsonObject.put("workPlanEigth", mHourReportData.get(7).getWorkPlan());
 
         //实际工作
-        jsonObject.put("workOne", mHourReportData.get("0").getRealWork());
-        jsonObject.put("workTwo", mHourReportData.get("1").getRealWork());
-        jsonObject.put("workThree", mHourReportData.get("2").getRealWork());
-        jsonObject.put("workFour", mHourReportData.get("3").getRealWork());
-        jsonObject.put("workFive", mHourReportData.get("4").getRealWork());
-        jsonObject.put("workSix", mHourReportData.get("5").getRealWork());
-        jsonObject.put("workSeven", mHourReportData.get("6").getRealWork());
-        jsonObject.put("workEigth", mHourReportData.get("7").getRealWork());
+        jsonObject.put("workOne", mHourReportData.get(0).getRealWork());
+        jsonObject.put("workTwo", mHourReportData.get(1).getRealWork());
+        jsonObject.put("workThree", mHourReportData.get(2).getRealWork());
+        jsonObject.put("workFour", mHourReportData.get(3).getRealWork());
+        jsonObject.put("workFive", mHourReportData.get(4).getRealWork());
+        jsonObject.put("workSix", mHourReportData.get(5).getRealWork());
+        jsonObject.put("workSeven", mHourReportData.get(6).getRealWork());
+        jsonObject.put("workEigth", mHourReportData.get(7).getRealWork());
 
         //职业素养
         jsonObject.put("selfBehavior", mWorkReportListData.get(8).getContent()); // 个人言行
@@ -177,9 +204,10 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         jsonObject.put("selfOrganization", mWorkReportListData.get(17).getContent());//服从组织安排
 
 
-//        params.put("supervisor", ""); //监督人
-//        params.put("supervisorId", "");//监督人id
-        jsonObject.put("thereCipientId", mReceiverId);//接收人
+        jsonObject.put("supervisor", mReceiverName); //监督人
+        jsonObject.put("supervisorId", Integer.valueOf(mReceiverId));//监督人id
+
+//        jsonObject.put("thereCipientId", mReceiverId);//接收人
         jsonObject.put("time", mDate.getText().toString());//时间
         jsonObject.put("tomorrowPlan", mTomorrowPlan.getText().toString());//明日计划
 
@@ -194,18 +222,27 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
                 return false;
             }
         }
-        if (TextUtils.isEmpty(mReceiverId) || TextUtils.isEmpty(mTomorrowPlan.getText().toString())) {
-            Toast.makeText(this, "数据不完整", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(mReceiverId) || TextUtils.isEmpty(mReceiverName) || TextUtils.isEmpty(mTomorrowPlan.getText().toString())) {
             return false;
         }
 
-        if (mHourReportData.isEmpty() || mHourReportData.size() < 8) {
+        if (mHourReportData.isEmpty()) {
             return false;
+        } else {
+            for (HourReportBean bean : mHourReportData) {
+                if (bean.checkHasEmpty()) {
+                    return false;
+                }
+            }
         }
-
         return true;
     }
 
+    /**
+     * 初始化整个列表的显示数据
+     *
+     * @return List<ItemBean>
+     */
     private List<ItemBean> initListData() {
         List<ItemBean> listData = new ArrayList<>();
         //时报 上午九点到12点
@@ -256,10 +293,9 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     private void toWriteHourData(int position) {
         Intent intent = new Intent(WorkReportLaunchActivity.this, WriteWorkReportActivity.class);
         Bundle extras = new Bundle();
-        String title = DateUtils.getBiDisplayDateByTimestamp(System.currentTimeMillis()) + " " + mWorkReportListData.get(position).getTitle() + "日报";
-        extras.putString("title", title);
         extras.putInt("position", position);
-        extras.putParcelable("hour_report", mHourReportData.get(position + ""));
+        extras.putString("date", mDate.getText().toString());
+        extras.putParcelableArrayList("hour_report_list", (ArrayList<? extends Parcelable>) mHourReportData);
         intent.putExtras(extras);
         startActivityForResult(intent, WRITE_REPORT_OK);
     }
@@ -272,16 +308,33 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
             if (bundle == null)
                 return;
             if (requestCode == WRITE_REPORT_OK) {
-                int position = bundle.getInt("position");
-                HourReportBean hourReportBean = bundle.getParcelable("hour_report");
-                mHourReportData.put(position + "", hourReportBean);
-                mWorkReportListData.get(position).setContent(getString(R.string.work_report_has_write));
-                mWorkReportListAdapter.notifyItemChanged(position);
+                //填写日报返回
+                mHourReportData = bundle.getParcelableArrayList("hour_report_list");
+                freshHourReportList();
             } else if (requestCode == SELECT_OK) {
-                mReceiver.setText(data.getStringExtra("name") + "-" + data.getStringExtra("post"));
+                //选择接收人返回
                 mReceiverId = data.getStringExtra("uid");
+                mReceiverName = data.getStringExtra("name");
+                mReceiverPost = data.getStringExtra("post");
+                mReceiver.setText(mReceiverName + "-" + mReceiverPost);
+
             }
         }
+    }
+
+    /**
+     * 刷新时报
+     */
+    private void freshHourReportList() {
+        for (int i = 0; i < mHourReportData.size(); i++) {
+            if (mHourReportData.get(i).checkHasEmpty()) {
+                mWorkReportListData.get(i).setContent(getString(R.string.work_report_no_write));
+            } else {
+                mWorkReportListData.get(i).setContent(getString(R.string.work_report_has_write));
+            }
+            mWorkReportListAdapter.notifyItemChanged(i);
+        }
+
     }
 
 
@@ -316,6 +369,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
                 break;
             case R.id.ll_select_receiver:
                 Intent intent = new Intent(this, SelectContactActivity.class);
+                intent.putExtra("childId", mReceiverId);
                 startActivityForResult(intent, SELECT_OK);
                 break;
         }
@@ -333,7 +387,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     }
 
     @Override
-    public void reportFailed(int errCode, String errMsg) {
+    public void reportFailed(String errMsg) {
         Toast.makeText(this, errMsg, Toast.LENGTH_SHORT).show();
     }
 
@@ -345,12 +399,14 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     @Override
     public void getDefaultReceiverSuccess(String id, String name, String post) {
         mReceiverId = id;
+        mReceiverName = name;
+        mReceiverPost = post;
         mReceiver.setText(name + "-" + post);
     }
 
 
     @Override
-    public void getDefaultReceiverFailed(int errCode, String errMsg) {
+    public void getDefaultReceiverFailed(String errMsg) {
 //        onBackPressed();
         Toast.makeText(this, errMsg, Toast.LENGTH_SHORT).show();
     }

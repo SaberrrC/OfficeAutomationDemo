@@ -1,12 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.presenter;
 
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
@@ -34,11 +32,11 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
                 try {
                     JSONObject jo = new JSONObject(t);
                     switch (jo.getString("code")) {
-                        case "000000":
+                        case ApiJava.REQUEST_CODE_OK:
                             mView.reportSuccess(jo.getString("message"));
                             break;
                         default:
-                            mView.reportFailed(0, jo.getString("message"));
+                            mView.reportFailed(jo.getString("message"));
                     }
 
                 } catch (JSONException e) {
@@ -50,7 +48,7 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.reportFailed(errorNo, strMsg);
+                mView.reportFailed(strMsg);
             }
 
             @Override
@@ -69,20 +67,13 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
                 super.onSuccess(t);
                 try {
                     JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            JSONArray data = jo.getJSONArray("data");
-                            mView.getDefaultReceiverSuccess(data.getString(0), data.getString(1), data.getString(2));
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            mView.getDefaultReceiverEmpty(Api.getInfo(jo));
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(Api.getCode(jo));
+                    switch (jo.getString("code")) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            JSONObject data = jo.getJSONObject("data");
+                            mView.getDefaultReceiverSuccess(data.getString("id"), data.getString("username"), data.getString("post"));
                             break;
                         default:
-                            mView.getDefaultReceiverFailed(Api.getCode(jo), jo.getString("message"));
+                            mView.getDefaultReceiverFailed(jo.getString("message"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -92,7 +83,7 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getDefaultReceiverFailed(errorNo, strMsg);
+                mView.getDefaultReceiverFailed(strMsg);
             }
 
             @Override

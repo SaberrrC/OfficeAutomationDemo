@@ -8,6 +8,8 @@ public class ApiJava {
     //新接口的域名
     public static final String BASE_URL = "http://106.15.205.215:8084/";
 
+    public static final String REQUEST_CODE_OK = "000000"; //返回成功code
+
     //发起日报
     public static final String DAILY_REPORT = "dailyreport";
 

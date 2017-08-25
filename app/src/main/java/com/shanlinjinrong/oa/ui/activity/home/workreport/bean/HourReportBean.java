@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.home.workreport.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 /**
  * Created by 丁 on 2017/8/22.
@@ -43,6 +44,15 @@ public class HourReportBean implements Parcelable {
     public HourReportBean setSelfEvaluate(String mSelfEvaluate) {
         this.mSelfEvaluate = mSelfEvaluate;
         return this;
+    }
+
+    /**
+     * 判断时候有空的内容
+     *
+     * @return
+     */
+    public boolean checkHasEmpty() {
+        return TextUtils.isEmpty(mWorkPlan) || TextUtils.isEmpty(mRealWork) || TextUtils.isEmpty(mSelfEvaluate);
     }
 
     @Override

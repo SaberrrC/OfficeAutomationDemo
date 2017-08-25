@@ -22,6 +22,6 @@ public interface SelectContactActivityContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void loadData(String departmentId, String searchName);
+        void loadData(String departmentId, String searchName, String selectChildId);
     }
 }

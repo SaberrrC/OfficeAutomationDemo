@@ -150,7 +150,7 @@ public class WorkReportListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (s != null && !"".equals(s.toString())) {
+            if (s != null) {
                 int position = (int) mHolder.mEdit.getTag();
                 // 当EditText数据发生改变的时候存到data变量中
                 mData.get(position).setContent(s.toString());

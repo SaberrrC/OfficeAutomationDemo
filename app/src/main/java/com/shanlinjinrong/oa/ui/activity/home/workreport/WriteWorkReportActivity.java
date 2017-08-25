@@ -1,20 +1,26 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shanlinjinrong.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,20 +29,22 @@ import butterknife.ButterKnife;
  * Created by 丁 on 2017/8/21.
  * 填写日报页面
  */
-public class WriteWorkReportActivity extends Activity {
-    @Bind(R.id.et_plan_work)
-    EditText mPlanWork;
-
-    @Bind(R.id.et_real_work)
-    EditText mRealWork;
-
-    @Bind(R.id.et_self_evaluate)
-    EditText mSelfEvaluate;
+public class WriteWorkReportActivity extends FragmentActivity implements WriteReportFragment.OnFragmentStartChangeListener, WriteReportFragment.OnPageBthClickListener {
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
 
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
+
     private int mPosition; //条目位置
+
+    private List<WriteReportFragment> mFragmentList;
+    private List<HourReportBean> mHourReportList;
+
+    private List<String> mTitles;
+
+    private boolean isBack;
 
 
     @Override
@@ -47,35 +55,74 @@ public class WriteWorkReportActivity extends Activity {
         initView();
     }
 
-
     private void initView() {
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
-            mTopView.setAppTitle(extra.getString("title"));
             mPosition = extra.getInt("position");
-            HourReportBean hourReportBean = extra.getParcelable("hour_report");
-            if (hourReportBean != null) {
-                mPlanWork.setText(hourReportBean.getWorkPlan());
-                mRealWork.setText(hourReportBean.getRealWork());
-                mSelfEvaluate.setText(hourReportBean.getSelfEvaluate());
+            mTitles = createTitles(changeDateFormat(extra.getString("date")));
+            mTopView.setAppTitle(mTitles.get(mPosition));
+            mHourReportList = extra.getParcelableArrayList("hour_report_list");
+        }
+
+        mFragmentList = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            WriteReportFragment fragment = new WriteReportFragment();
+            Bundle fragmentArg = new Bundle();
+            fragmentArg.putParcelable("hour_report", mHourReportList.get(i));
+            fragment.setArguments(fragmentArg);
+            fragment.setChangeListener(this);
+            fragment.setPageBtnClickListener(this);
+            mFragmentList.add(fragment);
+        }
+
+        mViewPager.setAdapter(new WorkReportAdapter(getSupportFragmentManager(), mFragmentList));
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mFragmentList.get(position).fragmentChange(position);
             }
-        }
+
+            @Override
+            public void onPageSelected(int position) {
+                mTopView.setAppTitle(mTitles.get(position));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mViewPager.setCurrentItem(mPosition);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (TextUtils.isEmpty(mPlanWork.getText().toString()) && TextUtils.isEmpty(mRealWork.getText().toString()) &&
-                TextUtils.isEmpty(mSelfEvaluate.getText().toString())) {
-            super.onBackPressed();
-        } else if (!TextUtils.isEmpty(mPlanWork.getText().toString()) && !TextUtils.isEmpty(mRealWork.getText().toString()) &&
-                !TextUtils.isEmpty(mSelfEvaluate.getText().toString())) {
-            setFinishResult();
-        } else {
-            showTip("是否放弃编辑", "确定", "取消");
-        }
+    private String changeDateFormat(String date) {
+        if (TextUtils.isEmpty(date))
+            return "";
+        String[] srtArr = date.split("-");
+        return srtArr[0] + "年" + srtArr[1] + "月" + srtArr[2] + "日";
     }
 
+    private List<String> createTitles(String date) {
+        List<String> titles = new ArrayList<>();
+        for (int i = 9; i < 12; i++) {
+            String title = date + " " + i + ":00~" + (i + 1) + ":00";
+            titles.add(title);
+        }
 
+        //下午一点到五点
+        for (int i = 13; i < 17; i++) {
+            String title = date + " " + i + ":00~" + (i + 1) + ":00";
+            titles.add(title);
+        }
+
+        //下午五点到五点半
+        titles.add(date + " " + "17:00~17:30");
+        return titles;
+    }
+
+    //暂时没提示了
     public void showTip(String msg, final String posiStr, String negaStr) {
         @SuppressLint("InflateParams")
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
@@ -110,18 +157,57 @@ public class WriteWorkReportActivity extends Activity {
     }
 
 
+    public void onBackPressed() {
+        isBack = true;
+        int curPage = mViewPager.getCurrentItem();
+        mFragmentList.get(curPage).fragmentChange(curPage);
+//        setFinishResult();
+    }
+
     /**
      * 设置回调数据
      */
     private void setFinishResult() {
         Intent intent = new Intent();
         Bundle extras = new Bundle();
-        extras.putInt("position", mPosition);
-        HourReportBean hourReportBean = new HourReportBean(mPlanWork.getText().toString(), mRealWork.getText().toString(), mSelfEvaluate.getText().toString());
-        extras.putParcelable("hour_report", hourReportBean);
+        extras.putParcelableArrayList("hour_report_list", (ArrayList<? extends Parcelable>) mHourReportList);
         intent.putExtras(extras);
         setResult(RESULT_OK, intent);
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.bind(this);
+    }
+
+    @Override
+    public void fragmentStartChange(int position, String planWork, String realWork, String selfEvaluate) {
+        mHourReportList.get(position).setRealWork(realWork).setWorkPlan(planWork).setSelfEvaluate(selfEvaluate);
+        if (isBack) {
+            setFinishResult();
+        }
+    }
+
+    @Override
+    public void onLastPageClick() {
+        int curPage = mViewPager.getCurrentItem();
+        if (curPage > 0) {
+            mViewPager.setCurrentItem(--curPage);
+        } else {
+            Toast.makeText(this, "已经是第一项", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onNextPageClick() {
+        int curPage = mViewPager.getCurrentItem();
+        if (curPage < mFragmentList.size() - 1) {
+            mViewPager.setCurrentItem(++curPage);
+        } else {
+            Toast.makeText(this, "已经是最后一项", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

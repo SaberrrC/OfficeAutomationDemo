@@ -17,20 +17,16 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.Notice;
+import com.shanlinjinrong.oa.ui.activity.notice.contract.NoticeListActivityContract;
+import com.shanlinjinrong.oa.ui.activity.notice.presenter.NoticeListActivityPresenter;
 import com.shanlinjinrong.oa.ui.adapter.NoticeDetailAdapter;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
-
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,7 +37,7 @@ import butterknife.ButterKnife;
  * Author:Created by CXP on Date: 2016/9/18 16:45.
  * Description:公告通知列表
  */
-public class NoticeListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class NoticeListActivity extends MyBaseActivity<NoticeListActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, NoticeListActivityContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;
@@ -78,6 +74,7 @@ public class NoticeListActivity extends BaseActivity implements SwipeRefreshLayo
             return false;
         }
     });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +83,12 @@ public class NoticeListActivity extends BaseActivity implements SwipeRefreshLayo
         initToolBar();
         setTranslucentStatus(this);
         initWidget();
-        loadData(false,false);
+        loadData(false, false);
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initWidget() {
@@ -119,7 +121,7 @@ public class NoticeListActivity extends BaseActivity implements SwipeRefreshLayo
                 // 0屏幕停止滚动；1:滚动且用户仍在触碰或手指还在屏幕上2：随用户的操作，屏幕上产生的惯性滑动；
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (newState == 0 && list.size() > 9) {
-                    hasMore=true;
+                    hasMore = true;
                     // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
                     int lastPosition = layoutManager.findLastVisibleItemPosition();
                     if (lastPosition == list.size() - 1) {
@@ -131,7 +133,7 @@ public class NoticeListActivity extends BaseActivity implements SwipeRefreshLayo
                             if (!isLoading) {
                                 isLoading = true;
                                 mAdapter.addFooterView(view, list.size());
-                                handler.sendEmptyMessageDelayed(LOAD_MORE_CONTENT,1000);
+                                handler.sendEmptyMessageDelayed(LOAD_MORE_CONTENT, 1000);
                             }
                         } else {
                             handler.sendEmptyMessage(NO_MORE_CONTENT);
@@ -145,7 +147,7 @@ public class NoticeListActivity extends BaseActivity implements SwipeRefreshLayo
     @Override
     protected void onResume() {
         super.onResume();
-        currentPage=1;
+        currentPage = 1;
     }
 
     @Override
@@ -156,103 +158,26 @@ public class NoticeListActivity extends BaseActivity implements SwipeRefreshLayo
     /**
      * @param isPull 是否是下拉或加载更多
      */
-    private void loadData(boolean isPull,final boolean loadMore) {
+    private void loadData(boolean isPull, final boolean loadMore) {
         if (isPull) {
             mSwipeRefreshLayout.setRefreshing(true);
             currentPage = 1;
             list.clear();
             hasMore = true;
-            LogUtils.e("当前在下拉刷新-》"+currentPage);
+            LogUtils.e("当前在下拉刷新-》" + currentPage);
         }
         if (!isPull && !loadMore) {
             list.clear();
             showLoadingView();
             currentPage = 1;
-            LogUtils.e("当前是正常加载数据-》"+currentPage);
+            LogUtils.e("当前是正常加载数据-》" + currentPage);
         }
         if (loadMore) {
             currentPage++;
-            LogUtils.e("当前是加载更多数据-》"+currentPage);
+            LogUtils.e("当前是加载更多数据-》" + currentPage);
         }
-
-        HttpParams params = new HttpParams();
-        params.put("limit", limit);
-        params.put("page", currentPage);
-        LogUtils.e("loadData:currentPage->"+currentPage);
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        initKjHttp().post(Api.MESSAGE_NOTICE, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            ArrayList<Notice> listNotices = new ArrayList<>();
-                            JSONArray notices = Api.getDataToJSONArray(jo);
-                            for (int i = 0; i < notices.length(); i++) {
-                                JSONObject jsonObject = notices.getJSONObject(i);
-                                Notice notice =
-                                        new Notice(jsonObject);
-                                listNotices.add(notice);
-                            }
-
-                            if (loadMore) {
-                                //如果是加载更多的话，需要将最后一个view移除了
-                                mAdapter.removeAllFooterView();
-                            }
-                            isLoading = false;
-
-                            list.addAll(listNotices);
-                            mAdapter.notifyDataSetChanged();
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            showEmptyView(mRootView, "抱歉，当前公告通知为空", 0, false);
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.LIMIT_CONTENT_EMPTY:
-                           hasMore=false;
-                            mAdapter.removeAllFooterView();
-                            showToast("没有更多了");
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    LogUtils.e("通知列表发生异常："+e.toString());
-
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.loadData(AppConfig.getAppConfig(this).getDepartmentId(), limit, currentPage, loadMore);
     }
-
 
 
     private void initToolBar() {
@@ -286,4 +211,43 @@ public class NoticeListActivity extends BaseActivity implements SwipeRefreshLayo
     }
 
 
+    @Override
+    public void loadDataSuccess(List<Notice> listNotices, boolean loadMore) {
+        if (loadMore) {
+            //如果是加载更多的话，需要将最后一个view移除了
+            mAdapter.removeAllFooterView();
+        }
+        isLoading = false;
+
+        list.addAll(listNotices);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void loadDataFinish() {
+        hideLoadingView();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void loadDataFailed(int errCode, String msg) {
+        catchWarningByCode(errCode);
+    }
+
+    @Override
+    public void loadDataEmpty() {
+        showEmptyView(mRootView, "抱歉，当前公告通知为空", 0, false);
+    }
+
+    @Override
+    public void loadDataNoMore() {
+        hasMore = false;
+        mAdapter.removeAllFooterView();
+        showToast("没有更多了");
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
 }

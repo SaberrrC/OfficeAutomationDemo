@@ -11,6 +11,8 @@ import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPhoneActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UserInfoActivity;
+import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
+import com.shanlinjinrong.oa.ui.activity.notice.NoticesSingleInfoActivity;
 import com.shanlinjinrong.oa.ui.annotation.PerActivity;
 import com.shanlinjinrong.oa.ui.base.module.ActivityModule;
 
@@ -43,4 +45,8 @@ public interface ActivityComponent {
     void inject(ModifyPwdActivity activity);
 
     void inject(UserInfoActivity activity);
+
+    void inject(NoticeListActivity activity);
+
+    void inject(NoticesSingleInfoActivity activity);
 }

@@ -13,15 +13,13 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.Notice;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.activity.notice.contract.NoticesSingleInfoActivityContract;
+import com.shanlinjinrong.oa.ui.activity.notice.presenter.NoticesSingleInfoActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.Utils;
-
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.List;
 
@@ -34,7 +32,7 @@ import butterknife.ButterKnife;
  * Author:Created by CXP on Date: 2016/9/22 18:04.
  * Description:单个公告通知详细页
  */
-public class NoticesSingleInfoActivity extends BaseActivity {
+public class NoticesSingleInfoActivity extends MyBaseActivity<NoticesSingleInfoActivityPresenter> implements NoticesSingleInfoActivityContract.View {
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.toolbar_text_btn)
@@ -67,6 +65,12 @@ public class NoticesSingleInfoActivity extends BaseActivity {
         initWidget();
         initData();
     }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
     private void setPicTureParams() {
         picParams = new LinearLayout.LayoutParams(Utils
                 .dip2px(70),
@@ -74,6 +78,7 @@ public class NoticesSingleInfoActivity extends BaseActivity {
         picParams.setMargins(20, 0, 0, 0);
         picParams.gravity = Gravity.CENTER;
     }
+
     private void initData() {
         //singleNotice
         notice = (Notice) getIntent().getSerializableExtra("singleNotice");
@@ -95,7 +100,7 @@ public class NoticesSingleInfoActivity extends BaseActivity {
         mTvNoticeDetailSingleContent.setText(notice.getContent()
                 .replace("&nbsp;", " ").replace("<br/>", "\n"));
         mTvNoticeDetailSingleTitle.setText(notice.getTitle());
-          imgsLists = notice.getImgsLists();
+        imgsLists = notice.getImgsLists();
         if (imgsLists.size() > 0) {
             for (int i = 0; i < imgsLists.size(); i++) {
                 View picView = LayoutInflater.from(this).inflate(R.layout.add_pic_view, null);
@@ -107,14 +112,14 @@ public class NoticesSingleInfoActivity extends BaseActivity {
                         Intent intent = new Intent(NoticesSingleInfoActivity.this,
                                 ShowPictureActivity.class);
                         try {
-                            intent.putExtra("picUrl",picUrl);
+                            intent.putExtra("picUrl", picUrl);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         startActivity(intent);
                     }
                 });
-                LogUtils.e("url->"+Uri.parse(picUrl));
+                LogUtils.e("url->" + Uri.parse(picUrl));
                 pic.setImageURI(Uri.parse(picUrl));
                 llPictures.addView(picView, picParams);
             }
@@ -130,19 +135,7 @@ public class NoticesSingleInfoActivity extends BaseActivity {
      * 标记通知公告为已读
      */
     private void markReadNotice(String Nid) {
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        params.put("nid", Nid);
-        initKjHttp().post(Api.NOTICE_HAD_READ, params, new HttpCallBack() {
-            @Override
-            public void onSuccess(String t) {
-
-                LogUtils.e("标记已读"+t);
-                super.onSuccess(t);
-            }
-        });
+       mPresenter.markReadNotice(Nid, AppConfig.getAppConfig(this).getDepartmentId());
     }
 
     private void initWidget() {
@@ -181,5 +174,17 @@ public class NoticesSingleInfoActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+
+
+    @Override
+    public void uidNull(int code) {
+
+    }
+
+    @Override
+    public void markSuccess() {
+
     }
 }

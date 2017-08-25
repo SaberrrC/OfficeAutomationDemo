@@ -27,7 +27,7 @@ android {
         versionCode 64
         versionName "v1.1.9"
         ndk {
-            abiFilters 'armeabi', 'armeabi-v7a' ,'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64', "arm64-v8a"
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64', "arm64-v8a"
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME: "com.shanlinjinrong.oa",
@@ -63,12 +63,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets{
-        main{
+    sourceSets {
+        main {
             jniLibs.srcDirs = ['libs']
         }
     }
 }
+
 def preAppName() {
     return "善林OA"
 }
@@ -92,82 +93,81 @@ def devJavaAddress() {
     return "\"http://106.15.205.215:8084/\""
 }
 
-
 def devAppName() {
     return '善林OA-Dev版'
 }
 
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.0'
     //    compile 'com.android.support:support-v4:24.2.0'
-    compile 'com.android.support:recyclerview-v7:24.2.0'
+    //混淆需要添加文件
+    //仿微信图片选择
+    compile files('libs/Msc.jar')
+    compile files('libs/Sunflower.jar')
+    //数据库
+    //腾讯bugly
+    //小红点提示
+    //RxBinding
+    //内存分析检测
+    //内存分析end
+
+    // 网易云信start:基础 (必需)
+    // 音视频需要
+    // 聊天室需要
+    // 实时会话服务需要
+    // 网易云信end
+
+    //底部弹出框
+    // optional
+
+    //蒲公英
+    //EventBus
+    //stetho
+    //leakCanary 检测内存泄露
+    //blockCanary 检测ANR
+
+
+    compile project(':easeui')
+    compile project(':calendarlibrary')
+    compile project(':uilibrary')
+
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'org.kymjs.kjframe:kjframe:2.6'
-    //混淆需要添加文件
     compile 'com.facebook.fresco:fresco:0.13.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v2.1.0'
     compile 'cn.qqtheme.framework:WheelPicker:1.1.2'
     compile 'com.github.florent37:viewanimator:1.0.3'
     compile 'com.google.code.gson:gson:2.7'
-    //仿微信图片选择
     compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
     compile 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
     compile 'com.alibaba:fastjson:1.2.20'
     compile 'cn.jiguang:jpush:2.1.8'
-    compile files('libs/Msc.jar')
-    compile files('libs/Sunflower.jar')
     compile 'me.relex:photodraweeview:1.1.2'
-    //数据库
     compile 'com.j256.ormlite:ormlite-android:5.0'
-    //腾讯bugly
     compile 'com.tencent.bugly:crashreport:2.4.0'
     compile 'com.tencent.bugly:nativecrashreport:3.1.2'
-    //小红点提示
     compile 'q.rorbin:badgeview:1.0.5'
-    //RxBinding
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-    //内存分析检测
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    //内存分析end
-
-    // 网易云信start:基础 (必需)
     compile 'com.netease.nimlib:basesdk:4.0.0'
-    // 音视频需要
     compile 'com.netease.nimlib:avchat:4.0.0'
-    // 聊天室需要
     compile 'com.netease.nimlib:chatroom:4.0.0'
-    // 实时会话服务需要
     compile 'com.netease.nimlib:rts:4.0.0'
-    // 网易云信end
-
-    //底部弹出框
     compile 'com.flipboard:bottomsheet-core:1.5.3'
     compile 'com.flipboard:bottomsheet-commons:1.5.3'
-    // optional
-
-    //蒲公英
     compile 'com.pgyersdk:sdk:2.5.6'
-    //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.parse:parse-android:1.13.1'
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:3.0.1"
-    //stetho
     compile 'com.facebook.stetho:stetho:1.5.0'
-    //leakCanary 检测内存泄露
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.2'
-    //blockCanary 检测ANR
     compile 'com.github.markzhai:blockcanary-android:1.5.0'
-
-    compile project(':easeui')
-    compile project(':calendarlibrary')
-    compile project(':uilibrary')
     compile 'com.google.dagger:dagger:2.11'
+    compile 'com.android.support:support-v4:24.2.1'
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
