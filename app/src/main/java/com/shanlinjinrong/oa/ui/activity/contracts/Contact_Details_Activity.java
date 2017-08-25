@@ -340,6 +340,7 @@ public class Contact_Details_Activity extends BaseActivity {
                             }
                             startActivity(new Intent(mContext, VoiceCallActivity.class)
                                     .putExtra("username",  "sl_"+userInfoSelfDetailsBean.CODE_self)
+                                    .putExtra("toUsername",  "sl_"+userInfoDetailsBean.CODE)
                                     .putExtra("nike", userInfoSelfDetailsBean.username_self)
                                     .putExtra("portrait", userInfoSelfDetailsBean.portrait_self)
                                     .putExtra("isComingCall", false));

@@ -350,14 +350,14 @@ public class CallActivity extends BaseActivity {
 //            message.setFrom(username);
 //        }
 //
-//        String st1 = getResources().getString(R.string.call_duration);
-//        String st2 = getResources().getString(R.string.Refused);
-//        String st3 = getResources().getString(R.string.The_other_party_has_refused_to);
-//        String st4 = getResources().getString(R.string.The_other_is_not_online);
-//        String st5 = getResources().getString(R.string.The_other_is_on_the_phone);
-//        String st6 = getResources().getString(R.string.The_other_party_did_not_answer);
-//        String st7 = getResources().getString(R.string.did_not_answer);
-//        String st8 = getResources().getString(R.string.Has_been_cancelled);
+        String st1 = getResources().getString(R.string.call_duration);
+        String st2 = getResources().getString(R.string.Refused);
+        String st3 = getResources().getString(R.string.The_other_party_has_refused_to);
+        String st4 = getResources().getString(R.string.The_other_is_not_online);
+        String st5 = getResources().getString(R.string.The_other_is_on_the_phone);
+        String st6 = getResources().getString(R.string.The_other_party_did_not_answer);
+        String st7 = getResources().getString(R.string.did_not_answer);
+        String st8 = getResources().getString(R.string.Has_been_cancelled);
 //        switch (callingState) {
 //            case NORMAL:
 //                txtBody = new EMTextMessageBody(st1 + callDruationText);

@@ -44,6 +44,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.adapter.EaseConversationAdapter;
 import com.hyphenate.exceptions.EMNoActiveCallException;
 import com.hyphenate.exceptions.HyphenateException;
@@ -55,6 +56,11 @@ import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
 import java.util.UUID;
 
+//                                    if (username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
+//                                        EMMessage message = EMMessage.createTxtSendMessage(nike + str, username);
+//                                        //发送消息
+//                                        EMClient.getInstance().chatManager().sendMessage(message);
+//                                      }
 
 /**
  * 语音通话页面
@@ -80,6 +86,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     private boolean monitor = false;
     private String nike;
     private String portrait;
+    private String toUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +129,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         addCallStateListener();
         msgid = UUID.randomUUID().toString();
         username = getIntent().getStringExtra("username");
+        toUsername = getIntent().getStringExtra("toUsername");
         nike = getIntent().getStringExtra("nike");
         portrait = getIntent().getStringExtra("portrait");
 //        String nickName = FriendsInfoCacheSvc.getInstance(this).getNickName(username);
@@ -352,11 +360,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                                             @Override
                                             public void run() {
                                                 removeCallStateListener();
-
-//                                                EMMessage message = EMMessage.createTxtSendMessage(nike + "已挂断", username);
-//                                                //发送消息
-//                                                EMClient.getInstance().chatManager().sendMessage(message);
-
                                                 saveCallRecord();
                                                 Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                                 animation.setDuration(800);
@@ -468,6 +471,14 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 isRefused = true;
                 refuseBtn.setEnabled(false);
                 handler.sendEmptyMessage(MSG_CALL_REJECT);
+                //TODO 拒接
+                String s = AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE);
+                if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
+                    EMMessage message = EMMessage.createTxtSendMessage("已拒接", "sl_" + username);
+                    //发送消息
+                    EMClient.getInstance().chatManager().sendMessage(message);
+                }
+
                 break;
 
             case R.id.btn_answer_call:
@@ -478,6 +489,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 hangupBtn.setVisibility(View.VISIBLE);
                 voiceContronlLayout.setVisibility(View.VISIBLE);
                 handler.sendEmptyMessage(MSG_CALL_ANSWER);
+                //TODO 接通
                 break;
 
             case R.id.btn_hangup_call:
@@ -486,6 +498,13 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 endCallTriggerByMe = true;
                 callStateTextView.setText(getResources().getString(R.string.hanging_up));
                 handler.sendEmptyMessage(MSG_CALL_END);
+                //TODO 挂断
+                if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
+                    EMMessage message = EMMessage.createTxtSendMessage("已取消", username);
+                    //发送消息
+                    EMClient.getInstance().chatManager().sendMessage(message);
+                }
+
                 break;
 
             case R.id.iv_mute:
