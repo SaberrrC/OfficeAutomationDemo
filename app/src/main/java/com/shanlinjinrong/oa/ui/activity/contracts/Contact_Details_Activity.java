@@ -229,7 +229,7 @@ public class Contact_Details_Activity extends BaseActivity {
                                         .putExtra("department_name", userInfoDetailsBean.department_name)
                                         .putExtra("post_name", userInfoDetailsBean.post_title)
                                         .putExtra("sex", userInfoDetailsBean.sex)
-//                                    .putExtra("uid", constants.getUid())
+//                                      .putExtra("uid", constants.getUid())
                                         .putExtra("phone", userInfoDetailsBean.phone)
                                         .putExtra("email", userInfoDetailsBean.email));
                             } catch (Throwable e) {
@@ -252,7 +252,7 @@ public class Contact_Details_Activity extends BaseActivity {
                                 return;
                             }
                             startActivity(new Intent(mContext, VoiceCallActivity.class)
-                                    .putExtra("username", userInfoDetailsBean.CODE)
+                                    .putExtra("username", "sl_"+userInfoDetailsBean.CODE)
                                     .putExtra("nike", userInfoDetailsBean.username)
                                     .putExtra("portrait", userInfoDetailsBean.portrait)
                                     .putExtra("isComingCall", false));
@@ -339,7 +339,7 @@ public class Contact_Details_Activity extends BaseActivity {
                                 return;
                             }
                             startActivity(new Intent(mContext, VoiceCallActivity.class)
-                                    .putExtra("username", userInfoSelfDetailsBean.CODE_self)
+                                    .putExtra("username",  "sl_"+userInfoSelfDetailsBean.CODE_self)
                                     .putExtra("nike", userInfoSelfDetailsBean.username_self)
                                     .putExtra("portrait", userInfoSelfDetailsBean.portrait_self)
                                     .putExtra("isComingCall", false));

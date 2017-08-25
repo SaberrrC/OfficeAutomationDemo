@@ -39,7 +39,7 @@ public class WelcomePagePresenter implements WelcomePageContract.Presenter {
         params.put("uid", uid);
         params.put("token", token);
 
-        mKjHttp.post(AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.BASE_URL) + Api.SITE_TIMEOUT, params, new HttpCallBack() {
+        mKjHttp.post( Api.SITE_TIMEOUT, params, new HttpCallBack() {
             @Override
             public void onFinish() {
                 super.onFinish();
@@ -70,7 +70,7 @@ public class WelcomePagePresenter implements WelcomePageContract.Presenter {
                 mView.checkTimeOutFailed();
             }
         });
-    }
+     }
 
     /**
      * 请求接口的域名

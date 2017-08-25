@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -80,6 +79,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     private TextView netwrokStatusVeiw;
     private boolean monitor = false;
     private String nike;
+    private String portrait;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +122,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         addCallStateListener();
         msgid = UUID.randomUUID().toString();
         username = getIntent().getStringExtra("username");
-        String nike = getIntent().getStringExtra("nike");
-        String portrait = getIntent().getStringExtra("portrait");
+        nike = getIntent().getStringExtra("nike");
+        portrait = getIntent().getStringExtra("portrait");
 //        String nickName = FriendsInfoCacheSvc.getInstance(this).getNickName(username);
 //        String portrait = FriendsInfoCacheSvc.getInstance(this).getPortrait(username);
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
@@ -147,7 +147,9 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
             hangupBtn.setVisibility(View.VISIBLE);
             st1 = getResources().getString(R.string.Are_connected_to_each_other);
             callStateTextView.setText(st1);
+
             handler.sendEmptyMessage(MSG_CALL_MAKE_VOICE);
+
             handler.postDelayed(new Runnable() {
                 public void run() {
                     streamID = playMakeCallSounds();
@@ -257,7 +259,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 EMLog.d("EMCallManager", "onCallStateChanged:" + callState);
                 switch (callState) {
 
-                    case CONNECTING:
+                    case CONNECTING:  // 正在连接对方
                         runOnUiThread(new Runnable() {
 
                             @Override
@@ -266,7 +268,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                             }
                         });
                         break;
-                    case CONNECTED:
+                    case CONNECTED: // 双方已经建立连接
                         //获取扩展内容
                         runOnUiThread(new Runnable() {
                             @Override
@@ -277,7 +279,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                         });
                         break;
 
-                    case ACCEPTED:
+                    case ACCEPTED:// 电话接通成功
                         handler.removeCallbacks(timeoutHangup);
                         runOnUiThread(new Runnable() {
 
@@ -337,7 +339,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                             }
                         });
                         break;
-                    case DISCONNECTED:
+                    case DISCONNECTED: // 电话断了
                         handler.removeCallbacks(timeoutHangup);
                         @SuppressWarnings("UnnecessaryLocalVariable") final CallError fError = error;
                         runOnUiThread(new Runnable() {
@@ -349,8 +351,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Log.d("AAA", "CALL DISCONNETED");
                                                 removeCallStateListener();
+
+//                                                EMMessage message = EMMessage.createTxtSendMessage(nike + "已挂断", username);
+//                                                //发送消息
+//                                                EMClient.getInstance().chatManager().sendMessage(message);
+
                                                 saveCallRecord();
                                                 Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                                 animation.setDuration(800);

@@ -18,16 +18,12 @@ import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMMessage.Status;
-import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.BadgeUtil;
-import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -344,70 +340,70 @@ public class CallActivity extends BaseActivity {
      * save call record
      */
     protected void saveCallRecord() {
-        @SuppressWarnings("UnusedAssignment") EMMessage message = null;
-        @SuppressWarnings("UnusedAssignment") EMTextMessageBody txtBody = null;
-        if (!isInComingCall) { // outgoing call
-            message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-            message.setFrom(username);
-        } else {
-            message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-            message.setFrom(username);
-        }
-
-        String st1 = getResources().getString(R.string.call_duration);
-        String st2 = getResources().getString(R.string.Refused);
-        String st3 = getResources().getString(R.string.The_other_party_has_refused_to);
-        String st4 = getResources().getString(R.string.The_other_is_not_online);
-        String st5 = getResources().getString(R.string.The_other_is_on_the_phone);
-        String st6 = getResources().getString(R.string.The_other_party_did_not_answer);
-        String st7 = getResources().getString(R.string.did_not_answer);
-        String st8 = getResources().getString(R.string.Has_been_cancelled);
-        switch (callingState) {
-            case NORMAL:
-                txtBody = new EMTextMessageBody(st1 + callDruationText);
-                break;
-            case REFUSED:
-                txtBody = new EMTextMessageBody(st2);
-                break;
-            case BEREFUSED:
-                txtBody = new EMTextMessageBody(st3);
-                break;
-            case OFFLINE:
-                txtBody = new EMTextMessageBody(st4);
-                break;
-            case BUSY:
-                txtBody = new EMTextMessageBody(st5);
-                break;
-            case NO_RESPONSE:
-                txtBody = new EMTextMessageBody(st6);
-                break;
-            case UNANSWERED:
-                txtBody = new EMTextMessageBody(st7);
-                break;
-            case VERSION_NOT_SAME:
-                txtBody = new EMTextMessageBody(getString(R.string.call_version_inconsistent));
-                break;
-            default:
-                txtBody = new EMTextMessageBody(st8);
-                break;
-        }
-        // set message extension
-        if (callType == 0)
-            message.setAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, true);
-        else
-            message.setAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, true);
-
-        // set message body
-        message.addBody(txtBody);
-        message.setMsgId(msgid);
-        message.setStatus(Status.SUCCESS);
-
-        // save
-        try {
-            EMClient.getInstance().chatManager().saveMessage(message);
-        } catch (Exception e) {
-            LogUtils.e(e.toString());
-        }
+//        @SuppressWarnings("UnusedAssignment") EMMessage message = null;
+//        @SuppressWarnings("UnusedAssignment") EMTextMessageBody txtBody = null;
+//        if (!isInComingCall) { // outgoing call
+//            message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+//            message.setFrom(username);
+//        } else {
+//            message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+//            message.setFrom(username);
+//        }
+//
+//        String st1 = getResources().getString(R.string.call_duration);
+//        String st2 = getResources().getString(R.string.Refused);
+//        String st3 = getResources().getString(R.string.The_other_party_has_refused_to);
+//        String st4 = getResources().getString(R.string.The_other_is_not_online);
+//        String st5 = getResources().getString(R.string.The_other_is_on_the_phone);
+//        String st6 = getResources().getString(R.string.The_other_party_did_not_answer);
+//        String st7 = getResources().getString(R.string.did_not_answer);
+//        String st8 = getResources().getString(R.string.Has_been_cancelled);
+//        switch (callingState) {
+//            case NORMAL:
+//                txtBody = new EMTextMessageBody(st1 + callDruationText);
+//                break;
+//            case REFUSED:
+//                txtBody = new EMTextMessageBody(st2);
+//                break;
+//            case BEREFUSED:
+//                txtBody = new EMTextMessageBody(st3);
+//                break;
+//            case OFFLINE:
+//                txtBody = new EMTextMessageBody(st4);
+//                break;
+//            case BUSY:
+//                txtBody = new EMTextMessageBody(st5);
+//                break;
+//            case NO_RESPONSE:
+//                txtBody = new EMTextMessageBody(st6);
+//                break;
+//            case UNANSWERED:
+//                txtBody = new EMTextMessageBody(st7);
+//                break;
+//            case VERSION_NOT_SAME:
+//                txtBody = new EMTextMessageBody(getString(R.string.call_version_inconsistent));
+//                break;
+//            default:
+//                txtBody = new EMTextMessageBody(st8);
+//                break;
+//        }
+//        // set message extension
+//        if (callType == 0)
+//            message.setAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, true);
+//        else
+//            message.setAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, true);
+//
+//        // set message body
+//        message.addBody(txtBody);
+//        message.setMsgId(msgid);
+//        message.setStatus(Status.SUCCESS);
+//
+//        // save
+//        try {
+//            EMClient.getInstance().chatManager().saveMessage(message);
+//        } catch (Exception e) {
+//            LogUtils.e(e.toString());
+//        }
     }
 
     enum CallingState {

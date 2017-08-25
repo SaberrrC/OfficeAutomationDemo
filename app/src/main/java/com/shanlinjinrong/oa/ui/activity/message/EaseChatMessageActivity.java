@@ -12,9 +12,11 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.model.UserInfoDetailsBean;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
@@ -179,10 +181,26 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     }
 
     @Override
-    public void voiceCallListener(String toChatUsername) {
-        startActivity(new Intent(this, VoiceCallActivity.class)
-                .putExtra("username", toChatUsername)
-                .putExtra("isComingCall", false));
+    public void voiceCallListener(String toChatUsername, EMMessage mEmMessage) {
+        try {
+            if (mEmMessage != null) {
+                userInfo = mEmMessage.getStringAttribute("userInfo", "");
+                userInfo_self = mEmMessage.getStringAttribute("userInfo_self", "");
+                final UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
+                //final UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
+                startActivity(new Intent(this, VoiceCallActivity.class)
+                        .putExtra("nike", userInfoDetailsBean.username)
+                        .putExtra("portrait", userInfoDetailsBean.portrait)
+                        .putExtra("username", toChatUsername)
+                        .putExtra("isomingCall", false));
+            } else {
+                startActivity(new Intent(this, VoiceCallActivity.class)
+                        .putExtra("username", toChatUsername)
+                        .putExtra("isomingCall", false));
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     String userInfo_self;

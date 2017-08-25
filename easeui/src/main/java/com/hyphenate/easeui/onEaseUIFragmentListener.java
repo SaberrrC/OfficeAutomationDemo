@@ -10,7 +10,7 @@ import com.hyphenate.chat.EMMessage;
 
 public interface onEaseUIFragmentListener {
 
-    void voiceCallListener(String toChatUsername);
+    void voiceCallListener(String toChatUsername,EMMessage mEmMessage);
 
     void clickUserInfo(String userInfo, EMMessage emMessage);
 }

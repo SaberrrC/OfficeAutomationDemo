@@ -42,8 +42,12 @@ public class WelcomePage extends Activity implements WelcomePageContract.View {
                 .get(AppConfig.PREF_KEY_USER_UID);
         token = AppConfig.getAppConfig(AppManager.mContext)
                 .get(AppConfig.PREF_KEY_TOKEN);
-        mPresenter.checkoutTimeOut(uid, token);
-        mPresenter.getDomain();
+        checkTimeOutSuccess();
+
+        //TODO 2017年8月25日14:14:46  Welcome界面为什么要登录超时判断
+        //  mPresenter.checkoutTimeOut(uid, token);
+        //TODO BaseURL 废弃
+        //  mPresenter.getDomain();
 
     }
 
