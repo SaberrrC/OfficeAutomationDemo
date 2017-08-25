@@ -19,6 +19,7 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.my.contract.FeedbackActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.FeedbackActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.utils.StringUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -57,8 +58,11 @@ public class FeedbackActivity extends MyBaseActivity<FeedbackActivityPresenter> 
 
     @OnClick(R.id.toolbar_text_btn)
     public void onClick() {
+        String tvContent = this.feedbackText.getText().toString();
         if (feedbackText.getText().toString().equals("")) {
             showToast("提交内容不能为空");
+        } else if(StringUtils.isEmoji(tvContent)){
+            showToast("反馈内容不能包含特殊字符");
         } else {
             sendFeedback();
         }

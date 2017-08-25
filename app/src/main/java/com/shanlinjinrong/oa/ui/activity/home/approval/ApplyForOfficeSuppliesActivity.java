@@ -16,10 +16,10 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.listener.PermissionListener;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.thirdParty.iflytek.IflytekUtil;
+import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.json.JSONArray;
@@ -148,6 +148,17 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
                 params.setMargins(40, 0, 0, 0);
                 params.gravity = Gravity.CENTER;
                 tvLeader.setText(username);
+                if (username.equals("暂无")) {
+                    sdv.setClickable(true);
+                    sdv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //TODO 暂无
+                        }
+                    });
+                } else {
+                    sdv.setClickable(false);
+                }
                 mLlContainer.addView(view, params);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -276,9 +287,9 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)){
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
                         catchWarningByCode(Api.getCode(jo));
-                    }else {
+                    } else {
                         showToast(Api.getInfo(jo));
 
                     }

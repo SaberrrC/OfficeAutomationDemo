@@ -49,6 +49,7 @@ public class MyJpushReceiver extends BroadcastReceiver {
         LogUtils.d("onReceive - " + intent.getAction());
         LogUtils.e("bundleaaa：" + bundle.toString());
 
+        //TODO 2017-8-25 10:03:19 极光逻辑部分走不通
         EventMessage  eventMessage = new EventMessage();
         eventMessage.setStr("reFreash");
         EventBus.getDefault().postSticky(eventMessage);

@@ -726,7 +726,54 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     //send message
     protected void sendTextMessage(String content) {
+        readUserInfoDetailsMessage();
+        if (EaseAtMessageHelper.get().containsAtUsername(content)) {
+            sendAtMessage(content);
+        } else {
+            EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
+            sendUserInfoDetailsMessage(message);
+            sendMessage(message);
+            mEmMessage = message;
+        }
+    }
 
+    private void sendUserInfoDetailsMessage(EMMessage message) {
+        String from = message.getFrom();
+        UserInfoSelfDetailsBean bean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
+        String newUserInfo_self = null;
+        String newUserInfo = null;
+        if (!from.equals("sl_" + bean.CODE_self)) {
+            try {
+                newUserInfo_self = userInfo_self.replaceAll("_self", "");
+                newUserInfo = userInfo.replace("phone", "phone_self");
+                newUserInfo = newUserInfo.replace("CODE", "CODE_self");
+                newUserInfo = newUserInfo.replace("sex", "sex_self");
+                newUserInfo = newUserInfo.replace("post_title", "post_title_self");
+                newUserInfo = newUserInfo.replace("username", "username_self");
+                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
+                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
+                newUserInfo = newUserInfo.replace("email", "email_self");
+                newUserInfo = newUserInfo.replace("department_name", "department_name_self");
+                sendUserInfo_self = new JSONObject(newUserInfo_self);
+                sendUserInfo = new JSONObject(newUserInfo);
+                message.setAttribute("userInfo_self", sendUserInfo);
+                message.setAttribute("userInfo", sendUserInfo_self);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                sendUserInfo_self = new JSONObject(userInfo_self);
+                sendUserInfo = new JSONObject(userInfo);
+                message.setAttribute("userInfo_self", sendUserInfo_self);
+                message.setAttribute("userInfo", sendUserInfo);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void readUserInfoDetailsMessage() {
         //TODO TEXT 携带消息
         JSONObject object_self = new JSONObject();
         JSONObject object = new JSONObject();
@@ -762,47 +809,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (EaseAtMessageHelper.get().containsAtUsername(content)) {
-            sendAtMessage(content);
-        } else {
-            EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
-            String from = message.getFrom();
-            UserInfoSelfDetailsBean bean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
-            String newUserInfo_self = null;
-            String newUserInfo = null;
-            if (!from.equals("sl_" + bean.CODE_self)) {
-                try {
-                    newUserInfo_self = userInfo_self.replaceAll("_self", "");
-                    newUserInfo = userInfo.replace("phone", "phone_self");
-                    newUserInfo = newUserInfo.replace("CODE", "CODE_self");
-                    newUserInfo = newUserInfo.replace("sex", "sex_self");
-                    newUserInfo = newUserInfo.replace("post_title", "post_title_self");
-                    newUserInfo = newUserInfo.replace("username", "username_self");
-                    newUserInfo = newUserInfo.replace("portrait", "portrait_self");
-                    newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
-                    newUserInfo = newUserInfo.replace("email", "email_self");
-                    newUserInfo = newUserInfo.replace("department_name", "department_name_self");
-                    sendUserInfo_self = new JSONObject(userInfo_self);
-                    sendUserInfo = new JSONObject(userInfo);
-                    message.setAttribute("userInfo_self", newUserInfo);
-                    message.setAttribute("userInfo", newUserInfo_self);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    sendUserInfo_self = new JSONObject(userInfo_self);
-                    sendUserInfo = new JSONObject(userInfo);
-                    message.setAttribute("userInfo_self", sendUserInfo_self);
-                    message.setAttribute("userInfo", sendUserInfo);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-
-            sendMessage(message);
-            mEmMessage = message;
-        }
     }
 
     /**
@@ -837,77 +843,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected void sendVoiceMessage(String filePath, int length) {
         EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, toChatUsername);
         //TODO 语音携带消息
-        JSONObject object_self = new JSONObject();
-        JSONObject object = new JSONObject();
-        try {
-            userInfo_self = getArguments().getString("userInfo_self", "");
-            userInfo = getArguments().getString("userInfo", "");
-            String user_code = getArguments().getString("user_code", "-");
-            String to_user_code = getArguments().getString("to_user_code", "-");
-
-            if (!user_code.equals("-") && getArguments().getString("user_code", "-").equals(user_code) && userInfo_self.equals("")) {
-                object_self.put("CODE_self", getArguments().getString("user_code", "-"));
-                object_self.put("phone_self", getArguments().getString("userPhone", "-"));
-                object_self.put("sex_self", getArguments().getString("userSex", "-"));
-                object_self.put("post_title_self", getArguments().getString("userPost", "-"));
-                object_self.put("username_self", getArguments().getString("userName", "-"));
-                object_self.put("portrait_self", getArguments().getString("userPic", "-"));
-                object_self.put("email_self", getArguments().getString("userEmail", "-"));
-                object_self.put("department_name_self", getArguments().getString("userDepartment", "-"));
-                userInfo_self = object_self.toString();
-            }
-
-            if (!to_user_code.equals("-") && userInfo.equals("")) {
-                object.put("CODE", getArguments().getString("to_user_code", "-"));
-                object.put("phone", getArguments().getString("to_user_phone", "-"));
-                object.put("sex", getArguments().getString("to_user_sex", "-"));
-                object.put("post_title", getArguments().getString("to_user_post", "-"));
-                object.put("username", getArguments().getString("to_user_nike", "-"));
-                object.put("portrait", getArguments().getString("to_user_pic", "-"));
-                object.put("email", getArguments().getString("to_user_email", "-"));
-                object.put("department_name", getArguments().getString("to_user_department", "-"));
-                userInfo = object.toString();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        String from = message.getFrom();
-
-        UserInfoSelfDetailsBean bean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
-        String newUserInfo_self = null;
-        String newUserInfo = null;
-        if (!from.equals("sl_" + bean.CODE_self)) {
-            try {
-                newUserInfo_self = userInfo_self.replaceAll("_self", "");
-                newUserInfo = userInfo.replace("phone", "phone_self");
-                newUserInfo = newUserInfo.replace("CODE", "CODE_self");
-                newUserInfo = newUserInfo.replace("sex", "sex_self");
-                newUserInfo = newUserInfo.replace("post_title", "post_title_self");
-                newUserInfo = newUserInfo.replace("username", "username_self");
-                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
-                newUserInfo = newUserInfo.replace("/portrait_self/", "/portrait/");
-                newUserInfo = newUserInfo.replace("email", "email_self");
-                newUserInfo = newUserInfo.replace("department_name", "department_name_self");
-                sendUserInfo_self = new JSONObject(userInfo_self);
-                sendUserInfo = new JSONObject(userInfo);
-
-                message.setAttribute("userInfo_self", newUserInfo);
-                message.setAttribute("userInfo", newUserInfo_self);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                sendUserInfo_self = new JSONObject(userInfo_self);
-                sendUserInfo = new JSONObject(userInfo);
-                message.setAttribute("userInfo_self", sendUserInfo_self);
-                message.setAttribute("userInfo", sendUserInfo);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
+        readUserInfoDetailsMessage();
+        sendUserInfoDetailsMessage(message);
         sendMessage(message);
     }
 

@@ -88,23 +88,23 @@ public class WelcomePagePresenter implements WelcomePageContract.Presenter {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                        JSONObject data = Api.getDataToJSONObject(jo);
-                        String url = data.getString("domain");
-                        AppConfig.getAppConfig(AppManager.mContext).set(AppConfig.BASE_URL, url);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    JSONObject jo = new JSONObject(t);
+//                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
+//                        JSONObject data = Api.getDataToJSONObject(jo);
+//                        String url = data.getString("domain");
+//                        AppConfig.getAppConfig(AppManager.mContext).set(AppConfig.BASE_URL, url);
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 // TODO: 2017/8/15 域名请求失败，不需要给一个默认的域名吗？
-                AppConfig.getAppConfig(AppManager.mContext).set(AppConfig.BASE_URL, "http://api.sl.s1.zhitongoa.com/");
+                AppConfig.getAppConfig(AppManager.mContext).set(AppConfig.BASE_URL, "http://api.testoa.shanlinjinrong.com/");
                 LogUtils.e("onFailure" + strMsg);
             }
         });
