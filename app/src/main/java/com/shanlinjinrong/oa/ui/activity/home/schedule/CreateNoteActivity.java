@@ -260,6 +260,8 @@ public class CreateNoteActivity extends BaseActivity {
 
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
                         catchWarningByCode(Api.getCode(jo));
+                    }else if ((Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH)) {
+                        catchWarningByCode(Api.getCode(jo));
                     } else {
                         showToast(Api.getInfo(jo));
                     }
