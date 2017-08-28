@@ -274,7 +274,7 @@ public class MainController extends MyBaseActivity<MainControllerPresenter> impl
      * 初始化云信视频的相关数据
      */
     private void initEaseData() {
-        String account = Constants.CID + "_" + AppConfig.getAppConfig(
+        String account = "SL_" + AppConfig.getAppConfig(
                 MainController.this).get(AppConfig.PREF_KEY_CODE);
         String token = AppConfig.getAppConfig(MainController.this).get(
                 AppConfig.PREF_KEY_YX_TOKEN);

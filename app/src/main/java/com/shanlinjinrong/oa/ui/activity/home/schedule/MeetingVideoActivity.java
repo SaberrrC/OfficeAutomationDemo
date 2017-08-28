@@ -139,7 +139,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
                 TextView tvState = (TextView) view.findViewById(R.id.tv_state);
                 //要切换的成员头像
-                String wantSpeakAccount = Constants.CID + "_" + mRealityLists.get(position).getUid();
+                String wantSpeakAccount = "SL" + "_" + mRealityLists.get(position).getUid();
                 if (tvState.getText().toString().trim().equals("切换")) {
                     //同意对方的连麦请求
                     MsgHelper.getInstance().sendP2PCustomNotification(roomName, "2",
@@ -170,7 +170,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     }
 
     private void initData() {
-        myAccount = Constants.CID + "_" + AppConfig.getAppConfig(this).getPrivateCode();
+        myAccount = "SL" + "_" + AppConfig.getAppConfig(this).getPrivateCode();
         initIntentData();
         //默认加载会议创建人的视频
         AVChatManager.getInstance().muteLocalVideo(true);
@@ -411,7 +411,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
             String code = ja.getJSONObject(i).getString("CODE");
             JoinVideoMember joinVideoMember = new JoinVideoMember(uid, code, username, post);
             if (is_createman.equals("1")) {
-                createMen = Constants.CID + "_" + uid;
+                createMen = "SL" + "_" + uid;
                 //默认通话的成员是主播
                 currentSpeakerMember = createMen;
                 //默认进来后是主播视频
@@ -611,7 +611,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     @Override
     public void onCallEstablished() {
         LogUtils.e("createMen:" + "createMen" + myAccount);
-        String selfAccount = Constants.CID + "_" + AppConfig.getAppConfig(this).getPrivateCode();
+        String selfAccount = "SL" + "_" + AppConfig.getAppConfig(this).getPrivateCode();
         LogUtils.e("createMen:" + "selfAccount" + selfAccount);
         if (selfAccount.equals(myAccount)) {
             showMemberVideo(myAccount);
@@ -753,7 +753,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
 
         for (int i = 0; i < mRealityLists.size(); i++) {
             String uid = mRealityLists.get(i).getUid();
-            String account = Constants.CID + "_" + uid;
+            String account = "SL" + "_" + uid;
             MsgHelper.getInstance().sendP2PCustomNotification(roomName, "3",
                     account);
         }
