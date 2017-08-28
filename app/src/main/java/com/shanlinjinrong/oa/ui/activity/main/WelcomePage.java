@@ -72,6 +72,7 @@ public class WelcomePage extends Activity implements WelcomePageContract.View {
             Log.e("ding", "checkTimeOutSuccess" + "login");
             startActivity(new Intent(AppManager.mContext, LoginActivity.class));
         }
+        finish();
     }
 
     @Override
