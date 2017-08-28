@@ -62,11 +62,12 @@ public class WorkReportListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             WriteCellHolder writeHolder = (WriteCellHolder) holder;
             writeHolder.mLeftTitle.setText(title);
             Object tag = writeHolder.mEdit.getTag();
-            if (tag != null) {
-                int tagPos = (int) tag;
-                if (!TextUtils.isEmpty(content) && tagPos == position)
-                    writeHolder.mEdit.setText(content);
-            }
+//            if (tag != null) {
+//                int tagPos = (int) tag;
+//            if (!TextUtils.isEmpty(content) && tagPos == position)
+            if (!TextUtils.isEmpty(content))
+                writeHolder.mEdit.setText(content);
+//            }
 
             writeHolder.mEdit.addTextChangedListener(new WriteTextWatcher(writeHolder));
             writeHolder.mEdit.setTag(position);

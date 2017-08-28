@@ -112,13 +112,14 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     private void initView() {
         mWorkReportList.setLayoutManager(new LinearLayoutManager(this));
         mWorkReportListData = initListData();
+        mHourReportData = initHourReportData();
+        if (hasLocalData()) {
+            getLocalData();
+        }
         mWorkReportListAdapter = new WorkReportListAdapter(this, mWorkReportListData);
         mWorkReportList.setAdapter(mWorkReportListAdapter);
         mWorkReportListAdapter.setItemClickListener(this);
         mWorkReportList.addItemDecoration(new DecorationLine(this, mWorkReportListData));
-
-        mHourReportData = initHourReportData();
-
         mDate.setText(DateUtils.getTodayDate(false));
 
         mTopView.setRightAction(new View.OnClickListener() {
@@ -387,12 +388,13 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     public void reportSuccess(String msg) {
         Toast.makeText(this, getString(R.string.work_report_send_sucess), Toast.LENGTH_SHORT).show();
         onBackPressed();
+        clearLocalData();
     }
 
     @Override
     public void reportFailed(String errMsg) {
         Toast.makeText(this, getString(R.string.work_report_send_failed), Toast.LENGTH_SHORT).show();
-        //        saveDataToLocal();
+        saveDataToLocal();
 
     }
 
@@ -421,6 +423,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
      */
     private void saveDataToLocal() {
         SharedPreferences.Editor edit = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE).edit();
+        edit.putBoolean("local_data", true);
         for (int i = 0; i < mHourReportData.size(); i++) {
             edit.putString("HourReportData_RealWork" + i, mHourReportData.get(i).getRealWork());
             edit.putString("HourReportData_WorkPlan" + i, mHourReportData.get(i).getWorkPlan());
@@ -448,11 +451,28 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     }
 
     private void getLocalData() {
-//        SharedPreferences sp = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE);
-//        for (int i = 0; i < ; i++) {
-//
-//        }
-//        sp.getString()
+        SharedPreferences sp = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE);
+        for (int i = 0; i < mHourReportData.size(); i++) {
+            HourReportBean bean = mHourReportData.get(i);
+            bean.setWorkPlan(sp.getString("HourReportData_WorkPlan" + i, ""));
+            bean.setRealWork(sp.getString("HourReportData_RealWork" + i, ""));
+            bean.setSelfEvaluate(sp.getString("HourReportData_SelfEvaluate" + i, ""));
+            mWorkReportListData.get(i).setContent(getString(R.string.work_report_has_write));
+        }
+
+        for (int i = 8; i < mWorkReportListData.size(); i++) {
+            mWorkReportListData.get(i).setContent(sp.getString("WorkReportListData" + i, ""));
+        }
+
+        mReceiverName = sp.getString("receiverName", mReceiverName);
+        mReceiverId = sp.getString("receiverId", mReceiverId);
+        mDate.setText(sp.getString("time", ""));
+        mTomorrowPlan.setText(sp.getString("tomorrowPlan", ""));
+    }
+
+    private boolean hasLocalData() {
+        SharedPreferences sp = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE);
+        return sp.getBoolean("local_data", false);
     }
 
     @Override
