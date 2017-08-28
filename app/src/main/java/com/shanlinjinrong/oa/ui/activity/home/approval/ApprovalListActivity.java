@@ -50,6 +50,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.shanlinjinrong.oa.manager.AppManager.mContext;
+
 /**
  * ProjectName: dev-beta-v1.0.1
  * PackageName: com.itcrm.GroupInformationPlatform.ui.activity
@@ -309,6 +311,9 @@ public class ApprovalListActivity extends BaseActivity implements View.OnClickLi
                         case 2:
                             intent = new Intent(ApprovalListActivity.this,
                                     MeLaunchOfficesSuppliesActivity.class);
+                            //发送推送已读
+                            readPush(list.get(i).getOal_id());
+                            list.get(i).setStatus("2");
                             break;
                         case 3:
                             intent = new Intent(ApprovalListActivity.this,
@@ -819,5 +824,60 @@ public class ApprovalListActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    private void readPush(String pid) {
+
+        HttpParams params = new HttpParams();
+        params.put("uid", AppConfig.getAppConfig(mContext).getPrivateUid());
+        params.put("token", AppConfig.getAppConfig(mContext).getPrivateToken());
+
+        params.put("department_id", AppConfig.getAppConfig(mContext).getDepartmentId());
+        params.put("pid", pid);
+
+        initKjHttp().post(Api.MESSAGE_READPUSH, params, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                showLoadingView();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                LogUtils.e(t);
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    switch (Api.getCode(jo)) {
+                        case Api.RESPONSES_CODE_OK:
+                            break;
+                        case Api.RESPONSES_CODE_DATA_EMPTY:
+                            break;
+                        case Api.RESPONSES_CONTENT_EMPTY:
+                            break;
+                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            catchWarningByCode(Api.getCode(jo));
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                hideLoadingView();
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                catchWarningByCode(errorNo);
+            }
+        });
+    }
 
 }

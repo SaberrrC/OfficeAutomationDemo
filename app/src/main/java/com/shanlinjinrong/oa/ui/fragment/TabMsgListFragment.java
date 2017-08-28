@@ -448,6 +448,21 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            isResume = true;
+            currentPage = 1;
+            reFresUnRedCount();
+            if (!isFirst) {
+                onRefresh();
+            }
+        } else {
+            //相当于Fragment的onPause
+        }
+    }
+
+    @Override
     public void onPause() {
         isResume = false;
         isFirst = false;
