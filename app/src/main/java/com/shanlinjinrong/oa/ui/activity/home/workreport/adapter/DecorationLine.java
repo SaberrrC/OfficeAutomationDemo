@@ -79,7 +79,6 @@ public class DecorationLine extends RecyclerView.ItemDecoration {
                 } else {
                     //绘制分割线
                     mPaint.setColor(ResourcesCompat.getColor(mContext.getResources(), R.color.text_common_dark_color, null));
-                    Log.i("DecorationLine", (left + mMarginLeft) + ",,," + child.getY() + ",,," + right + ",,," + child.getY());
                     c.drawLine(left + mMarginLeft, child.getY(), right, child.getY(), mPaint);
                 }
             }

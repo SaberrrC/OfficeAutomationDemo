@@ -28,7 +28,6 @@ public class WorkReportBean {
     private String selfSave;//		节约
     private String supervisor;//	监督人
     private String supervisorId;//	监督人Id
-    private String thereCipientId;//	接收人Id
     private String time;//	时报时间	string
     private String tomorrowPlan;//		明日计划
     private String workEigth;//	实际工作17-17:30
@@ -249,14 +248,6 @@ public class WorkReportBean {
         return this;
     }
 
-    public String getThereCipientId() {
-        return thereCipientId;
-    }
-
-    public WorkReportBean setThereCipientId(String thereCipientId) {
-        this.thereCipientId = thereCipientId;
-        return this;
-    }
 
     public String getTime() {
         return time;

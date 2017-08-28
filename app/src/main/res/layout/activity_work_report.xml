@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/page_bg"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <com.shanlinjinrong.common.CommonTopView
@@ -27,8 +28,7 @@
         android:layout_marginTop="@dimen/common_margin_top"
         android:background="@color/page_bg"
         android:overScrollMode="never"
-        android:scrollbars="none"
-        android:transitionGroup="true">
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/report_content_view"
@@ -107,8 +107,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:fitsSystemWindows="true" />
+                android:layout_height="20dp" />
 
         </LinearLayout>
     </ScrollView>

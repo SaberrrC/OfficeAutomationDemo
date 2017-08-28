@@ -56,9 +56,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "BASE_URL", prePHPAddress()
+            buildConfigField "String", "BASE_URL", devPHPAddress()
 //            buildConfigField "String", "BASE_URL", devAddress()
-            buildConfigField "String", "BASE_JAVA_URL", preJavaAddress()
+            buildConfigField "String", "BASE_JAVA_URL", devJavaAddress()
             resValue "string", "app_name", devAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -73,12 +73,13 @@ android {
 def preAppName() {
     return "善林OA"
 }
-def preAddress() {
-    return "\"http://api.oa.shanlinjinrong.com/\""
+
+def devPHPAddress() {
+    return "\"http://118.31.18.67:81/\""
 }
 
-def devAddress() {
-    return "\"http://106.15.205.215:30081/\""
+def devJavaAddress() {
+    return "\"http://118.31.18.67:8090/\""
 }
 
 def preJavaAddress() {
@@ -87,10 +88,6 @@ def preJavaAddress() {
 
 def prePHPAddress() {
     return "\"http://api.testoa.shanlinjinrong.com/\""
-}
-
-def devJavaAddress() {
-    return "\"http://106.15.205.215:8084/\""
 }
 
 def devAppName() {

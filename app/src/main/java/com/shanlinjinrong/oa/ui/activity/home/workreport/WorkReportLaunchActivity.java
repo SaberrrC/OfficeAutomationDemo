@@ -1,12 +1,15 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.shanlinjinrong.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
@@ -117,13 +121,11 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
 
         mDate.setText(DateUtils.getTodayDate(false));
 
-        mTopView.setTopViewFocus();
-
         mTopView.setRightAction(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!checkDataIsFull()) {
-                    Toast.makeText(WorkReportLaunchActivity.this, "数据不完整", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showLoadingView();
@@ -131,12 +133,6 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
             }
         });
 
-        mRootLayout.setOnSizeChangedListener(new KeyboardLinearLayout.onSizeChangedListener() {
-            @Override
-            public void onChanged(boolean showKeyboard, int height) {
-//                mScroll.h
-            }
-        });
     }
 
     private List<HourReportBean> initHourReportData() {
@@ -212,6 +208,8 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         jsonObject.put("tomorrowPlan", mTomorrowPlan.getText().toString());//明日计划
 
         params.putJsonParams(jsonObject.toString());
+
+        Log.i("WorkReport", "WorkReport : " + jsonObject.toString());
         return params;
     }
 
@@ -346,8 +344,13 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
             picker = new DatePicker(this, DatePicker.YEAR_MONTH_DAY);
         }
         Calendar cal = Calendar.getInstance();
-        picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
-                cal.get(Calendar.DAY_OF_MONTH));
+        if (!TextUtils.isEmpty(tv.getText().toString())) {
+            String[] srtArr = tv.getText().toString().split("-");
+            picker.setSelectedItem(Integer.valueOf(srtArr[0]), Integer.valueOf(srtArr[1]), Integer.valueOf(srtArr[2]));
+        } else {
+            picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
+                    cal.get(Calendar.DAY_OF_MONTH));
+        }
         picker.setSubmitText("确认");
         picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
         picker.setTextColor(Color.parseColor("#2d9dff"));
@@ -382,13 +385,15 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
 
     @Override
     public void reportSuccess(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.work_report_send_sucess), Toast.LENGTH_SHORT).show();
         onBackPressed();
     }
 
     @Override
     public void reportFailed(String errMsg) {
-        Toast.makeText(this, errMsg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.work_report_send_failed), Toast.LENGTH_SHORT).show();
+        //        saveDataToLocal();
+
     }
 
     @Override
@@ -408,7 +413,46 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     @Override
     public void getDefaultReceiverFailed(String errMsg) {
 //        onBackPressed();
-        Toast.makeText(this, errMsg, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, errMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 提交失败，保存已填写的数据
+     */
+    private void saveDataToLocal() {
+        SharedPreferences.Editor edit = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE).edit();
+        for (int i = 0; i < mHourReportData.size(); i++) {
+            edit.putString("HourReportData_RealWork" + i, mHourReportData.get(i).getRealWork());
+            edit.putString("HourReportData_WorkPlan" + i, mHourReportData.get(i).getWorkPlan());
+            edit.putString("HourReportData_SelfEvaluate" + i, mHourReportData.get(i).getSelfEvaluate());
+        }
+
+        for (int i = 8; i < mWorkReportListData.size(); i++) {
+            edit.putString("WorkReportListData" + i, mWorkReportListData.get(i).getContent());
+        }
+
+        edit.putString("receiverName", mReceiverName);
+        edit.putString("receiverId", mReceiverId);
+        edit.putString("time", mDate.getText().toString());
+        edit.putString("tomorrowPlan", mTomorrowPlan.getText().toString());
+        edit.apply();
+    }
+
+    /**
+     * 提交成功后，把保存的数据清除
+     */
+    private void clearLocalData() {
+        SharedPreferences.Editor edit = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE).edit();
+        edit.clear();
+        edit.apply();
+    }
+
+    private void getLocalData() {
+//        SharedPreferences sp = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE);
+//        for (int i = 0; i < ; i++) {
+//
+//        }
+//        sp.getString()
     }
 
     @Override

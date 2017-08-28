@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -46,6 +47,12 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
 
     private boolean isBack;
 
+    private int lastPosition; //上一次滑动位置
+    private int lastPage; //上一次所在的页面
+
+
+    private boolean isScrolling = false; // 判断是否滑动中
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,7 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
             mTitles = createTitles(changeDateFormat(extra.getString("date")));
             mTopView.setAppTitle(mTitles.get(mPosition));
             mHourReportList = extra.getParcelableArrayList("hour_report_list");
+            lastPage = mPosition;
         }
 
         mFragmentList = new ArrayList<>();
@@ -80,20 +88,38 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mFragmentList.get(position).fragmentChange(position);
+                if (isScrolling) {
+                    if (lastPosition > positionOffsetPixels) {
+                        // 递减，向右侧滑动
+                        lastPage = position + 1;
+                    } else if (lastPosition < positionOffsetPixels) {
+                        // 递增，向左侧滑动
+                        lastPage = position;
+                    }
+                    lastPosition = positionOffsetPixels;
+                }
             }
 
             @Override
             public void onPageSelected(int position) {
                 mTopView.setAppTitle(mTitles.get(position));
+                mPosition = position;
+                Log.i("WriteWorkRepor", "WriteWorkRepor : + onPageSelected :::" + position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                // state == 0 表示什么都没做。
+                // state == 1 表示正在滑动
+                // state == 2 表示滑动完毕了
+                isScrolling = state == 1;
+                if (state == 2) {
+                    mFragmentList.get(lastPage).fragmentChange(lastPage);
+                    Log.i("WriteWorkRepor", "WriteWorkRepor : + onPageScrollStateChanged ::: state = " + state + ";;lastPage = " + lastPage);
+                }
             }
-        });
 
+        });
         mViewPager.setCurrentItem(mPosition);
     }
 
@@ -161,6 +187,8 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
         isBack = true;
         int curPage = mViewPager.getCurrentItem();
         mFragmentList.get(curPage).fragmentChange(curPage);
+        Log.i("WriteWorkRepor", "onBackPressed ::::curPage = " + curPage);
+
 //        setFinishResult();
     }
 
@@ -194,6 +222,7 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
     public void onLastPageClick() {
         int curPage = mViewPager.getCurrentItem();
         if (curPage > 0) {
+            lastPage= curPage;
             mViewPager.setCurrentItem(--curPage);
         } else {
             Toast.makeText(this, "已经是第一项", Toast.LENGTH_SHORT).show();
@@ -205,6 +234,7 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
     public void onNextPageClick() {
         int curPage = mViewPager.getCurrentItem();
         if (curPage < mFragmentList.size() - 1) {
+            lastPage= curPage;
             mViewPager.setCurrentItem(++curPage);
         } else {
             Toast.makeText(this, "已经是最后一项", Toast.LENGTH_SHORT).show();

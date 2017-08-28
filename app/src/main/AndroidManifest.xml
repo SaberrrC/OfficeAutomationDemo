@@ -437,7 +437,7 @@
         <activity
             android:name="com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden|adjustResize" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <activity
             android:name="com.shanlinjinrong.oa.ui.activity.home.workreport.WriteWorkReportActivity"

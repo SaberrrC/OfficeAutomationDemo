@@ -1,5 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.presenter;
 
+import android.util.Log;
+
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
@@ -29,6 +31,7 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                Log.i("WorkReport", "WorkReport result: " + t);
                 try {
                     JSONObject jo = new JSONObject(t);
                     switch (jo.getString("code")) {

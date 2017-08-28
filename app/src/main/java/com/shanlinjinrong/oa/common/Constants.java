@@ -30,6 +30,10 @@ public class Constants {
      */
     public final static String PUSH_CONFORM_MEETING = "push_conform_meeting";
 
+    //日报临时数据
+    public final static String WORK_REPORT_TEMP_DATA = "work_report_temp_data";
+
+
     /**
      * 记事本编辑标识
      */
