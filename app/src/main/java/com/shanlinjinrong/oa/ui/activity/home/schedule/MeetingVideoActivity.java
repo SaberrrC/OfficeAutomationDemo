@@ -25,16 +25,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.model.JoinVideoMember;
-import com.shanlinjinrong.oa.listener.PermissionListener;
-import com.shanlinjinrong.oa.ui.activity.netease.MsgHelper;
-import com.shanlinjinrong.oa.ui.adapter.JoinVideoMeetingListAdapter;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.utils.LogUtils;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -59,6 +49,15 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
+import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.listener.PermissionListener;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.model.JoinVideoMember;
+import com.shanlinjinrong.oa.ui.activity.netease.MsgHelper;
+import com.shanlinjinrong.oa.ui.adapter.JoinVideoMeetingListAdapter;
+import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,8 +145,6 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
                             wantSpeakAccount);
                     changeRole();
                     refreshMemberState(wantSpeakAccount);
-
-
                 }
             }
         });
@@ -247,8 +244,19 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
 
             @Override
             public void onFailed(int code) {
+
                 LogUtils.e("joinRoom失败。。。" + code);
-                showToast("加入会议失败，请重试");
+                switch (code){
+                    case 417:
+                        showToast("会议室被占用,请稍后重试!");
+                        break;
+                    case 408:
+                        showToast("加入会议室超时,请检查网络!");
+                        break;
+                    default:
+                        showToast("加入会议失败，请重试");
+                        break;
+                }
                 finish();
             }
 
@@ -567,7 +575,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
      */
     @Override
     public void onUserLeave(String account, int event) {
-        String userAccount = account.replace("sl_", "");
+        String userAccount = account.replace("SL_", "");
         //如果是创建会议的人，那么，所有人也离开房间，否则，刷新界面
         for (int i = 0; i < mLists.size(); i++) {
             if (mLists.get(i).getState().equals("1")) {
@@ -643,14 +651,14 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
 
     @Override
     public void onReportSpeaker(Map<String, Integer> speakers, int mixedEnergy) {
-        LogUtils.e("有人在说话：" + speakers.toString());
+        //    LogUtils.e("有人在说话：" + speakers.toString());
 
         Set<String> set =
                 speakers.keySet();
-
-        for (String str : set) {
-            LogUtils.e("onReportSpeaker:" + str);
-        }
+//
+//        for (String str : set) {
+//            LogUtils.e("onReportSpeaker:" + str);
+//        }
 
     }
 
