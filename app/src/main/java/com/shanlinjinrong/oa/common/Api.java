@@ -26,9 +26,17 @@ public class Api {
      */
     public static final int RESPONSES_CODE_OK = 200;
     /**
-     * 所有接口返回code=304表示Token不匹配
+     * 用户名错误
+     */
+    public static final int RESPONSES_CODE_ACCOUNT_USERNAME_NOT_EXIST = 302;
+    /**
+     * 用户密码错误
      */
     public static final int RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR = 303;
+    /**
+     * 用户被冻结
+     */
+    public static final int RESPONSES_CODE_ACCOUNT_USER_FREEZE = 610;
     /**
      * 所有接口返回code=304表示Token不匹配
      */

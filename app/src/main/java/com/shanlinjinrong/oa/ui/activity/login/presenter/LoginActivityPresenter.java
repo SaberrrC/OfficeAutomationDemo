@@ -40,9 +40,13 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                         mView.loginSuccess(Api.getDataToJSONObject(jo));
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                       mView.loginFailed(Api.getCode(jo));
+                        mView.loginFailed(Api.getCode(jo));
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR)) {
-                       mView.accountOrPswError(Api.getInfo(jo));
+                        mView.accountOrPswError(Api.getCode(jo),Api.getInfo(jo));
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_USERNAME_NOT_EXIST)) {
+                        mView.accountOrPswError(Api.getCode(jo),Api.getInfo(jo));
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_USER_FREEZE)) {
+                        mView.accountOrPswError(Api.getCode(jo),Api.getInfo(jo));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

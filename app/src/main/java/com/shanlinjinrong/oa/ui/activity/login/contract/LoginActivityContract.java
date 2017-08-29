@@ -15,7 +15,7 @@ public interface LoginActivityContract {
 
         void loginFailed(int errorCode); // 登录失败
 
-        void accountOrPswError(String msg); //账号或密码错误
+        void accountOrPswError(int errorCode,String msg); //账号或密码错误
 
         void requestFinish(); //登录请求结束
     }

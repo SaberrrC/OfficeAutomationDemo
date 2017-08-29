@@ -39,6 +39,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.shanlinjinrong.oa.common.Api.RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR;
+
 /**
  * <h3>Description: 登录界面 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/30.<br />
@@ -138,8 +140,8 @@ public class LoginActivity extends MyBaseActivity<LoginActivityPresenter> implem
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //TODO isChecked
                 if (isChecked) {
-                        AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, true);
-                        isAutoLogin = true;
+                    AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, true);
+                    isAutoLogin = true;
                 } else {
                     AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, false);
                     isAutoLogin = false;
@@ -151,9 +153,9 @@ public class LoginActivity extends MyBaseActivity<LoginActivityPresenter> implem
 
     @OnClick(R.id.btn_login)
     public void onClick() {
-        if (mCbAutoLogin.isChecked()){
+        if (mCbAutoLogin.isChecked()) {
             AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_LOGIN_PASSWORD, userPwd.getText().toString());
-        }else {
+        } else {
             AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_LOGIN_PASSWORD, "");
         }
 
@@ -228,8 +230,10 @@ public class LoginActivity extends MyBaseActivity<LoginActivityPresenter> implem
     }
 
     @Override
-    public void accountOrPswError(String msg) {
-        userPwd.setText("");
+    public void accountOrPswError(int errorCode, String msg) {
+        if (errorCode == RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR) {
+            userPwd.setText("");
+        }
         showToast(msg);
     }
 
