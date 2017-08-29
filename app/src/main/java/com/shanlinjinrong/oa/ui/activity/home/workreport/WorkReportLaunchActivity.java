@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.shanlinjinrong.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportListAdapter;
@@ -105,22 +106,26 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     }
 
     private void initDefaultReceiver() {
-        showLoadingView();
         mPresenter.getDefaultReceiver();
     }
 
     private void initView() {
         mWorkReportList.setLayoutManager(new LinearLayoutManager(this));
+
+        //初始化空的时候的数据
         mWorkReportListData = initListData();
         mHourReportData = initHourReportData();
+        mDate.setText(DateUtils.getTodayDate(false));
+
+        //如果有提交日报失败，保存本地，加载本地数据
         if (hasLocalData()) {
             getLocalData();
         }
+
         mWorkReportListAdapter = new WorkReportListAdapter(this, mWorkReportListData);
         mWorkReportList.setAdapter(mWorkReportListAdapter);
         mWorkReportListAdapter.setItemClickListener(this);
         mWorkReportList.addItemDecoration(new DecorationLine(this, mWorkReportListData));
-        mDate.setText(DateUtils.getTodayDate(false));
 
         mTopView.setRightAction(new View.OnClickListener() {
             @Override
@@ -392,10 +397,15 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     }
 
     @Override
-    public void reportFailed(String errMsg) {
-        Toast.makeText(this, getString(R.string.work_report_send_failed), Toast.LENGTH_SHORT).show();
+    public void reportFailed(String errCode, String errMsg) {
+        switch (errCode) {
+            case ApiJava.REQUEST_HAD_REPORTED:
+                Toast.makeText(this, getString(R.string.work_report_current_date_had_report), Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, getString(R.string.work_report_send_failed), Toast.LENGTH_SHORT).show();
+        }
         saveDataToLocal();
-
     }
 
     @Override
@@ -436,6 +446,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
 
         edit.putString("receiverName", mReceiverName);
         edit.putString("receiverId", mReceiverId);
+        edit.putString("receiverPost", mReceiverPost);
         edit.putString("time", mDate.getText().toString());
         edit.putString("tomorrowPlan", mTomorrowPlan.getText().toString());
         edit.apply();
@@ -466,6 +477,8 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
 
         mReceiverName = sp.getString("receiverName", mReceiverName);
         mReceiverId = sp.getString("receiverId", mReceiverId);
+        mReceiverPost = sp.getString("receiverPost", mReceiverPost);
+        mReceiver.setText(mReceiverName + "-" + mReceiverPost);
         mDate.setText(sp.getString("time", ""));
         mTomorrowPlan.setText(sp.getString("tomorrowPlan", ""));
     }

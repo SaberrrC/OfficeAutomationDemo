@@ -13,7 +13,7 @@ public interface WorkReportLaunchActivityContract {
     interface View extends BaseView {
         void reportSuccess(String msg);
 
-        void reportFailed(String errMsg);
+        void reportFailed(String errCode, String errMsg);
 
         void requestFinish();
 

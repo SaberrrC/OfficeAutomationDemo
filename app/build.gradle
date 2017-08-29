@@ -57,7 +57,6 @@ android {
         }
         debug {
             buildConfigField "String", "BASE_URL", devPHPAddress()
-//            buildConfigField "String", "BASE_URL", devAddress()
             buildConfigField "String", "BASE_JAVA_URL", devJavaAddress()
             resValue "string", "app_name", devAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
