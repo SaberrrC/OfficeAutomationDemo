@@ -209,6 +209,10 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
                     @Override
                     public void onFailed(int code) {
                         LogUtils.e("createRoom。。。" + code);
+                        if (code == 417){
+                            showToast("房间被占用,请稍后重试!");
+                            finish();
+                        }
                     }
 
                     @Override
