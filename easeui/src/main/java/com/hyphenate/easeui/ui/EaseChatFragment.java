@@ -851,6 +851,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     protected void sendImageMessage(String imagePath) {
         EMMessage message = EMMessage.createImageSendMessage(imagePath, false, toChatUsername);
+        //TODO 图片携带消息
+        readUserInfoDetailsMessage();
+        sendUserInfoDetailsMessage(message);
         sendMessage(message);
     }
 
@@ -866,6 +869,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     protected void sendFileMessage(String filePath) {
         EMMessage message = EMMessage.createFileSendMessage(filePath, toChatUsername);
+        //TODO 文件携带消息
+        readUserInfoDetailsMessage();
+        sendUserInfoDetailsMessage(message);
         sendMessage(message);
     }
 

@@ -493,107 +493,111 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
      * @param loadMore 是否是加载更多
      */
     private void loadData(boolean isPull, final boolean loadMore, String time, String where) {
-        if (isPull) {
-            mSwipeRefreshLayout.setRefreshing(true);
-            changeLoadState();
-        }
-        if (!isPull && !loadMore && isResume) {
-            isResume = false;
-            showLoadingView();
-            changeLoadState();
-        }
-        if (loadMore) {
-            currentPage++;
-        }
-        HttpParams params = new HttpParams();
-        params.put("limit", limit);
-        params.put("time", time);
-        params.put("where", where);
-        params.put("page", currentPage);
-        params.put("uid", AppConfig.getAppConfig(mContext).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(mContext).getPrivateToken());
-        params.put("department_id", AppConfig.getAppConfig(mContext).getDepartmentId());
-
-        LogUtils.e("limit" + limit);
-        LogUtils.e("time" + time);
-        LogUtils.e("where" + where);
-        LogUtils.e("page" + currentPage);
-        LogUtils.e("uid" + AppConfig.getAppConfig(mContext).getPrivateUid());
-        LogUtils.e("department_id" + AppConfig.getAppConfig(mContext).getDepartmentId());
-
-        initKjHttp().post(Api.MESSAGE_PUSHS, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
+        try {
+            if (isPull) {
+                mSwipeRefreshLayout.setRefreshing(true);
+                changeLoadState();
             }
+            if (!isPull && !loadMore && isResume) {
+                isResume = false;
+                showLoadingView();
+                changeLoadState();
+            }
+            if (loadMore) {
+                currentPage++;
+            }
+            HttpParams params = new HttpParams();
+            params.put("limit", limit);
+            params.put("time", time);
+            params.put("where", where);
+            params.put("page", currentPage);
+            params.put("uid", AppConfig.getAppConfig(mContext).getPrivateUid());
+            params.put("token", AppConfig.getAppConfig(mContext).getPrivateToken());
+            params.put("department_id", AppConfig.getAppConfig(mContext).getDepartmentId());
 
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                hideLoadingView();
-                removeEmptyView(mContentView);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            ArrayList<PushMsg> listPushMsgs = new ArrayList<>();
-                            JSONArray notices = Api.getDataToJSONArray(jo);
-                            for (int i = 0; i < notices.length(); i++) {
-                                JSONObject jsonObject = notices.getJSONObject(i);
-                                PushMsg pushMsg =
-                                        new PushMsg(jsonObject);
-                                listPushMsgs.add(pushMsg);
-                            }
-                            if (loadMore) {
-                                //如果是加载更多的话，需要将最后一个view移除了
+            LogUtils.e("limit" + limit);
+            LogUtils.e("time" + time);
+            LogUtils.e("where" + where);
+            LogUtils.e("page" + currentPage);
+            LogUtils.e("uid" + AppConfig.getAppConfig(mContext).getPrivateUid());
+            LogUtils.e("department_id" + AppConfig.getAppConfig(mContext).getDepartmentId());
+
+            initKjHttp().post(Api.MESSAGE_PUSHS, params, new HttpCallBack() {
+
+                @Override
+                public void onPreStart() {
+                    super.onPreStart();
+
+                }
+
+                @Override
+                public void onSuccess(String t) {
+                    super.onSuccess(t);
+                    LogUtils.e(t);
+                    hideLoadingView();
+                    removeEmptyView(mContentView);
+                    try {
+                        JSONObject jo = new JSONObject(t);
+                        switch (Api.getCode(jo)) {
+                            case Api.RESPONSES_CODE_OK:
+                                ArrayList<PushMsg> listPushMsgs = new ArrayList<>();
+                                JSONArray notices = Api.getDataToJSONArray(jo);
+                                for (int i = 0; i < notices.length(); i++) {
+                                    JSONObject jsonObject = notices.getJSONObject(i);
+                                    PushMsg pushMsg =
+                                            new PushMsg(jsonObject);
+                                    listPushMsgs.add(pushMsg);
+                                }
+                                if (loadMore) {
+                                    //如果是加载更多的话，需要将最后一个view移除了
+                                    mAdapter.removeAllFooterView();
+                                }
+                                isLoading = false;
+
+                                list.addAll(listPushMsgs);
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                            case Api.RESPONSES_CODE_DATA_EMPTY:
+                                showEmptyView(mContentView, "当前没有收到通知", 0, false);
+                                break;
+                            case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+                                catchWarningByCode(Api.getCode(jo));
+                                break;
+                            case Api.LIMIT_CONTENT_EMPTY:
                                 mAdapter.removeAllFooterView();
-                            }
-                            isLoading = false;
-
-                            list.addAll(listPushMsgs);
-                            mAdapter.notifyDataSetChanged();
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            showEmptyView(mContentView, "当前没有收到通知", 0, false);
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.LIMIT_CONTENT_EMPTY:
-                            mAdapter.removeAllFooterView();
-                            hasMore = false;
-                            showToast("没有更多了");
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
+                                hasMore = false;
+                                showToast("没有更多了");
+                                break;
+                            case Api.RESPONSES_CODE_UID_NULL:
+                                catchWarningByCode(Api.getCode(jo));
+                                break;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
 
 
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-                if (null != mSwipeRefreshLayout) {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                @Override
+                public void onFinish() {
+                    super.onFinish();
+                    hideLoadingView();
+                    if (null != mSwipeRefreshLayout) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                hideLoadingView();
-                LogUtils.e("onFailure->" + errorNo + strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+                @Override
+                public void onFailure(int errorNo, String strMsg) {
+                    super.onFailure(errorNo, strMsg);
+                    hideLoadingView();
+                    LogUtils.e("onFailure->" + errorNo + strMsg);
+                    catchWarningByCode(errorNo);
+                }
+            });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     private void changeLoadState() {
