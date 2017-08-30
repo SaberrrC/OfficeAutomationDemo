@@ -184,6 +184,16 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
                                 mLongClickListener.onLongClick(mImageView.get());
                             }
                         }
+
+
+
+                        @Override
+                        public boolean onSingleTapUp(MotionEvent e) {
+                            //Log.d("imageDownFinish","图片点击事件");
+
+                            EventBus.getDefault().post("onClickImageFinish");
+                            return super.onSingleTapUp(e);
+                        }
                     });
 
             mGestureDetector.setOnDoubleTapListener(this);
@@ -467,7 +477,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
             }
             // Check to see if the user double tapped
             if (null != mGestureDetector && mGestureDetector.onTouchEvent(ev)) {
-                EventBus.getDefault().post("onClickImageFinish");
+              //  EventBus.getDefault().post("onClickImageFinish");
                 handled = true;
             }
             // Finally, try the Scale/Drag detector
@@ -973,6 +983,8 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
         }
 
     }
+
+
 
     @Override
     public float getMidScale() {
