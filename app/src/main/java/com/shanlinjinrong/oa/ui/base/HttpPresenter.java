@@ -27,5 +27,6 @@ public class HttpPresenter<T extends BaseView> implements BasePresenter<T> {
     public void detachView() {
         this.mView = null;
         mKjHttp.cancelAll();
+        mKjHttp.cleanCache();
     }
 }
