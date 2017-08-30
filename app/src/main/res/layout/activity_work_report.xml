@@ -82,6 +82,7 @@
                 android:background="@color/white"
                 android:gravity="left|top"
                 android:hint="@string/work_report_please_write_tomorrow_plan"
+                android:maxLength="800"
                 android:padding="12dp"
                 android:textSize="14sp" />
 

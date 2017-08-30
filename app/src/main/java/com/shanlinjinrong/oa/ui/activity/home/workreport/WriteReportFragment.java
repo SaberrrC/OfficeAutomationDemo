@@ -85,7 +85,7 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
     }
 
     public void fragmentChange(int position) {
-        if (changeListener != null)
+        if (changeListener != null && mPlanWork != null && mRealWork != null && mSelfEvaluate != null)
             changeListener.fragmentStartChange(position, mPlanWork.
                     getText().toString(), mRealWork.getText().toString(), mSelfEvaluate.getText().toString());
     }

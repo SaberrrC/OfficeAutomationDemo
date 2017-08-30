@@ -134,7 +134,6 @@ dependencies {
     compile 'org.kymjs.kjframe:kjframe:2.6'
     compile 'com.facebook.fresco:fresco:0.13.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v2.1.0'
-    compile 'cn.qqtheme.framework:WheelPicker:1.1.2'
     compile 'com.github.florent37:viewanimator:1.0.3'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.github.lovetuzitong:MultiImageSelector:1.2'

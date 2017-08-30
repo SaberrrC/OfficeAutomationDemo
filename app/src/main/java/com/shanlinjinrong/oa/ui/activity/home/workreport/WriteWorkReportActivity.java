@@ -47,6 +47,7 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
 
     private boolean isBack;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +63,6 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
             mTitles = createTitles(changeDateFormat(extra.getString("date")));
             mTopView.setAppTitle(mTitles.get(mPosition));
             mHourReportList = extra.getParcelableArrayList("hour_report_list");
-//            lastPage = mPosition;
         }
 
         mFragmentList = new ArrayList<>();
