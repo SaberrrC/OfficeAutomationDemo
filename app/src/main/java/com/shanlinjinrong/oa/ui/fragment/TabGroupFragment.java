@@ -35,6 +35,11 @@ public class TabGroupFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    @Override
+    protected void lazyLoadData() {
+
+    }
+
     @OnClick({R.id.btn_schedule, R.id.btn_work_report, R.id.btn_Approval})
     public void onClick(View view) {
         switch (view.getId()) {

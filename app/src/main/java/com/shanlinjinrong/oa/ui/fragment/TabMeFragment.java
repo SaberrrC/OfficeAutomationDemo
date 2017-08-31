@@ -196,6 +196,11 @@ public class TabMeFragment extends BaseFragment {
         }
     }
 
+    @Override
+    protected void lazyLoadData() {
+
+    }
+
     private void getNewVersionInfo() {
         HttpParams params = new HttpParams();
         params.put("uid", AppConfig.getAppConfig(getActivity()).getPrivateUid());

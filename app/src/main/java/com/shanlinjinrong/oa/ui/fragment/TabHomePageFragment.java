@@ -53,6 +53,11 @@ public class TabHomePageFragment extends BaseFragment {
 
     }
 
+    @Override
+    protected void lazyLoadData() {
+
+    }
+
 
     /**
      * 初始化控件

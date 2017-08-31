@@ -46,13 +46,18 @@ import cn.jpush.android.api.TagAliasCallback;
  * <h3>Description: 基础Fragment</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
     private AlertDialog loadingDialog;
     private TextView msg;
     private KJHttp kjHttp;
     public Activity mContext;//CXP添加，供子类使用
     private Toast toast;
+
+    //Fragment的View加载完毕的标记
+    private boolean isViewCreated;
+    //Fragment对用户可见的标记
+    private boolean isUIVisible;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -66,6 +71,10 @@ public class BaseFragment extends Fragment {
                 R.style.AppTheme_Dialog_Loading).create();
         loadingDialog.setView(loading);
         loadingDialog.setCancelable(false);
+
+        //懒加载
+        isViewCreated = true;
+        lazyLoad();
     }
 
     @Override
@@ -317,6 +326,33 @@ public class BaseFragment extends Fragment {
             default:
 
                 break;
+        }
+    }
+
+    //懒加载
+    private void lazyLoad() {
+        //这里进行双重标记判断,是因为setUserVisibleHint会多次回调,并且会在onCreateView执行前回调,必须确保onCreateView加载完毕且页面可见,才加载数据
+        if (isViewCreated && isUIVisible) {
+            lazyLoadData();
+            //数据加载完毕,恢复标记,防止重复加载
+            isViewCreated = false;
+            isUIVisible = false;
+        }
+    }
+
+    protected abstract void lazyLoadData();
+
+    /**
+     * @param isVisibleToUser 用来判断Fragment的UI 用户是否可见
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            isUIVisible = true;
+            lazyLoad();
+        } else {
+            isUIVisible = false;
         }
     }
 

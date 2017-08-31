@@ -135,7 +135,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initWidget();
-        loadData(true, false, "", "");
+        //loadData(true, false, "", "");
     }
 
     private void initWidget() {
@@ -467,6 +467,11 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         isResume = false;
         isFirst = false;
         super.onPause();
+    }
+
+    @Override
+    protected void lazyLoadData() {
+        loadData(true, false, "", "");
     }
 
     /**
