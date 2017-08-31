@@ -13,6 +13,7 @@ import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UserInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticesSingleInfoActivity;
+import com.shanlinjinrong.oa.ui.activity.push.PushListActivity;
 import com.shanlinjinrong.oa.ui.annotation.PerActivity;
 import com.shanlinjinrong.oa.ui.base.module.ActivityModule;
 
@@ -49,4 +50,6 @@ public interface ActivityComponent {
     void inject(NoticeListActivity activity);
 
     void inject(NoticesSingleInfoActivity activity);
+
+    void inject(PushListActivity activity);
 }

@@ -1,4 +1,4 @@
-package com.shanlinjinrong.common;
+package com.shanlinjinrong.views.common;
 
 import android.app.Dialog;
 import android.content.Context;

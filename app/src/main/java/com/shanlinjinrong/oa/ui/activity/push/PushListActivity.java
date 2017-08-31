@@ -17,23 +17,17 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.PushMsg;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInfoActivity;
-import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
-import com.shanlinjinrong.oa.ui.adapter.TabMsgListAdapter;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportListActivity;
-import com.shanlinjinrong.oa.utils.LogUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
+import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
+import com.shanlinjinrong.oa.ui.activity.push.contract.PushListActivityContract;
+import com.shanlinjinrong.oa.ui.activity.push.presenter.PushListActivityPresenter;
+import com.shanlinjinrong.oa.ui.adapter.TabMsgListAdapter;
+import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 
 import java.util.ArrayList;
 
@@ -46,7 +40,7 @@ import butterknife.ButterKnife;
  * Author:Created by CXP on Date: 2016/9/18 16:45.
  * Description:推送消息列表
  */
-public class PushListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class PushListActivity extends MyBaseActivity<PushListActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, PushListActivityContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;
@@ -95,9 +89,12 @@ public class PushListActivity extends BaseActivity implements SwipeRefreshLayout
         loadData(false, false);
     }
 
+    @Override
+    protected void initInject() {
+
+    }
+
     private void initWidget() {
-
-
         mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#468bff"),
                 Color.parseColor("#468bff"), Color.parseColor("#468bff"));
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -182,7 +179,7 @@ public class PushListActivity extends BaseActivity implements SwipeRefreshLayout
                             if (!isLoading) {
                                 isLoading = true;
                                 mAdapter.addFooterView(view, list.size());
-                                handler.sendEmptyMessageDelayed(LOAD_MORE_CONTENT,1000);
+                                handler.sendEmptyMessageDelayed(LOAD_MORE_CONTENT, 1000);
                             }
                         } else {
                             handler.sendEmptyMessage(NO_MORE_CONTENT);
@@ -195,71 +192,19 @@ public class PushListActivity extends BaseActivity implements SwipeRefreshLayout
 
     private void readPush(String pid) {
         showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        params.put("pid", pid);
-
-        initKjHttp().post(Api.MESSAGE_READPUSH, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            break;
-                        case Api.RESPONSES_CONTENT_EMPTY:
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.readPush(AppConfig.getAppConfig(this).getDepartmentId(), pid);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        currentPage=1;
+        currentPage = 1;
     }
 
     @Override
     public void onRefresh() {
         loadData(true, false);
     }
-
 
 
     /**
@@ -278,81 +223,7 @@ public class PushListActivity extends BaseActivity implements SwipeRefreshLayout
         if (loadMore) {
             currentPage++;
         }
-
-
-
-        HttpParams params = new HttpParams();
-        params.put("limit", limit);
-        params.put("page", currentPage);
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        initKjHttp().post(Api.MESSAGE_PUSHS, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            ArrayList<PushMsg> listPushMsgs = new ArrayList<>();
-                            JSONArray notices = Api.getDataToJSONArray(jo);
-                            for (int i = 0; i < notices.length(); i++) {
-                                JSONObject jsonObject = notices.getJSONObject(i);
-                                PushMsg pushMsg =
-                                        new PushMsg(jsonObject);
-                                listPushMsgs.add(pushMsg);
-                            }
-                            if (loadMore) {
-                                //如果是加载更多的话，需要将最后一个view移除了
-                                mAdapter.removeAllFooterView();
-                            }
-                            isLoading = false;
-
-                            list.addAll(listPushMsgs);
-                            mAdapter.notifyDataSetChanged();
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            showEmptyView(mRootView, "抱歉，当前推送消息为空", 0, false);
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.LIMIT_CONTENT_EMPTY:
-                            mAdapter.removeAllFooterView();
-                            hasMore = false;
-                            showToast("没有更多了");
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.loadPushMsg(AppConfig.getAppConfig(this).getDepartmentId(), currentPage, limit, loadMore);
     }
 
     private void changeLoadState() {
@@ -394,4 +265,49 @@ public class PushListActivity extends BaseActivity implements SwipeRefreshLayout
     }
 
 
+    @Override
+    public void loadPushMsgSuccess(ArrayList<PushMsg> pushMessages, boolean loadMore) {
+        if (loadMore) {
+            //如果是加载更多的话，需要将最后一个view移除了
+            mAdapter.removeAllFooterView();
+        }
+        isLoading = false;
+
+        list.addAll(pushMessages);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void loadPushMsgEmpty() {
+        showEmptyView(mRootView, "抱歉，当前推送消息为空", 0, false);
+    }
+
+    @Override
+    public void loadPushMsgLimitContentEmpty() {
+        mAdapter.removeAllFooterView();
+        hasMore = false;
+        showToast("没有更多了");
+    }
+
+    @Override
+    public void loadPushMsgFailed(int errCode, String errMsg) {
+        catchWarningByCode(errCode);
+    }
+
+    @Override
+    public void requestFinish() {
+        hideLoadingView();
+        if (mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void readPushFailed(int errCode, String errMsg) {
+        catchWarningByCode(errCode);
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
 }

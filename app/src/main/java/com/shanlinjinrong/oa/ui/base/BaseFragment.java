@@ -65,7 +65,7 @@ public class BaseFragment extends Fragment {
         loadingDialog = new AlertDialog.Builder(getActivity(),
                 R.style.AppTheme_Dialog_Loading).create();
         loadingDialog.setView(loading);
-        loadingDialog.setCancelable(false);
+//        loadingDialog.setCancelable(false);
     }
 
     @Override

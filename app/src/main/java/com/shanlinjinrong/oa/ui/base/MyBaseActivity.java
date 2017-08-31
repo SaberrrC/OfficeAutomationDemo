@@ -103,7 +103,7 @@ public abstract class MyBaseActivity<T extends BasePresenter> extends AppCompatA
     private void initLoadingDialog(View loading) {
         loadingDialog = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Loading).create();
         loadingDialog.setView(loading);
-        loadingDialog.setCancelable(false);
+//        loadingDialog.setCancelable(false);
     }
 
 
