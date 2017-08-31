@@ -471,7 +471,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     protected void lazyLoadData() {
-        loadData(true, false, "", "");
+        loadData(false, false, "", "");
     }
 
     /**
@@ -488,7 +488,8 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             mAdapter.removeAllFooterView();
         } catch (Exception e) {
         }
-        loadData(true, false, "", "");
+
+        loadData(false, false, "", "");
         reFresUnRedCount();
     }
 
@@ -545,6 +546,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                         JSONObject jo = new JSONObject(t);
                         switch (Api.getCode(jo)) {
                             case Api.RESPONSES_CODE_OK:
+                                list.clear();
                                 ArrayList<PushMsg> listPushMsgs = new ArrayList<>();
                                 JSONArray notices = Api.getDataToJSONArray(jo);
                                 for (int i = 0; i < notices.length(); i++) {
