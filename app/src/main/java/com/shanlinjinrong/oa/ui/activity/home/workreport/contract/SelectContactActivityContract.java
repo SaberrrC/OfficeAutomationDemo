@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.contract;
 
+import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.model.selectContacts.Group;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 public interface SelectContactActivityContract {
     interface View extends BaseView {
-        void loadDataSuccess(ArrayList<Group> groups);
+        void loadDataSuccess(ArrayList<Group> groups, Child selectChild);
 
         void loadDataFailed(int errCode, String errMsg);
 

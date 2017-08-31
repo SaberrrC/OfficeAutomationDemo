@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -58,6 +59,10 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
 
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @Bind(R.id.tv_content_empty)
+    TextView mContentEmpty;
+
 
     ArrayList<Group> groups = new ArrayList<>();//联系人群组
 
@@ -117,6 +122,9 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
         });
 
         mSelectChildId = getIntent().getStringExtra("childId");
+//        if (!TextUtils.isEmpty(mSelectChildId)) {
+//            mSelectChild = new Child()
+//        }
 
         mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#0EA7ED"),
                 Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
@@ -173,10 +181,12 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
 
 
     @Override
-    public void loadDataSuccess(ArrayList<Group> groups) {
+    public void loadDataSuccess(ArrayList<Group> groups, Child selectChild) {
         hideEmptyView();
         mContactList.setVisibility(View.VISIBLE);
+        mContentEmpty.setVisibility(View.GONE);
         this.groups = groups;
+        mSelectChild = selectChild;
         mAdapter = new ContactAdapter(this, groups);
         mContactList.setAdapter(mAdapter);
         mContactList.expandGroup(0);
@@ -184,7 +194,9 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
 
     @Override
     public void loadDataFailed(int errCode, String errMsg) {
-        showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);
+        mContentEmpty.setVisibility(View.VISIBLE);
+        mContentEmpty.setText("没有搜索到该员工，请重新搜索");
+//        showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);
         catchWarningByCode(errCode);
     }
 
@@ -199,7 +211,9 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
     @Override
     public void loadDataEmpty() {
         mContactList.setVisibility(View.GONE);
-        showEmptyView(mRootView, "数据暂无，请输入全名搜索", 0, false);
+        mContentEmpty.setVisibility(View.VISIBLE);
+        mContentEmpty.setText("没有搜索到该员工，请重新搜索");
+//        showEmptyView(mRootView, "数据暂无，请输入全名搜索", 0, false);
     }
 
     private void loadData(String name) {
