@@ -217,7 +217,10 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
     }
 
     private void loadData(String name) {
-        showLoadingView("正在获取联系人列表");
+        if (!mSwipeRefreshLayout.isRefreshing()){
+            showLoadingView("正在获取联系人列表");
+        }
+        mContentEmpty.setVisibility(View.GONE);
         String department_id = AppConfig.getAppConfig(AppManager.mContext)
                 .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
         mPresenter.loadData(department_id, name, mSelectChildId);

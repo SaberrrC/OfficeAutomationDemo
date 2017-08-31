@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.workreport;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
+import com.shanlinjinrong.oa.utils.EmojiFilter;
 
 public class WriteReportFragment extends Fragment implements View.OnClickListener {
 
@@ -59,6 +61,10 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
         mNextPageBtn = (TextView) view.findViewById(R.id.next_page);
         mLastPageBtn.setOnClickListener(this);
         mNextPageBtn.setOnClickListener(this);
+        InputFilter[] filters = new InputFilter[]{new EmojiFilter(10)};
+        mPlanWork.setFilters(filters);
+        mRealWork.setFilters(filters);
+        mSelfEvaluate.setFilters(filters);
     }
 
 
