@@ -268,7 +268,8 @@ public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPres
     @Override
     public void autoSearchFinish() {
         hideLoadingView();
-        mSwipeRefreshLayout.setRefreshing(false);
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

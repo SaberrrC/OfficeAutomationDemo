@@ -32,8 +32,6 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
     @Override
     public void loadData(String departmentId, String searchName, final String selectChildId) {
         HttpParams params = new HttpParams();
-
-
         // TODO: 2017/8/28 新给的接口没有分组信息
         mKjHttp.jsonGet(ApiJava.SAME_ORGANIZATION + "?username=" + searchName + "&pagesize=" + Integer.MAX_VALUE, params, new HttpCallBack() {
             @Override
@@ -62,6 +60,9 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                             }
                             groups.add(group);
                             mView.loadDataSuccess(groups);
+                            break;
+                        case ApiJava.REQUEST_NO_RESULT:
+                            mView.loadDataEmpty();
                             break;
                         default:
                             mView.loadDataFailed(0, jo.getString("message"));

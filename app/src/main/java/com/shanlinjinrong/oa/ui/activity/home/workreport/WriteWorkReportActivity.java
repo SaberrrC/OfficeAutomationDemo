@@ -70,6 +70,7 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
             WriteReportFragment fragment = new WriteReportFragment();
             Bundle fragmentArg = new Bundle();
             fragmentArg.putParcelable("hour_report", mHourReportList.get(i));
+            fragmentArg.putInt("page", i);
             fragment.setArguments(fragmentArg);
             fragment.setChangeListener(this);
             fragment.setPageBtnClickListener(this);

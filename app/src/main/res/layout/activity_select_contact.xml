@@ -42,11 +42,16 @@
             android:textSize="@dimen/common_text_size" />
     </RelativeLayout>
 
-    <ExpandableListView
-        android:id="@+id/contact_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:groupIndicator="@null" />
+        android:layout_height="wrap_content">
 
+        <ExpandableListView
+            android:id="@+id/contact_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:groupIndicator="@null" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

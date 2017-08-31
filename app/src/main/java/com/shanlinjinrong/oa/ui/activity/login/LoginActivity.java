@@ -140,6 +140,7 @@ public class LoginActivity extends MyBaseActivity<LoginActivityPresenter> implem
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //TODO isChecked
                 if (isChecked) {
+                    AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_CODE, true);
                     AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, true);
                     isAutoLogin = true;
                 } else {

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -102,7 +103,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         setContentView(R.layout.activity_work_report);
         ButterKnife.bind(this);
         setTranslucentStatus(this);
-        initView();
+        initView(savedInstanceState);
         initDefaultReceiver();
     }
 
@@ -110,13 +111,23 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         mPresenter.getDefaultReceiver();
     }
 
-    private void initView() {
+    private void initView(Bundle savedInstanceState) {
         mWorkReportList.setLayoutManager(new LinearLayoutManager(this));
+        if (savedInstanceState != null){
+            mHourReportData = savedInstanceState.getParcelableArrayList("hour_report_list");
+            mWorkReportListData = savedInstanceState.getParcelableArrayList("work_report_list");
+            mReceiverName = savedInstanceState.getString("receiverName", mReceiverName);
+            mReceiverId = savedInstanceState.getString("receiverId", mReceiverId);
+            mReceiverPost = savedInstanceState.getString("receiverPost", mReceiverPost);
+            mDate.setText(savedInstanceState.getString("time", mDate.getText().toString()));
+            mTomorrowPlan.setText(savedInstanceState.getString("tomorrowPlan", mTomorrowPlan.getText().toString()));
+        }else {
+            //初始化空的时候的数据
+            mWorkReportListData = initListData();
+            mHourReportData = initHourReportData();
+            mDate.setText(DateUtils.getTodayDate(false));
+        }
 
-        //初始化空的时候的数据
-        mWorkReportListData = initListData();
-        mHourReportData = initHourReportData();
-        mDate.setText(DateUtils.getTodayDate(false));
 
         //如果有提交日报失败，保存本地，加载本地数据
         if (hasLocalData()) {
@@ -132,7 +143,6 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
             @Override
             public void onClick(View v) {
                 if (!checkDataIsFull()) {
-                    Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showLoadingView();
@@ -232,26 +242,55 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         return params;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putParcelableArrayList("hour_report_list", (ArrayList<? extends Parcelable>) mHourReportData);
+        outState.putParcelableArrayList("work_report_list", (ArrayList<? extends Parcelable>) mWorkReportListData);
+        outState.putString("receiverName", mReceiverName);
+        outState.putString("receiverId", mReceiverId);
+        outState.putString("receiverPost", mReceiverPost);
+        outState.putString("time", mDate.getText().toString());
+        outState.putString("tomorrowPlan", mTomorrowPlan.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mHourReportData = savedInstanceState.getParcelableArrayList("hour_report_list");
+        mWorkReportListData = savedInstanceState.getParcelableArrayList("work_report_list");
+        mReceiverName = savedInstanceState.getString("receiverName", mReceiverName);
+        mReceiverId = savedInstanceState.getString("receiverId", mReceiverId);
+        mReceiverPost = savedInstanceState.getString("receiverPost", mReceiverPost);
+        mDate.setText(savedInstanceState.getString("time", mDate.getText().toString()));
+        mTomorrowPlan.setText(savedInstanceState.getString("tomorrowPlan", mTomorrowPlan.getText().toString()));
+    }
+
     //检测数据是否完整
     private boolean checkDataIsFull() {
         for (int i = 0; i < mWorkReportListData.size(); i++) {
             if (mWorkReportListData.get(i).getContent().equals("")) {
+                Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
-        if (TextUtils.isEmpty(mReceiverId) || TextUtils.isEmpty(mReceiverName) || TextUtils.isEmpty(mTomorrowPlan.getText().toString())) {
+
+        if (TextUtils.isEmpty(mTomorrowPlan.getText().toString())) {
+            Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(mReceiverId) || TextUtils.isEmpty(mReceiverName)) {
+            Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_please_write_receiver), Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (mHourReportData.isEmpty()) {
-            return false;
-        } else {
-            for (HourReportBean bean : mHourReportData) {
-                if (bean.checkHasEmpty()) {
-                    return false;
-                }
+        for (HourReportBean bean : mHourReportData) {
+            if (bean.checkHasEmpty()) {
+                Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
+                return false;
             }
         }
+
         return true;
     }
 
@@ -334,7 +373,6 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
                 mReceiverName = data.getStringExtra("name");
                 mReceiverPost = data.getStringExtra("post");
                 mReceiver.setText(mReceiverName + "-" + mReceiverPost);
-
             }
         }
     }

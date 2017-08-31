@@ -71,6 +71,8 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
                 mRealWork.setText(hourReportBean.getRealWork());
                 mSelfEvaluate.setText(hourReportBean.getSelfEvaluate());
             }
+
+            setBtnBackGround(extra.getInt("page"));
         }
     }
 
@@ -88,6 +90,17 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
         if (changeListener != null && mPlanWork != null && mRealWork != null && mSelfEvaluate != null)
             changeListener.fragmentStartChange(position, mPlanWork.
                     getText().toString(), mRealWork.getText().toString(), mSelfEvaluate.getText().toString());
+    }
+
+    public void setBtnBackGround(int position) {
+        if (mLastPageBtn != null && mNextPageBtn != null) {
+            if (position == 0) {
+                mLastPageBtn.setEnabled(false);
+            }
+            if (position == 7) {
+                mNextPageBtn.setEnabled(false);
+            }
+        }
     }
 
     @Override
