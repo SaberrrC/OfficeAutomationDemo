@@ -15,8 +15,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.Notice;
-import com.shanlinjinrong.oa.ui.activity.notice.contract.NoticesSingleInfoActivityContract;
-import com.shanlinjinrong.oa.ui.activity.notice.presenter.NoticesSingleInfoActivityPresenter;
+import com.shanlinjinrong.oa.ui.activity.notice.contract.NoticesSingleInfoContract;
+import com.shanlinjinrong.oa.ui.activity.notice.presenter.NoticesSingleInfoPresenter;
 import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.Utils;
@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * Author:Created by CXP on Date: 2016/9/22 18:04.
  * Description:单个公告通知详细页
  */
-public class NoticesSingleInfoActivity extends MyBaseActivity<NoticesSingleInfoActivityPresenter> implements NoticesSingleInfoActivityContract.View {
+public class NoticesSingleInfoActivity extends MyBaseActivity<NoticesSingleInfoPresenter> implements NoticesSingleInfoContract.View {
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.toolbar_text_btn)

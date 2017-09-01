@@ -30,9 +30,9 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
-import com.shanlinjinrong.oa.ui.base.component.DaggerFragmentComponent;
-import com.shanlinjinrong.oa.ui.base.component.FragmentComponent;
-import com.shanlinjinrong.oa.ui.base.module.FragmentModule;
+import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerFragmentComponent;
+import com.shanlinjinrong.oa.ui.base.dagger.component.FragmentComponent;
+import com.shanlinjinrong.oa.ui.base.dagger.module.FragmentModule;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
 import java.util.ArrayList;

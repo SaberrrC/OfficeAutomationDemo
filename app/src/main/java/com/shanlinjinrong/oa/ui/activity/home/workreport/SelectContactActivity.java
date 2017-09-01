@@ -21,7 +21,7 @@ import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.model.selectContacts.Group;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.SelectContactActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.SelectContactActivityPresenter;
-import com.shanlinjinrong.oa.ui.adapter.ContactAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ContactAdapter;
 import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.views.ClearEditText;
 

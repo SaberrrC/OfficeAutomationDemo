@@ -54,8 +54,8 @@ import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.JoinVideoMember;
-import com.shanlinjinrong.oa.ui.activity.netease.MsgHelper;
-import com.shanlinjinrong.oa.ui.adapter.JoinVideoMeetingListAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.netease.MsgHelper;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.adapter.JoinVideoMeetingListAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 

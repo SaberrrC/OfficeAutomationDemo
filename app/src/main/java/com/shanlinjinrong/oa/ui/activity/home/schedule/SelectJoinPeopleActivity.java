@@ -287,7 +287,7 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.GlightContact;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.model.selectContacts.Group;
-import com.shanlinjinrong.oa.ui.adapter.SelectCopierAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.adapter.SelectJoinPeopleAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.MyJoinPeopleFragment;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
@@ -331,7 +331,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
     ArrayList<GlightContact> list;
     ArrayList<Group> groups = new ArrayList<>();
     private ArrayList<Child> selectedContacts;//已经选择的联系人
-    private SelectCopierAdapter mAdapter;
+    private SelectJoinPeopleAdapter mAdapter;
     private boolean isFirstLoad = true;//刚进入页面，第一次加载数据
     //----------自己写的
     @Bind(R.id.search_et_input)
@@ -428,7 +428,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
     }
 
     private void initWeiget() {
-        mAdapter = new SelectCopierAdapter(this, groups);
+        mAdapter = new SelectJoinPeopleAdapter(this, groups);
         mListView.setAdapter(mAdapter);
         //mListView.setOnChildClickListener(mAdapter);
         mListView.setOnChildClickListener(new GetSelectedEmployee());

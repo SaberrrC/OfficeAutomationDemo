@@ -2,7 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.main.component;
 
 import com.shanlinjinrong.oa.ui.activity.main.WelcomePage;
 import com.shanlinjinrong.oa.ui.activity.main.module.WelcomeModule;
-import com.shanlinjinrong.oa.ui.annotation.PerActivity;
+import com.shanlinjinrong.oa.ui.base.dagger.annotation.PerActivity;
 
 import dagger.Component;
 

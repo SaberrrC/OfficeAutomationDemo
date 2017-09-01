@@ -28,7 +28,7 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.model.ScheduleRvItemData;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.ScheduleActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.presenter.ScheduleActivityPresenter;
-import com.shanlinjinrong.oa.ui.adapter.CalendarRvAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.adapter.CalendarRvAdapter;
 import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.Utils;

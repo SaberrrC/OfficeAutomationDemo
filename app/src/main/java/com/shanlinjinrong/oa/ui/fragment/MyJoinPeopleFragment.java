@@ -15,7 +15,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
-import com.shanlinjinrong.oa.ui.adapter.SelectAdapter;
+import com.shanlinjinrong.oa.ui.fragment.adapter.SelectAdapter;
 
 import java.util.ArrayList;
 

@@ -36,7 +36,7 @@ import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportListActivity;
-import com.shanlinjinrong.oa.ui.adapter.TabMsgListAdapter;
+import com.shanlinjinrong.oa.ui.fragment.adapter.TabMsgListAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.LogUtils;
 

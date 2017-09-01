@@ -37,9 +37,9 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
-import com.shanlinjinrong.oa.ui.base.component.ActivityComponent;
-import com.shanlinjinrong.oa.ui.base.component.DaggerActivityComponent;
-import com.shanlinjinrong.oa.ui.base.module.ActivityModule;
+import com.shanlinjinrong.oa.ui.base.dagger.component.ActivityComponent;
+import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerActivityComponent;
+import com.shanlinjinrong.oa.ui.base.dagger.module.ActivityModule;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
 
@@ -323,7 +323,8 @@ public abstract class MyBaseActivity<T extends BasePresenter> extends AppCompatA
     }
 
     public void hideLoadingView() {
-        loadingDialog.dismiss();
+        if (loadingDialog.isShowing())
+            loadingDialog.dismiss();
     }
 
     /**

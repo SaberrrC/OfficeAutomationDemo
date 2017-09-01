@@ -15,7 +15,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.MeetRoom;
-import com.shanlinjinrong.oa.ui.adapter.SelectOrdinaryMeetingRoomAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.adapter.SelectOrdinaryMeetingRoomAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 

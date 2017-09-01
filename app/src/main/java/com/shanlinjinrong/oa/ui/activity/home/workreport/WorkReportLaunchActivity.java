@@ -26,7 +26,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportListAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportLaunchListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.ItemBean;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
@@ -52,7 +52,7 @@ import cn.qqtheme.framework.picker.DatePicker;
  * create by lvdinghao
  * 发起日报 页面
  */
-public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchActivityPresenter> implements WorkReportLaunchActivityContract.View, WorkReportListAdapter.OnItemClickListener {
+public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchActivityPresenter> implements WorkReportLaunchActivityContract.View, WorkReportLaunchListAdapter.OnItemClickListener {
 
     // TODO: 2017/8/21 之前字段，先保留，应该不用多选
     public static final int REQUEST_CODE_MULTIPLE = 1;//多选，接收人
@@ -93,7 +93,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
     private DatePicker picker;
 
     private String currentDate;//当前年月日
-    private WorkReportListAdapter mWorkReportListAdapter;
+    private WorkReportLaunchListAdapter mWorkReportListAdapter;
     private String mReceiverId; //接收人ID
     private String mReceiverName; //接收人名称
     private String mReceiverPost; //接收人ID
@@ -136,7 +136,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
             getLocalData();
         }
 
-        mWorkReportListAdapter = new WorkReportListAdapter(this, mWorkReportListData);
+        mWorkReportListAdapter = new WorkReportLaunchListAdapter(this, mWorkReportListData);
         mWorkReportList.setAdapter(mWorkReportListAdapter);
         mWorkReportListAdapter.setItemClickListener(this);
         mWorkReportList.addItemDecoration(new DecorationLine(this, mWorkReportListData));
@@ -309,31 +309,31 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
         //时报 上午九点到12点
         for (int i = 9; i < 12; i++) {
             String title = i + ":00~" + (i + 1) + ":00";
-            listData.add(new ItemBean(title, getString(R.string.work_report_no_write), WorkReportListAdapter.CLICK_TYPE));
+            listData.add(new ItemBean(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
         }
 
         //下午一点到五点
         for (int i = 13; i < 17; i++) {
             String title = i + ":00~" + (i + 1) + ":00";
-            listData.add(new ItemBean(title, getString(R.string.work_report_no_write), WorkReportListAdapter.CLICK_TYPE));
+            listData.add(new ItemBean(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
         }
 
         //下午五点到五点半
-        listData.add(new ItemBean("17:00~17:30", getString(R.string.work_report_no_write), WorkReportListAdapter.CLICK_TYPE));
+        listData.add(new ItemBean("17:00~17:30", getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
 
         //职业素养
-        listData.add(new ItemBean(getString(R.string.work_report_personal_behavior), "", WorkReportListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
-        listData.add(new ItemBean(getString(R.string.work_report_environmental_hygiene), "", WorkReportListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_save), "", WorkReportListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_communication_skills), "", WorkReportListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_appearance), "", WorkReportListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_work_discipline), "", WorkReportListAdapter.WRITE_TYPE));
+        listData.add(new ItemBean(getString(R.string.work_report_personal_behavior), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
+        listData.add(new ItemBean(getString(R.string.work_report_environmental_hygiene), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new ItemBean(getString(R.string.work_report_save), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new ItemBean(getString(R.string.work_report_communication_skills), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new ItemBean(getString(R.string.work_report_appearance), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new ItemBean(getString(R.string.work_report_work_discipline), "", WorkReportLaunchListAdapter.WRITE_TYPE));
 
         //团队合作
-        listData.add(new ItemBean(getString(R.string.work_report_initiative), "", WorkReportListAdapter.WRITE_TYPE, true, getString(R.string.work_report_teamwork)));
-        listData.add(new ItemBean(getString(R.string.work_report_cooperation), "", WorkReportListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_dedication), "", WorkReportListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_obey), "", WorkReportListAdapter.WRITE_TYPE));
+        listData.add(new ItemBean(getString(R.string.work_report_initiative), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_teamwork)));
+        listData.add(new ItemBean(getString(R.string.work_report_cooperation), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new ItemBean(getString(R.string.work_report_dedication), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new ItemBean(getString(R.string.work_report_obey), "", WorkReportLaunchListAdapter.WRITE_TYPE));
 
         return listData;
     }

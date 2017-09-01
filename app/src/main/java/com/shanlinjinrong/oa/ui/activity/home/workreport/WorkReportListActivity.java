@@ -34,7 +34,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.ReportList;
-import com.shanlinjinrong.oa.ui.adapter.WorkReportListAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportListAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.BitmapUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;

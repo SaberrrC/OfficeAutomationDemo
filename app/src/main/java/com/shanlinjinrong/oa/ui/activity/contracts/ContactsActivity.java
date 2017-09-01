@@ -20,7 +20,7 @@ import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.contracts.contract.ContractActivityContract;
 import com.shanlinjinrong.oa.ui.activity.contracts.presenter.ContractActivityPresenter;
-import com.shanlinjinrong.oa.ui.adapter.TabContactsAdapter;
+import com.shanlinjinrong.oa.ui.fragment.adapter.TabContactsAdapter;
 import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 
 import java.util.ArrayList;

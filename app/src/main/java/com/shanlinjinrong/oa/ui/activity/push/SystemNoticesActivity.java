@@ -11,20 +11,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.SystemNotice;
-import com.shanlinjinrong.oa.ui.adapter.SystemNoticeDetailAdapter;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.oa.ui.activity.push.contract.SystemNoticesContract;
+import com.shanlinjinrong.oa.ui.activity.push.presenter.SystemNoticesPresenter;
+import com.shanlinjinrong.oa.ui.activity.push.adapter.SystemNoticeDetailAdapter;
+import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
-
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,7 +29,7 @@ import butterknife.ButterKnife;
  * Author:Created by CXP on Date: 2016/9/19 11:31.
  * Description:系统消息activity
  */
-public class SystemNoticesActivity extends BaseActivity {
+public class SystemNoticesActivity extends MyBaseActivity<SystemNoticesPresenter> implements SystemNoticesContract.View {
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.toolbar_text_btn)
@@ -44,7 +38,7 @@ public class SystemNoticesActivity extends BaseActivity {
     Toolbar toolbar;
     @Bind(R.id.notice_detail_recyclerView)
     RecyclerView mRecyclerView;
-    private ArrayList<SystemNotice> list;
+    private List<SystemNotice> list;
     private SystemNoticeDetailAdapter mAdapter;
     @Bind(R.id.layout_content)
     RelativeLayout mRootView;
@@ -57,72 +51,17 @@ public class SystemNoticesActivity extends BaseActivity {
         initToolBar();
         setTranslucentStatus(this);
         initWidget();
-        initData();
         loadData();
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
     private void loadData() {
-
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        initKjHttp().post(Api.SYSTEM_NOTICE, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-                showLoadingView();
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            list = new ArrayList<>();
-                            JSONArray notices = Api.getDataToJSONArray(jo);
-                            for (int i = 0; i < notices.length(); i++) {
-                                JSONObject jsonObject = notices.getJSONObject(i);
-                                SystemNotice systemNotice =
-                                        new SystemNotice(jsonObject);
-                                list.add(systemNotice);
-                            }
-                            mAdapter.notifyDataSetChanged();
-                            setDataForRecyclerView();
-                            readAllSystemNotices();
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            showEmptyView(mRootView, "抱歉，暂时还未接收到消息",
-                                    R.drawable.contacts_empty_icon, false);
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        showLoadingView();
+        mPresenter.loadData(AppConfig.getAppConfig(this).getDepartmentId());
     }
 
     private void setDataForRecyclerView() {
@@ -135,33 +74,9 @@ public class SystemNoticesActivity extends BaseActivity {
      * 系统消息全部已读接口
      */
     private void readAllSystemNotices() {
-        showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        initKjHttp().post(Api.SYSTEM_NOTICE_ALL_READ, params, new HttpCallBack() {
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                System.out.println(t);
-            }
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                hideLoadingView();
-                catchWarningByCode(errorNo);
-                super.onFailure(errorNo, strMsg);
-            }
-        });
+        mPresenter.readAllSystemNotices(AppConfig.getAppConfig(this).getDepartmentId());
     }
 
-    private void initData() {
-    }
 
     private void initWidget() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -190,5 +105,40 @@ public class SystemNoticesActivity extends BaseActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void loadDataSuccess(List<SystemNotice> pushMessages) {
+        list = pushMessages;
+        mAdapter.notifyDataSetChanged();
+        setDataForRecyclerView();
+        readAllSystemNotices();
+    }
+
+    @Override
+    public void loadDataEmpty() {
+        showEmptyView(mRootView, "抱歉，暂时还未接收到消息",
+                R.drawable.contacts_empty_icon, false);
+    }
+
+
+    @Override
+    public void loadDataFailed(int errCode, String errMsg) {
+        hideLoadingView();
+    }
+
+    @Override
+    public void requestFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void readSystemNoticesFailed(int errCode, String errMsg) {
+        catchWarningByCode(errCode);
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 }

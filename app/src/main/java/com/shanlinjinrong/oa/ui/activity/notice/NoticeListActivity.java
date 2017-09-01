@@ -19,9 +19,9 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.Notice;
-import com.shanlinjinrong.oa.ui.activity.notice.contract.NoticeListActivityContract;
-import com.shanlinjinrong.oa.ui.activity.notice.presenter.NoticeListActivityPresenter;
-import com.shanlinjinrong.oa.ui.adapter.NoticeDetailAdapter;
+import com.shanlinjinrong.oa.ui.activity.notice.contract.NoticeListContract;
+import com.shanlinjinrong.oa.ui.activity.notice.presenter.NoticeListPresenter;
+import com.shanlinjinrong.oa.ui.activity.notice.adapter.NoticeDetailAdapter;
 import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
  * Author:Created by CXP on Date: 2016/9/18 16:45.
  * Description:公告通知列表
  */
-public class NoticeListActivity extends MyBaseActivity<NoticeListActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, NoticeListActivityContract.View {
+public class NoticeListActivity extends MyBaseActivity<NoticeListPresenter> implements SwipeRefreshLayout.OnRefreshListener, NoticeListContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;

@@ -2,7 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.main.module;
 
 import com.shanlinjinrong.oa.ui.activity.main.contract.WelcomePageContract;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.WelcomePagePresenter;
-import com.shanlinjinrong.oa.ui.annotation.PerActivity;
+import com.shanlinjinrong.oa.ui.base.dagger.annotation.PerActivity;
 
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpConfig;
