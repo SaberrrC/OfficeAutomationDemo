@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,6 +33,7 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaun
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportLaunchActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
+import com.shanlinjinrong.oa.utils.EmojiFilter;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
 import com.shanlinjinrong.oa.views.KeyboardLinearLayout;
 
@@ -113,7 +115,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
 
     private void initView(Bundle savedInstanceState) {
         mWorkReportList.setLayoutManager(new LinearLayoutManager(this));
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             mHourReportData = savedInstanceState.getParcelableArrayList("hour_report_list");
             mWorkReportListData = savedInstanceState.getParcelableArrayList("work_report_list");
             mReceiverName = savedInstanceState.getString("receiverName", mReceiverName);
@@ -121,7 +123,7 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
             mReceiverPost = savedInstanceState.getString("receiverPost", mReceiverPost);
             mDate.setText(savedInstanceState.getString("time", mDate.getText().toString()));
             mTomorrowPlan.setText(savedInstanceState.getString("tomorrowPlan", mTomorrowPlan.getText().toString()));
-        }else {
+        } else {
             //初始化空的时候的数据
             mWorkReportListData = initListData();
             mHourReportData = initHourReportData();
@@ -162,6 +164,9 @@ public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchAct
                 return false;
             }
         });
+
+        InputFilter[] filters = new InputFilter[]{new EmojiFilter(800)};
+        mTomorrowPlan.setFilters(filters);
     }
 
     private List<HourReportBean> initHourReportData() {

@@ -61,7 +61,7 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
         mNextPageBtn = (TextView) view.findViewById(R.id.next_page);
         mLastPageBtn.setOnClickListener(this);
         mNextPageBtn.setOnClickListener(this);
-        InputFilter[] filters = new InputFilter[]{new EmojiFilter(10)};
+        InputFilter[] filters = new InputFilter[]{new EmojiFilter(50)};
         mPlanWork.setFilters(filters);
         mRealWork.setFilters(filters);
         mSelfEvaluate.setFilters(filters);

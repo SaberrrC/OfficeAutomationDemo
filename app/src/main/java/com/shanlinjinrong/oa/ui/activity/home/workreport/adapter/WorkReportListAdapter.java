@@ -122,7 +122,7 @@ public class WorkReportListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             super(view);
             mLeftTitle = (TextView) view.findViewById(R.id.tv_left_title);
             mEdit = (EditText) view.findViewById(R.id.et_text);
-            InputFilter[] filters = new InputFilter[]{new EmojiFilter(10)};
+            InputFilter[] filters = new InputFilter[]{new EmojiFilter(50)};
             mEdit.setFilters(filters);
         }
     }
