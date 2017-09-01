@@ -3,15 +3,18 @@ package com.shanlinjinrong.oa.ui.activity.home.workreport.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.ItemBean;
+import com.shanlinjinrong.oa.utils.EmojiFilter;
 
 import java.util.List;
 
@@ -113,12 +116,14 @@ public class WorkReportListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         TextView mLeftTitle;
 
-        TextView mEdit;
+        EditText mEdit;
 
         WriteCellHolder(View view) {
             super(view);
             mLeftTitle = (TextView) view.findViewById(R.id.tv_left_title);
-            mEdit = (TextView) view.findViewById(R.id.et_text);
+            mEdit = (EditText) view.findViewById(R.id.et_text);
+            InputFilter[] filters = new InputFilter[]{new EmojiFilter(50)};
+            mEdit.setFilters(filters);
         }
     }
 

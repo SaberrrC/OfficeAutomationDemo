@@ -24,8 +24,8 @@ android {
         multiDexEnabled true
 
         //pwd:13579
-        versionCode 64
-        versionName "v1.1.9"
+        versionCode 20
+        versionName "v1.0.2"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64', "arm64-v8a"
         }
@@ -82,7 +82,7 @@ def devJavaAddress() {
 }
 
 def preJavaAddress() {
-    return "\"http://172.16.201.205:8080/\""
+    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
 }
 
 def prePHPAddress() {

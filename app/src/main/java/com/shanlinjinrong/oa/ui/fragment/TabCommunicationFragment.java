@@ -47,8 +47,12 @@ public class TabCommunicationFragment extends BaseFragment  {
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         initData();
+    }
+
+    @Override
+    protected void lazyLoadData() {
+
     }
 
     private void initData() {

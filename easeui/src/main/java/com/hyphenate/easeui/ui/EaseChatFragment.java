@@ -35,8 +35,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMImageMessageBody;
@@ -1050,7 +1052,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         requestRunTimePermission(new String[]{Manifest.permission.RECORD_AUDIO}, new PermissionListener() {
             @Override
             public void onGranted() {
-                mListener.voiceCallListener(toChatUsername,mEmMessage);
+                mListener.voiceCallListener(toChatUsername, mEmMessage);
             }
 
             @Override
@@ -1376,7 +1378,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     //intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
                     //startActivity(intent);
                     break;
-                case ContextMenuActivity.RESULT_CODE_RECALL: //recall
+                case ContextMenuActivity.RESULT_CODE_RECALL: //recall 消息撤回
+
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -1387,7 +1390,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                                 msgNotification.setMsgTime(contextMenuMessage.getMsgTime());
                                 msgNotification.setLocalTime(contextMenuMessage.getMsgTime());
                                 msgNotification.setAttribute(Constant.MESSAGE_TYPE_RECALL, true);
+
                                 EMClient.getInstance().chatManager().recallMessage(contextMenuMessage);
+
                                 EMClient.getInstance().chatManager().saveMessage(msgNotification);
                                 messageList.refresh();
                             } catch (final HyphenateException e) {
@@ -1407,6 +1412,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                             }
                         }
                     }).start();
+
                     break;
                 default:
                     break;
@@ -1449,6 +1455,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             }
         }
     }
+
 
     /**
      * chat row provider

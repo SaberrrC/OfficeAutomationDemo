@@ -124,9 +124,13 @@ public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPres
                 recyclerViewSearchResult.setVisibility(View.GONE);
                 reSetSwipRefreash();
                 search_et_input.setText("");
-                inputManager.hideSoftInputFromWindow(
-                        getActivity().getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                try {
+                    inputManager.hideSoftInputFromWindow(
+                            getActivity().getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
                 break;
         }
 
@@ -185,6 +189,11 @@ public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPres
         getFragmentComponent().inject(this);
     }
 
+    @Override
+    protected void lazyLoadData() {
+        mPresenter.loadData();
+    }
+
 
     @Override
     public void onResume() {
@@ -196,7 +205,7 @@ public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPres
      * 加载通讯录数据
      */
     private void loadData() {
-        mPresenter.loadData();
+        //mPresenter.loadData();
     }
 
     public void reSetSwipRefreash() {
@@ -214,6 +223,7 @@ public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPres
     public void onRefresh() {
         isPullRefreashing = true;
         loadData();
+        lazyLoadData();
     }
 
     @Override
@@ -258,28 +268,36 @@ public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPres
     @Override
     public void autoSearchFinish() {
         hideLoadingView();
-        mSwipeRefreshLayout.setRefreshing(false);
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void loadDataStart() {
-        if (!isPullRefreashing) {
-            showLoadingView();
-            recyclerView.setVisibility(View.VISIBLE);
-            recyclerViewSearchResult.setVisibility(View.GONE);
-
+        try {
+            if (!isPullRefreashing) {
+                showLoadingView();
+                recyclerView.setVisibility(View.VISIBLE);
+                recyclerViewSearchResult.setVisibility(View.GONE);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void loadDataSuccess(List<Contacts> contacts) {
-        if (items.size() > 0 || items != null) {
-            items.clear();
+        try {
+            if (items.size() > 0 || items != null) {
+                items.clear();
+            }
+            items = contacts;
+            hideEmptyView();
+            recyclerView.setAdapter(new TabContactsAdapter(items));
+            reSetSwipRefreash();
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
-        items = contacts;
-        hideEmptyView();
-        recyclerView.setAdapter(new TabContactsAdapter(items));
-        reSetSwipRefreash();
     }
 
     @Override
@@ -308,6 +326,7 @@ public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPres
     public void loadDataFinish() {
         hideLoadingView();
         isPullRefreashing = false;
+        if (mSwipeRefreshLayout != null)
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

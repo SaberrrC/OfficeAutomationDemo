@@ -31,9 +31,8 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
 
     @Override
     public void loadData(String departmentId, String searchName, final String selectChildId) {
+        mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
-
-
         // TODO: 2017/8/28 新给的接口没有分组信息
         mKjHttp.jsonGet(ApiJava.SAME_ORGANIZATION + "?username=" + searchName + "&pagesize=" + Integer.MAX_VALUE, params, new HttpCallBack() {
             @Override
@@ -44,6 +43,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                     switch (jo.getString("code")) {
                         case ApiJava.REQUEST_CODE_OK:
                             ArrayList<Group> groups = new ArrayList<>();
+                            Child selectChild = null;
                             JSONObject data = Api.getDataToJSONObject(jo);
                             JSONArray usersData = data.getJSONArray("data");
                             Group group = new Group("0", usersData.getJSONObject(0).getString("organization"));
@@ -57,11 +57,15 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                                         false);
                                 if (joChild.getString("id").equals(selectChildId)) {
                                     child.setChecked(true);
+                                    selectChild = child;
                                 }
                                 group.addChildrenItem(child);
                             }
                             groups.add(group);
-                            mView.loadDataSuccess(groups);
+                            mView.loadDataSuccess(groups, selectChild);
+                            break;
+                        case ApiJava.REQUEST_NO_RESULT:
+                            mView.loadDataEmpty();
                             break;
                         default:
                             mView.loadDataFailed(0, jo.getString("message"));

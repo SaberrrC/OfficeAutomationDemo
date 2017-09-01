@@ -135,7 +135,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initWidget();
-        loadData(true, false, "", "");
+        //loadData(true, false, "", "");
     }
 
     private void initWidget() {
@@ -469,6 +469,11 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         super.onPause();
     }
 
+    @Override
+    protected void lazyLoadData() {
+        loadData(false, false, "", "");
+    }
+
     /**
      * 刷新消息未读的红点数量
      */
@@ -483,7 +488,8 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             mAdapter.removeAllFooterView();
         } catch (Exception e) {
         }
-        loadData(true, false, "", "");
+
+        loadData(false, false, "", "");
         reFresUnRedCount();
     }
 
@@ -540,6 +546,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                         JSONObject jo = new JSONObject(t);
                         switch (Api.getCode(jo)) {
                             case Api.RESPONSES_CODE_OK:
+                                list.clear();
                                 ArrayList<PushMsg> listPushMsgs = new ArrayList<>();
                                 JSONArray notices = Api.getDataToJSONArray(jo);
                                 for (int i = 0; i < notices.length(); i++) {

@@ -1,10 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by 丁 on 2017/8/21.
  */
 
-public class ItemBean {
+public class ItemBean implements Parcelable {
     private int mType;
     private String mTitle;
     private String mContent;
@@ -71,4 +74,38 @@ public class ItemBean {
         this.mContent = mContent;
         return this;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.mType);
+        dest.writeString(this.mTitle);
+        dest.writeString(this.mContent);
+        dest.writeByte(this.mGroup ? (byte) 1 : (byte) 0);
+        dest.writeString(this.mGroupTitle);
+    }
+
+    protected ItemBean(Parcel in) {
+        this.mType = in.readInt();
+        this.mTitle = in.readString();
+        this.mContent = in.readString();
+        this.mGroup = in.readByte() != 0;
+        this.mGroupTitle = in.readString();
+    }
+
+    public static final Parcelable.Creator<ItemBean> CREATOR = new Parcelable.Creator<ItemBean>() {
+        @Override
+        public ItemBean createFromParcel(Parcel source) {
+            return new ItemBean(source);
+        }
+
+        @Override
+        public ItemBean[] newArray(int size) {
+            return new ItemBean[size];
+        }
+    };
 }

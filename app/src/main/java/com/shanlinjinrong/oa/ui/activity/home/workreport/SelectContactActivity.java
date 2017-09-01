@@ -2,11 +2,14 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -37,7 +40,7 @@ import io.reactivex.schedulers.Schedulers;
  * 申请用品：选择审批人界面
  * 发起日报：选择接收人界面
  */
-public class SelectContactActivity extends MyBaseActivity<SelectContactActivityPresenter> implements SelectContactActivityContract.View {
+public class SelectContactActivity extends MyBaseActivity<SelectContactActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, SelectContactActivityContract.View {
 
     @Bind(R.id.layout_root)
     LinearLayout mRootView;
@@ -53,6 +56,13 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
 
     @Bind(R.id.contact_list)
     ExpandableListView mContactList;
+
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @Bind(R.id.tv_content_empty)
+    TextView mContentEmpty;
+
 
     ArrayList<Group> groups = new ArrayList<>();//联系人群组
 
@@ -112,6 +122,14 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
         });
 
         mSelectChildId = getIntent().getStringExtra("childId");
+//        if (!TextUtils.isEmpty(mSelectChildId)) {
+//            mSelectChild = new Child()
+//        }
+
+        mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#0EA7ED"),
+                Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setEnabled(true);
     }
 
     public void handleClick(int childPosition, int groupPosition) {
@@ -163,9 +181,12 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
 
 
     @Override
-    public void loadDataSuccess(ArrayList<Group> groups) {
+    public void loadDataSuccess(ArrayList<Group> groups, Child selectChild) {
         hideEmptyView();
+        mContactList.setVisibility(View.VISIBLE);
+        mContentEmpty.setVisibility(View.GONE);
         this.groups = groups;
+        mSelectChild = selectChild;
         mAdapter = new ContactAdapter(this, groups);
         mContactList.setAdapter(mAdapter);
         mContactList.expandGroup(0);
@@ -173,22 +194,33 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
 
     @Override
     public void loadDataFailed(int errCode, String errMsg) {
-        showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);
+        mContentEmpty.setVisibility(View.VISIBLE);
+        mContentEmpty.setText("没有搜索到该员工，请重新搜索");
+//        showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);
         catchWarningByCode(errCode);
     }
 
     @Override
     public void loadDataFinish() {
         hideLoadingView();
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
+
     }
 
     @Override
     public void loadDataEmpty() {
-        showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);
+        mContactList.setVisibility(View.GONE);
+        mContentEmpty.setVisibility(View.VISIBLE);
+        mContentEmpty.setText("没有搜索到该员工，请重新搜索");
+//        showEmptyView(mRootView, "数据暂无，请输入全名搜索", 0, false);
     }
 
     private void loadData(String name) {
-        showLoadingView("正在获取联系人列表");
+        if (!mSwipeRefreshLayout.isRefreshing()){
+            showLoadingView("正在获取联系人列表");
+        }
+        mContentEmpty.setVisibility(View.GONE);
         String department_id = AppConfig.getAppConfig(AppManager.mContext)
                 .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
         mPresenter.loadData(department_id, name, mSelectChildId);
@@ -201,4 +233,8 @@ public class SelectContactActivity extends MyBaseActivity<SelectContactActivityP
         ButterKnife.unbind(this);
     }
 
+    @Override
+    public void onRefresh() {
+        loadData(mSearchEdit.getText().toString().trim());
+    }
 }

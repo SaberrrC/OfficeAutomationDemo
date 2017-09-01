@@ -55,6 +55,11 @@ public abstract class MyBaseFragment<T extends BasePresenter> extends Fragment i
     public Activity mContext;//CXP添加，供子类使用
     private Toast toast;
 
+    //Fragment的View加载完毕的标记
+    private boolean isViewCreated;
+    //Fragment对用户可见的标记
+    private boolean isUIVisible;
+
     @Inject
     protected T mPresenter;
 
@@ -69,11 +74,15 @@ public abstract class MyBaseFragment<T extends BasePresenter> extends Fragment i
         loadingDialog = new AlertDialog.Builder(getActivity(),
                 R.style.AppTheme_Dialog_Loading).create();
         loadingDialog.setView(loading);
-        loadingDialog.setCancelable(false);
+        loadingDialog.setCancelable(true);
         initInject();
         if (mPresenter != null) {
             mPresenter.attachView(this);
         }
+
+        //懒加载
+        isViewCreated = true;
+        lazyLoad();
     }
 
     @Override
@@ -328,6 +337,33 @@ public abstract class MyBaseFragment<T extends BasePresenter> extends Fragment i
             default:
 
                 break;
+        }
+    }
+
+    //懒加载
+    private void lazyLoad() {
+        //这里进行双重标记判断,是因为setUserVisibleHint会多次回调,并且会在onCreateView执行前回调,必须确保onCreateView加载完毕且页面可见,才加载数据
+        if (isViewCreated && isUIVisible) {
+            lazyLoadData();
+            //数据加载完毕,恢复标记,防止重复加载
+            isViewCreated = false;
+            isUIVisible = false;
+        }
+    }
+
+    protected abstract void lazyLoadData();
+
+    /**
+     * @param isVisibleToUser 用来判断Fragment的UI 用户是否可见
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            isUIVisible = true;
+            lazyLoad();
+        } else {
+            isUIVisible = false;
         }
     }
 

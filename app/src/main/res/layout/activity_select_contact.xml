@@ -42,11 +42,32 @@
             android:textSize="@dimen/common_text_size" />
     </RelativeLayout>
 
-    <ExpandableListView
-        android:id="@+id/contact_list"
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:groupIndicator="@null" />
+        android:background="@color/white">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ExpandableListView
+                android:id="@+id/contact_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:groupIndicator="@null" />
+
+            <TextView
+                android:id="@+id/tv_content_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="没有搜索到该员工，请重新搜索"
+                android:visibility="gone" />
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

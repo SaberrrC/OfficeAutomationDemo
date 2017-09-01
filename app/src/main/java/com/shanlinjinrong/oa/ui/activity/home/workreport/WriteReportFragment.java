@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.workreport;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
+import com.shanlinjinrong.oa.utils.EmojiFilter;
 
 public class WriteReportFragment extends Fragment implements View.OnClickListener {
 
@@ -59,6 +61,10 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
         mNextPageBtn = (TextView) view.findViewById(R.id.next_page);
         mLastPageBtn.setOnClickListener(this);
         mNextPageBtn.setOnClickListener(this);
+        InputFilter[] filters = new InputFilter[]{new EmojiFilter(50)};
+        mPlanWork.setFilters(filters);
+        mRealWork.setFilters(filters);
+        mSelfEvaluate.setFilters(filters);
     }
 
 
@@ -71,6 +77,8 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
                 mRealWork.setText(hourReportBean.getRealWork());
                 mSelfEvaluate.setText(hourReportBean.getSelfEvaluate());
             }
+
+            setBtnBackGround(extra.getInt("page"));
         }
     }
 
@@ -88,6 +96,17 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
         if (changeListener != null && mPlanWork != null && mRealWork != null && mSelfEvaluate != null)
             changeListener.fragmentStartChange(position, mPlanWork.
                     getText().toString(), mRealWork.getText().toString(), mSelfEvaluate.getText().toString());
+    }
+
+    public void setBtnBackGround(int position) {
+        if (mLastPageBtn != null && mNextPageBtn != null) {
+            if (position == 0) {
+                mLastPageBtn.setEnabled(false);
+            }
+            if (position == 7) {
+                mNextPageBtn.setEnabled(false);
+            }
+        }
     }
 
     @Override

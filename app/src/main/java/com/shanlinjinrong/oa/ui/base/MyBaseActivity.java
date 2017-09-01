@@ -107,7 +107,6 @@ public abstract class MyBaseActivity<T extends BasePresenter> extends AppCompatA
     }
 
 
-
     public void showLoadingView() {
         loadingDialog.show();
     }
@@ -287,6 +286,10 @@ public abstract class MyBaseActivity<T extends BasePresenter> extends AppCompatA
      * @param isShow 是否显示图片
      */
     public void showEmptyView(ViewGroup view, String str, int resId, boolean isShow) {
+        if (empty != null) {
+            empty.setVisibility(View.VISIBLE);
+            return;
+        }
         empty = LayoutInflater.from(this).inflate(R.layout.public_empty_view, null);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
