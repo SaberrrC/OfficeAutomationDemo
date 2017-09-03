@@ -18,7 +18,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.ui.activity.notice.ShowPictureActivity;
+import com.shanlinjinrong.oa.ui.activity.common.ShowPictureActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.Utils;

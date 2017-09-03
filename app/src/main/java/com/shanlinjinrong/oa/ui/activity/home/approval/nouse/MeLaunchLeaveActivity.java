@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.ui.activity.home.approval;
+package com.shanlinjinrong.oa.ui.activity.home.approval.nouse;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,8 +18,8 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.model.approval.ApprovalTraval;
-import com.shanlinjinrong.oa.model.TravalSingle;
+import com.shanlinjinrong.oa.model.approval.ApprovalLeave;
+import com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalReplyActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.StringUtils;
@@ -30,8 +30,6 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,25 +38,28 @@ import butterknife.OnClick;
  * ProjectName: dev-beta-v1.0.1
  * PackageName: com.itcrm.GroupInformationPlatform.ui.activity
  * Author:Created by Tsui on Date:2016/11/16 16:01
- * Description:我发起的(差旅)
+ * Description:我发起的(请假)
  */
-public class MeLaunchTravalActivity extends BaseActivity {
+public class MeLaunchLeaveActivity extends BaseActivity {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.empty_view_container)
+    @Bind(R.id.rl_rootView)
     RelativeLayout mRootView;
     @Bind(R.id.iv_top_status)
     ImageView ivApprovalTopState;
     @Bind(R.id.tv_event_type)
     TextView tvEventType;
-    @Bind(R.id.ll_approval_travla_container)
-    LinearLayout mTvApprovalContainer;
-    @Bind(R.id.tv_approval_reson_content)
-    TextView mTvResonContent;
-    @Bind(R.id.tv_approval_day)
-    TextView mTvApprovalDay;
+
+    @Bind(R.id.tv_duration)
+    TextView tvDuration;
+    @Bind(R.id.tv_reason)
+    TextView tvReason;
+    @Bind(R.id.tv_time_start)
+    TextView tvTimeStart;
+    @Bind(R.id.tv_time_end)
+    TextView tvTimeEnd;
     @Bind(R.id.ll_approval_state_iv_container)
     LinearLayout mLlApprovalStateIvContainer;
     @Bind(R.id.ll_approval_info_container)
@@ -73,12 +74,13 @@ public class MeLaunchTravalActivity extends BaseActivity {
     private String oal_id;
     private String status = "0";
     private String titleName;
+    private PopupWindow popupWindow;
     private String oa_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_me_launch_traval);
+        setContentView(R.layout.activity_me_launch_leave);
         ButterKnife.bind(this);
         initToolBar();
         setTranslucentStatus(this);
@@ -104,8 +106,8 @@ public class MeLaunchTravalActivity extends BaseActivity {
         showLoadingView();
         HttpParams params = new HttpParams();
         params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("appr_id", appr_id);
         params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
+        params.put("appr_id", appr_id);
         params.put("oal_id", oal_id);
 
         initKjHttp().post(Api.APPROVAL_INFO, params, new HttpCallBack() {
@@ -119,7 +121,7 @@ public class MeLaunchTravalActivity extends BaseActivity {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                LogUtils.e(t);
+                LogUtils.e("MeLaunchLeaveActivity->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
                     switch (Api.getCode(jo)) {
@@ -152,7 +154,6 @@ public class MeLaunchTravalActivity extends BaseActivity {
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                LogUtils.e("errorNo,strMsg--->" + errorNo + "," + strMsg);
                 showEmptyView(mRootView, "内容为空", 0, false);
                 catchWarningByCode(errorNo);
             }
@@ -162,25 +163,12 @@ public class MeLaunchTravalActivity extends BaseActivity {
     private void setDataForWidget(JSONObject data) {
         mRootView.setVisibility(View.VISIBLE);
         mLlApprovalProcessLayout.setVisibility(View.VISIBLE);
-        final ApprovalTraval al = new ApprovalTraval(data);
-        tvEventType.setText("差旅");
-        List<TravalSingle> text = al.getInfo().getText();
-        mTvApprovalContainer.removeAllViews();
-        for (int i = 0; i < text.size(); i++) {
-            View view = LayoutInflater.from(this).inflate(R.layout.travel_entry_detail_single, null);
-            ((TextView) view.findViewById(R.id.et_travel_place_name)).setText(text.get(i).getAddress());
-            ((TextView) view.findViewById(R.id.tv_travel_start_time)).setText(text.get(i).getStart_time());
-            ((TextView) view.findViewById(R.id.tv_travel_end_time)).setText(text.get(i).getEnd_time());
-            ((TextView) view.findViewById(R.id.tv_travel_tool)).setText(text.get(i).getVehicle());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, Utils.dip2px(11), 0, 0);
-            mTvApprovalContainer.addView(view, params);
-        }
-        mTvApprovalDay.setText(al.getInfo().getDay() + "天");
-        mTvResonContent.setText(al.getInfo().getRemark().replace("&nbsp;", " ").replace("<br/>", "\n"));
-
-
+        final ApprovalLeave al = new ApprovalLeave(data);
+        tvEventType.setText(al.getInfo().getType());
+        tvTimeStart.setText(al.getInfo().getStart_time());
+        tvTimeEnd.setText(al.getInfo().getEnd_time());
+        tvDuration.setText(al.getInfo().getDay() + "小时");
+        tvReason.setText(al.getInfo().getRemark().replace("&nbsp;", " ").replace("<br/>", "\n"));
         // 1审批中 2通过 3驳回
         status = al.getInfo().getStatus();
         switch (Integer.parseInt(status)) {
@@ -207,7 +195,6 @@ public class MeLaunchTravalActivity extends BaseActivity {
         tvPostil.setTextColor(Color.parseColor("#0EA7ED"));
         tvPostil.setText("发起审批");
 
-
         mLlApprovalLaunchInfoContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,7 +205,7 @@ public class MeLaunchTravalActivity extends BaseActivity {
 
         //循环添加审批流程
         for (int i = 0; i < al.getApproversLists().size(); i++) {
-            ApprovalTraval.ApproversList approvers = al.getApproversLists().get(i);
+            ApprovalLeave.ApproversList approvers = al.getApproversLists().get(i);
             //添加左侧审批图标
             addLeftStateImage(i, approvers);
 
@@ -227,12 +214,11 @@ public class MeLaunchTravalActivity extends BaseActivity {
 
         }
 
-
     }
 
-    private void addRightInfo(int i, final ApprovalTraval.ApproversList approvers) {
+    private void addRightInfo(int i, final ApprovalLeave.ApproversList approvers) {
         View view = View.inflate(this, R.layout.approval_process_item_info_layout, null);
-        TextView tvPostil=((TextView) view.findViewById(R.id.tv_postil));
+        TextView tvPostil = ((TextView) view.findViewById(R.id.tv_postil));
         switch (Integer.parseInt(approvers.getApprovalStatus())) {
             //状态 1审批中，2通过，3驳回
             case 1:
@@ -285,10 +271,11 @@ public class MeLaunchTravalActivity extends BaseActivity {
         });
         mLlApprovalInfoContainer.addView(view);
     }
+
     public void showDetailDialog(String status, String timeBefore, String timeAfter, String user, String reply) {
         View contentView = LayoutInflater.from(this).inflate(R.layout
                 .approval_popupwindow_content_view, null);
-        PopupWindow   popupWindow = new PopupWindow(contentView, Utils.dip2px(200), Utils.dip2px(200), false);
+        popupWindow = new PopupWindow(contentView, Utils.dip2px(200), Utils.dip2px(200), false);
         TextView topTips = (TextView) contentView.findViewById(R.id.tv_dialog_top_tips);
         TextView bottomTips = (TextView) contentView.findViewById(R.id.tv_dialog_bottom_tips);
         TextView tvDate = (TextView) contentView.findViewById(R.id.tv_dialog_date);
@@ -347,16 +334,19 @@ public class MeLaunchTravalActivity extends BaseActivity {
             }
         });
         popupWindow.setFocusable(true);
+
         popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
         popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
     }
+
+
     /**
      * 添加左侧状态图片
      *
      * @param i
      * @param approvers
      */
-    private void addLeftStateImage(int i, ApprovalTraval.ApproversList approvers) {
+    private void addLeftStateImage(int i, ApprovalLeave.ApproversList approvers) {
         ImageView iv = new ImageView(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(Utils.dip2px(43), Utils.dip2px(43));
         if (i >= 0) {
@@ -378,6 +368,7 @@ public class MeLaunchTravalActivity extends BaseActivity {
 
         mLlApprovalStateIvContainer.addView(iv);
     }
+
 
     private void initToolBar() {
         if (mToolbar == null) {
@@ -427,6 +418,10 @@ public class MeLaunchTravalActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        if (popupWindow != null) {
+            popupWindow.dismiss();
+            popupWindow = null;
+        }
     }
 
 

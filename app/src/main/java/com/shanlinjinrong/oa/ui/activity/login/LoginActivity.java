@@ -26,7 +26,7 @@ import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.AndroidAdjustResizeBugFix;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.NetWorkUtils;
@@ -45,7 +45,7 @@ import static com.shanlinjinrong.oa.common.Api.RESPONSES_CODE_ACCOUNT_PASSWORD_E
  * <h3>Description: 登录界面 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/30.<br />
  */
-public class LoginActivity extends MyBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View {
+public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View {
     @Bind(R.id.user_email)
     EditText userEmail;
     @Bind(R.id.user_pwd)

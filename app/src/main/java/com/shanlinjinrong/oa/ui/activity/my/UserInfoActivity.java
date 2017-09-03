@@ -40,7 +40,7 @@ import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.my.contract.UserInfoActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.UserInfoActivityPresenter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.FileUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.views.BottomPushPopupWindow;
@@ -64,7 +64,7 @@ import cn.jpush.android.api.TagAliasCallback;
  * <h3>Description: 用户信息 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/31.<br />
  */
-public class UserInfoActivity extends MyBaseActivity<UserInfoActivityPresenter> implements UserInfoActivityContract.View {
+public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter> implements UserInfoActivityContract.View {
 
     public static final int UPDATE_PHONE = 0x4;//修改电话
     public static final int UPDATE_PROTRAIT = 2;//修改头像

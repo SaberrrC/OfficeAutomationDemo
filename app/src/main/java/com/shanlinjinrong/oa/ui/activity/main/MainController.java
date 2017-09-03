@@ -32,13 +32,12 @@ import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.MainControllerPresenter;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.TabCommunicationFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
@@ -85,7 +84,7 @@ import q.rorbin.badgeview.QBadgeView;
  * <h3>Description: 首页控制器 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br />
  */
-public class MainController extends MyBaseActivity<MainControllerPresenter> implements MainControllerContract.View {
+public class MainController extends HttpBaseActivity<MainControllerPresenter> implements MainControllerContract.View {
 
     @Bind(R.id.controller)
     ViewPager mController;

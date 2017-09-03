@@ -16,7 +16,7 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPswActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.ModifyPswActivityPresenter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
 
 import butterknife.Bind;
@@ -27,7 +27,7 @@ import butterknife.OnClick;
  * <h3>Description: 修改密码 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/31.<br />
  */
-public class ModifyPwdActivity extends MyBaseActivity<ModifyPswActivityPresenter> implements ModifyPswActivityContract.View {
+public class ModifyPwdActivity extends HttpBaseActivity<ModifyPswActivityPresenter> implements ModifyPswActivityContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;

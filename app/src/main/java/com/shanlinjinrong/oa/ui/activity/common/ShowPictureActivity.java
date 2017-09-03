@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.ui.activity.notice;
+package com.shanlinjinrong.oa.ui.activity.common;
 
 
 import android.net.Uri;

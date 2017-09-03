@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.base.dagger.component;
 
 import com.shanlinjinrong.oa.ui.activity.contracts.ContactsActivity;
+import com.shanlinjinrong.oa.ui.activity.home.approval.ApplyForOfficeSuppliesActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
@@ -55,4 +56,6 @@ public interface ActivityComponent {
     void inject(PushListActivity activity);
 
     void inject(SystemNoticesActivity activity);
+
+    void inject(ApplyForOfficeSuppliesActivity activity);
 }

@@ -22,7 +22,7 @@ import com.shanlinjinrong.oa.model.selectContacts.Group;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.SelectContactActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.SelectContactActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ContactAdapter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.views.ClearEditText;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ import io.reactivex.schedulers.Schedulers;
  * 申请用品：选择审批人界面
  * 发起日报：选择接收人界面
  */
-public class SelectContactActivity extends MyBaseActivity<SelectContactActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, SelectContactActivityContract.View {
+public class SelectContactActivity extends HttpBaseActivity<SelectContactActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, SelectContactActivityContract.View {
 
     @Bind(R.id.layout_root)
     LinearLayout mRootView;

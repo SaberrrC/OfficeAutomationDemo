@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.views.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.ApiJava;
@@ -31,7 +32,6 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.ItemBean;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportLaunchActivityPresenter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.EmojiFilter;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
@@ -52,7 +52,7 @@ import cn.qqtheme.framework.picker.DatePicker;
  * create by lvdinghao
  * 发起日报 页面
  */
-public class WorkReportLaunchActivity extends MyBaseActivity<WorkReportLaunchActivityPresenter> implements WorkReportLaunchActivityContract.View, WorkReportLaunchListAdapter.OnItemClickListener {
+public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchActivityPresenter> implements WorkReportLaunchActivityContract.View, WorkReportLaunchListAdapter.OnItemClickListener {
 
     // TODO: 2017/8/21 之前字段，先保留，应该不用多选
     public static final int REQUEST_CODE_MULTIPLE = 1;//多选，接收人

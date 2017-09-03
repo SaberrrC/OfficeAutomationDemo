@@ -22,7 +22,7 @@ import com.shanlinjinrong.oa.model.Notice;
 import com.shanlinjinrong.oa.ui.activity.notice.contract.NoticeListContract;
 import com.shanlinjinrong.oa.ui.activity.notice.presenter.NoticeListPresenter;
 import com.shanlinjinrong.oa.ui.activity.notice.adapter.NoticeDetailAdapter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
  * Author:Created by CXP on Date: 2016/9/18 16:45.
  * Description:公告通知列表
  */
-public class NoticeListActivity extends MyBaseActivity<NoticeListPresenter> implements SwipeRefreshLayout.OnRefreshListener, NoticeListContract.View {
+public class NoticeListActivity extends HttpBaseActivity<NoticeListPresenter> implements SwipeRefreshLayout.OnRefreshListener, NoticeListContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;

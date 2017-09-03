@@ -13,7 +13,7 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPhoneActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.ModifyPhoneActivityPresenter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
 
 import butterknife.Bind;
@@ -24,7 +24,7 @@ import butterknife.OnClick;
  * <h3>Description: 修改电话 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/31.<br />
  */
-public class ModifyPhoneActivity extends MyBaseActivity<ModifyPhoneActivityPresenter> implements ModifyPhoneActivityContract.View {
+public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPresenter> implements ModifyPhoneActivityContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;

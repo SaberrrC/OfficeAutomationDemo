@@ -107,4 +107,7 @@
     <string name="work_report_send_sucess">日报提交成功</string>
     <string name="work_report_send_failed">日报提交失败，请稍后重试</string>
     <string name="work_report_please_write_receiver">请选择接收人</string>
+
+    <!--审批流程-->
+    <string name="approval_office_supplies">办公用品</string>
 </resources>

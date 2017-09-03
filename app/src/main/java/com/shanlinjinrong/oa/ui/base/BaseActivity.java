@@ -28,7 +28,6 @@ import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.iflytek.cloud.thirdparty.T;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
@@ -49,8 +48,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
@@ -65,9 +62,6 @@ public class BaseActivity extends AppCompatActivity {
     private KJHttp kjHttp;
     private Toast toast;
     private View empty;
-
-    @Inject
-    protected T mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,7 @@
-package com.shanlinjinrong.oa.ui.activity.home.approval;
+package com.shanlinjinrong.oa.ui.activity.home.approval.nouse;
 
 import android.Manifest;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
@@ -52,28 +55,25 @@ import cn.qqtheme.framework.picker.TimePicker;
  * ProjectName: dev-beta-v1.0.1
  * PackageName: com.itcrm.GroupInformationPlatform.ui.activity
  * Author:Created by Tsui on Date:2016/11/15 16:37
- * Description:加班申请
+ * Description:请假申请
  */
-public class ApplyForOverTimeActivity extends BaseActivity {
+public class ApplyForLeaveActivity extends BaseActivity {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+    @Bind(R.id.et_leave_reason_content)
+    EditText mEtLeaveContent;
     @Bind(R.id.layout_root)
     LinearLayout mRootView;
-
-    @Bind(R.id.et_overTime_reason)
-    EditText mEtOverTimeReson;
-    @Bind(R.id.tv_overTime_start_time)
-    TextView tvOverTimeStartTime;
-    @Bind(R.id.tv_overTime_stage)
-    TextView tvOverTimeStage;
-    @Bind(R.id.tv_overTime_end_time)
-    TextView tvOverTimeEndTime;
-    @Bind(R.id.tv_overTime_hours)
-    EditText tvOverTimeDurations;
-
-
+    @Bind(R.id.tv_travel_start_time)
+    TextView tvTravelStartTime;
+    @Bind(R.id.tv_type)
+    TextView tvType;
+    @Bind(R.id.tv_travel_end_time)
+    TextView tvTravelEndTime;
+    @Bind(R.id.tv_leave_days)
+    EditText tvLeaveDurations;
     @Bind(R.id.user_portrait)
     SimpleDraweeView mUserPortrait;
     @Bind(R.id.tv_leader_name)
@@ -88,7 +88,7 @@ public class ApplyForOverTimeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_overtime_applyfor);
+        setContentView(R.layout.activity_leave_entry);
         ButterKnife.bind(this);
         initToolBar();
         setTranslucentStatus(this);
@@ -166,7 +166,7 @@ public class ApplyForOverTimeActivity extends BaseActivity {
                 View view = LayoutInflater.from(this).inflate(R.layout
                         .travel_entry_approvel_single, null);
                 SimpleDraweeView sdv = (SimpleDraweeView) view.findViewById(R.id.user_portrait);
-                sdv.setImageURI("http://" + Uri.parse(portrait));
+                sdv.setImageURI("http://"+Uri.parse(portrait));
                 LogUtils.e("头像url——》" + portrait);
                 TextView tvLeader = (TextView) view.findViewById(R.id.tv_leader_name);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout
@@ -186,11 +186,11 @@ public class ApplyForOverTimeActivity extends BaseActivity {
 
     private void initData() {
         //解决editText与ScrollView之间的冲突
-        mEtOverTimeReson.setOnTouchListener(new View.OnTouchListener() {
+        mEtLeaveContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 //触摸的是EditText并且当前EditText可以滚动则将事件交给EditText处理；否则将事件交由其父类处理
-                if ((view.getId() == R.id.et_leave_reason_content && canVerticalScroll(mEtOverTimeReson))) {
+                if ((view.getId() == R.id.et_leave_reason_content && canVerticalScroll(mEtLeaveContent))) {
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         view.getParent().requestDisallowInterceptTouchEvent(false);
@@ -226,22 +226,41 @@ public class ApplyForOverTimeActivity extends BaseActivity {
         return (scrollY > 0) || (scrollY < scrollDifference - 1);
     }
 
-    private void submit() {
-        if (!checkDate()) {
-            return;
+    private boolean check() {
+        if (tvType.getText().toString().trim().equals("点击选择")) {
+            showToast("请选择请假类型");
+            return false;
         }
-        showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
+        if (tvTravelStartTime.getText().toString().trim().equals("点击选择时间")
+                || tvTravelStartTime.getText().toString().trim().equals("点击选择时间")) {
+            showToast("请选择时间");
+            return false;
+        }
+        if (!DateUtils.judeDateOrder(tvTravelStartTime.getText().toString().trim(), tvTravelEndTime.getText().toString().trim())) {
+            showToast("结束时间不能早于开始时间");
+            return false;
+        }
+        if (mEtLeaveContent.getText().toString().trim().equals("")) {
+            showToast("请假原因不能为空");
+            return false;
+        }
 
-        params.put("time_plan", tvOverTimeDurations.getText().toString().trim());
-        params.put("end_time_plan", tvOverTimeEndTime.getText().toString().trim());
-        params.put("reason_plan", mEtOverTimeReson.getText().toString().trim());
-        params.put("start_time_plan", tvOverTimeStartTime.getText().toString().trim());
+        return true;
+    }
+
+    private void submit() {
+        showLoadingView();
+
+
+        HttpParams params = new HttpParams();
+        params.put("day", tvLeaveDurations.getText().toString().trim());
+        params.put("end_time", tvTravelEndTime.getText().toString().trim());
+        params.put("remark", mEtLeaveContent.getText().toString().trim());
+        params.put("start_time", tvTravelStartTime.getText().toString().trim());
         params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
         params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
         params.put("type", getType());
-        initKjHttp().post(Api.POST_OVERTIME, params, new HttpCallBack() {
+        initKjHttp().post(Api.POSTOFF_WORK_APPROVAL, params, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -258,9 +277,9 @@ public class ApplyForOverTimeActivity extends BaseActivity {
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
+                    }else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)){
                         catchWarningByCode(Api.getCode(jo));
-                    } else {
+                    }else {
                         showToast(Api.getInfo(jo));
                     }
                 } catch (JSONException e) {
@@ -283,30 +302,25 @@ public class ApplyForOverTimeActivity extends BaseActivity {
         });
     }
 
-    private boolean checkDate() {
-        if (tvOverTimeStartTime.getText().toString().trim().equals("点击选择时间")
-                || tvOverTimeEndTime.getText().toString().trim().equals("点击选择时间")) {
-            showToast("请选择时间");
-            return false;
-        }
-        if (mEtOverTimeReson.getText().toString().trim().equals("")) {
-            showToast("加班理由不能为空");
-            return false;
-        }
-        return true;
-    }
-
     @NonNull
     private String getType() {
-        String type = tvOverTimeStage.getText().toString().trim();
-        if (type.equals("工作日加班")) {
+        String type = tvType.getText().toString().trim();
+        if (type.equals("年假")) {
             type = "1";
-        } else if (type.equals("周休加班")) {
+        } else if (type.equals("婚假")) {
             type = "2";
-        } else if (type.equals("法定节假日加班")) {
+        } else if (type.equals("产假")) {
             type = "3";
-        } else if (type.equals("其他假日加班")) {
+        } else if (type.equals("陪产假")) {
             type = "4";
+        } else if (type.equals("丧假")) {
+            type = "5";
+        } else if (type.equals("病假")) {
+            type = "6";
+        } else if (type.equals("事假")) {
+            type = "7";
+        } else if (type.equals("调休")) {
+            type = "8";
         }
         return type;
     }
@@ -318,7 +332,7 @@ public class ApplyForOverTimeActivity extends BaseActivity {
         setTitle("");//必须在setSupportActionBar之前调用
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(mToolbar);
-        mTvTitle.setText("加班申请");
+        mTvTitle.setText("请假申请");
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
                 Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
@@ -327,7 +341,7 @@ public class ApplyForOverTimeActivity extends BaseActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((!(mEtOverTimeReson.getText().toString().equals("")))) {
+                if ((!(mEtLeaveContent.getText().toString().equals("")))) {
                     showBackTip("是否放弃编辑", "确定", "取消");
                 } else {
                     finish();
@@ -341,7 +355,7 @@ public class ApplyForOverTimeActivity extends BaseActivity {
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if ((!(mEtOverTimeReson.getText().toString().equals("")))) {
+                if ((!(mEtLeaveContent.getText().toString().equals("")))) {
                     showBackTip("是否放弃编辑", "确定", "取消");
                 }
                 break;
@@ -353,7 +367,7 @@ public class ApplyForOverTimeActivity extends BaseActivity {
         requestRunTimePermission(new String[]{Manifest.permission.RECORD_AUDIO}, new PermissionListener() {
             @Override
             public void onGranted() {
-                IflytekUtil iflytekUtil = new IflytekUtil(ApplyForOverTimeActivity.this, mEtOverTimeReson);
+                IflytekUtil iflytekUtil = new IflytekUtil(ApplyForLeaveActivity.this, mEtLeaveContent);
                 iflytekUtil.showIatDialog();
             }
 
@@ -365,24 +379,29 @@ public class ApplyForOverTimeActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btn_voice_input, R.id.tv_overTime_start_time,
-            R.id.tv_overTime_end_time, R.id.btn_submit, R.id.tv_overTime_stage})
+    @OnClick({R.id.btn_voice_input, R.id.parting_line, R.id.tv_travel_start_time,
+            R.id.tv_travel_end_time, R.id.btn_submit, R.id.tv_type})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_voice_input:
                 showDialog();
                 break;
-            case R.id.tv_overTime_stage:
+            case R.id.tv_type:
+                //隐藏输入框
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
                 showPopDialog();
                 break;
             case R.id.btn_submit:
-                submit();
+                if (check()) {
+                    submit();
+                }
                 break;
-            case R.id.tv_overTime_start_time:
-                showDoneDatePicker(tvOverTimeStartTime, false);
+            case R.id.tv_travel_start_time:
+                showDoneDatePicker(tvTravelStartTime, false);
                 break;
-            case R.id.tv_overTime_end_time:
-                showDoneDatePicker(tvOverTimeEndTime, true);
+            case R.id.tv_travel_end_time:
+                showDoneDatePicker(tvTravelEndTime, true);
                 break;
 
         }
@@ -397,13 +416,14 @@ public class ApplyForOverTimeActivity extends BaseActivity {
                 Utils.dip2px(100)
         );
         listView.setLayoutParams(params);
-        final String[] array = {"工作日加班", "周休加班", "法定节假日加班", "其他假日加班"};
+        final String[] array = {"事假", "年假", "调休", "病假", "婚假", "产假", "陪产假", "丧假"};
         listView.setAdapter(new ArrayAdapter<>(this, R.layout.leave_approval_list_item, array));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                tvOverTimeStage.setText(array[position]);
+                tvType.setText(array[position]);
+                LogUtils.e("当前请假类型选择的是--》" + array[position]);
 
                 popupWindowTYpe.dismiss();
             }
@@ -457,19 +477,21 @@ public class ApplyForOverTimeActivity extends BaseActivity {
 
             @Override
             public void onTimeSelect(Date date) {
-                tv.setText(DateUtils.getTime(date));
+                tv.setText(DateUtils.getTime(date).replace("-", "/"));
                 if (isEndTime) {
-                    boolean isOrder = DateUtils.judeDateOrder(tvOverTimeStartTime.getText().toString(), DateUtils.getTime(date));
+                    boolean isOrder = DateUtils.judeDateOrder(tvTravelStartTime.getText()
+                            .toString(), DateUtils.getTime(date));
                     if (isOrder) {
-                        int hourD_value = DateUtils.getHourD_Value(tvOverTimeStartTime.getText().toString(), DateUtils.getTime(date));
-                        tvOverTimeDurations.setText(String.valueOf(hourD_value));
-                        tvOverTimeDurations.setFocusable(true);
-                        tvOverTimeDurations.setFocusableInTouchMode(true);
-                        tvOverTimeDurations.requestFocus();
+                        int hourD_value = DateUtils.getHourD_Value(tvTravelStartTime.getText()
+                                .toString(), DateUtils.getTime(date));
+                        tvLeaveDurations.setText(String.valueOf(hourD_value));
+                        tvLeaveDurations.setFocusable(true);
+                        tvLeaveDurations.setFocusableInTouchMode(true);
+                        tvLeaveDurations.requestFocus();
                     } else {
-                        showToast("加班结束时间必须晚于加班开始时间");
+                        showToast("结束时间必须晚于开始时间");
                         tv.setText("点击选择时间");
-
+                        tvLeaveDurations.setText("");
                     }
                 }
             }

@@ -1,26 +1,17 @@
-package com.shanlinjinrong.oa.ui.activity.home.approval;
+package com.shanlinjinrong.oa.ui.activity.home.approval.nouse;
 
 import android.Manifest;
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -33,7 +24,6 @@ import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.thirdParty.iflytek.IflytekUtil;
 import com.shanlinjinrong.oa.utils.LogUtils;
-import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.pickerview.TimePickerView;
 
 import org.json.JSONArray;
@@ -55,9 +45,9 @@ import cn.qqtheme.framework.picker.TimePicker;
  * ProjectName: dev-beta-v1.0.1
  * PackageName: com.itcrm.GroupInformationPlatform.ui.activity
  * Author:Created by Tsui on Date:2016/11/15 16:37
- * Description:请假申请
+ * Description:公出申请
  */
-public class ApplyForLeaveActivity extends BaseActivity {
+public class ApplyForPublicOutActivity extends BaseActivity {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.toolbar)
@@ -68,8 +58,7 @@ public class ApplyForLeaveActivity extends BaseActivity {
     LinearLayout mRootView;
     @Bind(R.id.tv_travel_start_time)
     TextView tvTravelStartTime;
-    @Bind(R.id.tv_type)
-    TextView tvType;
+
     @Bind(R.id.tv_travel_end_time)
     TextView tvTravelEndTime;
     @Bind(R.id.tv_leave_days)
@@ -88,7 +77,7 @@ public class ApplyForLeaveActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leave_entry);
+        setContentView(R.layout.activity_public_out_applyfor);
         ButterKnife.bind(this);
         initToolBar();
         setTranslucentStatus(this);
@@ -166,7 +155,7 @@ public class ApplyForLeaveActivity extends BaseActivity {
                 View view = LayoutInflater.from(this).inflate(R.layout
                         .travel_entry_approvel_single, null);
                 SimpleDraweeView sdv = (SimpleDraweeView) view.findViewById(R.id.user_portrait);
-                sdv.setImageURI("http://"+Uri.parse(portrait));
+                sdv.setImageURI("http://" + Uri.parse(portrait));
                 LogUtils.e("头像url——》" + portrait);
                 TextView tvLeader = (TextView) view.findViewById(R.id.tv_leader_name);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout
@@ -226,41 +215,17 @@ public class ApplyForLeaveActivity extends BaseActivity {
         return (scrollY > 0) || (scrollY < scrollDifference - 1);
     }
 
-    private boolean check() {
-        if (tvType.getText().toString().trim().equals("点击选择")) {
-            showToast("请选择请假类型");
-            return false;
-        }
-        if (tvTravelStartTime.getText().toString().trim().equals("点击选择时间")
-                || tvTravelStartTime.getText().toString().trim().equals("点击选择时间")) {
-            showToast("请选择时间");
-            return false;
-        }
-        if (!DateUtils.judeDateOrder(tvTravelStartTime.getText().toString().trim(), tvTravelEndTime.getText().toString().trim())) {
-            showToast("结束时间不能早于开始时间");
-            return false;
-        }
-        if (mEtLeaveContent.getText().toString().trim().equals("")) {
-            showToast("请假原因不能为空");
-            return false;
-        }
-
-        return true;
-    }
-
     private void submit() {
         showLoadingView();
 
-
         HttpParams params = new HttpParams();
-        params.put("day", tvLeaveDurations.getText().toString().trim());
+        params.put("duration", tvLeaveDurations.getText().toString().trim());
+        params.put("begin_time", tvTravelStartTime.getText().toString().trim());
         params.put("end_time", tvTravelEndTime.getText().toString().trim());
         params.put("remark", mEtLeaveContent.getText().toString().trim());
-        params.put("start_time", tvTravelStartTime.getText().toString().trim());
         params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
         params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("type", getType());
-        initKjHttp().post(Api.POSTOFF_WORK_APPROVAL, params, new HttpCallBack() {
+        initKjHttp().post(Api.POSTOFF_POSTOUT_FORBUSINESS, params, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -277,9 +242,9 @@ public class ApplyForLeaveActivity extends BaseActivity {
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         showToast("发送成功");
                         finish();
-                    }else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)){
+                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
                         catchWarningByCode(Api.getCode(jo));
-                    }else {
+                    } else {
                         showToast(Api.getInfo(jo));
                     }
                 } catch (JSONException e) {
@@ -302,28 +267,19 @@ public class ApplyForLeaveActivity extends BaseActivity {
         });
     }
 
-    @NonNull
-    private String getType() {
-        String type = tvType.getText().toString().trim();
-        if (type.equals("年假")) {
-            type = "1";
-        } else if (type.equals("婚假")) {
-            type = "2";
-        } else if (type.equals("产假")) {
-            type = "3";
-        } else if (type.equals("陪产假")) {
-            type = "4";
-        } else if (type.equals("丧假")) {
-            type = "5";
-        } else if (type.equals("病假")) {
-            type = "6";
-        } else if (type.equals("事假")) {
-            type = "7";
-        } else if (type.equals("调休")) {
-            type = "8";
+    private boolean checkOption() {
+        if (tvTravelStartTime.getText().toString().trim().equals("点击选择时间")
+                || tvTravelEndTime.getText().toString().trim().equals("点击选择时间")) {
+            showToast("请选择时间");
+            return false;
         }
-        return type;
+        if (mEtLeaveContent.getText().toString().trim().equals("")) {
+            showToast("内容不能为空");
+            return false;
+        }
+        return true;
     }
+
 
     private void initToolBar() {
         if (mToolbar == null) {
@@ -332,7 +288,7 @@ public class ApplyForLeaveActivity extends BaseActivity {
         setTitle("");//必须在setSupportActionBar之前调用
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(mToolbar);
-        mTvTitle.setText("请假申请");
+        mTvTitle.setText("公出申请");
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
                 Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
@@ -367,7 +323,7 @@ public class ApplyForLeaveActivity extends BaseActivity {
         requestRunTimePermission(new String[]{Manifest.permission.RECORD_AUDIO}, new PermissionListener() {
             @Override
             public void onGranted() {
-                IflytekUtil iflytekUtil = new IflytekUtil(ApplyForLeaveActivity.this, mEtLeaveContent);
+                IflytekUtil iflytekUtil = new IflytekUtil(ApplyForPublicOutActivity.this, mEtLeaveContent);
                 iflytekUtil.showIatDialog();
             }
 
@@ -380,20 +336,17 @@ public class ApplyForLeaveActivity extends BaseActivity {
     }
 
     @OnClick({R.id.btn_voice_input, R.id.parting_line, R.id.tv_travel_start_time,
-            R.id.tv_travel_end_time, R.id.btn_submit, R.id.tv_type})
+            R.id.tv_travel_end_time, R.id.btn_submit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_voice_input:
                 showDialog();
                 break;
-            case R.id.tv_type:
-                //隐藏输入框
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
-                showPopDialog();
-                break;
+
             case R.id.btn_submit:
-                if (check()) {
+                if (!checkOption()) {
+                    return;
+                } else {
                     submit();
                 }
                 break;
@@ -407,45 +360,6 @@ public class ApplyForLeaveActivity extends BaseActivity {
         }
     }
 
-    private void showPopDialog() {
-        final ListView listView = new ListView(this);
-        listView.setBackgroundColor(Color.parseColor("#ffffff"));
-        listView.setPadding(0, 20, 0, 20);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                Utils.dip2px(140),
-                Utils.dip2px(100)
-        );
-        listView.setLayoutParams(params);
-        final String[] array = {"事假", "年假", "调休", "病假", "婚假", "产假", "陪产假", "丧假"};
-        listView.setAdapter(new ArrayAdapter<>(this, R.layout.leave_approval_list_item, array));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                tvType.setText(array[position]);
-                LogUtils.e("当前请假类型选择的是--》" + array[position]);
-
-                popupWindowTYpe.dismiss();
-            }
-        });
-        popupWindowTYpe = new PopupWindow(listView, FrameLayout.LayoutParams
-                .MATCH_PARENT, Utils.dip2px(206), false);
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = 0.7f;
-        getWindow().setAttributes(lp);
-        popupWindowTYpe.setOutsideTouchable(true);
-        popupWindowTYpe.setBackgroundDrawable(new BitmapDrawable());
-        popupWindowTYpe.setOnDismissListener(new PopupWindow.OnDismissListener() {
-
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = getWindow().getAttributes();
-                lp.alpha = 1f;
-                getWindow().setAttributes(lp);
-            }
-        });
-        popupWindowTYpe.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
-    }
 
     private void showDoneDatePicker(final TextView tv, final boolean isEndTime) {
         if (pvTime == null) {
@@ -477,13 +391,11 @@ public class ApplyForLeaveActivity extends BaseActivity {
 
             @Override
             public void onTimeSelect(Date date) {
-                tv.setText(DateUtils.getTime(date).replace("-", "/"));
+                tv.setText(DateUtils.getTime(date));
                 if (isEndTime) {
-                    boolean isOrder = DateUtils.judeDateOrder(tvTravelStartTime.getText()
-                            .toString(), DateUtils.getTime(date));
+                    boolean isOrder = DateUtils.judeDateOrder(tvTravelStartTime.getText().toString(), DateUtils.getTime(date));
                     if (isOrder) {
-                        int hourD_value = DateUtils.getHourD_Value(tvTravelStartTime.getText()
-                                .toString(), DateUtils.getTime(date));
+                        int hourD_value = DateUtils.getHourD_Value(tvTravelStartTime.getText().toString(), DateUtils.getTime(date));
                         tvLeaveDurations.setText(String.valueOf(hourD_value));
                         tvLeaveDurations.setFocusable(true);
                         tvLeaveDurations.setFocusableInTouchMode(true);
@@ -491,7 +403,7 @@ public class ApplyForLeaveActivity extends BaseActivity {
                     } else {
                         showToast("结束时间必须晚于开始时间");
                         tv.setText("点击选择时间");
-                        tvLeaveDurations.setText("");
+
                     }
                 }
             }

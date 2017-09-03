@@ -26,8 +26,8 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportListActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlinjinrong.oa.ui.activity.push.contract.PushListContract;
 import com.shanlinjinrong.oa.ui.activity.push.presenter.PushListPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.adapter.TabMsgListAdapter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
 
 import java.util.ArrayList;
 
@@ -40,7 +40,7 @@ import butterknife.ButterKnife;
  * Author:Created by CXP on Date: 2016/9/18 16:45.
  * Description:推送消息列表
  */
-public class PushListActivity extends MyBaseActivity<PushListPresenter> implements SwipeRefreshLayout.OnRefreshListener, PushListContract.View {
+public class PushListActivity extends HttpBaseActivity<PushListPresenter> implements SwipeRefreshLayout.OnRefreshListener, PushListContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;

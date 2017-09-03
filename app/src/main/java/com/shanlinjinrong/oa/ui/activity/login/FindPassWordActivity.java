@@ -12,7 +12,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.login.contract.FindPassWordContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.FindPasswordPresenter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.AndroidAdjustResizeBugFix;
 import com.shanlinjinrong.oa.utils.Utils;
 
@@ -27,7 +27,7 @@ import butterknife.OnClick;
  * Author:Created by Tsui on Date:2016/11/9 15:59
  * Description:
  */
-public class FindPassWordActivity extends MyBaseActivity<FindPasswordPresenter> implements FindPassWordContract.View {
+public class FindPassWordActivity extends HttpBaseActivity<FindPasswordPresenter> implements FindPassWordContract.View {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.tv_title)

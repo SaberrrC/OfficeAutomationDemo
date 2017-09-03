@@ -29,7 +29,7 @@ import com.shanlinjinrong.oa.model.ScheduleRvItemData;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.ScheduleActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.presenter.ScheduleActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.adapter.CalendarRvAdapter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
@@ -50,7 +50,7 @@ import butterknife.ButterKnife;
  * Author:Created by Tsui on Date:2016/12/7 15:37
  * Description:日程安排
  */
-public class ScheduleActivity extends MyBaseActivity<ScheduleActivityPresenter> implements ScheduleActivityContract.View {
+public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter> implements ScheduleActivityContract.View {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.circlecalendarview)

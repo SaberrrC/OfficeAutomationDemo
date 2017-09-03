@@ -21,7 +21,7 @@ import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.contracts.contract.ContractActivityContract;
 import com.shanlinjinrong.oa.ui.activity.contracts.presenter.ContractActivityPresenter;
 import com.shanlinjinrong.oa.ui.fragment.adapter.TabContactsAdapter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +36,7 @@ import butterknife.OnClick;
  * <h3>Description: 首页名片页面二级一下界面 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/9/22.<br />
  */
-public class ContactsActivity extends MyBaseActivity<ContractActivityPresenter> implements ContractActivityContract.View {
+public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter> implements ContractActivityContract.View {
 
 
     @Bind(R.id.recycler_view)

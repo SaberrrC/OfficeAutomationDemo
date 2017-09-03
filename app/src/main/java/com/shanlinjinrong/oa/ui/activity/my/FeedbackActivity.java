@@ -18,7 +18,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.my.contract.FeedbackActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.FeedbackActivityPresenter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.StringUtils;
 
 import butterknife.Bind;
@@ -29,7 +29,7 @@ import butterknife.OnClick;
  * <h3>Description: 用户反馈</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class FeedbackActivity extends MyBaseActivity<FeedbackActivityPresenter> implements FeedbackActivityContract.View {
+public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter> implements FeedbackActivityContract.View {
 
     @Bind(R.id.tv_title)
     TextView tvTitle;

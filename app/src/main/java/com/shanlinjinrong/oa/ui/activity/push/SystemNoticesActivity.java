@@ -16,7 +16,7 @@ import com.shanlinjinrong.oa.model.SystemNotice;
 import com.shanlinjinrong.oa.ui.activity.push.contract.SystemNoticesContract;
 import com.shanlinjinrong.oa.ui.activity.push.presenter.SystemNoticesPresenter;
 import com.shanlinjinrong.oa.ui.activity.push.adapter.SystemNoticeDetailAdapter;
-import com.shanlinjinrong.oa.ui.base.MyBaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * Author:Created by CXP on Date: 2016/9/19 11:31.
  * Description:系统消息activity
  */
-public class SystemNoticesActivity extends MyBaseActivity<SystemNoticesPresenter> implements SystemNoticesContract.View {
+public class SystemNoticesActivity extends HttpBaseActivity<SystemNoticesPresenter> implements SystemNoticesContract.View {
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.toolbar_text_btn)

@@ -492,17 +492,17 @@
             android:screenOrientation="portrait" />
         <!-- 差旅申请 -->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.ApplyForTravelActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.ApplyForTravelActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 公出申请申请 -->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.ApplyForPublicOutActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.ApplyForPublicOutActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 请假申请 -->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.ApplyForLeaveActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.ApplyForLeaveActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 办公用品申请 -->
@@ -512,12 +512,12 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <!--加班申请 -->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.ApplyForOverTimeActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.ApplyForOverTimeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 待我审批 (请假)-->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalLeaveActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.WaitApprovalLeaveActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <!-- 待我审批 （办公用品）-->
@@ -527,16 +527,16 @@
             android:screenOrientation="portrait" />
         <!-- 待我审批 （差旅）-->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovaltravalActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.WaitApprovaltravalActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <!-- 待我审批 （公告）-->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalNoticeActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.WaitApprovalNoticeActivity"
             android:screenOrientation="portrait" />
         <!-- 我发起的 (请假)-->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.MeLaunchLeaveActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchLeaveActivity"
             android:screenOrientation="portrait" />
         <!-- 我发起的 (办公用品)-->
         <activity
@@ -544,16 +544,16 @@
             android:screenOrientation="portrait" />
         <!-- 我发起的 (办公用品)-->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.MeLaunchTravalActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchTravalActivity"
             android:screenOrientation="portrait" />
         <!-- 我发起的 (加班)-->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.MeLaunchOverTimeActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchOverTimeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 我发起的 (加班)-->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.MeLaunchPublicOutActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchPublicOutActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 待我审批回复 -->
@@ -562,7 +562,7 @@
             android:screenOrientation="portrait" />
         <!-- 单个图片activity -->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.notice.ShowPictureActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.common.ShowPictureActivity"
             android:screenOrientation="portrait" />
         <!-- 名片(联系人)  -->
         <!-- 推送列表  -->

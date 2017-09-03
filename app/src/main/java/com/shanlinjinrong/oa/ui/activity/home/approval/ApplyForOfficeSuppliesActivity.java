@@ -15,18 +15,15 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.thirdParty.iflytek.IflytekUtil;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.oa.ui.activity.home.approval.contract.ApplyForOfficeSuppliesContract;
+import com.shanlinjinrong.oa.ui.activity.home.approval.presenter.ApplyForOfficeSuppliesPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.Calendar;
 
@@ -41,7 +38,7 @@ import cn.qqtheme.framework.picker.DatePicker;
  * Author:Created by Tsui on Date:2016/11/15 17:48
  * Description：办公用品申请
  */
-public class ApplyForOfficeSuppliesActivity extends BaseActivity {
+public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOfficeSuppliesPresenter> implements ApplyForOfficeSuppliesContract.View {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.toolbar)
@@ -67,6 +64,11 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
         loadData();
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
     private void initWidget() {
         mTvSelectDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,59 +79,7 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
     }
 
     private void loadData() {
-        showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("appr_id", "2");
-        params.put("isleader", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_IS_LEADER));
-        params.put("oid", AppConfig.getAppConfig(this).getDepartmentId());
-        initKjHttp().post(Api.GET_APPROVERS, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            JSONArray ja = Api.getDataToJSONArray(jo);
-                            setDataForWidget(ja);
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-//                                showEmptyView(mRootView, "内容为空", 0, false);
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.loadAdmin("2", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_IS_LEADER), AppConfig.getAppConfig(this).getDepartmentId());
     }
 
     private void setDataForWidget(JSONArray ja) {
@@ -259,57 +209,7 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
 
     private void submit() {
         showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("article_name", mEtContent.getText().toString().trim());
-        params.put("application_time", mTvSelectDate.getText().toString());
-
-        LogUtils.e("uid" + AppConfig.getAppConfig(this).getPrivateUid());
-        LogUtils.e("token" + AppConfig.getAppConfig(this).getPrivateToken());
-        LogUtils.e("article_name" + mEtContent.getText().toString().trim());
-        LogUtils.e("application_time" + mTvSelectDate.getText().toString().replace("/", "-"));
-
-        initKjHttp().post(Api.POSTOFFICE_APPROVAL, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
-                        showToast("发送成功");
-                        finish();
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                        catchWarningByCode(Api.getCode(jo));
-                    } else {
-                        showToast(Api.getInfo(jo));
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.submitData(mEtContent.getText().toString().trim(), mTvSelectDate.getText().toString());
     }
 
     private void showDialog() {
@@ -334,4 +234,40 @@ public class ApplyForOfficeSuppliesActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void loadDataSuccess(JSONArray json) {
+        setDataForWidget(json);
+
+    }
+
+    @Override
+    public void loadDataFailed(int errorNo, String strMsg) {
+        catchWarningByCode(errorNo);
+    }
+
+    @Override
+    public void submitSuccess() {
+        showToast("发送成功");
+        finish();
+    }
+
+    @Override
+    public void submitFailed(int errorNo, String strMsg) {
+        catchWarningByCode(errorNo);
+    }
+
+    @Override
+    public void submitFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void submitOther(String msg) {
+        showToast(msg);
+    }
 }

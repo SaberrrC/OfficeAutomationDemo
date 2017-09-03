@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.ui.activity.home.approval;
+package com.shanlinjinrong.oa.ui.activity.home.approval.nouse;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,7 +18,8 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.model.approval.ApprovalLeave;
+import com.shanlinjinrong.oa.model.approval.ApprovalPublicOut;
+import com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalReplyActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.StringUtils;
@@ -36,41 +37,52 @@ import butterknife.OnClick;
 /**
  * ProjectName: dev-beta-v1.0.1
  * PackageName: com.itcrm.GroupInformationPlatform.ui.activity
- * Author:Created by Tsui on Date:2016/11/16 11:20
- * Description:待我审批(请假)
+ * Author:Created by Tsui on Date:2016/11/16 16:01
+ * Description:我发起的(公出)
  */
-public class WaitApprovalLeaveActivity extends BaseActivity {
+public class MeLaunchPublicOutActivity extends BaseActivity {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.empty_view_container)
+    @Bind(R.id.rl_root_view)
     RelativeLayout mRootView;
+    @Bind(R.id.iv_top_status)
+    ImageView ivApprovalTopState;
+
     @Bind(R.id.tv_event_type)
     TextView tvEventType;
-    @Bind(R.id.tv_time_bucket)
-    TextView tvTimeBucket;
-    @Bind(R.id.tv_duration)
+    //...
+    @Bind(R.id.tv_time_start)
+    TextView tvTimeStart;
+    @Bind(R.id.tv_time_end)
+    TextView tvTimeEnd;
+    @Bind(R.id.tv_date_duration)
     TextView tvDuration;
-    @Bind(R.id.tv_reason)
-    TextView tvReason;
-    @Bind(R.id.ll_approval_launcher_info_layout)
-    LinearLayout mLlApprovalLaunchInfoContainer;
+    @Bind(R.id.tv_no_did_event)
+    TextView tvNoDidEvent;
+
     @Bind(R.id.ll_approval_state_iv_container)
     LinearLayout mLlApprovalStateIvContainer;
     @Bind(R.id.ll_approval_info_container)
     LinearLayout mLlApprovalInfoContainer;
+    @Bind(R.id.ll_approval_launcher_info_layout)
+    LinearLayout mLlApprovalLaunchInfoContainer;
     @Bind(R.id.ll_approval_process_layout)
     LinearLayout mLlApprovalProcessLayout;
+    @Bind(R.id.ll_not_approval_operate_layout)
+    LinearLayout mLlApprovalOperateContainer;
     private String appr_id;
-    private String oa_id;
     private String oal_id;
+    private String status = "0";
+    private String titleName;
     private PopupWindow popupWindow;
+    private String oa_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wait_approval_leave);
+        setContentView(R.layout.activity_me_launch_public_out);
         ButterKnife.bind(this);
         initToolBar();
         setTranslucentStatus(this);
@@ -79,8 +91,17 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
 
     private void initData() {
         appr_id = getIntent().getStringExtra("appr_id");
-        oa_id = getIntent().getStringExtra("oa_id");
         oal_id = getIntent().getStringExtra("oal_id");
+        oa_id = getIntent().getStringExtra("oa_id");
+        titleName = getIntent().getStringExtra("titleName");
+        mTvTitle.setText(titleName);
+        boolean isCanReply = getIntent().getBooleanExtra("isCanReply", false);
+        if (isCanReply) {
+            mLlApprovalOperateContainer.setVisibility(View.VISIBLE);
+        } else {
+            mLlApprovalOperateContainer.setVisibility(View.GONE);
+        }
+
         loadData();
     }
 
@@ -103,7 +124,7 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                LogUtils.e(t);
+                LogUtils.e("MeLaunchLeaveActivity->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
                     switch (Api.getCode(jo)) {
@@ -143,14 +164,39 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
     }
 
     private void setDataForWidget(JSONObject data) {
-
+        mRootView.setVisibility(View.VISIBLE);
         mLlApprovalProcessLayout.setVisibility(View.VISIBLE);
-        final ApprovalLeave al = new ApprovalLeave(data);
+        final ApprovalPublicOut al = new ApprovalPublicOut(data);
+        tvEventType.setText("公出");
+        tvTimeStart.setText(al.getInfo().getStart_time());
+        tvTimeEnd.setText(al.getInfo().getEnd_time());
+        tvDuration.setText(al.getInfo().getDay() + "小时");
+        tvNoDidEvent.setText(al.getInfo().getRemark().replace("&nbsp;", " ").replace("<br/>", "\n"));
+        // 1审批中 2通过 3驳回
+        status = al.getInfo().getStatus();
+        switch (Integer.parseInt(status)) {
+            case 1:
+                ivApprovalTopState.setImageResource(R.drawable.approval_top_state_approvaling_image);
 
-        tvEventType.setText(al.getInfo().getType());
-        tvTimeBucket.setText(al.getInfo().getStart_time() + " " + al.getInfo().getEnd_time());
-        tvDuration.setText(al.getInfo().getDay() + "天");
-        tvReason.setText(al.getInfo().getRemark().replace("&nbsp;", " ").replace("<br/>", "\n"));
+                break;
+            case 2:
+                ivApprovalTopState.setImageResource(R.drawable.approval_top_state_passed_image);
+                break;
+            case 3:
+                ivApprovalTopState.setImageResource(R.drawable.approval_top_state_reject_image);
+
+                break;
+        }
+        //设置发起人数据
+        ((TextView) mLlApprovalLaunchInfoContainer.findViewById(R.id.tv_launch_date)).setText(al
+                .getInfo().getTime_before());
+        ((TextView) mLlApprovalLaunchInfoContainer.findViewById(R.id.tv_launch_time)).setText(al
+                .getInfo().getTime_after());
+        ((TextView) mLlApprovalLaunchInfoContainer.findViewById(R.id.tv_name)).setText(al.getInfo()
+                .getUsername());
+        TextView tvPostil = (TextView) mLlApprovalLaunchInfoContainer.findViewById(R.id.tv_postil);
+        tvPostil.setTextColor(Color.parseColor("#0EA7ED"));
+        tvPostil.setText("发起审批");
 
         mLlApprovalLaunchInfoContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,18 +205,10 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
                         al.getInfo().getUsername(), "");
             }
         });
-        //设置发起人数据
-        ((TextView) mLlApprovalLaunchInfoContainer.findViewById(R.id.tv_launch_date)).setText(al
-                .getInfo().getTime_before());
-        ((TextView) mLlApprovalLaunchInfoContainer.findViewById(R.id.tv_launch_time)).setText(al
-                .getInfo().getTime_after());
-        ((TextView) mLlApprovalLaunchInfoContainer.findViewById(R.id.tv_name)).setText(al.getInfo()
-                .getUsername());
-        mLlApprovalLaunchInfoContainer.findViewById(R.id.tv_postil).setVisibility(View.GONE);
 
         //循环添加审批流程
         for (int i = 0; i < al.getApproversLists().size(); i++) {
-            ApprovalLeave.ApproversList approvers = al.getApproversLists().get(i);
+            ApprovalPublicOut.ApproversList approvers = al.getApproversLists().get(i);
             //添加左侧审批图标
             addLeftStateImage(i, approvers);
 
@@ -181,19 +219,26 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
 
     }
 
-    private void addRightInfo(int i, final ApprovalLeave.ApproversList approvers) {
+    private void addRightInfo(int i, final ApprovalPublicOut.ApproversList approvers) {
         View view = View.inflate(this, R.layout.approval_process_item_info_layout, null);
+        TextView tvPostil = ((TextView) view.findViewById(R.id.tv_postil));
         switch (Integer.parseInt(approvers.getApprovalStatus())) {
             //状态 1审批中，2通过，3驳回
             case 1:
                 view.setBackgroundResource(R.drawable.approval_item_approvaling_bg);
+                tvPostil.setTextColor(Color.parseColor("#F7931E"));
+                tvPostil.setText("审批中");
+
                 break;
             case 2:
                 view.setBackgroundResource(R.drawable.approval_item_passed_bg);
+                tvPostil.setTextColor(Color.parseColor("#10C48B"));
                 break;
             case 3:
                 view.setBackgroundResource(R.drawable.approval_item_reject_bg);
+                tvPostil.setTextColor(Color.parseColor("#C1272D"));
                 break;
+
         }
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Utils.dip2px(43));
@@ -220,10 +265,7 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
             (view.findViewById(R.id.tv_name)).setVisibility(View.GONE);
         }
         if (!StringUtils.isBlank(approvers.getReply())) {
-            view.findViewById(R.id.tv_postil).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.tv_postil)).setText(approvers.getReply());
-        } else {
-            view.findViewById(R.id.tv_postil).setVisibility(View.GONE);
         }
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,13 +275,11 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
         });
         mLlApprovalInfoContainer.addView(view);
     }
+
     public void showDetailDialog(String status, String timeBefore, String timeAfter, String user, String reply) {
         View contentView = LayoutInflater.from(this).inflate(R.layout
                 .approval_popupwindow_content_view, null);
-        if (popupWindow==null) {
-         popupWindow = new PopupWindow(contentView, Utils.dip2px(156), Utils.dip2px(156), false);
-            popupWindow.setOutsideTouchable(true);
-        }
+        PopupWindow popupWindow = new PopupWindow(contentView, Utils.dip2px(200), Utils.dip2px(200), false);
         TextView topTips = (TextView) contentView.findViewById(R.id.tv_dialog_top_tips);
         TextView bottomTips = (TextView) contentView.findViewById(R.id.tv_dialog_bottom_tips);
         TextView tvDate = (TextView) contentView.findViewById(R.id.tv_dialog_date);
@@ -256,14 +296,14 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
             case 0:
                 contentView.setBackgroundResource(R.drawable.wait_approval_ll_blue_bg);
                 topTips.setText("发起");
-                topTips.setTextColor(Color.parseColor("#548ee9"));
+                topTips.setTextColor(Color.parseColor("#0EA7ED"));
                 bottomTips.setVisibility(View.GONE);
                 tvRemark.setVisibility(View.GONE);
                 break;
             case 1:
                 contentView.setBackgroundResource(R.drawable.wait_approval_ll_yellow_bg);
                 topTips.setText("审批中");
-                topTips.setTextColor(Color.parseColor("#f69933"));
+                topTips.setTextColor(Color.parseColor("#F7931E"));
                 bottomTips.setVisibility(View.GONE);
                 tvDate.setVisibility(View.GONE);
                 tvTime.setVisibility(View.GONE);
@@ -273,18 +313,18 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
             case 2:
                 contentView.setBackgroundResource(R.drawable.wait_approval_ll_green_bg);
                 topTips.setText("审批");
-                topTips.setTextColor(Color.parseColor("#5dc470"));
-                bottomTips.setTextColor(Color.parseColor("#5dc470"));
+                topTips.setTextColor(Color.parseColor("#10C48B"));
+                bottomTips.setTextColor(Color.parseColor("#10C48B"));
                 break;
             case 3:
                 contentView.setBackgroundResource(R.drawable.wait_approval_ll_red_bg);
                 topTips.setText("驳回");
-                topTips.setTextColor(Color.parseColor("#ff6666"));
-                bottomTips.setTextColor(Color.parseColor("#ff6666"));
+                topTips.setTextColor(Color.parseColor("#C1272D"));
+                bottomTips.setTextColor(Color.parseColor("#C1272D"));
                 break;
         }
 
-
+        popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = 0.7f;
@@ -297,8 +337,8 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
                 getWindow().setAttributes(lp);
             }
         });
-        popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
         popupWindow.setFocusable(true);
+        popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
         popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
     }
 
@@ -308,7 +348,7 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
      * @param i
      * @param approvers
      */
-    private void addLeftStateImage(int i, ApprovalLeave.ApproversList approvers) {
+    private void addLeftStateImage(int i, ApprovalPublicOut.ApproversList approvers) {
         ImageView iv = new ImageView(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(Utils.dip2px(43), Utils.dip2px(43));
         if (i >= 0) {
@@ -331,6 +371,7 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
         mLlApprovalStateIvContainer.addView(iv);
     }
 
+
     private void initToolBar() {
         if (mToolbar == null) {
             return;
@@ -338,7 +379,7 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
         setTitle("");//必须在setSupportActionBar之前调用
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(mToolbar);
-        mTvTitle.setText("待我审批");
+        mTvTitle.setText("我发起的");
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
                 Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
@@ -353,25 +394,24 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_approval_pass, R.id.iv_approval_reject
-    })
+    @OnClick({R.id.iv_approval_pass, R.id.iv_approval_reject})
     public void onClick(View view) {
         switch (view.getId()) {
-
             case R.id.iv_approval_pass:
-                Intent i = new Intent(WaitApprovalLeaveActivity.this, WaitApprovalReplyActivity.class);
+                Intent i = new Intent(this, WaitApprovalReplyActivity.class);
                 i.putExtra("appr_id", appr_id);
                 i.putExtra("oa_id", oa_id);
                 i.putExtra("isReject", false);
                 startActivity(i);
                 break;
             case R.id.iv_approval_reject:
-                Intent i2 = new Intent(WaitApprovalLeaveActivity.this, WaitApprovalReplyActivity.class);
+                Intent i2 = new Intent(this, WaitApprovalReplyActivity.class);
                 i2.putExtra("appr_id", appr_id);
                 i2.putExtra("oa_id", oa_id);
                 i2.putExtra("isReject", true);
                 startActivity(i2);
                 break;
+
         }
     }
 
@@ -380,6 +420,10 @@ public class WaitApprovalLeaveActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        if (popupWindow != null) {
+            popupWindow.dismiss();
+            popupWindow = null;
+        }
     }
 
 
