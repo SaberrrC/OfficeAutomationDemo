@@ -7,7 +7,6 @@
     android:background="@drawable/tab_contacts_selector_bg_x"
     android:clickable="true"
     >
-
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/portrait"
         android:layout_width="40dp"
@@ -54,5 +53,4 @@
         android:layout_marginRight="20dp"
         android:layout_alignParentBottom="true"
         android:background="@color/common_line_color"/>
-
 </RelativeLayout>

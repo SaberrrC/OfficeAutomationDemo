@@ -97,7 +97,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
             @Override
             public void onPreStart() {
                 super.onPreStart();
-                mView.loadDataStart();
+                    mView.loadDataStart();
 
             }
 

@@ -37,9 +37,9 @@ import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.contracts.ContactsActivity;
+import com.shanlinjinrong.oa.ui.base.MyBaseFragment;
 import com.shanlinjinrong.oa.ui.fragment.adapter.SearchUserResultAdapter;
 import com.shanlinjinrong.oa.ui.fragment.adapter.TabContactsAdapter;
-import com.shanlinjinrong.oa.ui.base.MyBaseFragment;
 import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
 import com.shanlinjinrong.oa.ui.fragment.presenter.TabContractsFragmentPresenter;
 import com.shanlinjinrong.oa.views.ClearEditText;
@@ -249,9 +249,11 @@ public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPres
         }
 
         hideEmptyView();
+        if (recyclerViewSearchResult != null)
         recyclerViewSearchResult.setVisibility(View.VISIBLE);
         reSetSwipRefreash();
         SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
+        if (recyclerViewSearchResult != null)
         recyclerViewSearchResult.setAdapter(adapter);
     }
 

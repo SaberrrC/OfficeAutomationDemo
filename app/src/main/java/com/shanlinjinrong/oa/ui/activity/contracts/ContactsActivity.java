@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -101,7 +103,7 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
         pageMap.add(map);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //在初始化是为RecyclerView添加点击时间，这样可以防止重复点击问题
-        recyclerView.addOnItemTouchListener(new ItemClick());
+      //  recyclerView.addOnItemTouchListener(new ItemClick());
     }
 
     /**
@@ -123,6 +125,7 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
         items = contacts;
         adapter = new TabContactsAdapter(items);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new ItemClick());
     }
 
     @Override
@@ -162,6 +165,7 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
     class ItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+            
             switch (items.get(i).getItemType()) {
                 case Contacts.DEPARTMENT:
                     if (!pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID).equals(
