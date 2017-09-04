@@ -17,18 +17,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.CreateMeetingContract;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.presenter.CreateMeetingPresenter;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.StringUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,7 +39,7 @@ import cn.qqtheme.framework.picker.DatePicker;
  * Author:Created by Tsui on Date:2016/12/8 15:17
  * Description:创建会议
  */
-public class CreateMeetingActivity extends BaseActivity {
+public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresenter> implements CreateMeetingContract.View {
     private static final int ADD_JOIN_PEOPLE = 1;
     @Bind(R.id.tv_title)
     TextView tvTitle;
@@ -83,6 +78,11 @@ public class CreateMeetingActivity extends BaseActivity {
         initToolBar();
         setTranslucentStatus(this);
         initData();
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initData() {
@@ -320,78 +320,41 @@ public class CreateMeetingActivity extends BaseActivity {
 
     private void sendData() {
         showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("begintime", begintime);
-        params.put("endtime", endtime);
-        params.put("date", tvDate.getText().toString().substring(0,10).trim().replace("/","-"));
-        params.put("theme", mEtMeetingTheme.getText().toString().trim());
-        params.put("attentees", copy.toString());
-        params.put("type", meetingType);
-        params.put("roomid", roomId);
-
-        LogUtils.e("uid:"+AppConfig.getAppConfig(this).getPrivateUid());
-        LogUtils.e("token"+ AppConfig.getAppConfig(this).getPrivateToken());
-        LogUtils.e("begintime"+begintime);
-        LogUtils.e("endtime"+endtime);
-        LogUtils.e("date"+tvDate.getText().toString().substring(0,10).trim());
-        LogUtils.e("theme"+mEtMeetingTheme.getText().toString().trim());
-        LogUtils.e("attentees"+copy.toString());
-        LogUtils.e("type"+meetingType);
-        LogUtils.e("roomid"+roomId);
-
-
-
-        initKjHttp().post(Api.CONFERENCE_SETCONF, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e("创建会议返回数据：" + t);
-                JSONObject jo = null;
-                try {
-                    jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-
-                        showToast("发送成功");
-                        startActivity(new Intent(CreateMeetingActivity.this, MainController.class));
-                        finish();
-
-                    }else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)){
-                        catchWarningByCode(Api.getCode(jo));
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                LogUtils.e("errorNo,strMsg--->" + errorNo + "," + strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.sendData(begintime,
+                endtime,
+                tvDate.getText().toString().substring(0, 10).trim().replace("/", "-"),
+                mEtMeetingTheme.getText().toString().trim(),
+                copy.toString(),
+                meetingType,
+                roomId);
     }
 
     private String subSting(String str) {
         int index = str.indexOf("点");
         LogUtils.e("开始或结束时间-》" + str.substring(0, index));
         return str.substring(0, index);
+    }
+
+    @Override
+    public void sendDataSuccess() {
+        showToast("发送成功");
+        startActivity(new Intent(CreateMeetingActivity.this, MainController.class));
+        finish();
+    }
+
+    @Override
+    public void sendDataFailed(int errCode, String msg) {
+        catchWarningByCode(errCode);
+    }
+
+    @Override
+    public void sendDataFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+
     }
 }

@@ -16,18 +16,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.approval.ApprovalOfficeSupplies;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.oa.ui.activity.home.approval.contract.MeLaunchOfficesSuppliesContract;
+import com.shanlinjinrong.oa.ui.activity.home.approval.presenter.MeLaunchOfficesSuppliesPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.StringUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,7 +35,7 @@ import butterknife.OnClick;
  * Author:Created by Tsui on Date:2016/11/16 16:01
  * Description:我发起的(办公用品)
  */
-public class MeLaunchOfficesSuppliesActivity extends BaseActivity {
+public class MeLaunchOfficesSuppliesActivity extends HttpBaseActivity<MeLaunchOfficesSuppliesPresenter> implements MeLaunchOfficesSuppliesContract.View {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.toolbar)
@@ -80,6 +76,11 @@ public class MeLaunchOfficesSuppliesActivity extends BaseActivity {
         initData();
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
     private void initData() {
         appr_id = getIntent().getStringExtra("appr_id");
         oal_id = getIntent().getStringExtra("oal_id");
@@ -97,59 +98,7 @@ public class MeLaunchOfficesSuppliesActivity extends BaseActivity {
 
     private void loadData() {
         showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("appr_id", appr_id);
-        params.put("oal_id", oal_id);
-
-        initKjHttp().post(Api.APPROVAL_INFO, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            JSONObject data = Api.getDataToJSONObject(jo);
-                            setDataForWidget(data);
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            showEmptyView(mRootView, "内容为空", 0, false);
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                showEmptyView(mRootView, "内容为空", 0, false);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.loadData(appr_id, oal_id);
     }
 
     private void setDataForWidget(JSONObject data) {
@@ -407,4 +356,29 @@ public class MeLaunchOfficesSuppliesActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void loadDataSuccess(JSONObject data) {
+        setDataForWidget(data);
+    }
+
+    @Override
+    public void loadDataFailed(int errorNo, String strMsg) {
+        showEmptyView(mRootView, "内容为空", 0, false);
+        catchWarningByCode(errorNo);
+    }
+
+    @Override
+    public void loadDataEmpty() {
+        showEmptyView(mRootView, "内容为空", 0, false);
+    }
+
+    @Override
+    public void requestFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
 }

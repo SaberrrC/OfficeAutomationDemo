@@ -16,20 +16,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.thirdParty.iflytek.IflytekUtil;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.CreateNoteContract;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.presenter.CreateNotePresenter;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.Calendar;
 
@@ -44,7 +40,7 @@ import cn.qqtheme.framework.picker.DatePicker;
  * Author:Created by Tsui on Date:2016/12/8 15:17
  * Description:创建记事本,也是编译记事本界面
  */
-public class CreateNoteActivity extends BaseActivity {
+public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> implements CreateNoteContract.View {
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.toolbar)
@@ -71,6 +67,11 @@ public class CreateNoteActivity extends BaseActivity {
         initData();
         initToolBar();
         setTranslucentStatus(this);
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initData() {
@@ -212,22 +213,6 @@ public class CreateNoteActivity extends BaseActivity {
 
     private void createNote() {
         showLoadingView();
-        HttpParams params = new HttpParams();
-        String url = "";
-        if (mode.equals(Constants.EDIT_NOTE)) {
-            params.put("nt_id", note_id);
-            url = Api.NOTE_EDIT;
-        } else {
-            url = Api.NOTE_ADD;
-        }
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("department_id", AppConfig.getAppConfig(this).getDepartmentId());
-        params.put("content", mEtNoteContent.getText().toString().trim());
-        params.put("time", mTvNoteDate.getText().toString().trim().replace("年", "-")
-                .replace("月", "-").replace("日", "").trim());
-
-
         LogUtils.e("uid" + "->" + AppConfig.getAppConfig(this).getPrivateUid());
         LogUtils.e("token" + "->" + AppConfig.getAppConfig(this).getPrivateToken());
         LogUtils.e("department_id" + "->" + AppConfig.getAppConfig(this).getDepartmentId());
@@ -237,53 +222,11 @@ public class CreateNoteActivity extends BaseActivity {
                 .replace("月", "-").replace("日", "").trim());
         LogUtils.e("nt_id" + "->" + note_id);
 
-        initKjHttp().post(url, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                JSONObject jo = null;
-                try {
-                    jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-
-                        showToast("创建记事成功");
-                        startActivity(new Intent(CreateNoteActivity.this, MainController.class));
-                        CreateNoteActivity.this.finish();
-
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                        catchWarningByCode(Api.getCode(jo));
-                    }else if ((Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH)) {
-                        catchWarningByCode(Api.getCode(jo));
-                    } else {
-                        showToast(Api.getInfo(jo));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                LogUtils.e("errorNo,strMsg--->" + errorNo + "," + strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.createNote(AppConfig.getAppConfig(this).getDepartmentId(),
+                mEtNoteContent.getText().toString().trim(),
+                mTvNoteDate.getText().toString().trim().replace("年", "-")
+                        .replace("月", "-").replace("日", "").trim(),
+                note_id, mode);
     }
 
     private void showDoneDatePicker(final TextView tv) {
@@ -343,5 +286,34 @@ public class CreateNoteActivity extends BaseActivity {
                 showToast("录音权限被拒绝！请手动设置");
             }
         });
+    }
+
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void createSuccess() {
+        showToast("创建记事成功");
+        startActivity(new Intent(CreateNoteActivity.this, MainController.class));
+        CreateNoteActivity.this.finish();
+    }
+
+    @Override
+    public void createFailed(int errCode, String msg) {
+        catchWarningByCode(errCode);
+
+    }
+
+    @Override
+    public void createFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void createResponseOther(String msg) {
+        showToast(msg);
     }
 }

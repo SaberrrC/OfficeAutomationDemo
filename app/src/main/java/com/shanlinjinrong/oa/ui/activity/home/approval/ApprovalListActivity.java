@@ -28,25 +28,20 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.approval.Approval;
 import com.shanlinjinrong.oa.ui.activity.home.approval.adapter.ApprovalListAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.approval.contract.ApprovalListContract;
 import com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchLeaveActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchNoticeActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchOverTimeActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchPublicOutActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchTravalActivity;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.activity.home.approval.presenter.ApprovalListPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.BitmapUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.StringUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +58,7 @@ import static com.shanlinjinrong.oa.manager.AppManager.mContext;
  * Author:Created by Tsui on Date:2016/11/15 9:50
  * Description:审批列表
  */
-public class ApprovalListActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, ApprovalListContract.View {
     @Bind(R.id.tv_title)
     TextView mTvTitle;
     @Bind(R.id.toolbar)
@@ -155,6 +150,11 @@ public class ApprovalListActivity extends BaseActivity implements View.OnClickLi
         initWidget();
         initData(getIntent());
         loadData(true, false, "", "");
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initData(Intent intent) {
@@ -475,114 +475,21 @@ public class ApprovalListActivity extends BaseActivity implements View.OnClickLi
             mSwipeRefreshLayout.setRefreshing(true);
             changeLoadState();
         }
-        HttpParams params = new HttpParams();
+
+        int page = 1;
         switch (currentState) {
             case 1:
-                params.put("page", meLaunchCurrentPage);
-                LogUtils.e("page:" + meLaunchCurrentPage);
+                page = meLaunchCurrentPage;
                 break;
             case 2:
-                params.put("page", waitApprovalCurrentPage);
-                LogUtils.e("page:" + waitApprovalCurrentPage);
+                page = waitApprovalCurrentPage;
                 break;
             case 3:
-                params.put("page", meApprovaledCurrentPage);
-                LogUtils.e("page:" + meApprovaledCurrentPage);
+                page = meApprovaledCurrentPage;
                 break;
         }
-        params.put("limit", limit);
-        params.put("time", time);
-        params.put("where", where);
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        if (currentState == 1) {
-            requestUrl = Api.APPROVAL_LIST_ME_LAUNCH;
-        } else if (currentState == 2) {
-            requestUrl = Api.APPROVAL_LIST_WAIT_APPROVAL;
-        } else if (currentState == 3) {
-            requestUrl = Api.APPROVAL_LIST_ME_APPROVALED;
-        }
-        initKjHttp().post(requestUrl, params, new HttpCallBack() {
+        mPresenter.loadData(currentState, page, limit, time, where, loadMore);
 
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e("ApprovalListActivity->" + t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-
-                            mTvEmptyView.setVisibility(View.GONE);
-
-                            ArrayList<Approval> listApproval = new ArrayList<>();
-                            JSONArray notices = Api.getDataToJSONArray(jo);
-                            Approval notice;
-                            for (int i = 0; i < notices.length(); i++) {
-                                JSONObject jsonObject = notices.getJSONObject(i);
-                                if (currentState == 1) {
-                                    notice =
-                                            new Approval(jsonObject, true);
-                                } else {
-                                    notice =
-                                            new Approval(jsonObject, false);
-                                }
-                                listApproval.add(notice);
-                            }
-                            if (loadMore) {
-                                //如果是加载更多的话，需要将最后一个view移除了
-                                mAdapter.removeAllFooterView();
-                            }
-                            isLoading = false;
-
-                            list.addAll(listApproval);
-                            mAdapter.notifyDataSetChanged();
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            clearCurrentDataAndChangeUI();
-                            break;
-                        case Api.RESPONSES_CONTENT_EMPTY:
-                            clearCurrentDataAndChangeUI();
-                            break;
-                        case Api.LIMIT_CONTENT_EMPTY:
-                            mAdapter.removeAllFooterView();
-                            markNoMoreState();
-                            showToast("没有更多了");
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-                if (null != mSwipeRefreshLayout) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                catchWarningByCode(errorNo);
-                mTvEmptyView.setVisibility(View.VISIBLE);
-            }
-        });
     }
 
     /**
@@ -830,59 +737,60 @@ public class ApprovalListActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void readPush(String pid) {
-
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(mContext).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(mContext).getPrivateToken());
-
-        params.put("department_id", AppConfig.getAppConfig(mContext).getDepartmentId());
-        params.put("pid", pid);
-
-        initKjHttp().post(Api.MESSAGE_READPUSH, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-                showLoadingView();
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            break;
-                        case Api.RESPONSES_CONTENT_EMPTY:
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.readPush(AppConfig.getAppConfig(mContext).getDepartmentId(), pid);
     }
 
+    @Override
+    public void loadDataSuccess(ArrayList<Approval> listApproval, boolean isMore) {
+        mTvEmptyView.setVisibility(View.GONE);
+        if (isMore) {
+            //如果是加载更多的话，需要将最后一个view移除了
+            mAdapter.removeAllFooterView();
+        }
+        isLoading = false;
+
+        list.addAll(listApproval);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void loadDataFailed(int errorNo, String strMsg) {
+        catchWarningByCode(errorNo);
+        mTvEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void loadDataResponseEmpty() {
+        clearCurrentDataAndChangeUI();
+    }
+
+    @Override
+    public void loadDataEmpty() {
+        mAdapter.removeAllFooterView();
+        markNoMoreState();
+        showToast("没有更多了");
+    }
+
+    @Override
+    public void readSuccess() {
+
+    }
+
+    @Override
+    public void readFailed(int errorNo, String strMsg) {
+        catchWarningByCode(errorNo);
+    }
+
+    @Override
+    public void requestFinish() {
+        hideLoadingView();
+        if (null != mSwipeRefreshLayout) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
 }

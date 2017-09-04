@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.ui.activity.home.schedule;
+package com.shanlinjinrong.oa.ui.activity.home.schedule.nouse;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,6 +19,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingVideoActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 

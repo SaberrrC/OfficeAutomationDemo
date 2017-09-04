@@ -2,6 +2,11 @@ package com.shanlinjinrong.oa.ui.base.dagger.component;
 
 import com.shanlinjinrong.oa.ui.activity.contracts.ContactsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApplyForOfficeSuppliesActivity;
+import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
+import com.shanlinjinrong.oa.ui.activity.home.approval.MeLaunchOfficesSuppliesActivity;
+import com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalReplyActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateMeetingActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
@@ -58,4 +63,14 @@ public interface ActivityComponent {
     void inject(SystemNoticesActivity activity);
 
     void inject(ApplyForOfficeSuppliesActivity activity);
+
+    void inject(ApprovalListActivity activity);
+
+    void inject(MeLaunchOfficesSuppliesActivity activity);
+
+    void inject(WaitApprovalReplyActivity activity);
+
+    void inject(CreateMeetingActivity activity);
+
+    void inject(CreateNoteActivity activity);
 }

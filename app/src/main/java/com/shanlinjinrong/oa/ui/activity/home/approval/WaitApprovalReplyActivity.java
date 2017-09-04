@@ -17,17 +17,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.listener.PermissionListener;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.thirdParty.iflytek.IflytekUtil;
-import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.oa.ui.activity.home.approval.contract.WaitApprovalReplyContract;
+import com.shanlinjinrong.oa.ui.activity.home.approval.presenter.WaitApprovalReplyPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,7 +34,7 @@ import butterknife.ButterKnife;
  * Author:Created by Tsui on Date:2016/11/16 16:26
  * Description:待我审批回复
  */
-public class WaitApprovalReplyActivity extends BaseActivity implements View.OnClickListener {
+public class WaitApprovalReplyActivity extends HttpBaseActivity<WaitApprovalReplyPresenter> implements View.OnClickListener, WaitApprovalReplyContract.View {
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.toolbar)
@@ -70,6 +66,11 @@ public class WaitApprovalReplyActivity extends BaseActivity implements View.OnCl
         } else {
             initToolBar("通过回复");
         }
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initWidget() {
@@ -168,112 +169,7 @@ public class WaitApprovalReplyActivity extends BaseActivity implements View.OnCl
      */
     private void finishReply() {
         showLoadingView();
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(this).getPrivateToken());
-        params.put("appr_id", appr_id);
-        params.put("oa_id", oa_id);
-        params.put("reply", mEtReply.getText().toString().trim());
-
-        LogUtils.e("uid->" + AppConfig.getAppConfig(this).getPrivateUid());
-        LogUtils.e("token->" + AppConfig.getAppConfig(this).getPrivateToken());
-        LogUtils.e("appr_id->" + appr_id);
-        LogUtils.e("oa_id->" + oa_id);
-        LogUtils.e("reply->" + mEtReply.getText().toString().trim());
-// 1公告 2办公用品3请假4出差
-        String url = "";
-        if (isReject) {
-            if (appr_id.equals("1")) {
-                url = Api.APPROVAL_TURNED_DOWN_NOTICES;
-
-            }
-            if (appr_id.equals("2")) {
-                url = Api.APPROVAL_TURNED_DOWN_OFFICE;
-
-            }
-            if (appr_id.equals("3")) {
-                url = Api.APPROVAL_TURNED_DOWN_OFFWORK;
-            }
-            if (appr_id.equals("4")) {
-                url = Api.APPROVAL_TURNED_DOWN_TRIP;
-            }
-            if (appr_id.equals("5")) {
-                url = Api.APPROVAL_REJECTOVER_TIME;
-            }
-            if (appr_id.equals("6")) {
-                url = Api.APPROVAL_TURNEDDOWN_BUSINESS;
-            }
-
-        } else {
-
-            if (appr_id.equals("1")) {
-                url = Api.APPROVAL_ACCESS_NOTICE;
-
-            }
-            if (appr_id.equals("2")) {
-                url = Api.APPROVAL_ACCESS_OFFICE;
-
-            }
-            if (appr_id.equals("3")) {
-                url = Api.APPROVAL_ACCESS_OFFWORK;
-            }
-            if (appr_id.equals("4")) {
-                url = Api.APPROVAL_ACCESS_TRIP;
-            }
-            if (appr_id.equals("5")) {
-                url = Api.APPROVAL_ACCESSOVER_TIME;
-            }
-            if (appr_id.equals("6")) {
-                url = Api.APPROVAL_ACCESS_BUSINESS;
-            }
-        }
-        initKjHttp().post(url, params, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e("onSuccess-->" + t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-
-                    if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
-                        showToast("发送成功");
-                        Intent intent = new Intent(WaitApprovalReplyActivity.this, ApprovalListActivity.class);
-                        intent.putExtra("oa_id", oa_id);
-                        intent.putExtra("whichList", 2);
-                        startActivity(intent);
-                        finish();
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                        catchWarningByCode(Api.getCode(jo));
-                    } else {
-                        showToast(Api.getInfo(jo));
-
-                    }
-                } catch (JSONException e) {
-                    LogUtils.e(e);
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                LogUtils.e("onFailure-->" + strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
+        mPresenter.finishReply(isReject, appr_id, oa_id, mEtReply.getText().toString().trim());
     }
 
     @Override
@@ -301,5 +197,35 @@ public class WaitApprovalReplyActivity extends BaseActivity implements View.OnCl
     }
 
 
+    @Override
+    public void replySuccess() {
+        showToast("发送成功");
+        Intent intent = new Intent(WaitApprovalReplyActivity.this, ApprovalListActivity.class);
+        intent.putExtra("oa_id", oa_id);
+        intent.putExtra("whichList", 2);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void replyFailed(int errorNo, String strMsg) {
+        catchWarningByCode(errorNo);
+    }
+
+    @Override
+    public void replyResponseOther(String strMsg) {
+        showToast(strMsg);
+
+    }
+
+    @Override
+    public void requestFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
 }
 

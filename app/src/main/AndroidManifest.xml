@@ -522,7 +522,7 @@
             android:screenOrientation="portrait" />
         <!-- 待我审批 （办公用品）-->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalOfficesSuppliesActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.approval.nouse.WaitApprovalOfficesSuppliesActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <!-- 待我审批 （差旅）-->
@@ -598,7 +598,7 @@
             android:screenOrientation="portrait" />
         <!-- 视频会议详情-->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInfoVideoActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.schedule.nouse.MeetingInfoVideoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <!-- 视频会议-->
@@ -618,7 +618,7 @@
             android:screenOrientation="portrait" />
         <!-- 选择会议室 activity -->
         <activity
-            android:name="com.shanlinjinrong.oa.ui.activity.home.schedule.SelectMeetingRoomActivity"
+            android:name="com.shanlinjinrong.oa.ui.activity.home.schedule.nouse.SelectMeetingRoomActivity"
             android:screenOrientation="portrait" />
         <!--搜索联系人返回结果=联系人详情页-->
         <activity android:name="com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity" />

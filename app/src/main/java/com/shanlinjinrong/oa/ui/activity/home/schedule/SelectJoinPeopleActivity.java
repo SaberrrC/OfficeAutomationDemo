@@ -439,33 +439,6 @@ public class SelectJoinPeopleActivity extends BaseActivity {
 
     }
 
-//
-//    class GetSelectedSearchEmployee implements ExpandableListView.OnChildClickListener {
-//        @Override
-//        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-//                                    int childPosition, long id) {
-//            if (selectedContacts.size() == 0) {
-//                selectedContacts.add(searchGroup.get(groupPosition).getChildItem(childPosition));
-//            } else {
-//                boolean isExist = false;
-//                for (int i = 0; i < selectedContacts.size(); i++) {
-//                    if (selectedContacts.get(i).getUid().equals(
-//                            searchGroup.get(groupPosition).getChildItem(childPosition).getUid())) {
-//                        isExist = true;
-//                        Toast.makeText(SelectJoinPeopleActivity.this, R.string.selectJoinPeopleHint, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//                if (!isExist) {
-//                    selectedContacts.add(searchGroup.get(groupPosition).getChildItem(childPosition));
-//                }
-//            }
-//
-//            qty.setText(selectedContacts.size() + "");
-//
-//            return false;
-//        }
-//    }
-
 
     class GetSelectedEmployee implements ExpandableListView.OnChildClickListener {
         @Override
