@@ -165,7 +165,7 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
     class ItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-            
+
             switch (items.get(i).getItemType()) {
                 case Contacts.DEPARTMENT:
                     if (!pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID).equals(

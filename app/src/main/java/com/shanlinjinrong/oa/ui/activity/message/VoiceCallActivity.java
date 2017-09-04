@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -42,10 +43,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.Gson;
+import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessageBody;
+import com.hyphenate.chat.adapter.message.EMACmdMessageBody;
 import com.hyphenate.easeui.adapter.EaseConversationAdapter;
+import com.hyphenate.easeui.model.UserInfoDetailsBean;
 import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.exceptions.EMNoActiveCallException;
 import com.hyphenate.exceptions.HyphenateException;
@@ -55,8 +62,11 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -72,12 +82,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     private SimpleDraweeView mSwingCard;
     private boolean isMuteState;
     private boolean isHandsfreeState;
-    TextView nickTextView;
+    private TextView nickTextView;
     public String sideInfo;
     private TextView callStateTextView;
     private boolean endCallTriggerByMe = false;
     private Chronometer chronometer;
-    String st1;
+    private String st1;
     private LinearLayout voiceContronlLayout;
     private TextView netwrokStatusVeiw;
     private boolean monitor = false;
@@ -120,14 +130,25 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         muteImage.setOnClickListener(this);
         handsFreeImage.setOnClickListener(this);
 
+        //TODO 接收上个界面的用户信息
+        username = getIntent().getStringExtra("username");
+        send_CODE = getIntent().getStringExtra("CODE");
+        send_phone = getIntent().getStringExtra("phone");
+        send_sex = getIntent().getStringExtra("sex");
+        send_post_title = getIntent().getStringExtra("post_name");
+        send_username = getIntent().getStringExtra("nike");
+        send_portrait = getIntent().getStringExtra("portrait");
+        send_email = getIntent().getStringExtra("email");
+        send_department_name = getIntent().getStringExtra("department_name");
+
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         addCallStateListener();
         msgid = UUID.randomUUID().toString();
-        username = getIntent().getStringExtra("username");
-//        readUserInfoDetailsMessage();
+
+        //readUserInfoDetailsMessage();
         toUsername = getIntent().getStringExtra("toUsername");
         nike = getIntent().getStringExtra("nike");
         portrait = getIntent().getStringExtra("portrait");
@@ -215,32 +236,42 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-    UserInfoSelfDetailsBean bean;
+
+    JSONObject sendUserInfo_self;
+    JSONObject sendUserInfo;
+
 
     @Override
     protected void onResume() {
         super.onResume();
         try {
-            String userName = null;
-            String pic = null;
             //TODO 语音携带体
             String callExt = EMClient.getInstance().callManager().getCurrentCallSession().getExt();
+            Log.d("callExt", "实时语音携带的消息：" + callExt);
             for (int i = 0; i < callExt.length(); i++) {
                 char charAt = callExt.charAt(i);
                 String string = new String(String.valueOf(charAt));
                 if (string.equals("|")) {
-                    userName = callExt.substring(0, i);
-                    pic = callExt.substring(i + 1, callExt.length());
+                    userInfo_self = callExt.substring(0, i);
+                    userInfo = callExt.substring(i + 1, callExt.length());
                     break;
                 }
             }
-            EaseConversationAdapter.requestNamePic(userName,pic);
 
-            if (!TextUtils.isEmpty(userName))
-                nickTextView.setText(userName);
-            if (!TextUtils.isEmpty(pic))
+            sendUserInfo_self = new JSONObject(userInfo_self);
+            sendUserInfo = new JSONObject(userInfo);
+
+            userInfoSelfBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
+            userInfoBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
+
+            //TODO 消息 展示
+            EaseConversationAdapter.requestNamePic(userInfoSelfBean.username_self, userInfoSelfBean.portrait_self);
+
+            if (!TextUtils.isEmpty(userInfoSelfBean.username_self))
+                nickTextView.setText(userInfoSelfBean.username_self);
+            if (!TextUtils.isEmpty(userInfoSelfBean.portrait_self))
                 Glide.with(AppManager.mContext)
-                        .load(pic)
+                        .load(userInfoSelfBean.portrait_self)
                         .error(R.drawable.ease_default_avatar)
                         .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                         .placeholder(R.drawable.ease_default_avatar)
@@ -265,8 +296,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 switch (callState) {
 
                     case CONNECTING:  // 正在连接对方
+                        isThroughTo = false;
                         runOnUiThread(new Runnable() {
-
                             @Override
                             public void run() {
                                 callStateTextView.setText(st1);
@@ -274,6 +305,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                         });
                         break;
                     case CONNECTED: // 双方已经建立连接
+                        isThroughTo = false;
                         //获取扩展内容
                         runOnUiThread(new Runnable() {
                             @Override
@@ -285,6 +317,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                         break;
 
                     case ACCEPTED:// 电话接通成功
+                        isThroughTo = true;
                         handler.removeCallbacks(timeoutHangup);
                         runOnUiThread(new Runnable() {
 
@@ -345,6 +378,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                         });
                         break;
                     case DISCONNECTED: // 电话断了
+                        isThroughTo = false;
                         handler.removeCallbacks(timeoutHangup);
                         @SuppressWarnings("UnnecessaryLocalVariable") final CallError fError = error;
                         runOnUiThread(new Runnable() {
@@ -471,20 +505,18 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 refuseBtn.setEnabled(false);
                 handler.sendEmptyMessage(MSG_CALL_REJECT);
                 //TODO 拒接
-//                String s = AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE);
-//                if (isThroughTo) {
-//
-//                } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
-//                    readUserInfoDetailsMessage();
-//                    mMessage = EMMessage.createTxtSendMessage("已拒接", username);
-//                    sendUserInfoDetailsMessage(mMessage);
-//                    //发送消息
-//                    EMClient.getInstance().chatManager().sendMessage(mMessage);
-//                    isThroughTo = false;
-//                }
+                String s = AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE);
+                if (isThroughTo) {
 
+                } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
+                    mMessage = EMMessage.createTxtSendMessage("已拒接", username);
+                    readUserInfoDetailsMessage();
+                    sendUserInfoDetailsMessage(mMessage);
+                    //发送消息
+                    EMClient.getInstance().chatManager().sendMessage(mMessage);
+                    isThroughTo = false;
+                }
                 break;
-
             case R.id.btn_answer_call:
                 answerBtn.setEnabled(false);
                 closeSpeakerOn();
@@ -494,10 +526,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 voiceContronlLayout.setVisibility(View.VISIBLE);
                 handler.sendEmptyMessage(MSG_CALL_ANSWER);
                 //TODO 接通
-//                isThroughTo = true;
-
+                isThroughTo = true;
                 break;
-
             case R.id.btn_hangup_call:
                 hangupBtn.setEnabled(false);
                 chronometer.stop();
@@ -505,22 +535,22 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 callStateTextView.setText(getResources().getString(R.string.hanging_up));
                 handler.sendEmptyMessage(MSG_CALL_END);
                 //TODO 挂断
-//                if (isThroughTo) {
-//                    readUserInfoDetailsMessage();
-//                    mMessage = EMMessage.createTxtSendMessage("通话时长:" + chronometer.getText().toString(), username);
-//                    sendUserInfoDetailsMessage(mMessage);
-//                    //发送消息
-//                    EMClient.getInstance().chatManager().sendMessage(mMessage);
-//                } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
-//                    readUserInfoDetailsMessage();
-//                    mMessage = EMMessage.createTxtSendMessage("已取消", username);
-//                    sendUserInfoDetailsMessage(mMessage);
-//                    //发送消息
-//                    EMClient.getInstance().chatManager().sendMessage(mMessage);
-//                }
-
+                if (isThroughTo) {
+                    mMessage = EMMessage.createTxtSendMessage("通话时长:" + chronometer.getText().toString(), username);
+                    readUserInfoDetailsMessage();
+                    sendUserInfoDetailsMessage(mMessage);
+                    isThroughTo = false;
+                    //发送消息
+                    EMClient.getInstance().chatManager().sendMessage(mMessage);
+                } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
+                    mMessage = EMMessage.createTxtSendMessage("已取消", username);
+                    readUserInfoDetailsMessage();
+                    sendUserInfoDetailsMessage(mMessage);
+                    isThroughTo = false;
+                    //发送消息
+                    EMClient.getInstance().chatManager().sendMessage(mMessage);
+                }
                 break;
-
             case R.id.iv_mute:
                 if (isMuteState) {
                     muteImage.setImageResource(R.drawable.em_icon_mute_normal);
@@ -605,75 +635,88 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     }
 
 
-//    private void readUserInfoDetailsMessage() {
-//        //TODO TEXT 携带消息
-//        JSONObject object_self = new JSONObject();
-//        JSONObject object = new JSONObject();
-//        try {
-////            userInfo_self = getIntent().getStringExtra("userInfo_self");
-////            userInfo = getIntent().getStringExtra("userInfo");
-//
-//            //   if (userInfo_self.equals("")) {
-//            object_self.put("CODE_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
-//            object_self.put("phone_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
-//            object_self.put("sex_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
-//            object_self.put("post_title_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
-//            object_self.put("username_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
-//            object_self.put("portrait_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
-//            object_self.put("email_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
-//            object_self.put("department_name_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
-//            userInfo_self = object_self.toString();
-//            //   }
-//            //  if (userInfo.equals("")) {
-//            object.put("CODE", getIntent().getStringExtra("CODE"));
-//            object.put("phone", getIntent().getStringExtra("phone"));
-//            object.put("sex", getIntent().getStringExtra("sex"));
-//            object.put("post_title", getIntent().getStringExtra("post_name"));
-//            object.put("username", getIntent().getStringExtra("nike"));
-//            object.put("portrait", getIntent().getStringExtra("portrait"));
-//            object.put("email", getIntent().getStringExtra("email"));
-//            object.put("department_name", getIntent().getStringExtra("department_name"));
-//            userInfo = object.toString();
-//            //   }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void readUserInfoDetailsMessage() {
+        try {
+            //TODO TEXT 携带消息
+            JSONObject object_self = new JSONObject();
+            JSONObject object = new JSONObject();
+            if (userInfo_self == null) {
+                userInfo_self = "";
+            }
 
-    JSONObject sendUserInfo_self;
-    JSONObject sendUserInfo;
+            if (userInfo == null) {
+                userInfo = "";
+            }
 
-//    private void sendUserInfoDetailsMessage(EMMessage message) {
-//        String from = message.getFrom();
-//        //  userInfo_self = message.getStringAttribute("userInfo_self", "");
-//        //   userInfo = message.getStringAttribute("userInfo", "");
-//        //UserInfoSelfDetailsBean bean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
-//        try {
-//            String newUserInfo_self = null;
-//            String newUserInfo = null;
-//            if (!from.equals("sl_" + bean.CODE_self)) {
-//                newUserInfo_self = userInfo_self.replaceAll("_self", "");
-//                newUserInfo = userInfo.replace("phone", "phone_self");
-//                newUserInfo = newUserInfo.replace("CODE", "CODE_self");
-//                newUserInfo = newUserInfo.replace("sex", "sex_self");
-//                newUserInfo = newUserInfo.replace("post_title", "post_title_self");
-//                newUserInfo = newUserInfo.replace("username", "username_self");
-//                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
-//                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
-//                newUserInfo = newUserInfo.replace("email", "email_self");
-//                newUserInfo = newUserInfo.replace("department_name", "department_name_self");
-//                sendUserInfo_self = new JSONObject(newUserInfo_self);
-//                sendUserInfo = new JSONObject(newUserInfo);
-//                message.setAttribute("userInfo_self", sendUserInfo);
-//                message.setAttribute("userInfo", sendUserInfo_self);
-//            } else {
-//                sendUserInfo_self = new JSONObject(userInfo_self);
-//                sendUserInfo = new JSONObject(userInfo);
-//                message.setAttribute("userInfo_self", sendUserInfo_self);
-//                message.setAttribute("userInfo", sendUserInfo);
-//            }
-//        } catch (Throwable e) {
-//            e.printStackTrace();
-//        }
-//    }
+            if (userInfo_self.equals("")) {
+                object_self.put("CODE_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
+                object_self.put("phone_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
+                object_self.put("sex_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
+                object_self.put("post_title_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
+                object_self.put("username_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
+                object_self.put("portrait_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
+                object_self.put("email_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
+                object_self.put("department_name_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
+
+                userInfo_self = object_self.toString();
+            }
+            if (userInfo.equals("")) {
+                object.put("CODE", getIntent().getStringExtra("CODE"));
+                object.put("phone", getIntent().getStringExtra("phone"));
+                object.put("sex", getIntent().getStringExtra("sex"));
+                object.put("post_title", getIntent().getStringExtra("post_name"));
+                object.put("username", getIntent().getStringExtra("nike"));
+                object.put("portrait", getIntent().getStringExtra("portrait"));
+                object.put("email", getIntent().getStringExtra("email"));
+                object.put("department_name", getIntent().getStringExtra("department_name"));
+                userInfo = object.toString();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    JSONObject sendJson_self;
+    JSONObject sendJson;
+
+    private void sendUserInfoDetailsMessage(EMMessage message) {
+        String from = message.getFrom();
+        //  userInfo_self = message.getStringAttribute("userInfo_self", "");
+        //   userInfo = message.getStringAttribute("userInfo", "");
+        //UserInfoSelfDetailsBean bean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
+        try {
+            String newUserInfo_self = null;
+            String newUserInfo = null;
+            if (userInfoSelfBean == null) {
+                sendJson_self = new JSONObject(userInfo_self);
+                sendJson = new JSONObject(userInfo);
+                mMessage.setAttribute("userInfo_self", sendJson_self);
+                mMessage.setAttribute("userInfo", sendJson);
+                return;
+            }
+            if (!from.equals("sl_" + userInfoSelfBean.CODE_self)) {
+                newUserInfo_self = userInfo_self.replaceAll("_self", "");
+                newUserInfo = userInfo.replace("phone", "phone_self");
+                newUserInfo = newUserInfo.replace("CODE", "CODE_self");
+                newUserInfo = newUserInfo.replace("sex", "sex_self");
+                newUserInfo = newUserInfo.replace("post_title", "post_title_self");
+                newUserInfo = newUserInfo.replace("username", "username_self");
+                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
+                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
+                newUserInfo = newUserInfo.replace("email", "email_self");
+                newUserInfo = newUserInfo.replace("department_name", "department_name_self");
+                sendJson_self = new JSONObject(newUserInfo_self);
+                sendJson = new JSONObject(newUserInfo);
+                mMessage.setAttribute("userInfo_self", sendJson);
+                mMessage.setAttribute("userInfo", sendJson_self);
+            } else {
+                sendJson_self = new JSONObject(userInfo_self);
+                sendJson = new JSONObject(userInfo);
+                mMessage.setAttribute("userInfo_self", sendJson_self);
+                mMessage.setAttribute("userInfo", sendJson);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 }

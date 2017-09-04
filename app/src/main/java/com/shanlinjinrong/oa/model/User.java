@@ -54,52 +54,36 @@ public class User implements MultiItemEntity,Serializable {
         return yx_token;
     }
 
-    public void setYx_token(String yx_token) {
-        this.yx_token = yx_token;
-    }
-
     public String getIs_initial_pwd() {
         return is_initial_pwd;
-    }
-
-    public void setIs_initial_pwd(String is_initial_pwd) {
-        this.is_initial_pwd = is_initial_pwd;
     }
 
     public String getUid() {
         return uid;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
     public String getToken() {
         return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPortraits() {
         return "http://"+portraits;
     }
 
-    public void setPortraits(String portraits) {
-        this.portraits = portraits;
-    }
-
     public String getUsername() {
         return username;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setUsername(String username) {
@@ -118,12 +102,24 @@ public class User implements MultiItemEntity,Serializable {
         return phone;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setIs_initial_pwd(String is_initial_pwd) {
+        this.is_initial_pwd = is_initial_pwd;
+    }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
     public String getIsshow() {
         return isshow;
+    }
+
+    public void setPortraits(String portraits) {
+        this.portraits = portraits;
     }
 
     public void setIsshow(String isshow) {
@@ -136,6 +132,10 @@ public class User implements MultiItemEntity,Serializable {
 
     public void setHiredate(String hiredate) {
         this.hiredate = hiredate;
+    }
+
+    public void setYx_token(String yx_token) {
+        this.yx_token = yx_token;
     }
 
     public String getCompanyName() {

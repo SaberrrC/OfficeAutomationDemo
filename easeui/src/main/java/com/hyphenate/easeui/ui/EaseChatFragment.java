@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -72,6 +73,9 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -629,7 +633,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     @Override
     public void onCmdMessageReceived(List<EMMessage> messages) {
-
     }
 
     @Override
@@ -744,8 +747,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         UserInfoSelfDetailsBean bean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
         String newUserInfo_self = null;
         String newUserInfo = null;
+        try {
         if (!from.equals("sl_" + bean.CODE_self)) {
-            try {
                 newUserInfo_self = userInfo_self.replaceAll("_self", "");
                 newUserInfo = userInfo.replace("phone", "phone_self");
                 newUserInfo = newUserInfo.replace("CODE", "CODE_self");
@@ -760,18 +763,15 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 sendUserInfo = new JSONObject(newUserInfo);
                 message.setAttribute("userInfo_self", sendUserInfo);
                 message.setAttribute("userInfo", sendUserInfo_self);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+
         } else {
-            try {
                 sendUserInfo_self = new JSONObject(userInfo_self);
                 sendUserInfo = new JSONObject(userInfo);
                 message.setAttribute("userInfo_self", sendUserInfo_self);
                 message.setAttribute("userInfo", sendUserInfo);
-            } catch (Throwable e) {
-                e.printStackTrace();
             }
+        } catch (Throwable e) {
+                e.printStackTrace();
         }
     }
 
@@ -782,6 +782,16 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         try {
             userInfo_self = getArguments().getString("userInfo_self", "");
             userInfo = getArguments().getString("userInfo", "");
+            try {
+                if (userInfo_self.equals("") && mEmMessage.getStringAttribute("userInfo_self", "") != null) {
+                    userInfo_self = mEmMessage.getStringAttribute("userInfo_self", "");
+                }
+                if (userInfo.equals("") && mEmMessage.getStringAttribute("userInfo", "") != null) {
+                    userInfo = mEmMessage.getStringAttribute("userInfo", "");
+                }
+            }catch (Throwable e1){
+                e1.printStackTrace();
+            }
             String user_code = getArguments().getString("user_code", "-");
             String to_user_code = getArguments().getString("to_user_code", "-");
 

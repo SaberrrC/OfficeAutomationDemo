@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.telecom.Call;
 import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
@@ -19,9 +20,13 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.model.UserInfoDetailsBean;
+import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.util.NetUtils;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.BadgeUtil;
 
@@ -53,6 +58,11 @@ public class CallActivity extends BaseActivity {
     protected EMCallStateChangeListener callStateListener;
     protected boolean isAnswered = false;
     protected int streamID = -1;
+    protected String userInfo_self;
+    protected String userInfo;
+    protected UserInfoSelfDetailsBean userInfoSelfBean;
+    protected UserInfoDetailsBean userInfoBean;
+
 
     EMCallManager.EMCallPushProvider pushProvider;
 
@@ -65,58 +75,6 @@ public class CallActivity extends BaseActivity {
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-
-        pushProvider = new EMCallManager.EMCallPushProvider() {
-
-            void updateMessageText(final EMMessage oldMsg, final String to) {
-                // update local message text
-                EMConversation conv = EMClient.getInstance().chatManager().getConversation(oldMsg.getTo());
-                conv.removeMessage(oldMsg.getMsgId());
-            }
-
-            @Override
-            public void onRemoteOffline(final String to) {
-                BadgeUtil.setBadgeCount(CallActivity.this, 1, R.drawable.ring_red);
-                //this function should exposed & move to Demo
-                EMLog.d(TAG, "onRemoteOffline, to:" + to);
-
-                final EMMessage message = EMMessage.createTxtSendMessage("有人呼叫你,开启 APP 接听吧", to);
-                // set the user-defined extension field
-                message.setAttribute("em_apns_ext", true);
-                message.setAttribute("em_force_notification", true);
-                message.setAttribute("is_voice_call", callType == 0 ? true : false);
-                JSONObject extObj = new JSONObject();
-                try {
-                    extObj.put("em_push_title", "有人呼叫你，开启 APP 接听吧");
-                    extObj.put("extern", "定义推送扩展内容");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                message.setAttribute("em_apns_ext", extObj);
-
-                message.setMessageStatusCallback(new EMCallBack() {
-
-                    @Override
-                    public void onSuccess() {
-                        EMLog.d(TAG, "onRemoteOffline success");
-                        updateMessageText(message, to);
-                    }
-
-                    @Override
-                    public void onError(int code, String error) {
-                        EMLog.d(TAG, "onRemoteOffline Error");
-                        updateMessageText(message, to);
-                    }
-
-                    @Override
-                    public void onProgress(int progress, String status) {
-                    }
-                });
-                // send messages
-                EMClient.getInstance().chatManager().sendMessage(message);
-            }
-        };
-        EMClient.getInstance().callManager().setPushProvider(pushProvider);
     }
 
     @Override
@@ -162,6 +120,18 @@ public class CallActivity extends BaseActivity {
         callHandlerThread.start();
     }
 
+
+    protected String send_CODE;
+    protected String send_phone;
+    protected String send_sex;
+    protected String send_post_title;
+    protected String send_username;
+    protected String send_portrait;
+    protected String send_email;
+    protected String send_department_name;
+    protected boolean isMakeVoiceCall;
+
+
     protected Handler handler = new Handler(callHandlerThread.getLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -173,10 +143,64 @@ public class CallActivity extends BaseActivity {
                         if (msg.what == MSG_CALL_MAKE_VIDEO) {
                             EMClient.getInstance().callManager().makeVideoCall(username);
                         } else {
-                            String nickName = FriendsInfoCacheSvc.getInstance(CallActivity.this).getNickName("SL_"+myAccount);
+                            String nickName = FriendsInfoCacheSvc.getInstance(CallActivity.this).getNickName("SL_" + myAccount);
                             String portrait = FriendsInfoCacheSvc.getInstance(CallActivity.this).getPortrait("SL_" + myAccount);
 
-                            EMClient.getInstance().callManager().makeVoiceCall(username, nickName+"|"+portrait);
+                            JSONObject json_self = new JSONObject();
+                            JSONObject json = new JSONObject();
+
+                            //TODO 自己的信息
+                            json_self.put("CODE_self", AppConfig.getAppConfig(CallActivity.this).get(AppConfig.PREF_KEY_CODE));
+                            json_self.put("phone_self", AppConfig.getAppConfig(CallActivity.this).get(AppConfig.PREF_KEY_PHONE));
+                            json_self.put("sex_self", AppConfig.getAppConfig(CallActivity.this).get(AppConfig.PREF_KEY_SEX));
+                            json_self.put("post_title_self", AppConfig.getAppConfig(CallActivity.this).get(AppConfig.PREF_KEY_POST_NAME));
+                            json_self.put("username_self", AppConfig.getAppConfig(CallActivity.this).get(AppConfig.PREF_KEY_USERNAME));
+                            json_self.put("portrait_self", AppConfig.getAppConfig(CallActivity.this).get(AppConfig.PREF_KEY_PORTRAITS));
+                            json_self.put("email_self", AppConfig.getAppConfig(CallActivity.this).get(AppConfig.PREF_KEY_USER_EMAIL));
+                            json_self.put("department_name_self", AppConfig.getAppConfig(CallActivity.this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
+
+                            //TODO 对方的信息
+                            if (userInfoBean != null) {
+                                if (send_CODE == null) {
+                                    send_CODE = userInfoBean.CODE;
+                                }
+                                if (send_phone == null) {
+                                    send_phone = userInfoBean.phone;
+                                }
+                                if (send_sex == null) {
+                                    send_sex = userInfoBean.sex;
+                                }
+                                if (send_post_title == null) {
+                                    send_post_title = userInfoBean.post_title;
+                                }
+                                if (send_username == null) {
+                                    send_username = userInfoBean.username;
+                                }
+                                if (send_portrait == null) {
+                                    send_portrait = userInfoBean.portrait;
+                                }
+                                if (send_email == null) {
+                                    send_email = userInfoBean.email;
+                                }
+                                if (send_department_name == null) {
+                                    send_department_name = userInfoBean.department_name;
+                                }
+                            }
+                            json.put("CODE", send_CODE);
+                            json.put("phone", send_phone);
+                            json.put("sex", send_sex);
+                            json.put("post_title", send_post_title);
+                            json.put("username", send_username);
+                            json.put("portrait", send_portrait);
+                            json.put("email", send_email);
+                            json.put("department_name", send_department_name);
+
+                             userInfo_self = json_self.toString();
+                             userInfo = json.toString();
+
+                            //发起实时语音通讯
+                            EMClient.getInstance().callManager().makeVoiceCall(username, userInfo_self + "|" + userInfo);
+                            isMakeVoiceCall = true;
                         }
                     } catch (final EMServiceNotReadyException e) {
                         e.printStackTrace();
@@ -200,6 +224,8 @@ public class CallActivity extends BaseActivity {
                                 finish();
                             }
                         });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                     break;
                 case MSG_CALL_ANSWER:

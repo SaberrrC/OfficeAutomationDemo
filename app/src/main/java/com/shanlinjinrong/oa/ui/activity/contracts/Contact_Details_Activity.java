@@ -172,7 +172,7 @@ public class Contact_Details_Activity extends BaseActivity {
             e.printStackTrace();
         }
         try {
-            if (userCode.equals("sl_"+userInfoDetailsBean.CODE)) {
+            if (userCode.equals("sl_" + userInfoDetailsBean.CODE)) {
                 //判断是否有权限打电话
                 if (userCode.equals("sl_" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE))) {
                     Toast.makeText(getApplication(), "不能给自己打电话", Toast.LENGTH_SHORT);
@@ -252,9 +252,15 @@ public class Contact_Details_Activity extends BaseActivity {
                                 return;
                             }
                             startActivity(new Intent(mContext, VoiceCallActivity.class)
-                                    .putExtra("username", "sl_"+userInfoDetailsBean.CODE)
+                                    .putExtra("username", "sl_" + userInfoDetailsBean.CODE)
+                                    .putExtra("CODE", userInfoDetailsBean.CODE)
+                                    .putExtra("phone", userInfoDetailsBean.phone)
+                                    .putExtra("sex", userInfoDetailsBean.sex)
+                                    .putExtra("post_name", userInfoDetailsBean.post_title)
                                     .putExtra("nike", userInfoDetailsBean.username)
                                     .putExtra("portrait", userInfoDetailsBean.portrait)
+                                    .putExtra("email", userInfoDetailsBean.email)
+                                    .putExtra("department_name", userInfoDetailsBean.department_name)
                                     .putExtra("isComingCall", false));
                         }
                     });
@@ -339,10 +345,20 @@ public class Contact_Details_Activity extends BaseActivity {
                                 return;
                             }
                             startActivity(new Intent(mContext, VoiceCallActivity.class)
-                                    .putExtra("username",  "sl_"+userInfoSelfDetailsBean.CODE_self)
-                                    .putExtra("toUsername",  "sl_"+userInfoDetailsBean.CODE)
+//                                    .putExtra("username",  "sl_"+userInfoSelfDetailsBean.CODE_self)
+//                                    .putExtra("toUsername",  "sl_"+userInfoDetailsBean.CODE)
+//                                    .putExtra("nike", userInfoSelfDetailsBean.username_self)
+//                                    .putExtra("portrait", userInfoSelfDetailsBean.portrait_self)
+//                                    .putExtra("isComingCall", false));
+                                    .putExtra("username", "sl_" + userInfoSelfDetailsBean.CODE_self)
+                                    .putExtra("CODE", userInfoSelfDetailsBean.CODE_self)
+                                    .putExtra("phone", userInfoSelfDetailsBean.phone_self)
+                                    .putExtra("sex", userInfoSelfDetailsBean.sex_self)
+                                    .putExtra("post_name", userInfoSelfDetailsBean.post_title_self)
                                     .putExtra("nike", userInfoSelfDetailsBean.username_self)
                                     .putExtra("portrait", userInfoSelfDetailsBean.portrait_self)
+                                    .putExtra("email", userInfoSelfDetailsBean.email_self)
+                                    .putExtra("department_name", userInfoSelfDetailsBean.department_name_self)
                                     .putExtra("isComingCall", false));
                         }
                     });
@@ -493,6 +509,7 @@ public class Contact_Details_Activity extends BaseActivity {
                             .putExtra("nike", user.getUsername())
                             .putExtra("portrait", user.getPortraits())
                             .putExtra("isComingCall", false)
+                            .putExtra("CODE", user.getCode())
                             .putExtra("u_id", user.getUid())
                             .putExtra("department_name", user.getDepartmentName())
                             .putExtra("post_name", user.getPostName())

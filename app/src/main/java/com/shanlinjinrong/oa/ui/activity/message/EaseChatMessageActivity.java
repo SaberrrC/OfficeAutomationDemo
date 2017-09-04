@@ -190,7 +190,13 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
                 //final UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
                 startActivity(new Intent(this, VoiceCallActivity.class)
                         .putExtra("nike", userInfoDetailsBean.username)
+                        .putExtra("CODE", userInfoDetailsBean.CODE)
                         .putExtra("portrait", userInfoDetailsBean.portrait)
+                        .putExtra("post_name", userInfoDetailsBean.post_title)
+                        .putExtra("sex", userInfoDetailsBean.sex)
+                        .putExtra("phone", userInfoDetailsBean.phone)
+                        .putExtra("email", userInfoDetailsBean.email)
+                        .putExtra("department_name", userInfoDetailsBean.department_name)
                         .putExtra("username", toChatUsername)
                         .putExtra("isomingCall", false));
             } else {
