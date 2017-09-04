@@ -34,4 +34,11 @@
         <attr name="titleTextSize" format="dimension" />
 
     </declare-styleable>
+
+
+    <!--圆形imageview-->
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
 </resources>

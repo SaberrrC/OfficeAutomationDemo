@@ -23,7 +23,7 @@ import com.shanlinjinrong.oa.utils.LogUtils;
  * Description:讯飞工具类
  */
 public class IflytekUtil {
-    Context mContext;
+    private Context mContext;
     private RecognizerDialog iatDialog;
     private Toast toast;
     private EditText mEtContent;

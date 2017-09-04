@@ -159,16 +159,12 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     private QBadgeView qBadgeView;
     private AlertDialog dialog;
     TabCommunicationFragment tabCommunicationFragment;
-
     private AbortableFuture<LoginInfo> loginRequest;
-
-    public static MainController instance = null;
     private EaseUI easeUI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = this;
         setContentView(R.layout.activity_main_controller);
         ButterKnife.bind(this);
         setTranslucentStatus(this);

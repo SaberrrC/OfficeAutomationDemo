@@ -37,7 +37,6 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
 
@@ -168,12 +167,12 @@ public class BaseActivity extends AppCompatActivity {
 
                 AppConfig.getAppConfig(this).clearLoginInfo();
                 startActivity(new Intent(this, LoginActivity.class));
-                MainController.instance.finish();
+//                MainController.instance.finish();
             } catch (Exception e) {
                 LogUtils.e("退出环信抛出异常" + e.toString());
                 AppConfig.getAppConfig(this).clearLoginInfo();
                 startActivity(new Intent(this, LoginActivity.class));
-                MainController.instance.finish();
+//                MainController.instance.finish();
             }
         }
         startActivity(new Intent(this, LoginActivity.class));

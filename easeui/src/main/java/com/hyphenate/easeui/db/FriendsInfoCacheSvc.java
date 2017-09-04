@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.lang.ref.WeakReference;
+
 /**
  * 作者:王凤旭
  * 日期:2017/8/4
@@ -18,8 +20,10 @@ public class FriendsInfoCacheSvc {
     private static FriendsInfoCacheSvc instance = null;
     public static String TABLE_NAME = "t_friend";
 
+
     private FriendsInfoCacheSvc(Context context) {
-        mDB = EaseUISqliteHelper.getInstance(context).getWritableDatabase();
+        WeakReference<Context> wr = new WeakReference<>(context); //单例中弱引用context对象，避免造成内存泄露   modify by lvdinghao 2017/9/4
+        mDB = EaseUISqliteHelper.getInstance(wr.get()).getWritableDatabase();
     }
 
     public static FriendsInfoCacheSvc getInstance(Context context) {
