@@ -29,7 +29,6 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.kymjs.kjframe.KJHttp;
@@ -156,12 +155,12 @@ public abstract class BaseFragment extends Fragment {
 
                 AppConfig.getAppConfig(getContext()).clearLoginInfo();
                 startActivity(new Intent(getContext(), LoginActivity.class));
-                MainController.instance.finish();
+//                MainController.instance.finish();
             } catch (Exception e) {
                 LogUtils.e("退出环信抛出异常" + e.toString());
                 AppConfig.getAppConfig(getContext()).clearLoginInfo();
                 startActivity(new Intent(getContext(), LoginActivity.class));
-                MainController.instance.finish();
+//                MainController.instance.finish();
             }
         }
         startActivity(new Intent(getActivity(), LoginActivity.class));

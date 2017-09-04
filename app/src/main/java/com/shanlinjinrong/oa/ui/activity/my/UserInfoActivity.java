@@ -37,7 +37,6 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.my.contract.UserInfoActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.UserInfoActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -437,13 +436,13 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
 
                     AppConfig.getAppConfig(UserInfoActivity.this).clearLoginInfo();
                     startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
-                    MainController.instance.finish();
+//                    MainController.instance.finish();
                     finish();
                 } catch (Exception e) {
                     LogUtils.e("退出环信抛出异常" + e.toString());
                     AppConfig.getAppConfig(UserInfoActivity.this).clearLoginInfo();
                     startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
-                    MainController.instance.finish();
+//                    MainController.instance.finish();
                     finish();
                 }
             }

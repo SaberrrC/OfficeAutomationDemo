@@ -37,9 +37,9 @@ import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.contracts.ContactsActivity;
+import com.shanlinjinrong.oa.ui.base.BaseHttpFragment;
 import com.shanlinjinrong.oa.ui.fragment.adapter.SearchUserResultAdapter;
 import com.shanlinjinrong.oa.ui.fragment.adapter.TabContactsAdapter;
-import com.shanlinjinrong.oa.ui.base.MyBaseFragment;
 import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
 import com.shanlinjinrong.oa.ui.fragment.presenter.TabContractsFragmentPresenter;
 import com.shanlinjinrong.oa.views.ClearEditText;
@@ -62,7 +62,7 @@ import io.reactivex.schedulers.Schedulers;
  * <h3>Description: 名片页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class TabContactsFragment extends MyBaseFragment<TabContractsFragmentPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabContractsFragmentContract.View {
+public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabContractsFragmentContract.View {
 
     @Bind(R.id.title)
     TextView title;
