@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -22,8 +20,8 @@ import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.contracts.contract.ContractActivityContract;
 import com.shanlinjinrong.oa.ui.activity.contracts.presenter.ContractActivityPresenter;
-import com.shanlinjinrong.oa.ui.fragment.adapter.TabContactsAdapter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.ui.fragment.adapter.TabContactsAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,8 +37,6 @@ import butterknife.OnClick;
  * <b>Notes:</b> Created by KevinMeng on 2016/9/22.<br />
  */
 public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter> implements ContractActivityContract.View {
-
-
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
     @Bind(R.id.btn_back)
@@ -102,8 +98,10 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
         map.put(PAGE_MAP_TITLE, getIntent().getStringExtra(PAGE_MAP_TITLE));
         pageMap.add(map);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new TabContactsAdapter(items);
+        recyclerView.setAdapter(adapter);
         //在初始化是为RecyclerView添加点击时间，这样可以防止重复点击问题
-      //  recyclerView.addOnItemTouchListener(new ItemClick());
+        recyclerView.addOnItemTouchListener(new OnItemClick());
     }
 
     /**
@@ -123,9 +121,7 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
             items.clear();
         }
         items = contacts;
-        adapter = new TabContactsAdapter(items);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(new ItemClick());
+        adapter.setNewData(items);
     }
 
     @Override
@@ -162,7 +158,8 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
         catchWarningByCode(code);
     }
 
-    class ItemClick extends OnItemClickListener {
+
+    class OnItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
 
@@ -181,7 +178,7 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
             }
         }
     }
-
+    
     /**
      * 获取页面参数
      *
@@ -204,128 +201,6 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
         intent.putExtras(bundle);
         startActivity(intent);
     }
-
-//    @SuppressLint("SetTextI18n")
-//    private void showContactsInfo(final Contacts contacts) {
-//
-//        LayoutInflater factory = LayoutInflater.from(this);
-//
-//        @SuppressLint("InflateParams")
-//        View view = factory.inflate(R.layout.custom_dialog, null);
-//
-//        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams
-//                .WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
-//        popupWindow.setOutsideTouchable(true);
-//        popupWindow.setFocusable(true);
-//        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-//        TextView name = (TextView) view.findViewById(R.id.name);
-//        name.setText(contacts.getUsername());
-//        final TextView phoneNumber = (TextView) view.findViewById(R.id.tv_phone_number);
-//        LinearLayout btnCall = (LinearLayout) view.findViewById(R.id.ll_phone_layout);
-//        Button btnVoiceCall = (Button) view.findViewById(R.id.btn_voice_call);
-//        Button btnSendMsg = (Button) view.findViewById(R.id.btn_send_msg);
-//        View partLine =view.findViewById(R.id.partLine);
-//        String isshow = contacts.getIsshow();
-//
-//
-//        if (isshow.equals("1")) {
-//            //显示电话
-//            phoneNumber.setText(contacts.getPhone());
-//        } else {
-//            phoneNumber.setText("");
-//            btnCall.setVisibility(View.GONE);
-//            partLine.setVisibility(View.INVISIBLE);
-//        }
-//
-//
-//        SimpleDraweeView portrait = (SimpleDraweeView) view.findViewById(R.id.user_portrait);
-//        portrait.setImageURI(contacts.getPortraits());
-//
-//
-//        btnVoiceCall.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                boolean availabl = Utils.isNetworkAvailabl(ContactsActivity.this);
-//                if (!availabl) {
-//                    showToast("网络不稳定，请重试");
-//                    return;
-//                }
-//
-//                addOrUpdateFriendInfo(contacts);
-//
-//                    startActivity(new Intent(ContactsActivity.this, VoiceCallActivity.class)
-//                            .putExtra("username", Constants.CID + "_" + contacts.getCode())
-//                            .putExtra("nike", contacts.getUsername())
-//                            .putExtra("portrait", contacts.getPortraits())
-//                            .putExtra("isComingCall", false));
-//                popupWindow.dismiss();
-//                popupWindow = null;
-//            }
-//        });
-//        btnSendMsg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                boolean availabl = Utils.isNetworkAvailabl(ContactsActivity.this);
-//                if (!availabl) {
-//                    showToast("网络不稳定，请重试");
-//                    return;
-//                }
-//                addOrUpdateFriendInfo(contacts);
-//
-//                    startActivity(new Intent(ContactsActivity.this, EaseChatMessageActivity.class)
-//                            .putExtra("usernike", contacts.getUsername())
-//                            .putExtra("user_pic", contacts.getPortraits())
-//                            .putExtra("u_id", Constants.CID + "_" + contacts.getCode()));
-//                popupWindow.dismiss();
-//                popupWindow = null;
-//            }
-//        });
-//
-//        btnCall.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
-//                    @Override
-//                    public void onGranted() {
-//                        Intent intent = new Intent(Intent.ACTION_CALL,
-//                                Uri.parse("tel:" + contacts.getPhone()));
-//
-//                        if (ActivityCompat.checkSelfPermission(ContactsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                            // TODO: Consider calling
-//                            //    ActivityCompat#requestPermissions
-//                            // here to request the missing permissions, and then overriding
-//                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                            //                                          int[] grantResults)
-//                            // to handle the case where the user grants the permission. See the documentation
-//                            // for ActivityCompat#requestPermissions for more details.
-//                            return;
-//                        }
-//                        startActivity(intent);
-//                    }
-//
-//                    @Override
-//                    public void onDenied() {
-//                        showToast("拨打电话权限被拒绝，请手动设置");
-//                    }
-//                });
-//            }
-//        });
-//        WindowManager.LayoutParams lp = getWindow().getAttributes();
-//        lp.alpha = 0.5f;
-//        getWindow().setAttributes(lp);
-//        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//
-//            @Override
-//            public void onDismiss() {
-//                WindowManager.LayoutParams lp = getWindow().getAttributes();
-//                lp.alpha = 1f;
-//                getWindow().setAttributes(lp);
-//            }
-//        });
-//
-//        popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
-//        popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
-//    }
 
     @OnClick({R.id.btn_back, R.id.title})
     public void onClick(View view) {

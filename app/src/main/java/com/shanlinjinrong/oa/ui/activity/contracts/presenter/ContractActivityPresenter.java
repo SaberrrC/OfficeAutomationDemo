@@ -29,7 +29,7 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
     }
 
     @Override
-    public List<Contacts> loadData(String departmentId) {
+    public void loadData(String departmentId) {
         HttpParams params = new HttpParams();
         params.put("department_id", departmentId);
         mKjHttp.post(Api.GET_CONTACTS, params, new HttpCallBack() {
@@ -85,6 +85,5 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
                 super.onFailure(errorNo, strMsg);
             }
         });
-        return null;
     }
 }

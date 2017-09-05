@@ -1,14 +1,9 @@
 package com.shanlinjinrong.oa.ui.fragment.adapter;
 
 import android.net.Uri;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.model.Contacts;
@@ -46,4 +41,8 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
                 break;
         }
     }
+
+
+
+
 }

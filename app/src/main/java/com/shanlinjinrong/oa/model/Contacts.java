@@ -83,6 +83,8 @@ public class Contacts implements MultiItemEntity,Serializable {
         this.email = email;
     }
 
+
+
     public Contacts(JSONObject jsonObject) {
         try {
             type = jsonObject.getString("type");

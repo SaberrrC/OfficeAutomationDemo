@@ -30,5 +30,10 @@ public class ApiJava {
     //根据当前登录用户获取当前部门用户列表，并支持姓名模糊搜索
     public static final String SAME_ORGANIZATION = "user/query/sameOrganization";
 
+    //获取公司所有联系人
+    public static final String ALL_ORGANIZATION = "organization/queryAllOrganiza";
+
+
+
 
 }

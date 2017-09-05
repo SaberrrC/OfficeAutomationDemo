@@ -92,6 +92,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     private InputMethodManager inputManager;
     private List<User> userList = null;
     private boolean isPullRefreashing = false;
+    private SearchUserResultAdapter mSearchUserResultAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -145,7 +146,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //在初始化是为RecyclerView添加点击事件，这样可以防止重复点击问题
         recyclerView.addOnItemTouchListener(new ItemClick());
-
+        mSearchUserResultAdapter = new SearchUserResultAdapter(userList);
+        recyclerViewSearchResult.setAdapter(mSearchUserResultAdapter);
 //        title.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_COMPANY_NAME));
         loadData();
 
@@ -240,7 +242,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         }
 
         userList = users;
-
+        mSearchUserResultAdapter.setNewData(userList);
         try {
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
@@ -250,11 +252,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
         hideEmptyView();
         if (recyclerViewSearchResult != null)
-        recyclerViewSearchResult.setVisibility(View.VISIBLE);
+            recyclerViewSearchResult.setVisibility(View.VISIBLE);
         reSetSwipRefreash();
-        SearchUserResultAdapter adapter = new SearchUserResultAdapter(userList);
-        if (recyclerViewSearchResult != null)
-        recyclerViewSearchResult.setAdapter(adapter);
     }
 
     @Override
@@ -329,7 +328,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         hideLoadingView();
         isPullRefreashing = false;
         if (mSwipeRefreshLayout != null)
-        mSwipeRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

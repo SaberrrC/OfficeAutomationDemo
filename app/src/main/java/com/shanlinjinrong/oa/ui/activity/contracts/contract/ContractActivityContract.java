@@ -24,6 +24,6 @@ public interface ContractActivityContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        List<Contacts> loadData(String departmentId); //加载通讯录数据
+        void loadData(String departmentId); //加载通讯录数据
     }
 }
