@@ -72,6 +72,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_details);
+        setTranslucentStatus(this);
         ButterKnife.bind(this);
         init2();
     }

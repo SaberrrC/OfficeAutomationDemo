@@ -93,6 +93,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     private List<User> userList = null;
     private boolean isPullRefreashing = false;
     private SearchUserResultAdapter mSearchUserResultAdapter;
+    private TabContactsAdapter mContactAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -110,6 +111,9 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         recyclerViewSearchResult.setVisibility(View.GONE);
         recyclerViewSearchResult.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewSearchResult.addOnItemTouchListener(new SearchResultItemClick());
+        mSearchUserResultAdapter = new SearchUserResultAdapter(userList);
+        recyclerViewSearchResult.setAdapter(mSearchUserResultAdapter);
+
         mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#0EA7ED"),
                 Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -146,8 +150,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //在初始化是为RecyclerView添加点击事件，这样可以防止重复点击问题
         recyclerView.addOnItemTouchListener(new ItemClick());
-        mSearchUserResultAdapter = new SearchUserResultAdapter(userList);
-        recyclerViewSearchResult.setAdapter(mSearchUserResultAdapter);
+        mContactAdapter = new TabContactsAdapter(items);
+        recyclerView.setAdapter(mContactAdapter);
 //        title.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_COMPANY_NAME));
         loadData();
 
@@ -240,7 +244,6 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         } else {
             userList.clear();
         }
-
         userList = users;
         mSearchUserResultAdapter.setNewData(userList);
         try {
@@ -294,7 +297,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
             }
             items = contacts;
             hideEmptyView();
-            recyclerView.setAdapter(new TabContactsAdapter(items));
+            mContactAdapter.setNewData(items);
             reSetSwipRefreash();
         } catch (Throwable e) {
             e.printStackTrace();
