@@ -178,7 +178,7 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
             }
         }
     }
-    
+
     /**
      * 获取页面参数
      *
