@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -123,10 +122,8 @@ public class TabHomePageFragment extends BaseFragment {
                 intent.putExtra("whichId", 1);
                 break;
             case R.id.rl_schedule_me_launch:
-//                intent = new Intent(mContext, ScheduleActivity.class);
-//                intent.putExtra("whichId", 2);
-                intent = new Intent(mContext, TestFreshActivity.class);
-
+                intent = new Intent(mContext, ScheduleActivity.class);
+                intent.putExtra("whichId", 2);
                 break;
             case R.id.rl_schedule_note:
                 intent = new Intent(mContext, ScheduleActivity.class);
