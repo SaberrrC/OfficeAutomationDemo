@@ -165,6 +165,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .placeholder(R.drawable.ease_default_avatar).into(mSwingCard);
         }
+
         if (!isInComingCall) {// outgoing call
             soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
             outgoing = soundPool.load(this, R.raw.em_outgoing, 1);
@@ -267,15 +268,30 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
             //TODO 消息 展示
             EaseConversationAdapter.requestNamePic(userInfoSelfBean.username_self, userInfoSelfBean.portrait_self);
 
-            if (!TextUtils.isEmpty(userInfoSelfBean.username_self))
-                nickTextView.setText(userInfoSelfBean.username_self);
-            if (!TextUtils.isEmpty(userInfoSelfBean.portrait_self))
-                Glide.with(AppManager.mContext)
-                        .load(userInfoSelfBean.portrait_self)
-                        .error(R.drawable.ease_default_avatar)
-                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                        .placeholder(R.drawable.ease_default_avatar)
-                        .into(mSwingCard);
+            String privateCode = AppConfig.getAppConfig(this).getPrivateCode();
+            if(AppConfig.getAppConfig(this).getPrivateCode().equals(userInfoBean.CODE)){
+                if (!TextUtils.isEmpty(userInfoSelfBean.username_self))
+                    nickTextView.setText(userInfoSelfBean.username_self);
+
+                if (!TextUtils.isEmpty(userInfoSelfBean.portrait_self))
+                    Glide.with(AppManager.mContext)
+                            .load(userInfoSelfBean.portrait_self)
+                            .error(R.drawable.ease_default_avatar)
+                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                            .placeholder(R.drawable.ease_default_avatar)
+                            .into(mSwingCard);
+            }else{
+                if (!TextUtils.isEmpty(userInfoBean.username))
+                    nickTextView.setText(userInfoBean.username);
+
+                if (!TextUtils.isEmpty(userInfoBean.portrait))
+                    Glide.with(AppManager.mContext)
+                            .load(userInfoBean.portrait)
+                            .error(R.drawable.ease_default_avatar)
+                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                            .placeholder(R.drawable.ease_default_avatar)
+                            .into(mSwingCard);
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -654,7 +670,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 object_self.put("sex_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
                 object_self.put("post_title_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
                 object_self.put("username_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
-                object_self.put("portraits_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
+                object_self.put("portrait_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
                 object_self.put("email_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
                 object_self.put("department_name_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
 
@@ -666,7 +682,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 object.put("sex", getIntent().getStringExtra("sex"));
                 object.put("post_title", getIntent().getStringExtra("post_name"));
                 object.put("username", getIntent().getStringExtra("nike"));
-                object.put("portraits", getIntent().getStringExtra("portrait"));
+                object.put("portrait", getIntent().getStringExtra("portrait"));
                 object.put("email", getIntent().getStringExtra("email"));
                 object.put("department_name", getIntent().getStringExtra("department_name"));
                 userInfo = object.toString();
@@ -701,8 +717,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 newUserInfo = newUserInfo.replace("sex", "sex_self");
                 newUserInfo = newUserInfo.replace("post_title", "post_title_self");
                 newUserInfo = newUserInfo.replace("username", "username_self");
-                newUserInfo = newUserInfo.replace("portraits", "portraits_self");
-                newUserInfo = newUserInfo.replace("/portraits_self", "/portraits/");
+                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
+                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
                 newUserInfo = newUserInfo.replace("email", "email_self");
                 newUserInfo = newUserInfo.replace("department_name", "department_name_self");
                 sendJson_self = new JSONObject(newUserInfo_self);

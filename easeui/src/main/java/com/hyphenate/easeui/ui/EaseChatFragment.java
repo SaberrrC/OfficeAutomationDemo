@@ -755,8 +755,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 newUserInfo = newUserInfo.replace("sex", "sex_self");
                 newUserInfo = newUserInfo.replace("post_title", "post_title_self");
                 newUserInfo = newUserInfo.replace("username", "username_self");
-                newUserInfo = newUserInfo.replace("portraits", "portraits_self");
-                newUserInfo = newUserInfo.replace("/portraits_self", "/portraits/");
+                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
+                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
                 newUserInfo = newUserInfo.replace("email", "email_self");
                 newUserInfo = newUserInfo.replace("department_name", "department_name_self");
                 sendUserInfo_self = new JSONObject(newUserInfo_self);
@@ -801,7 +801,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 object_self.put("sex_self", getArguments().getString("userSex", "-"));
                 object_self.put("post_title_self", getArguments().getString("userPost", "-"));
                 object_self.put("username_self", getArguments().getString("userName", "-"));
-                object_self.put("portraits_self", getArguments().getString("userPic", "-"));
+                object_self.put("portrait_self", getArguments().getString("userPic", "-"));
                 object_self.put("email_self", getArguments().getString("userEmail", "-"));
                 object_self.put("department_name_self", getArguments().getString("userDepartment", "-"));
                 userInfo_self = object_self.toString();
@@ -813,7 +813,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 object.put("sex", getArguments().getString("to_user_sex", "-"));
                 object.put("post_title", getArguments().getString("to_user_post", "-"));
                 object.put("username", getArguments().getString("to_user_nike", "-"));
-                object.put("portraits", getArguments().getString("to_user_pic", "-"));
+                object.put("portrait", getArguments().getString("to_user_pic", "-"));
                 object.put("email", getArguments().getString("to_user_email", "-"));
                 object.put("department_name", getArguments().getString("to_user_department", "-"));
                 userInfo = object.toString();
