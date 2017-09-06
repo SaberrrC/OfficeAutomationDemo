@@ -25,6 +25,7 @@ public class Api {
      * 所有接口返回code=200表示成功
      */
     public static final int RESPONSES_CODE_OK = 200;
+
     /**
      * 用户名错误
      */
@@ -94,9 +95,14 @@ public class Api {
     public static final String LOGIN = "site/login";
 
     /**
-     * 获取通讯录接口
+     * 获取通讯录接口1
      */
-    public static final String GET_CONTACTS = "phonebook/list";
+    //public static final String GET_CONTACTS = "phonebook/list";
+
+    /**
+     * 获取通讯录接口2
+     */
+    public static final String GET_CONTACTS = "organization/queryAllOrganiza";
     /**
      * 搜索联系人
      */

@@ -654,7 +654,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 object_self.put("sex_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
                 object_self.put("post_title_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
                 object_self.put("username_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
-                object_self.put("portrait_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
+                object_self.put("portraits_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
                 object_self.put("email_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
                 object_self.put("department_name_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
 
@@ -666,7 +666,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 object.put("sex", getIntent().getStringExtra("sex"));
                 object.put("post_title", getIntent().getStringExtra("post_name"));
                 object.put("username", getIntent().getStringExtra("nike"));
-                object.put("portrait", getIntent().getStringExtra("portrait"));
+                object.put("portraits", getIntent().getStringExtra("portrait"));
                 object.put("email", getIntent().getStringExtra("email"));
                 object.put("department_name", getIntent().getStringExtra("department_name"));
                 userInfo = object.toString();
@@ -701,8 +701,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 newUserInfo = newUserInfo.replace("sex", "sex_self");
                 newUserInfo = newUserInfo.replace("post_title", "post_title_self");
                 newUserInfo = newUserInfo.replace("username", "username_self");
-                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
-                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
+                newUserInfo = newUserInfo.replace("portraits", "portraits_self");
+                newUserInfo = newUserInfo.replace("/portraits_self", "/portraits/");
                 newUserInfo = newUserInfo.replace("email", "email_self");
                 newUserInfo = newUserInfo.replace("department_name", "department_name_self");
                 sendJson_self = new JSONObject(newUserInfo_self);

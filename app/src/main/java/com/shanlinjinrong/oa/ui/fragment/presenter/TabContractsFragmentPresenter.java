@@ -3,6 +3,8 @@ package com.shanlinjinrong.oa.ui.fragment.presenter;
 import android.util.Log;
 
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.net.MyKjHttp;
@@ -93,11 +95,11 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
     public void loadData() {
         HttpParams params = new HttpParams();
         params.put("department_id", "");
-        mKjHttp.post(Api.GET_CONTACTS, params, new HttpCallBack() {
+        mKjHttp.jsonGet(Api.GET_CONTACTS, params, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
-                    mView.loadDataStart();
+                mView.loadDataStart();
 
             }
 
@@ -116,21 +118,43 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                 try {
                     JSONObject jo = new JSONObject(t);
                     switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
+                        case 000000:
+
                             List<Contacts> contacts = new ArrayList<>();
 
                             JSONArray jDepartment = Api.getDataToJSONObject(jo)
-                                    .getJSONArray("department");
+                                    .getJSONArray("children");
                             for (int i = 0; i < jDepartment.length(); i++) {
                                 JSONObject d = jDepartment.getJSONObject(i);
-                                Contacts c = new Contacts(d);
-                                contacts.add(c);
+                                if (!d.getString("memberCount").equals("0")) {
+                                    Contacts c = new Contacts(d);
+                                    contacts.add(c);
+                                }
                             }
                             JSONArray jEmployee = Api.getDataToJSONObject(jo)
-                                    .getJSONArray("employee");
+                                    .getJSONArray("users");
                             for (int i = 0; i < jEmployee.length(); i++) {
-                                JSONObject e = jEmployee.getJSONObject(i);
-                                Contacts c = new Contacts(e);
+                                JSONObject jsonObject = jEmployee.getJSONObject(i);
+                                Contacts c = new Contacts();
+
+                                //TODO 修改部分
+                                c.code = jsonObject.getString("code");
+                                c.sex = jsonObject.getString("sex");
+                                c.username = jsonObject.getString("username");
+                                c.uid = jsonObject.getString("uid");
+                                c.portraits = "http://" + jsonObject.getString("portraits");
+                                c.postId = jsonObject.getString("post_id");
+                                c.postTitle = jsonObject.getString("post_title");
+                                c.phone = jsonObject.getString("phone");
+                                c.email = jsonObject.getString("email");
+                                c.departmentName = jsonObject.getString("department_name");
+                                c.itemType = 1;
+                                if (AppConfig.getAppConfig(AppManager.sharedInstance()).getDepartmentId().equals(jsonObject.getString("department_id"))) {
+                                    c.isshow = "1";
+                                } else {
+                                    c.isshow = "0";
+                                }
+
                                 contacts.add(c);
                             }
                             mView.loadDataSuccess(contacts);

@@ -108,7 +108,7 @@ public class AppManager extends Application {
         Fresco.initialize(AppManager.mContext);
 
         //初始化讯飞语音
-        SpeechUtility.createUtility(AppManager.mContext, SpeechConstant.APPID + "=5819a625");
+        SpeechUtility.createUtility(AppManager.mContext, SpeechConstant.APPID + "=59ae7651");
 
         //极光初始化+
         BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(

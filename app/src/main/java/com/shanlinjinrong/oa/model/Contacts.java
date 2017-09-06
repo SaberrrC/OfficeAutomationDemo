@@ -22,58 +22,60 @@ public class Contacts implements MultiItemEntity,Serializable {
      * 1-员工
      */
     public static final int EMPLOYEE = 1;
-    private String code;//工号
+    public String code;//工号
 
-    private int itemType;
+    public int itemType;
 
     /**
      * 0-部门 1-员工
      */
-    private String type;
+    public String type;
     /**
      * 部门ID
      */
-    private String departmentId;
+    public String departmentId;
     /**
      * 部门名称
      */
-    private String departmentName;
+    public String departmentName;
     /**
      * 部门人数
      */
-    private String departmentPersons;
+    public String departmentPersons;
 
 
     /**
      * UID
      */
-    private String uid;
+    public String uid;
     /**
      * 用户名称
      */
-    private String username;
+    public String username;
     /**
      * 性别
      */
-    private String sex;
+    public String sex;
     /**
      * 岗位ID
      */
-    private String postId;
+    public String postId;
     /**
      * 岗位名称
      */
-    private String postTitle;
+    public String postTitle;
     /**
      * 电话号码
      */
-    private String phone;
+    public String phone;
     /**
      * 是否显示
      */
-    private String isshow;
-    private String portraits;
-    private String email;
+    public String isshow;
+    public String portraits;
+    public String email;
+
+
 
     public String getEmail() {
         return email;
@@ -84,28 +86,31 @@ public class Contacts implements MultiItemEntity,Serializable {
     }
 
 
+    public Contacts() {
+    }
 
     public Contacts(JSONObject jsonObject) {
         try {
-            type = jsonObject.getString("type");
-            itemType = Integer.parseInt(type);
-            departmentId = jsonObject.getString("department_id");
-            departmentName = jsonObject.getString("department_name");
-
-            if (itemType == EMPLOYEE) {
-                code = jsonObject.getString("CODE");
-                portraits = "http://" + jsonObject.getString("portraits");
-                uid = jsonObject.getString("uid");
-                username = jsonObject.getString("username");
-                sex = jsonObject.getString("sex");
-                postId = jsonObject.getString("post_id");
-                postTitle = jsonObject.getString("post_title");
-                phone = jsonObject.getString("phone");
-                email=jsonObject.getString("email");
-                isshow = jsonObject.getString("isshow");
-            } else {
-                departmentPersons = jsonObject.getString("department_persons");
-            }
+//            type = jsonObject.getString("type");
+//            itemType = Integer.parseInt(type);
+            departmentId = jsonObject.getString("id");
+            departmentName = jsonObject.getString("name");
+            itemType = 0;
+//            if (itemType == EMPLOYEE) {
+//                code = jsonObject.getString("CODE");
+//                portraits = "http://" + jsonObject.getString("portraits");
+//                uid = jsonObject.getString("uid");
+//                username = jsonObject.getString("username");
+//                sex = jsonObject.getString("sex");
+//
+//                postId = jsonObject.getString("post_id");
+//                postTitle = jsonObject.getString("post_title");
+//                phone = jsonObject.getString("phone");
+//                email=jsonObject.getString("email");
+//                isshow = jsonObject.getString("isshow");
+//            } else {
+                departmentPersons = jsonObject.getString("memberCount");
+//            }
         } catch (JSONException e) {
             LogUtils.e("获取部门和员工异常：" + e.toString());
         }
@@ -145,6 +150,55 @@ public class Contacts implements MultiItemEntity,Serializable {
 
     public String getPortraits() {
         return portraits;
+    }
+
+
+    public void setItemType(int itemType) {
+        this.itemType = itemType;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public void setDepartmentPersons(String departmentPersons) {
+        this.departmentPersons = departmentPersons;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setPortraits(String portraits) {
+        this.portraits = portraits;
     }
 
     public String getUid() {
