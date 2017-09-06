@@ -14,5 +14,6 @@
     <dimen name="vertical_spacing16">16dp</dimen>
     <dimen name="common_title_size16">16sp</dimen>
     <dimen name="common_height_48">48dp</dimen>
+    <dimen name="common_margin">12dp</dimen>
     <dimen name="horizontal_spacing5">5dp</dimen>
 </resources>

@@ -535,7 +535,7 @@
                             android:id="@+id/iv_homepage_schedule_me_launch"
                             style="@style/home_page_icon_style"
                             android:src="@drawable/icon_homepage_schedule_meeting_me_launch"
-                            android:visibility="gone" />
+                            />
 
                         <TextView
                             style="@style/common_text_style"

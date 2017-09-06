@@ -11,4 +11,6 @@ public class RefreshListViewHolder extends RecyclerView.ViewHolder {
     public RefreshListViewHolder(View itemView) {
         super(itemView);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,8 +13,8 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.LaunchApprovalActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectOrdinaryMeetingRoomActivity;
@@ -122,8 +123,10 @@ public class TabHomePageFragment extends BaseFragment {
                 intent.putExtra("whichId", 1);
                 break;
             case R.id.rl_schedule_me_launch:
-                intent = new Intent(mContext, ScheduleActivity.class);
-                intent.putExtra("whichId", 2);
+//                intent = new Intent(mContext, ScheduleActivity.class);
+//                intent.putExtra("whichId", 2);
+                intent = new Intent(mContext, TestFreshActivity.class);
+
                 break;
             case R.id.rl_schedule_note:
                 intent = new Intent(mContext, ScheduleActivity.class);

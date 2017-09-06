@@ -17,16 +17,16 @@
         <!-- Left View Attributes-->
         <attr name="leftText" format="string" />
         <attr name="leftTextColor" format="color" />
-        <attr name="leftTextMargin" format="dimension"/>
+        <attr name="leftTextMargin" format="dimension" />
         <attr name="leftTextSize" format="dimension" />
-        <attr name="leftDrawable" format="reference"/>
+        <attr name="leftDrawable" format="reference" />
 
         <!-- Right View Attributes-->
         <attr name="rightText" format="string" />
         <attr name="rightTextColor" format="color" />
-        <attr name="rightTextMargin" format="dimension"/>
+        <attr name="rightTextMargin" format="dimension" />
         <attr name="rightTextSize" format="dimension" />
-        <attr name="rightDrawable" format="reference"/>
+        <attr name="rightDrawable" format="reference" />
 
         <!-- Title View Attribute-->
         <attr name="topTitle" format="string" />
@@ -40,5 +40,28 @@
     <declare-styleable name="CircleImageView">
         <attr name="border_width" format="dimension" />
         <attr name="border_color" format="color" />
+    </declare-styleable>
+
+
+    <!--下拉刷新操作-->
+    <declare-styleable name="BaseRefreshLayout">
+        <!-- Optional. If you put header and content in xml, you can you these to specify them. -->
+        <attr name="header" format="reference" />
+        <attr name="content" format="reference" />
+
+        <!-- the resistance when you are moving the frame -->
+        <attr name="resistance" format="float" />
+
+        <!-- the ration of the height of the header to trigger refresh -->
+        <attr name="ratio_of_header_height_to_refresh" format="float" />
+
+        <attr name="duration_to_close" format="integer" />
+        <attr name="duration_to_close_header" format="integer" />
+
+        <!-- pull to refresh, otherwise release to refresh, default is release to refresh -->
+        <attr name="pull_to_fresh" format="boolean" />
+
+        <!-- keep header when refreshing-->
+        <attr name="keep_header_when_refresh" format="boolean" />
     </declare-styleable>
 </resources>
