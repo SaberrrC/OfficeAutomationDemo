@@ -78,7 +78,7 @@ public class TabHomePageFragment extends BaseFragment {
             .rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id
             .rl_approval_me_launch, R.id.rl_approval_wait_me_approval, R.id
             .rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id
-            .rl_schedule_meeting_plan, R.id.rl_schedule_me_launch, R.id.rl_schedule_note, R.id
+            .rl_schedule_meeting_plan, R.id
             .rl_schedule_create_common_meeting, R.id.rl_schedule_create_video_meeting, R.id
             .rl_schedule_create_note, R.id.rl_schedule_my_mail})
     public void onClick(View view) {
@@ -120,14 +120,6 @@ public class TabHomePageFragment extends BaseFragment {
             case R.id.rl_schedule_meeting_plan:
                 intent = new Intent(mContext, ScheduleActivity.class);
                 intent.putExtra("whichId", 1);
-                break;
-            case R.id.rl_schedule_me_launch:
-                intent = new Intent(mContext, ScheduleActivity.class);
-                intent.putExtra("whichId", 2);
-                break;
-            case R.id.rl_schedule_note:
-                intent = new Intent(mContext, ScheduleActivity.class);
-                intent.putExtra("whichId", 3);
                 break;
             case R.id.rl_schedule_create_common_meeting:
                 //创建普通会议-旧版

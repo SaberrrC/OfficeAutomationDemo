@@ -34,7 +34,7 @@ public class WelcomePage extends Activity implements WelcomePageContract.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = new View(this);
-        view.setBackgroundResource(R.drawable.welcome_page);
+        view.setBackgroundResource(R.drawable.welcome);
         setContentView(view);
         startAnimation(view);
         getComponent().inject(this);

@@ -131,6 +131,8 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
                 layoutParams.setMargins(0, 0, 0, heightDifference);
 
                 mScrollView.requestLayout();
+                Message msg = new Message();
+                msg.arg1 = heightDifference;
                 mHandler.sendEmptyMessage(UPDATE_RECYCLERVIEW_POSITION);
             }
         });
