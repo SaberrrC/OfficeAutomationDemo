@@ -525,7 +525,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 if (isThroughTo) {
 
                 } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
-                    mMessage = EMMessage.createTxtSendMessage("已拒接", username);
+                    mMessage = EMMessage.createTxtSendMessage("通话已拒接", username);
                     readUserInfoDetailsMessage();
                     sendUserInfoDetailsMessage(mMessage);
                     //发送消息
@@ -559,7 +559,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);
                 } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
-                    mMessage = EMMessage.createTxtSendMessage("已取消", username);
+                    mMessage = EMMessage.createTxtSendMessage("通话已取消", username);
                     readUserInfoDetailsMessage();
                     sendUserInfoDetailsMessage(mMessage);
                     isThroughTo = false;

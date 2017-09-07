@@ -120,7 +120,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         mSwipeRefreshLayout.setEnabled(true);
     }
 
-    @OnClick({R.id.search_et_cancle})
+    @OnClick({R.id.search_et_cancle})   
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.search_et_cancle:
