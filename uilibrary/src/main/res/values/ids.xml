@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="topview_left_view" type="id"/>
+    <item name="topview_right_view" type="id"/>
+    <item name="middle_view" type="id"/>
+    <item name="topview_app_title" type="id"/>
+    <item name="left_action" type="id" />
+</resources>

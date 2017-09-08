@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="pickerview">
+        <attr name="pickerview_gravity">
+            <enum name="center" value="17" />
+            <enum name="left" value="3" />
+            <enum name="right" value="5" />
+        </attr>
+        <attr name="pickerview_textSize" format="dimension" />
+        <attr name="pickerview_textColorOut" format="color" />
+        <attr name="pickerview_textColorCenter" format="color" />
+        <attr name="pickerview_dividerColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="commonTopView">
+
+        <!-- Left View Attributes-->
+        <attr name="leftText" format="string" />
+        <attr name="leftTextColor" format="color" />
+        <attr name="leftTextMargin" format="dimension" />
+        <attr name="leftTextSize" format="dimension" />
+        <attr name="leftDrawable" format="reference" />
+
+        <!-- Right View Attributes-->
+        <attr name="rightText" format="string" />
+        <attr name="rightTextColor" format="color" />
+        <attr name="rightTextMargin" format="dimension" />
+        <attr name="rightTextSize" format="dimension" />
+        <attr name="rightDrawable" format="reference" />
+
+        <!-- Title View Attribute-->
+        <attr name="topTitle" format="string" />
+        <attr name="titleColor" format="color" />
+        <attr name="titleTextSize" format="dimension" />
+
+    </declare-styleable>
+
+
+    <!--圆形imageview-->
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+
+
+    <!--下拉刷新操作-->
+    <declare-styleable name="BaseRefreshLayout">
+        <!-- Optional. If you put header and content in xml, you can you these to specify them. -->
+        <attr name="header" format="reference" />
+        <attr name="content" format="reference" />
+
+        <!-- the resistance when you are moving the frame -->
+        <attr name="resistance" format="float" />
+
+        <!-- the ration of the height of the header to trigger refresh -->
+        <attr name="ratio_of_header_height_to_refresh" format="float" />
+
+        <attr name="duration_to_close" format="integer" />
+        <attr name="duration_to_close_header" format="integer" />
+
+        <!-- pull to refresh, otherwise release to refresh, default is release to refresh -->
+        <attr name="pull_to_fresh" format="boolean" />
+
+        <!-- keep header when refreshing-->
+        <attr name="keep_header_when_refresh" format="boolean" />
+    </declare-styleable>
+</resources>
