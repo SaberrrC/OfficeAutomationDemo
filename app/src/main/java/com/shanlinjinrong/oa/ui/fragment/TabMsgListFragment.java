@@ -489,7 +489,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         } catch (Exception e) {
         }
 
-        loadData(false, false, "", "");
+        loadData(true, false, "", "");
         reFresUnRedCount();
     }
 
@@ -511,6 +511,8 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             }
             if (loadMore) {
                 currentPage++;
+            }else {
+                currentPage = 1;
             }
             HttpParams params = new HttpParams();
             params.put("limit", limit);
@@ -546,7 +548,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                         JSONObject jo = new JSONObject(t);
                         switch (Api.getCode(jo)) {
                             case Api.RESPONSES_CODE_OK:
-                                list.clear();
+                                //list.clear();
                                 ArrayList<PushMsg> listPushMsgs = new ArrayList<>();
                                 JSONArray notices = Api.getDataToJSONArray(jo);
                                 for (int i = 0; i < notices.length(); i++) {
@@ -619,7 +621,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void RefreashData(EventMessage eventMessage) {
         if (eventMessage.getStr().equals("reFreash")) {
-            loadData(false, false, "", "");
+            loadData(true, false, "", "");
             //刷新通知
             reFresUnRedCount();
         }
