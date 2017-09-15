@@ -43,6 +43,7 @@ public class FeedbackActivityPresenter extends HttpPresenter<FeedbackActivityCon
                 LogUtils.d("data-->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
+                    LogUtils.d("data-->" + Api.getCode(jo));
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             mView.feedbackSuccess();

@@ -88,16 +88,16 @@ public class WelcomePagePresenter implements WelcomePageContract.Presenter {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-//                try {
-//                    JSONObject jo = new JSONObject(t);
-//                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-//                        JSONObject data = Api.getDataToJSONObject(jo);
-//                        String url = data.getString("domain");
-//                        AppConfig.getAppConfig(AppManager.mContext).set(AppConfig.BASE_URL, url);
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
+                        JSONObject data = Api.getDataToJSONObject(jo);
+                        String url = data.getString("domain");
+                        AppConfig.getAppConfig(AppManager.mContext).set(AppConfig.BASE_URL, url);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
