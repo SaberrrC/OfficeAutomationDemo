@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.pgyersdk.update.PgyUpdateManager;
+import com.pgyersdk.update.UpdateManagerListener;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
@@ -178,8 +179,17 @@ public class TabMeFragment extends BaseFragment {
             }
 
         } else {
-            PgyUpdateManager.register(getActivity(),
-                    "com.shanlinjinrong.oa.fileprovider");
+            PgyUpdateManager.register(getActivity(), "com.shanlinjinrong.oa.fileprovider", new UpdateManagerListener() {
+                @Override
+                public void onNoUpdateAvailable() {
+                   Toast.makeText(getContext(),"当前已是最新版本！",Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onUpdateAvailable(String s) {
+
+                }
+            });
         }
     }
 
