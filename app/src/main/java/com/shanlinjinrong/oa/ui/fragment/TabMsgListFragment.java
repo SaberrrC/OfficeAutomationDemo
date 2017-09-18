@@ -102,7 +102,6 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
     private Integer NO_MORE_CONTENT = 0;//没有更多内容的标识
     private Integer LOAD_MORE_CONTENT = 1;//jia zai更多内容的标识
     private boolean isLoading = false;
-    private boolean isFirst = true;
     public Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -441,9 +440,6 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         isResume = true;
         currentPage = 1;
         reFresUnRedCount();
-        if (!isFirst) {
-            onRefresh();
-        }
         super.onResume();
     }
 
@@ -454,9 +450,6 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             isResume = true;
             currentPage = 1;
             reFresUnRedCount();
-            if (!isFirst) {
-                onRefresh();
-            }
         } else {
             //相当于Fragment的onPause
         }
@@ -465,7 +458,6 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
     @Override
     public void onPause() {
         isResume = false;
-        isFirst = false;
         super.onPause();
     }
 

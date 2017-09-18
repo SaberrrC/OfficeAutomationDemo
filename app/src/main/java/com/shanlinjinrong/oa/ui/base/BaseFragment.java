@@ -83,15 +83,13 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void showLoadingView() {
-        if (!loadingDialog.isShowing()) {
-            LogUtils.e("showLoadingView");
+        if (loadingDialog != null && !loadingDialog.isShowing())
             loadingDialog.show();
-        }
     }
 
     public void showLoadingView(String text) {
         msg.setText(text);
-        loadingDialog.show();
+        showLoadingView();
     }
 
     /**
@@ -199,16 +197,16 @@ public abstract class BaseFragment extends Fragment {
 
     public void showEmptyView(ViewGroup view, String str, int resId, boolean isShow) {
 //        if (empty == null) {
-            empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            empty.setLayoutParams(lp);
-            if (isShow) {
-                ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
-                imageView.setImageResource(resId);
-            }
-            TextView msg = (TextView) empty.findViewById(R.id.message);
-            msg.setText(str);
+        empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        empty.setLayoutParams(lp);
+        if (isShow) {
+            ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
+            imageView.setImageResource(resId);
+        }
+        TextView msg = (TextView) empty.findViewById(R.id.message);
+        msg.setText(str);
 //        }
         view.addView(empty);
     }
@@ -223,7 +221,7 @@ public abstract class BaseFragment extends Fragment {
      * @param view 移除空的view，如果有
      */
     public void removeEmptyView(ViewGroup view) {
-         // modify by lvdinghao 2017/8/10 之前view使用findviewbyid，始终是一个新的对象，无法把原来的view删除
+        // modify by lvdinghao 2017/8/10 之前view使用findviewbyid，始终是一个新的对象，无法把原来的view删除
         try {
             for (int i = 0; i < view.getChildCount(); i++) {
                 LogUtils.d(view.getChildAt(i).getId() + "");
