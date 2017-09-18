@@ -53,3 +53,7 @@ Thumbs.db
 # Other
 .svn
 *.sh
+
+gradlew
+gradlew.bat
+gradle/

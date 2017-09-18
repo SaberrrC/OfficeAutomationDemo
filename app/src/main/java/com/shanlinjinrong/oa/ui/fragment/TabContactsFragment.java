@@ -120,7 +120,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         mSwipeRefreshLayout.setEnabled(true);
     }
 
-    @OnClick({R.id.search_et_cancle})   
+    @OnClick({R.id.search_et_cancle})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.search_et_cancle:
@@ -280,7 +280,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     public void loadDataStart() {
         try {
             if (!isPullRefreashing) {
-                showLoadingView();
+                if (mContactAdapter.getItemCount() == 0)
+                    showLoadingView();
                 recyclerView.setVisibility(View.VISIBLE);
                 recyclerViewSearchResult.setVisibility(View.GONE);
             }
