@@ -90,7 +90,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
         mKjHttp.post(Api.TAB_UN_READ_MSG_COUNT, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
-                LogUtils.e(t);
+                LogUtils.e("unread : "+ t);
                 super.onSuccess(t);
                 try {
                     JSONObject jo = new JSONObject(t);

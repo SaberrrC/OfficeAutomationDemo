@@ -279,9 +279,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     public void loadDataStart() {
         try {
-            if (!isPullRefreashing) {
-                if (mContactAdapter.getItemCount() == 0)
-                    showLoadingView();
+            if (!isPullRefreashing && recyclerView != null && recyclerViewSearchResult != null) {
+                showLoadingView();
                 recyclerView.setVisibility(View.VISIBLE);
                 recyclerViewSearchResult.setVisibility(View.GONE);
             }

@@ -27,10 +27,10 @@ import com.pgyersdk.update.UpdateManagerListener;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.helper.UpdateHelper;
 import com.shanlinjinrong.oa.listener.PermissionListener;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.my.AboutUsActivity;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
@@ -43,8 +43,6 @@ import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
@@ -242,7 +240,6 @@ public class TabMeFragment extends BaseFragment {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                hideLoadingView();
                 LogUtils.e("onSuccess-->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
@@ -273,7 +270,6 @@ public class TabMeFragment extends BaseFragment {
                 super.onFailure(errorNo, strMsg);
                 LogUtils.e(errorNo + strMsg);
                 catchWarningByCode(errorNo);
-                hideLoadingView();
             }
         });
     }

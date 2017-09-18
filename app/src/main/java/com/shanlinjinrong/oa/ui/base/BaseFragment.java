@@ -83,8 +83,11 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void showLoadingView() {
-        if (loadingDialog != null && !loadingDialog.isShowing())
+        if (loadingDialog != null && !loadingDialog.isShowing()) {
             loadingDialog.show();
+            LogUtils.e("showLoadingView " + getActivity());
+        }
+
     }
 
     public void showLoadingView(String text) {
@@ -238,6 +241,7 @@ public abstract class BaseFragment extends Fragment {
 
     public void hideLoadingView() {
         LogUtils.e("hideLoadingView");
+        LogUtils.e("getClass " + getClass());
         loadingDialog.dismiss();
     }
 

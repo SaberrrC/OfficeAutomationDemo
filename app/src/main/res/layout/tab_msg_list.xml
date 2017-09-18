@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/layout_root"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#f2f2f2">
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f2f2">
 
 
     <RelativeLayout
@@ -12,8 +12,7 @@
         android:layout_height="56dp"
         android:layout_alignParentTop="true"
         android:background="#ffffff"
-        android:gravity="center"
-        >
+        android:gravity="center">
 
         <RelativeLayout
             android:id="@+id/rl_condition"
@@ -27,7 +26,7 @@
                 android:layout_centerVertical="true"
                 android:text="通知列表"
                 android:textColor="#333333"
-                android:textSize="18dp"/>
+                android:textSize="18dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -35,18 +34,16 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="6dp"
                 android:layout_toRightOf="@+id/title"
-                android:src="@drawable/tab_msg_top_select"
-                />
+                android:src="@drawable/tab_msg_top_select" />
         </RelativeLayout>
     </RelativeLayout>
 
-<include
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/toolbar_shadow"
-    layout="@layout/toolbar_shadow"
-    android:layout_below="@id/tab_homepage_top"
-    />
+    <include
+        android:id="@+id/toolbar_shadow"
+        layout="@layout/toolbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tab_homepage_top" />
 
     <RelativeLayout
         android:id="@+id/layout_content"
@@ -58,14 +55,12 @@
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/notice_detail_recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -74,7 +69,6 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_below="@+id/swipeRefreshLayout"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </RelativeLayout>
