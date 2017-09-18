@@ -172,7 +172,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     private List<HourReportBean> initHourReportData() {
         List<HourReportBean> list = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            HourReportBean hourReport = new HourReportBean("", "", "");
+            HourReportBean hourReport = new HourReportBean("", "", "", "");
             list.add(hourReport);
         }
         return list;
@@ -218,6 +218,17 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
         jsonObject.put("workSix", mHourReportData.get(5).getRealWork());
         jsonObject.put("workSeven", mHourReportData.get(6).getRealWork());
         jsonObject.put("workEigth", mHourReportData.get(7).getRealWork());
+
+
+        //数据量化  // TODO: 2017/9/18 字段还没有  暂不提交
+//        jsonObject.put("workOne", mHourReportData.get(0).getQuantitative());
+//        jsonObject.put("workTwo", mHourReportData.get(1).getQuantitative());
+//        jsonObject.put("workThree", mHourReportData.get(2).getQuantitative());
+//        jsonObject.put("workFour", mHourReportData.get(3).getQuantitative());
+//        jsonObject.put("workFive", mHourReportData.get(4).getQuantitative());
+//        jsonObject.put("workSix", mHourReportData.get(5).getQuantitative());
+//        jsonObject.put("workSeven", mHourReportData.get(6).getQuantitative());
+//        jsonObject.put("workEigth", mHourReportData.get(7).getQuantitative());
 
         //职业素养
         jsonObject.put("selfBehavior", mWorkReportListData.get(8).getContent()); // 个人言行
@@ -494,6 +505,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
             edit.putString("HourReportData_RealWork" + i, mHourReportData.get(i).getRealWork());
             edit.putString("HourReportData_WorkPlan" + i, mHourReportData.get(i).getWorkPlan());
             edit.putString("HourReportData_SelfEvaluate" + i, mHourReportData.get(i).getSelfEvaluate());
+            edit.putString("HourReportData_Quantitative" + i, mHourReportData.get(i).getQuantitative());
         }
 
         for (int i = 8; i < mWorkReportListData.size(); i++) {
@@ -524,6 +536,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
             bean.setWorkPlan(sp.getString("HourReportData_WorkPlan" + i, ""));
             bean.setRealWork(sp.getString("HourReportData_RealWork" + i, ""));
             bean.setSelfEvaluate(sp.getString("HourReportData_SelfEvaluate" + i, ""));
+            bean.setQuantitative(sp.getString("HourReportData_Quantitative" + i, ""));
             mWorkReportListData.get(i).setContent(getString(R.string.work_report_has_write));
         }
 

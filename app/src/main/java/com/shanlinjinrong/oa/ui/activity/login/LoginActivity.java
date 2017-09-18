@@ -233,6 +233,11 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     }
 
     @Override
+    public void loginOtherError() {
+        showToast("请检查网络！");
+    }
+
+    @Override
     public void accountOrPswError(int errorCode, String msg) {
         if (errorCode == RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR) {
             userPwd.setText("");

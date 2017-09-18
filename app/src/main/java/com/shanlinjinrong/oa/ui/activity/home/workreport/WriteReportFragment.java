@@ -22,6 +22,8 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
 
     private EditText mSelfEvaluate; //自评
 
+    private EditText mQuantitative; //数据量化
+
     private TextView mLastPageBtn;//上一项
 
     private TextView mNextPageBtn;//下一项
@@ -57,6 +59,7 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
         mPlanWork = (EditText) view.findViewById(R.id.et_plan_work);
         mRealWork = (EditText) view.findViewById(R.id.et_real_work);
         mSelfEvaluate = (EditText) view.findViewById(R.id.et_self_evaluate);
+        mQuantitative = (EditText) view.findViewById(R.id.et_quantitative);
         mLastPageBtn = (TextView) view.findViewById(R.id.last_page);
         mNextPageBtn = (TextView) view.findViewById(R.id.next_page);
         mLastPageBtn.setOnClickListener(this);
@@ -65,6 +68,7 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
         mPlanWork.setFilters(filters);
         mRealWork.setFilters(filters);
         mSelfEvaluate.setFilters(filters);
+        mQuantitative.setFilters(filters);
     }
 
 
@@ -76,6 +80,7 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
                 mPlanWork.setText(hourReportBean.getWorkPlan());
                 mRealWork.setText(hourReportBean.getRealWork());
                 mSelfEvaluate.setText(hourReportBean.getSelfEvaluate());
+                mQuantitative.setText(hourReportBean.getQuantitative());
             }
 
             setBtnBackGround(extra.getInt("page"));
@@ -95,9 +100,10 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
     public void fragmentChange(int position) {
         if (changeListener != null && mPlanWork != null && mRealWork != null && mSelfEvaluate != null)
             changeListener.fragmentStartChange(position, mPlanWork.
-                    getText().toString(), mRealWork.getText().toString(), mSelfEvaluate.getText().toString());
+                    getText().toString(), mRealWork.getText().toString(), mSelfEvaluate.getText().toString(), mQuantitative.getText().toString());
     }
 
+    //第一页：向前翻按钮不可用，最后一页的下一页按钮不可用
     public void setBtnBackGround(int position) {
         if (mLastPageBtn != null && mNextPageBtn != null) {
             if (position == 0) {
@@ -122,7 +128,7 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
     }
 
     public interface OnFragmentStartChangeListener {
-        void fragmentStartChange(int position, String planWork, String realWork, String selfEvaluate);
+        void fragmentStartChange(int position, String planWork, String realWork, String selfEvaluate, String quantitative);
     }
 
     public interface OnPageBthClickListener {

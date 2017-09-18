@@ -12,11 +12,14 @@ public class HourReportBean implements Parcelable {
     private String mWorkPlan;//工作计划
     private String mRealWork;//实际工作
     private String mSelfEvaluate;//自评
+    private String mQuantitative;//数据量化
 
-    public HourReportBean(String mWorkPlan, String mRealWork, String mSelfEvaluate) {
+
+    public HourReportBean(String mWorkPlan, String mRealWork, String mSelfEvaluate, String mQuantitative) {
         this.mWorkPlan = mWorkPlan;
         this.mRealWork = mRealWork;
         this.mSelfEvaluate = mSelfEvaluate;
+        this.mQuantitative = mQuantitative;
     }
 
     public String getWorkPlan() {
@@ -46,13 +49,22 @@ public class HourReportBean implements Parcelable {
         return this;
     }
 
+    public String getQuantitative() {
+        return mQuantitative;
+    }
+
+    public HourReportBean setQuantitative(String mQuantitative) {
+        this.mQuantitative = mQuantitative;
+        return this;
+    }
+
     /**
      * 判断时候有空的内容
      *
      * @return
      */
     public boolean checkHasEmpty() {
-        return TextUtils.isEmpty(mWorkPlan) || TextUtils.isEmpty(mRealWork) || TextUtils.isEmpty(mSelfEvaluate);
+        return TextUtils.isEmpty(mWorkPlan) || TextUtils.isEmpty(mRealWork) || TextUtils.isEmpty(mSelfEvaluate) || TextUtils.isEmpty(mQuantitative);
     }
 
     @Override
@@ -65,12 +77,14 @@ public class HourReportBean implements Parcelable {
         dest.writeString(this.mWorkPlan);
         dest.writeString(this.mRealWork);
         dest.writeString(this.mSelfEvaluate);
+        dest.writeString(this.mQuantitative);
     }
 
     protected HourReportBean(Parcel in) {
         this.mWorkPlan = in.readString();
         this.mRealWork = in.readString();
         this.mSelfEvaluate = in.readString();
+        this.mQuantitative = in.readString();
     }
 
     public static final Parcelable.Creator<HourReportBean> CREATOR = new Parcelable.Creator<HourReportBean>() {

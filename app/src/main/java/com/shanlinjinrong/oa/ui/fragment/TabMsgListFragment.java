@@ -621,7 +621,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void RefreashData(EventMessage eventMessage) {
         if (eventMessage.getStr().equals("reFreash")) {
-            loadData(true, false, "", "");
+            loadData(false, false, "", "");
             //刷新通知
             reFresUnRedCount();
         }

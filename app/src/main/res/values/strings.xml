@@ -95,6 +95,8 @@
     <string name="work_report_plan_work">计划工作</string>
     <string name="work_report_real_work">实际工作</string>
     <string name="work_report_self_evaluate">自评</string>
+    <string name="work_report_quantitative">量化数据/结果</string>
+    <string name="work_report_write_quantitative">量化</string>
     <string name="work_report_write_work_plan">请在此填写您的计划工作.\n1\n2</string>
     <string name="work_report_write_real_work">请在此填写您的实际工作.\n1\n2</string>
     <string name="work_report_write_self_evaluate">请在此填写您的自评.\n1\n2</string>
