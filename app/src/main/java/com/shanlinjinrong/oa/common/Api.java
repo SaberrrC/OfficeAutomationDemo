@@ -43,6 +43,10 @@ public class Api {
      */
     public static final int RESPONSES_CODE_TOKEN_NO_MATCH = 304;
     /**
+     * 所有接口返回code=362 表示反馈失败
+     */
+    public static final int RESPONSES_CODE_TOKEN_FEEDBACK_FAILURE = 362;
+    /**
      * 所有接口返回code=305表示Uid为空
      */
     public static final int RESPONSES_CODE_UID_NULL = 305;
