@@ -9,10 +9,10 @@ import android.text.TextUtils;
  * 时报填写内容实体类
  */
 public class HourReportBean implements Parcelable {
-    private String mWorkPlan;//工作计划
-    private String mRealWork;//实际工作
-    private String mSelfEvaluate;//自评
-    private String mQuantitative;//数据量化
+    private String mWorkPlan = "";//工作计划
+    private String mRealWork = "";//实际工作
+    private String mSelfEvaluate = "";//自评
+    private String mQuantitative = "";//数据量化
 
 
     public HourReportBean(String mWorkPlan, String mRealWork, String mSelfEvaluate, String mQuantitative) {
@@ -64,7 +64,9 @@ public class HourReportBean implements Parcelable {
      * @return
      */
     public boolean checkHasEmpty() {
-        return TextUtils.isEmpty(mWorkPlan) || TextUtils.isEmpty(mRealWork) || TextUtils.isEmpty(mSelfEvaluate) || TextUtils.isEmpty(mQuantitative);
+        // TODO: 2017/9/19 暂时不判断量化
+//        return TextUtils.isEmpty(mWorkPlan) || TextUtils.isEmpty(mRealWork) || TextUtils.isEmpty(mSelfEvaluate) || TextUtils.isEmpty(mQuantitative);
+        return TextUtils.isEmpty(mWorkPlan) || TextUtils.isEmpty(mRealWork) || TextUtils.isEmpty(mSelfEvaluate);
     }
 
     @Override
