@@ -158,8 +158,6 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
 
     private void initData(Intent intent) {
         currentState = intent.getIntExtra("whichList", 1);
-
-
         if (currentState != 0) {
             switch (currentState) {
                 case 1:
@@ -178,9 +176,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
                     meApprovaledMore = true;
                     break;
             }
-            list.clear();//需要清空list，不然我发起的或者待我审批的列表内容会显示到同一个页面
             clearCurrentDataAndChangeUI();
-            loadData(false, false, "", "");
         } else {
             rbMeLaunch.setChecked(true);
         }
@@ -238,6 +234,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
                         break;
                 }
                 list.clear();//需要清空list，不然我发起的或者待我审批的列表内容会显示到同一个页面
+                loadData(false, false, "", "");
                 try {
                     mAdapter.removeAllFooterView();
                 } catch (Exception e) {
