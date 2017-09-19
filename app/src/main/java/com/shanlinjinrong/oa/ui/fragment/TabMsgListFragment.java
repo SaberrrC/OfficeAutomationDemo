@@ -263,6 +263,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             public void onClick(View v) {
                 Integer dateValue = checkCheckedListDateRb();
                 Integer typeValue = checkCheckedListTypeRb();
+                changeLoadState();
                 loadData(false, false, String.valueOf(dateValue), String.valueOf(typeValue));
                 popupWindow.dismiss();
             }
