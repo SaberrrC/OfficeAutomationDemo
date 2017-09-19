@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout_root"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
-    <include layout="@layout/toolbar_shadow"/>
+    <include layout="@layout/toolbar_shadow" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <RadioGroup
             android:id="@+id/btn_group_box"
@@ -31,16 +30,15 @@
                 android:layout_weight="1"
                 android:background="@drawable/work_report_list_btn_bg_x"
                 android:button="@null"
-                android:checked="true"
                 android:gravity="center"
                 android:text="我发起的"
                 android:textColor="@drawable/work_report_list_btn_color"
-                android:textSize="@dimen/text_common_dp"/>
+                android:textSize="@dimen/text_common_dp" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#1a9afa"/>
+                android:background="#1a9afa" />
 
             <RadioButton
                 android:id="@+id/rb_wait_approval"
@@ -52,12 +50,12 @@
                 android:gravity="center"
                 android:text="待我审批"
                 android:textColor="@drawable/work_report_list_btn_color"
-                android:textSize="@dimen/text_common_dp"/>
+                android:textSize="@dimen/text_common_dp" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#1a9afa"/>
+                android:background="#1a9afa" />
 
             <RadioButton
                 android:id="@+id/rb_me_approvaled"
@@ -69,7 +67,7 @@
                 android:gravity="center"
                 android:text="我审批的"
                 android:textColor="@drawable/work_report_list_btn_color"
-                android:textSize="@dimen/text_common_dp"/>
+                android:textSize="@dimen/text_common_dp" />
 
         </RadioGroup>
 
@@ -79,21 +77,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/btn_group_box"
-            android:layout_marginTop="10dp"
-            >
+            android:layout_marginTop="10dp">
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
-                    />
+                    android:background="@color/white" />
             </android.support.v4.widget.SwipeRefreshLayout>
 
             <TextView
@@ -104,8 +99,7 @@
                 android:text="当前没有审批流程"
                 android:textColor="#999999"
                 android:textSize="14dp"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
         </RelativeLayout>
     </RelativeLayout>

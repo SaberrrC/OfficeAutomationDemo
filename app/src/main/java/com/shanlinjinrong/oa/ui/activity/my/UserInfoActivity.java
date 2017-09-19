@@ -434,16 +434,10 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                     });
                     JPushInterface.setTags(UserInfoActivity.this, null, null);
 
-                    AppConfig.getAppConfig(UserInfoActivity.this).clearLoginInfo();
-                    startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
-//                    MainController.instance.finish();
-                    finish();
+                    exitToLogin();
                 } catch (Exception e) {
                     LogUtils.e("退出环信抛出异常" + e.toString());
-                    AppConfig.getAppConfig(UserInfoActivity.this).clearLoginInfo();
-                    startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
-//                    MainController.instance.finish();
-                    finish();
+                    exitToLogin();
                 }
             }
         });
@@ -470,6 +464,12 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
 
         popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
         popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
+    }
+
+    private void exitToLogin() {
+        AppConfig.getAppConfig(UserInfoActivity.this).clearLoginInfo();
+        startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
+        AppManager.sharedInstance().finishAllActivity();
     }
 
     private void initToolBar() {

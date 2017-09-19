@@ -491,7 +491,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             }
             if (loadMore) {
                 currentPage++;
-            }else {
+            } else {
                 currentPage = 1;
             }
             HttpParams params = new HttpParams();
@@ -515,7 +515,8 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                 @Override
                 public void onPreStart() {
                     super.onPreStart();
-                    mSwipeRefreshLayout.setRefreshing(true);
+                    if (mSwipeRefreshLayout != null)
+                        mSwipeRefreshLayout.setRefreshing(true);
                 }
 
                 @Override

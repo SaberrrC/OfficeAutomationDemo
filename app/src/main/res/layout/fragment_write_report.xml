@@ -111,14 +111,12 @@
                 android:textSize="@dimen/common_text_size" />
         </LinearLayout>
 
-        <!-- 这里修复版本没有，之后要添上的-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_margin_top"
             android:background="@color/white"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView3"

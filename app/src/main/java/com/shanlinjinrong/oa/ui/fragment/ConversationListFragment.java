@@ -37,7 +37,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
     @Override
     protected void initView() {
         super.initView();
-        View errorView = (LinearLayout) View.inflate(getActivity(), R.layout.em_chat_neterror_item, null);
+        View errorView = View.inflate(getActivity(), R.layout.em_chat_neterror_item, null);
         errorItemContainer.addView(errorView);
         errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
         ll_error = (LinearLayout) errorView.findViewById(R.id.ll_error);
@@ -45,15 +45,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
         RxView.clicks(ll_error).throttleFirst(2000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Object>() {
             @Override
             public void accept(Object o) throws Exception {
-                if (!EMClient.getInstance().isConnected()) {
-                    Log.i("ConversationList", "重连");
-                    try {
-                        connectHuanXin();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.i("ConversationList", "重连error" + e.toString());
-                    }
-                }
+                reConnection();
             }
         }, new Consumer<Throwable>() {
             @Override
@@ -61,6 +53,18 @@ public class ConversationListFragment extends EaseConversationListFragment {
                 throwable.printStackTrace();
             }
         });
+    }
+
+    private void reConnection() {
+        if (!EMClient.getInstance().isConnected()) {
+            Log.i("ConversationList", "重连");
+            try {
+                connectHuanXin();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.i("ConversationList", "重连error" + e.toString());
+            }
+        }
     }
 
     @Override
