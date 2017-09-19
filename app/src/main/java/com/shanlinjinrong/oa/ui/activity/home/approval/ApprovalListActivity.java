@@ -81,7 +81,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     private LinearLayoutManager linearLayoutManager;
-    private ArrayList<Approval> list;
+    private ArrayList<Approval> list = new ArrayList<>();
     private int currentState = 1;//当前状态，我发起的1,待我审批2，我审批的3
     private boolean isFirstIn = true;
     private int meLaunchCurrentPage = 1;//我发起的分页页数
@@ -149,7 +149,6 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
         setTranslucentStatus(this);
         initWidget();
         initData(getIntent());
-        loadData(true, false, "", "");
     }
 
     @Override
@@ -160,27 +159,23 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
     private void initData(Intent intent) {
         currentState = intent.getIntExtra("whichList", 1);
 
-        int whichList = intent.getIntExtra("whichList", 0);
 
-        if (whichList != 0) {
-            switch (whichList) {
+        if (currentState != 0) {
+            switch (currentState) {
                 case 1:
                     rbMeLaunch.setChecked(true);
                     meLaunchCurrentPage = 1;
-                    currentState = 1;
                     meLaunchMore = true;
                     break;
                 case 2:
                     rbWaitApproval.setChecked(true);
                     waitApprovalCurrentPage = 1;
                     waitApprovalMore = true;
-                    currentState = 2;
                     break;
                 case 3:
                     rbMeApprovaled.setChecked(true);
                     meApprovaledCurrentPage = 1;
                     meApprovaledMore = true;
-                    currentState = 3;
                     break;
             }
             list.clear();//需要清空list，不然我发起的或者待我审批的列表内容会显示到同一个页面
@@ -247,15 +242,15 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
                     mAdapter.removeAllFooterView();
                 } catch (Exception e) {
                 }
-                loadData(false, false, "", "");
             }
         });
         mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#0EA7ED"),
                 Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
+
         mSwipeRefreshLayout.setOnRefreshListener(this);
         linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        list = new ArrayList<>();
+
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int i) {
@@ -318,6 +313,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
                                     MeLaunchOfficesSuppliesActivity.class);
                             //发送推送已读
                             readPush(list.get(i).getOal_id());
+
                             list.get(i).setStatus("2");
                             break;
                         case 3:
@@ -466,7 +462,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
      * @param isPull 是否是下拉刷新或加载更多触发的
      */
 
-    private void loadData(boolean isPull, final boolean loadMore, String time, String where) {
+    private void  loadData(boolean isPull, final boolean loadMore, String time, String where) {
         if (!isPull && !loadMore) {
             showLoadingView();
             changeLoadState();
@@ -667,20 +663,6 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!isFirstIn) {
-            onRefresh();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        isFirstIn = false;
-    }
-
     private void showPopupWindow() {
         View view = View.inflate(this, R.layout.tab_approval_list_popwindow, null);
         bind(view);
@@ -748,7 +730,6 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
             mAdapter.removeAllFooterView();
         }
         isLoading = false;
-
         list.addAll(listApproval);
         mAdapter.notifyDataSetChanged();
     }
