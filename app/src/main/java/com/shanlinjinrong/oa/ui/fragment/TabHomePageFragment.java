@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -18,6 +19,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectOrdinaryMeetingRoomActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectVedioMeetingRoomActivity;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportListActivity;
@@ -89,16 +91,20 @@ public class TabHomePageFragment extends BaseFragment {
                 intent = new Intent(mContext, MyMailActivity.class);
                 break;
             case R.id.rl_work_report_launch:
-                intent = new Intent(mContext, WorkReportListActivity.class);
-                intent.putExtra("whichList", 1);
+                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
+//                intent = new Intent(mContext, WorkReportListActivity.class);
+//                intent.putExtra("whichList", 1);
                 break;
             case R.id.rl_work_report_send_to_me:
-                intent = new Intent(mContext, WorkReportCheckActivity.class);
-                intent.putExtra("whichList", 2);
+                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
+//                intent = new Intent(mContext, WorkReportCheckActivity.class);
+//                intent.putExtra("whichList", 2);
                 break;
             case R.id.rl_work_report_copy_to_me:
-                intent = new Intent(mContext, WorkReportListActivity.class);
-                intent.putExtra("whichList", 3);
+                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
+//                intent = new Intent(mContext, WorkReportListActivity.class);
+//                intent = new Intent(mContext, WriteWeeklyNewspaperActivity.class);
+//                intent.putExtra("whichList", 3);
                 break;
             case R.id.rl_work_report_launch_report:
                 intent = new Intent(mContext, WorkReportLaunchActivity.class);
@@ -141,6 +147,7 @@ public class TabHomePageFragment extends BaseFragment {
             case R.id.rl_schedule_create_note:
                 intent = new Intent(mContext, CreateNoteActivity.class);
                 break;
+
         }
         if (intent != null) {
             startActivity(intent);
