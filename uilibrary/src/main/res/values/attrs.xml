@@ -64,4 +64,10 @@
         <!-- keep header when refreshing-->
         <attr name="keep_header_when_refresh" format="boolean" />
     </declare-styleable>
+
+    <!-- loadingView -->
+    <declare-styleable name="LoadingView">
+        <attr name="loading_view_color" format="color" />
+        <attr name="loading_view_size" format="dimension" />
+    </declare-styleable>
 </resources>

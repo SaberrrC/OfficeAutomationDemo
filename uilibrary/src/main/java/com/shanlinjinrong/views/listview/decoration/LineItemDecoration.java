@@ -1,4 +1,4 @@
-package com.shanlinjinrong.views.listview;
+package com.shanlinjinrong.views.listview.decoration;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -17,7 +17,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by 丁 on 2017/9/1.
  * list分割线
  */
-public class ListItemDecoration extends RecyclerView.ItemDecoration {
+public class LineItemDecoration extends RecyclerView.ItemDecoration {
     @IntDef({HORIZONTAL_LIST, VERTICAL_LIST})
     @Retention(RetentionPolicy.SOURCE)
     @interface OrientationMode {
@@ -29,7 +29,7 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
     private int mOrientation;
     private Drawable mDivider;
 
-    public ListItemDecoration(Context context, @OrientationMode int orientation, int resId) {
+    public LineItemDecoration(Context context, @OrientationMode int orientation, int resId) {
         mDivider = ResourcesCompat.getDrawable(context.getResources(), resId, null);
         setOrientation(orientation);
     }

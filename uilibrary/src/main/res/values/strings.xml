@@ -24,4 +24,13 @@
     <string name="cube_ptr_seconds_ago">&#160;秒之前</string>
     <string name="cube_ptr_minutes_ago">&#160;分钟之前</string>
     <string name="cube_ptr_hours_ago">&#160;小时之前</string>
+    <string name="dialog_text_sure">确定</string>
+    <string name="dialog_defalut_text_title">提示</string>
+    <string name="dialog_please_write_content">请在此填写内容</string>
+    <string name="dialog_no_write_content">您还没有输入任何内容！</string>
+
+    <!--添加多种cell的listview-->
+    <string name="empty_message">数据为空</string>
+    <string name="error_message">加载出错</string>
+    <string name="common_loading">加载中...</string>
 </resources>

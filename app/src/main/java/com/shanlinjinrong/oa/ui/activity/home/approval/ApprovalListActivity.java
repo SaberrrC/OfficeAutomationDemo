@@ -186,21 +186,21 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        handleIntent(intent);
         initData(intent);
+        loadData(false, false, "", "");
+//        handleIntent(intent);
     }
 
     private void handleIntent(Intent intent) {
-
         if (intent != null) {
             String oa_id = intent.getStringExtra("oa_id");
             if (!StringUtils.isBlank(oa_id)) {
                 //循环将list中的那个已读的找出来移除
                 for (int i = 0; i < list.size(); i++) {
-                    String oa_id1 = list.get(i).getOa_id();
+                    String oa_id1 = list.get(i).getOal_id(); // 将oa_id改为oal_id,接口那边不用oa_id了  modify by lvdinghao 2017/9/20
                     if (oa_id1.equals(oa_id)) {
                         list.remove(i);
-                        mAdapter.notifyDataSetChanged();
+                        mAdapter.notifyItemChanged(i);
                     }
 
                 }
