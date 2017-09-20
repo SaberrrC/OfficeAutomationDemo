@@ -2,6 +2,7 @@ package com.hyphenate.easeui.widget;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -54,6 +55,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
         Context context1 = context;
         LayoutInflater.from(context).inflate(R.layout.ease_widget_chat_primary_menu, this);
         editText = (EditText) findViewById(R.id.et_sendmessage);
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(500)});
         buttonSetModeKeyboard = findViewById(R.id.btn_set_mode_keyboard);
         edittext_layout = (RelativeLayout) findViewById(R.id.edittext_layout);
         buttonSetModeVoice = findViewById(R.id.btn_set_mode_voice);
