@@ -84,7 +84,7 @@ public class WaitApprovalOfficesSuppliesActivity extends BaseActivity {
 
     private void initData() {
         appr_id = getIntent().getStringExtra("appr_id");
-        oa_id = getIntent().getStringExtra("oa_id");
+        oa_id = getIntent().getStringExtra("oal_id");
         oal_id = getIntent().getStringExtra("oal_id");
         loadData();
     }

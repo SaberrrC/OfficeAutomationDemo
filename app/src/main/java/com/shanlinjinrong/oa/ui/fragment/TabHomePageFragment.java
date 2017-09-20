@@ -18,6 +18,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectOrdinaryMeetingRoomActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectVedioMeetingRoomActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportListActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
@@ -92,7 +93,7 @@ public class TabHomePageFragment extends BaseFragment {
                 intent.putExtra("whichList", 1);
                 break;
             case R.id.rl_work_report_send_to_me:
-                intent = new Intent(mContext, WorkReportListActivity.class);
+                intent = new Intent(mContext, WorkReportCheckActivity.class);
                 intent.putExtra("whichList", 2);
                 break;
             case R.id.rl_work_report_copy_to_me:

@@ -112,4 +112,7 @@
 
     <!--审批流程-->
     <string name="approval_office_supplies">办公用品</string>
+    <string name="title_work_report_approval">审核汇报</string>
+    <string name="work_report_check_pending_text">待审核</string>
+    <string name="work_report_checked_text">已审核</string>
 </resources>

@@ -11,7 +11,7 @@ public class EaseUISqliteHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     public EaseUISqliteHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context.getApplicationContext(), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     public static EaseUISqliteHelper getInstance(Context context) {

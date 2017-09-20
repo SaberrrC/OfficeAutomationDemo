@@ -84,7 +84,7 @@ public class MeLaunchNoticeActivity extends BaseActivity {
     private void initData() {
         appr_id = getIntent().getStringExtra("appr_id");
         oal_id = getIntent().getStringExtra("oal_id");
-        oa_id = getIntent().getStringExtra("oa_id");
+        oa_id = getIntent().getStringExtra("oal_id");
         titleName = getIntent().getStringExtra("titleName");
         mTvTitle.setText(titleName);
         boolean isCanReply = getIntent().getBooleanExtra("isCanReply", false);

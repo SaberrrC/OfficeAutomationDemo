@@ -60,4 +60,6 @@
 
     <color name="work_report_button_enable">#1a9afa</color>
     <color name="work_report_button_disenable">#bfbaba</color>
+
+    <color name="blue_69B0F2">#69B0F2</color>
 </resources>

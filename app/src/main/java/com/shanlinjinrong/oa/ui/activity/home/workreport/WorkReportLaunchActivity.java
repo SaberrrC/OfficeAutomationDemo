@@ -220,15 +220,15 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
         jsonObject.put("workEigth", mHourReportData.get(7).getRealWork());
 
 
-        //数据量化  // TODO: 2017/9/18 字段还没有  暂不提交
-//        jsonObject.put("workOne", mHourReportData.get(0).getQuantitative());
-//        jsonObject.put("workTwo", mHourReportData.get(1).getQuantitative());
-//        jsonObject.put("workThree", mHourReportData.get(2).getQuantitative());
-//        jsonObject.put("workFour", mHourReportData.get(3).getQuantitative());
-//        jsonObject.put("workFive", mHourReportData.get(4).getQuantitative());
-//        jsonObject.put("workSix", mHourReportData.get(5).getQuantitative());
-//        jsonObject.put("workSeven", mHourReportData.get(6).getQuantitative());
-//        jsonObject.put("workEigth", mHourReportData.get(7).getQuantitative());
+        //数据量化
+        jsonObject.put("workResultOne", mHourReportData.get(0).getQuantitative());
+        jsonObject.put("workResultTwo", mHourReportData.get(1).getQuantitative());
+        jsonObject.put("workResultThree", mHourReportData.get(2).getQuantitative());
+        jsonObject.put("workResultFour", mHourReportData.get(3).getQuantitative());
+        jsonObject.put("workResultFive", mHourReportData.get(4).getQuantitative());
+        jsonObject.put("workResultSix", mHourReportData.get(5).getQuantitative());
+        jsonObject.put("workResultSeven", mHourReportData.get(6).getQuantitative());
+        jsonObject.put("workResultEigth", mHourReportData.get(7).getQuantitative());
 
         //职业素养
         jsonObject.put("selfBehavior", mWorkReportListData.get(8).getContent()); // 个人言行
