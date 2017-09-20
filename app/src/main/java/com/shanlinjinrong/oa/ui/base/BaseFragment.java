@@ -26,6 +26,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
@@ -152,18 +153,19 @@ public abstract class BaseFragment extends Fragment {
                     }
                 });
                 JPushInterface.setTags(getContext(), null, null);
-
-                AppConfig.getAppConfig(getContext()).clearLoginInfo();
-                startActivity(new Intent(getContext(), LoginActivity.class));
-//                MainController.instance.finish();
+                toLoginActivity();
             } catch (Exception e) {
                 LogUtils.e("退出环信抛出异常" + e.toString());
-                AppConfig.getAppConfig(getContext()).clearLoginInfo();
-                startActivity(new Intent(getContext(), LoginActivity.class));
-//                MainController.instance.finish();
+                toLoginActivity();
             }
         }
+        toLoginActivity();
+    }
+
+    private void toLoginActivity() {
+        AppConfig.getAppConfig(getContext()).clearLoginInfo();
         startActivity(new Intent(getActivity(), LoginActivity.class));
+        AppManager.sharedInstance().finishAllActivity();
     }
 
     public void showTips(String msg) {
