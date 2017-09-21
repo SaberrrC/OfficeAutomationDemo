@@ -7,13 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
-import com.shanlinjinrong.views.listview.listener.LoadMoreListener;
-import com.shanlinjinrong.views.listview.RefreshRecyclerView;
 import com.shanlinjinrong.views.listview.cell.BaseCell;
 import com.shanlinjinrong.views.listview.cell.EmptyCell;
 import com.shanlinjinrong.views.listview.cell.ErrorCell;
 import com.shanlinjinrong.views.listview.cell.LoadMoreCell;
 import com.shanlinjinrong.views.listview.cell.NoMoreCell;
+import com.shanlinjinrong.views.listview.listener.LoadMoreListener;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class RefreshAdapter extends BaseAdapter {
     private View mCustomMoreView;// custom LoadMoreCell
     private View mCustomNoMoreCell;// custom NoMoreCell
 
-    private RefreshRecyclerView mListView;
+    private RecyclerView mListView;
 
     private LoadMoreListener mLoadMoreListener;
 
@@ -59,7 +58,7 @@ public class RefreshAdapter extends BaseAdapter {
     private boolean isLoadMore;
 
 
-    public RefreshAdapter(Context mContext, RefreshRecyclerView mListView, List<BaseCell> mItems) {
+    public RefreshAdapter(Context mContext, RecyclerView mListView, List<BaseCell> mItems) {
         super(mItems);
         this.mListView = mListView;
         this.mItems = mItems;

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.views.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
@@ -29,7 +30,6 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportLaunchListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.ItemBean;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportLaunchActivityPresenter;
 import com.shanlinjinrong.oa.utils.DateUtils;
@@ -88,7 +88,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
     private List<HourReportBean> mHourReportData;
 
-    private List<ItemBean> mWorkReportListData;//日报列表数据
+    private List<LaunchReportItem> mWorkReportListData;//日报列表数据
 
     private DatePicker picker;
 
@@ -313,38 +313,38 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     /**
      * 初始化整个列表的显示数据
      *
-     * @return List<ItemBean>
+     * @return List<LaunchReportItem>
      */
-    private List<ItemBean> initListData() {
-        List<ItemBean> listData = new ArrayList<>();
+    private List<LaunchReportItem> initListData() {
+        List<LaunchReportItem> listData = new ArrayList<>();
         //时报 上午九点到12点
         for (int i = 9; i < 12; i++) {
             String title = i + ":00~" + (i + 1) + ":00";
-            listData.add(new ItemBean(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
+            listData.add(new LaunchReportItem(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
         }
 
         //下午一点到五点
         for (int i = 13; i < 17; i++) {
             String title = i + ":00~" + (i + 1) + ":00";
-            listData.add(new ItemBean(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
+            listData.add(new LaunchReportItem(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
         }
 
         //下午五点到五点半
-        listData.add(new ItemBean("17:00~17:30", getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
+        listData.add(new LaunchReportItem("17:00~17:30", getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
 
         //职业素养
-        listData.add(new ItemBean(getString(R.string.work_report_personal_behavior), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
-        listData.add(new ItemBean(getString(R.string.work_report_environmental_hygiene), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_save), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_communication_skills), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_appearance), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_work_discipline), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_personal_behavior), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_environmental_hygiene), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_save), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_communication_skills), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_appearance), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_work_discipline), "", WorkReportLaunchListAdapter.WRITE_TYPE));
 
         //团队合作
-        listData.add(new ItemBean(getString(R.string.work_report_initiative), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_teamwork)));
-        listData.add(new ItemBean(getString(R.string.work_report_cooperation), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_dedication), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_obey), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_initiative), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_teamwork)));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_cooperation), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_dedication), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_obey), "", WorkReportLaunchListAdapter.WRITE_TYPE));
 
         return listData;
     }

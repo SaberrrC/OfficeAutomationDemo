@@ -43,11 +43,11 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fadingEdge="none"
-        android:overScrollMode="never"
-        android:layout_below="@+id/toolbarshadow"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbarshadow"
+        android:fadingEdge="none"
+        android:overScrollMode="never">
 
         <RelativeLayout
 
@@ -111,23 +111,23 @@
                         android:background="@color/grid_layout_line_color" />
 
                     <RelativeLayout
-                        android:id="@+id/rl_work_report_send_to_me"
+                        android:id="@+id/rl_work_report_launch_report"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center">
 
                         <ImageView
-                            android:id="@+id/iv_homepage_wr_send_to_me"
+                            android:id="@+id/iv_homepage_wr_launch_work_report"
                             style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_work_report_send_to_me" />
+                            android:src="@drawable/icon_homepage_work_report_launch" />
 
                         <TextView
                             style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_wr_send_to_me"
+                            android:layout_below="@+id/iv_homepage_wr_launch_work_report"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
-                            android:text="发送我的"
+                            android:text="@string/launch_work_report"
                             android:textSize="@dimen/text_common_icon_tips" />
 
 
@@ -167,20 +167,20 @@
                         android:background="@color/grid_layout_line_color" />
 
                     <RelativeLayout
-                        android:id="@+id/rl_work_report_launch_report"
+                        android:id="@+id/rl_work_report_send_to_me"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center">
 
                         <ImageView
-                            android:id="@+id/iv_homepage_wr_launch_work_report"
+                            android:id="@+id/iv_homepage_wr_send_to_me"
                             style="@style/home_page_icon_style"
                             android:src="@mipmap/work_content_send_me" />
 
                         <TextView
                             style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_wr_launch_work_report"
+                            android:layout_below="@+id/iv_homepage_wr_send_to_me"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="发给我的"

@@ -70,4 +70,10 @@
         <attr name="loading_view_color" format="color" />
         <attr name="loading_view_size" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="SwipeMenuLayout">
+        <attr name="leftViewId" format="reference"/>
+        <attr name="rightViewId" format="reference"/>
+        <attr name="contentViewId" format="reference"/>
+    </declare-styleable>
 </resources>

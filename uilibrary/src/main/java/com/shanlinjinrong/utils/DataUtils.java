@@ -20,7 +20,7 @@ public class DataUtils {
             JSONObject jsonObject = new JSONObject(jsonStr);
             // TODO: 2017/9/15 单层json的解析过程
             detail.setMessage(jsonObject.optString("message"));
-            detail.setCode(jsonObject.optInt("code"));
+            detail.setCode(jsonObject.optString("code"));
 
             // TODO: 2017/9/15 数据
             JSONObject data = jsonObject.getJSONObject("");

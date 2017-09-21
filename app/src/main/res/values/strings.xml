@@ -115,4 +115,15 @@
     <string name="title_work_report_approval">审核汇报</string>
     <string name="work_report_check_pending_text">待审核</string>
     <string name="work_report_checked_text">已审核</string>
+    <string name="launch_work_report">发起日报</string>
+    <string name="title_work_report_all_report">全部汇报</string>
+
+    <string name="work_report_type_text">类型</string>
+    <string name="work_report_report_time_text">汇报时间</string>
+    <string name="work_report_commit_time_text">提交时间</string>
+    <string name="work_report_status_text">状态</string>
+    <string name="work_report_account_text">汇报人</string>
+
+    <string name="work_report_check_title">审核工作日报</string>
+    <string name="work_report_check_evaluation_text">一键评价</string>
 </resources>

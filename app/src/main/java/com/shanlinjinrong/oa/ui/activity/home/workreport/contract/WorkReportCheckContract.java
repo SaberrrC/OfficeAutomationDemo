@@ -1,11 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.contract;
 
-import com.shanlinjinrong.oa.model.selectContacts.Child;
-import com.shanlinjinrong.oa.model.selectContacts.Group;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.CheckReportItem;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 丁 on 2017/8/21.
@@ -13,7 +12,8 @@ import java.util.ArrayList;
  */
 public interface WorkReportCheckContract {
     interface View extends BaseView {
-        void loadDataSuccess(ArrayList<Group> groups, Child selectChild);
+
+        void loadDataSuccess(List<CheckReportItem> reports, int pageNum, int pageSize, boolean hasNextPage, boolean isLoadMore);
 
         void loadDataFailed(int errCode, String errMsg);
 
@@ -22,7 +22,7 @@ public interface WorkReportCheckContract {
         void loadDataEmpty();
     }
 
-    interface Presenter extends BasePresenter<View> {
-        void loadData(String departmentId, String searchName, String selectChildId);
+    interface Presenter extends BasePresenter<MyLaunchWorkReportContract.View> {
+        void loadData(int reportType, int pageSize, int pageNum, int timeType, boolean isLoadMore);
     }
 }

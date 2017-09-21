@@ -5,24 +5,23 @@ import android.os.Parcelable;
 
 /**
  * Created by 丁 on 2017/8/21.
+ * 发报页面的实体类
  */
-
-public class ItemBean implements Parcelable {
-    private int mType;
-    private String mTitle;
-    private String mContent;
+public class LaunchReportItem implements Parcelable {
+    private int mType; // cell 类型
+    private String mTitle; // 标题
+    private String mContent; //显示内容
     private boolean mGroup;
-    private String mGroupTitle;
+    private String mGroupTitle; //组标题
 
 
-
-    public ItemBean(String mTitle, String mContent, int mType) {
+    public LaunchReportItem(String mTitle, String mContent, int mType) {
         this.mContent = mContent;
         this.mType = mType;
         this.mTitle = mTitle;
     }
 
-    public ItemBean(String mTitle, String mContent, int mType, boolean mGroup, String mGroupTitle) {
+    public LaunchReportItem(String mTitle, String mContent, int mType, boolean mGroup, String mGroupTitle) {
         this.mContent = mContent;
         this.mType = mType;
         this.mTitle = mTitle;
@@ -34,7 +33,7 @@ public class ItemBean implements Parcelable {
         return mGroupTitle;
     }
 
-    public ItemBean setGroupTitle(String mGroupTitle) {
+    public LaunchReportItem setGroupTitle(String mGroupTitle) {
         this.mGroupTitle = mGroupTitle;
         return this;
     }
@@ -43,7 +42,7 @@ public class ItemBean implements Parcelable {
         return mGroup;
     }
 
-    public ItemBean setGroup(boolean mGroup) {
+    public LaunchReportItem setGroup(boolean mGroup) {
         this.mGroup = mGroup;
         return this;
     }
@@ -52,7 +51,7 @@ public class ItemBean implements Parcelable {
         return mType;
     }
 
-    public ItemBean setType(int mType) {
+    public LaunchReportItem setType(int mType) {
         this.mType = mType;
         return this;
     }
@@ -61,7 +60,7 @@ public class ItemBean implements Parcelable {
         return mTitle;
     }
 
-    public ItemBean setTitle(String mTitle) {
+    public LaunchReportItem setTitle(String mTitle) {
         this.mTitle = mTitle;
         return this;
     }
@@ -70,7 +69,7 @@ public class ItemBean implements Parcelable {
         return mContent;
     }
 
-    public ItemBean setContent(String mContent) {
+    public LaunchReportItem setContent(String mContent) {
         this.mContent = mContent;
         return this;
     }
@@ -89,7 +88,7 @@ public class ItemBean implements Parcelable {
         dest.writeString(this.mGroupTitle);
     }
 
-    protected ItemBean(Parcel in) {
+    protected LaunchReportItem(Parcel in) {
         this.mType = in.readInt();
         this.mTitle = in.readString();
         this.mContent = in.readString();
@@ -97,15 +96,15 @@ public class ItemBean implements Parcelable {
         this.mGroupTitle = in.readString();
     }
 
-    public static final Parcelable.Creator<ItemBean> CREATOR = new Parcelable.Creator<ItemBean>() {
+    public static final Parcelable.Creator<LaunchReportItem> CREATOR = new Parcelable.Creator<LaunchReportItem>() {
         @Override
-        public ItemBean createFromParcel(Parcel source) {
-            return new ItemBean(source);
+        public LaunchReportItem createFromParcel(Parcel source) {
+            return new LaunchReportItem(source);
         }
 
         @Override
-        public ItemBean[] newArray(int size) {
-            return new ItemBean[size];
+        public LaunchReportItem[] newArray(int size) {
+            return new LaunchReportItem[size];
         }
     };
 }

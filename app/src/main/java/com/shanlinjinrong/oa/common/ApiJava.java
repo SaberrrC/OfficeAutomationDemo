@@ -24,6 +24,7 @@ public class ApiJava {
     //发起日报
     public static final String DAILY_REPORT = "dailyreport";
 
+
     //当前登录用户获取其leader
     public static final String GET_CURRENT_LEADER = "user/getCurrentLeader";
 
@@ -32,6 +33,12 @@ public class ApiJava {
 
     //获取公司所有联系人
     public static final String ALL_ORGANIZATION = "organization/queryAllOrganiza";
+
+
+
+    public static final String LEADER_READ_DAILY_REPORT = "dailyreport/leader";
+
+
 
 
 

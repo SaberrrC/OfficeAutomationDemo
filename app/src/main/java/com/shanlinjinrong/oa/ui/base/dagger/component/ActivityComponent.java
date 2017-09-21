@@ -8,7 +8,9 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalReplyActivity
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateMeetingActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.ui.activity.login.FindPassWordActivity;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
@@ -73,4 +75,9 @@ public interface ActivityComponent {
     void inject(CreateMeetingActivity activity);
 
     void inject(CreateNoteActivity activity);
+
+    void inject(WorkReportCheckActivity activity);
+
+    void inject(MyLaunchWorkReportActivity activity);
+
 }

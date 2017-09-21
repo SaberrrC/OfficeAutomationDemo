@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.ItemBean;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
 import com.shanlinjinrong.oa.utils.EmojiFilter;
 
 import java.util.List;
@@ -28,12 +28,12 @@ public class WorkReportLaunchListAdapter extends RecyclerView.Adapter<RecyclerVi
     public static int CLICK_TYPE = 2;//可输入的cell
     private LayoutInflater mLayoutInflater;
     private Context mContext;
-    private List<ItemBean> mData;
+    private List<LaunchReportItem> mData;
 
 
     private OnItemClickListener mItemClickListener;
 
-    public WorkReportLaunchListAdapter(Context context, List<ItemBean> mData) {
+    public WorkReportLaunchListAdapter(Context context, List<LaunchReportItem> mData) {
         mContext = context;
         this.mData = mData;
         mLayoutInflater = LayoutInflater.from(context);

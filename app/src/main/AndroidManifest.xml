@@ -661,10 +661,20 @@
                 <category android:name="com.hyphenate.chatuidemo" />
             </intent-filter>
         </receiver>
-        <activity android:name=".ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.home.workreport.WorkReportCheckActivity"
-                  android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.home.workreport.WorkReportCheckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.home.workreport.MyLaunchWorkReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.home.workreport.CheckDailyReportActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

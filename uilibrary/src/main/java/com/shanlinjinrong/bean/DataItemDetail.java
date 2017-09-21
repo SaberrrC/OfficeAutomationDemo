@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class DataItemDetail {
 
-    private int mCode = 0; //接口的返回值
+    private String mCode = ""; //接口的返回值
     private String message = ""; //接口返回message
     private boolean hasError;//返回信息是否有错
 
@@ -27,11 +27,11 @@ public class DataItemDetail {
     }
 
 
-    public int getCode() {
+    public String getCode() {
         return mCode;
     }
 
-    public DataItemDetail setCode(int mCode) {
+    public DataItemDetail setCode(String mCode) {
         this.mCode = mCode;
         return this;
     }

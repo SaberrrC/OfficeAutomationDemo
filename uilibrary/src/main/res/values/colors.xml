@@ -31,4 +31,10 @@
     <!--覆盖颜色-->
     <color name="bgColor_overlay">#60000000</color>
     <color name="lineColor">#babdbf</color>
+
+    <!--recycler_swipe-->
+    <color name="recycler_swipe_color_text_gray">#FF777777</color>
+    <color name="recycler_swipe_color_loading_color1">#55777777</color>
+    <color name="recycler_swipe_color_loading_color2">#B1777777</color>
+    <color name="recycler_swipe_color_loading_color3">#FF777777</color>
 </resources>
