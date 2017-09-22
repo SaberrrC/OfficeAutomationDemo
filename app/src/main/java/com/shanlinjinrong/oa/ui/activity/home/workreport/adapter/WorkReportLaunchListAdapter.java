@@ -71,9 +71,8 @@ public class WorkReportLaunchListAdapter extends RecyclerView.Adapter<RecyclerVi
             if (!TextUtils.isEmpty(content))
                 writeHolder.mEdit.setText(content);
 //            }
-
-            writeHolder.mEdit.addTextChangedListener(new WriteTextWatcher(writeHolder));
             writeHolder.mEdit.setTag(position);
+            writeHolder.mEdit.addTextChangedListener(new WriteTextWatcher(writeHolder));
         }
     }
 

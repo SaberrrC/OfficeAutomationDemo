@@ -38,6 +38,8 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
 
     private int mPosition; //条目位置
 
+    private boolean mIsFromCheckPage = false;//是否来自审核页面
+
     private List<WriteReportFragment> mFragmentList;
     private List<HourReportBean> mHourReportList;
 
@@ -58,7 +60,8 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             mPosition = extra.getInt("position");
-            mTitles = createTitles(changeDateFormat(extra.getString("date")));
+            mIsFromCheckPage = extra.getBoolean("is_from_check_page", false);
+            mTitles = createTitles(changeDateFormat(extra.getString("date", "")));
             mTopView.setAppTitle(mTitles.get(mPosition));
             mHourReportList = extra.getParcelableArrayList("hour_report_list");
         }
@@ -71,6 +74,7 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
             Bundle fragmentArg = new Bundle();
             fragmentArg.putParcelable("hour_report", mHourReportList.get(i));
             fragmentArg.putInt("page", i);
+            fragmentArg.putBoolean("is_from_check_page", mIsFromCheckPage);
             fragment.setArguments(fragmentArg);
             fragment.setChangeListener(this);
             fragment.setPageBtnClickListener(this);
@@ -184,8 +188,14 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
     }
 
     @Override
-    public void fragmentStartChange(int position, String planWork, String realWork, String selfEvaluate, String quantitative) {
-        mHourReportList.get(position).setRealWork(realWork).setWorkPlan(planWork).setSelfEvaluate(selfEvaluate).setQuantitative(quantitative);
+    public void fragmentStartChange(int position, String planWork, String realWork, String selfEvaluate, String quantitative, String checkManEvaluate, String supervisorEvaluate) {
+        mHourReportList.get(position)
+                .setRealWork(realWork)
+                .setWorkPlan(planWork)
+                .setSelfEvaluate(selfEvaluate)
+                .setQuantitative(quantitative)
+                .setCheckManEvaluate(checkManEvaluate)
+                .setSupervisorEvaluate(supervisorEvaluate);
         if (isBack) {
             setFinishResult();
         }

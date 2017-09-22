@@ -2,8 +2,8 @@ package com.shanlinjinrong.oa.ui.activity.home.workreport.presenter;
 
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.MyLaunchReportItem;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.MyLaunchWorkReportContract;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.CheckReportItem;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportCheckContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
 import org.json.JSONArray;
@@ -21,7 +21,7 @@ import javax.inject.Inject;
  * Created by 丁 on 2017/8/21.
  * 发起日报 Presenter
  */
-public class WorkReportCheckPresenter extends HttpPresenter<MyLaunchWorkReportContract.View> implements MyLaunchWorkReportContract.Presenter {
+public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContract.View> implements WorkReportCheckContract.Presenter {
 
 
     @Inject
@@ -30,20 +30,27 @@ public class WorkReportCheckPresenter extends HttpPresenter<MyLaunchWorkReportCo
     }
 
     @Override
-    public void loadData(int reportType, int pageSize, int pageNum, int timeType, final boolean isLoadMore) {
+    public void loadData(int reportType, int pageSize, int pageNum, int timeType, int reportStatus, final boolean isLoadMore) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("type", reportType);
+            jsonObject.put("pageSize", pageSize);
+            jsonObject.put("pageNum", pageNum);
+            jsonObject.put("time", timeType);
+            jsonObject.put("mobileRatingStatus", reportStatus);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         HttpParams params = new HttpParams();
-        params.put("reportType", reportType);
-        params.put("pageSize", pageSize);
-        params.put("pageNum", pageNum);
-        params.put("time", timeType);
-        mKjHttp.jsonGet(ApiJava.LEADER_READ_DAILY_REPORT, params, new HttpCallBack() {
+        params.putJsonParams(jsonObject.toString());
+        mKjHttp.jsonPost(ApiJava.LEADER_READ_DAILY_REPORT, params, new HttpCallBack() {
 
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
                     JSONObject jo = new JSONObject(t);
-                    List<MyLaunchReportItem> items = new ArrayList<>();
+                    List<CheckReportItem> items = new ArrayList<>();
                     String code = jo.getString("code");
                     String message = jo.getString("message");
                     switch (code) {
@@ -55,10 +62,10 @@ public class WorkReportCheckPresenter extends HttpPresenter<MyLaunchWorkReportCo
                             JSONArray array = data.getJSONArray("data");
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject item = new JSONObject(array.get(i).toString());
-                                items.add(new MyLaunchReportItem(item.getInt("type"),
+                                items.add(new CheckReportItem(item.getInt("type"),
                                         item.getString("reportingDate"),
                                         item.getString("releaseDate"),
-                                        item.getInt("speedOfProgress")));
+                                        item.getString("speedOfProgress")));
                             }
                             mView.loadDataSuccess(items, pageNum, pageSize, hasNextPage, isLoadMore);
                             break;

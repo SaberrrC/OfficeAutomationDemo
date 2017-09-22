@@ -1,19 +1,17 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.contract;
 
-import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.CheckReportItem;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.WorkReportBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
-import java.util.List;
-
 /**
  * Created by 丁 on 2017/8/21.
- * 汇报审核接口
+ * 审核日报页面接口
  */
-public interface WorkReportCheckContract {
+public interface CheckDailyReportContract {
     interface View extends BaseView {
 
-        void loadDataSuccess(List<CheckReportItem> reports, int pageNum, int pageSize, boolean hasNextPage, boolean isLoadMore);
+        void loadDataSuccess(WorkReportBean report);
 
         void loadDataFailed(int errCode, String errMsg);
 
@@ -23,6 +21,8 @@ public interface WorkReportCheckContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void loadData(int reportType, int pageSize, int pageNum, int timeType, int reportStatus, boolean isLoadMore);
+        void loadDailyData(int dailyid);
+
+        void commitDailyEvaluation();
     }
 }

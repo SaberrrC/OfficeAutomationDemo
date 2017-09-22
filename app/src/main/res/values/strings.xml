@@ -81,7 +81,7 @@
     <string name="work_report_professional_qualities">职业素养</string>
     <string name="work_report_personal_behavior">个人行为</string>
     <string name="work_report_environmental_hygiene">环境卫生</string>
-    <string name="work_report_save">节约    </string>
+    <string name="work_report_save">节约　　</string>
     <string name="work_report_communication_skills">沟通能力</string>
     <string name="work_report_appearance">仪容仪表</string>
     <string name="work_report_work_discipline">工作纪律</string>
@@ -124,6 +124,18 @@
     <string name="work_report_status_text">状态</string>
     <string name="work_report_account_text">汇报人</string>
 
+    <!--审核日报-->
+    <string name="work_report_check_right_btn_text">提交</string>
     <string name="work_report_check_title">审核工作日报</string>
     <string name="work_report_check_evaluation_text">一键评价</string>
+    <string name="work_report_no_evaluation">待评价</string>
+    <string name="work_report_has_evaluation">已评价</string>
+    <string name="work_report_check_work_score">工作评分</string>
+    <string name="work_report_check_work_content">工作内容</string>
+    <string name="work_report_check_professional_qualities">职业素养</string>
+    <string name="work_report_check_teamwork">团队合作</string>
+    <string name="work_report_check_man_evaluate">检查人评价</string>
+    <string name="work_report_supervisor_evaluate">监督人评价</string>
+    <string name="work_report_please_write">请输入</string>
+    <string name="no_problem">无问题</string>
 </resources>

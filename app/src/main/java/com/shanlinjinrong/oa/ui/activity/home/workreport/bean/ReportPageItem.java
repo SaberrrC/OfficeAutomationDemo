@@ -22,6 +22,13 @@ public class ReportPageItem implements Parcelable {
         this.mTitle = mTitle;
     }
 
+    public ReportPageItem(String mTitle, String mContent, String mEvaluation, int mType) {
+        this.mContent = mContent;
+        this.mType = mType;
+        this.mTitle = mTitle;
+        this.mEvaluation = mEvaluation;
+    }
+
     public ReportPageItem(String mTitle, String mContent, int mType, boolean mGroup, String mGroupTitle) {
         this.mContent = mContent;
         this.mType = mType;
@@ -30,7 +37,7 @@ public class ReportPageItem implements Parcelable {
         this.mGroupTitle = mGroupTitle;
     }
 
-    public ReportPageItem(String mTitle, String mContent, int mType, String mEvaluation, boolean mGroup, String mGroupTitle) {
+    public ReportPageItem(String mTitle, String mContent, String mEvaluation, int mType, boolean mGroup, String mGroupTitle) {
         this.mContent = mContent;
         this.mType = mType;
         this.mTitle = mTitle;
@@ -88,10 +95,11 @@ public class ReportPageItem implements Parcelable {
         return mEvaluation;
     }
 
-    public ReportPageItem setmEvaluation(String mEvaluation) {
+    public ReportPageItem setEvaluation(String mEvaluation) {
         this.mEvaluation = mEvaluation;
         return this;
     }
+
 
     @Override
     public int describeContents() {

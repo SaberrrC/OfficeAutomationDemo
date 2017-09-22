@@ -35,12 +35,11 @@ public class ApiJava {
     public static final String ALL_ORGANIZATION = "organization/queryAllOrganiza";
 
 
-
+    //审核日报列表
     public static final String LEADER_READ_DAILY_REPORT = "dailyreport/leader";
 
-
-
-
+    //审核周报列表
+    public static final String LEADER_READ_WEEK_REPORT = "weekreport/leader";
 
 
 }

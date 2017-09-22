@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -65,7 +66,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         setContentView(R.layout.activity_work_report_check);
         ButterKnife.bind(this);
         initListView();
-//        loadData(false);
+        loadData(false);
 
     }
 
@@ -102,7 +103,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
      * @param isMore ：is load more data?
      */
     private void loadData(boolean isMore) {
-        mPresenter.loadData(reportType, pageSize, pageNum, timeType, isMore);
+        mPresenter.loadData(reportType, pageSize, pageNum, timeType, mReportStatus, isMore);
     }
 
     /**
@@ -130,8 +131,16 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     private SwipeItemClickListener mItemClickListener = new SwipeItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
+            toCheckDailyReport();
         }
+
+
     };
+
+    private void toCheckDailyReport() {
+        Intent intent = new Intent(WorkReportCheckActivity.this, CheckDailyReportActivity.class);
+        startActivity(intent);
+    }
 
     /**
      * RecyclerView的Item的Menu点击监听。
@@ -190,7 +199,6 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     @Override
     public void loadDataEmpty() {
-
     }
 
     @Override
