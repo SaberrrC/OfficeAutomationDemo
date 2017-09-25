@@ -10,6 +10,7 @@
     tools:context="com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity">
 
     <com.shanlinjinrong.views.common.CommonTopView
+        android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
@@ -49,10 +50,27 @@
 
     </RadioGroup>
 
-    <com.shanlinjinrong.views.swipeRecycleview.SwipeMenuRecyclerView
-        android:id="@+id/report_check_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.shanlinjinrong.views.swipeRecycleview.SwipeMenuRecyclerView
+                android:id="@+id/report_no_check_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.shanlinjinrong.views.swipeRecycleview.SwipeMenuRecyclerView
+                android:id="@+id/report_check_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

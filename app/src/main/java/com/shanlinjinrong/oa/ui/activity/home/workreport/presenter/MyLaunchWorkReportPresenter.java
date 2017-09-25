@@ -36,7 +36,9 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
         params.put("pageSize", pageSize);
         params.put("pageNum", pageNum);
         params.put("time", timeType);
-        mKjHttp.jsonGet(ApiJava.DAILY_REPORT, params, new HttpCallBack() {
+        String url = reportType == 1 ? ApiJava.DAILY_REPORT : ApiJava.WEEK_REPORT;
+        mKjHttp.cleanCache();
+        mKjHttp.jsonGet(url, params, new HttpCallBack() {
 
             @Override
             public void onSuccess(String t) {
@@ -55,7 +57,10 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                             JSONArray array = data.getJSONArray("data");
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject item = new JSONObject(array.get(i).toString());
-                                items.add(new MyLaunchReportItem(item.getInt("type"),
+                                items.add(new MyLaunchReportItem(
+                                        item.getInt("id"),
+                                        item.getString("userName"),
+                                        item.getInt("type"),
                                         item.getString("reportingDate"),
                                         item.getString("releaseDate"),
                                         item.getInt("speedOfProgress")));

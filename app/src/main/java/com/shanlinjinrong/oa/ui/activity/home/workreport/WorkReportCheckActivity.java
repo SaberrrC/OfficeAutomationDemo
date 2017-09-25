@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportChec
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportCheckPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.utils.DeviceUtil;
+import com.shanlinjinrong.views.common.CommonTopView;
 import com.shanlinjinrong.views.swipeRecycleview.SwipeItemClickListener;
 import com.shanlinjinrong.views.swipeRecycleview.SwipeMenu;
 import com.shanlinjinrong.views.swipeRecycleview.SwipeMenuBridge;
@@ -35,9 +37,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPresenter> implements OnItemMoveListener, WorkReportCheckContract.View {
+/**
+ * 发给我的页面，日报周报审核工作
+ */
+public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPresenter> implements SwipeRefreshLayout.OnRefreshListener, OnItemMoveListener, WorkReportCheckContract.View {
     @Bind(R.id.report_check_list)
     SwipeMenuRecyclerView mReportCheckList;
+
+    @Bind(R.id.report_no_check_list)
+    SwipeMenuRecyclerView mReportNoCheckList;
 
     @Bind(R.id.tv_check_pending)
     RadioButton mTvCheckPending;
@@ -45,19 +53,33 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     @Bind(R.id.tv_checked)
     RadioButton mTvChecked;
 
+    @Bind(R.id.refresh_layout)
+    SwipeRefreshLayout mRefreshLayout;
+
+    @Bind(R.id.top_view)
+    CommonTopView mTopView;
+
+    private static int DEFAULT_PAGE_SIZE = 15;
+
     private int mReportStatus = 1;
 
-    private int pageSize = 15;//页面数量
+    private int pageSize = DEFAULT_PAGE_SIZE;//页面数量
 
-    private int pageNum = 1;//请求页
+    private int checkPageNum = 1;//请求页
+
+    private int noCheckPageNum = 1;//请求页
 
     private int timeType = 0;//时间类型
 
-    private int reportType = 0;//发报类型
+    private int reportType = 1;//发报类型 1:日报  2：周报
 
-    private List<CheckReportItem> mReportData;
+    private List<CheckReportItem> mReportCheckData;
 
-    private ReportCheckAdapter mAdapter;
+    private List<CheckReportItem> mReportNoCheckData;
+
+    private ReportCheckAdapter mCheckAdapter;
+
+    private ReportCheckAdapter mNoCheckAdapter;
 
 
     @Override
@@ -76,25 +98,67 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     }
 
     private void initListView() {
-        mReportCheckList.setLayoutManager(new LinearLayoutManager(this));
-        mReportData = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mReportData.add(new CheckReportItem(1, "张三", "2017-09-08", "2017-09-08"));
-        }
+        //初始化未审核list
+        mReportNoCheckData = new ArrayList<>();
+        mReportNoCheckList.setLayoutManager(new LinearLayoutManager(this));
+        mReportNoCheckList.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.driver_line)));
 
+        mReportNoCheckList.setSwipeItemClickListener(mItemClickListener); // Item点击。
+        mReportNoCheckList.setSwipeMenuItemClickListener(mMenuItemClickListener); // Item的Menu点击。
+        mReportNoCheckList.setSwipeMenuCreator(mSwipeMenuCreator); // 菜单创建器。
+
+        mReportNoCheckList.setLoadMoreListener(mLoadMoreListener);
+        mReportNoCheckList.useDefaultLoadMore();//加载更多
+
+        mReportNoCheckList.setOnItemMoveListener(this);// 监听拖拽和侧滑删除
+
+        mReportNoCheckList.addHeaderView(LayoutInflater.from(this).inflate(R.layout.work_report_check_list_item, mReportNoCheckList, false));
+
+        mNoCheckAdapter = new ReportCheckAdapter(mReportNoCheckData);
+        mReportNoCheckList.setAdapter(mNoCheckAdapter);
+
+
+        //初始化已审核list
+        mReportCheckData = new ArrayList<>();
         mReportCheckList.setLayoutManager(new LinearLayoutManager(this));
         mReportCheckList.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.driver_line)));
 
         mReportCheckList.setSwipeItemClickListener(mItemClickListener); // Item点击。
-        mReportCheckList.setSwipeMenuItemClickListener(mMenuItemClickListener); // Item的Menu点击。
-        mReportCheckList.setSwipeMenuCreator(mSwipeMenuCreator); // 菜单创建器。
 
-        mReportCheckList.setOnItemMoveListener(this);// 监听拖拽和侧滑删除
+        mReportCheckList.setLoadMoreListener(mLoadMoreListener);
+        mReportCheckList.useDefaultLoadMore();//加载更多
 
         mReportCheckList.addHeaderView(LayoutInflater.from(this).inflate(R.layout.work_report_check_list_item, mReportCheckList, false));
 
-        mAdapter = new ReportCheckAdapter(mReportData);
-        mReportCheckList.setAdapter(mAdapter);
+        mCheckAdapter = new ReportCheckAdapter(mReportCheckData);
+        mReportCheckList.setAdapter(mCheckAdapter);
+
+
+        //下拉刷新
+        mRefreshLayout.setOnRefreshListener(this);
+
+        mTopView.setRightAction(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (reportType == 1) {
+                    reportType = 2;
+                } else {
+                    reportType = 1;
+                }
+                onRefresh();
+            }
+        });
+
+    }
+
+    private void showCheckList(boolean showCheck) {
+        if (showCheck) {
+            mReportCheckList.setVisibility(View.VISIBLE);
+            mReportNoCheckList.setVisibility(View.GONE);
+        } else {
+            mReportCheckList.setVisibility(View.GONE);
+            mReportNoCheckList.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -103,8 +167,23 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
      * @param isMore ：is load more data?
      */
     private void loadData(boolean isMore) {
+        if (!isMore) {
+            noCheckPageNum = mReportStatus == 1 ? 0 : noCheckPageNum;
+            checkPageNum = mReportStatus == 3 ? 0 : checkPageNum;
+        }
+        int pageNum = mReportStatus == 1 ? noCheckPageNum : checkPageNum;
         mPresenter.loadData(reportType, pageSize, pageNum, timeType, mReportStatus, isMore);
     }
+
+    /**
+     * load more
+     */
+    private SwipeMenuRecyclerView.LoadMoreListener mLoadMoreListener = new SwipeMenuRecyclerView.LoadMoreListener() {
+        @Override
+        public void onLoadMore() {
+            loadData(true);
+        }
+    };
 
     /**
      * 菜单创建器。
@@ -117,7 +196,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
             // 添加右侧的，如果不添加，则右侧不会出现菜单。
             SwipeMenuItem deleteItem = new SwipeMenuItem(WorkReportCheckActivity.this)
                     .setBackground(R.color.red)
-                    .setText("删除")
+                    .setText("退回")
                     .setTextColor(Color.WHITE)
                     .setWidth(width)
                     .setHeight(height);
@@ -131,14 +210,19 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     private SwipeItemClickListener mItemClickListener = new SwipeItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
-            toCheckDailyReport();
+            if (reportType == 1)//日报
+                toCheckDailyReport(position);
+
+            if (reportType == 2) {
+                //周报
+            }
         }
-
-
     };
 
-    private void toCheckDailyReport() {
+    private void toCheckDailyReport(int position) {
         Intent intent = new Intent(WorkReportCheckActivity.this, CheckDailyReportActivity.class);
+        int dailyId = mReportStatus == 1 ? mReportNoCheckData.get(position).getDailyId() : mReportCheckData.get(position).getDailyId();
+        intent.putExtra("dailyid", dailyId);
         startActivity(intent);
     }
 
@@ -151,9 +235,8 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
             menuBridge.closeMenu();
             int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
             int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
-
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                showToast("删除item " + adapterPosition);
+                mPresenter.rejectReport(mReportNoCheckData.get(adapterPosition).getDailyId(), adapterPosition);
             }
         }
     };
@@ -163,12 +246,20 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         switch (view.getId()) {
             case R.id.tv_check_pending:
                 mReportStatus = 1;
+                showCheckList(false);
+                if (mReportNoCheckData.size() == 0) {
+                    onRefresh();
+                }
                 break;
             case R.id.tv_checked:
                 mReportStatus = 3;
+                showCheckList(true);
+                if (mReportCheckData.size() == 0) {
+                    onRefresh();
+                }
                 break;
-
         }
+
     }
 
 
@@ -183,26 +274,77 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     }
 
     @Override
-    public void loadDataSuccess(List<CheckReportItem> reports, int pageNum, int pageSize, boolean hasNextPage, boolean isLoadMore) {
+    public void loadDataSuccess(List<CheckReportItem> reports, int pageNum, boolean hasNextPage, boolean isLoadMore) {
+        if (!isLoadMore) {
+            if (mReportStatus == 1) {
+                mReportNoCheckData.clear();
+            } else {
+                mReportCheckData.clear();
+            }
+        }
+
+        if (mReportStatus == 1) {
+            mReportNoCheckData.addAll(reports);
+            mNoCheckAdapter.notifyDataSetChanged();
+            this.noCheckPageNum = pageNum + 1;
+            mReportNoCheckList.loadMoreFinish(false, hasNextPage);
+        } else {
+            mReportCheckData.addAll(reports);
+            mCheckAdapter.notifyDataSetChanged();
+            this.checkPageNum = pageNum + 1;
+            mReportCheckList.loadMoreFinish(false, hasNextPage);
+        }
+
 
     }
 
     @Override
     public void loadDataFailed(int errCode, String errMsg) {
-
+//        mReportCheckList.loadMoreError(errCode, errMsg);
+        showToast("数据加载失败，请稍后重试！");
     }
 
     @Override
     public void loadDataFinish() {
-
+        if (mRefreshLayout != null && mRefreshLayout.isRefreshing())
+            mRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void loadDataEmpty() {
+        if (mReportStatus == 1) {
+            mReportNoCheckData.clear();
+            mNoCheckAdapter.notifyDataSetChanged();
+            mReportNoCheckList.loadMoreFinish(true, false);
+        } else {
+            mReportCheckData.clear();
+            mCheckAdapter.notifyDataSetChanged();
+            mReportCheckList.loadMoreFinish(true, false);
+        }
+
+    }
+
+    @Override
+    public void rejectReportSuccess(int position) {
+        mReportCheckData.remove(position);
+        mCheckAdapter.notifyItemChanged(position);
+        showToast("退回成功！");
+    }
+
+    @Override
+    public void rejectReportFailed(int errCode, String errMsg) {
+        showToast("退回失败！");
     }
 
     @Override
     public void uidNull(int code) {
 
     }
+
+    @Override
+    public void onRefresh() {
+
+        loadData(false);
+    }
+
 }

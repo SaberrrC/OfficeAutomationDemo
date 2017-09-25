@@ -1,9 +1,14 @@
 package com.shanlinjinrong.views.swipeRecycleview;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
+import android.support.annotation.StringRes;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +20,7 @@ import com.shanlinjinrong.views.swipeRecycleview.touch.DefaultItemTouchHelper;
 import com.shanlinjinrong.views.swipeRecycleview.touch.OnItemMoveListener;
 import com.shanlinjinrong.views.swipeRecycleview.touch.OnItemMovementListener;
 import com.shanlinjinrong.views.swipeRecycleview.touch.OnItemStateChangedListener;
+import com.shanlinjinrong.views.swipeRecycleview.widget.DefaultEmptyView;
 import com.shanlinjinrong.views.swipeRecycleview.widget.DefaultLoadMoreView;
 
 import java.lang.annotation.Retention;
@@ -676,6 +682,31 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         }
     }
 
+    public void setLoadEmptyView() {
+        setLoadEmptyView(null, null, "");
+    }
+
+    public void setLoadEmptyView(View emptyView, @DrawableRes int drawableId, @StringRes int emptyMessageId) {
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), drawableId, null);
+        String message = getResources().getString(emptyMessageId);
+        setLoadEmptyView(emptyView, drawable, message);
+    }
+
+    public void setLoadEmptyView(View emptyView, Drawable drawable, String emptyMessage) {
+        mDataEmpty = true;
+        DefaultEmptyView defaultEmptyView = new DefaultEmptyView(getContext());
+        if (drawable != null) {
+            defaultEmptyView.setLoadEmptyDrawable(drawable);
+        }
+        if (!TextUtils.isEmpty(emptyMessage)) {
+            defaultEmptyView.setMessage(emptyMessage);
+        }
+        if (emptyView != null) {
+            defaultEmptyView.setCustomEmptyView(emptyView);
+        }
+
+    }
+
     public interface LoadMoreView {
 
         /**
@@ -705,6 +736,15 @@ public class SwipeMenuRecyclerView extends RecyclerView {
          * More data should be requested.
          */
         void onLoadMore();
+    }
+
+
+    public interface LoadEmptyListener {
+
+        /**
+         * More data should be requested.
+         */
+        void onEmptyClicked();
     }
 
 }

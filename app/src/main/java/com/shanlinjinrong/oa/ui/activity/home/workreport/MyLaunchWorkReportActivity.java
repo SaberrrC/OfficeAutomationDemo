@@ -1,12 +1,12 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.AllReportAdapter;
@@ -50,7 +50,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
 
     private int timeType = 0;//时间类型
 
-    private int reportType = 0;//发报类型
+    private int reportType = 1;//发报类型
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,12 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         mTopView.setRightAction(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (reportType == 1)
+                    reportType = 2;
+                else
+                    reportType = 1;
 
+                onRefresh();
             }
         });
     }
@@ -112,7 +117,14 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
     private SwipeItemClickListener mItemClickListener = new SwipeItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
-            Toast.makeText(MyLaunchWorkReportActivity.this, "第" + position + "个", Toast.LENGTH_SHORT).show();
+            Intent intent;
+            if (mItemList.get(position).getStatus() == 1) {
+                intent = new Intent(MyLaunchWorkReportActivity.this, WorkReportLaunchActivity.class);
+            } else {
+                intent = new Intent(MyLaunchWorkReportActivity.this, CheckDailyReportActivity.class);
+                intent.putExtra("dailyid", mItemList.get(position).getDailyId());
+            }
+            startActivity(intent);
         }
     };
 
@@ -154,7 +166,6 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
 
     @Override
     public void onRefresh() {
-        pageSize = 15;
         pageNum = 1;
         loadData(false);
     }

@@ -43,8 +43,9 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
         }
         HttpParams params = new HttpParams();
         params.putJsonParams(jsonObject.toString());
-        mKjHttp.jsonPost(ApiJava.LEADER_READ_DAILY_REPORT, params, new HttpCallBack() {
-
+        mKjHttp.cleanCache();
+        String url = reportType == 1 ? ApiJava.LEADER_READ_DAILY_REPORT : ApiJava.LEADER_READ_WEEK_REPORT;
+        mKjHttp.jsonPost(url, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -62,12 +63,15 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
                             JSONArray array = data.getJSONArray("data");
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject item = new JSONObject(array.get(i).toString());
-                                items.add(new CheckReportItem(item.getInt("type"),
+                                //{"dailyid":74,"name":"张俊玉","releaseDate":"2017-09-21 14:37:55","reportingDate":"2017-09-18","speedOfProgress":1,"type":1}
+                                items.add(new CheckReportItem(item.getInt("dailyid"),
+                                        item.getInt("type"),
+                                        item.getString("name"),
                                         item.getString("reportingDate"),
                                         item.getString("releaseDate"),
-                                        item.getString("speedOfProgress")));
+                                        item.getInt("speedOfProgress")));
                             }
-                            mView.loadDataSuccess(items, pageNum, pageSize, hasNextPage, isLoadMore);
+                            mView.loadDataSuccess(items, pageNum, hasNextPage, isLoadMore);
                             break;
 
                         case ApiJava.REQUEST_NO_RESULT:
@@ -94,6 +98,39 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
             public void onFinish() {
                 super.onFinish();
                 mView.loadDataFinish();
+            }
+        });
+    }
+
+    @Override
+    public void rejectReport(int dailyId, final int position) {
+        String url = ApiJava.REJECT_WEEK_REPORT + dailyId;
+        mKjHttp.jsonGet(url, new HttpParams(), new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    String code = jo.getString("code");
+                    String message = jo.getString("message");
+                    switch (code) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.rejectReportSuccess(position);
+                            break;
+                        default:
+                            mView.rejectReportFailed(0, message);
+                            break;
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.rejectReportFailed(errorNo, strMsg);
             }
         });
     }

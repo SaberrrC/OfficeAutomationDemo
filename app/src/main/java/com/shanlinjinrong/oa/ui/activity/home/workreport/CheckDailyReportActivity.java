@@ -89,7 +89,7 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
 
             }
         });
-        mPresenter.loadDailyData(52);
+        mPresenter.loadDailyData(getIntent().getIntExtra("dailyid", 0));
     }
 
     private void setListViewData(WorkReportBean reportData) {

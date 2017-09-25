@@ -78,7 +78,6 @@ public class DefaultLoadMoreView extends LinearLayout implements SwipeMenuRecycl
     public void onLoadFinish(boolean dataEmpty, boolean hasMore) {
         if (!hasMore) {
             setVisibility(VISIBLE);
-
             if (dataEmpty) {
                 mLoadingView.setVisibility(GONE);
                 mTvMessage.setVisibility(VISIBLE);

@@ -13,16 +13,22 @@ import java.util.List;
 public interface WorkReportCheckContract {
     interface View extends BaseView {
 
-        void loadDataSuccess(List<CheckReportItem> reports, int pageNum, int pageSize, boolean hasNextPage, boolean isLoadMore);
+        void loadDataSuccess(List<CheckReportItem> reports, int pageNum, boolean hasNextPage, boolean isLoadMore);
 
         void loadDataFailed(int errCode, String errMsg);
 
         void loadDataFinish();
 
         void loadDataEmpty();
+
+        void rejectReportSuccess(int position);
+
+        void rejectReportFailed(int errCode, String errMsg);
     }
 
     interface Presenter extends BasePresenter<View> {
         void loadData(int reportType, int pageSize, int pageNum, int timeType, int reportStatus, boolean isLoadMore);
+
+        void rejectReport(int dailyId, int position);
     }
 }

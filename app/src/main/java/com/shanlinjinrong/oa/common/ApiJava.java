@@ -24,6 +24,7 @@ public class ApiJava {
     //发起日报
     public static final String DAILY_REPORT = "dailyreport";
 
+    public static final String WEEK_REPORT = "weekreport";
 
     //当前登录用户获取其leader
     public static final String GET_CURRENT_LEADER = "user/getCurrentLeader";
@@ -41,5 +42,6 @@ public class ApiJava {
     //审核周报列表
     public static final String LEADER_READ_WEEK_REPORT = "weekreport/leader";
 
-
+    //退回日报接口
+    public static final String REJECT_WEEK_REPORT = "dailyreport/reject/";
 }

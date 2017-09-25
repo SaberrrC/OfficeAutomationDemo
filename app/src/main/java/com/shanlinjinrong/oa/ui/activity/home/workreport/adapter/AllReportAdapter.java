@@ -56,7 +56,7 @@ public class AllReportAdapter extends RecyclerView.Adapter<AllReportAdapter.View
             type.setText(reportItem.getType());
             time.setText(reportItem.getReportTime());
             commitTime.setText(reportItem.getReportCommitTime());
-            status.setText(reportItem.getStatus());
+            status.setText(reportItem.getStatusText());
         }
     }
 
