@@ -1,8 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -21,21 +19,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
-import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
-import com.shanlinjinrong.views.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.ApiJava;
-import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportLaunchListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportLaunchActivityPresenter;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.WorkReportBean;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportUpdateContract;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportUpdatePresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.EmojiFilter;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
-import com.shanlinjinrong.oa.views.KeyboardLinearLayout;
+import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -52,14 +48,13 @@ import cn.qqtheme.framework.picker.DatePicker;
  * create by lvdinghao
  * 发起日报 页面
  */
-public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchActivityPresenter> implements WorkReportLaunchActivityContract.View, WorkReportLaunchListAdapter.OnItemClickListener {
-
-    // TODO: 2017/8/21 之前字段，先保留，应该不用多选
-    public static final int REQUEST_CODE_MULTIPLE = 1;//多选，接收人
+public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdatePresenter> implements WorkReportUpdateContract.View, WorkReportLaunchListAdapter.OnItemClickListener {
 
     public static final int WRITE_REPORT_OK = 100;//填写日报
     public static final int SELECT_OK = 101;//选择成功，requestcode
 
+    @Bind(R.id.report_scroll_view)
+    ScrollView mScrollView;
 
     @Bind(R.id.work_report_list)
     AllRecyclerView mWorkReportList;
@@ -79,12 +74,6 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     @Bind(R.id.et_tomorrow_plan)
     EditText mTomorrowPlan;//明日计划
 
-    @Bind(R.id.report_scroll_view)
-    ScrollView mScroll;
-
-
-    @Bind(R.id.layout_root)
-    KeyboardLinearLayout mRootLayout;
 
     private List<HourReportBean> mHourReportData;
 
@@ -105,14 +94,11 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
         ButterKnife.bind(this);
         setTranslucentStatus(this);
         initView(savedInstanceState);
-        initDefaultReceiver();
     }
 
-    private void initDefaultReceiver() {
-        mPresenter.getDefaultReceiver();
-    }
 
     private void initView(Bundle savedInstanceState) {
+        mScrollView.setVisibility(View.GONE);
         mWorkReportList.setLayoutManager(new LinearLayoutManager(this));
         if (savedInstanceState != null) {
             mHourReportData = savedInstanceState.getParcelableArrayList("hour_report_list");
@@ -123,23 +109,13 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
             mDate.setText(savedInstanceState.getString("time", mDate.getText().toString()));
             mTomorrowPlan.setText(savedInstanceState.getString("tomorrowPlan", mTomorrowPlan.getText().toString()));
         } else {
-            //初始化空的时候的数据
-            mWorkReportListData = initListData();
-            mHourReportData = initHourReportData();
-            mDate.setText(DateUtils.getTodayDate(false));
+            //从接口读取数据
+            mPresenter.getReportData(getIntent().getIntExtra("dailyid", 0));
+            showLoadingView();
         }
 
-
-        //如果有提交日报失败，保存本地，加载本地数据
-        if (hasLocalData()) {
-            getLocalData();
-        }
-
-        mWorkReportListAdapter = new WorkReportLaunchListAdapter(this, mWorkReportListData);
-        mWorkReportList.setAdapter(mWorkReportListAdapter);
-        mWorkReportListAdapter.setItemClickListener(this);
-        mWorkReportList.addItemDecoration(new DecorationLine(this, mWorkReportListData));
-
+        mTopView.setAppTitle(getString(R.string.work_report_edit_report_title));
+        mTopView.setRightText(getString(R.string.work_report_update_text));
         mTopView.setRightAction(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +123,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
                     return;
                 }
                 showLoadingView();
-                mPresenter.launchWorkReport(createHttpParams());
+                mPresenter.updateReport(createHttpParams());
             }
         });
 
@@ -166,16 +142,122 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
         InputFilter[] filters = new InputFilter[]{new EmojiFilter(800)};
         mTomorrowPlan.setFilters(filters);
+
     }
 
-    private List<HourReportBean> initHourReportData() {
+
+    private void setListViewData(WorkReportBean reportData) {
+
+        mDate.setText(DateUtils.longToDateString(reportData.getTime(), "yyyy-MM-dd"));//设置日期
+
+
+        //设置接收人
+        mReceiverId = reportData.getCheckManId();
+        mReceiverName = reportData.getCheckMan();
+        mReceiverPost = reportData.getPostName();
+        mReceiver.setText(mReceiverName + "-" + mReceiverPost);
+
+        //明日计划
+        mTomorrowPlan.setText(reportData.getTomorrowPlan());
+
+        mWorkReportListData = initListData(reportData);
+        mWorkReportListAdapter = new WorkReportLaunchListAdapter(this, mWorkReportListData);
+        mWorkReportList.setAdapter(mWorkReportListAdapter);
+        mWorkReportListAdapter.setItemClickListener(this);
+        mWorkReportList.addItemDecoration(new DecorationLine(this, mWorkReportListData));
+        mHourReportData = initHourReportData(reportData);
+    }
+
+    /**
+     * 创建时报条目数据 对应每个小时的时间
+     */
+    private List<HourReportBean> initHourReportData(WorkReportBean reportData) {
         List<HourReportBean> list = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            HourReportBean hourReport = new HourReportBean("", "", "", "");
-            list.add(hourReport);
-        }
+        //数据类别 mWorkPlan, mRealWork, mSelfEvaluate, mQuantitative, mCheckManEvaluate, mSupervisorEvaluate
+        HourReportBean hourReportOne = new HourReportBean(reportData.getWorkPlanOne(),
+                reportData.getWorkOne(), reportData.getSelfRatingOne(), reportData.getWorkResultOne(),
+                reportData.getCheckRatingOne(), reportData.getSupervisorRatingOne());
+        list.add(hourReportOne);
+
+        HourReportBean hourReportTwo = new HourReportBean(reportData.getWorkPlanTwo(),
+                reportData.getWorkTwo(), reportData.getSelfRatingTwo(), reportData.getWorkResultTwo(),
+                reportData.getCheckRatingTwo(), reportData.getSupervisorRatingTwo());
+        list.add(hourReportTwo);
+
+        HourReportBean hourReportThree = new HourReportBean(reportData.getWorkPlanThree(),
+                reportData.getWorkThree(), reportData.getSelfRatingThree(), reportData.getWorkResultThree(),
+                reportData.getCheckRatingThree(), reportData.getSupervisorRatingThree());
+        list.add(hourReportThree);
+
+        HourReportBean hourReportFour = new HourReportBean(reportData.getWorkPlanFour(),
+                reportData.getWorkFour(), reportData.getSelfRatingFour(), reportData.getWorkResultFour(),
+                reportData.getCheckRatingFour(), reportData.getSupervisorRatingFour());
+        list.add(hourReportFour);
+
+
+        HourReportBean hourReportFive = new HourReportBean(reportData.getWorkPlanFive(),
+                reportData.getWorkFive(), reportData.getSelfRatingFive(), reportData.getWorkResultFive(),
+                reportData.getCheckRatingFive(), reportData.getSupervisorRatingFive());
+        list.add(hourReportFive);
+
+        HourReportBean hourReportSix = new HourReportBean(reportData.getWorkPlanSix(),
+                reportData.getWorkSix(), reportData.getSelfRatingSix(), reportData.getWorkResultSix(),
+                reportData.getCheckRatingSix(), reportData.getSupervisorRatingSix());
+        list.add(hourReportSix);
+
+        HourReportBean hourReportSeven = new HourReportBean(reportData.getWorkPlanSeven(),
+                reportData.getWorkSeven(), reportData.getSelfRatingSeven(), reportData.getWorkResultSeven(),
+                reportData.getCheckRatingSeven(), reportData.getSupervisorRatingSeven());
+        list.add(hourReportSeven);
+
+        HourReportBean hourReportEight = new HourReportBean(reportData.getWorkPlanEigth(),
+                reportData.getWorkEigth(), reportData.getSelfRatingEigth(), reportData.getWorkResultEigth(),
+                reportData.getCheckRatingEigth(), reportData.getSupervisorRatingEigth());
+        list.add(hourReportEight);
+
+
         return list;
     }
+
+    /**
+     * 初始化整个列表的显示数据
+     *
+     * @return List<>
+     */
+    private List<LaunchReportItem> initListData(WorkReportBean reportData) {
+        List<LaunchReportItem> listData = new ArrayList<>();
+        //时报 上午九点到12点
+        for (int i = 9; i < 12; i++) {
+            String title = i + ":00~" + (i + 1) + ":00";
+            listData.add(new LaunchReportItem(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
+        }
+
+        //下午一点到五点
+        for (int i = 13; i < 17; i++) {
+            String title = i + ":00~" + (i + 1) + ":00";
+            listData.add(new LaunchReportItem(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
+        }
+
+        //下午五点到五点半
+        listData.add(new LaunchReportItem("17:00~17:30", getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
+
+        //职业素养
+        listData.add(new LaunchReportItem(getString(R.string.work_report_personal_behavior), reportData.getSelfBehavior(), WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_environmental_hygiene), reportData.getSelfEnvironmental(), WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_save), reportData.getSelfSave(), WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_communication_skills), reportData.getSelfCommunication(), WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_appearance), reportData.getSelfAppearance(), WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_work_discipline), reportData.getSelfDiscipline(), WorkReportLaunchListAdapter.WRITE_TYPE));
+
+        //团队合作
+        listData.add(new LaunchReportItem(getString(R.string.work_report_initiative), reportData.getSelfJobInitiative(), WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_teamwork)));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_cooperation), reportData.getSelfCooperation(), WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_dedication), reportData.getSelfDedicated(), WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_obey), reportData.getSelfOrganization(), WorkReportLaunchListAdapter.WRITE_TYPE));
+
+        return listData;
+    }
+
 
     /**
      * 构建请求数据
@@ -285,68 +367,29 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     private boolean checkDataIsFull() {
         for (int i = 0; i < mWorkReportListData.size(); i++) {
             if (mWorkReportListData.get(i).getContent().equals("")) {
-                Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
+                Toast.makeText(WorkReportUpdateActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
 
         if (TextUtils.isEmpty(mTomorrowPlan.getText().toString())) {
-            Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
+            Toast.makeText(WorkReportUpdateActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (TextUtils.isEmpty(mReceiverId) || TextUtils.isEmpty(mReceiverName)) {
-            Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_please_write_receiver), Toast.LENGTH_SHORT).show();
+            Toast.makeText(WorkReportUpdateActivity.this, getString(R.string.work_report_please_write_receiver), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         for (HourReportBean bean : mHourReportData) {
             if (bean.checkHasEmpty()) {
-                Toast.makeText(WorkReportLaunchActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
+                Toast.makeText(WorkReportUpdateActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
-
         return true;
     }
 
-    /**
-     * 初始化整个列表的显示数据
-     *
-     * @return List<LaunchReportItem>
-     */
-    private List<LaunchReportItem> initListData() {
-        List<LaunchReportItem> listData = new ArrayList<>();
-        //时报 上午九点到12点
-        for (int i = 9; i < 12; i++) {
-            String title = i + ":00~" + (i + 1) + ":00";
-            listData.add(new LaunchReportItem(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
-        }
-
-        //下午一点到五点
-        for (int i = 13; i < 17; i++) {
-            String title = i + ":00~" + (i + 1) + ":00";
-            listData.add(new LaunchReportItem(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
-        }
-
-        //下午五点到五点半
-        listData.add(new LaunchReportItem("17:00~17:30", getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
-
-        //职业素养
-        listData.add(new LaunchReportItem(getString(R.string.work_report_personal_behavior), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_environmental_hygiene), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_save), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_communication_skills), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_appearance), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_work_discipline), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-
-        //团队合作
-        listData.add(new LaunchReportItem(getString(R.string.work_report_initiative), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_teamwork)));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_cooperation), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_dedication), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_obey), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-
-        return listData;
-    }
 
     @Override
     protected void initInject() {
@@ -362,7 +405,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
      * 跳转填写时报信息
      */
     private void toWriteHourData(int position) {
-        Intent intent = new Intent(WorkReportLaunchActivity.this, WriteWorkReportActivity.class);
+        Intent intent = new Intent(WorkReportUpdateActivity.this, WriteWorkReportActivity.class);
         Bundle extras = new Bundle();
         extras.putInt("position", position);
         extras.putString("date", mDate.getText().toString());
@@ -455,23 +498,18 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
         toWriteHourData(position);
     }
 
+
     @Override
-    public void reportSuccess(String msg) {
-        Toast.makeText(this, getString(R.string.work_report_send_sucess), Toast.LENGTH_SHORT).show();
-        onBackPressed();
-        clearLocalData();
+    public void getReportSuccess(WorkReportBean workReport) {
+        setListViewData(workReport);
+        mScrollView.setVisibility(View.VISIBLE);
+        freshHourReportList();
     }
 
     @Override
-    public void reportFailed(String errCode, String errMsg) {
-        switch (errCode) {
-            case ApiJava.REQUEST_HAD_REPORTED:
-                Toast.makeText(this, getString(R.string.work_report_current_date_had_report), Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                Toast.makeText(this, getString(R.string.work_report_send_failed), Toast.LENGTH_SHORT).show();
-        }
-        saveDataToLocal();
+    public void getReportFailed(String errCode, String errMsg) {
+        showToast(getString(R.string.load_report_data_error));
+        onBackPressed();
     }
 
     @Override
@@ -480,84 +518,14 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     }
 
     @Override
-    public void getDefaultReceiverSuccess(String id, String name, String post) {
-        mReceiverId = id;
-        mReceiverName = name;
-        mReceiverPost = post;
-        mReceiver.setText(name + "-" + post);
-    }
-
-
-    @Override
-    public void getDefaultReceiverFailed(String errMsg) {
-//        onBackPressed();
-//        Toast.makeText(this, errMsg, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 提交失败，保存已填写的数据
-     */
-    private void saveDataToLocal() {
-        SharedPreferences.Editor edit = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE).edit();
-        edit.putBoolean("local_data", true);
-        for (int i = 0; i < mHourReportData.size(); i++) {
-            edit.putString("HourReportData_RealWork" + i, mHourReportData.get(i).getRealWork());
-            edit.putString("HourReportData_WorkPlan" + i, mHourReportData.get(i).getWorkPlan());
-            edit.putString("HourReportData_SelfEvaluate" + i, mHourReportData.get(i).getSelfEvaluate());
-            edit.putString("HourReportData_Quantitative" + i, mHourReportData.get(i).getQuantitative());
-        }
-
-        for (int i = 8; i < mWorkReportListData.size(); i++) {
-            edit.putString("WorkReportListData" + i, mWorkReportListData.get(i).getContent());
-        }
-
-        edit.putString("receiverName", mReceiverName);
-        edit.putString("receiverId", mReceiverId);
-        edit.putString("receiverPost", mReceiverPost);
-        edit.putString("time", mDate.getText().toString());
-        edit.putString("tomorrowPlan", mTomorrowPlan.getText().toString());
-        edit.apply();
-    }
-
-    /**
-     * 提交成功后，把保存的数据清除
-     */
-    private void clearLocalData() {
-        SharedPreferences.Editor edit = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE).edit();
-        edit.clear();
-        edit.apply();
-    }
-
-    private void getLocalData() {
-        SharedPreferences sp = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE);
-        for (int i = 0; i < mHourReportData.size(); i++) {
-            HourReportBean bean = mHourReportData.get(i);
-            bean.setWorkPlan(sp.getString("HourReportData_WorkPlan" + i, ""));
-            bean.setRealWork(sp.getString("HourReportData_RealWork" + i, ""));
-            bean.setSelfEvaluate(sp.getString("HourReportData_SelfEvaluate" + i, ""));
-            bean.setQuantitative(sp.getString("HourReportData_Quantitative" + i, ""));
-            mWorkReportListData.get(i).setContent(getString(R.string.work_report_has_write));
-        }
-
-        for (int i = 8; i < mWorkReportListData.size(); i++) {
-            mWorkReportListData.get(i).setContent(sp.getString("WorkReportListData" + i, ""));
-        }
-
-        mReceiverName = sp.getString("receiverName", mReceiverName);
-        mReceiverId = sp.getString("receiverId", mReceiverId);
-        mReceiverPost = sp.getString("receiverPost", mReceiverPost);
-        mReceiver.setText(mReceiverName + "-" + mReceiverPost);
-        mDate.setText(sp.getString("time", ""));
-        mTomorrowPlan.setText(sp.getString("tomorrowPlan", ""));
-    }
-
-    private boolean hasLocalData() {
-        SharedPreferences sp = getSharedPreferences(Constants.WORK_REPORT_TEMP_DATA, Context.MODE_PRIVATE);
-        return sp.getBoolean("local_data", false);
+    public void updateReportSuccess() {
+        showToast(getString(R.string.work_report_update_success));
     }
 
     @Override
-    public void getDefaultReceiverEmpty(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    public void updateReportFailed(String errMsg) {
+
     }
+
+
 }

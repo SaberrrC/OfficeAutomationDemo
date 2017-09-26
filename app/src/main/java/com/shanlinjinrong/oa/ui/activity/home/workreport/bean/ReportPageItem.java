@@ -13,7 +13,8 @@ public class ReportPageItem implements Parcelable {
     private String mContent = ""; //显示内容
     private boolean mGroup;
     private String mGroupTitle = ""; //组标题
-    private String mEvaluation = ""; //评价
+    private String mEvaluationSupervisor = ""; //监督人评价
+    private String mEvaluationCheckMan = ""; //检查人评价
 
 
     public ReportPageItem(String mTitle, String mContent, int mType) {
@@ -22,11 +23,12 @@ public class ReportPageItem implements Parcelable {
         this.mTitle = mTitle;
     }
 
-    public ReportPageItem(String mTitle, String mContent, String mEvaluation, int mType) {
+    public ReportPageItem(String mTitle, String mContent, String mEvaluationSupervisor, String mEvaluationCheckMan, int mType) {
         this.mContent = mContent;
         this.mType = mType;
         this.mTitle = mTitle;
-        this.mEvaluation = mEvaluation;
+        this.mEvaluationSupervisor = mEvaluationSupervisor;
+        this.mEvaluationCheckMan = mEvaluationCheckMan;
     }
 
     public ReportPageItem(String mTitle, String mContent, int mType, boolean mGroup, String mGroupTitle) {
@@ -37,13 +39,14 @@ public class ReportPageItem implements Parcelable {
         this.mGroupTitle = mGroupTitle;
     }
 
-    public ReportPageItem(String mTitle, String mContent, String mEvaluation, int mType, boolean mGroup, String mGroupTitle) {
+    public ReportPageItem(String mTitle, String mContent, String mEvaluationSupervisor, String mEvaluationCheckMan, int mType, boolean mGroup, String mGroupTitle) {
         this.mContent = mContent;
         this.mType = mType;
         this.mTitle = mTitle;
         this.mGroup = mGroup;
         this.mGroupTitle = mGroupTitle;
-        this.mEvaluation = mEvaluation;
+        this.mEvaluationSupervisor = mEvaluationSupervisor;
+        this.mEvaluationCheckMan = mEvaluationCheckMan;
     }
 
     public String getGroupTitle() {
@@ -91,15 +94,23 @@ public class ReportPageItem implements Parcelable {
         return this;
     }
 
-    public String getEvaluation() {
-        return mEvaluation;
+    public String getEvaluationSupervisor() {
+        return mEvaluationSupervisor;
     }
 
-    public ReportPageItem setEvaluation(String mEvaluation) {
-        this.mEvaluation = mEvaluation;
+    public ReportPageItem setEvaluationSupervisor(String mEvaluationSupervisor) {
+        this.mEvaluationSupervisor = mEvaluationSupervisor;
         return this;
     }
 
+    public String getEvaluationCheckMan() {
+        return mEvaluationCheckMan;
+    }
+
+    public ReportPageItem setEvaluationCheckMan(String mEvaluationCheckMan) {
+        this.mEvaluationCheckMan = mEvaluationCheckMan;
+        return this;
+    }
 
     @Override
     public int describeContents() {
@@ -113,7 +124,8 @@ public class ReportPageItem implements Parcelable {
         dest.writeString(this.mContent);
         dest.writeByte(this.mGroup ? (byte) 1 : (byte) 0);
         dest.writeString(this.mGroupTitle);
-        dest.writeString(this.mEvaluation);
+        dest.writeString(this.mEvaluationSupervisor);
+        dest.writeString(this.mEvaluationCheckMan);
     }
 
     protected ReportPageItem(Parcel in) {
@@ -122,10 +134,11 @@ public class ReportPageItem implements Parcelable {
         this.mContent = in.readString();
         this.mGroup = in.readByte() != 0;
         this.mGroupTitle = in.readString();
-        this.mEvaluation = in.readString();
+        this.mEvaluationSupervisor = in.readString();
+        this.mEvaluationCheckMan = in.readString();
     }
 
-    public static final Parcelable.Creator<ReportPageItem> CREATOR = new Parcelable.Creator<ReportPageItem>() {
+    public static final Creator<ReportPageItem> CREATOR = new Creator<ReportPageItem>() {
         @Override
         public ReportPageItem createFromParcel(Parcel source) {
             return new ReportPageItem(source);

@@ -8,25 +8,24 @@ import org.kymjs.kjframe.http.HttpParams;
 
 /**
  * Created by 丁 on 2017/8/21.
- * 审核日报页面接口
+ * 发起日报页面接口
  */
-public interface CheckDailyReportContract {
+public interface WorkReportUpdateContract {
     interface View extends BaseView {
+        void getReportSuccess(WorkReportBean workReport);
 
-        void loadDataSuccess(WorkReportBean report);
+        void getReportFailed(String errCode, String errMsg);
 
-        void loadDataFailed(String errCode, String errMsg);
+        void requestFinish();
 
-        void loadDataFinish();
+        void updateReportSuccess();
 
-        void commitSuccess();
-
-        void commitFailed(String errCode, String errMsg);
+        void updateReportFailed(String errMsg);
     }
 
     interface Presenter extends BasePresenter<View> {
-        void loadDailyData(int dailyid);
+        void getReportData(int dailyid);//获取已填写的日报信息
 
-        void commitDailyEvaluation(HttpParams params);
+        void updateReport(HttpParams params); //更新日报
     }
 }

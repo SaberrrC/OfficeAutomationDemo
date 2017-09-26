@@ -2,9 +2,12 @@ package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -20,7 +23,12 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.CheckDailyRep
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
+import com.shanlinjinrong.utils.DeviceUtil;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +36,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.qqtheme.framework.picker.DatePicker;
 
 import static com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity.WRITE_REPORT_OK;
 
@@ -61,11 +68,18 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
 
     private List<ReportPageItem> mWorkReportListData;//日报列表数据
 
-    private DatePicker picker;
-
-    private String currentDate;//当前年月日
 
     private CheckDailyReportAdapter mCheckDailyReportAdapter;
+
+    private int dailyId;
+
+    private int workScore;
+
+    private int professionalScore;
+
+    private int teamScore;
+
+    private boolean hasEvaluation = false;//是否评价
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,21 +96,156 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
 
 
     private void initView() {
+        mScroll.setVisibility(View.GONE);
         mReportList.setLayoutManager(new LinearLayoutManager(this));
-        mTopView.setRightAction(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
+        dailyId = getIntent().getIntExtra("dailyid", 0);
+        mPresenter.loadDailyData(dailyId);
+        showLoadingView();
+        hasEvaluation = getIntent().getBooleanExtra("has_evaluation", false);
+        String userName = getIntent().getStringExtra("user_name");
+        mTopView.setAppTitle(userName + getString(R.string.work_report_check_title));
+        if (hasEvaluation) {
+            mTopView.setRightVisible(View.GONE);
+            mOneEvaluation.setVisibility(View.GONE);
+            ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) mReportList.getLayoutParams();
+            param.topMargin = DeviceUtil.dip2px(this, 10);
+            mReportList.setLayoutParams(param);
+        } else {
+            mTopView.setRightAction(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkRequestData())
+                        mPresenter.commitDailyEvaluation(createRequestData());
+                }
+            });
+        }
+    }
+
+    private boolean checkRequestData() {
+        for (int i = 0; i < mWorkReportListData.size(); i++) {
+            if (TextUtils.isEmpty(mWorkReportListData.get(i).getContent())) {
+                showToast(getString(R.string.work_report_data_write_not_full));
+                return false;
             }
-        });
-        mPresenter.loadDailyData(getIntent().getIntExtra("dailyid", 0));
+        }
+
+
+        workScore = Integer.valueOf(mWorkReportListData.get(19).getContent());
+
+        professionalScore = Integer.valueOf(mWorkReportListData.get(20).getContent());
+
+        teamScore = Integer.valueOf(mWorkReportListData.get(21).getContent());
+
+        if (workScore < 0 || workScore > 60) {
+            showToast(getString(R.string.work_report_data_work_score_limit));
+            return false;
+        }
+
+        if (professionalScore < 0 || professionalScore > 20) {
+            showToast(getString(R.string.work_report_data_professional_score_limit));
+            return false;
+        }
+
+        if (teamScore < 0 || teamScore > 20) {
+            showToast(getString(R.string.work_report_data_team_score_limit));
+            return false;
+        }
+
+        for (HourReportBean bean : mHourReportData) {
+            if (bean.hasEvaluation()) {
+                showToast(getString(R.string.work_report_data_no_evaluation));
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private HttpParams createRequestData() {
+        HttpParams params = new HttpParams();
+        JSONObject data = new JSONObject();
+        try {
+            //检查人评价
+            data.put("checkRatingOne", mHourReportData.get(0).getCheckManEvaluate());
+            data.put("checkRatingTwo", mHourReportData.get(1).getCheckManEvaluate());
+            data.put("checkRatingThree", mHourReportData.get(2).getCheckManEvaluate());
+            data.put("checkRatingFour", mHourReportData.get(3).getCheckManEvaluate());
+            data.put("checkRatingFive", mHourReportData.get(4).getCheckManEvaluate());
+            data.put("checkRatingSix", mHourReportData.get(5).getCheckManEvaluate());
+            data.put("checkRatingSeven", mHourReportData.get(6).getCheckManEvaluate());
+            data.put("checkRatingEigth", mHourReportData.get(7).getCheckManEvaluate());
+
+            //监督人评价
+            data.put("supervisorRatingOne", mHourReportData.get(0).getSupervisorEvaluate());
+            data.put("supervisorRatingTwo", mHourReportData.get(1).getSupervisorEvaluate());
+            data.put("supervisorRatingThree", mHourReportData.get(2).getSupervisorEvaluate());
+            data.put("supervisorRatingFour", mHourReportData.get(3).getSupervisorEvaluate());
+            data.put("supervisorRatingFive", mHourReportData.get(4).getSupervisorEvaluate());
+            data.put("supervisorRatingSix", mHourReportData.get(5).getSupervisorEvaluate());
+            data.put("supervisorRatingSeven", mHourReportData.get(6).getSupervisorEvaluate());
+            data.put("supervisorRatingEigth", mHourReportData.get(7).getSupervisorEvaluate());
+
+            //职业素养
+            data.put("supervisorBehavior", mWorkReportListData.get(8).getEvaluationSupervisor()); // 个人言行
+            data.put("checkBehavior", mWorkReportListData.get(8).getEvaluationCheckMan()); // 个人言行
+
+            data.put("supervisorEnvironMental", mWorkReportListData.get(9).getEvaluationSupervisor());//	环境卫生
+            data.put("checkEnvironMental", mWorkReportListData.get(9).getEvaluationCheckMan());//	环境卫生
+
+            data.put("supervisorSave", mWorkReportListData.get(10).getEvaluationSupervisor()); //节约
+            data.put("checkSave", mWorkReportListData.get(10).getEvaluationCheckMan()); //节约
+
+            data.put("supervisorCommunication", mWorkReportListData.get(11).getEvaluationSupervisor());// 沟通协调能力
+            data.put("checkCommunication", mWorkReportListData.get(11).getEvaluationCheckMan());// 沟通协调能力
+
+            data.put("supervisorAppearance", mWorkReportListData.get(12).getEvaluationSupervisor());// 仪容仪表
+            data.put("checkAppearance", mWorkReportListData.get(12).getEvaluationCheckMan());// 仪容仪表
+
+            data.put("supervisorDiscipline", mWorkReportListData.get(13).getEvaluationSupervisor());// 工作纪律
+            data.put("checkDiscipline", mWorkReportListData.get(13).getEvaluationCheckMan());// 工作纪律
+
+            //团队合作
+            data.put("supervisorJobInitiative", mWorkReportListData.get(14).getEvaluationSupervisor());//	工作主动性
+            data.put("checkJobInitiative", mWorkReportListData.get(14).getEvaluationCheckMan());//	工作主动性
+
+            data.put("supervisorCooperation", mWorkReportListData.get(15).getEvaluationSupervisor());// 合作性
+            data.put("checkCooperation", mWorkReportListData.get(15).getEvaluationCheckMan());// 合作性
+
+            data.put("supervisorDedicated", mWorkReportListData.get(16).getEvaluationSupervisor());//	 敬业精神
+            data.put("checkDedicated", mWorkReportListData.get(16).getEvaluationCheckMan());//	 敬业精神
+
+            data.put("supervisorOrganization", mWorkReportListData.get(17).getEvaluationSupervisor());//服从组织安排
+            data.put("checkOrganization", mWorkReportListData.get(17).getEvaluationCheckMan());//服从组织安排
+
+
+            //工作日志评分
+            data.put("worklogScore", workScore);
+            //职业素养评分
+            data.put("professionalismScore", professionalScore);
+            //团队合作评分
+            data.put("teamScore", teamScore);
+
+            //    日报id		number
+            data.put("dailyId", dailyId);
+            //    总分		number
+            data.put("totalScore", workScore + professionalScore + teamScore);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        params.putJsonParams(data.toString());
+        return params;
     }
 
     private void setListViewData(WorkReportBean reportData) {
         mHourReportData = initHourReportData(reportData);
         mDate.setText(DateUtils.getTodayDate(false));
         mWorkReportListData = initListData(reportData);
-        mCheckDailyReportAdapter = new CheckDailyReportAdapter(this, mWorkReportListData);
+        mCheckDailyReportAdapter = new CheckDailyReportAdapter(this, mWorkReportListData, hasEvaluation);
+
         mReportList.setAdapter(mCheckDailyReportAdapter);
         mCheckDailyReportAdapter.setItemClickListener(this);
         mReportList.addItemDecoration(new CheckReportDecorationLine(this, mWorkReportListData));
@@ -174,18 +323,18 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
         listData.add(new ReportPageItem("17:00~17:30", getString(R.string.work_report_no_evaluation), CheckDailyReportAdapter.CLICK));
 
         //职业素养
-        listData.add(new ReportPageItem(getString(R.string.work_report_personal_behavior), reportData.getSelfBehavior(), "", CheckDailyReportAdapter.WRITE_EVALUATION, true, getString(R.string.work_report_professional_qualities)));
-        listData.add(new ReportPageItem(getString(R.string.work_report_environmental_hygiene), reportData.getSelfEnvironmental(), "", CheckDailyReportAdapter.WRITE_EVALUATION));
-        listData.add(new ReportPageItem(getString(R.string.work_report_save), reportData.getSelfSave(), "", CheckDailyReportAdapter.WRITE_EVALUATION));
-        listData.add(new ReportPageItem(getString(R.string.work_report_communication_skills), reportData.getSelfCommunication(), "", CheckDailyReportAdapter.WRITE_EVALUATION));
-        listData.add(new ReportPageItem(getString(R.string.work_report_appearance), reportData.getSelfAppearance(), "", CheckDailyReportAdapter.WRITE_EVALUATION));
-        listData.add(new ReportPageItem(getString(R.string.work_report_work_discipline), reportData.getSelfDiscipline(), "", CheckDailyReportAdapter.WRITE_EVALUATION));
+        listData.add(new ReportPageItem(getString(R.string.work_report_personal_behavior), reportData.getSelfBehavior(), reportData.getSupervisorBehavior(), reportData.getCheckBehavior(), CheckDailyReportAdapter.WRITE_EVALUATION, true, getString(R.string.work_report_professional_qualities)));
+        listData.add(new ReportPageItem(getString(R.string.work_report_environmental_hygiene), reportData.getSelfEnvironmental(), reportData.getSupervisorEnvironMental(), reportData.getCheckEnvironMental(), CheckDailyReportAdapter.WRITE_EVALUATION));
+        listData.add(new ReportPageItem(getString(R.string.work_report_save), reportData.getSelfSave(), reportData.getSupervisorSave(), reportData.getCheckSave(), CheckDailyReportAdapter.WRITE_EVALUATION));
+        listData.add(new ReportPageItem(getString(R.string.work_report_communication_skills), reportData.getSelfCommunication(), reportData.getSupervisorCommunication(), reportData.getCheckCommunication(), CheckDailyReportAdapter.WRITE_EVALUATION));
+        listData.add(new ReportPageItem(getString(R.string.work_report_appearance), reportData.getSelfAppearance(), reportData.getSupervisorAppearance(), reportData.getCheckAppearance(), CheckDailyReportAdapter.WRITE_EVALUATION));
+        listData.add(new ReportPageItem(getString(R.string.work_report_work_discipline), reportData.getSelfDiscipline(), reportData.getSupervisorDiscipline(), reportData.getCheckDiscipline(), CheckDailyReportAdapter.WRITE_EVALUATION));
 
         //团队合作
-        listData.add(new ReportPageItem(getString(R.string.work_report_initiative), reportData.getSelfJobInitiative(), "", CheckDailyReportAdapter.WRITE_EVALUATION, true, getString(R.string.work_report_teamwork)));
-        listData.add(new ReportPageItem(getString(R.string.work_report_cooperation), reportData.getSelfCooperation(), "", CheckDailyReportAdapter.WRITE_EVALUATION));
-        listData.add(new ReportPageItem(getString(R.string.work_report_dedication), reportData.getSelfDedicated(), "", CheckDailyReportAdapter.WRITE_EVALUATION));
-        listData.add(new ReportPageItem(getString(R.string.work_report_obey), reportData.getSelfOrganization(), "", CheckDailyReportAdapter.WRITE_EVALUATION));
+        listData.add(new ReportPageItem(getString(R.string.work_report_initiative), reportData.getSelfJobInitiative(), reportData.getSupervisorJobInitiative(), reportData.getCheckJobInitiative(), CheckDailyReportAdapter.WRITE_EVALUATION, true, getString(R.string.work_report_teamwork)));
+        listData.add(new ReportPageItem(getString(R.string.work_report_cooperation), reportData.getSelfCooperation(), reportData.getSupervisorCooperation(), reportData.getCheckCooperation(), CheckDailyReportAdapter.WRITE_EVALUATION));
+        listData.add(new ReportPageItem(getString(R.string.work_report_dedication), reportData.getSelfDedicated(), reportData.getSupervisorDedicated(), reportData.getCheckDedicated(), CheckDailyReportAdapter.WRITE_EVALUATION));
+        listData.add(new ReportPageItem(getString(R.string.work_report_obey), reportData.getSelfOrganization(), reportData.getSupervisorOrganization(), reportData.getCheckOrganization(), CheckDailyReportAdapter.WRITE_EVALUATION));
 
 
         //工作计划
@@ -211,7 +360,8 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
      */
     private void doEvaluation() {
         for (ReportPageItem pageItem : mWorkReportListData) {
-            pageItem.setEvaluation(getString(R.string.no_problem));
+            pageItem.setEvaluationSupervisor(getString(R.string.no_problem));
+            pageItem.setEvaluationCheckMan(getString(R.string.no_problem));
         }
 
         for (int i = 0; i < mHourReportData.size(); i++) {
@@ -224,7 +374,12 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
             }
         }
         mCheckDailyReportAdapter.notifyDataSetChanged();
-//        mScroll.scrollTo();
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                mScroll.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
     }
 
     @Override
@@ -239,7 +394,7 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
         Intent intent = new Intent(CheckDailyReportActivity.this, WriteWorkReportActivity.class);
         Bundle extras = new Bundle();
         extras.putInt("position", position);
-        extras.putBoolean("is_from_check_page", true);
+        extras.putInt(WriteReportFragment.PAGE_STATUS, hasEvaluation ? WriteReportFragment.READ : WriteReportFragment.EVALUATION);
         extras.putString("date", mDate.getText().toString());
         extras.putParcelableArrayList("hour_report_list", (ArrayList<? extends Parcelable>) mHourReportData);
         intent.putExtras(extras);
@@ -279,22 +434,40 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
     @Override
     public void loadDataSuccess(WorkReportBean report) {
         setListViewData(report);
+        mScroll.setVisibility(View.VISIBLE);
+        freshHourReportList();
     }
 
     @Override
-    public void loadDataFailed(int errCode, String errMsg) {
-
+    public void loadDataFailed(String errCode, String errMsg) {
+        showToast(getString(R.string.load_report_data_error));
+        onBackPressed();
     }
 
     @Override
     public void loadDataFinish() {
-
+        hideLoadingView();
     }
 
     @Override
-    public void loadDataEmpty() {
-
+    public void commitSuccess() {
+        showToast("评价日报成功！");
+        setFinishResult();
+        onBackPressed();
     }
+
+    private void setFinishResult() {
+        Intent intent = new Intent();
+        intent.putExtra("evaluation_ok", true);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void commitFailed(String errCode, String errMsg) {
+        showToast("评价日报失败，请稍后重试！");
+    }
+
 
     @Override
     public void uidNull(int code) {

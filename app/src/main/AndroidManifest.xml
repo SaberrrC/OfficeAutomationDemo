@@ -665,15 +665,27 @@
         <activity
             android:name=".ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity"
             android:screenOrientation="portrait" />
+
+        <!--发给我的-->
         <activity
             android:name=".ui.activity.home.workreport.WorkReportCheckActivity"
             android:screenOrientation="portrait" />
+
+        <!--我发起的-->
         <activity
             android:name=".ui.activity.home.workreport.MyLaunchWorkReportActivity"
             android:screenOrientation="portrait" />
+
+        <!--审核日报-->
         <activity
             android:name=".ui.activity.home.workreport.CheckDailyReportActivity"
             android:screenOrientation="portrait" />
+
+        <!--日报更新-->
+        <activity
+            android:name=".ui.activity.home.workreport.WorkReportUpdateActivity"
+            android:screenOrientation="portrait" />
+
 
     </application>
 

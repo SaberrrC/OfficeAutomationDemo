@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.IntDef;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 
 import com.shanlinjinrong.uilibrary.R;
 import com.shanlinjinrong.utils.DeviceUtil;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by 丁 on 2017/8/18.
@@ -109,6 +113,11 @@ public class CommonTopView extends RelativeLayout {
 
         a.recycle();
     }
+
+    /** @hide */
+    @IntDef({VISIBLE, INVISIBLE, GONE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Visibility {}
 
     private void initTopView() {
         Drawable background = getBackground();
@@ -382,7 +391,7 @@ public class CommonTopView extends RelativeLayout {
     /**
      * 设置右边显示隐藏
      */
-    public void setRightVisible(int visible) {
+    public void setRightVisible(@Visibility int visible) {
         View view = findViewById(R.id.topview_right_view);
         if (null == view) {
             return;

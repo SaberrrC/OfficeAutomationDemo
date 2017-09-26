@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.WorkReportBean;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.CheckDailyReportContract;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportUpdateContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
 import org.json.JSONException;
@@ -18,17 +18,16 @@ import javax.inject.Inject;
  * Created by 丁 on 2017/8/21.
  * 发起日报 Presenter
  */
-public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportContract.View> implements CheckDailyReportContract.Presenter {
-
+public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateContract.View> implements WorkReportUpdateContract.Presenter {
 
     @Inject
-    public CheckDailyReportPresenter(MyKjHttp mKjHttp) {
+    public WorkReportUpdatePresenter(MyKjHttp mKjHttp) {
         super(mKjHttp);
     }
 
 
     @Override
-    public void loadDailyData(int dailyid) {
+    public void getReportData(int dailyid) {
         String url = ApiJava.DAILY_REPORT + "/" + dailyid;
         mKjHttp.jsonGet(url, new HttpParams(), new HttpCallBack() {
             @Override
@@ -43,10 +42,11 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
                         case ApiJava.REQUEST_CODE_OK:
                             JSONObject data = jo.getJSONObject("data");
                             WorkReportBean workReport = new Gson().fromJson(data.toString(), WorkReportBean.class);
-                            mView.loadDataSuccess(workReport);
+                            mView.getReportSuccess(workReport);
                             break;
+
                         default:
-                            mView.loadDataFailed(code, message);
+                            mView.getReportFailed("", "");
                             break;
                     }
                 } catch (Exception e) {
@@ -58,21 +58,21 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.loadDataFailed("" + errorNo, strMsg);
+                mView.getReportFailed("", "");
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.loadDataFinish();
+                mView.requestFinish();
             }
         });
     }
 
     @Override
-    public void commitDailyEvaluation(HttpParams params) {
-        mKjHttp.cleanCache();
-        mKjHttp.jsonPut(ApiJava.DAILY_REPORT, params, true,new HttpCallBack() {
+    public void updateReport(HttpParams params) {
+        mKjHttp.cleanCache();//清除缓存，否则换个日期请求的话，response来自缓存，会一直提示该天已填写日报
+        mKjHttp.jsonPost(ApiJava.UPDATE_DAILY_REPORT, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -80,10 +80,10 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
                     JSONObject jo = new JSONObject(t);
                     switch (jo.getString("code")) {
                         case ApiJava.REQUEST_CODE_OK:
-                            mView.commitSuccess();
+                            mView.updateReportSuccess();
                             break;
                         default:
-                            mView.commitFailed(jo.getString("code"), jo.getString("message"));
+                            mView.updateReportFailed(jo.getString("message"));
                     }
 
                 } catch (JSONException e) {
@@ -95,16 +95,15 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.commitFailed("" + errorNo, strMsg);
+                mView.updateReportFailed(strMsg);
+
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.loadDataFinish();
+                mView.requestFinish();
             }
         });
     }
-
-
 }

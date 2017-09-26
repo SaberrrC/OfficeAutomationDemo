@@ -41,6 +41,9 @@ import butterknife.OnClick;
  * 发给我的页面，日报周报审核工作
  */
 public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPresenter> implements SwipeRefreshLayout.OnRefreshListener, OnItemMoveListener, WorkReportCheckContract.View {
+
+    public static int FOR_RESULT_OK = 1 << 2;
+
     @Bind(R.id.report_check_list)
     SwipeMenuRecyclerView mReportCheckList;
 
@@ -81,6 +84,8 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     private ReportCheckAdapter mNoCheckAdapter;
 
+    private boolean mContentChange = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +94,6 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         ButterKnife.bind(this);
         initListView();
         loadData(false);
-
     }
 
     @Override
@@ -145,6 +149,8 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
                 } else {
                     reportType = 1;
                 }
+                //点击周报日报切换时，标记内容改变
+                mContentChange = true;
                 onRefresh();
             }
         });
@@ -223,7 +229,12 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         Intent intent = new Intent(WorkReportCheckActivity.this, CheckDailyReportActivity.class);
         int dailyId = mReportStatus == 1 ? mReportNoCheckData.get(position).getDailyId() : mReportCheckData.get(position).getDailyId();
         intent.putExtra("dailyid", dailyId);
-        startActivity(intent);
+        intent.putExtra("user_name", mReportNoCheckData.get(position).getReportAccount());
+        if (mReportStatus == 3) {
+            intent.putExtra("has_evaluation", true);
+            intent.putExtra("user_name", mReportCheckData.get(position).getReportAccount());
+        }
+        startActivityForResult(intent, FOR_RESULT_OK);
     }
 
     /**
@@ -247,14 +258,16 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
             case R.id.tv_check_pending:
                 mReportStatus = 1;
                 showCheckList(false);
-                if (mReportNoCheckData.size() == 0) {
+                if (mReportNoCheckData.size() == 0 || mContentChange) {
+                    mContentChange = false;
                     onRefresh();
                 }
                 break;
             case R.id.tv_checked:
                 mReportStatus = 3;
                 showCheckList(true);
-                if (mReportCheckData.size() == 0) {
+                if (mReportCheckData.size() == 0 || mContentChange) {
+                    mContentChange = false;
                     onRefresh();
                 }
                 break;
@@ -301,7 +314,11 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     @Override
     public void loadDataFailed(int errCode, String errMsg) {
 //        mReportCheckList.loadMoreError(errCode, errMsg);
-        showToast("数据加载失败，请稍后重试！");
+        if (errCode == -1) {
+            showToast(getString(R.string.net_no_connection));
+        } else {
+            showToast(getString(R.string.data_load_error));
+        }
     }
 
     @Override
@@ -343,8 +360,19 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     @Override
     public void onRefresh() {
-
         loadData(false);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_OK && resultCode == FOR_RESULT_OK) {
+            boolean isEvaluationOk = data.getBooleanExtra("evaluation_ok", false);
+            if (isEvaluationOk) {
+                //日报审核成功时，标记内容改变
+                mContentChange = true;
+                onRefresh();
+            }
+        }
+    }
 }

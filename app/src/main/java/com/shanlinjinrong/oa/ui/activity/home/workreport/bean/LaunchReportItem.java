@@ -9,10 +9,10 @@ import android.os.Parcelable;
  */
 public class LaunchReportItem implements Parcelable {
     private int mType; // cell 类型
-    private String mTitle; // 标题
-    private String mContent; //显示内容
+    private String mTitle = ""; // 标题
+    private String mContent = ""; //显示内容
     private boolean mGroup;
-    private String mGroupTitle; //组标题
+    private String mGroupTitle = ""; //组标题
 
 
     public LaunchReportItem(String mTitle, String mContent, int mType) {

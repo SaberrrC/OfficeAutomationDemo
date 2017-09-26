@@ -45,17 +45,17 @@
                 <TextView
                     android:id="@+id/tv_date"
                     style="@style/work_report_launch_right_text_style"
-                    android:drawableRight="@drawable/arrow_right"
-                    android:enabled="true" />
+                    android:enabled="true"
+                    android:layout_marginRight="@dimen/common_margin14"/>
 
                 <TextView
                     style="@style/work_report_launch_left_text_style"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginStart="14dp"
-                    android:text="@string/work_report_select_date_text" />
+                    android:layout_marginLeft="@dimen/common_margin14"
+                    android:layout_marginStart="@dimen/common_margin14"
+                    android:text="@string/work_report_report_time_text" />
             </RelativeLayout>
 
             <TextView

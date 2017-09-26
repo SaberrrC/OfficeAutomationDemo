@@ -44,4 +44,9 @@ public class ApiJava {
 
     //退回日报接口
     public static final String REJECT_WEEK_REPORT = "dailyreport/reject/";
+
+    // 更新日报
+    public static final String UPDATE_DAILY_REPORT = "upddailyreport";
+
+
 }

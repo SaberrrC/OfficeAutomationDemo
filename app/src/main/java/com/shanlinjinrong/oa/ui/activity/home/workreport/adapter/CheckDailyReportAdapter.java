@@ -35,13 +35,15 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Context mContext;
     private List<ReportPageItem> mData;
 
+    private boolean isEditEnable = false;
 
     private OnItemClickListener mItemClickListener;
 
-    public CheckDailyReportAdapter(Context context, List<ReportPageItem> mData) {
+    public CheckDailyReportAdapter(Context context, List<ReportPageItem> mData, boolean isEditEnable) {
         mContext = context;
         this.mData = mData;
         mLayoutInflater = LayoutInflater.from(context);
+        this.isEditEnable = isEditEnable;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         String title = mData.get(position).getTitle();
         String content = mData.get(position).getContent();
-        String evaluation = mData.get(position).getEvaluation();
+
         if (holder instanceof ClickCellHolder) {
             ClickCellHolder clickHolder = (ClickCellHolder) holder;
             clickHolder.mLeftTitle.setText(title);
@@ -72,13 +74,30 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
                 clickHolder.mRightText.setEnabled(true);
             }
         } else if (holder instanceof WriteEvaluationCellHolder) {
+            String evaluation1 = mData.get(position).getEvaluationSupervisor();
+            String evaluation2 = mData.get(position).getEvaluationCheckMan();
             WriteEvaluationCellHolder writeHolder = (WriteEvaluationCellHolder) holder;
             writeHolder.mLeftTitle.setText(title);
             writeHolder.mContent.setText(content);
-            if (!TextUtils.isEmpty(evaluation))
-                writeHolder.mEdit.setText(evaluation);
-            writeHolder.mEdit.setTag(position);//先设置tag，检测内容改变时用到了
-            writeHolder.mEdit.addTextChangedListener(new WriteTextWatcher(writeHolder.mEdit));
+            if (!TextUtils.isEmpty(evaluation1)) {
+                writeHolder.mSupervisorEvaluate.setText(evaluation1);
+            }
+
+            if (!TextUtils.isEmpty(evaluation2)) {
+                writeHolder.mCheckManEvaluate.setText(evaluation2);
+            }
+
+            if (isEditEnable){
+                writeHolder.mSupervisorEvaluate.setEnabled(false);
+                writeHolder.mCheckManEvaluate.setEnabled(false);
+            }
+
+            writeHolder.mSupervisorEvaluate.setTag(position);//先设置tag，检测内容改变时用到了
+            writeHolder.mSupervisorEvaluate.addTextChangedListener(new WriteTextWatcher(writeHolder.mSupervisorEvaluate));
+
+            writeHolder.mCheckManEvaluate.setTag(position);//先设置tag，检测内容改变时用到了
+            writeHolder.mCheckManEvaluate.addTextChangedListener(new WriteTextWatcher(writeHolder.mCheckManEvaluate));
+
         } else if (holder instanceof ShowPlanCellHolder) {
             ShowPlanCellHolder planHolder = (ShowPlanCellHolder) holder;
             if (!TextUtils.isEmpty(content))
@@ -94,6 +113,10 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
                 scoreHolder.mEdit.setHint("满分60分");
             else
                 scoreHolder.mEdit.setHint("满分20分");
+
+            if (isEditEnable){
+                scoreHolder.mEdit.setEnabled(false);
+            }
 
             scoreHolder.mEdit.setTag(position);
             scoreHolder.mEdit.addTextChangedListener(new WriteTextWatcher(scoreHolder.mEdit));
@@ -146,15 +169,18 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         TextView mLeftTitle;
         TextView mContent;
-        EditText mEdit;
+        EditText mSupervisorEvaluate;
+        EditText mCheckManEvaluate;
 
         WriteEvaluationCellHolder(View view) {
             super(view);
             mLeftTitle = (TextView) view.findViewById(R.id.tv_left_title);
             mContent = (TextView) view.findViewById(R.id.tv_show_content);
-            mEdit = (EditText) view.findViewById(R.id.et_text);
+            mSupervisorEvaluate = (EditText) view.findViewById(R.id.et_supervisor_evaluate);
+            mCheckManEvaluate = (EditText) view.findViewById(R.id.et_check_man_evaluate);
             InputFilter[] filters = new InputFilter[]{new EmojiFilter(20)};
-            mEdit.setFilters(filters);
+            mSupervisorEvaluate.setFilters(filters);
+            mCheckManEvaluate.setFilters(filters);
         }
     }
 
@@ -183,7 +209,6 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         ShowPlanCellHolder(View view) {
             super(view);
-            // TODO: 2017/9/22
             mPlan = (TextView) view.findViewById(R.id.tv_show_plan);
         }
     }
@@ -219,8 +244,12 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
         public void afterTextChanged(Editable s) {
             if (s != null) {
                 int position = (int) mEdit.getTag();
-                if (position < mData.size() - 2) {
-                    mData.get(position).setEvaluation(s.toString());
+                //最后3项是填写分数的，区别对待一下
+                if (position < mData.size() - 3) {
+                    if (mEdit.getId() == R.id.et_check_man_evaluate)
+                        mData.get(position).setEvaluationCheckMan(s.toString());
+                    if (mEdit.getId() == R.id.et_supervisor_evaluate)
+                        mData.get(position).setEvaluationSupervisor(s.toString());
                 } else {
                     // 当EditText数据发生改变的时候存到data变量中
                     mData.get(position).setContent(s.toString());

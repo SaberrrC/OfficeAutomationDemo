@@ -37,6 +37,12 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
 
     private TextView mNextPageBtn;//下一项
 
+    public static int WRITE = 0;//输入状态
+    public static int EVALUATION = 1;//评价状态
+    public static int READ = 2;//只读状态
+
+    public static String PAGE_STATUS = "page_status";
+
 
     OnFragmentStartChangeListener changeListener;//翻页监听
 
@@ -89,13 +95,24 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
         mSupervisorEvaluate.setFilters(filters);
     }
 
-    private void setEnableFalse() {
-        mPlanWork.setEnabled(false);
-        mRealWork.setEnabled(false);
-        mSelfEvaluate.setEnabled(false);
-        mQuantitative.setEnabled(false);
-        mLlCheckManEvaluate.setVisibility(View.VISIBLE);
-        mLlSupervisorEvaluate.setVisibility(View.VISIBLE);
+    private void setPageStatus(int status) {
+        if (status == EVALUATION) {
+            mPlanWork.setEnabled(false);
+            mRealWork.setEnabled(false);
+            mSelfEvaluate.setEnabled(false);
+            mQuantitative.setEnabled(false);
+            mLlCheckManEvaluate.setVisibility(View.VISIBLE);
+            mLlSupervisorEvaluate.setVisibility(View.VISIBLE);
+        } else if (status == READ) {
+            mPlanWork.setEnabled(false);
+            mRealWork.setEnabled(false);
+            mSelfEvaluate.setEnabled(false);
+            mQuantitative.setEnabled(false);
+            mSupervisorEvaluate.setEnabled(false);
+            mCheckManEvaluate.setEnabled(false);
+            mLlCheckManEvaluate.setVisibility(View.VISIBLE);
+            mLlSupervisorEvaluate.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -111,10 +128,10 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
                 mCheckManEvaluate.setText(hourReportBean.getCheckManEvaluate());
                 mSupervisorEvaluate.setText(hourReportBean.getSupervisorEvaluate());
             }
-            boolean mIsFromCheckPage = extra.getBoolean("is_from_check_page", false);
-            if (mIsFromCheckPage) {
-                setEnableFalse();
-            }
+            int pageStatus = extra.getInt(PAGE_STATUS);
+
+            setPageStatus(pageStatus);
+
             setBtnBackGround(extra.getInt("page"));
         }
     }

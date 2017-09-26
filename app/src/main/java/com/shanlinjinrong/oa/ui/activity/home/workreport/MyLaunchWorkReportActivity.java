@@ -119,11 +119,13 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         public void onItemClick(View itemView, int position) {
             Intent intent;
             if (mItemList.get(position).getStatus() == 1) {
-                intent = new Intent(MyLaunchWorkReportActivity.this, WorkReportLaunchActivity.class);
+                intent = new Intent(MyLaunchWorkReportActivity.this, WorkReportUpdateActivity.class);
             } else {
                 intent = new Intent(MyLaunchWorkReportActivity.this, CheckDailyReportActivity.class);
-                intent.putExtra("dailyid", mItemList.get(position).getDailyId());
+                intent.putExtra("has_evaluation", true);
+                intent.putExtra("user_name", mItemList.get(position).getReportAccount());
             }
+            intent.putExtra("dailyid", mItemList.get(position).getDailyId());
             startActivity(intent);
         }
     };
@@ -152,7 +154,9 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
 
     @Override
     public void loadDataFailed(int errCode, String errMsg) {
-
+        if (errCode == -1) {
+            showToast(getString(R.string.net_no_connection));
+        }
     }
 
     @Override

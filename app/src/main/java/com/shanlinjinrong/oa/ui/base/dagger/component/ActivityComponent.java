@@ -13,6 +13,7 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActiv
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportUpdateActivity;
 import com.shanlinjinrong.oa.ui.activity.login.FindPassWordActivity;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
@@ -82,5 +83,7 @@ public interface ActivityComponent {
     void inject(MyLaunchWorkReportActivity activity);
 
     void inject(CheckDailyReportActivity activity);
+
+    void inject(WorkReportUpdateActivity activity);
 
 }
