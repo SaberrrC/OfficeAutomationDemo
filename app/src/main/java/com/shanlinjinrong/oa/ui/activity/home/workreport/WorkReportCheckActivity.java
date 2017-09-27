@@ -48,8 +48,8 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     public static int FOR_RESULT_OK = 1 << 2;
 
-    private static String SHOW_MASK = "show_mask";
-    private static String IS_HSOW_MASK = "is_show_mask";
+    public static String HAS_EVALUATION = "has_evaluation";
+
 
     @Bind(R.id.report_check_list)
     SwipeMenuRecyclerView mReportCheckList;
@@ -106,11 +106,13 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     }
 
     private void showMask() {
+        String SHOW_MASK = "show_mask";
+        String IS_SHOW_MASK = "is_show_mask";
         SharedPreferences sp = getSharedPreferences(SHOW_MASK, MODE_PRIVATE);
-        boolean isShowMask = sp.getBoolean(IS_HSOW_MASK, true);
+        boolean isShowMask = sp.getBoolean(IS_SHOW_MASK, true);
         if (isShowMask) {
             new MaskDialog(this, R.mipmap.report_check_mask_image).show();
-            sp.edit().putBoolean(IS_HSOW_MASK, false).apply();
+            sp.edit().putBoolean(IS_SHOW_MASK, false).apply();
         }
     }
 
@@ -253,7 +255,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         intent.putExtra("dailyid", dailyId);
         intent.putExtra("user_name", mReportNoCheckData.get(position).getReportAccount());
         if (mReportStatus == 3) {
-            intent.putExtra("has_evaluation", true);
+            intent.putExtra(HAS_EVALUATION, true);
             intent.putExtra("user_name", mReportCheckData.get(position).getReportAccount());
         }
         startActivityForResult(intent, FOR_RESULT_OK);
@@ -264,7 +266,9 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         Intent intent = new Intent(WorkReportCheckActivity.this, WriteWeeklyNewspaperActivity.class);
         int dailyId = mReportStatus == 1 ? mReportNoCheckData.get(position).getDailyId() : mReportCheckData.get(position).getDailyId();
         intent.putExtra("dailyid", dailyId);
-        intent.putExtra("user_name", mReportNoCheckData.get(position).getReportAccount());
+        String userName = mReportStatus == 1 ? mReportNoCheckData.get(position).getReportAccount() : mReportCheckData.get(position).getReportAccount();
+        intent.putExtra("user_name", userName);
+        intent.putExtra("function", WriteWeeklyNewspaperActivity.FUNCTION_EVALUATION);
         if (mReportStatus == 3) {
             intent.putExtra("has_evaluation", true);
             intent.putExtra("user_name", mReportCheckData.get(position).getReportAccount());

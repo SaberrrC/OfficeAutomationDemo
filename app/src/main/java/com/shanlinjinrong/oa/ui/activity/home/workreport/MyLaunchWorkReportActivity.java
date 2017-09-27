@@ -138,11 +138,13 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
                 intent.putExtra("dailyid", mItemList.get(position).getDailyId());
             } else if (reportType == 2) {
                 intent = new Intent(MyLaunchWorkReportActivity.this, WriteWeeklyNewspaperActivity.class);
+                intent.putExtra("function", WriteWeeklyNewspaperActivity.FUNCTION_EDIT);
+                intent.putExtra("user_name", AppConfig.getAppConfig(MyLaunchWorkReportActivity.this).getPrivateName());
+                intent.putExtra("dailyid", mItemList.get(position).getDailyId());
                 if (mItemList.get(position).getStatus() == 3) {
                     intent.putExtra("has_evaluation", true);
-                    intent.putExtra("user_name", AppConfig.getAppConfig(MyLaunchWorkReportActivity.this).getPrivateName());
+                    intent.putExtra("function", WriteWeeklyNewspaperActivity.FUNCTION_EVALUATION);
                 }
-                intent.putExtra("week_report_id", mItemList.get(position).getDailyId());
             }
 
             if (intent != null)

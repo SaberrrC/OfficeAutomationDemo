@@ -2,13 +2,11 @@ package com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.presenter;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.ApiJava;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WeekReportItemBean;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.contract.WriteWeeklyNewspaperActivityContract;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
-import com.shanlinjinrong.oa.ui.base.BasePresenter;
-import com.shanlinjinrong.oa.ui.base.BaseView;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
 import org.json.JSONException;
@@ -17,8 +15,6 @@ import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
 import javax.inject.Inject;
-
-import static com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.contract.WriteWeeklyNewspaperActivityContract.*;
 
 /**
  * Created by tonny on 2017/9/21.
@@ -51,6 +47,10 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                         case ApiJava.REQUEST_CODE_OK:
                             mView.sendWeeklyReportSuccess(jsonObject.getString("message"));
                             break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
+                            break;
                         default:
                             mView.sendWeeklyReportFailure(jsonObject.getString("code"), jsonObject.getString("message"));
                             break;
@@ -70,7 +70,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.sendWeeklyReportFailure(""+errorNo,strMsg);
+                mView.sendWeeklyReportFailure("" + errorNo, strMsg);
             }
         });
     }
@@ -88,6 +88,10 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                         case ApiJava.REQUEST_CODE_OK:
                             JSONObject data = jo.getJSONObject("data");
                             mView.getDefaultReceiverSuccess(data.getString("id"), data.getString("username"), data.getString("post"));
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
                             break;
                         default:
                             mView.getDefaultReceiverFailed(jo.getString("message"));
@@ -133,5 +137,107 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
 
             }
         });
+    }
+
+    @Override
+    public void getWeReportData(int reportId) {
+        HttpParams httpParams = new HttpParams();
+        mKjHttp.jsonGet(ApiJava.WEEK_REPORT + "/" + reportId, httpParams, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                JSONObject jo;
+                try {
+                    jo = new JSONObject(t);
+                    String code = jo.getString("code");
+                    String message = jo.getString("message");
+                    switch (code) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            JSONObject data = jo.getJSONObject("data");
+                            WeekReportItemBean weekReportItem = new Gson().fromJson(data.toString(), WeekReportItemBean.class);
+                            mView.getReportSuccess(weekReportItem);
+                            break;
+
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
+                            break;
+                        default:
+                            mView.getReportFailed(code, message);
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.getReportFailed("" + errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.requestFinish();
+            }
+        });
+    }
+
+    @Override
+    public void evaluationReport(int reportId, String content) {
+        HttpParams httpParams = new HttpParams();
+        JSONObject jsonData = new JSONObject();
+        try {
+            jsonData.put("id", reportId);
+            jsonData.put("checkManRating", content);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        httpParams.putJsonParams(jsonData.toString());
+        mKjHttp.cleanCache();
+        mKjHttp.jsonPut(ApiJava.WEEK_REPORT, httpParams, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                JSONObject jo;
+                try {
+                    jo = new JSONObject(t);
+                    String code = jo.getString("code");
+                    String message = jo.getString("message");
+                    switch (code) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.evaluationReportSuccess();
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
+                            break;
+
+                        default:
+                            mView.evaluationReportFailed(code, message);
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.evaluationReportFailed("" + errorNo, strMsg);
+
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.requestFinish();
+            }
+        });
+
     }
 }

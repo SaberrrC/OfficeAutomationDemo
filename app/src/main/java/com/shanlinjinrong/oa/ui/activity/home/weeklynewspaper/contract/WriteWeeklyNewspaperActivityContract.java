@@ -1,6 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.contract;
 
-import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WeekReportItemBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
@@ -25,9 +25,17 @@ public interface WriteWeeklyNewspaperActivityContract {
 
         void sendWeeklyReportSuccess(String msg);
 
-        void sendWeeklyReportFailure(String code,String msg);
+        void sendWeeklyReportFailure(String code, String msg);
 
         void sendWeeklyReportFinish();
+
+        void getReportSuccess(WeekReportItemBean weekReportItem);
+
+        void getReportFailed(String code, String msg);
+
+        void evaluationReportSuccess();
+
+        void evaluationReportFailed(String code, String msg);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -38,5 +46,9 @@ public interface WriteWeeklyNewspaperActivityContract {
         void getDefaultReceiver();
 
         void getLastWeek(); //获取上周工作计划
+
+        void getWeReportData(int reportId); //获取上周工作计划
+
+        void evaluationReport(int reportId, String content); //评价周报
     }
 }

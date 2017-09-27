@@ -80,4 +80,8 @@ public class MyKjHttp extends KJHttp {
         return request;
     }
 
+    public Request<byte[]> jsonPut(String url, HttpParams params, HttpCallBack callback) {
+        return jsonPut(url, params, true, callback);
+    }
+
 }

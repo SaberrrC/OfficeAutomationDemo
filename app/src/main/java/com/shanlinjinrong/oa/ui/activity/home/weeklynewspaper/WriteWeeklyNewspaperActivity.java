@@ -8,24 +8,30 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.adapter.NextWeekWorkContentAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.adapter.ThisWeekWorkContentAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WeekReportItemBean;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkContentBean;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkStateTipNotifyChangeEvent;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.contract.WriteWeeklyNewspaperActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.presenter.WriteWeeklyNewspaperActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
@@ -49,13 +55,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.DatePicker;
 
+import static com.shanlinjinrong.oa.R.id.btn_add_this_week_work;
 import static com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity.SELECT_OK;
 
 /**
  * 发起周报
  */
 public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNewspaperActivityPresenter> implements WriteWeeklyNewspaperActivityContract.View {
-
+    //标题栏右侧按键的功能  0：提交周报  1：编辑更新周报 2：审核周报
+    public static int FUNCTION_COMMIT = 0;
+    public static int FUNCTION_EDIT = 1;
+    public static int FUNCTION_EVALUATION = 2;
     @Bind(R.id.top_view)
     CommonTopView mTopView;
     @Bind(R.id.tv_date)
@@ -68,6 +78,33 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     AllRecyclerView mRvNextWorkContent;
     @Bind(R.id.tv_receiver)
     TextView mTvReceiver;
+
+    @Bind(R.id.btn_add_this_week_work)
+    TextView mAddThisWeekWorkBtn;
+
+    @Bind(R.id.btn_add_next_week_work)
+    TextView mAddNextWeekWorkBtn;
+
+    @Bind(R.id.ll_week_report_evaluation)
+    LinearLayout mLlWeekEvaluation;//评价栏
+
+    @Bind(R.id.rl_report_date)
+    RelativeLayout mRlReportDateEva; //评价
+
+    @Bind(R.id.ll_select_date)
+    RelativeLayout mSelectDate; //提交
+
+    @Bind(R.id.tv_report_date)
+    TextView mTvDateEva;//评价
+
+    @Bind(R.id.et_work_report_evaluation)
+    EditText mEtWorkReportEvaluation;//评价
+
+    @Bind(R.id.ll_select_receiver)
+    RelativeLayout mSelectReceiver;
+
+    @Bind(R.id.report_scroll_view)
+    ScrollView mScroll;
 
     private DatePicker picker;
     private int workPlanIndex;
@@ -88,6 +125,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     private List<String> mondayData1;
     private List<String> mondayData2;
 
+    private String mUserName;
+    private boolean hasEvaluation = false;
+    private int mDailyId;
+
+
+    private int mFunction = FUNCTION_COMMIT;//标题栏右侧按键的功能  0：提交周报  1：编辑更新周报 2：审核周报
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,8 +140,43 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        initData();
-        initView();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mUserName = extras.getString("user_name");
+            hasEvaluation = extras.getBoolean(WorkReportCheckActivity.HAS_EVALUATION, false);
+            mDailyId = extras.getInt("dailyid");
+            mFunction = extras.getInt("function");
+        }
+
+        if (mFunction == FUNCTION_COMMIT) {
+            mPresenter.getLastWeek();
+            initData();
+            initView();
+        } else if (mFunction == FUNCTION_EDIT) {
+            initData();
+            initView();
+            mTopView.setRightText("更新");
+            mTopView.setAppTitle(mUserName + "工作周报");
+        } else {
+            mScroll.setVisibility(View.GONE);
+            mSelectDate.setVisibility(View.GONE);
+            mAddThisWeekWorkBtn.setVisibility(View.GONE);
+            mAddNextWeekWorkBtn.setVisibility(View.GONE);
+            mSelectReceiver.setVisibility(View.GONE);
+            mLlWeekEvaluation.setVisibility(View.VISIBLE);
+            mRlReportDateEva.setVisibility(View.VISIBLE);
+            mTopView.setAppTitle(mUserName + "工作周报");
+
+            if (hasEvaluation) {
+                mEtWorkReportEvaluation.setEnabled(false);
+                mTopView.setRightVisible(View.GONE);
+            }
+            mPresenter.getWeReportData(mDailyId);
+            showLoadingView();
+        }
+
+
     }
 
     @Override
@@ -106,14 +185,14 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     }
 
     private void initData() {
-
-        mPresenter.getLastWeek();
-
         mSharedPreferences = getSharedPreferences(AppConfig.getAppConfig(AppManager.sharedInstance()).getPrivateCode() +
                 Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE);
         int workContentSize = mSharedPreferences.getInt("workContentSize", 4);
         int workPlanSize = mSharedPreferences.getInt("workPlanSize", 4);
+        initListData(workContentSize, workPlanSize);
+    }
 
+    private void initListData(int workContentSize, int workPlanSize) {
         //周报日期 数据初始化
         mondayData1 = DateUtils.getMondayData1("yyyy—MM-dd");
         mondayData2 = DateUtils.getMondayData2("yyyy-MM-dd");
@@ -140,6 +219,14 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             mWorkContentBean.setTitle("工作计划 " + workPlanIndex);
             mNextData.add(mWorkContentBean);
         }
+    }
+
+    private void setData(WeekReportItemBean weekReportItem) {
+        int workContentSize = weekReportItem.getWeeklySummary().size();
+        int workPlanSize = weekReportItem.getWeekPlane().size();
+
+        //周报日期 数据初始化
+        initListData(workContentSize, workPlanSize);
     }
 
     private void initView() {
@@ -200,42 +287,88 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         mPresenter.getDefaultReceiver();
     }
 
-    @OnClick({R.id.ll_select_date, R.id.btn_add_this_week_work, R.id.btn_add_next_week_work, R.id.ll_select_receiver, R.id.topview_right_view})
+    private void setEvaluationView(WeekReportItemBean weekReportItem) {
+        for (int i = 0; i < mData.size(); i++) {
+            int state = weekReportItem.getWeeklySummary().get(i).getWriteState();
+            if (state == 0) {
+                mData.get(i).setState("已填写");
+            } else if (state == 1) {
+                mData.get(i).setState("待完善");
+            } else {
+                mData.get(i).setState("未填写");
+            }
+        }
+
+        String startTime = DateUtils.longToDateString(weekReportItem.getStartTime(), "yyyy-MM-dd");
+        String endTime = DateUtils.longToDateString(weekReportItem.getEndTime(), "yyyy-MM-dd");
+        mTvDateEva.setText(startTime + "至" + endTime);
+
+        mAdapter = new ThisWeekWorkContentAdapter(mData);
+        mRvWorkContent.setLayoutManager(new LinearLayoutManager(this));
+        mRvWorkContent.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+
+        mRvWorkContent.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                WorkContentBean workContentBean = mData.get(i);
+                Intent intent = new Intent(WriteWeeklyNewspaperActivity.this, WeeklyWorkContentActivity.class);
+                intent.putExtra("TopTitle", workContentBean.getTitle());
+                intent.putExtra("isWorkContent", true);
+                startActivity(intent);
+            }
+        });
+
+        for (int i = 0; i < mNextData.size(); i++) {
+            int state = weekReportItem.getWeekPlane().get(i).getWriteState();
+            if (state == 0) {
+                mNextData.get(i).setState("已填写");
+            } else if (state == 1) {
+                mNextData.get(i).setState("待完善");
+            } else {
+                mNextData.get(i).setState("未填写");
+            }
+        }
+        mRvNextWorkContent.setLayoutManager(new LinearLayoutManager(this));
+        mNextAdapter = new NextWeekWorkContentAdapter(mNextData);
+        mRvNextWorkContent.setAdapter(mNextAdapter);
+        mNextAdapter.notifyDataSetChanged();
+
+        mRvNextWorkContent.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                WorkContentBean workContentBean = mNextData.get(i);
+                Intent intent = new Intent(WriteWeeklyNewspaperActivity.this, WeeklyWorkContentActivity.class);
+                intent.putExtra("TopTitle", workContentBean.getTitle());
+                intent.putExtra("isWorkContent", false);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @OnClick({R.id.ll_select_date, btn_add_this_week_work, R.id.btn_add_next_week_work, R.id.ll_select_receiver, R.id.topview_right_view})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.topview_right_view:
-                if (mTvReceiver.getText().toString().equals("请选择")) {
-                    Toast.makeText(this, "请选择接收人", Toast.LENGTH_SHORT).show();
-                    return;
+                if (mFunction == FUNCTION_COMMIT) {
+                    //提交周报
+                    if (checkData())
+                        mPresenter.addWeekReport(initHttpParams());
+                } else if (mFunction == FUNCTION_EDIT) {
+                    //编辑周报
+                    if (checkData())
+                        mPresenter.addWeekReport(initHttpParams());
+                } else if (mFunction == FUNCTION_EVALUATION) {
+                    //审核周报
+                    mPresenter.evaluationReport(mDailyId, mEtWorkReportEvaluation.getText().toString().trim());
                 }
-                for (int i = 0; i < mData.size(); i++) {
-                    if (mData.get(i).getState().equals("待完善")) {
-                        //Toast.makeText(this, "\"工作内容 " + (i + 1) + "\"" + "待完善，请完善后发起!", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(this, "当前有未填写汇报内容,请检查", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-                for (int i = 0; i < mNextData.size(); i++) {
-                    if (mNextData.get(i).getState().equals("待完善")) {
-                        //Toast.makeText(this, "\"工作计划 " + (i + 1) + "\"" + "待完善，请完善后发起!", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(this, "当前有未填写汇报内容,请检查", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-                if (!mNextData.get(0).getState().equals("已填写")) {
-                    Toast.makeText(this, "请填写下周计划", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                if (!mData.get(0).getState().equals("已填写")) {
-                    Toast.makeText(this, "请填写本周工作", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                mPresenter.addWeekReport(initHttpParams());
+
+
                 break;
             case R.id.ll_select_date:
                 showBeginTimeView();
                 break;
-            case R.id.btn_add_this_week_work:
+            case btn_add_this_week_work:
                 if (workContentIndex < 8) {
                     workContentIndex++;
                     //记录每个账号的填写情况
@@ -274,6 +407,37 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 startActivityForResult(intent, SELECT_OK);
                 break;
         }
+    }
+
+    private boolean checkData() {
+        if (mTvReceiver.getText().toString().equals("请选择")) {
+            Toast.makeText(this, "请选择接收人", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        for (int i = 0; i < mData.size(); i++) {
+            if (mData.get(i).getState().equals("待完善")) {
+                //Toast.makeText(this, "\"工作内容 " + (i + 1) + "\"" + "待完善，请完善后发起!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "当前有未填写汇报内容,请检查", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        for (int i = 0; i < mNextData.size(); i++) {
+            if (mNextData.get(i).getState().equals("待完善")) {
+                //Toast.makeText(this, "\"工作计划 " + (i + 1) + "\"" + "待完善，请完善后发起!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "当前有未填写汇报内容,请检查", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        if (!mNextData.get(0).getState().equals("已填写")) {
+            Toast.makeText(this, "请填写下周计划", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!mData.get(0).getState().equals("已填写")) {
+            Toast.makeText(this, "请填写本周工作", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     private HttpParams initHttpParams() {
@@ -332,7 +496,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void uidNull(int code) {
-
+        catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
     }
 
     @Override
@@ -342,7 +506,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void requestFinish() {
-
+        hideLoadingView();
     }
 
     @Override
@@ -395,6 +559,37 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         hideLoadingView();
     }
 
+    @Override
+    public void getReportSuccess(WeekReportItemBean weekReportItem) {
+        mScroll.setVisibility(View.VISIBLE);
+        setData(weekReportItem);
+        setEvaluationView(weekReportItem);
+    }
+
+    @Override
+    public void getReportFailed(String code, String msg) {
+        showToast("获取周报信息失败！");
+        onBackPressed();
+    }
+
+    @Override
+    public void evaluationReportSuccess() {
+        showToast("周报审核成功！");
+        setFinishResult();
+    }
+
+    @Override
+    public void evaluationReportFailed(String code, String msg) {
+        showToast("周报审核失败！");
+    }
+
+    private void setFinishResult() {
+        Intent intent = new Intent();
+        intent.putExtra("evaluation_ok", true);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     /**
      * 时间选择器
      */
@@ -419,7 +614,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 if (beginTimeList.size() - 1 == options1) {
                     endTime = DateUtils.getIntervalDate1(currentTime, 7, "yyyy-MM-dd");
                 } else {
-                     endTime = WriteWeeklyNewspaperActivity.this.beginTimeList.get(options1 + 1);
+                    endTime = WriteWeeklyNewspaperActivity.this.beginTimeList.get(options1 + 1);
                 }
                 mTvDate.setText(currentTime + "至" + endTime);
             }
