@@ -192,6 +192,14 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         initListData(workContentSize, workPlanSize);
     }
 
+    private void putInt(String key, int value) {
+        mSharedPreferences.edit().putInt(key, value).apply();
+    }
+
+    private void putString(String key, String value) {
+        mSharedPreferences.edit().putString(key, value).apply();
+    }
+
     private void initListData(int workContentSize, int workPlanSize) {
         //周报日期 数据初始化
         mondayData1 = DateUtils.getMondayData1("yyyy—MM-dd");
@@ -224,6 +232,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     private void setData(WeekReportItemBean weekReportItem) {
         int workContentSize = weekReportItem.getWeeklySummary().size();
         int workPlanSize = weekReportItem.getWeekPlane().size();
+
+        putInt("workContentSize", workContentSize);
+        putInt("workPlanSize", workPlanSize);
 
         //周报日期 数据初始化
         initListData(workContentSize, workPlanSize);
@@ -297,6 +308,11 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             } else {
                 mData.get(i).setState("未填写");
             }
+
+            putString(mData.get(i).getTitle() + "work_plan", weekReportItem.getWeeklySummary().get(i).getWorkPlan());
+            putString(mData.get(i).getTitle() + "practical_work", weekReportItem.getWeeklySummary().get(i).getWork());
+            putString(mData.get(i).getTitle() + "work_analyzes", weekReportItem.getWeeklySummary().get(i).getDifference());
+            putString(mData.get(i).getTitle() + "work_remark", weekReportItem.getWeeklySummary().get(i).getRemark());
         }
 
         String startTime = DateUtils.longToDateString(weekReportItem.getStartTime(), "yyyy-MM-dd");
@@ -328,6 +344,10 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             } else {
                 mNextData.get(i).setState("未填写");
             }
+            putString(mData.get(i).getTitle() + "next_work", weekReportItem.getWeekPlane().get(i).getNextWorkPlan());
+            putString(mData.get(i).getTitle() + "personLiable", weekReportItem.getWeekPlane().get(i).getPersonLiable());
+            putString(mData.get(i).getTitle() + "remark", weekReportItem.getWeekPlane().get(i).getRemark());
+
         }
         mRvNextWorkContent.setLayoutManager(new LinearLayoutManager(this));
         mNextAdapter = new NextWeekWorkContentAdapter(mNextData);
