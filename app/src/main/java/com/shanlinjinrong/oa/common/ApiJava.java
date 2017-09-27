@@ -38,6 +38,9 @@ public class ApiJava {
     //发起周报
     public static final String SEND_WEEK_REPORT = "weekreport/add";
 
+    //发起周报
+    public static final String LOOK_LAST_WEEK = "weekreport/lastWeek";
+
 
     //审核日报列表
     public static final String LEADER_READ_DAILY_REPORT = "dailyreport/leader";

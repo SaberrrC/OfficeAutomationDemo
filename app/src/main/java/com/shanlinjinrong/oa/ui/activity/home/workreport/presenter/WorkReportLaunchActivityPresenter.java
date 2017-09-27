@@ -25,6 +25,8 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
         super(mKjHttp);
     }
 
+
+
     @Override
     public void launchWorkReport(HttpParams params) {
         mKjHttp.cleanCache();//清除缓存，否则换个日期请求的话，response来自缓存，会一直提示该天已填写日报

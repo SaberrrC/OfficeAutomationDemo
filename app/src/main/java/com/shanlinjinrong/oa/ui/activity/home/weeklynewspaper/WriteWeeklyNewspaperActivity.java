@@ -106,6 +106,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     }
 
     private void initData() {
+
+        mPresenter.getLastWeek();
+
         mSharedPreferences = getSharedPreferences(AppConfig.getAppConfig(AppManager.sharedInstance()).getPrivateCode() +
                 Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE);
         int workContentSize = mSharedPreferences.getInt("workContentSize", 4);

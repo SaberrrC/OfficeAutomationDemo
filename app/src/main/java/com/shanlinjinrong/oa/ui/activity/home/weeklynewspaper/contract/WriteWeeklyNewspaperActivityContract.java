@@ -36,5 +36,7 @@ public interface WriteWeeklyNewspaperActivityContract {
 
         //获取默认接收人
         void getDefaultReceiver();
+
+        void getLastWeek(); //获取上周工作计划
     }
 }

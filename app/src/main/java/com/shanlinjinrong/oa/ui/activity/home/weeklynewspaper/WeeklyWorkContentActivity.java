@@ -4,16 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -56,6 +55,9 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements View
     @Bind(R.id.work_analyzes)
     TextView mWorkAnalyzes;
 
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
+
     private int mIndex;
     private int mWeeklySize;
     private int mWeekly_Size;
@@ -78,6 +80,9 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements View
 
     private void initView() {
         initEditText();
+
+        
+
         mTopTitle = getIntent().getStringExtra("TopTitle");
         mTopView.setAppTitle(mTopTitle);
         mTopView.getLeftView().setOnClickListener(this);

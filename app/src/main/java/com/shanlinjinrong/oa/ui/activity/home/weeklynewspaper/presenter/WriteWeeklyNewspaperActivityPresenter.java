@@ -111,4 +111,27 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
         });
 
     }
+
+    @Override
+    public void getLastWeek() {
+        HttpParams httpParams = new HttpParams();
+        mKjHttp.jsonGet(ApiJava.LOOK_LAST_WEEK, httpParams, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+
+                String t1 = t;
+                String t11 = t1;
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                int errorNo1 = errorNo;
+                String strMsg1 = strMsg;
+                String strMsg11 = strMsg1;
+
+            }
+        });
+    }
 }
