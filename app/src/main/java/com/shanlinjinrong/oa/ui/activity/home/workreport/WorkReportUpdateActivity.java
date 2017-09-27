@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportLaunchListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
@@ -398,7 +399,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void uidNull(int code) {
-
+        catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
     }
 
     /**
@@ -520,11 +521,12 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     @Override
     public void updateReportSuccess() {
         showToast(getString(R.string.work_report_update_success));
+        onBackPressed();
     }
 
     @Override
     public void updateReportFailed(String errMsg) {
-
+        showToast(getString(R.string.work_report_update_failed));
     }
 
 

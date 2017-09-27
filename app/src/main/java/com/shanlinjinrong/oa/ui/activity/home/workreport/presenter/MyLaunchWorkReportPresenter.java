@@ -30,13 +30,9 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
     }
 
     @Override
-    public void loadData(int reportType, int pageSize, int pageNum, int timeType, final boolean isLoadMore) {
+    public void loadDailyReport(int pageSize, int pageNum, int timeType, final boolean isLoadMore) {
         HttpParams params = new HttpParams();
-        params.put("reportType", reportType);
-        params.put("pageSize", pageSize);
-        params.put("pageNum", pageNum);
-        params.put("time", timeType);
-        String url = reportType == 1 ? ApiJava.DAILY_REPORT : ApiJava.WEEK_REPORT;
+        String url = ApiJava.DAILY_REPORT + "?pageSize=" + pageSize + "&pageNum=" + pageNum + "&time=" + timeType;
         mKjHttp.cleanCache();
         mKjHttp.jsonGet(url, params, new HttpCallBack() {
 
@@ -71,8 +67,12 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                         case ApiJava.REQUEST_NO_RESULT:
                             mView.loadDataEmpty();
                             break;
-                        default:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                             mView.uidNull(0);
+                            break;
+                        default:
+                            mView.loadDataFailed(code, message);
                             break;
                     }
 
@@ -85,7 +85,74 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.loadDataFailed(errorNo, strMsg);
+                mView.loadDataFailed("" + errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.loadDataFinish();
+            }
+        });
+    }
+
+    @Override
+    public void loadWeekReportList(int pageSize, int pageNum, int timeType, final boolean isLoadMore) {
+        HttpParams params = new HttpParams();
+        String url = ApiJava.WEEK_REPORT_LIST + "?pageSize=" + pageSize + "&pageNum=" + pageNum + "&time=" + timeType;
+        mKjHttp.cleanCache();
+        mKjHttp.jsonGet(url, params, new HttpCallBack() {
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    List<MyLaunchReportItem> items = new ArrayList<>();
+                    String code = jo.getString("code");
+                    String message = jo.getString("message");
+                    switch (code) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            JSONObject data = jo.getJSONObject("data");
+                            int pageNum = data.getInt("pageNum");
+                            int pageSize = data.getInt("pageSize");
+                            boolean hasNextPage = data.getBoolean("hasNext");
+                            JSONArray array = data.getJSONArray("data");
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject item = new JSONObject(array.get(i).toString());
+                                items.add(new MyLaunchReportItem(
+                                        item.getInt("id"),
+                                        "",
+                                        item.getInt("reportType"),
+                                        item.getString("reportDate"),
+                                        item.getString("createdAt"),
+                                        item.getInt("ratingStatus")));
+                            }
+                            mView.loadDataSuccess(items, pageNum, pageSize, hasNextPage, isLoadMore);
+                            break;
+
+                        case ApiJava.REQUEST_NO_RESULT:
+                            mView.loadDataEmpty();
+                            break;
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                            mView.uidNull(0);
+                            break;
+                        default:
+                            mView.loadDataFailed(code, message);
+                            break;
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.loadDataFailed("" + errorNo, strMsg);
             }
 
             @Override

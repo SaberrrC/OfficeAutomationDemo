@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.ReportPageItem;
@@ -87,7 +88,7 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
                 writeHolder.mCheckManEvaluate.setText(evaluation2);
             }
 
-            if (isEditEnable){
+            if (isEditEnable) {
                 writeHolder.mSupervisorEvaluate.setEnabled(false);
                 writeHolder.mCheckManEvaluate.setEnabled(false);
             }
@@ -114,7 +115,7 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
             else
                 scoreHolder.mEdit.setHint("满分20分");
 
-            if (isEditEnable){
+            if (isEditEnable) {
                 scoreHolder.mEdit.setEnabled(false);
             }
 
@@ -178,7 +179,7 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
             mContent = (TextView) view.findViewById(R.id.tv_show_content);
             mSupervisorEvaluate = (EditText) view.findViewById(R.id.et_supervisor_evaluate);
             mCheckManEvaluate = (EditText) view.findViewById(R.id.et_check_man_evaluate);
-            InputFilter[] filters = new InputFilter[]{new EmojiFilter(20)};
+            InputFilter[] filters = new InputFilter[]{new EmojiFilter(50)};
             mSupervisorEvaluate.setFilters(filters);
             mCheckManEvaluate.setFilters(filters);
         }
@@ -242,7 +243,7 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (s != null) {
+            if (!TextUtils.isEmpty(s)) {
                 int position = (int) mEdit.getTag();
                 //最后3项是填写分数的，区别对待一下
                 if (position < mData.size() - 3) {
@@ -253,6 +254,15 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
                 } else {
                     // 当EditText数据发生改变的时候存到data变量中
                     mData.get(position).setContent(s.toString());
+                    int score = Integer.valueOf(s.toString());
+                    if (position == mData.size() - 3 && (score > 60 || score < 0)) {
+                        Toast.makeText(mContext, mContext.getString(R.string.work_report_data_work_score_limit), Toast.LENGTH_SHORT).show();
+                    } else if (position == mData.size() - 2 && (score > 20 || score < 0)) {
+                        Toast.makeText(mContext, mContext.getString(R.string.work_report_data_professional_score_limit), Toast.LENGTH_SHORT).show();
+                    } else if (position == mData.size() - 1 && (score > 20 || score < 0)) {
+                        Toast.makeText(mContext, mContext.getString(R.string.work_report_data_team_score_limit), Toast.LENGTH_SHORT).show();
+
+                    }
                 }
 
             }

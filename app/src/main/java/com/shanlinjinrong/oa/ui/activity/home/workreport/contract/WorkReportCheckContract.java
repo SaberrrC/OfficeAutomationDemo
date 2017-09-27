@@ -29,6 +29,6 @@ public interface WorkReportCheckContract {
     interface Presenter extends BasePresenter<View> {
         void loadData(int reportType, int pageSize, int pageNum, int timeType, int reportStatus, boolean isLoadMore);
 
-        void rejectReport(int dailyId, int position);
+        void rejectReport(int reportType, int dailyId, int position);
     }
 }

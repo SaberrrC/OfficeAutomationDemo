@@ -235,7 +235,6 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
             e.printStackTrace();
         }
 
-
         params.putJsonParams(data.toString());
         return params;
     }
@@ -453,7 +452,6 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
     public void commitSuccess() {
         showToast("评价日报成功！");
         setFinishResult();
-        onBackPressed();
     }
 
     private void setFinishResult() {

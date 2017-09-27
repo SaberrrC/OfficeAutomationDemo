@@ -147,7 +147,8 @@
     <string name="load_report_data_error">加载日报信息失败！</string>
     <string name="work_report_update_text">更新</string>
     <string name="work_report_edit_report_title">编辑工作日报</string>
-    <string name="work_report_update_success">更新日报成功！</string>
+    <string name="work_report_update_success">日报更新成功！</string>
+    <string name="work_report_update_failed">日报更新失败！</string>
     <string name="work_report_data_no_evaluation">时报信息评价未完成！</string>
     <string name="work_report_data_work_score_limit">工作内容打分不能低于0分或者超过60分！</string>
     <string name="work_report_data_professional_score_limit">职业素养打分不能低于0分或者超过20分！</string>

@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ReportCheckAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.CheckReportItem;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportCheckContract;
@@ -20,6 +23,7 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportChe
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.utils.DeviceUtil;
 import com.shanlinjinrong.views.common.CommonTopView;
+import com.shanlinjinrong.views.dialog.MaskDialog;
 import com.shanlinjinrong.views.swipeRecycleview.SwipeItemClickListener;
 import com.shanlinjinrong.views.swipeRecycleview.SwipeMenu;
 import com.shanlinjinrong.views.swipeRecycleview.SwipeMenuBridge;
@@ -43,6 +47,9 @@ import butterknife.OnClick;
 public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPresenter> implements SwipeRefreshLayout.OnRefreshListener, OnItemMoveListener, WorkReportCheckContract.View {
 
     public static int FOR_RESULT_OK = 1 << 2;
+
+    private static String SHOW_MASK = "show_mask";
+    private static String IS_HSOW_MASK = "is_show_mask";
 
     @Bind(R.id.report_check_list)
     SwipeMenuRecyclerView mReportCheckList;
@@ -93,7 +100,18 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         setContentView(R.layout.activity_work_report_check);
         ButterKnife.bind(this);
         initListView();
+        mRefreshLayout.setRefreshing(true);
         loadData(false);
+        showMask();
+    }
+
+    private void showMask() {
+        SharedPreferences sp = getSharedPreferences(SHOW_MASK, MODE_PRIVATE);
+        boolean isShowMask = sp.getBoolean(IS_HSOW_MASK, true);
+        if (isShowMask) {
+            new MaskDialog(this, R.mipmap.report_check_mask_image).show();
+            sp.edit().putBoolean(IS_HSOW_MASK, false).apply();
+        }
     }
 
     @Override
@@ -149,6 +167,9 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
                 } else {
                     reportType = 1;
                 }
+                mRefreshLayout.setRefreshing(true);
+                mReportCheckList.setVisibility(View.GONE);
+                mReportNoCheckList.setVisibility(View.GONE);
                 //点击周报日报切换时，标记内容改变
                 mContentChange = true;
                 onRefresh();
@@ -221,12 +242,26 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
             if (reportType == 2) {
                 //周报
+                toCheckWeekReport(position);
             }
         }
     };
 
     private void toCheckDailyReport(int position) {
         Intent intent = new Intent(WorkReportCheckActivity.this, CheckDailyReportActivity.class);
+        int dailyId = mReportStatus == 1 ? mReportNoCheckData.get(position).getDailyId() : mReportCheckData.get(position).getDailyId();
+        intent.putExtra("dailyid", dailyId);
+        intent.putExtra("user_name", mReportNoCheckData.get(position).getReportAccount());
+        if (mReportStatus == 3) {
+            intent.putExtra("has_evaluation", true);
+            intent.putExtra("user_name", mReportCheckData.get(position).getReportAccount());
+        }
+        startActivityForResult(intent, FOR_RESULT_OK);
+    }
+
+
+    private void toCheckWeekReport(int position) {
+        Intent intent = new Intent(WorkReportCheckActivity.this, WriteWeeklyNewspaperActivity.class);
         int dailyId = mReportStatus == 1 ? mReportNoCheckData.get(position).getDailyId() : mReportCheckData.get(position).getDailyId();
         intent.putExtra("dailyid", dailyId);
         intent.putExtra("user_name", mReportNoCheckData.get(position).getReportAccount());
@@ -247,27 +282,36 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
             int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
             int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                mPresenter.rejectReport(mReportNoCheckData.get(adapterPosition).getDailyId(), adapterPosition);
+                mPresenter.rejectReport(reportType, mReportNoCheckData.get(adapterPosition).getDailyId(), adapterPosition);
             }
         }
     };
 
+    /**
+     * 切换已审核 待审核
+     *
+     * @param view
+     */
     @OnClick({R.id.tv_check_pending, R.id.tv_checked})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_check_pending:
                 mReportStatus = 1;
                 showCheckList(false);
+                //切换的时候如果没有数据或者有日报、周报按钮的切换，刷新数据
                 if (mReportNoCheckData.size() == 0 || mContentChange) {
                     mContentChange = false;
+                    mRefreshLayout.setRefreshing(true);
                     onRefresh();
                 }
                 break;
             case R.id.tv_checked:
                 mReportStatus = 3;
                 showCheckList(true);
+                //切换的时候如果没有数据或者有日报、周报按钮的切换，刷新数据
                 if (mReportCheckData.size() == 0 || mContentChange) {
                     mContentChange = false;
+                    mRefreshLayout.setRefreshing(true);
                     onRefresh();
                 }
                 break;
@@ -300,14 +344,15 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
             mReportNoCheckData.addAll(reports);
             mNoCheckAdapter.notifyDataSetChanged();
             this.noCheckPageNum = pageNum + 1;
+            mReportNoCheckList.setVisibility(View.VISIBLE);
             mReportNoCheckList.loadMoreFinish(false, hasNextPage);
         } else {
             mReportCheckData.addAll(reports);
             mCheckAdapter.notifyDataSetChanged();
             this.checkPageNum = pageNum + 1;
+            mReportCheckList.setVisibility(View.VISIBLE);
             mReportCheckList.loadMoreFinish(false, hasNextPage);
         }
-
 
     }
 
@@ -343,8 +388,8 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     @Override
     public void rejectReportSuccess(int position) {
-        mReportCheckData.remove(position);
-        mCheckAdapter.notifyItemChanged(position);
+        mReportNoCheckData.remove(position);
+        mNoCheckAdapter.notifyDataSetChanged();
         showToast("退回成功！");
     }
 
@@ -355,7 +400,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     @Override
     public void uidNull(int code) {
-
+        catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
     }
 
     @Override
@@ -366,7 +411,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_OK && resultCode == FOR_RESULT_OK) {
+        if (requestCode == FOR_RESULT_OK && resultCode == RESULT_OK) {
             boolean isEvaluationOk = data.getBooleanExtra("evaluation_ok", false);
             if (isEvaluationOk) {
                 //日报审核成功时，标记内容改变

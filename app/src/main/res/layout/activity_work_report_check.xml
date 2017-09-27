@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:rightDrawable="@mipmap/filter_btn"
+        app:rightDrawable="@mipmap/report_change_btn"
         app:topTitle="@string/title_work_report_approval" />
 
     <RadioGroup

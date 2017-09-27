@@ -113,7 +113,7 @@ public class AppConfig {
      * @param key eg:PREF_KEY_PRIVATE_TOKEN, PREF_KEY_USER_UID
      * @return 参数值
      */
-    public boolean get(String key,boolean b) {
+    public boolean get(String key, boolean b) {
         return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE)
                 .getBoolean(key, b);
     }
@@ -135,6 +135,15 @@ public class AppConfig {
      */
     public String getDepartmentId() {
         return get(PREF_KEY_DEPARTMENT_ID);
+    }
+
+    /**
+     * 获取用户name
+     *
+     * @return User name
+     */
+    public String getPrivateName() {
+        return get(PREF_KEY_USERNAME);
     }
 
     /**
@@ -192,6 +201,7 @@ public class AppConfig {
         editor.putString(key, value);
         editor.apply();
     }
+
     /**
      * 保存配置信息
      *

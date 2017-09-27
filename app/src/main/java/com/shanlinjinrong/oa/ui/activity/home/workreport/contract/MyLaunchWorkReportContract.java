@@ -15,7 +15,7 @@ public interface MyLaunchWorkReportContract {
 
         void loadDataSuccess(List<MyLaunchReportItem> reports, int pageNum, int pageSize, boolean hasNextPage, boolean isLoadMore);
 
-        void loadDataFailed(int errCode, String errMsg);
+        void loadDataFailed(String errCode, String errMsg);
 
         void loadDataFinish();
 
@@ -23,6 +23,9 @@ public interface MyLaunchWorkReportContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void loadData(int reportType, int pageSize, int pageNum, int timeType, boolean isLoadMore);
+        void loadDailyReport(int pageSize, int pageNum, int timeType, boolean isLoadMore);
+
+        void loadWeekReportList(int pageSize, int pageNum, int timeType, boolean isLoadMore);
+
     }
 }

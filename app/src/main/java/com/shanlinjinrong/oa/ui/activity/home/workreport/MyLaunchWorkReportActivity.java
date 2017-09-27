@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.AllReportAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.MyLaunchReportItem;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.MyLaunchWorkReportContract;
@@ -58,6 +61,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         setContentView(R.layout.activity_my_lacunch_work_report);
         ButterKnife.bind(this);
         initListView();
+        mRefreshLayout.setRefreshing(true);
         loadData(false);
 
     }
@@ -68,7 +72,10 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
      * @param isMore ：is load more data?
      */
     private void loadData(boolean isMore) {
-        mPresenter.loadData(reportType, pageSize, pageNum, timeType, isMore);
+        if (reportType == 2)
+            mPresenter.loadWeekReportList(pageSize, pageNum, timeType, isMore);
+        else
+            mPresenter.loadDailyReport(pageSize, pageNum, timeType, isMore);
     }
 
     private void initListView() {
@@ -95,6 +102,8 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
                 else
                     reportType = 1;
 
+                mAllReportList.setVisibility(View.GONE);
+                mRefreshLayout.setRefreshing(true);
                 onRefresh();
             }
         });
@@ -117,16 +126,27 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
     private SwipeItemClickListener mItemClickListener = new SwipeItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
-            Intent intent;
-            if (mItemList.get(position).getStatus() == 1) {
-                intent = new Intent(MyLaunchWorkReportActivity.this, WorkReportUpdateActivity.class);
-            } else {
-                intent = new Intent(MyLaunchWorkReportActivity.this, CheckDailyReportActivity.class);
-                intent.putExtra("has_evaluation", true);
-                intent.putExtra("user_name", mItemList.get(position).getReportAccount());
+            Intent intent = null;
+            if (reportType == 1) {
+                if (mItemList.get(position).getStatus() == 1) {
+                    intent = new Intent(MyLaunchWorkReportActivity.this, WorkReportUpdateActivity.class);
+                } else {
+                    intent = new Intent(MyLaunchWorkReportActivity.this, CheckDailyReportActivity.class);
+                    intent.putExtra("has_evaluation", true);
+                    intent.putExtra("user_name", mItemList.get(position).getReportAccount());
+                }
+                intent.putExtra("dailyid", mItemList.get(position).getDailyId());
+            } else if (reportType == 2) {
+                intent = new Intent(MyLaunchWorkReportActivity.this, WriteWeeklyNewspaperActivity.class);
+                if (mItemList.get(position).getStatus() == 3) {
+                    intent.putExtra("has_evaluation", true);
+                    intent.putExtra("user_name", AppConfig.getAppConfig(MyLaunchWorkReportActivity.this).getPrivateName());
+                }
+                intent.putExtra("week_report_id", mItemList.get(position).getDailyId());
             }
-            intent.putExtra("dailyid", mItemList.get(position).getDailyId());
-            startActivity(intent);
+
+            if (intent != null)
+                startActivity(intent);
         }
     };
 
@@ -137,13 +157,14 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
 
     @Override
     public void uidNull(int code) {
-
+        catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
     }
 
     @Override
     public void loadDataSuccess(List<MyLaunchReportItem> reports, int pageNum, int pageSize, boolean hasNextPage, boolean isLoadMore) {
         if (!isLoadMore) {
             mItemList.clear();
+            mAllReportList.setVisibility(View.VISIBLE);
         }
         mItemList.addAll(reports);
         mAllReportList.loadMoreFinish(false, hasNextPage);
@@ -153,9 +174,11 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
     }
 
     @Override
-    public void loadDataFailed(int errCode, String errMsg) {
-        if (errCode == -1) {
+    public void loadDataFailed(String errCode, String errMsg) {
+        if (errCode.equals("-1")) {
             showToast(getString(R.string.net_no_connection));
+        } else {
+            showToast("数据加载失败，请稍后重试！");
         }
     }
 

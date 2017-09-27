@@ -103,8 +103,10 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
     }
 
     @Override
-    public void rejectReport(int dailyId, final int position) {
-        String url = ApiJava.REJECT_WEEK_REPORT + dailyId;
+    public void rejectReport(int reportType, int dailyId, final int position) {
+        String url = reportType == 1 ? ApiJava.REJECT_DAILY_REPORT : ApiJava.REJECT_WEEK_REPORT;
+        url += dailyId;
+        mKjHttp.cleanCache();
         mKjHttp.jsonGet(url, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
@@ -116,6 +118,10 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
                     switch (code) {
                         case ApiJava.REQUEST_CODE_OK:
                             mView.rejectReportSuccess(position);
+                            break;
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                            mView.uidNull(0);
                             break;
                         default:
                             mView.rejectReportFailed(0, message);
