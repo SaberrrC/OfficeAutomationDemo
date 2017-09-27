@@ -69,10 +69,12 @@
 
     <!--发起日报-->
     <string name="work_report_launch_title">发起工作日报</string>
+    <string name="work_weekly_newspaper_launch_title">发起工作周报</string>
     <string name="work_report_right_btn_text">发起</string>
     <string name="work_report_select_date_text">请选择需要填写的时间</string>
     <string name="work_report_please_select">请选择</string>
     <string name="work_report_tomorrow_plan">明日计划</string>
+    <string name="work_report_this_week_work">本周工作</string>
     <string name="work_report_please_write_tomorrow_plan">请在此填写您的明日计划.</string>
     <string name="work_report_receiver">接收人</string>
     <string name="work_report_no_write">未填写</string>
@@ -148,4 +150,6 @@
     <string name="work_report_data_work_score_limit">工作内容打分不能低于0分或者超过60分！</string>
     <string name="work_report_data_professional_score_limit">职业素养打分不能低于0分或者超过20分！</string>
     <string name="work_report_data_team_score_limit">团队合作打分不能低于0分或者超过20分！</string>
+    <string name="weekly_add_work_plan">+ 添加一项计划</string>
+    <string name="weekly_add_work_content">+ 添加一项工作</string>
 </resources>

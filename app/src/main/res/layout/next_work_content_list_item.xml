@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/page_bg"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <!--<EditText-->
+        <!--android:id="@+id/et_next_work_plan_four"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="126dp"-->
+        <!--android:layout_marginTop="@dimen/common_margin_top"-->
+        <!--android:background="@color/white"-->
+        <!--android:gravity="left|top"-->
+        <!--android:hint="请输入工作内容和负责人"-->
+        <!--android:maxLength="800"-->
+        <!--android:padding="12dp"-->
+        <!--android:focusable="true"-->
+        <!--android:focusableInTouchMode="true"-->
+        <!--android:textSize="14sp"/>-->
+
+
+</LinearLayout>

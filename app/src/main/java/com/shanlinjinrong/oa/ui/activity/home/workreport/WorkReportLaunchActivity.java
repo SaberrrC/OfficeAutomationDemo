@@ -104,7 +104,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
         setContentView(R.layout.activity_work_report);
         ButterKnife.bind(this);
         setTranslucentStatus(this);
-        initView(savedInstanceState);
+            initView(savedInstanceState);
         initDefaultReceiver();
     }
 

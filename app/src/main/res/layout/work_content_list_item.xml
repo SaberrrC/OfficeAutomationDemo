@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_work_state"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/ll_work_state"
+        android:gravity="center"
+        android:text="未填写"
+        android:textColor="#FF333333"
+        android:textSize="14sp"/>
+
+    <LinearLayout
+        android:id="@+id/ll_work_state"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="11.4dp"
+            android:drawableRight="@drawable/arrow_right"
+            android:enabled="true"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_work_content"
+        style="@style/work_report_launch_left_text_style"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp"
+        android:text="工作内容 1"
+        android:textColor="#FF333333"
+        android:textSize="14sp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/tv_work_content"
+        android:background="#000"
+        />
+
+
+</RelativeLayout>

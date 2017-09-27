@@ -19,6 +19,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectOrdinaryMeetingRoomActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectVedioMeetingRoomActivity;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
@@ -98,10 +99,10 @@ public class TabHomePageFragment extends BaseFragment {
                 intent = new Intent(mContext, WorkReportCheckActivity.class);
                 break;
             case R.id.rl_work_report_copy_to_me:
-                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
 //                intent = new Intent(mContext, WorkReportListActivity.class);
-//                intent = new Intent(mContext, WriteWeeklyNewspaperActivity.class);
-//                intent.putExtra("whichList", 3);
+                intent = new Intent(mContext, WriteWeeklyNewspaperActivity.class);
+                intent.putExtra("whichList", 3);
                 break;
             case R.id.rl_work_report_launch_report:
                 intent = new Intent(mContext, WorkReportLaunchActivity.class);

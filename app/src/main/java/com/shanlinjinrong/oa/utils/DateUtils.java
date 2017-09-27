@@ -260,11 +260,38 @@ public class DateUtils {
     public static List<String> getMondayData(String date, String pattern) {
         List<String> mondays = new ArrayList<>();
         String monday = getCurrentMonday(pattern);
-        mondays.add(monday);
+        String currentYear = monday.replace("年", "-");
+        String currentMonth = currentYear.replace("月", "-");
+        String currentDay = currentMonth.replace("日", "");
+        mondays.add(currentDay);
         for (; ; ) {
             monday = getIntervalDate(monday, -7, pattern);
+            long l = dateToLong(monday, pattern);
             if (dateToLong(monday, pattern) > dateToLong(date, pattern)) {
-                mondays.add(monday);
+                String currentYear1 = monday.replace("年", "-");
+                String currentMonth1 = currentYear1.replace("月", "-");
+                String currentDay1 = currentMonth1.replace("日", "");
+                mondays.add(currentDay1);
+            } else {
+                break;
+            }
+        }
+        return mondays;
+    }
+
+    /**
+     * 获取某个日期到当前日期之后的所有周一时间
+     */
+    public static List<String> getMondayData1(String date, String pattern) {
+        List<String> mondays = new ArrayList<>();
+        String monday = getCurrentMonday(pattern);
+        for (; ; ) {
+            monday = getIntervalDate(monday, +7, pattern);
+            if (dateToLong(monday, pattern) < dateToLong(date, pattern)) {
+                String currentYear = monday.replace("年", "-");
+                String currentMonth = currentYear.replace("月", "-");
+                String currentDay = currentMonth.replace("日", "");
+                mondays.add(currentDay);
             } else {
                 break;
             }
@@ -349,7 +376,8 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         //周一
-        return dateFormat.format(cal.getTime());
+        Date time = cal.getTime();
+        return dateFormat.format(time);
     }
 
     public static String getDateWeek(String dateMonday, String pattern) {

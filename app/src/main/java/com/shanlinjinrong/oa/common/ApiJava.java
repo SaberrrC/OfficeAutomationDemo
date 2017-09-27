@@ -35,6 +35,9 @@ public class ApiJava {
     //获取公司所有联系人
     public static final String ALL_ORGANIZATION = "organization/queryAllOrganiza";
 
+    //发起周报
+    public static final String SEND_WEEK_REPORT = "weekreport/add";
+
 
     //审核日报列表
     public static final String LEADER_READ_DAILY_REPORT = "dailyreport/leader";

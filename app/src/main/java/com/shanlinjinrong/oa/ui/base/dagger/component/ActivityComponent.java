@@ -9,6 +9,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateMeetingActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
@@ -86,4 +87,5 @@ public interface ActivityComponent {
 
     void inject(WorkReportUpdateActivity activity);
 
+    void inject(WriteWeeklyNewspaperActivity activity);
 }
