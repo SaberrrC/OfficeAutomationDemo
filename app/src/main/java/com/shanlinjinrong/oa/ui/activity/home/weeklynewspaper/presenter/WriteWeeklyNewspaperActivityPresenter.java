@@ -76,6 +76,55 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
     }
 
     @Override
+    public void updateWeekReport(HttpParams httpParams) {
+        mKjHttp.cleanCache();
+        mKjHttp.jsonPut(ApiJava.UPDATE_DAILY_REPORT, httpParams, new HttpCallBack() {
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                mView.showLoading();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    Log.d("updateWeeklyReportData", "onSuccess" + t.toString());
+                    JSONObject jsonObject = new JSONObject(t);
+                    switch (jsonObject.getString("code")) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.updateWeekReportSuccess();
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
+                            break;
+                        default:
+                            mView.updateWeekReportFailed(jsonObject.getString("code"), jsonObject.getString("message"));
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    mView.requestFinish();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.requestFinish();
+
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.updateWeekReportFailed("" + errorNo, strMsg);
+            }
+        });
+    }
+
+    @Override
     public void getDefaultReceiver() {
 
         mKjHttp.jsonGet(ApiJava.GET_CURRENT_LEADER, new HttpParams(), new HttpCallBack() {

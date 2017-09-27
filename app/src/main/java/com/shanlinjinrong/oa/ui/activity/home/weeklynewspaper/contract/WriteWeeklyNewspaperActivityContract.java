@@ -36,11 +36,17 @@ public interface WriteWeeklyNewspaperActivityContract {
         void evaluationReportSuccess();
 
         void evaluationReportFailed(String code, String msg);
+
+        void updateWeekReportSuccess();
+
+        void updateWeekReportFailed(String code, String msg);
     }
 
     interface Presenter extends BasePresenter<View> {
 
         void addWeekReport(HttpParams httpParams);
+
+        void updateWeekReport(HttpParams httpParams);
 
         //获取默认接收人
         void getDefaultReceiver();

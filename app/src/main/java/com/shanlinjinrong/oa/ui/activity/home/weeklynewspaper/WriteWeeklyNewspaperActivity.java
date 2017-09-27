@@ -193,10 +193,18 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     }
 
     private void putInt(String key, int value) {
+        if (mSharedPreferences == null) {
+            mSharedPreferences = getSharedPreferences(AppConfig.getAppConfig(AppManager.sharedInstance()).getPrivateCode() +
+                    Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE);
+        }
         mSharedPreferences.edit().putInt(key, value).apply();
     }
 
     private void putString(String key, String value) {
+        if (mSharedPreferences == null) {
+            mSharedPreferences = getSharedPreferences(AppConfig.getAppConfig(AppManager.sharedInstance()).getPrivateCode() +
+                    Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE);
+        }
         mSharedPreferences.edit().putString(key, value).apply();
     }
 
@@ -344,10 +352,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             } else {
                 mNextData.get(i).setState("未填写");
             }
-            putString(mData.get(i).getTitle() + "next_work", weekReportItem.getWeekPlane().get(i).getNextWorkPlan());
-            putString(mData.get(i).getTitle() + "personLiable", weekReportItem.getWeekPlane().get(i).getPersonLiable());
-            putString(mData.get(i).getTitle() + "remark", weekReportItem.getWeekPlane().get(i).getRemark());
-
+            putString(mNextData.get(i).getTitle() + "next_work", weekReportItem.getWeekPlane().get(i).getNextWorkPlan());
+            putString(mNextData.get(i).getTitle() + "personLiable", weekReportItem.getWeekPlane().get(i).getPersonLiable());
+            putString(mNextData.get(i).getTitle() + "remark", weekReportItem.getWeekPlane().get(i).getRemark());
         }
         mRvNextWorkContent.setLayoutManager(new LinearLayoutManager(this));
         mNextAdapter = new NextWeekWorkContentAdapter(mNextData);
@@ -377,7 +384,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 } else if (mFunction == FUNCTION_EDIT) {
                     //编辑周报
                     if (checkData())
-                        mPresenter.addWeekReport(initHttpParams());
+                        mPresenter.updateWeekReport(initHttpParams());
                 } else if (mFunction == FUNCTION_EVALUATION) {
                     //审核周报
                     mPresenter.evaluationReport(mDailyId, mEtWorkReportEvaluation.getText().toString().trim());
@@ -507,6 +514,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             jsonObject.put("checkmanId", mReceiverId);
             jsonObject.put("weeklySummary", jsonArray);
             jsonObject.put("nextWeekPlane", jsonArray);
+            if (mFunction == FUNCTION_EDIT) {
+                jsonObject.put("id", "" + mDailyId);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -601,6 +611,17 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void evaluationReportFailed(String code, String msg) {
         showToast("周报审核失败！");
+    }
+
+    @Override
+    public void updateWeekReportSuccess() {
+        showToast("更新周报成功！");
+        setFinishResult();
+    }
+
+    @Override
+    public void updateWeekReportFailed(String code, String msg) {
+        showToast("更新周报失败！");
     }
 
     private void setFinishResult() {
