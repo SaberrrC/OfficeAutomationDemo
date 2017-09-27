@@ -78,7 +78,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
     @Override
     public void updateWeekReport(HttpParams httpParams) {
         mKjHttp.cleanCache();
-        mKjHttp.jsonPut(ApiJava.UPDATE_DAILY_REPORT, httpParams, new HttpCallBack() {
+        mKjHttp.jsonPut(ApiJava.UPDATE_WEEK_REPORT, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();

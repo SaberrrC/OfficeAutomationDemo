@@ -59,5 +59,7 @@ public class ApiJava {
     // 更新日报
     public static final String UPDATE_DAILY_REPORT = "upddailyreport";
 
+    // 更新周报
+    public static final String UPDATE_WEEK_REPORT = "weekreport/upd";
 
 }

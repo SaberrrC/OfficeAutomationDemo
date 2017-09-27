@@ -515,7 +515,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             jsonObject.put("weeklySummary", jsonArray);
             jsonObject.put("nextWeekPlane", jsonArray);
             if (mFunction == FUNCTION_EDIT) {
-                jsonObject.put("id", "" + mDailyId);
+                jsonObject.put("id", mDailyId);
             }
         } catch (JSONException e) {
             e.printStackTrace();
