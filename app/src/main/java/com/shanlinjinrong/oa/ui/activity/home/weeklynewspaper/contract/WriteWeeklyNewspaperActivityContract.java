@@ -13,6 +13,8 @@ import org.kymjs.kjframe.http.HttpParams;
 public interface WriteWeeklyNewspaperActivityContract {
     interface View extends BaseView {
 
+        void showLoading();
+
         void requestFinish();
 
         void getDefaultReceiverSuccess(String id, String name, String post);
@@ -20,6 +22,12 @@ public interface WriteWeeklyNewspaperActivityContract {
         void getDefaultReceiverFailed(String errMsg);
 
         void getDefaultReceiverEmpty(String msg);
+
+        void sendWeeklyReportSuccess(String msg);
+
+        void sendWeeklyReportFailure(String code,String msg);
+
+        void sendWeeklyReportFinish();
     }
 
     interface Presenter extends BasePresenter<View> {

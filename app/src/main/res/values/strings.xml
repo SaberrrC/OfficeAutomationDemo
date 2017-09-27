@@ -109,7 +109,9 @@
     <string name="work_report_data_write_not_full">当前有未填写汇报内容，请检查</string>
     <string name="work_report_current_date_had_report">当前日期已有汇报，请重新选择日期</string>
     <string name="work_report_send_sucess">日报提交成功</string>
+    <string name="work_weekly_send_success">周报提交成功</string>
     <string name="work_report_send_failed">日报提交失败，请稍后重试</string>
+    <string name="work_weekly_send_failed">周报提交失败，请稍后重试</string>
     <string name="work_report_please_write_receiver">请选择接收人</string>
 
     <!--审批流程-->

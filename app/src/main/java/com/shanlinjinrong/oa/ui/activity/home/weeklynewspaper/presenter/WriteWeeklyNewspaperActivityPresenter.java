@@ -38,24 +38,39 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             @Override
             public void onPreStart() {
                 super.onPreStart();
+                mView.showLoading();
             }
 
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                Log.d("76547447", "onSuccess" + t.toString());
+                try {
+                    Log.d("sendWeeklyReportData", "onSuccess" + t.toString());
+                    JSONObject jsonObject = new JSONObject(t);
+                    switch (jsonObject.getString("code")) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.sendWeeklyReportSuccess(jsonObject.getString("message"));
+                            break;
+                        default:
+                            mView.sendWeeklyReportFailure(jsonObject.getString("code"), jsonObject.getString("message"));
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    mView.sendWeeklyReportFinish();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                Log.d("76547447", "onFinish");
+                mView.sendWeeklyReportFinish();
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                Log.d("76547447", "onFailure" + errorNo + strMsg);
+                mView.sendWeeklyReportFailure(""+errorNo,strMsg);
             }
         });
     }

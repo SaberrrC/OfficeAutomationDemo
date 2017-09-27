@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -111,13 +112,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         int workPlanSize = mSharedPreferences.getInt("workPlanSize", 4);
 
         //周报日期 数据初始化
-        mondayData1 = DateUtils.getMondayData("2017年01月23日", "yyyy年MM月dd日");
-        mondayData2 = DateUtils.getMondayData1("2020年01月23日", "yyyy年MM月dd日");
+        mondayData1 = DateUtils.getMondayData1("yyyy—MM-dd");
+        mondayData2 = DateUtils.getMondayData2("yyyy-MM-dd");
 
         beginTimeList = new ArrayList<>();
         for (int i = 0; i < mondayData1.size(); i++) {
-            beginTimeList.add(mondayData1.get(i));
-            beginTimeList.add(0, mondayData2.get(i));
+            beginTimeList.add(mondayData2.get(i));
+            beginTimeList.add(0, mondayData1.get(i));
         }
 
         for (int i = 0; i < workContentSize; i++) {
@@ -150,7 +151,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             }
         }
 
-        mTvDate.setText(beginTimeList.get(beginTimeList.size() / 2) + "至" + beginTimeList.get(beginTimeList.size() / 2 - 1));
+        mTvDate.setText(beginTimeList.get(beginTimeList.size() / 2) + "至" + beginTimeList.get(beginTimeList.size() / 2 + 1));
         mAdapter = new ThisWeekWorkContentAdapter(mData);
         mRvWorkContent.setLayoutManager(new LinearLayoutManager(this));
         mRvWorkContent.setAdapter(mAdapter);
@@ -218,12 +219,15 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                         return;
                     }
                 }
+                if (!mNextData.get(0).getState().equals("已填写")) {
+                    Toast.makeText(this, "请填写下周计划", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                if (!mData.get(0).getState().equals("已填写")) {
+                    Toast.makeText(this, "请填写本周工作", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 mPresenter.addWeekReport(initHttpParams());
-                SharedPreferences.Editor edit = getSharedPreferences(AppConfig.getAppConfig(AppManager.
-                        sharedInstance()).getPrivateCode() + Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE).edit();
-                edit.clear();
-                edit.apply();
-                finish();
                 break;
             case R.id.ll_select_date:
                 showBeginTimeView();
@@ -312,7 +316,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             String endTime = Date.substring(11, Date.length());
             jsonObject.put("startTime", startTime);
             jsonObject.put("endTime", endTime);
-            jsonObject.put("checkman", mTvReceiver);
+            jsonObject.put("checkman", mReceiverName);
             jsonObject.put("checkmanId", mReceiverId);
             jsonObject.put("weeklySummary", jsonArray);
             jsonObject.put("nextWeekPlane", jsonArray);
@@ -326,6 +330,11 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void uidNull(int code) {
 
+    }
+
+    @Override
+    public void showLoading() {
+        showLoadingView();
     }
 
     @Override
@@ -351,6 +360,38 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     }
 
+    @Override
+    public void sendWeeklyReportSuccess(String msg) {
+        Toast.makeText(this, getString(R.string.work_weekly_send_success), Toast.LENGTH_SHORT).show();
+        clearMemory();
+        onBackPressed();
+    }
+
+    private void clearMemory() {
+        SharedPreferences.Editor edit = getSharedPreferences(AppConfig.getAppConfig(AppManager.
+                sharedInstance()).getPrivateCode() + Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE).edit();
+        edit.clear();
+        edit.apply();
+    }
+
+    @Override
+    public void sendWeeklyReportFailure(String code, String msg) {
+        switch (code) {
+            case ApiJava.REQUEST_HAD_REPORTED:
+                Toast.makeText(this, getString(R.string.work_report_current_date_had_report), Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, getString(R.string.work_weekly_send_failed), Toast.LENGTH_SHORT).show();
+                break;
+        }
+        hideLoadingView();
+    }
+
+    @Override
+    public void sendWeeklyReportFinish() {
+        hideLoadingView();
+    }
+
     /**
      * 时间选择器
      */
@@ -370,25 +411,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 //当前时间
                 String currentTime = WriteWeeklyNewspaperActivity.this.beginTimeList.get(options1);
-//                String currentYear = currentTime.replace("年", "-");
-//                String currentMonth = currentYear.replace("月", "-");
-//                String currentDay = currentMonth.replace("日", "");
                 //结束时间
                 String endTime = null;
-                try {
-                    endTime = WriteWeeklyNewspaperActivity.this.beginTimeList.get(options1 - 1);
-                } catch (Throwable e) {
-                    endTime = WriteWeeklyNewspaperActivity.this.beginTimeList.get(options1);
-
-                    //TODO 数据问题
-                    //endTime.
-                    // List<String> yyyy年MM月dd日 = DateUtils.getMondayData1("2020年01月23日", "yyyy年MM月dd日");
+                if (beginTimeList.size() - 1 == options1) {
+                    endTime = DateUtils.getIntervalDate1(currentTime, 7, "yyyy-MM-dd");
+                } else {
+                     endTime = WriteWeeklyNewspaperActivity.this.beginTimeList.get(options1 + 1);
                 }
-//                String endYear = endTime.replace("年", "-");
-//                String endMonth = endYear.replace("月", "-");
-//                String endDay = endMonth.replace("日", "");
-
-
                 mTvDate.setText(currentTime + "至" + endTime);
             }
         });

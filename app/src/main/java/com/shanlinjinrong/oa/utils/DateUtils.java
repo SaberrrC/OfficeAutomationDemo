@@ -245,7 +245,7 @@ public class DateUtils {
         }
         return false;
     }
-    
+
 
     /**
      * 获取当前日期之前的所有周一时间
@@ -260,18 +260,14 @@ public class DateUtils {
     public static List<String> getMondayData(String date, String pattern) {
         List<String> mondays = new ArrayList<>();
         String monday = getCurrentMonday(pattern);
-        String currentYear = monday.replace("年", "-");
-        String currentMonth = currentYear.replace("月", "-");
-        String currentDay = currentMonth.replace("日", "");
-        mondays.add(currentDay);
         for (; ; ) {
             monday = getIntervalDate(monday, -7, pattern);
             long l = dateToLong(monday, pattern);
             if (dateToLong(monday, pattern) > dateToLong(date, pattern)) {
-                String currentYear1 = monday.replace("年", "-");
-                String currentMonth1 = currentYear1.replace("月", "-");
-                String currentDay1 = currentMonth1.replace("日", "");
-                mondays.add(currentDay1);
+                String currentYear = monday.replace("年", "-");
+                String currentMonth = currentYear.replace("月", "-");
+                String currentDay = currentMonth.replace("日", "");
+                mondays.add(currentDay);
             } else {
                 break;
             }
@@ -285,16 +281,47 @@ public class DateUtils {
     public static List<String> getMondayData1(String date, String pattern) {
         List<String> mondays = new ArrayList<>();
         String monday = getCurrentMonday(pattern);
+        String currentYear = monday.replace("年", "-");
+        String currentMonth = currentYear.replace("月", "-");
+        String currentDay = currentMonth.replace("日", "");
+        mondays.add(currentDay);
         for (; ; ) {
             monday = getIntervalDate(monday, +7, pattern);
             if (dateToLong(monday, pattern) < dateToLong(date, pattern)) {
-                String currentYear = monday.replace("年", "-");
-                String currentMonth = currentYear.replace("月", "-");
-                String currentDay = currentMonth.replace("日", "");
-                mondays.add(currentDay);
+                String currentYear1 = monday.replace("年", "-");
+                String currentMonth1 = currentYear1.replace("月", "-");
+                String currentDay1 = currentMonth1.replace("日", "");
+                mondays.add(currentDay1);
             } else {
                 break;
             }
+        }
+        return mondays;
+    }
+
+    /**
+     * 获取某个日期到当前日期之间的所有周一时间
+     */
+    public static List<String> getMondayData1(String pattern) {
+        List<String> mondays = new ArrayList<>();
+        String monday = getCurrentMonday(pattern);
+        for (int i = 0; i < 52; i++) {
+            monday = getIntervalDate(monday, -7, pattern);
+            mondays.add(monday);
+        }
+        return mondays;
+    }
+
+    /**
+     * 获取某个日期到当前日期之后的所有周一时间
+     */
+    public static List<String> getMondayData2(String pattern) {
+        List<String> mondays = new ArrayList<>();
+        String monday = getCurrentMonday(pattern);
+        mondays.add(monday);
+        for (int i = 0; i < 52; i++) {
+            monday = getIntervalDate(monday, +7, pattern);
+            mondays.add(monday);
         }
         return mondays;
     }
@@ -309,6 +336,14 @@ public class DateUtils {
             return longToDateString(otherTime, pattern);
         }
         return "";
+    }
+
+    /**
+     * 获取与某个日期间隔几天的日期
+     */
+    public static String getIntervalDate1(String date, int day, String pattern) {
+        long otherTime = dateToLong(date, pattern) + day * 24 * 60 * 60 * 1000;
+        return longToDateString(otherTime, pattern);
     }
 
     /**
