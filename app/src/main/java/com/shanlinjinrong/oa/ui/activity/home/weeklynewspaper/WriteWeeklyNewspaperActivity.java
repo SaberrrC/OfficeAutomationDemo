@@ -663,6 +663,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     private void setFinishResult() {
         Intent intent = new Intent();
         intent.putExtra("evaluation_ok", true);
+        intent.putExtra("refresh_data", true);
         setResult(RESULT_OK, intent);
         finish();
     }

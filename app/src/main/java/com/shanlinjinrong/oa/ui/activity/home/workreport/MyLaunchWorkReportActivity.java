@@ -148,7 +148,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
             }
 
             if (intent != null)
-                startActivity(intent);
+                startActivityForResult(intent, 100);
         }
     };
 
@@ -197,5 +197,15 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
     public void onRefresh() {
         pageNum = 1;
         loadData(false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            if (data.getBooleanExtra("refresh_data", false)){
+                onRefresh();
+            }
+        }
     }
 }

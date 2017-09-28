@@ -522,7 +522,14 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     @Override
     public void updateReportSuccess() {
         showToast(getString(R.string.work_report_update_success));
-        onBackPressed();
+        setFinishResult();
+    }
+
+    private void setFinishResult() {
+        Intent intent = new Intent();
+        intent.putExtra("refresh_data", true);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override

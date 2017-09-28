@@ -120,11 +120,15 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                             JSONArray array = data.getJSONArray("data");
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject item = new JSONObject(array.get(i).toString());
+                                String reportDate = item.getString("reportDate");
+                                if (reportDate.contains("--")) {
+                                    reportDate.replace("--", "至");
+                                }
                                 items.add(new MyLaunchReportItem(
                                         item.getInt("id"),
                                         "",
                                         item.getInt("reportType"),
-                                        item.getString("reportDate"),
+                                        reportDate,
                                         item.getString("createdAt"),
                                         item.getInt("ratingStatus")));
                             }
