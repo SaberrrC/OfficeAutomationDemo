@@ -610,13 +610,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void evaluationReportSuccess() {
-        showToast("周报审核成功！");
+        showToast("汇报已审批成功！");
         setFinishResult();
     }
 
     @Override
     public void evaluationReportFailed(String code, String msg) {
-        showToast("周报审核失败！");
+        showToast("汇报审核失败！");
     }
 
     @Override
