@@ -38,7 +38,7 @@ import butterknife.OnClick;
 /**
  * 发起周报、下周计划 内容界面
  */
-public class WeeklyWorkContentActivity extends AppCompatActivity implements View.OnClickListener {
+public class WeeklyWorkContentActivity extends AppCompatActivity implements WeeklyWorkContentFragment.OnPageBthClickListener {
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
@@ -70,7 +70,6 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements View
         mTopTitle = getIntent().getStringExtra("TopTitle");
         pageIndex = getIntent().getIntExtra("index", 0);
         mTopView.setAppTitle(mTopTitle);
-        mTopView.getLeftView().setOnClickListener(this);
         mIsWorkContent = getIntent().getBooleanExtra("isWorkContent", false);
         if (mIsWorkContent) {
             mWeeklyWorkContentList = new ArrayList<>();
@@ -78,8 +77,9 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements View
                 WeeklyWorkContentFragment weeklyWorkContentFragment = new WeeklyWorkContentFragment();
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("isWorkContent", mIsWorkContent);
-                bundle.putString("title", "工作内容 "+(i+1));
+                bundle.putString("title", "工作内容 " + (i + 1));
                 weeklyWorkContentFragment.setArguments(bundle);
+                weeklyWorkContentFragment.setPageBtnClickListener(this);
                 mWeeklyWorkContentList.add(weeklyWorkContentFragment);
             }
         } else {
@@ -88,8 +88,9 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements View
                 WeeklyWorkContentFragment weeklyWorkContentFragment = new WeeklyWorkContentFragment();
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("isWorkContent", mIsWorkContent);
-                bundle.putString("title", "工作计划 "+(i+1));
+                bundle.putString("title", "工作计划 " + (i + 1));
                 weeklyWorkContentFragment.setArguments(bundle);
+                weeklyWorkContentFragment.setPageBtnClickListener(this);
                 mWeeklyWorkContentList.add(weeklyWorkContentFragment);
             }
         }
@@ -136,31 +137,40 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements View
 //        }
     }
 
-    @OnClick({R.id.btn_write_next_work, R.id.btn_back_up_work})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_write_next_work:
-                int index1 = pageIndex >= mWeeklySize - 1 ? pageIndex : ++pageIndex;
-                mViewPager.setCurrentItem(index1);
-                break;
-            case R.id.btn_back_up_work:
-                int index2 = pageIndex <= 0 ? 0 : --pageIndex;
-                mViewPager.setCurrentItem(index2);
-                break;
-        }
-    }
-
-
-    @Override
-    public void onClick(View view) {
-        onBackPressed();
-
-
-    }
+//    @OnClick({R.id.btn_write_next_work, R.id.btn_back_up_work})
+//    public void onViewClicked(View view) {
+//        switch (view.getId()) {
+//            case R.id.btn_write_next_work:
+//                int index1 = pageIndex >= mWeeklySize - 1 ? pageIndex : ++pageIndex;
+//                mViewPager.setCurrentItem(index1);
+//                break;
+//            case R.id.btn_back_up_work:
+//                int index2 = pageIndex <= 0 ? 0 : --pageIndex;
+//                mViewPager.setCurrentItem(index2);
+//                break;
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         mWeeklyWorkContentList.get(pageIndex).backStateNotify();
+    }
+
+    @Override
+    public void onLastPageClick() {
+        int currentItem = mViewPager.getCurrentItem();
+        if (currentItem > 0) {
+            mViewPager.setCurrentItem(--currentItem);
+        }
+    }
+
+    @Override
+    public void onNextPageClick() {
+        int currentItem = mViewPager.getCurrentItem();
+        if (currentItem < mWeeklyWorkContentList.size() - 1) {
+            mViewPager.setCurrentItem(++currentItem);
+        }
+
     }
 }

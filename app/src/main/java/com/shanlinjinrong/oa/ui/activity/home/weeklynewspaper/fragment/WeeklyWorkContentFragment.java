@@ -17,13 +17,13 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkStateTipNotifyChangeEvent;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.WriteReportFragment;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class WeeklyWorkContentFragment extends Fragment {
 
@@ -47,6 +47,7 @@ public class WeeklyWorkContentFragment extends Fragment {
     private boolean mIsWorkContent;
     private String mTopTitle;
     private SharedPreferences mSharedPreferences;
+    private OnPageBthClickListener mPageBthClickListener;
 
     public WeeklyWorkContentFragment() {
     }
@@ -69,6 +70,12 @@ public class WeeklyWorkContentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initData();
     }
+
+    public WeeklyWorkContentFragment setPageBtnClickListener(WeeklyWorkContentFragment.OnPageBthClickListener PageBtnClickListener) {
+        this.mPageBthClickListener = PageBtnClickListener;
+        return this;
+    }
+
 
     private void initData() {
         Bundle arguments = getArguments();
@@ -131,7 +138,6 @@ public class WeeklyWorkContentFragment extends Fragment {
                 //工作内容填写情况 0完成 1待填写 2未填写
                 edit.putString(mTopTitle + "this_work_content_state", "0");
                 edit.apply();
-                //finish();
             } else if ((!mEtNextWorkPlan.getText().toString().trim().equals("") || !mEtNextPracticalWork.getText().toString().trim().equals("") ||
                     !mEtNextWorkAnalyzes.getText().toString().trim().equals("") || !mEtNextWorkRemark.getText().toString().trim().equals(""))) {
                 WorkStateTipNotifyChangeEvent state = new WorkStateTipNotifyChangeEvent();
@@ -148,7 +154,6 @@ public class WeeklyWorkContentFragment extends Fragment {
                 //工作内容填写情况 0完成 1待填写 2未填写
                 edit.putString(mTopTitle + "this_work_content_state", "1");
                 edit.apply();
-                //finish();
             } else {
                 WorkStateTipNotifyChangeEvent state = new WorkStateTipNotifyChangeEvent();
                 state.setState("未填写");
@@ -164,7 +169,6 @@ public class WeeklyWorkContentFragment extends Fragment {
                 //工作内容填写情况 0完成 1待填写 2未填写
                 edit.putString(mTopTitle + "this_work_content_state", "2");
                 edit.apply();
-                //finish();
             }
         } else {//下周计划
             if (!mEtNextWorkPlan.getText().toString().trim().equals("") && !mEtNextPracticalWork.getText().toString().trim().equals("") &&
@@ -182,7 +186,6 @@ public class WeeklyWorkContentFragment extends Fragment {
                 //工作内容填写情况 0完成 1待填写 2未填写
                 edit.putString(mTopTitle + "this_work_plan_state", "0");
                 edit.apply();
-                //finish();
             } else if ((!mEtNextWorkPlan.getText().toString().trim().equals("") || !mEtNextPracticalWork.getText().toString().trim().equals("") ||
                     !mEtNextWorkRemark.getText().toString().trim().equals(""))) {
                 WorkStateTipNotifyChangeEvent state = new WorkStateTipNotifyChangeEvent();
@@ -198,7 +201,6 @@ public class WeeklyWorkContentFragment extends Fragment {
                 //工作内容填写情况 0完成 1待填写 2未填写
                 edit.putString(mTopTitle + "this_work_plan_state", "1");
                 edit.apply();
-                //finish();
             } else {
                 WorkStateTipNotifyChangeEvent state = new WorkStateTipNotifyChangeEvent();
                 state.setState("未填写");
@@ -213,7 +215,6 @@ public class WeeklyWorkContentFragment extends Fragment {
                 //工作内容填写情况 0完成 1待填写 2未填写
                 edit.putString(mTopTitle + "this_work_plan_state", "2");
                 edit.apply();
-                //finish();
             }
         }
     }
@@ -223,8 +224,24 @@ public class WeeklyWorkContentFragment extends Fragment {
         super.onDestroyView();
         backStateNotify();
         ButterKnife.unbind(this);
-        Log.d("76547447",mTopTitle+"onDestroyView");
     }
 
 
+    @OnClick({R.id.btn_write_next_work, R.id.btn_back_up_work})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_write_next_work:
+                mPageBthClickListener.onNextPageClick();
+                break;
+            case R.id.btn_back_up_work:
+                mPageBthClickListener.onLastPageClick();
+                break;
+        }
+    }
+
+    public interface OnPageBthClickListener {
+        void onLastPageClick();
+
+        void onNextPageClick();
+    }
 }
