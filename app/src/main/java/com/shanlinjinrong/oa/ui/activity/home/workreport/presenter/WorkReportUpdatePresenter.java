@@ -44,7 +44,10 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
                             WorkReportBean workReport = new Gson().fromJson(data.toString(), WorkReportBean.class);
                             mView.getReportSuccess(workReport);
                             break;
-
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
+                            break;
                         default:
                             mView.getReportFailed("", "");
                             break;

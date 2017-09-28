@@ -13,11 +13,12 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.EventMessage;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlinjinrong.oa.ui.activity.push.PushListActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.push.SystemNoticesActivity;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportListActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.StringUtils;
 
@@ -131,8 +132,7 @@ public class MyJpushReceiver extends BroadcastReceiver {
                 intent = new Intent(mContext, NoticeListActivity.class);
                 break;
             case 5:
-                intent = new Intent(mContext, WorkReportListActivity.class);
-                intent.putExtra("whichList", 1);
+                intent = new Intent(mContext, MyLaunchWorkReportActivity.class);
                 break;
             case 6:
                 intent = new Intent(mContext, ApprovalListActivity.class);
@@ -150,13 +150,9 @@ public class MyJpushReceiver extends BroadcastReceiver {
                 intent = new Intent(mContext, ScheduleActivity.class);
                 break;
             case 10:
-                intent = new Intent(mContext, WorkReportListActivity.class);
-                intent.putExtra("whichList", 2);
+                intent = new Intent(mContext, WorkReportCheckActivity.class);
                 break;
-            case 11:
-                intent = new Intent(mContext, WorkReportListActivity.class);
-                intent.putExtra("whichList", 3);
-                break;
+
 
         }
         if (intent != null) {

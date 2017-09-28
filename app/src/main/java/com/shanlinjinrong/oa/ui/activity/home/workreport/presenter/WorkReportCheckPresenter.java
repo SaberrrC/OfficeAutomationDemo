@@ -77,8 +77,12 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
                         case ApiJava.REQUEST_NO_RESULT:
                             mView.loadDataEmpty();
                             break;
-                        default:
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
                             mView.uidNull(0);
+                            break;
+                        default:
+                            mView.loadDataFailed(0, message);
                             break;
                     }
 

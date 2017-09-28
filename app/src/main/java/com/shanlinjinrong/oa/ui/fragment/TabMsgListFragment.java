@@ -33,7 +33,8 @@ import com.shanlinjinrong.oa.model.EventMessage;
 import com.shanlinjinrong.oa.model.PushMsg;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInfoActivity;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportListActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
@@ -176,8 +177,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                         break;
                     case 5://工作汇报：我发起的
                         intent = new Intent(mContext,
-                                WorkReportListActivity.class);
-                        intent.putExtra("whichList", 1);
+                                MyLaunchWorkReportActivity.class);
                         break;
                     case 6:
                         intent = new Intent(mContext,
@@ -199,13 +199,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                         break;
                     case 10://工作汇报：发送我的
                         intent = new Intent(mContext,
-                                WorkReportListActivity.class);
-                        intent.putExtra("whichList", 2);
-                        break;
-                    case 11://工作汇报：抄送我的
-                        intent = new Intent(mContext,
-                                WorkReportListActivity.class);
-                        intent.putExtra("whichList", 3);
+                                WorkReportCheckActivity.class);
                         break;
                 }
 

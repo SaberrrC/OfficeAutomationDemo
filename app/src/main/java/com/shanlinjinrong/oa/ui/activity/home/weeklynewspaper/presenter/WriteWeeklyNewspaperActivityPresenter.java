@@ -89,7 +89,6 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    Log.d("updateWeeklyReportData", "onSuccess" + t.toString());
                     JSONObject jsonObject = new JSONObject(t);
                     switch (jsonObject.getString("code")) {
                         case ApiJava.REQUEST_CODE_OK:

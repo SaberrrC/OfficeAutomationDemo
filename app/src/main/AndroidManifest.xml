@@ -434,14 +434,7 @@
             android:name=".ui.activity.my.ModifyPhoneActivity"
             android:screenOrientation="portrait"/>
         <!-- 工作汇报列表 -->
-        <activity
-            android:name=".ui.activity.home.workreport.WorkReportListActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
         <!-- 工作汇报详情页 -->
-        <activity
-            android:name=".ui.activity.home.workreport.WorkReportSingleInfoActivity"
-            android:screenOrientation="portrait"/>
         <!-- 发起工作汇报 -->
         <activity
             android:name=".ui.activity.home.workreport.WorkReportLaunchActivity"
@@ -484,10 +477,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
         <!-- 工作汇报回复 -->
-        <activity
-            android:name=".ui.activity.home.workreport.WorkReportReplyActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
         <!-- 审批列表 -->
         <activity
             android:name=".ui.activity.home.approval.ApprovalListActivity"

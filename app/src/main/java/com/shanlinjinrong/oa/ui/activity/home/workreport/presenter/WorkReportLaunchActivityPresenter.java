@@ -41,6 +41,10 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
                         case ApiJava.REQUEST_CODE_OK:
                             mView.reportSuccess(jo.getString("message"));
                             break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
+                            break;
                         default:
                             mView.reportFailed(jo.getString("code"), jo.getString("message"));
                     }
@@ -77,6 +81,10 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
                         case ApiJava.REQUEST_CODE_OK:
                             JSONObject data = jo.getJSONObject("data");
                             mView.getDefaultReceiverSuccess(data.getString("id"), data.getString("username"), data.getString("post"));
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
                             break;
                         default:
                             mView.getDefaultReceiverFailed(jo.getString("message"));

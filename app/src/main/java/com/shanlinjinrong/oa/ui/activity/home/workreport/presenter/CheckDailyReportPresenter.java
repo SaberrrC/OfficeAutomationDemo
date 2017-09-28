@@ -45,6 +45,10 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
                             WorkReportBean workReport = new Gson().fromJson(data.toString(), WorkReportBean.class);
                             mView.loadDataSuccess(workReport);
                             break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
+                            break;
                         default:
                             mView.loadDataFailed(code, message);
                             break;
@@ -81,6 +85,10 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
                     switch (jo.getString("code")) {
                         case ApiJava.REQUEST_CODE_OK:
                             mView.commitSuccess();
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
                             break;
                         default:
                             mView.commitFailed(jo.getString("code"), jo.getString("message"));
