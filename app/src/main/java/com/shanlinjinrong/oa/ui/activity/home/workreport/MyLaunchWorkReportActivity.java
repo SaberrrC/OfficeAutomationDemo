@@ -190,6 +190,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
 
     @Override
     public void loadDataEmpty() {
+        mAllReportList.loadMoreFinish(true, false);
     }
 
     @Override

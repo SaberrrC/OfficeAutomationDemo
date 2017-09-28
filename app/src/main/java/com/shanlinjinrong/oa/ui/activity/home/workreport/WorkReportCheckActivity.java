@@ -253,7 +253,8 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         Intent intent = new Intent(WorkReportCheckActivity.this, CheckDailyReportActivity.class);
         int dailyId = mReportStatus == 1 ? mReportNoCheckData.get(position).getDailyId() : mReportCheckData.get(position).getDailyId();
         intent.putExtra("dailyid", dailyId);
-        intent.putExtra("user_name", mReportNoCheckData.get(position).getReportAccount());
+        String userName = mReportStatus == 1 ? mReportNoCheckData.get(position).getReportAccount() : mReportCheckData.get(position).getReportAccount();
+        intent.putExtra("user_name", userName);
         if (mReportStatus == 3) {
             intent.putExtra(HAS_EVALUATION, true);
             intent.putExtra("user_name", mReportCheckData.get(position).getReportAccount());
