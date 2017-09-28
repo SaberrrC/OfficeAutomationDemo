@@ -273,6 +273,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 Intent intent = new Intent(WriteWeeklyNewspaperActivity.this, WeeklyWorkContentActivity.class);
                 intent.putExtra("TopTitle", workContentBean.getTitle());
                 intent.putExtra("isWorkContent", true);
+                intent.putExtra("index", i);
                 startActivity(intent);
             }
         });
@@ -299,6 +300,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 Intent intent = new Intent(WriteWeeklyNewspaperActivity.this, WeeklyWorkContentActivity.class);
                 intent.putExtra("TopTitle", workContentBean.getTitle());
                 intent.putExtra("isWorkContent", false);
+                intent.putExtra("index", i);
                 startActivity(intent);
             }
         });
@@ -373,7 +375,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         });
     }
 
-    @OnClick({R.id.ll_select_date, btn_add_this_week_work, R.id.btn_add_next_week_work, R.id.ll_select_receiver, R.id.topview_right_view})
+    @OnClick({R.id.ll_select_date, btn_add_this_week_work, R.id.btn_add_next_week_work, R.id.ll_select_receiver, R.id.topview_right_view, R.id.top_view})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.topview_right_view:
@@ -455,12 +457,12 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 return false;
             }
         }
-        if (!mNextData.get(0).getState().equals("已填写")) {
-            Toast.makeText(this, "请填写下周计划", Toast.LENGTH_SHORT).show();
-            return false;
-        }
         if (!mData.get(0).getState().equals("已填写")) {
             Toast.makeText(this, "请填写本周工作", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!mNextData.get(0).getState().equals("已填写")) {
+            Toast.makeText(this, "请填写下周计划", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -743,6 +745,16 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
+        }
+        clearMemory();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!mData.get(0).getState().equals("未填写") || !mNextData.get(0).getState().equals("未填写")){
+            showBackTip("是否放弃编辑", "确定", "取消");
+        }else {
+            finish();
         }
     }
 }
