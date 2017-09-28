@@ -122,7 +122,7 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                                 JSONObject item = new JSONObject(array.get(i).toString());
                                 String reportDate = item.getString("reportDate");
                                 if (reportDate.contains("--")) {
-                                    reportDate.replace("--", "至");
+                                    reportDate = reportDate.replaceAll("--", "至");
                                 }
                                 items.add(new MyLaunchReportItem(
                                         item.getInt("id"),
