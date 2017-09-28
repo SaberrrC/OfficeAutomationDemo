@@ -116,10 +116,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginBottom="15dp"
+                android:background="@drawable/write_report_bth_bg_selector"
                 android:layout_marginLeft="22dp"
                 android:layout_marginRight="22dp"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/btn_blue_round_bg"
                 android:gravity="center"
                 android:text="填写下一项"
                 android:textColor="@color/white"
@@ -133,11 +133,15 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginLeft="22dp"
                 android:layout_marginRight="22dp"
-                android:background="@drawable/btn_blue_round_bg"
                 android:gravity="center"
+                android:background="@drawable/write_report_bth_bg_selector"
                 android:text="返回上一项"
                 android:textColor="@color/white"
                 android:textSize="16sp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
         </LinearLayout>
     </ScrollView>
 

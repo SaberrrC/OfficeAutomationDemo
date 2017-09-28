@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkStateTipNotifyChangeEvent;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.WriteReportFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -43,9 +41,15 @@ public class WeeklyWorkContentFragment extends Fragment {
     TextView mWorkRemark;
     @Bind(R.id.et_next_work_remark)
     EditText mEtNextWorkRemark;
+    @Bind(R.id.btn_write_next_work)
+    TextView mBtnWriteNextWork;
+    @Bind(R.id.btn_back_up_work)
+    TextView mBtnBackUpWork;
 
-    private boolean mIsWorkContent;
+    private int mPageIndex;
     private String mTopTitle;
+    private int mPageIndexMax;
+    private boolean mIsWorkContent;
     private SharedPreferences mSharedPreferences;
     private OnPageBthClickListener mPageBthClickListener;
 
@@ -71,7 +75,7 @@ public class WeeklyWorkContentFragment extends Fragment {
         initData();
     }
 
-    public WeeklyWorkContentFragment setPageBtnClickListener(WeeklyWorkContentFragment.OnPageBthClickListener PageBtnClickListener) {
+    public WeeklyWorkContentFragment setPageBtnClickListener(OnPageBthClickListener PageBtnClickListener) {
         this.mPageBthClickListener = PageBtnClickListener;
         return this;
     }
@@ -81,10 +85,15 @@ public class WeeklyWorkContentFragment extends Fragment {
         Bundle arguments = getArguments();
         mIsWorkContent = arguments.getBoolean("isWorkContent");
         mTopTitle = arguments.getString("title");
-
+        mPageIndex = arguments.getInt("index");
+        mPageIndexMax = arguments.getInt("indexMax");
+        if (mPageIndex == 0) {
+            mBtnBackUpWork.setEnabled(false);
+        } else if (mPageIndex == (mPageIndexMax - 1)) {
+            mBtnWriteNextWork.setEnabled(false);
+        }
         mSharedPreferences = getContext().getSharedPreferences(AppConfig.getAppConfig(AppManager.
                 sharedInstance()).getPrivateCode() + Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE);
-
         if (mIsWorkContent) {
             mWorkPlan.setText("计划工作");
             mPracticalWork.setText("实际工作");
@@ -98,22 +107,17 @@ public class WeeklyWorkContentFragment extends Fragment {
             mEtNextPracticalWork.setText(practical_work);
             mEtNextWorkAnalyzes.setText(work_analyzes);
             mEtNextWorkRemark.setText(work_remark);
-            // getWorkContentIndex();
-            //WorkSelectionState(mWeeklySize);
         } else {
             mWorkPlan.setText("下周工作");
             mPracticalWork.setText("责任人");
             mWorkAnalyzes.setVisibility(View.GONE);
             mEtNextWorkAnalyzes.setVisibility(View.GONE);
-            //mWeeklySize = mSharedPreferences.getInt("workPlanSize", 4);
             String work_plan = mSharedPreferences.getString(mTopTitle + "next_work", "");
             String practical_work = mSharedPreferences.getString(mTopTitle + "personLiable", "");
             String work_remark = mSharedPreferences.getString(mTopTitle + "remark", "");
             mEtNextWorkPlan.setText(work_plan);
             mEtNextPracticalWork.setText(practical_work);
             mEtNextWorkRemark.setText(work_remark);
-            //getWorkContentIndex();
-            // WorkSelectionState(mWeeklySize);
         }
     }
 

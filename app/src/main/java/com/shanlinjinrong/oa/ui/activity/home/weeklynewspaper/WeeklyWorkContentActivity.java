@@ -10,6 +10,7 @@ import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,9 +67,9 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
                 sharedInstance()).getPrivateCode() + Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE);
         mWeeklySize = mSharedPreferences.getInt("workContentSize", 4);
         mPlanSize = mSharedPreferences.getInt("workPlanSize", 4);
-
         mTopTitle = getIntent().getStringExtra("TopTitle");
         pageIndex = getIntent().getIntExtra("index", 0);
+
         mTopView.setAppTitle(mTopTitle);
         mIsWorkContent = getIntent().getBooleanExtra("isWorkContent", false);
         if (mIsWorkContent) {
@@ -78,6 +79,8 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("isWorkContent", mIsWorkContent);
                 bundle.putString("title", "工作内容 " + (i + 1));
+                bundle.putInt("index", i);
+                bundle.putInt("indexMax", (mWeeklySize));
                 weeklyWorkContentFragment.setArguments(bundle);
                 weeklyWorkContentFragment.setPageBtnClickListener(this);
                 mWeeklyWorkContentList.add(weeklyWorkContentFragment);
@@ -89,6 +92,8 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("isWorkContent", mIsWorkContent);
                 bundle.putString("title", "工作计划 " + (i + 1));
+                bundle.putInt("index", i);
+                bundle.putInt("indexMax", (mPlanSize));
                 weeklyWorkContentFragment.setArguments(bundle);
                 weeklyWorkContentFragment.setPageBtnClickListener(this);
                 mWeeklyWorkContentList.add(weeklyWorkContentFragment);
@@ -124,37 +129,16 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
         });
     }
 
-    private void WorkSelectionState(int weeklySize) {
-//        if (mWeekly_Size == 1) {
-//            mBtnBackUpWork.setBackground(getResources().getDrawable(R.drawable.btn_gray_round_bg));
-//            mBtnBackUpWork.setClickable(false);
-//        } else if (mWeekly_Size >= weeklySize) {
-//            mBtnLookNextWork.setBackground(getResources().getDrawable(R.drawable.btn_gray_round_bg));
-//            mBtnLookNextWork.setClickable(false);
-//        } else {
-//            mBtnLookNextWork.setClickable(true);
-//            mBtnBackUpWork.setClickable(true);
-//        }
-    }
-
-//    @OnClick({R.id.btn_write_next_work, R.id.btn_back_up_work})
-//    public void onViewClicked(View view) {
-//        switch (view.getId()) {
-//            case R.id.btn_write_next_work:
-//                int index1 = pageIndex >= mWeeklySize - 1 ? pageIndex : ++pageIndex;
-//                mViewPager.setCurrentItem(index1);
-//                break;
-//            case R.id.btn_back_up_work:
-//                int index2 = pageIndex <= 0 ? 0 : --pageIndex;
-//                mViewPager.setCurrentItem(index2);
-//                break;
-//        }
-//    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         mWeeklyWorkContentList.get(pageIndex).backStateNotify();
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
