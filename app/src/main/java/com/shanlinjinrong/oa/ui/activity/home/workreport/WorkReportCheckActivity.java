@@ -69,7 +69,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     @Bind(R.id.top_view)
     CommonTopView mTopView;
 
-    private static int DEFAULT_PAGE_SIZE = 15;
+    private static int DEFAULT_PAGE_SIZE = 20;
 
     private int mReportStatus = 1;
 

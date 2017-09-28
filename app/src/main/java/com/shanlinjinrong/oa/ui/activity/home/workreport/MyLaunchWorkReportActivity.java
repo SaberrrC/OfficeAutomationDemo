@@ -47,7 +47,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
     private AllReportAdapter mAllReportAdapter;
     private List<MyLaunchReportItem> mItemList = new ArrayList<>();
 
-    private int pageSize = 15;//页面数量
+    private int pageSize = 20;//页面数量
 
     private int pageNum = 1;//请求页
 
@@ -170,8 +170,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         }
         mItemList.addAll(reports);
         mAllReportList.loadMoreFinish(false, hasNextPage);
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
+        this.pageNum = pageNum + 1;
         mAllReportAdapter.notifyDataSetChanged();
     }
 
