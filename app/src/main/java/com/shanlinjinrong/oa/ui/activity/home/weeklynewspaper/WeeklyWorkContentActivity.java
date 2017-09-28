@@ -39,7 +39,7 @@ import butterknife.OnClick;
 /**
  * 发起周报、下周计划 内容界面
  */
-public class WeeklyWorkContentActivity extends AppCompatActivity implements WeeklyWorkContentFragment.OnPageBthClickListener {
+public class WeeklyWorkContentActivity extends AppCompatActivity implements WeeklyWorkContentFragment.OnPageBthClickListener, ViewPager.OnPageChangeListener {
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
@@ -60,10 +60,20 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weekly_newspaper_work_content);
         ButterKnife.bind(this);
+        initData();
         initView();
     }
 
     private void initView() {
+        mTopView.setAppTitle(mTopTitle);
+        mViewPager.setAdapter(new WeeklyWorkAdapter(getSupportFragmentManager(), mWeeklyWorkContentList));
+        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setCurrentItem(pageIndex);
+        EventBus.getDefault().postSticky(mTopTitle);
+        mViewPager.addOnPageChangeListener(this);
+    }
+
+    private void initData() {
         mSharedPreferences = getSharedPreferences(AppConfig.getAppConfig(AppManager.
                 sharedInstance()).getPrivateCode() + Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE);
         mWeeklySize = mSharedPreferences.getInt("workContentSize", 4);
@@ -71,8 +81,6 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
         mTopTitle = getIntent().getStringExtra("TopTitle");
         pageIndex = getIntent().getIntExtra("index", 0);
         mIsEditTextEnabled = getIntent().getBooleanExtra("isEditTextEnabled", false);
-
-        mTopView.setAppTitle(mTopTitle);
         mIsWorkContent = getIntent().getBooleanExtra("isWorkContent", false);
         if (mIsWorkContent) {
             mWeeklyWorkContentList = new ArrayList<>();
@@ -103,46 +111,6 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
                 mWeeklyWorkContentList.add(weeklyWorkContentFragment);
             }
         }
-        mViewPager.setAdapter(new WeeklyWorkAdapter(getSupportFragmentManager(), mWeeklyWorkContentList));
-        mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setCurrentItem(pageIndex);
-        EventBus.getDefault().postSticky(mTopTitle);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (mIsWorkContent) {
-                    mWeeklyWorkContentList.get(position);
-                    mTopView.setAppTitle("工作计划 " + (position + 1));
-                    mWeeklyWorkContentList.get(position).backStateNotify();
-                } else {
-                    mTopView.setAppTitle("工作计划 " + (position + 1));
-                    mWeeklyWorkContentList.get(position).backStateNotify();
-                }
-                pageIndex = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mWeeklyWorkContentList.get(pageIndex).backStateNotify();
-        try {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -159,6 +127,41 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
         if (currentItem < mWeeklyWorkContentList.size() - 1) {
             mViewPager.setCurrentItem(++currentItem);
         }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mWeeklyWorkContentList.get(pageIndex).backStateNotify();
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (mIsWorkContent) {
+            mWeeklyWorkContentList.get(position);
+            mTopView.setAppTitle("工作计划 " + (position + 1));
+            mWeeklyWorkContentList.get(position).backStateNotify();
+        } else {
+            mTopView.setAppTitle("工作计划 " + (position + 1));
+            mWeeklyWorkContentList.get(position).backStateNotify();
+        }
+        pageIndex = position;
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
 
     }
 }
