@@ -50,6 +50,7 @@ public class WeeklyWorkContentFragment extends Fragment {
     private String mTopTitle;
     private int mPageIndexMax;
     private boolean mIsWorkContent;
+    private boolean mIsEditTextEnabled;
     private SharedPreferences mSharedPreferences;
     private OnPageBthClickListener mPageBthClickListener;
 
@@ -62,8 +63,7 @@ public class WeeklyWorkContentFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weekly_work_content, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -87,6 +87,16 @@ public class WeeklyWorkContentFragment extends Fragment {
         mTopTitle = arguments.getString("title");
         mPageIndex = arguments.getInt("index");
         mPageIndexMax = arguments.getInt("indexMax");
+        mIsEditTextEnabled = arguments.getBoolean("isEditTextEnabled",false);
+
+        if (mIsEditTextEnabled){
+            mEtNextWorkPlan.setEnabled(false);
+            mEtNextPracticalWork.setEnabled(false);
+            mEtNextWorkAnalyzes.setEnabled(false);
+            mEtNextWorkRemark.setEnabled(false);
+        }
+
+
         if (mPageIndex == 0) {
             mBtnBackUpWork.setEnabled(false);
         } else if (mPageIndex == (mPageIndexMax - 1)) {

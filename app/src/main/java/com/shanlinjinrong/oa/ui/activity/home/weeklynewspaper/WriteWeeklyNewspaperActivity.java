@@ -341,6 +341,8 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 Intent intent = new Intent(WriteWeeklyNewspaperActivity.this, WeeklyWorkContentActivity.class);
                 intent.putExtra("TopTitle", workContentBean.getTitle());
                 intent.putExtra("isWorkContent", true);
+                if (mFunction == FUNCTION_EVALUATION)
+                    intent.putExtra("isEditTextEnabled", true);
                 startActivity(intent);
             }
         });
@@ -370,6 +372,8 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 Intent intent = new Intent(WriteWeeklyNewspaperActivity.this, WeeklyWorkContentActivity.class);
                 intent.putExtra("TopTitle", workContentBean.getTitle());
                 intent.putExtra("isWorkContent", false);
+                if (mFunction == FUNCTION_EVALUATION)
+                    intent.putExtra("isEditTextEnabled", true);
                 startActivity(intent);
             }
         });
@@ -751,9 +755,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void onBackPressed() {
-        if (!mData.get(0).getState().equals("未填写") || !mNextData.get(0).getState().equals("未填写")){
+        if (!mData.get(0).getState().equals("未填写") || !mNextData.get(0).getState().equals("未填写")) {
             showBackTip("是否放弃编辑", "确定", "取消");
-        }else {
+        } else {
             finish();
         }
     }

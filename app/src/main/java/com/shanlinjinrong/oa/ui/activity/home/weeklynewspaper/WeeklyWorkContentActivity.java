@@ -51,6 +51,7 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
     private int mWeeklySize;
     private String mTopTitle;
     private boolean mIsWorkContent;
+    private boolean mIsEditTextEnabled;
     private SharedPreferences mSharedPreferences;
     private List<WeeklyWorkContentFragment> mWeeklyWorkContentList;
 
@@ -69,6 +70,7 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
         mPlanSize = mSharedPreferences.getInt("workPlanSize", 4);
         mTopTitle = getIntent().getStringExtra("TopTitle");
         pageIndex = getIntent().getIntExtra("index", 0);
+        mIsEditTextEnabled = getIntent().getBooleanExtra("isEditTextEnabled", false);
 
         mTopView.setAppTitle(mTopTitle);
         mIsWorkContent = getIntent().getBooleanExtra("isWorkContent", false);
@@ -80,7 +82,8 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
                 bundle.putBoolean("isWorkContent", mIsWorkContent);
                 bundle.putString("title", "工作内容 " + (i + 1));
                 bundle.putInt("index", i);
-                bundle.putInt("indexMax", (mWeeklySize));
+                bundle.putInt("indexMax", mWeeklySize);
+                bundle.putBoolean("isEditTextEnabled", mIsEditTextEnabled);
                 weeklyWorkContentFragment.setArguments(bundle);
                 weeklyWorkContentFragment.setPageBtnClickListener(this);
                 mWeeklyWorkContentList.add(weeklyWorkContentFragment);
@@ -93,7 +96,8 @@ public class WeeklyWorkContentActivity extends AppCompatActivity implements Week
                 bundle.putBoolean("isWorkContent", mIsWorkContent);
                 bundle.putString("title", "工作计划 " + (i + 1));
                 bundle.putInt("index", i);
-                bundle.putInt("indexMax", (mPlanSize));
+                bundle.putInt("indexMax", mPlanSize);
+                bundle.putBoolean("isEditTextEnabled", mIsEditTextEnabled);
                 weeklyWorkContentFragment.setArguments(bundle);
                 weeklyWorkContentFragment.setPageBtnClickListener(this);
                 mWeeklyWorkContentList.add(weeklyWorkContentFragment);
