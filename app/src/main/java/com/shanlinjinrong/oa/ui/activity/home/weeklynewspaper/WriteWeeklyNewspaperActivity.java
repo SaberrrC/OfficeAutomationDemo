@@ -344,6 +344,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 Intent intent = new Intent(WriteWeeklyNewspaperActivity.this, WeeklyWorkContentActivity.class);
                 intent.putExtra("TopTitle", workContentBean.getTitle());
                 intent.putExtra("isWorkContent", true);
+                intent.putExtra("index", i);
                 if (mFunction == FUNCTION_EVALUATION)
                     intent.putExtra("isEditTextEnabled", true);
                 startActivity(intent);
@@ -375,6 +376,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 Intent intent = new Intent(WriteWeeklyNewspaperActivity.this, WeeklyWorkContentActivity.class);
                 intent.putExtra("TopTitle", workContentBean.getTitle());
                 intent.putExtra("isWorkContent", false);
+                intent.putExtra("index", i);
                 if (mFunction == FUNCTION_EVALUATION)
                     intent.putExtra("isEditTextEnabled", true);
                 startActivity(intent);
@@ -569,7 +571,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void getLastWeekPlanSuccess(List<LastWeekPlanBean.DataBean> data) {
         for (int i = 0; i < data.size(); i++) {
-            SharedPreferences.Editor edit = getSharedPreferences(AppConfig.getAppConfig(AppManager.sharedInstance()).getPrivateCode() +
+                SharedPreferences.Editor edit = getSharedPreferences(AppConfig.getAppConfig(AppManager.sharedInstance()).getPrivateCode() +
                     Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE).edit();
 
             String nextWorkPlan = data.get(i).getNextWorkPlan();
