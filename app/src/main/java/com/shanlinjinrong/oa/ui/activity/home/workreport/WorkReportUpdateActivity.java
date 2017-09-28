@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.InputFilter;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -88,6 +87,8 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     private String mReceiverName; //接收人名称
     private String mReceiverPost; //接收人ID
 
+    private int mDailyId; //日报ID
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +112,8 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
             mTomorrowPlan.setText(savedInstanceState.getString("tomorrowPlan", mTomorrowPlan.getText().toString()));
         } else {
             //从接口读取数据
-            mPresenter.getReportData(getIntent().getIntExtra("dailyid", 0));
+            mDailyId = getIntent().getIntExtra("dailyid", 0);
+            mPresenter.getReportData(mDailyId);
             showLoadingView();
         }
 
@@ -330,13 +332,12 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
         jsonObject.put("supervisor", mReceiverName); //监督人
         jsonObject.put("supervisorId", Integer.valueOf(mReceiverId));//监督人id
 
-//        jsonObject.put("thereCipientId", mReceiverId);//接收人
+        jsonObject.put("dailyId", mDailyId);//日报ID
         jsonObject.put("time", mDate.getText().toString());//时间
         jsonObject.put("tomorrowPlan", mTomorrowPlan.getText().toString());//明日计划
 
         params.putJsonParams(jsonObject.toString());
 
-        Log.i("WorkReport", "WorkReport : " + jsonObject.toString());
         return params;
     }
 

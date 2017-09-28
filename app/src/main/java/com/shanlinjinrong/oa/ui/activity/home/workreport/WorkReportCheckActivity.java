@@ -239,9 +239,10 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     private SwipeItemClickListener mItemClickListener = new SwipeItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
-            if (reportType == 1)//日报
+            if (reportType == 1) {
+                //日报
                 toCheckDailyReport(position);
-
+            }
             if (reportType == 2) {
                 //周报
                 toCheckWeekReport(position);
@@ -249,6 +250,9 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         }
     };
 
+    /**
+     * 审核日报页面
+     */
     private void toCheckDailyReport(int position) {
         Intent intent = new Intent(WorkReportCheckActivity.this, CheckDailyReportActivity.class);
         int dailyId = mReportStatus == 1 ? mReportNoCheckData.get(position).getDailyId() : mReportCheckData.get(position).getDailyId();
@@ -262,7 +266,9 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         startActivityForResult(intent, FOR_RESULT_OK);
     }
 
-
+    /**
+     * 审核周报页面
+     */
     private void toCheckWeekReport(int position) {
         Intent intent = new Intent(WorkReportCheckActivity.this, WriteWeeklyNewspaperActivity.class);
         int dailyId = mReportStatus == 1 ? mReportNoCheckData.get(position).getDailyId() : mReportCheckData.get(position).getDailyId();
@@ -294,8 +300,6 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     /**
      * 切换已审核 待审核
-     *
-     * @param view
      */
     @OnClick({R.id.tv_check_pending, R.id.tv_checked})
     public void onClick(View view) {
@@ -383,10 +387,12 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
             mReportNoCheckData.clear();
             mNoCheckAdapter.notifyDataSetChanged();
             mReportNoCheckList.loadMoreFinish(true, false);
+            mReportNoCheckList.setVisibility(View.VISIBLE);
         } else {
             mReportCheckData.clear();
             mCheckAdapter.notifyDataSetChanged();
             mReportCheckList.loadMoreFinish(true, false);
+            mReportCheckList.setVisibility(View.VISIBLE);
         }
 
     }

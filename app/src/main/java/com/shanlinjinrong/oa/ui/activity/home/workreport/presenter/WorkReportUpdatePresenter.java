@@ -75,7 +75,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
     @Override
     public void updateReport(HttpParams params) {
         mKjHttp.cleanCache();//清除缓存，否则换个日期请求的话，response来自缓存，会一直提示该天已填写日报
-        mKjHttp.jsonPost(ApiJava.UPDATE_DAILY_REPORT, params, new HttpCallBack() {
+        mKjHttp.jsonPut(ApiJava.UPDATE_DAILY_REPORT, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

@@ -606,13 +606,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void evaluationReportSuccess() {
-        showToast("周报审核成功！");
+        showToast("汇报已审批成功！");
         setFinishResult();
     }
 
     @Override
     public void evaluationReportFailed(String code, String msg) {
-        showToast("周报审核失败！");
+        showToast("汇报审核失败！");
     }
 
     @Override
@@ -751,9 +751,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void onBackPressed() {
-        if (!mData.get(0).getState().equals("未填写") || !mNextData.get(0).getState().equals("未填写")){
+        if (!mData.get(0).getState().equals("未填写") || !mNextData.get(0).getState().equals("未填写")) {
             showBackTip("是否放弃编辑", "确定", "取消");
-        }else {
+        } else {
             finish();
         }
     }

@@ -450,7 +450,7 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
 
     @Override
     public void commitSuccess() {
-        showToast("评价日报成功！");
+        showToast("汇报已审批成功！");
         setFinishResult();
     }
 
@@ -463,7 +463,7 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
 
     @Override
     public void commitFailed(String errCode, String errMsg) {
-        showToast("评价日报失败，请稍后重试！");
+        showToast("汇报审批失败！");
     }
 
 
