@@ -211,7 +211,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     private void initListData(int workContentSize, int workPlanSize) {
         //周报日期 数据初始化
-        mondayData1 = DateUtils.getMondayData1("yyyy—MM-dd");
+        mondayData1 = DateUtils.getMondayData1("yyyy-MM-dd");
         mondayData2 = DateUtils.getMondayData2("yyyy-MM-dd");
 
         beginTimeList = new ArrayList<>();
