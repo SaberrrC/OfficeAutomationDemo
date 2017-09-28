@@ -585,7 +585,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     }
 
     @Override
-    public void getLastWeekPlanFailure() {
+    public void getLastWeekPlanFailure(int code, String msg) {
 
     }
 
