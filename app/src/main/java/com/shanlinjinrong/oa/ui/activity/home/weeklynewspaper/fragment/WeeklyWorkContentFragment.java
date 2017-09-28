@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkStateTipNotifyChangeEvent;
+import com.shanlinjinrong.oa.utils.EmojiFilter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -82,12 +84,26 @@ public class WeeklyWorkContentFragment extends Fragment {
 
 
     private void initData() {
+        initWidget();
+        initWorkContent();
+    }
+
+    /**
+     * 控件初始化
+     */
+    private void initWidget() {
         Bundle arguments = getArguments();
         mIsWorkContent = arguments.getBoolean("isWorkContent");
         mTopTitle = arguments.getString("title");
         mPageIndex = arguments.getInt("index");
         mPageIndexMax = arguments.getInt("indexMax");
         mIsEditTextEnabled = arguments.getBoolean("isEditTextEnabled",false);
+
+        InputFilter[] filters = new InputFilter[]{new EmojiFilter(50)};
+        mEtNextWorkPlan.setFilters(filters);
+        mEtNextPracticalWork.setFilters(filters);
+        mEtNextWorkAnalyzes.setFilters(filters);
+        mEtNextWorkRemark.setFilters(filters);
 
         if (mIsEditTextEnabled){
             mEtNextWorkPlan.setEnabled(false);
@@ -96,12 +112,17 @@ public class WeeklyWorkContentFragment extends Fragment {
             mEtNextWorkRemark.setEnabled(false);
         }
 
-
         if (mPageIndex == 0) {
             mBtnBackUpWork.setEnabled(false);
         } else if (mPageIndex == (mPageIndexMax - 1)) {
             mBtnWriteNextWork.setEnabled(false);
         }
+    }
+
+    /**
+     * 初始化工作内容
+     */
+    private void initWorkContent() {
         mSharedPreferences = getContext().getSharedPreferences(AppConfig.getAppConfig(AppManager.
                 sharedInstance()).getPrivateCode() + Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE);
         if (mIsWorkContent) {
@@ -129,6 +150,31 @@ public class WeeklyWorkContentFragment extends Fragment {
             mEtNextPracticalWork.setText(practical_work);
             mEtNextWorkRemark.setText(work_remark);
         }
+    }
+
+    @OnClick({R.id.btn_write_next_work, R.id.btn_back_up_work})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_write_next_work:
+                mPageBthClickListener.onNextPageClick();
+                break;
+            case R.id.btn_back_up_work:
+                mPageBthClickListener.onLastPageClick();
+                break;
+        }
+    }
+
+    public interface OnPageBthClickListener {
+        void onLastPageClick();
+
+        void onNextPageClick();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        backStateNotify();
+        ButterKnife.unbind(this);
     }
 
     /**
@@ -231,31 +277,5 @@ public class WeeklyWorkContentFragment extends Fragment {
                 edit.apply();
             }
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        backStateNotify();
-        ButterKnife.unbind(this);
-    }
-
-
-    @OnClick({R.id.btn_write_next_work, R.id.btn_back_up_work})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_write_next_work:
-                mPageBthClickListener.onNextPageClick();
-                break;
-            case R.id.btn_back_up_work:
-                mPageBthClickListener.onLastPageClick();
-                break;
-        }
-    }
-
-    public interface OnPageBthClickListener {
-        void onLastPageClick();
-
-        void onNextPageClick();
     }
 }
