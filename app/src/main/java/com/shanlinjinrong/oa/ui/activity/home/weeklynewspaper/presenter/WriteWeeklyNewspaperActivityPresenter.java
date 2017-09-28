@@ -178,7 +178,9 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                     LastWeekPlanBean lastWeekPlanBean = new Gson().fromJson(jsonObject.toString(), LastWeekPlanBean.class);
                     switch (lastWeekPlanBean.getCode()){
                         case ApiJava.REQUEST_CODE_OK:
-                            mView.getLastWeekPlanSuccess(lastWeekPlanBean.getData());
+                            if (lastWeekPlanBean.getData() !=null){
+                                mView.getLastWeekPlanSuccess(lastWeekPlanBean.getData());
+                            }
                         break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:

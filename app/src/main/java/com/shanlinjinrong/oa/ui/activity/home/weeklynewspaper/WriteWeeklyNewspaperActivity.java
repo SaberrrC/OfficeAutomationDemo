@@ -520,7 +520,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             jsonObject.put("checkman", mReceiverName);
             jsonObject.put("checkmanId", mReceiverId);
             jsonObject.put("weeklySummary", jsonArray);
-            jsonObject.put("nextWeekPlane", jsonArray);
+            jsonObject.put("nextWeekPlane", jsonArray1);
             if (mFunction == FUNCTION_EDIT) {
                 jsonObject.put("id", mDailyId);
             }
@@ -573,12 +573,12 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             String nextWorkPlan = data.get(i).getNextWorkPlan();
             String remark = data.get(i).getRemark();
 
-            if (!nextWorkPlan.trim().equals("")|| !remark.trim().equals("")){
+            if (!nextWorkPlan.trim().equals("") || !remark.trim().equals("")) {
                 mData.get(i).setState("待完善");
             }
 
-            edit.putString(mData.get(i).getTitle()+ "work_plan",data.get(i).getNextWorkPlan());
-            edit.putString(mData.get(i).getTitle()+ "work_remark",data.get(i).getRemark());
+            edit.putString(mData.get(i).getTitle() + "work_plan", data.get(i).getNextWorkPlan());
+            edit.putString(mData.get(i).getTitle() + "work_remark", data.get(i).getRemark());
             edit.apply();
         }
         mAdapter.notifyDataSetChanged();
@@ -593,7 +593,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     public void sendWeeklyReportSuccess(String msg) {
         Toast.makeText(this, getString(R.string.work_weekly_send_success), Toast.LENGTH_SHORT).show();
         clearMemory();
-        onBackPressed();
+        finish();
     }
 
     private void clearMemory() {
@@ -631,7 +631,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void getReportFailed(String code, String msg) {
         showToast("获取周报信息失败！");
-        onBackPressed();
+        finish();
     }
 
     @Override
@@ -781,7 +781,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void onBackPressed() {
-        if (!mData.get(0).getState().equals("未填写") || !mNextData.get(0).getState().equals("未填写")) {
+        if (mFunction == FUNCTION_COMMIT && (!mData.get(0).getState().equals("未填写") || !mNextData.get(0).getState().equals("未填写"))) {
             showBackTip("是否放弃编辑", "确定", "取消");
         } else {
             finish();
