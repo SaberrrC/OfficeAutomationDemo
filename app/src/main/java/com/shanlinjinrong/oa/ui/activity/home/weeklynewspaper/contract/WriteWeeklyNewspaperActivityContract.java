@@ -1,10 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.contract;
 
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.LastWeekPlanBean;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WeekReportItemBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
 import org.kymjs.kjframe.http.HttpParams;
+
+import java.util.List;
 
 /**
  * Created by tonny on 2017/9/21.
@@ -22,6 +25,10 @@ public interface WriteWeeklyNewspaperActivityContract {
         void getDefaultReceiverFailed(String errMsg);
 
         void getDefaultReceiverEmpty(String msg);
+
+        void getLastWeekPlanSuccess(List<LastWeekPlanBean.DataBean> data);
+
+        void getLastWeekPlanFailure(int code,String msg);
 
         void sendWeeklyReportSuccess(String msg);
 

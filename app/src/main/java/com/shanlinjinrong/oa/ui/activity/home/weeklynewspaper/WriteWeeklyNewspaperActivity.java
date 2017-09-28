@@ -25,6 +25,7 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.adapter.NextWeekWorkContentAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.adapter.ThisWeekWorkContentAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.LastWeekPlanBean;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WeekReportItemBean;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkContentBean;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkStateTipNotifyChangeEvent;
@@ -560,6 +561,31 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void getDefaultReceiverEmpty(String msg) {
+
+    }
+
+    @Override
+    public void getLastWeekPlanSuccess(List<LastWeekPlanBean.DataBean> data) {
+        for (int i = 0; i < data.size(); i++) {
+            SharedPreferences.Editor edit = getSharedPreferences(AppConfig.getAppConfig(AppManager.sharedInstance()).getPrivateCode() +
+                    Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE).edit();
+
+            String nextWorkPlan = data.get(i).getNextWorkPlan();
+            String remark = data.get(i).getRemark();
+
+            if (!nextWorkPlan.trim().equals("")|| !remark.trim().equals("")){
+                mData.get(i).setState("待完善");
+            }
+
+            edit.putString(mData.get(i).getTitle()+ "work_plan",data.get(i).getNextWorkPlan());
+            edit.putString(mData.get(i).getTitle()+ "work_remark",data.get(i).getRemark());
+            edit.apply();
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getLastWeekPlanFailure() {
 
     }
 

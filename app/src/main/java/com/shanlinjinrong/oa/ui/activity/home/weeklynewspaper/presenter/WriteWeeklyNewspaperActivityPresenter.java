@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.LastWeekPlanBean;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WeekReportItemBean;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.contract.WriteWeeklyNewspaperActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -172,18 +173,34 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             public void onSuccess(String t) {
                 super.onSuccess(t);
 
-                String t1 = t;
-                String t11 = t1;
+                try {
+                    JSONObject jsonObject = new JSONObject(t);
+                    LastWeekPlanBean lastWeekPlanBean = new Gson().fromJson(jsonObject.toString(), LastWeekPlanBean.class);
+                    switch (lastWeekPlanBean.getCode()){
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.getLastWeekPlanSuccess(lastWeekPlanBean.getData());
+                        break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            mView.uidNull(0);
+                            break;
+                        default:
+                            mView.getLastWeekPlanFailure(Integer.parseInt(lastWeekPlanBean.getCode()),lastWeekPlanBean.getMessage());
+                            break;
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                int errorNo1 = errorNo;
-                String strMsg1 = strMsg;
-                String strMsg11 = strMsg1;
-
+                mView.getLastWeekPlanFailure(errorNo,strMsg);
             }
+
+
         });
     }
 
