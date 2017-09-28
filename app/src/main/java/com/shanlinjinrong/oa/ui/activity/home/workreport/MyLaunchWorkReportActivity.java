@@ -128,12 +128,12 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         public void onItemClick(View itemView, int position) {
             Intent intent = null;
             if (reportType == 1) {
-                if (mItemList.get(position).getStatus() == 1) {
-                    intent = new Intent(MyLaunchWorkReportActivity.this, WorkReportUpdateActivity.class);
-                } else {
+                if (mItemList.get(position).getStatus() == 3) {
                     intent = new Intent(MyLaunchWorkReportActivity.this, CheckDailyReportActivity.class);
                     intent.putExtra("has_evaluation", true);
                     intent.putExtra("user_name", mItemList.get(position).getReportAccount());
+                } else {
+                    intent = new Intent(MyLaunchWorkReportActivity.this, WorkReportUpdateActivity.class);
                 }
                 intent.putExtra("dailyid", mItemList.get(position).getDailyId());
             } else if (reportType == 2) {

@@ -330,6 +330,8 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         String endTime = DateUtils.longToDateString(weekReportItem.getEndTime(), "yyyy-MM-dd");
         mTvDateEva.setText(startTime + "至" + endTime);
 
+        mEtWorkReportEvaluation.setText(weekReportItem.getCheckmainRating() == null ? "" : weekReportItem.getCheckmainRating());
+
         mAdapter = new ThisWeekWorkContentAdapter(mData);
         mRvWorkContent.setLayoutManager(new LinearLayoutManager(this));
         mRvWorkContent.setAdapter(mAdapter);

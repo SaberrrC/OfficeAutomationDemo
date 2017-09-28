@@ -17,7 +17,7 @@ public class WeekReportItemBean {
     private int userId;
     private int ratingStatus;
     private int reportType;
-    private Object checkmainRating;
+    private String checkmainRating;
     private String remark;
     private String postName;
     private List<WeeklySummaryBean> weeklySummary;
@@ -87,11 +87,11 @@ public class WeekReportItemBean {
         this.reportType = reportType;
     }
 
-    public Object getCheckmainRating() {
+    public String getCheckmainRating() {
         return checkmainRating;
     }
 
-    public void setCheckmainRating(Object checkmainRating) {
+    public void setCheckmainRating(String checkmainRating) {
         this.checkmainRating = checkmainRating;
     }
 
