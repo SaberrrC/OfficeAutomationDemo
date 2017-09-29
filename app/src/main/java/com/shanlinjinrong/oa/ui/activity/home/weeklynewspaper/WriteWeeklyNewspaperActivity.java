@@ -156,10 +156,11 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             initData();
             initView();
         } else if (mFunction == FUNCTION_EDIT) {
-            initData();
-            initView();
+            mScroll.setVisibility(View.GONE);
             mTopView.setRightText("更新");
             mTopView.setAppTitle(mUserName + "工作周报");
+            mPresenter.getWeReportData(mDailyId);
+            showLoadingView();
         } else {
             mScroll.setVisibility(View.GONE);
             mSelectDate.setVisibility(View.GONE);
@@ -332,6 +333,12 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         String startTime = DateUtils.longToDateString(weekReportItem.getStartTime(), "yyyy-MM-dd");
         String endTime = DateUtils.longToDateString(weekReportItem.getEndTime(), "yyyy-MM-dd");
         mTvDateEva.setText(startTime + "至" + endTime);
+        mTvDate.setText(startTime + "至" + endTime);
+
+        mReceiverId = weekReportItem.getCheckmanId() + "";
+        mReceiverName = weekReportItem.getCheckman();
+        mReceiverPost = weekReportItem.getPostName();
+        mTvReceiver.setText(mReceiverName + "-" + mReceiverPost);
 
         mEtWorkReportEvaluation.setText(weekReportItem.getCheckmainRating() == null ? "" : weekReportItem.getCheckmainRating());
 
