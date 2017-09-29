@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -102,7 +101,6 @@ public class TabHomePageFragment extends BaseFragment {
 //                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
 //                intent = new Intent(mContext, WorkReportListActivity.class);
                 intent = new Intent(mContext, WriteWeeklyNewspaperActivity.class);
-                intent.putExtra("whichList", 3);
                 break;
             case R.id.rl_work_report_launch_report:
                 intent = new Intent(mContext, WorkReportLaunchActivity.class);

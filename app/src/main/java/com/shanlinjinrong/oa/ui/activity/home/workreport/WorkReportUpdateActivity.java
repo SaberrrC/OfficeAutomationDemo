@@ -31,18 +31,18 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.EmojiFilter;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
+import com.shanlinjinrong.oa.views.DatePicker;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.qqtheme.framework.picker.DatePicker;
+
 
 /**
  * create by lvdinghao
@@ -458,15 +458,13 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
      */
     private void showDoneDatePicker(final TextView tv) {
         if (picker == null) {
-            picker = new DatePicker(this, DatePicker.YEAR_MONTH_DAY);
+            picker = new DatePicker(this, true);
         }
-        Calendar cal = Calendar.getInstance();
         if (!TextUtils.isEmpty(tv.getText().toString())) {
             String[] srtArr = tv.getText().toString().split("-");
             picker.setSelectedItem(Integer.valueOf(srtArr[0]), Integer.valueOf(srtArr[1]), Integer.valueOf(srtArr[2]));
         } else {
-            picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
-                    cal.get(Calendar.DAY_OF_MONTH));
+            picker.setCurrentDate();
         }
         picker.setSubmitText("确认");
         picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
@@ -538,4 +536,8 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     }
 
 
+    @Override
+    public void onBackPressed() {
+        showBackTip("是否放弃编辑", "确定", "取消");
+    }
 }

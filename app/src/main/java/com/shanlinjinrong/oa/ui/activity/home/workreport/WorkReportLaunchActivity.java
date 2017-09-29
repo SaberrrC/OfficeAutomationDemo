@@ -21,32 +21,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
-import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
-import com.shanlinjinrong.views.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportLaunchListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportLaunchActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.EmojiFilter;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
+import com.shanlinjinrong.oa.views.DatePicker;
 import com.shanlinjinrong.oa.views.KeyboardLinearLayout;
+import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.qqtheme.framework.picker.DatePicker;
+
 
 /**
  * create by lvdinghao
@@ -104,7 +104,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
         setContentView(R.layout.activity_work_report);
         ButterKnife.bind(this);
         setTranslucentStatus(this);
-            initView(savedInstanceState);
+        initView(savedInstanceState);
         initDefaultReceiver();
     }
 
@@ -413,15 +413,14 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
      */
     private void showDoneDatePicker(final TextView tv) {
         if (picker == null) {
-            picker = new DatePicker(this, DatePicker.YEAR_MONTH_DAY);
+            picker = new DatePicker(this, true);
         }
-        Calendar cal = Calendar.getInstance();
+
         if (!TextUtils.isEmpty(tv.getText().toString())) {
             String[] srtArr = tv.getText().toString().split("-");
             picker.setSelectedItem(Integer.valueOf(srtArr[0]), Integer.valueOf(srtArr[1]), Integer.valueOf(srtArr[2]));
         } else {
-            picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
-                    cal.get(Calendar.DAY_OF_MONTH));
+            picker.setCurrentDate();
         }
         picker.setSubmitText("确认");
         picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
@@ -458,8 +457,8 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     @Override
     public void reportSuccess(String msg) {
         Toast.makeText(this, getString(R.string.work_report_send_sucess), Toast.LENGTH_SHORT).show();
-        onBackPressed();
         clearLocalData();
+        finish();
     }
 
     @Override
@@ -559,5 +558,10 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     @Override
     public void getDefaultReceiverEmpty(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        showBackTip("是否放弃编辑", "确定", "取消");
     }
 }
