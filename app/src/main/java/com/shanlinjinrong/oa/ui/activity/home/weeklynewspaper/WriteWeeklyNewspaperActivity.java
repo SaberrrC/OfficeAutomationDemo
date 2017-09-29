@@ -31,6 +31,7 @@ import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkContentBe
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkStateTipNotifyChangeEvent;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.contract.WriteWeeklyNewspaperActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.presenter.WriteWeeklyNewspaperActivityPresenter;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.widget.WeekReportDecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -265,6 +266,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         mAdapter = new ThisWeekWorkContentAdapter(mData);
         mRvWorkContent.setLayoutManager(new LinearLayoutManager(this));
         mRvWorkContent.setAdapter(mAdapter);
+        mRvWorkContent.addItemDecoration(new WeekReportDecorationLine(this, mData));
         mAdapter.notifyDataSetChanged();
 
         mRvWorkContent.addOnItemTouchListener(new OnItemClickListener() {
@@ -292,6 +294,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         mRvNextWorkContent.setLayoutManager(new LinearLayoutManager(this));
         mNextAdapter = new NextWeekWorkContentAdapter(mNextData);
         mRvNextWorkContent.setAdapter(mNextAdapter);
+        mRvNextWorkContent.addItemDecoration(new WeekReportDecorationLine(this, mNextData));
         mNextAdapter.notifyDataSetChanged();
 
         mRvNextWorkContent.addOnItemTouchListener(new OnItemClickListener() {
@@ -407,7 +410,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 showBeginTimeView();
                 break;
             case btn_add_this_week_work:
-                if (workContentIndex < 8) {
+                if (workContentIndex < 9) {
                     workContentIndex++;
                     //记录每个账号的填写情况
                     SharedPreferences.Editor workContentEdit = getSharedPreferences(AppConfig.getAppConfig(AppManager.
@@ -424,7 +427,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 }
                 break;
             case R.id.btn_add_next_week_work:
-                if (mNextData.size() >= 8) {
+                if (mNextData.size() >= 9) {
                     Toast.makeText(this, "添加计划已达上限！", Toast.LENGTH_SHORT).show();
                 } else {
                     workPlanIndex++;
@@ -437,6 +440,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                     mNextData.add(mWorkContentBean);
                     mNextAdapter.setNewData(mNextData);
                     mNextAdapter.notifyDataSetChanged();
+                    mScroll.fullScroll(ScrollView.FOCUS_DOWN);
                 }
                 break;
             case R.id.ll_select_receiver:
