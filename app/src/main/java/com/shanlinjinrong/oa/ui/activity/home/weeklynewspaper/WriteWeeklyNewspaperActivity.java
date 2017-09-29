@@ -574,22 +574,42 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void getLastWeekPlanSuccess(List<LastWeekPlanBean.DataBean> data) {
-        for (int i = 0; i < data.size(); i++) {
-                SharedPreferences.Editor edit = getSharedPreferences(AppConfig.getAppConfig(AppManager.sharedInstance()).getPrivateCode() +
-                    Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE).edit();
+        try {
+            initLastData(data);
+            changeWeekContent(data);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void changeWeekContent(List<LastWeekPlanBean.DataBean> data) {
+        for (int i = 0; i < data.size(); i++) {
+            SharedPreferences.Editor edit = getSharedPreferences(AppConfig.getAppConfig(AppManager.sharedInstance()).getPrivateCode() +
+                    Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE).edit();
             String nextWorkPlan = data.get(i).getNextWorkPlan();
             String remark = data.get(i).getRemark();
-
             if (!nextWorkPlan.trim().equals("") || !remark.trim().equals("")) {
                 mData.get(i).setState("待完善");
             }
-
             edit.putString(mData.get(i).getTitle() + "work_plan", data.get(i).getNextWorkPlan());
             edit.putString(mData.get(i).getTitle() + "work_remark", data.get(i).getRemark());
             edit.apply();
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void initLastData(List<LastWeekPlanBean.DataBean> data) {
+        if (data.size() > 4) {
+            mData.clear();
+            putInt("workContentSize", data.size());
+            for (int i = 0; i < data.size(); i++) {
+                mWorkContentBean = new WorkContentBean();
+                mWorkContentBean.setState("未填写");
+                workContentIndex = i + 1;
+                mWorkContentBean.setTitle("工作内容 " + workContentIndex);
+                mData.add(mWorkContentBean);
+            }
+        }
     }
 
     @Override
