@@ -7,6 +7,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -243,29 +244,30 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (!TextUtils.isEmpty(s)) {
-                int position = (int) mEdit.getTag();
-                //最后3项是填写分数的，区别对待一下
-                if (position < mData.size() - 3) {
-                    if (mEdit.getId() == R.id.et_check_man_evaluate)
-                        mData.get(position).setEvaluationCheckMan(s.toString());
-                    if (mEdit.getId() == R.id.et_supervisor_evaluate)
-                        mData.get(position).setEvaluationSupervisor(s.toString());
-                } else {
-                    // 当EditText数据发生改变的时候存到data变量中
-                    mData.get(position).setContent(s.toString());
-                    int score = Integer.valueOf(s.toString());
-                    if (position == mData.size() - 3 && (score > 60 || score < 0)) {
-                        Toast.makeText(mContext, mContext.getString(R.string.work_report_data_work_score_limit), Toast.LENGTH_SHORT).show();
-                    } else if (position == mData.size() - 2 && (score > 20 || score < 0)) {
-                        Toast.makeText(mContext, mContext.getString(R.string.work_report_data_professional_score_limit), Toast.LENGTH_SHORT).show();
-                    } else if (position == mData.size() - 1 && (score > 20 || score < 0)) {
-                        Toast.makeText(mContext, mContext.getString(R.string.work_report_data_team_score_limit), Toast.LENGTH_SHORT).show();
-
-                    }
+            String str = "";
+            if (s != null)
+                str = s.toString();
+            int position = (int) mEdit.getTag();
+            Log.i("WriteTextWatcher", "position : " + position);
+            //最后3项是填写分数的，区别对待一下
+            if (position < mData.size() - 3) {
+                if (mEdit.getId() == R.id.et_check_man_evaluate)
+                    mData.get(position).setEvaluationCheckMan(str);
+                if (mEdit.getId() == R.id.et_supervisor_evaluate)
+                    mData.get(position).setEvaluationSupervisor(str);
+            } else {
+                // 当EditText数据发生改变的时候存到data变量中
+                mData.get(position).setContent(str);
+                int score = Integer.valueOf(str);
+                if (position == mData.size() - 3 && (score > 60 || score < 0)) {
+                    Toast.makeText(mContext, mContext.getString(R.string.work_report_data_work_score_limit), Toast.LENGTH_SHORT).show();
+                } else if (position == mData.size() - 2 && (score > 20 || score < 0)) {
+                    Toast.makeText(mContext, mContext.getString(R.string.work_report_data_professional_score_limit), Toast.LENGTH_SHORT).show();
+                } else if (position == mData.size() - 1 && (score > 20 || score < 0)) {
+                    Toast.makeText(mContext, mContext.getString(R.string.work_report_data_team_score_limit), Toast.LENGTH_SHORT).show();
                 }
-
             }
+
         }
     }
 }

@@ -183,7 +183,7 @@ public class WeeklyWorkContentFragment extends Fragment {
     public void backStateNotify() {
         if (mIsWorkContent) {//本周工作
             if (!mEtNextWorkPlan.getText().toString().trim().equals("") && !mEtNextPracticalWork.getText().toString().trim().equals("") &&
-                    !mEtNextWorkAnalyzes.getText().toString().trim().equals("") && !mEtNextWorkRemark.getText().toString().trim().equals("")) {
+                    !mEtNextWorkAnalyzes.getText().toString().trim().equals("")) {
                 WorkStateTipNotifyChangeEvent state = new WorkStateTipNotifyChangeEvent();
                 state.setState("已填写");
                 state.setPosition(mTopTitle);
@@ -199,7 +199,7 @@ public class WeeklyWorkContentFragment extends Fragment {
                 edit.putString(mTopTitle + "this_work_content_state", "0");
                 edit.apply();
             } else if ((!mEtNextWorkPlan.getText().toString().trim().equals("") || !mEtNextPracticalWork.getText().toString().trim().equals("") ||
-                    !mEtNextWorkAnalyzes.getText().toString().trim().equals("") || !mEtNextWorkRemark.getText().toString().trim().equals(""))) {
+                    !mEtNextWorkAnalyzes.getText().toString().trim().equals(""))) {
                 WorkStateTipNotifyChangeEvent state = new WorkStateTipNotifyChangeEvent();
                 state.setState("待完善");
                 state.setPosition(mTopTitle);
@@ -231,8 +231,7 @@ public class WeeklyWorkContentFragment extends Fragment {
                 edit.apply();
             }
         } else {//下周计划
-            if (!mEtNextWorkPlan.getText().toString().trim().equals("") && !mEtNextPracticalWork.getText().toString().trim().equals("") &&
-                    !mEtNextWorkRemark.getText().toString().trim().equals("")) {
+            if (!mEtNextWorkPlan.getText().toString().trim().equals("") && !mEtNextPracticalWork.getText().toString().trim().equals("")) {
                 WorkStateTipNotifyChangeEvent state = new WorkStateTipNotifyChangeEvent();
                 state.setState("已填写");
                 state.setPosition(mTopTitle);
@@ -246,8 +245,7 @@ public class WeeklyWorkContentFragment extends Fragment {
                 //工作内容填写情况 0完成 1待填写 2未填写
                 edit.putString(mTopTitle + "this_work_plan_state", "0");
                 edit.apply();
-            } else if ((!mEtNextWorkPlan.getText().toString().trim().equals("") || !mEtNextPracticalWork.getText().toString().trim().equals("") ||
-                    !mEtNextWorkRemark.getText().toString().trim().equals(""))) {
+            } else if ((!mEtNextWorkPlan.getText().toString().trim().equals("") || !mEtNextPracticalWork.getText().toString().trim().equals(""))) {
                 WorkStateTipNotifyChangeEvent state = new WorkStateTipNotifyChangeEvent();
                 state.setState("待完善");
                 state.setPosition(mTopTitle);

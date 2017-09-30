@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -358,21 +359,38 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
      * 一键评价操作
      */
     private void doEvaluation() {
-        for (ReportPageItem pageItem : mWorkReportListData) {
-            pageItem.setEvaluationSupervisor(getString(R.string.no_problem));
-            pageItem.setEvaluationCheckMan(getString(R.string.no_problem));
+        for (int i = mHourReportData.size() - 1; i < mWorkReportListData.size(); i++) {
+            ReportPageItem pageItem = mWorkReportListData.get(i);
+            if (TextUtils.isEmpty(pageItem.getEvaluationSupervisor())) {
+                pageItem.setEvaluationSupervisor(getString(R.string.no_problem));
+                mCheckDailyReportAdapter.notifyItemChanged(i);
+                Log.i("CheckDailyReport", "setEvaluationSupervisor : i = " + i);
+            }
+
+            if (TextUtils.isEmpty(pageItem.getEvaluationCheckMan())) {
+                pageItem.setEvaluationCheckMan(getString(R.string.no_problem));
+                Log.i("CheckDailyReport", "EvaluationCheckMan : i = " + i);
+                mCheckDailyReportAdapter.notifyItemChanged(i);
+            }
+
         }
 
         for (int i = 0; i < mHourReportData.size(); i++) {
-            mHourReportData.get(i).setSupervisorEvaluate(getString(R.string.no_problem));
-            mHourReportData.get(i).setCheckManEvaluate(getString(R.string.no_problem));
+            if (TextUtils.isEmpty(mHourReportData.get(i).getSupervisorEvaluate())) {
+                mHourReportData.get(i).setSupervisorEvaluate(getString(R.string.no_problem));
+            }
+
+            if (TextUtils.isEmpty(mHourReportData.get(i).getCheckManEvaluate())) {
+                mHourReportData.get(i).setCheckManEvaluate(getString(R.string.no_problem));
+            }
+
             if (mHourReportData.get(i).hasEvaluation()) {
                 mWorkReportListData.get(i).setContent(getString(R.string.work_report_no_evaluation));
             } else {
                 mWorkReportListData.get(i).setContent(getString(R.string.work_report_has_evaluation));
             }
+            mCheckDailyReportAdapter.notifyItemChanged(i);
         }
-        mCheckDailyReportAdapter.notifyDataSetChanged();
         new Handler().post(new Runnable() {
             @Override
             public void run() {

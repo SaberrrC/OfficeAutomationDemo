@@ -417,32 +417,17 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         });
     }
 
-    boolean isResume;
-
-    @Override
-    public void onResume() {
-        isResume = true;
-        currentPage = 1;
-        reFresUnRedCount();
-        super.onResume();
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            isResume = true;
             currentPage = 1;
         } else {
             //相当于Fragment的onPause
         }
     }
 
-    @Override
-    public void onPause() {
-        isResume = false;
-        super.onPause();
-    }
 
     @Override
     protected void lazyLoadData() {
@@ -479,8 +464,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                 mSwipeRefreshLayout.setRefreshing(true);
                 changeLoadState();
             }
-            if (!isPull && !loadMore && isResume) {
-                isResume = false;
+            if (!isPull && !loadMore) {
                 changeLoadState();
             }
             if (loadMore) {

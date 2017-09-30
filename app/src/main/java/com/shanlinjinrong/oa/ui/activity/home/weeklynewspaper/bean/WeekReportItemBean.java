@@ -173,9 +173,9 @@ public class WeekReportItemBean {
         }
 
         public int getWriteState() {
-            if (!TextUtils.isEmpty(difference) && !TextUtils.isEmpty(remark) && !TextUtils.isEmpty(work) && !TextUtils.isEmpty(workPlan)) {
+            if (!TextUtils.isEmpty(difference) && !TextUtils.isEmpty(work) && !TextUtils.isEmpty(workPlan)) {
                 return 0;
-            } else if (!TextUtils.isEmpty(difference) || !TextUtils.isEmpty(remark) || !TextUtils.isEmpty(work) || !TextUtils.isEmpty(workPlan)) {
+            } else if (!TextUtils.isEmpty(difference) || !TextUtils.isEmpty(work) || !TextUtils.isEmpty(workPlan)) {
                 return 1;
             }
             return 2;
@@ -219,9 +219,9 @@ public class WeekReportItemBean {
         }
 
         public int getWriteState() {
-            if (!TextUtils.isEmpty(nextWorkPlan) && !TextUtils.isEmpty(personLiable) && !TextUtils.isEmpty(remark)) {
+            if (!TextUtils.isEmpty(nextWorkPlan) && !TextUtils.isEmpty(personLiable) ) {
                 return 0;
-            } else if (!TextUtils.isEmpty(nextWorkPlan) || !TextUtils.isEmpty(personLiable) || !TextUtils.isEmpty(remark)) {
+            } else if (!TextUtils.isEmpty(nextWorkPlan) || !TextUtils.isEmpty(personLiable)) {
                 return 1;
             }
             return 2;

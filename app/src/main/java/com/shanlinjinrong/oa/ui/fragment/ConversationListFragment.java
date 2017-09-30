@@ -24,6 +24,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -173,8 +174,9 @@ public class ConversationListFragment extends EaseConversationListFragment {
     }
 
     public void connectHuanXin() {
-        MainController activity = (MainController) getActivity();
-        activity.LoginIm();
+//        MainController activity = (MainController) getActivity();
+//        activity.LoginIm();
+        LoginUtils.loginIm(getContext(), null);
     }
 
 }
