@@ -305,6 +305,7 @@ public class DateUtils {
     public static List<String> getMondayData1(String pattern) {
         List<String> mondays = new ArrayList<>();
         String monday = getCurrentMonday(pattern);
+        mondays.add(monday);
         for (int i = 0; i < 52; i++) {
             monday = getIntervalDate(monday, -7, pattern);
             mondays.add(monday);
@@ -415,8 +416,8 @@ public class DateUtils {
         return dateFormat.format(time);
     }
 
-    public static String getDateWeek(String dateMonday, String pattern) {
-        return dateMonday + "-" + getIntervalDate(dateMonday, 6, pattern);
+    public static String getDateWeek(String dateMonday, String symbol, String pattern) {
+        return dateMonday + symbol + getIntervalDate(dateMonday, 6, pattern);
     }
 
     @NonNull
@@ -426,8 +427,9 @@ public class DateUtils {
 
     /**
      * 获取当前日期所在的周
+     * symbol : 连接的符号
      */
-    public static String getCurrentWeek(String pattern) {
+    public static String getCurrentWeek(String symbol, String pattern) {
         SimpleDateFormat dateFormat = getDateFormat(pattern);
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -436,6 +438,6 @@ public class DateUtils {
         //周日
         cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 6);
         String sunday = dateFormat.format(cal.getTime());
-        return monday + "-" + sunday;
+        return monday + symbol + sunday;
     }
 }

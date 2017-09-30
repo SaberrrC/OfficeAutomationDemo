@@ -112,7 +112,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     private int workPlanIndex;
     private int workContentIndex;
     private String mCurrentDate;//当前年月日
-    private ArrayList<String> beginTimeList;
+    private List<String> beginTimeList;
     private ThisWeekWorkContentAdapter mAdapter;
     private NextWeekWorkContentAdapter mNextAdapter;
     private WorkContentBean mWorkContentBean;
@@ -124,8 +124,6 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     private String mReceiverId; //接收人ID
     private String mReceiverName; //接收人名称
     private String mReceiverPost; //接收人ID
-    private List<String> mondayData1;
-    private List<String> mondayData2;
 
     private String mUserName;
     private boolean hasEvaluation = false;
@@ -213,15 +211,12 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     private void initListData(int workContentSize, int workPlanSize) {
         //周报日期 数据初始化
-        mondayData1 = DateUtils.getMondayData1("yyyy-MM-dd");
-        mondayData2 = DateUtils.getMondayData2("yyyy-MM-dd");
-
+        List<String> mondayData1 = DateUtils.getMondayData1("yyyy-MM-dd");
         beginTimeList = new ArrayList<>();
-        for (int i = 0; i < mondayData1.size(); i++) {
-            beginTimeList.add(mondayData2.get(i));
-            beginTimeList.add(0, mondayData1.get(i));
+        int size = mondayData1.size();
+        for (int i = 0; i < size; i++) {
+            beginTimeList.add(mondayData1.get(size - i - 1));
         }
-
         for (int i = 0; i < workContentSize; i++) {
             mWorkContentBean = new WorkContentBean();
             mWorkContentBean.setState("未填写");
@@ -263,7 +258,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             }
         }
 
-        mTvDate.setText(beginTimeList.get(beginTimeList.size() / 2) + "至" + beginTimeList.get(beginTimeList.size() / 2 + 1));
+        mTvDate.setText(DateUtils.getCurrentWeek("至", "yyyy-MM-dd"));
         mAdapter = new ThisWeekWorkContentAdapter(mData);
         mRvWorkContent.setLayoutManager(new LinearLayoutManager(this));
         mRvWorkContent.setAdapter(mAdapter);
@@ -718,17 +713,11 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 //当前时间
                 String currentTime = WriteWeeklyNewspaperActivity.this.beginTimeList.get(options1);
-                //结束时间
-                String endTime = null;
-                if (beginTimeList.size() - 1 == options1) {
-                    endTime = DateUtils.getIntervalDate1(currentTime, 7, "yyyy-MM-dd");
-                } else {
-                    endTime = WriteWeeklyNewspaperActivity.this.beginTimeList.get(options1 + 1);
-                }
-                mTvDate.setText(currentTime + "至" + endTime);
+
+                mTvDate.setText(DateUtils.getDateWeek(currentTime, "至", "yyyy-MM-dd"));
             }
         });
-        beginTimeView.setSelectOptions(mondayData1.size());
+        beginTimeView.setSelectOptions(beginTimeList.size());
         beginTimeView.setCyclic(false);
         beginTimeView.show();
     }

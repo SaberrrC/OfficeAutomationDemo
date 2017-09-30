@@ -357,7 +357,7 @@ public class DatePicker extends WheelPicker {
 
     private int getCurrentMonth() {
         Calendar cal = Calendar.getInstance();
-        return cal.get(Calendar.MONTH);
+        return cal.get(Calendar.MONTH) + 1;
     }
 
     private int getCurrentDay() {
