@@ -98,6 +98,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         mTvFindPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                startActivity(new Intent(LoginActivity.this, ConfirmCompanyEmailActivity.class));
                 startActivity(new Intent(LoginActivity.this, FindPassWordActivity.class));
             }
         });
@@ -265,31 +266,28 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         LoginUtils.initEase(LoginActivity.this, new LoginUtils.EaseInitLoginListener() {
             @Override
             public void easeInitSuccess() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showToast("登录成功");
-                        hideLoadingView();
-                        startActivity(new Intent(LoginActivity.this, MainController.class));
-                        finish();
-                    }
-                });
+                goToLogin();
 
             }
 
             @Override
             public void easeInitFailed() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showToast("登录失败，请稍后重试");
-                        hideLoadingView();
-                    }
-                });
-
+                goToLogin();
             }
         });
 
+    }
+
+    private void goToLogin() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showToast("登录成功");
+                hideLoadingView();
+                startActivity(new Intent(LoginActivity.this, MainController.class));
+                finish();
+            }
+        });
     }
 
     //登录环信
@@ -306,6 +304,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
                         hideLoadingView();
                         showToast("登录失败，请稍后重试");
 

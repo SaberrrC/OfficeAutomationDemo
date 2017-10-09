@@ -254,25 +254,11 @@ public class DatePicker extends WheelPicker {
                 @Override
                 public void onSelected(boolean isUserScroll, int selectedIndex, String item) {
                     selectedYearIndex = selectedIndex;
-                    //需要根据年份及月份动态计算天数
-                    days.clear();
-                    int maxDays;
                     int maxMonth = 12;
                     createMonth(maxMonth);
                     if (maxIsCurrentDate && stringToYearMonthDay(item) == getCurrentYear()) {
-                        maxDays = getCurrentDay();
                         maxMonth = getCurrentMonth();
                         createMonth(maxMonth);
-                    } else {
-                        maxDays = DateUtils.calculateDaysInMonth(stringToYearMonthDay(item), stringToYearMonthDay(months.get(selectedMonthIndex)));
-                    }
-                    for (int i = 1; i <= maxDays; i++) {
-                        days.add(DateUtils.fillZero(i));
-                    }
-
-                    if (selectedDayIndex >= maxDays) {
-                        //年或月变动时，保持之前选择的日不动：如果之前选择的日是之前年月的最大日，则日自动为该年月的最大日
-                        selectedDayIndex = days.size() - 1;
                     }
 
                     if (selectedMonthIndex >= maxMonth) {
@@ -280,7 +266,6 @@ public class DatePicker extends WheelPicker {
                         selectedMonthIndex = months.size() - 1;
                     }
                     monthView.setItems(months, selectedMonthIndex);
-                    dayView.setItems(days, selectedDayIndex);
                 }
             });
         }
@@ -297,15 +282,18 @@ public class DatePicker extends WheelPicker {
             public void onSelected(boolean isUserScroll, int selectedIndex, String item) {
                 selectedMonthIndex = selectedIndex;
                 if (mode != YEAR_MONTH) {
-                    if (maxIsCurrentDate && stringToYearMonthDay(years.get(selectedYearIndex)) == getCurrentYear()) {
-                        return;
-                    }
-                    //年月日或年月模式下，需要根据年份及月份动态计算天数
+
+                    //需要根据年份及月份动态计算天数
                     days.clear();
                     int maxDays = DateUtils.calculateDaysInMonth(stringToYearMonthDay(years.get(selectedYearIndex)), stringToYearMonthDay(item));
+
+                    if (maxIsCurrentDate && stringToYearMonthDay(years.get(selectedYearIndex)) == getCurrentYear() && stringToYearMonthDay(item) == getCurrentMonth()) {
+                        maxDays = getCurrentDay();
+                    }
                     for (int i = 1; i <= maxDays; i++) {
                         days.add(DateUtils.fillZero(i));
                     }
+
                     if (selectedDayIndex >= maxDays) {
                         //年或月变动时，保持之前选择的日不动：如果之前选择的日是之前年月的最大日，则日自动为该年月的最大日
                         selectedDayIndex = days.size() - 1;

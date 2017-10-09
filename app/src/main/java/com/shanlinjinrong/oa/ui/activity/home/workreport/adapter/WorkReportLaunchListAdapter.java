@@ -56,10 +56,10 @@ public class WorkReportLaunchListAdapter extends RecyclerView.Adapter<RecyclerVi
             ClickCellHolder clickHolder = (ClickCellHolder) holder;
             clickHolder.mLeftTitle.setText(title);
             clickHolder.mRightText.setText(content);
-            if (content.equals(mContext.getString(R.string.work_report_no_write))) {
-                clickHolder.mRightText.setEnabled(false);
-            } else {
+            if (content.equals(mContext.getString(R.string.work_report_has_write))) {
                 clickHolder.mRightText.setEnabled(true);
+            } else {
+                clickHolder.mRightText.setEnabled(false);
             }
         } else if (holder instanceof WriteCellHolder) {
             WriteCellHolder writeHolder = (WriteCellHolder) holder;

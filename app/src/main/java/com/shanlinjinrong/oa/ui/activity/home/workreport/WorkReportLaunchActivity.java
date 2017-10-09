@@ -397,10 +397,12 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
      */
     private void freshHourReportList() {
         for (int i = 0; i < mHourReportData.size(); i++) {
-            if (mHourReportData.get(i).checkHasEmpty()) {
+            if (mHourReportData.get(i).checkAllEmpty()) {
                 mWorkReportListData.get(i).setContent(getString(R.string.work_report_no_write));
-            } else {
+            } else if (mHourReportData.get(i).checkIsFull()) {
                 mWorkReportListData.get(i).setContent(getString(R.string.work_report_has_write));
+            } else {
+                mWorkReportListData.get(i).setContent(getString(R.string.work_report_need_perfect));
             }
             mWorkReportListAdapter.notifyItemChanged(i);
         }

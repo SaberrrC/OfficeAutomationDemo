@@ -17,6 +17,7 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivit
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportUpdateActivity;
 import com.shanlinjinrong.oa.ui.activity.login.FindPassWordActivity;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
+import com.shanlinjinrong.oa.ui.activity.login.WriteJobNumberActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPhoneActivity;
@@ -88,4 +89,7 @@ public interface ActivityComponent {
     void inject(WorkReportUpdateActivity activity);
 
     void inject(WriteWeeklyNewspaperActivity activity);
+
+    void inject(WriteJobNumberActivity activity);
+
 }

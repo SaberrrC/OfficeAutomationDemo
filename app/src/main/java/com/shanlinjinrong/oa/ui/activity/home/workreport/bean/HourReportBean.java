@@ -98,6 +98,24 @@ public class HourReportBean implements Parcelable {
     }
 
     /**
+     * 判断是否填写完善
+     *
+     * @return
+     */
+    public boolean checkIsFull() {
+        return !TextUtils.isEmpty(mWorkPlan) && !TextUtils.isEmpty(mRealWork) && !TextUtils.isEmpty(mSelfEvaluate) && !TextUtils.isEmpty(mQuantitative);
+    }
+
+    /**
+     * 判断是否全部为空
+     *
+     * @return
+     */
+    public boolean checkAllEmpty() {
+        return TextUtils.isEmpty(mWorkPlan) && TextUtils.isEmpty(mRealWork) && TextUtils.isEmpty(mSelfEvaluate) && TextUtils.isEmpty(mQuantitative);
+    }
+
+    /**
      * 判断是否已经评价
      */
     public boolean hasEvaluation() {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_email_confirm_finish"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.shanlinjinrong.oa.ui.activity.login.EmailConfirmFinishActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="系统已将您的密码发送到您的邮箱，请查收！"
+        android:textColor="@color/red" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_height_48"
+        android:layout_marginTop="@dimen/common_margin"
+        android:background="@drawable/write_report_bth_bg_selector"
+        android:gravity="center"
+        android:onClick="emailFinish"
+        android:text="完成"
+        android:textColor="@color/white"
+        android:textSize="@dimen/common_title_size16" />
+</LinearLayout>

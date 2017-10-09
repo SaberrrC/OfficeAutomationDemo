@@ -1,0 +1,25 @@
+package com.shanlinjinrong.oa.ui.activity.login;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
+import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.base.BaseActivity;
+
+public class EmailConfirmFinishActivity extends BaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_email_confirm_finish);
+    }
+
+    public void emailFinish(View view) {
+        AppConfig.getAppConfig(this).clearLoginInfo();
+        startActivity(new Intent(this, LoginActivity.class));
+        AppManager.sharedInstance().finishAllActivity();
+    }
+}
