@@ -131,4 +131,13 @@
         <item name="android:drawablePadding">6dp</item>
         <item name="android:textColor">@color/work_report_launch_activity_right_text_color</item>
     </style>
+
+    <style name="meeting_checkbox_style" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/meeting_checkbox_style</item>
+    </style>
+
+    <style name="meeting_checkbox_selector">
+        <!--选中的颜色-->
+        <item name="colorAccent">#69B0F2</item>
+    </style>
 </resources>

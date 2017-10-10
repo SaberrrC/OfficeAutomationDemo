@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/page_bg"
+              android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_meeting_details"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="200dp"
+        android:src="@color/c_cc"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_meeting_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333333"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="12dp"
+            android:layout_marginBottom="10dp"
+            android:text="七楼大会议室"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_meeting_people_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:textColor="#333333"
+            android:layout_below="@+id/tv_meeting_name"
+            android:layout_marginRight="5dp"
+            android:text="20人"
+            android:textSize="14sp"/>
+
+        <ImageView
+            android:id="@+id/iv_meeting_location"
+            android:layout_width="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_meeting_name"
+            android:layout_toRightOf="@+id/tv_meeting_people_number"
+            android:src="@mipmap/location"/>
+
+        <TextView
+            android:id="@+id/tv_meeting_location"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_meeting_name"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="7dp"
+            android:gravity="center"
+            android:textColor="#333333"
+            android:layout_toRightOf="@+id/iv_meeting_location"
+            android:text="星峰企业园1号楼"
+            android:textSize="14sp"/>
+
+
+        <ImageView
+            android:id="@+id/iv_meeting_device"
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/tv_meeting_name"
+            android:layout_toRightOf="@+id/tv_meeting_location"
+            android:src="@mipmap/devices"/>
+
+        <TextView
+            android:id="@+id/tv_meeting_device"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="#333333"
+            android:layout_marginLeft="7dp"
+            android:layout_below="@+id/tv_meeting_name"
+            android:layout_toRightOf="@+id/iv_meeting_device"
+            android:text="投影"
+            android:textSize="14sp"/>
+
+
+        <TextView
+            android:id="@+id/btn_meeting_predetermine"
+            android:layout_width="89dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/btn_blue_round_bg"
+            android:layout_marginTop="12.5dp"
+            android:layout_marginRight="12dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="立即预约"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -76,7 +76,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     AllRecyclerView mRvWorkContent;
     @Bind(R.id.ll_next_work_content)
     LinearLayout mLlNextWorkContent;
-    @Bind(R.id.rv_next_work_content)
+    @Bind(R.id. rv_next_work_content)
     AllRecyclerView mRvNextWorkContent;
     @Bind(R.id.tv_receiver)
     TextView mTvReceiver;

@@ -421,7 +421,7 @@ public class DateUtils {
     }
 
     @NonNull
-    private static SimpleDateFormat getDateFormat(String pattern) {
+    public static SimpleDateFormat getDateFormat(String pattern) {
         return new SimpleDateFormat(pattern, Locale.CHINA);
     }
 

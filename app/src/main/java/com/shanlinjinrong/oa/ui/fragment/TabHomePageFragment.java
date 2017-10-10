@@ -18,6 +18,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectOrdinaryMeetingRoomActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectVedioMeetingRoomActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
@@ -82,7 +83,7 @@ public class TabHomePageFragment extends BaseFragment {
             .rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id
             .rl_schedule_meeting_plan, R.id
             .rl_schedule_create_common_meeting, R.id.rl_schedule_create_video_meeting, R.id
-            .rl_schedule_create_note, R.id.rl_schedule_my_mail})
+            .rl_schedule_create_note, R.id.rl_schedule_my_mail,R.id.rl_schedule_me_launch})
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -142,6 +143,10 @@ public class TabHomePageFragment extends BaseFragment {
 
             case R.id.rl_schedule_create_note:
                 intent = new Intent(mContext, CreateNoteActivity.class);
+                break;
+            case R.id.rl_schedule_me_launch:
+
+                intent = new Intent(mContext, MeetingDetailsActivity.class);
                 break;
 
         }

@@ -663,7 +663,7 @@ public class ProgressWheel extends View {
   /**
    * @return the base spinning speed, in full circle turns per second
    * (1.0 equals on full turn in one second), this value also is applied for
-   * the smoothness when setting a progress
+   * the smoothness when devices a progress
    */
   public float getSpinSpeed() {
     return spinSpeed / 360.0f;
@@ -672,7 +672,7 @@ public class ProgressWheel extends View {
   /**
    * Sets the base spinning speed, in full circle turns per second
    * (1.0 equals on full turn in one second), this value also is applied for
-   * the smoothness when setting a progress
+   * the smoothness when devices a progress
    *
    * @param spinSpeed the desired base speed in full turns per second
    */
