@@ -24,146 +24,242 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_marginBottom="9dp"
+        android:background="@color/gray_d5d5d5"
         android:orientation="horizontal">
 
+        <LinearLayout
+            android:id="@+id/ll_month_selector"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text="9月"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:src="@mipmap/date_selector_icon"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_day_selector"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0.1dp"
+            android:layout_marginRight="0.1dp"
+            android:layout_weight="1"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text="31月"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:src="@mipmap/date_selector_icon"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0.1dp"
+            android:layout_weight="1"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text="星期一"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:src="@mipmap/date_selector_icon"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <CheckBox
-    android:id="@+id/selected_meeting_date1"
-    style="@style/meeting_checkbox_style"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:background="@color/white"
-    android:gravity="center"
-    android:text="9：00——10：00"/>
+        <CheckBox
+            android:id="@+id/selected_meeting_date1"
+            style="@style/meeting_checkbox_style"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="9：00——10：00"/>
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#EDEDED"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EDEDED"/>
 
-    <CheckBox
-    android:id="@+id/selected_meeting_date2"
-    style="@style/meeting_checkbox_style"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:background="@color/white"
-    android:gravity="center"
-    android:text="10：00——11：00"/>
+        <CheckBox
+            android:id="@+id/selected_meeting_date2"
+            style="@style/meeting_checkbox_style"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="10：00——11：00"/>
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#EDEDED"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EDEDED"/>
 
-    <CheckBox
-    android:id="@+id/selected_meeting_date3"
-    style="@style/meeting_checkbox_style"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:background="@color/white"
-    android:gravity="center"
-    android:text="11：00——12：00"/>
+        <CheckBox
+            android:id="@+id/selected_meeting_date3"
+            style="@style/meeting_checkbox_style"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="11：00——12：00"/>
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#EDEDED"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EDEDED"/>
 
-    <CheckBox
-    android:id="@+id/selected_meeting_date4"
-    style="@style/meeting_checkbox_style"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:background="@color/white"
-    android:gravity="center"
-    android:text="12：00——13：00"/>
+        <CheckBox
+            android:id="@+id/selected_meeting_date4"
+            style="@style/meeting_checkbox_style"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="12：00——13：00"/>
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#EDEDED"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EDEDED"/>
 
-    <CheckBox
-    android:id="@+id/selected_meeting_date5"
-    style="@style/meeting_checkbox_style"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:background="@color/white"
-    android:gravity="center"
-    android:text="13：00——14：00"/>
+        <CheckBox
+            android:id="@+id/selected_meeting_date5"
+            style="@style/meeting_checkbox_style"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="13：00——14：00"/>
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#EDEDED"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EDEDED"/>
 
-    <CheckBox
-    android:id="@+id/selected_meeting_date6"
-    style="@style/meeting_checkbox_style"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:background="@color/white"
-    android:gravity="center"
-    android:text="14：00——15：00"/>
+        <CheckBox
+            android:id="@+id/selected_meeting_date6"
+            style="@style/meeting_checkbox_style"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="14：00——15：00"/>
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#EDEDED"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EDEDED"/>
 
-    <CheckBox
-    android:id="@+id/selected_meeting_date7"
-    style="@style/meeting_checkbox_style"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:background="@color/white"
-    android:gravity="center"
-    android:text="15：00——16：00"/>
+        <CheckBox
+            android:id="@+id/selected_meeting_date7"
+            style="@style/meeting_checkbox_style"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="15：00——16：00"/>
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#EDEDED"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EDEDED"/>
 
-    <CheckBox
-    android:id="@+id/selected_meeting_date8"
-    style="@style/meeting_checkbox_style"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:background="@color/white"
-    android:gravity="center"
-    android:text="16：00——17：00"/>
+        <CheckBox
+            android:id="@+id/selected_meeting_date8"
+            style="@style/meeting_checkbox_style"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="16：00——17：00"/>
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#EDEDED"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EDEDED"/>
 
-    <CheckBox
-    android:id="@+id/selected_meeting_date9"
-    style="@style/meeting_checkbox_style"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:background="@color/white"
-    android:gravity="center"
-    android:text="17：00——18：00"/>
+        <CheckBox
+            android:id="@+id/selected_meeting_date9"
+            style="@style/meeting_checkbox_style"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="17：00——18：00"/>
 
     </LinearLayout>
 

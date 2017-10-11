@@ -431,6 +431,12 @@ public class Api {
     // 查询工号信息
     public static final String USERS_SEARCH = "/users/search?code=";
 
+
+    /**
+     * 新会议室信息
+     */
+    public static final String NEW_MEETINGROOMS = "new_meetingrooms";
+
     //*****************************************************************//
 
     /**

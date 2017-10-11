@@ -49,7 +49,7 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
     CheckBox mCbEmail;
     @Bind(R.id.cb_messages)
     CheckBox mCbMessages;
-    //    @Bind(R.id.cb_sms)
+//    @Bind(R.id.cb_sms)
 //    CheckBox mCbSms;
     @Bind(R.id.btn_meeting_info_complete)
     TextView mBtnMeetingInfoComplete;
@@ -67,6 +67,12 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
     LinearLayout mLlMeetingPerson;
     @Bind(R.id.ll_meeting_theme)
     LinearLayout mLlMeetingTheme;
+    @Bind(R.id.tv_red_dot1)
+    TextView mTvRedDot1;
+    @Bind(R.id.tv_red_dot2)
+    TextView mTvRedDot2;
+    @Bind(R.id.tv_red_dot3)
+    TextView mTvRedDot3;
     private String mEndDate;
     private String mBeginDate;
     private String mMeetingName;
@@ -116,6 +122,10 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
         mTvMeetingInvite.setVisibility(View.VISIBLE);
         mTvMeetingTheme.setVisibility(View.VISIBLE);
         mTvMeetingPerson.setVisibility(View.VISIBLE);
+        mTvRedDot1.setVisibility(View.INVISIBLE);
+        mTvRedDot2.setVisibility(View.INVISIBLE);
+        mTvRedDot3.setVisibility(View.INVISIBLE);
+
         mCbEmail.setEnabled(false);
 //        mCbSms.setEnabled(false);
         mCbMessages.setEnabled(false);
@@ -132,6 +142,9 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
         mEdMeetingPerson.setVisibility(View.VISIBLE);
         mLlMeetingPerson.setVisibility(View.VISIBLE);
         mLlMeetingTheme.setVisibility(View.VISIBLE);
+        mTvRedDot1.setVisibility(View.VISIBLE);
+        mTvRedDot2.setVisibility(View.VISIBLE);
+        mTvRedDot3.setVisibility(View.VISIBLE);
         mTvMeetingInvite.setVisibility(View.GONE);
         mTvMeetingTheme.setVisibility(View.GONE);
         mTvMeetingPerson.setVisibility(View.GONE);
@@ -143,7 +156,7 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
         mEdMeetingPerson.setEnabled(false);
         mCbEmail.setEnabled(false);
         mCbMessages.setEnabled(false);
-//        mCbSms.setEnabled(false);
+//      mCbSms.setEnabled(false);
         mRbIsMeetingInvite.setOnCheckedChangeListener(this);
     }
 
@@ -194,7 +207,6 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
                     return;
                 }
 
-
                 Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
                 intent.putExtra("mMeetingDate", DateUtils.getDateFormat("yyyy-MM-dd").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
                 intent.putExtra("mMeetingName", mMeetingName);
@@ -217,7 +229,7 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
                     mEdMeetingPerson.setEnabled(true);
                     mCbEmail.setEnabled(true);
                     mCbMessages.setEnabled(true);
-//                    mCbSms.setEnabled(true);
+//                  mCbSms.setEnabled(true);
                 } else {
                     mBtnMeetingInfoComplete.setEnabled(false);
                     mEdMeetingContent.setEnabled(false);
@@ -225,7 +237,7 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
                     mEdMeetingPerson.setEnabled(false);
                     mCbEmail.setEnabled(false);
                     mCbMessages.setEnabled(false);
-//                    mCbSms.setEnabled(false);
+//                  mCbSms.setEnabled(false);
                 }
                 break;
         }

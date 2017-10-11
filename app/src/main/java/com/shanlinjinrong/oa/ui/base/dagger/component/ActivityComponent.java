@@ -8,6 +8,8 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalReplyActivity
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateMeetingActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
@@ -92,6 +94,8 @@ public interface ActivityComponent {
     void inject(WriteWeeklyNewspaperActivity activity);
 
     void inject(WriteJobNumberActivity activity);
+
+    void inject(MeetingDetailsActivity activity);
 
     void inject(ConfirmCompanyEmailActivity activity);
 

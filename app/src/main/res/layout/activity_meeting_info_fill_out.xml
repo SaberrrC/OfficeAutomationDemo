@@ -223,6 +223,18 @@
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/tv_red_dot1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/tv_is_meeting_invite"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="11dp"
+                        android:gravity="center"
+                        android:text=" * "
+                        android:textColor="@color/red"
+                        android:textSize="14sp"/>
+
+                    <TextView
                         android:id="@+id/tv_meeting_theme"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -239,7 +251,6 @@
                         android:id="@+id/ll_meeting_theme"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="32dp"
                         android:background="@drawable/dialog_exit_editor_bg"
                         android:orientation="horizontal"
                         android:paddingLeft="10dp"
@@ -277,6 +288,18 @@
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/tv_red_dot2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/tv_is_meeting_invite"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="11dp"
+                        android:gravity="center"
+                        android:text=" * "
+                        android:textColor="@color/red"
+                        android:textSize="14sp"/>
+
+                    <TextView
                         android:id="@+id/tv_meeting_person"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -293,7 +316,6 @@
                         android:id="@+id/ll_meeting_person"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="32dp"
                         android:background="@drawable/dialog_exit_editor_bg"
                         android:orientation="horizontal"
                         android:paddingLeft="10dp"
@@ -335,11 +357,23 @@
                         android:textColor="#666666"
                         android:textSize="14sp"/>
 
+                    <TextView
+                        android:id="@+id/tv_red_dot3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/tv_is_meeting_invite"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="11dp"
+                        android:gravity="center"
+                        android:text=" * "
+                        android:textColor="@color/red"
+                        android:textSize="14sp"/>
+
+
                     <CheckBox
                         android:id="@+id/cb_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="32dp"
                         android:layout_marginRight="8dp"
                         android:gravity="center"
                         app:theme="@style/meeting_checkbox_selector"/>

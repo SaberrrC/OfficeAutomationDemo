@@ -1,12 +1,19 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
@@ -19,9 +26,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static butterknife.ButterKnife.bind;
+
 public class MeetingPredetermineRecordActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
-//    @Bind(R.id.rv_meeting_date_selected)
-//    RecyclerView mRvMeetingDateSelected;
+
     @Bind(R.id.selected_meeting_date1)
     CheckBox mSelectedMeetingDate1;
     @Bind(R.id.selected_meeting_date2)
@@ -40,6 +48,14 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
     CheckBox mSelectedMeetingDate8;
     @Bind(R.id.selected_meeting_date9)
     CheckBox mSelectedMeetingDate9;
+    @Bind(R.id.btn_meeting_info_complete)
+    TextView mBtnMeetingInfoComplete;
+    @Bind(R.id.ll_day_selector)
+    LinearLayout mLlDaySelector;
+    @Bind(R.id.ll_month_selector)
+    LinearLayout mLlMonthSelector;
+    //@Bind(R.id.rv_meeting_date_selected)
+    //RecyclerView mRvMeetingDateSelected;
 
     private PredetermineRecordAdapter mRecordAdapter;
 
@@ -56,7 +72,8 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_predetermine_record);
         ButterKnife.bind(this);
-//        initData();
+        bind(this);
+        //initData();
         initView();
 
 
@@ -96,40 +113,50 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
     int indexStart;
 
-    @OnClick(R.id.btn_meeting_info_complete)
-    public void onViewClicked() {
-        beginDate = null;
-        DateIndex = 0;
-        for (int i = 0; i < mCheckBoxes.size(); i++) {
-            if (mCheckBoxes.get(i).isChecked()) {
-                if (i - DateIndex == 1 || (DateIndex == 0 && beginDate == null)) {
-                    if (beginDate == null) {
-                        indexStart = mCheckBoxes.get(i).getText().toString().indexOf("—");
-                        beginDate = mCheckBoxes.get(i).getText().toString().substring(0, indexStart);
+    @OnClick({R.id.btn_meeting_info_complete, R.id.ll_day_selector,R.id.ll_month_selector})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_meeting_info_complete:
+                beginDate = null;
+                DateIndex = 0;
+                for (int i = 0; i < mCheckBoxes.size(); i++) {
+                    if (mCheckBoxes.get(i).isChecked()) {
+                        if (i - DateIndex == 1 || (DateIndex == 0 && beginDate == null)) {
+                            if (beginDate == null) {
+                                indexStart = mCheckBoxes.get(i).getText().toString().indexOf("—");
+                                beginDate = mCheckBoxes.get(i).getText().toString().substring(0, indexStart);
+                            }
+                            DateIndex = i;
+                            endDate = mCheckBoxes.get(i).getText().toString().substring(indexStart + 2, mCheckBoxes.get(i).getText().toString().length());
+                        } else {
+                            Toast.makeText(this, "只能预约连续的时间段", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }
-                    DateIndex = i;
-                    endDate = mCheckBoxes.get(i).getText().toString().substring(indexStart + 2, mCheckBoxes.get(i).getText().toString().length());
-                } else {
-                    Toast.makeText(this, "只能预约连续的时间段", Toast.LENGTH_SHORT).show();
+
+                }
+
+                if (beginDate == null || endDate == null) {
+                    Toast.makeText(this, "请选择预约时间段", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            }
 
+                Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
+                intent.putExtra("isWriteMeetingInfo", true);
+                intent.putExtra("beginDate", beginDate);
+                intent.putExtra("endDate", endDate);
+                intent.putExtra("meetingName", getIntent().getStringExtra("meetingName"));
+                intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));
+                intent.putExtra("meetingDevice", getIntent().getStringExtra("meetingDevice"));
+                startActivity(intent);
+                break;
+            case R.id.ll_day_selector:
+                showPopupWindow();
+                break;
+            case R.id.ll_month_selector:
+                showPopupWindow();
+                break;
         }
-
-        if (beginDate == null || endDate == null) {
-            Toast.makeText(this, "请选择预约时间段", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
-        intent.putExtra("isWriteMeetingInfo", true);
-        intent.putExtra("beginDate", beginDate);
-        intent.putExtra("endDate", endDate);
-        intent.putExtra("meetingName", getIntent().getStringExtra("meetingName"));
-        intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));
-        intent.putExtra("meetingDevice", getIntent().getStringExtra("meetingDevice"));
-        startActivity(intent);
     }
 
 
@@ -201,5 +228,46 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                 break;
         }
     }
+
+    private PopupWindow popupWindow;
+
+    //    private MeetingMonthSelector btnConfirm;
+    private void showPopupWindow() {
+        View view = View.inflate(this, R.layout.meeting_date_selector_popwindow, null);
+        bind(view);
+//        addRadioButtonToList();
+//         btnConfirm = (MeetingMonthSelector) view.findViewById(R.id.meeting_month_selector);
+//        btnConfirm.setOnDateClick(new OnDateClick() {
+//            @Override
+//            public void onClick(int year, int month, int data) {
+//                List<String> list = new ArrayList<String>();
+//                list.add("一月");
+//                btnConfirm.setmSelectableDates(list);
+//                Toast.makeText(MeetingPredetermineRecordActivity.this, year + "年" + month + "月" + data + "日", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams
+                .WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        WindowManager.LayoutParams lp = this.getWindow().getAttributes();
+//        lp.alpha = 0.7f;
+//        this.getWindow().setAttributes(lp);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+//                WindowManager.LayoutParams lp = MeetingPredetermineRecordActivity.this.getWindow().getAttributes();
+//                lp.alpha = 1f;
+//                MeetingPredetermineRecordActivity.this.getWindow().setAttributes(lp);
+            }
+        });
+        popupWindow.setFocusable(true);
+        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popupWindow.setAnimationStyle(R.style.top_filter_pop_anim_style);
+            popupWindow.showAsDropDown(mLlDaySelector, 0, 0, Gravity.CENTER);
+        }
+    }
+
 
 }

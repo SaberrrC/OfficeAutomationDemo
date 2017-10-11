@@ -27,14 +27,22 @@
             android:layout_marginBottom="10dp"
             android:text="七楼大会议室"
             android:textSize="16sp"/>
+        <ImageView
+            android:id="@+id/iv_meeting_person"
+            android:layout_width="15dp"
+            android:layout_marginLeft="14dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_meeting_name"
+            android:src="@mipmap/meeting_person_number"/>
 
         <TextView
             android:id="@+id/tv_meeting_people_number"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingLeft="12dp"
+            android:paddingLeft="10dp"
             android:textColor="#333333"
+            android:layout_toRightOf="@+id/iv_meeting_person"
             android:layout_below="@+id/tv_meeting_name"
             android:layout_marginRight="5dp"
             android:text="20人"
@@ -42,7 +50,7 @@
 
         <ImageView
             android:id="@+id/iv_meeting_location"
-            android:layout_width="15dp"
+            android:layout_width="13dp"
             android:layout_marginLeft="10dp"
             android:layout_height="match_parent"
             android:layout_below="@+id/tv_meeting_name"

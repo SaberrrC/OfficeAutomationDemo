@@ -4,18 +4,20 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
+
     <TextView
         android:id="@+id/tvTopLine"
         android:layout_width="2dp"
         android:layout_height="25dp"
-        android:layout_marginLeft="34dp"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        android:background="@color/blue_69B0F2"/>
+        android:layout_marginLeft="34dp"
+        android:background="@color/blue_69B0F2"
+        android:visibility="gone"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="102dp"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -23,7 +25,6 @@
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp">
-
 
             <TextView
                 android:id="@+id/tvDot"
@@ -40,15 +41,16 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/tvDot"
                 android:layout_centerHorizontal="true"
-                android:background="@color/blue_69B0F2"/>
-
+                android:background="@color/gray_9b9b9b"/>
         </RelativeLayout>
+
 
         <RelativeLayout
             android:id="@+id/rlCenter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="14dp"
             android:paddingBottom="6dp"
             android:paddingRight="10dp">
 
@@ -56,31 +58,67 @@
                 android:id="@+id/tvAcceptTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2017-09-18    17：00    周五"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:text="2017-09-18    17：00   "
                 android:textColor="#999"
                 android:textSize="14sp"/>
 
-            <!--<TextView-->
-            <!--android:id="@+id/tvAcceptStation"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/tvAcceptTime"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:text="在湖南隆回县公司进行到件扫描"-->
-            <!--android:textColor="#999"-->
-            <!--android:textSize="12sp"/>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="12dp"
+                android:text="待使用"
+                android:textColor="#55BBFF"/>
 
             <TextView
-                android:id="@+id/btn_meeting_info_complete"
+                android:id="@+id/tv_line"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="0.1dp"
                 android:layout_below="@id/tvAcceptTime"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="24dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/write_report_bth_bg_selector"
-                android:gravity="center"
-                android:text="善林OA需求评审 | 七楼大会议室"
-                android:textColor="@color/white"
-                android:textSize="16sp"/>
+                android:background="@color/gray_9b9b9b"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_meeting_room_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_line"
+                android:layout_marginLeft="12dp"
+                android:text="七楼大会议室"
+                android:textColor="#333333"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_meeting_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_meeting_room_name"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="4dp"
+                android:text="善林系统需求评审会会"
+                android:textColor="#666666"
+                android:textSize="14sp"/>
+
+
+            <!--<TextView-->
+            <!--android:id="@+id/btn_meeting_info_complete"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_below="@id/tv_line"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:background="@drawable/write_report_bth_bg_selector"-->
+            <!--android:gravity="center"-->
+            <!--android:text="善林OA需求评审 | 七楼大会议室"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="16sp"/>-->
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
