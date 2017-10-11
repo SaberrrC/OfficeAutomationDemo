@@ -44,6 +44,7 @@ import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.BadgeUtil;
+import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
 import java.util.ArrayList;
@@ -170,8 +171,8 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         setTranslucentStatus(this);
         initWidget();
         initData();
-//        LoginIm();//登录环信
-//        initEaseData();//初始化登录云信
+        LoginIm();//登录环信
+        initEaseData();//初始化登录云信
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
@@ -236,7 +237,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 Intent intent = new Intent(MainController.this, ModifyPwdActivity.class);
                 startActivity(intent);
                 dialog.dismiss();
-                MainController.this.finish();
             }
         });
         dialog = new AlertDialog.Builder(this, R.style.AppTheme_Dialog).create();
@@ -265,22 +265,17 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     }
 
 
-//    /**
-//     * 初始化云信视频的相关数据
-//     */
-//    private void initEaseData() {
-//        String account = "SL_" + AppConfig.getAppConfig(
-//                MainController.this).get(AppConfig.PREF_KEY_CODE);
-//        String token = AppConfig.getAppConfig(MainController.this).get(
-//                AppConfig.PREF_KEY_YX_TOKEN);
-//        mPresenter.initEase(loginRequest, account, token);
-//    }
-//
-//
-//    //登录环信
-//    public void LoginIm() {
-//        mPresenter.loginIm(this);
-//    }
+    //登录环信
+    public void LoginIm() {
+        LoginUtils.loginIm(MainController.this, null);
+    }
+
+    /**
+     * 初始化云信视频的相关数据
+     */
+    private void initEaseData() {
+        LoginUtils.initEase(MainController.this, null);
+    }
 
     public void refreshCommCount() {
         new Thread(new Runnable() {

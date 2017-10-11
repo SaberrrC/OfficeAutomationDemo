@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.login;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,11 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.activity.login.contract.ConfirmEmailContract;
+import com.shanlinjinrong.oa.ui.activity.login.presenter.ConfirmEmailPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +26,20 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ConfirmCompanyEmailActivity extends BaseActivity implements View.OnTouchListener {
+public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPresenter> implements View.OnTouchListener, ConfirmEmailContract.View {
 
     public static String EMAIL_STATUS = "email_status";
+    public static String EMAIL_ADDRESS = "email_address";
+
 
     @Bind(R.id.ll_confirm_email)
     LinearLayout mConfirmEmailLayout;
+
+    @Bind(R.id.ll_find_email_layout)
+    LinearLayout mFindEmailLayout;
+
+    @Bind(R.id.iv_icon)
+    ImageView mIcon;
 
     @Bind(R.id.et_email)
     EditText mEmail;
@@ -39,6 +51,7 @@ public class ConfirmCompanyEmailActivity extends BaseActivity implements View.On
     Button mSureBtn;
 
     private boolean mStatus; //是否查找到邮箱的状态
+    private String mEmailAddress;
 
 
     @Override
@@ -47,6 +60,11 @@ public class ConfirmCompanyEmailActivity extends BaseActivity implements View.On
         setContentView(R.layout.activity_confirm_company_email);
         ButterKnife.bind(this);
         initView();
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initView() {
@@ -64,21 +82,34 @@ public class ConfirmCompanyEmailActivity extends BaseActivity implements View.On
         mSureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(mEmail.getText().toString().trim()) || TextUtils.isEmpty(mEmailSuffix.getText().toString().trim())) {
-                    Toast.makeText(ConfirmCompanyEmailActivity.this, "请输入完整的邮箱格式！", Toast.LENGTH_SHORT).show();
+               // TODO: 2017/10/11
+                mPresenter.sendEmail();
 
-                } else {
-                    Toast.makeText(ConfirmCompanyEmailActivity.this, mEmail.getText().toString().trim() + mEmailSuffix.getText().toString().trim(), Toast.LENGTH_SHORT).show();
+                if (mStatus) {
+                    Toast.makeText(ConfirmCompanyEmailActivity.this, mEmailAddress, Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(ConfirmCompanyEmailActivity.this, EmailConfirmFinishActivity.class));
+                } else {
+                    if (TextUtils.isEmpty(mEmail.getText().toString().trim()) || TextUtils.isEmpty(mEmailSuffix.getText().toString().trim())) {
+                        Toast.makeText(ConfirmCompanyEmailActivity.this, "请输入完整的邮箱格式！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ConfirmCompanyEmailActivity.this, mEmail.getText().toString().trim() + mEmailSuffix.getText().toString().trim(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ConfirmCompanyEmailActivity.this, EmailConfirmFinishActivity.class));
+                    }
                 }
+
             }
         });
 
         mStatus = getIntent().getBooleanExtra(EMAIL_STATUS, true);
+        mEmailAddress = getIntent().getStringExtra(EMAIL_ADDRESS);
         if (mStatus) {
-            mConfirmEmailLayout.setVisibility(View.VISIBLE);
-        } else {
+            mIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.find_email, null));
             mConfirmEmailLayout.setVisibility(View.GONE);
+            mFindEmailLayout.setVisibility(View.VISIBLE);
+        } else {
+            mIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.not_find_email, null));
+            mConfirmEmailLayout.setVisibility(View.VISIBLE);
+            mFindEmailLayout.setVisibility(View.GONE);
         }
     }
 
@@ -111,5 +142,20 @@ public class ConfirmCompanyEmailActivity extends BaseActivity implements View.On
         }
 
         return false;
+    }
+
+    @Override
+    public void sendEmailSuccess() {
+
+    }
+
+    @Override
+    public void sendEmailFailed(int errorCode, String errMsg) {
+
+    }
+
+    @Override
+    public void uidNull(int code) {
+
     }
 }

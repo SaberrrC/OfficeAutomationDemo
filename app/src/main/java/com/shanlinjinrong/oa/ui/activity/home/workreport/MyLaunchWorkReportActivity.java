@@ -177,7 +177,11 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
     @Override
     public void loadDataFailed(String errCode, String errMsg) {
         if (errCode.equals("-1")) {
-            showToast(getString(R.string.net_no_connection));
+            if (errMsg.equals("auth error")){
+                catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            }else {
+                showToast(getString(R.string.net_no_connection));
+            }
         } else {
             showToast("数据加载失败，请稍后重试！");
         }

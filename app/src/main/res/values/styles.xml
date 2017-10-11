@@ -11,7 +11,7 @@
 
      </style>-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/page_bg</item>
         <item name="android:listDivider">@drawable/divider_bg</item>
     </style>
 

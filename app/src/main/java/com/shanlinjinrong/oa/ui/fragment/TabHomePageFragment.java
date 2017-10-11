@@ -83,7 +83,9 @@ public class TabHomePageFragment extends BaseFragment {
             .rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id
             .rl_schedule_meeting_plan, R.id
             .rl_schedule_create_common_meeting, R.id.rl_schedule_create_video_meeting, R.id
-            .rl_schedule_create_note, R.id.rl_schedule_my_mail,R.id.rl_schedule_me_launch})
+
+            .rl_schedule_create_note, R.id.rl_schedule_my_mail,R.id.rl_schedule_note})
+
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -147,6 +149,10 @@ public class TabHomePageFragment extends BaseFragment {
             case R.id.rl_schedule_me_launch:
 
                 intent = new Intent(mContext, MeetingDetailsActivity.class);
+                break;
+
+            case R.id.rl_schedule_note:
+//                intent = new Intent(mContext, MeetingInviteActivity.class);
                 break;
 
         }

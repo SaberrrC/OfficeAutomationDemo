@@ -29,7 +29,6 @@ import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.AndroidAdjustResizeBugFix;
 import com.shanlinjinrong.oa.utils.LogUtils;
-import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.NetWorkUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.oa.views.KeyboardLayout;
@@ -100,6 +99,14 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             public void onClick(View v) {
 //                startActivity(new Intent(LoginActivity.this, ConfirmCompanyEmailActivity.class));
                 startActivity(new Intent(LoginActivity.this, FindPassWordActivity.class));
+            }
+        });
+
+        mTvFindPwd.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class));
+                return false;
             }
         });
     }
@@ -224,7 +231,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         User user = new User(userInfo);
         LogUtils.e("user->" + user);
         AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
-        LoginIm();
+        goToLogin();
     }
 
     @Override
@@ -259,59 +266,14 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         hideLoadingView();
     }
 
-    /**
-     * 初始化云信视频的相关数据
-     */
-    private void initEaseData() {
-        LoginUtils.initEase(LoginActivity.this, new LoginUtils.EaseInitLoginListener() {
-            @Override
-            public void easeInitSuccess() {
-                goToLogin();
 
-            }
-
-            @Override
-            public void easeInitFailed() {
-                goToLogin();
-            }
-        });
-
-    }
 
     private void goToLogin() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showToast("登录成功");
-                hideLoadingView();
-                startActivity(new Intent(LoginActivity.this, MainController.class));
-                finish();
-            }
-        });
+        showToast("登录成功");
+        hideLoadingView();
+        startActivity(new Intent(LoginActivity.this, MainController.class));
+        finish();
     }
 
-    //登录环信
-    public void LoginIm() {
-        LoginUtils.loginIm(LoginActivity.this, new LoginUtils.ImLoginListener() {
-            @Override
-            public void loginImSuccess() {
-                initEaseData();
-            }
 
-            @Override
-            public void loginImFailed() {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
-                        hideLoadingView();
-                        showToast("登录失败，请稍后重试");
-
-                    }
-                });
-
-            }
-        });
-    }
 }

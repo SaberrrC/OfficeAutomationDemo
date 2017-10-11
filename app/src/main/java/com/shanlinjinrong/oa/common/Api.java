@@ -9,12 +9,9 @@ import org.json.JSONObject;
  * Created by KevinMeng on 2016/7/28.
  */
 public class Api {
-    /**
-     * 原始url
-     */
-    public static final String ORIGINAL_URL = "http://www.zhitongoa.com/getapidomain.php";
+    public static final String PHP_DEBUG_URL = "http://118.31.18.67:86";
 
-//    private static final String BASE_URL = "http://api.shanlin.zhitongoa.com/";
+    public static final String PHP_URL = "";
 
     private static final String RESPONSES_KEY_CODE = "code";
 
@@ -70,6 +67,11 @@ public class Api {
      * 所有接口返回code=365表示返回数据为空
      */
     public static final int RESPONSES_CONTENT_EMPTY = 365;
+
+    /**
+     * 没有这个用户
+     */
+    public static final int RESPONSES_CODE_NO_ACCOUNT = 823;
 
     /**
      * {"code":"393","info":"分页为空"}
@@ -422,6 +424,12 @@ public class Api {
      * 聊天个人信息
      */
     public static final String COMMUNICATION_USERINFO = "user/detail";
+
+    // 获取验证码
+    public static final String SENDS_CAPTCHA = "/sends/captcha?refresh";
+
+    // 查询工号信息
+    public static final String USERS_SEARCH = "/users/search?code=";
 
     //*****************************************************************//
 

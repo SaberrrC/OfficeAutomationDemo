@@ -65,6 +65,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
         //将activity加入到AppManager堆栈中
         AppManager.sharedInstance().addActivity(this);
 

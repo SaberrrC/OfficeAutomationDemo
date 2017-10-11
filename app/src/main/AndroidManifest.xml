@@ -683,10 +683,7 @@
         <activity
             android:name=".ui.activity.home.workreport.WorkReportUpdateActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.login.WriteJobNumberActivity" />
-        <activity android:name=".ui.activity.login.ConfirmCompanyEmailActivity" />
-        <activity android:name=".ui.activity.login.EmailConfirmFinishActivity"></activity>
-            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity"
             android:screenOrientation="portrait"
@@ -706,6 +703,27 @@
         </activity>
         <activity android:name=".ui.activity.home.schedule.meetingdetails.MeetingReservationRecordActivity">
         </activity>
+
+        <!--找回密码填写工号-->
+        <activity
+            android:name=".ui.activity.login.WriteJobNumberActivity"
+            android:screenOrientation="portrait" />
+
+        <!--找回密码 确认邮箱1-->
+        <activity
+            android:name=".ui.activity.login.ConfirmCompanyEmailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--找回密码 确认邮箱2-->
+        <activity
+            android:name=".ui.activity.login.EmailConfirmFinishActivity"
+            android:screenOrientation="portrait" />
+
+        <!--会议邀请-->
+        <activity
+            android:name=".ui.activity.home.schedule.MeetingInviteActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

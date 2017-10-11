@@ -5,20 +5,39 @@ package com.shanlinjinrong.oa.common;
  * java部署的服务器的接口
  */
 public class ApiJava {
-    //新接口的域名
-    public static final String BASE_URL = "http://106.15.205.215:8084/";
 
     public static final String REQUEST_CODE_OK = "000000"; //返回成功code
     public static final String REQUEST_USER_NOT_EXIST = "010003"; //不存在的用户
     public static final String REQUEST_TOKEN_OUT_TIME = "010004"; //token 失效
     public static final String REQUEST_NOT_LOGIN = "010005"; //用户未登录
     public static final String REQUEST_TOKEN_NOT_EXIST = "010006"; //token 不存在
+    public static final String ERROR_TOKEN = "020005";//token不存在或者用户不存在
     public static final String REQUEST_EXCEL_ERROR = "010007"; //上传文件异常
     public static final String REQUEST_NULL = "010008"; //请求为空
     public static final String REQUEST_NO_RESULT = "020000"; //查询无结果
     public static final String REQUEST_HAD_REPORTED = "030000"; //该天日报以填写
     public static final String REQUEST_REPORT_ID_NULL = "010009"; //日报id空
     public static final String REQUEST_UNKNOW_EX = "999999"; //未知异常
+
+
+    /************   接口给的code  ************/
+    public static final String SUCCESS = "000000";// 表示成功
+    public static final String NOT_EXIST_USER = "010003"; // 不存在的用户
+    public static final String OUT_TIME_TOKEN = "010004";// token 失效
+    public static final String NOT_LOGIN = "010005"; // 用户未登录
+    public static final String NOT_EXIST_TOKEN = "010006";// token 不存在
+    public static final String UNKNOW_EXCEPTION = "999999"; // 未知异常
+    public static final String EXCEL_ERROR="010007";//上传文件异常
+    public static final String NULL_DATE_ERROR="010008";//请求为空
+    public static final  String NO_CONTENT ="020000";//查询无结果
+    public static final  String EXISTENCE_REPORT_DAY = "030000";//该天日报以填写
+    public static final  String NULL_REPORT_ID = "010009";//日报id为空
+    public static final  String RATE_OVER = "010011";//日报以评，不能改
+    public static final  String ERROR_OPERATION="020008";//操作失败
+    public static final String FAST_DFS_CONNECTION_ERROR="010011";//文件存储异常
+    public static final String NULL_DATE_DISTANCE="010020";//"周报选择的时间跨度必须为7天"
+    public static final String NOT_ROLE = "000001";//权限不足
+    public static final String EXIST_NAME = "000002";//角色名已存在
 
 
     //发起日报
@@ -61,6 +80,5 @@ public class ApiJava {
 
     // 更新周报
     public static final String UPDATE_WEEK_REPORT = "weekreport/upd";
-
 
 }

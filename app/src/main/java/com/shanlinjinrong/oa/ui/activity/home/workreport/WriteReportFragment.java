@@ -149,12 +149,12 @@ public class WriteReportFragment extends Fragment implements View.OnClickListene
     public void fragmentChange(int position) {
         if (changeListener != null && mPlanWork != null && mRealWork != null && mSelfEvaluate != null)
             changeListener.fragmentStartChange(position,
-                    mPlanWork.getText().toString(),
-                    mRealWork.getText().toString(),
-                    mSelfEvaluate.getText().toString(),
-                    mQuantitative.getText().toString(),
-                    mCheckManEvaluate.getText().toString(),
-                    mSupervisorEvaluate.getText().toString());
+                    mPlanWork.getText().toString().trim(),
+                    mRealWork.getText().toString().trim(),
+                    mSelfEvaluate.getText().toString().trim(),
+                    mQuantitative.getText().toString().trim(),
+                    mCheckManEvaluate.getText().toString().trim(),
+                    mSupervisorEvaluate.getText().toString().trim());
     }
 
     //第一页：向前翻按钮不可用，最后一页的下一页按钮不可用

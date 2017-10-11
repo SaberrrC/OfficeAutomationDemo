@@ -497,10 +497,10 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             String work_analyzes = mSharedPreferences.getString(mData.get(i).getTitle() + "work_analyzes", "");
             String work_remark = mSharedPreferences.getString(mData.get(i).getTitle() + "work_remark", "");
             try {
-                jsonWeeklySummary.put("difference", work_plan);
-                jsonWeeklySummary.put("remark", practical_work);
-                jsonWeeklySummary.put("work", work_analyzes);
-                jsonWeeklySummary.put("workPlan", work_remark);
+                jsonWeeklySummary.put("difference", work_analyzes);
+                jsonWeeklySummary.put("remark", work_remark);
+                jsonWeeklySummary.put("work", practical_work);
+                jsonWeeklySummary.put("workPlan", work_plan);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -566,7 +566,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void getDefaultReceiverFailed(String errMsg) {
-
+        if (errMsg.equals("auth error")) {
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+        }
     }
 
     @Override
@@ -616,7 +618,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void getLastWeekPlanFailure(int code, String msg) {
-
+        if (msg.equals("auth error")) {
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+        }
     }
 
     @Override
@@ -635,6 +639,10 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void sendWeeklyReportFailure(String code, String msg) {
+        if (msg.equals("auth error")) {
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            return;
+        }
         switch (code) {
             case ApiJava.REQUEST_HAD_REPORTED:
                 Toast.makeText(this, getString(R.string.work_report_current_date_had_report), Toast.LENGTH_SHORT).show();
@@ -660,6 +668,10 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void getReportFailed(String code, String msg) {
+        if (msg.equals("auth error")) {
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            return;
+        }
         showToast("获取周报信息失败！");
         finish();
     }

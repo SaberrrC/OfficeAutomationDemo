@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPswActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.ModifyPswActivityPresenter;
@@ -165,7 +166,7 @@ public class ModifyPwdActivity extends HttpBaseActivity<ModifyPswActivityPresent
         showToast("修改密码成功,请重新登录！");
         startActivity(new Intent(ModifyPwdActivity.this, LoginActivity.class));
         AppConfig.getAppConfig(ModifyPwdActivity.this).clearLoginInfo();
-        finish();
+        AppManager.sharedInstance().finishAllActivity();
     }
 
     @Override

@@ -167,7 +167,7 @@ public class AppManager extends Application {
         // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
         config.notificationEntrance = WelcomePage.class; // 点击通知栏跳转到该Activity
-        config.notificationSmallIconId = R.mipmap.ic_launcher;
+        config.notificationSmallIconId = R.mipmap.oa_logo;
         // 呼吸灯配置
         config.ledARGB = Color.GREEN;
         config.ledOnMs = 1000;
@@ -199,7 +199,7 @@ public class AppManager extends Application {
 
             @Override
             public int getDefaultIconResId() {
-                return R.mipmap.ic_launcher;
+                return R.mipmap.oa_logo;
             }
 
             @Override

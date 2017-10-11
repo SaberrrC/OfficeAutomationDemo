@@ -1,50 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:orientation="vertical">
 
-
-    <RelativeLayout
-        android:id="@+id/rl_top"
+    <com.shanlinjinrong.views.common.CommonTopView
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentTop="true"
-        android:background="@color/white"
-        >
+        android:layout_height="@dimen/common_height_48"
+        app:topTitle="消息列表" />
 
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:text="消息列表"
-            android:textColor="#333333"
-            android:textSize="18dp"/>
-
-
-    </RelativeLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/driver_line" />
 
     <FrameLayout
         android:id="@+id/easeConversationListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar_shadow"
-        />
+        android:layout_height="match_parent" />
 
-
-    <include
-        android:id="@+id/toolbar_shadow"
-        layout="@layout/toolbar_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_top"
-        />
-
-</RelativeLayout>
+</LinearLayout>

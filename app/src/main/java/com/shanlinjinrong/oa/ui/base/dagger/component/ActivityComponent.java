@@ -8,13 +8,14 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalReplyActivity
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateMeetingActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportUpdateActivity;
+import com.shanlinjinrong.oa.ui.activity.login.ConfirmCompanyEmailActivity;
 import com.shanlinjinrong.oa.ui.activity.login.FindPassWordActivity;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.login.WriteJobNumberActivity;
@@ -91,5 +92,7 @@ public interface ActivityComponent {
     void inject(WriteWeeklyNewspaperActivity activity);
 
     void inject(WriteJobNumberActivity activity);
+
+    void inject(ConfirmCompanyEmailActivity activity);
 
 }

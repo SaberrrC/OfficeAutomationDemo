@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.net;
 
 import com.shanlinjinrong.oa.BuildConfig;
+import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 
@@ -59,6 +60,22 @@ public class MyKjHttp extends KJHttp {
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         return super.jsonGet(baseJavaUrl + url, params, callback);
     }
+
+    public Request<byte[]> phpJsonGet(String url, HttpParams params, HttpCallBack callback) {
+        if (BuildConfig.DEBUG) {
+            url = Api.PHP_DEBUG_URL + url;
+        } else {
+            url = Api.PHP_URL + url;
+        }
+        return super.jsonGet(url, params, callback);
+
+    }
+
+    public Request<byte[]> phpJsonPost(String url, HttpParams params, HttpCallBack callback) {
+        return super.jsonPost(url, params, callback);
+
+    }
+
 
     /**
      * 使用JSON传参的put请求

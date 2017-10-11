@@ -10,8 +10,6 @@
 
     <include layout="@layout/toolbar"/>
 
-    <include layout="@layout/toolbar_shadow"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -305,4 +303,7 @@
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
+
+    <include layout="@layout/toolbar_shadow"/>
+
 </LinearLayout>

@@ -510,6 +510,10 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void getReportFailed(String errCode, String errMsg) {
+        if (errMsg.equals("auth error")) {
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            return;
+        }
         showToast(getString(R.string.load_report_data_error));
         onBackPressed();
     }
@@ -534,6 +538,9 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void updateReportFailed(String errMsg) {
+        if (errMsg.equals("auth error")){
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+        }
         showToast(getString(R.string.work_report_update_failed));
     }
 
