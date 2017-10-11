@@ -28,6 +28,9 @@ import butterknife.OnClick;
 
 import static butterknife.ButterKnife.bind;
 
+/**
+ * 选择预约时间
+ */
 public class MeetingPredetermineRecordActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     @Bind(R.id.selected_meeting_date1)
@@ -61,7 +64,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
     private int DateIndex;
     private List<CheckBox> mCheckBoxes = new ArrayList<>();
-    //    private List<String> DataDate = new ArrayList<>();
+    //private List<String> DataDate = new ArrayList<>();
     public static MeetingPredetermineRecordActivity mRecordActivity;
 
     private String beginDate;
@@ -133,7 +136,6 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                             return;
                         }
                     }
-
                 }
 
                 if (beginDate == null || endDate == null) {

@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.MeetingDetailsAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRoomsBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingDetailsActivityContract;
@@ -21,6 +20,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * 选择会议室
+ */
 public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActivityPresenter> implements MeetingDetailsActivityContract.View, View.OnClickListener {
 
     @Bind(R.id.top_view)
@@ -35,10 +37,12 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_details);
         ButterKnife.bind(this);
-
-        mPresenter.getMeetingRooms();
-
+        initData();
         initView();
+    }
+
+    private void initData() {
+        mPresenter.getMeetingRooms();
     }
 
     private void initView() {
@@ -60,11 +64,6 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
     }
 
     @Override
-    public void uidNull(int code) {
-
-    }
-
-    @Override
     public void getMeetingRoomsSuccess(List<MeetingRoomsBean.DataBean> data) {
         mMeetingRoomAdapter.setNewData(data);
         mMeetingRoomAdapter.notifyDataSetChanged();
@@ -72,6 +71,9 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
 
     @Override
     public void getMeetingRoomsFailed(String data) {
+    }
 
+    @Override
+    public void uidNull(int code) {
     }
 }

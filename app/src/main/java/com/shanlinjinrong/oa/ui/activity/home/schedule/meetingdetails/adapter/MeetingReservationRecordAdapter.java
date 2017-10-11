@@ -45,14 +45,14 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
             baseViewHolder.getView(R.id.tvDot).setEnabled(true);
         }
 
-//        baseViewHolder.setOnClickListener(R.id.btn_meeting_info_complete, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext,MeetingInfoFillOutActivity.class);
-//                intent.putExtra("isWriteMeetingInfo",false);
-//                mContext.startActivity(intent);
-//            }
-//        });
+        baseViewHolder.setOnClickListener(R.id.rlContent, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext,MeetingInfoFillOutActivity.class);
+                intent.putExtra("isWriteMeetingInfo",false);
+                mContext.startActivity(intent);
+            }
+        });
 
         //布局样式
         if (baseViewHolder.getPosition() == 0) {

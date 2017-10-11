@@ -437,6 +437,11 @@ public class Api {
      */
     public static final String NEW_MEETINGROOMS = "new_meetingrooms";
 
+    /**
+     * 新会议室记录信息
+     */
+    public static final String NEW_MEETING_RECORD = "new_meetings";
+
     //*****************************************************************//
 
     /**

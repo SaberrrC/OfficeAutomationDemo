@@ -23,6 +23,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 预订会议室 确认
+ */
 public class MeetingInfoFillOutActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     @Bind(R.id.top_view)
@@ -49,8 +52,8 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
     CheckBox mCbEmail;
     @Bind(R.id.cb_messages)
     CheckBox mCbMessages;
-//    @Bind(R.id.cb_sms)
-//    CheckBox mCbSms;
+    //@Bind(R.id.cb_sms)
+    //CheckBox mCbSms;
     @Bind(R.id.btn_meeting_info_complete)
     TextView mBtnMeetingInfoComplete;
     @Bind(R.id.tv_receive_person)
@@ -94,7 +97,6 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
         } else {
             initReadView();
         }
-
         mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,7 +129,7 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
         mTvRedDot3.setVisibility(View.INVISIBLE);
 
         mCbEmail.setEnabled(false);
-//        mCbSms.setEnabled(false);
+        //mCbSms.setEnabled(false);
         mCbMessages.setEnabled(false);
         mEdMeetingContent.setEnabled(false);
     }
@@ -149,14 +151,13 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
         mTvMeetingTheme.setVisibility(View.GONE);
         mTvMeetingPerson.setVisibility(View.GONE);
 
-
         mBtnMeetingInfoComplete.setEnabled(false);
         mEdMeetingContent.setEnabled(false);
         mEdMeetingTheme.setEnabled(false);
         mEdMeetingPerson.setEnabled(false);
         mCbEmail.setEnabled(false);
         mCbMessages.setEnabled(false);
-//      mCbSms.setEnabled(false);
+        //mCbSms.setEnabled(false);
         mRbIsMeetingInvite.setOnCheckedChangeListener(this);
     }
 
@@ -191,7 +192,6 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
-
                 if (mEdMeetingTheme.getText().toString().trim().equals("")) {
                     Toast.makeText(this, "会议主题不能为空", Toast.LENGTH_SHORT).show();
                     return;
@@ -229,7 +229,7 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
                     mEdMeetingPerson.setEnabled(true);
                     mCbEmail.setEnabled(true);
                     mCbMessages.setEnabled(true);
-//                  mCbSms.setEnabled(true);
+                    //mCbSms.setEnabled(true);
                 } else {
                     mBtnMeetingInfoComplete.setEnabled(false);
                     mEdMeetingContent.setEnabled(false);
@@ -237,7 +237,7 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
                     mEdMeetingPerson.setEnabled(false);
                     mCbEmail.setEnabled(false);
                     mCbMessages.setEnabled(false);
-//                  mCbSms.setEnabled(false);
+                    //mCbSms.setEnabled(false);
                 }
                 break;
         }

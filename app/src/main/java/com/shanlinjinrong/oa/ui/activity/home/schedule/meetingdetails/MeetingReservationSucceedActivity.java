@@ -12,6 +12,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 预订成功
+ */
 public class MeetingReservationSucceedActivity extends AppCompatActivity {
 
     @Bind(R.id.top_view)

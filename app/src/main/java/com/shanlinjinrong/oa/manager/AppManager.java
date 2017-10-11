@@ -33,8 +33,6 @@ import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerAppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.module.AppManagerModule;
 import com.shanlinjinrong.oa.ui.base.dagger.module.KjHttpModule;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.BufferedReader;
@@ -73,15 +71,15 @@ public class AppManager extends Application {
     public static Context mContext;
 
     private AppComponent appComponent;
-
-    //内存检测start
-    public static RefWatcher getRefWatcher(Context context) {
-        AppManager application = (AppManager) context
-                .getApplicationContext();
-        return application.refWatcher;
-    }
-
-    private RefWatcher refWatcher;
+//
+//    //内存检测start
+//    public static RefWatcher getRefWatcher(Context context) {
+//        AppManager application = (AppManager) context
+//                .getApplicationContext();
+//        return application.refWatcher;
+//    }
+//
+//    private RefWatcher refWatcher;
     //内存检测end
 
     public AppManager() {
@@ -151,9 +149,9 @@ public class AppManager extends Application {
             StrictMode.setVmPolicy(vmPolicyBuilder.build());
         }
         //leakCanary
-        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this);
-        }
+//        if (!LeakCanary.isInAnalyzerProcess(this)) {
+//            LeakCanary.install(this);
+//        }
         //blockCanary
 //        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
