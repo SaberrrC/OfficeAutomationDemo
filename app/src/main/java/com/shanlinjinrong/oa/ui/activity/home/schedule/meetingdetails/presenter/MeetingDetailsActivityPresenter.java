@@ -19,7 +19,7 @@ import javax.inject.Inject;
  * Created by tonny on 2017/10/11.
  */
 
-public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetailsActivityContract.View> implements MeetingDetailsActivityContract.Presenter {
+    public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetailsActivityContract.View> implements MeetingDetailsActivityContract.Presenter {
 
 
     @Inject

@@ -30,7 +30,6 @@ public class MeetingReservationSucceedActivity extends AppCompatActivity {
 
         String mMeetingDate = getIntent().getStringExtra("mMeetingDate");
         String mMeetingName = getIntent().getStringExtra("mMeetingName");
-
         mTvTipsMessage.setText(mMeetingDate +"  "+ mMeetingName);
     }
 

@@ -29,6 +29,5 @@ public interface MeetingDetailsActivityContract {
     interface Presenter extends BasePresenter<MeetingDetailsActivityContract.View> {
 
         void getMeetingRooms(); //获取会议室信息
-
     }
 }

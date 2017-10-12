@@ -57,18 +57,13 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
     LinearLayout mLlDaySelector;
     @Bind(R.id.ll_month_selector)
     LinearLayout mLlMonthSelector;
-    //@Bind(R.id.rv_meeting_date_selected)
-    //RecyclerView mRvMeetingDateSelected;
-
-    private PredetermineRecordAdapter mRecordAdapter;
 
     private int DateIndex;
-    private List<CheckBox> mCheckBoxes = new ArrayList<>();
-    //private List<String> DataDate = new ArrayList<>();
-    public static MeetingPredetermineRecordActivity mRecordActivity;
-
-    private String beginDate;
     private String endDate;
+    private int indexStart;
+    private String beginDate;
+    private List<CheckBox> mCheckBoxes = new ArrayList<>();
+    public static MeetingPredetermineRecordActivity mRecordActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,30 +71,11 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         setContentView(R.layout.activity_meeting_predetermine_record);
         ButterKnife.bind(this);
         bind(this);
-        //initData();
         initView();
-
-
     }
-
-//    private void initData() {
-//        DataDate.add("9：00——10：00");
-//        DataDate.add("10：00——11：00");
-//        DataDate.add("11：00——12：00");
-//        DataDate.add("12：00——13：00");
-//        DataDate.add("13：00——14：00");
-//        DataDate.add("15：00——16：00");
-//        DataDate.add("16：00——17：00");
-//        DataDate.add("17：00——18：00");
-//    }
 
     private void initView() {
         mRecordActivity = this;
-//        mRecordAdapter = new PredetermineRecordAdapter(DataDate);
-//        mRvMeetingDateSelected.setLayoutManager(new LinearLayoutManager(this));
-//        mRvMeetingDateSelected.setAdapter(mRecordAdapter);
-//        mRecordAdapter.notifyDataSetChanged();
-
         mCheckBoxes.add(mSelectedMeetingDate1);
         mCheckBoxes.add(mSelectedMeetingDate2);
         mCheckBoxes.add(mSelectedMeetingDate3);
@@ -114,9 +90,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         }
     }
 
-    int indexStart;
-
-    @OnClick({R.id.btn_meeting_info_complete, R.id.ll_day_selector,R.id.ll_month_selector})
+    @OnClick({R.id.btn_meeting_info_complete, R.id.ll_day_selector, R.id.ll_month_selector})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
@@ -150,6 +124,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                 intent.putExtra("meetingName", getIntent().getStringExtra("meetingName"));
                 intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));
                 intent.putExtra("meetingDevice", getIntent().getStringExtra("meetingDevice"));
+                intent.putExtra("roomId", getIntent().getIntExtra("roomId", 0));
                 startActivity(intent);
                 break;
             case R.id.ll_day_selector:
@@ -158,6 +133,34 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
             case R.id.ll_month_selector:
                 showPopupWindow();
                 break;
+        }
+    }
+
+    private PopupWindow popupWindow;
+    //TODO 时间选择
+    private void showPopupWindow() {
+        View view = View.inflate(this, R.layout.meeting_date_selector_popwindow, null);
+        bind(view);
+        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams
+                .WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        WindowManager.LayoutParams lp = this.getWindow().getAttributes();
+//        lp.alpha = 0.7f;
+//        this.getWindow().setAttributes(lp);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+//                WindowManager.LayoutParams lp = MeetingPredetermineRecordActivity.this.getWindow().getAttributes();
+//                lp.alpha = 1f;
+//                MeetingPredetermineRecordActivity.this.getWindow().setAttributes(lp);
+            }
+        });
+        popupWindow.setFocusable(true);
+        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popupWindow.setAnimationStyle(R.style.top_filter_pop_anim_style);
+            popupWindow.showAsDropDown(mLlDaySelector, 0, 0, Gravity.CENTER);
         }
     }
 
@@ -230,46 +233,5 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                 break;
         }
     }
-
-    private PopupWindow popupWindow;
-
-    //    private MeetingMonthSelector btnConfirm;
-    private void showPopupWindow() {
-        View view = View.inflate(this, R.layout.meeting_date_selector_popwindow, null);
-        bind(view);
-//        addRadioButtonToList();
-//         btnConfirm = (MeetingMonthSelector) view.findViewById(R.id.meeting_month_selector);
-//        btnConfirm.setOnDateClick(new OnDateClick() {
-//            @Override
-//            public void onClick(int year, int month, int data) {
-//                List<String> list = new ArrayList<String>();
-//                list.add("一月");
-//                btnConfirm.setmSelectableDates(list);
-//                Toast.makeText(MeetingPredetermineRecordActivity.this, year + "年" + month + "月" + data + "日", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams
-                .WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        WindowManager.LayoutParams lp = this.getWindow().getAttributes();
-//        lp.alpha = 0.7f;
-//        this.getWindow().setAttributes(lp);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-//                WindowManager.LayoutParams lp = MeetingPredetermineRecordActivity.this.getWindow().getAttributes();
-//                lp.alpha = 1f;
-//                MeetingPredetermineRecordActivity.this.getWindow().setAttributes(lp);
-            }
-        });
-        popupWindow.setFocusable(true);
-        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            popupWindow.setAnimationStyle(R.style.top_filter_pop_anim_style);
-            popupWindow.showAsDropDown(mLlDaySelector, 0, 0, Gravity.CENTER);
-        }
-    }
-
 
 }

@@ -4,21 +4,20 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-
-    <TextView
-        android:id="@+id/tvTopLine"
-        android:layout_width="1dp"
-        android:layout_height="25dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="35dp"
-        android:background="@color/gray_9b9b9b"
-        android:visibility="gone"/>
-
+    <!--<TextView-->
+        <!--android:id="@+id/tvTopLine"-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginLeft="35dp"-->
+        <!--android:background="@color/gray_9b9b9b"-->
+        <!--android:visibility="gone"/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="125dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <FrameLayout
             android:id="@+id/rlTimeline"
@@ -26,15 +25,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp">
-
-            <!--<TextView-->
-            <!--android:id="@+id/tvDot"-->
-            <!--android:layout_width="13dp"-->
-            <!--android:layout_height="13dp"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginBottom="5dp"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:background="@drawable/time_line_dot_normal"/>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,6 +43,7 @@
                 android:id="@+id/tvDot"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginTop="25dp"
                 android:background="@mipmap/meeting_record_icon"/>
 
         </FrameLayout>
@@ -61,8 +52,8 @@
         <RelativeLayout
             android:id="@+id/rlContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="24dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="14dp"
             android:background="@drawable/meeting_record_bg_item"
@@ -70,7 +61,7 @@
             android:paddingRight="10dp">
 
             <TextView
-                android:id="@+id/tvAcceptTime"
+                android:id="@+id/tv_accept_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
@@ -80,6 +71,7 @@
                 android:textSize="14sp"/>
 
             <TextView
+                android:id="@+id/tv_meeting_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -92,7 +84,7 @@
                 android:id="@+id/tv_line"
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:layout_below="@id/tvAcceptTime"
+                android:layout_below="@id/tv_accept_time"
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
@@ -122,19 +114,8 @@
                 android:textColor="#666666"
                 android:textSize="14sp"/>
 
-
-            <!--<TextView-->
-            <!--android:id="@+id/btn_meeting_info_complete"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_below="@id/tv_line"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:background="@drawable/write_report_bth_bg_selector"-->
-            <!--android:gravity="center"-->
-            <!--android:text="善林OA需求评审 | 七楼大会议室"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="16sp"/>-->
         </RelativeLayout>
     </LinearLayout>
+
 </LinearLayout>
 

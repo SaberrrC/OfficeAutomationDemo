@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.shanlinjinrong.oa.R;
@@ -22,7 +23,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- *
+ * 会议室 预订记录
  */
 public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingReservationRecordActivityPresenter> implements MeetingReservationRecordActivityContract.View {
 
@@ -30,17 +31,18 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     CommonTopView mTopView;
     @Bind(R.id.rv_meeting_Reservation_Record)
     RecyclerView mRvMeetingReservationRecord;
-
     private MeetingReservationRecordAdapter mRecordAdapter;
-    private List<ReservationRecordBean> data = new ArrayList<>();
+    private List<ReservationRecordBean.DataBean> data = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_reservation_record);
         ButterKnife.bind(this);
+        initData();
+    }
 
-
+    private void initData() {
         mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,10 +51,12 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         });
 
         mPresenter.getMeetingRecord();
-
         mRecordAdapter = new MeetingReservationRecordAdapter(this, data);
+        View inflate = LayoutInflater.from(this).inflate(R.layout.meeting_record_footer_item, null);
+        mRecordAdapter.addFooterView(inflate);
         mRvMeetingReservationRecord.setLayoutManager(new LinearLayoutManager(this));
         mRvMeetingReservationRecord.setAdapter(mRecordAdapter);
+
     }
 
     @Override
@@ -62,6 +66,16 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
 
     @Override
     public void uidNull(int code) {
+
+    }
+
+    @Override
+    public void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean) {
+        mRecordAdapter.setNewData(bean);
+    }
+
+    @Override
+    public void getMeetingRecordFailed(String msgStr) {
 
     }
 }

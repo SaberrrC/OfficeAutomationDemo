@@ -435,12 +435,17 @@ public class Api {
     /**
      * 新会议室信息
      */
-    public static final String NEW_MEETINGROOMS = "new_meetingrooms";
+    public static final String NEW_MEETINGROOMS = "/new_meetingrooms";
 
     /**
      * 新会议室记录信息
      */
-    public static final String NEW_MEETING_RECORD = "new_meetings";
+    public static final String NEW_MEETING_RECORD = "/new_meetings";
+
+    /**
+     * 添加新会议室
+     */
+    public static final String ADD_NEW_MEETING = "/new_meetings";
 
     //*****************************************************************//
 

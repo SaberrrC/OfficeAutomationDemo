@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.Bind;
 
 /**
- * Created by tonny on 2017/9/29.
+ * 选择会议室
  */
 
 public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.DataBean> {
@@ -45,6 +45,7 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
         final String roomnameX = workContentBean.getRoomnameX();
         final int nopX = workContentBean.getNopX();
         final String deviceX = workContentBean.getDeviceX();
+        final int room_idX = workContentBean.getRoom_idX();
 
         baseViewHolder.setOnClickListener(R.id.btn_meeting_predetermine, new View.OnClickListener() {
             @Override
@@ -53,6 +54,7 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
                 intent.putExtra("meetingName", roomnameX);
                 intent.putExtra("meetingPeopleNumber", nopX + "人");
                 intent.putExtra("meetingDevice", deviceX);
+                intent.putExtra("roomId", room_idX);
                 mContext.startActivity(intent);
             }
         });

@@ -1,7 +1,11 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingDetailsActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingReservationRecordActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -30,7 +34,15 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                try {
+                    ReservationRecordBean reservationRecordBean = new Gson().fromJson(t, ReservationRecordBean.class);
+                    if (reservationRecordBean.getCode() == Api.RESPONSES_CODE_OK) {
+                        mView.getMeetingRecordSuccess(reservationRecordBean.getData());
+                    }
 
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

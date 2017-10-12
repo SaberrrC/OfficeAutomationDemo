@@ -14,8 +14,13 @@ import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingInfoFillOutActivityContract;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingInfoFillOutActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.Date;
 
@@ -26,7 +31,7 @@ import butterknife.OnClick;
 /**
  * 预订会议室 确认
  */
-public class MeetingInfoFillOutActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFillOutActivityPresenter> implements MeetingInfoFillOutActivityContract.View, CompoundButton.OnCheckedChangeListener {
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
@@ -79,6 +84,8 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
     private String mEndDate;
     private String mBeginDate;
     private String mMeetingName;
+    private String mSendType;
+    private int mRoomId;
     private boolean isWriteMeetingInfo;
 
     @Override
@@ -88,6 +95,11 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
         ButterKnife.bind(this);
         initData();
         initView();
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initView() {
@@ -100,13 +112,7 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
         mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isWriteMeetingInfo) {
-                    finish();
-                } else {
-                    Intent intent = new Intent(MeetingInfoFillOutActivity.this, MeetingReservationRecordActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                finish();
             }
         });
     }
@@ -165,6 +171,7 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
         mBeginDate = getIntent().getStringExtra("beginDate");
         mEndDate = getIntent().getStringExtra("endDate");
         mMeetingName = getIntent().getStringExtra("meetingName");
+        mRoomId = getIntent().getIntExtra("roomId", 0);
         String meetingPeopleNumber = getIntent().getStringExtra("meetingPeopleNumber");
         String meetingDevice = getIntent().getStringExtra("meetingDevice");
 
@@ -207,16 +214,29 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
                     return;
                 }
 
-                Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
-                intent.putExtra("mMeetingDate", DateUtils.getDateFormat("yyyy-MM-dd").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
-                intent.putExtra("mMeetingName", mMeetingName);
-                startActivity(intent);
-                MeetingPredetermineRecordActivity.mRecordActivity.finish();
-                finish();
+                HttpParams httpParams = new HttpParams();
+                httpParams.put("room_id", 3);
+                httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
+                httpParams.put("title", mTvMeetingName.getText().toString());
+                httpParams.put("content", mEdMeetingContent.getText().toString());
+                //TODO参会人待处理
+                httpParams.put("part_uid", mEdMeetingPerson.getText().toString());
+                //TODO 会议室开始时间跟结束时间
+                httpParams.put("start_time", 14);
+                httpParams.put("end_time", 16);
+
+                if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
+                    mSendType = "邮件，消息";
+                } else if (mCbMessages.isChecked()) {
+                    mSendType = "消息";
+                } else if (mCbEmail.isChecked()) {
+                    mSendType = "邮件";
+                }
+                httpParams.put("send_type", mSendType);
+                mPresenter.addMeetingRooms(httpParams);
                 break;
         }
     }
-
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -241,5 +261,25 @@ public class MeetingInfoFillOutActivity extends AppCompatActivity implements Com
                 }
                 break;
         }
+    }
+
+    @Override
+    public void uidNull(int code) {
+
+    }
+
+    @Override
+    public void addMeetingRoomsSuccess() {
+        Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
+        intent.putExtra("mMeetingDate", DateUtils.getDateFormat("yyyy-MM-dd").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
+        intent.putExtra("mMeetingName", mMeetingName);
+        startActivity(intent);
+        MeetingPredetermineRecordActivity.mRecordActivity.finish();
+        finish();
+    }
+
+    @Override
+    public void addMeetingRoomsFailed() {
+
     }
 }
