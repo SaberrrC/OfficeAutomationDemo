@@ -7,10 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.hyphenate.chat.EMConversation;
-//import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.shanlinjinrong.oa.R;
@@ -21,6 +19,8 @@ import com.shanlinjinrong.oa.utils.LogUtils;
 
 import butterknife.ButterKnife;
 
+//import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
+
 /**
  * <h3>Description: 首页通讯列表页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
@@ -29,15 +29,13 @@ public class TabCommunicationFragment extends BaseFragment  {
 
 //    private EaseConversationListFragment conversationListFragment;
     public ConversationListFragment myConversationListFragment;
-    private RelativeLayout view;
     String userInfo_self;
     String userInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        view = (RelativeLayout) inflater.inflate(R.layout.tab_communication_fragment, container, false);
+        View view = inflater.inflate(R.layout.tab_communication_fragment, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -74,7 +72,7 @@ public class TabCommunicationFragment extends BaseFragment  {
                                 .putExtra("u_id", conversation.conversationId())
                                 .putExtra("userInfo_self",userInfo_self)
                                 .putExtra("userInfo", userInfo)
-                                .putExtra("nike_name", ""));
+                                .putExtra("nikename", ""));
                     }
                 });
     }

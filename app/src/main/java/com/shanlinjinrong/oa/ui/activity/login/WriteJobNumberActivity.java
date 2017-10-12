@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.login;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -11,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
@@ -19,6 +19,9 @@ import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.WriteJobNumberContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.WriteJobNumberPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+
+import java.io.IOException;
+import java.net.URL;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -85,8 +88,40 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
         } else {
             picUrl = Api.PHP_URL + picUrl;
         }
-        Glide.with(this).load(picUrl).into(mIdentifyingCodeImg);
+
+
+        setImageViewDrawable(picUrl, mIdentifyingCodeImg);
+//        Glide.with(this).load(picUrl).into(mIdentifyingCodeImg);
+
+
         Log.i("WriteJobNumberActivity", "mCode : " + mCode);
+        Log.i("WriteJobNumberActivity", "picUrl : " + picUrl);
+    }
+
+
+    private void setImageViewDrawable(final String urlAddress, final ImageView imageView) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Drawable drawable = loadImageFromNetwork(urlAddress);
+                imageView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageDrawable(drawable);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private Drawable loadImageFromNetwork(String urlAddr) {
+        Drawable drawable = null;
+        try {
+            drawable = Drawable.createFromStream(new URL(urlAddr).openStream(), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return drawable;
     }
 
     @Override

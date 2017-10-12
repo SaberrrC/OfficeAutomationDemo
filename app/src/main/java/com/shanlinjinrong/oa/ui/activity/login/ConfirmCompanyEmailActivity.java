@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
@@ -46,6 +47,9 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
 
     @Bind(R.id.tv_email_suffix)
     AutoCompleteTextView mEmailSuffix;
+
+    @Bind(R.id.tv_email_address)
+    TextView mUserEmail;
 
     @Bind(R.id.btn_sure)
     Button mSureBtn;
@@ -82,21 +86,16 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
         mSureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // TODO: 2017/10/11
-                mPresenter.sendEmail();
-
-                if (mStatus) {
-                    Toast.makeText(ConfirmCompanyEmailActivity.this, mEmailAddress, Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ConfirmCompanyEmailActivity.this, EmailConfirmFinishActivity.class));
-                } else {
-                    if (TextUtils.isEmpty(mEmail.getText().toString().trim()) || TextUtils.isEmpty(mEmailSuffix.getText().toString().trim())) {
+                if (!mStatus) {
+                    if ((TextUtils.isEmpty(mEmail.getText().toString().trim()) || TextUtils.isEmpty(mEmailSuffix.getText().toString().trim()))) {
                         Toast.makeText(ConfirmCompanyEmailActivity.this, "请输入完整的邮箱格式！", Toast.LENGTH_SHORT).show();
+                        return;
                     } else {
-                        Toast.makeText(ConfirmCompanyEmailActivity.this, mEmail.getText().toString().trim() + mEmailSuffix.getText().toString().trim(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(ConfirmCompanyEmailActivity.this, EmailConfirmFinishActivity.class));
+                        mEmailAddress = mEmail.getText().toString().trim() + mEmailSuffix.getText().toString().trim();
                     }
                 }
-
+                // TODO: 2017/10/11
+                mPresenter.sendEmail("", mEmailAddress);
             }
         });
 
@@ -106,6 +105,7 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
             mIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.find_email, null));
             mConfirmEmailLayout.setVisibility(View.GONE);
             mFindEmailLayout.setVisibility(View.VISIBLE);
+            mUserEmail.setText(mEmailAddress);
         } else {
             mIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.not_find_email, null));
             mConfirmEmailLayout.setVisibility(View.VISIBLE);
@@ -146,7 +146,7 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
 
     @Override
     public void sendEmailSuccess() {
-
+        startActivity(new Intent(ConfirmCompanyEmailActivity.this, EmailConfirmFinishActivity.class));
     }
 
     @Override

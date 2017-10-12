@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -23,7 +24,9 @@ import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
-import com.shanlinjinrong.oa.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -191,18 +194,25 @@ public class Contact_Details_Activity2 extends BaseActivity {
                         return;
                     }
                     addOrUpdateFriendInfo2(constants);
+                    Intent intent = new Intent(Contact_Details_Activity2.this, EaseChatMessageActivity.class);
+                    try {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("CODE", constants.getCode());
+                        jsonObject.put("department_name", constants.getDepartmentName());
+                        jsonObject.put("email", constants.getEmail());
+                        jsonObject.put("phone", constants.getPhone());
+                        jsonObject.put("portrait", constants.getPortraits());
+                        jsonObject.put("post_title", constants.getPostTitle());
+                        jsonObject.put("sex", constants.getSex());
+                        jsonObject.put("username", constants.getUsername());
+                        intent.putExtra("u_id", Constants.CID + "_" + constants.getCode());
+                        intent.putExtra("userInfo", jsonObject.toString());
+                        startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                    startActivity(new Intent(Contact_Details_Activity2.this, EaseChatMessageActivity.class)
-                            .putExtra("usernike", constants.getUsername())
-                            .putExtra("user_pic", constants.getPortraits())
-                            .putExtra("u_id", Constants.CID + "_" + constants.getCode())
-                            .putExtra("department_name", constants.getDepartmentName())
-                            .putExtra("post_name", constants.getPostTitle())
-                            .putExtra("sex", constants.getSex())
-                            .putExtra("phone", constants.getPhone())
-                            .putExtra("code", constants.getCode())
-                            .putExtra("uid", constants.getUid())
-                            .putExtra("email", constants.getEmail()));
+
                 }
             });
         }

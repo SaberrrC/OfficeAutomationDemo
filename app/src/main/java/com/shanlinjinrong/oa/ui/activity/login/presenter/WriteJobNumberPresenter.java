@@ -1,5 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
+import android.text.TextUtils;
+
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.net.MyKjHttp;
@@ -69,6 +71,9 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                             JSONArray data = jsonObject.getJSONArray("data");
                             User user = new User();
                             String email = data.getJSONObject(0).getString("email");
+                            if (TextUtils.isEmpty(email) || "null".equalsIgnoreCase(email)) {
+                                email = "";
+                            }
                             user.setEmail(email);
                             mView.searchUserSuccess(user);
                             break;

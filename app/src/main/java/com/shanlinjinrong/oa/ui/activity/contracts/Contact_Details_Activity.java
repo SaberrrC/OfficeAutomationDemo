@@ -33,6 +33,9 @@ import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.oa.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -223,6 +226,9 @@ public class Contact_Details_Activity extends BaseActivity {
                                 return;
                             }
                             try {
+
+
+
                                 startActivity(new Intent(mContext, EaseChatMessageActivity.class)
                                         .putExtra("usernike", userInfoDetailsBean.username)
                                         .putExtra("user_pic", userInfoDetailsBean.portrait)
@@ -472,20 +478,23 @@ public class Contact_Details_Activity extends BaseActivity {
 
                     addOrUpdateFriendInfo(user);
 
-
-                    startActivity(new Intent(mContext, EaseChatMessageActivity.class)
-                            .putExtra("usernike", user.getUsername())
-                            .putExtra("user_pic", user.getPortraits())
-                            .putExtra("u_id", Constants.CID + "_" + user.getCode())
-                            .putExtra("code", user.getCode())
-
-
-                            .putExtra("department_name", user.getDepartmentName())
-                            .putExtra("post_name", user.getPostName())
-                            .putExtra("sex", user.getSex())
-                            .putExtra("phone", user.getPhone())
-                            .putExtra("email", user.getEmail()));
-
+                    Intent intent = new Intent(Contact_Details_Activity.this, EaseChatMessageActivity.class);
+                    try {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("CODE", user.getCode());
+                        jsonObject.put("department_name", user.getDepartmentName());
+                        jsonObject.put("email", user.getEmail());
+                        jsonObject.put("phone", user.getPhone());
+                        jsonObject.put("portrait", user.getPortraits());
+                        jsonObject.put("post_title", user.getPostName());
+                        jsonObject.put("sex", user.getSex());
+                        jsonObject.put("username", user.getUsername());
+                        intent.putExtra("u_id", Constants.CID + "_" + user.getCode());
+                        intent.putExtra("userInfo", jsonObject.toString());
+                        startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }

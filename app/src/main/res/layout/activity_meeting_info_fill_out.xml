@@ -333,6 +333,7 @@
                             android:layout_width="28dp"
                             android:layout_height="match_parent"
                             android:src="@mipmap/meeting_contacts_portrait"/>
+
                     </LinearLayout>
                 </LinearLayout>
 
