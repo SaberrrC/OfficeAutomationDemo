@@ -1,27 +1,25 @@
 package com.shanlinjinrong.oa.ui.activity.login;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.WriteJobNumberContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.WriteJobNumberPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
-
-import java.io.IOException;
-import java.net.URL;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -83,50 +81,44 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     @Override
     public void getIdentifyingCodeSuccess(String picUrl, String mCode) {
         this.mCode = mCode;
-        if (BuildConfig.DEBUG) {
-            picUrl = Api.PHP_DEBUG_URL + picUrl;
-        } else {
-            picUrl = Api.PHP_URL + picUrl;
-        }
+//        if (BuildConfig.DEBUG) {
+//            picUrl = Api.PHP_DEBUG_URL + picUrl;
+//        } else {
+//            picUrl = Api.PHP_URL + picUrl;
+//        }
+
+        picUrl = "data:image/gif;base64," + picUrl;
+        Log.i("WriteJobNumberActivity", "mCode : " + mCode);
+        Log.i("WriteJobNumberActivity", "picUrl : " + picUrl);
+
+        mIdentifyingCodeImg.setImageBitmap(base64ToBitmap(picUrl));
+
+        Log.i("WriteJobNumberActivity", "mCode : " + mCode);
 
 
-        setImageViewDrawable(picUrl, mIdentifyingCodeImg);
 //        Glide.with(this).load(picUrl).into(mIdentifyingCodeImg);
 
 
-        Log.i("WriteJobNumberActivity", "mCode : " + mCode);
-        Log.i("WriteJobNumberActivity", "picUrl : " + picUrl);
     }
 
-
-    private void setImageViewDrawable(final String urlAddress, final ImageView imageView) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final Drawable drawable = loadImageFromNetwork(urlAddress);
-                imageView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageView.setImageDrawable(drawable);
-                    }
-                });
-            }
-        }).start();
-    }
-
-    private Drawable loadImageFromNetwork(String urlAddr) {
-        Drawable drawable = null;
+    /**
+     * base64转为bitmap
+     */
+    public static Bitmap base64ToBitmap(String base64Data) {
+        Bitmap bitmap = null;
         try {
-            drawable = Drawable.createFromStream(new URL(urlAddr).openStream(), null);
-        } catch (IOException e) {
+            byte[] bytes = Base64.decode(base64Data.split(",")[1], Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return drawable;
+        return bitmap;
     }
+
 
     @Override
     public void getIdentifyingCodeFailed(int errorCode) {
-
+        mIdentifyingCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.user_code_default, null));
     }
 
     @Override
@@ -138,6 +130,7 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
         } else {
             intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_ADDRESS, email);
         }
+        intent.putExtra("code", user.getCode());
         startActivity(intent);
     }
 

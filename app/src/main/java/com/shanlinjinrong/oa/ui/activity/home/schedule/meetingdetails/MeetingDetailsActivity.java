@@ -2,11 +2,11 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.j256.ormlite.stmt.query.In;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.MeetingDetailsAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRoomsBean;
@@ -24,12 +24,14 @@ import butterknife.ButterKnife;
 /**
  * 选择会议室
  */
-public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActivityPresenter> implements MeetingDetailsActivityContract.View, View.OnClickListener {
+public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActivityPresenter> implements MeetingDetailsActivityContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
     @Bind(R.id.meeting_details_list)
     RecyclerView mMeetingDetailsList;
+    @Bind(R.id.refresh_layout)
+    SwipeRefreshLayout mRefreshLayout;
     private MeetingDetailsAdapter mMeetingRoomAdapter;
     private List<MeetingRoomsBean.DataBean> data = new ArrayList<>();
 
@@ -43,6 +45,7 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
     }
 
     private void initData() {
+        mRefreshLayout.setRefreshing(true);
         mPresenter.getMeetingRooms();
     }
 
@@ -51,6 +54,7 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
         mMeetingDetailsList.setLayoutManager(new LinearLayoutManager(this));
         mMeetingRoomAdapter = new MeetingDetailsAdapter(this, data);
         mMeetingDetailsList.setAdapter(mMeetingRoomAdapter);
+        mRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -67,14 +71,20 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
     @Override
     public void getMeetingRoomsSuccess(List<MeetingRoomsBean.DataBean> data) {
         mMeetingRoomAdapter.setNewData(data);
-        mMeetingRoomAdapter.notifyDataSetChanged();
+        mRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void getMeetingRoomsFailed(String data) {
+        mRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void uidNull(int code) {
+    }
+
+    @Override
+    public void onRefresh() {
+        initData();
     }
 }

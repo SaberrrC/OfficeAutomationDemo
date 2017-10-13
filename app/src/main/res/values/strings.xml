@@ -158,4 +158,5 @@
     <string name="weekly_add_work_content">+ 添加一项工作</string>
     <string name="write_job_number_text">填写工号</string>
     <string name="find_email_failed">提示：未找到您的邮箱，请手动输入</string>
+
 </resources>

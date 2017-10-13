@@ -1,13 +1,8 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract;
 
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRoomsBean;
-import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.LastWeekPlanBean;
-import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WeekReportItemBean;
-import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.contract.WriteWeeklyNewspaperActivityContract;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
-
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.List;
 
@@ -22,8 +17,6 @@ public interface MeetingDetailsActivityContract {
         void getMeetingRoomsSuccess(List<MeetingRoomsBean.DataBean> data);
 
         void getMeetingRoomsFailed(String data);
-
-
     }
 
     interface Presenter extends BasePresenter<MeetingDetailsActivityContract.View> {

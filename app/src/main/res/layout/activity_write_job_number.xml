@@ -56,7 +56,7 @@
             android:layout_height="@dimen/common_height44"
             android:layout_marginLeft="15dp"
             android:scaleType="fitXY"
-            android:src="@drawable/default_pic" />
+            android:src="@drawable/user_code_default" />
     </LinearLayout>
 
     <Button

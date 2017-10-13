@@ -37,7 +37,8 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                 super.onSuccess(t);
                 try {
                     JSONObject jsonObject = new JSONObject(t);
-                    mView.getIdentifyingCodeSuccess(jsonObject.getString("url"), jsonObject.getString("ver_code"));
+                    JSONObject data = jsonObject.getJSONObject("data");
+                    mView.getIdentifyingCodeSuccess(data.getString("img"), data.getString("code"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -75,6 +76,7 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                                 email = "";
                             }
                             user.setEmail(email);
+                            user.setCode(data.getJSONObject(0).getString("code"));
                             mView.searchUserSuccess(user);
                             break;
                         default:

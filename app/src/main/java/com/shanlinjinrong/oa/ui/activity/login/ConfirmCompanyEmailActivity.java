@@ -56,6 +56,7 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
 
     private boolean mStatus; //是否查找到邮箱的状态
     private String mEmailAddress;
+    private String userCode;
 
 
     @Override
@@ -95,12 +96,13 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
                     }
                 }
                 // TODO: 2017/10/11
-                mPresenter.sendEmail("", mEmailAddress);
+                mPresenter.sendEmail(userCode, mEmailAddress);
             }
         });
 
         mStatus = getIntent().getBooleanExtra(EMAIL_STATUS, true);
         mEmailAddress = getIntent().getStringExtra(EMAIL_ADDRESS);
+        userCode = getIntent().getStringExtra("code");
         if (mStatus) {
             mIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.find_email, null));
             mConfirmEmailLayout.setVisibility(View.GONE);
@@ -151,7 +153,11 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
 
     @Override
     public void sendEmailFailed(int errorCode, String errMsg) {
-
+        if (errorCode == -1) {
+            showToast("网络出错，请稍后重试");
+        } else {
+            showToast(errMsg);
+        }
     }
 
     @Override

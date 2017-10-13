@@ -426,7 +426,7 @@ public class Api {
     public static final String COMMUNICATION_USERINFO = "user/detail";
 
     // 获取验证码
-    public static final String SENDS_CAPTCHA = "/sends/captcha?refresh";
+    public static final String SENDS_CAPTCHA = "/users/code";
 
     // 查询工号信息
     public static final String USERS_SEARCH = "/users/search?code=";
@@ -448,7 +448,7 @@ public class Api {
     public static final String ADD_NEW_MEETING = "/new_meetings";
 
     // 找回密码，确认邮箱
-    public static final String USERS_REPWD = "users/repwd";
+    public static final String USERS_REPWD = "/users/repwd";
 
     //*****************************************************************//
 

@@ -69,7 +69,6 @@ public class MyKjHttp extends KJHttp {
             url = Api.PHP_URL + url;
         }
         return super.jsonGet(url, params, callback);
-
     }
 
     public Request<byte[]> phpJsonPost(String url, HttpParams params, HttpCallBack callback) {

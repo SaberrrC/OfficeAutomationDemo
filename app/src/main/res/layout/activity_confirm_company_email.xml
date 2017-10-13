@@ -85,23 +85,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_margin"
+                    android:background="@drawable/edittext_input_square_bg"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="邮箱："
-                        android:textColor="#FF666666"
-                        android:textSize="@dimen/common_text_size" />
 
 
                     <EditText
                         android:id="@+id/et_email"
-                        android:layout_width="133dp"
+                        android:layout_width="0dp"
                         android:layout_height="@dimen/common_height44"
+                        android:layout_weight="0.75"
                         android:layout_marginLeft="6dp"
-                        android:background="@drawable/edittext_input_square_bg"
                         android:inputType="textEmailAddress"
                         android:padding="@dimen/common_padding"
                         android:singleLine="true" />
@@ -113,13 +107,14 @@
                         android:layout_height="@dimen/common_height44"
                         android:layout_marginLeft="6dp"
                         android:layout_weight="1"
-                        android:background="@drawable/edittext_input_square_bg"
                         android:completionThreshold="1"
                         android:drawablePadding="4dp"
-                        android:drawableRight="@drawable/expandable_list_normal"
+                        android:drawableRight="@drawable/arrow_down_select"
                         android:dropDownHeight="200dp"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
+                        android:enabled="false"
+                        android:text="\@shanlinjinrong.com"
                         android:padding="@dimen/common_padding"
                         android:singleLine="true" />
 

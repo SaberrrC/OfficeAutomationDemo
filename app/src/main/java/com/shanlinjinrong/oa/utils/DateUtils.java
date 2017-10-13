@@ -3,9 +3,12 @@ package com.shanlinjinrong.oa.utils;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -245,6 +248,135 @@ public class DateUtils {
         }
         return false;
     }
+
+    public static int getCurrentMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.MONTH);
+    }
+
+
+    public static int getCurrentDay() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static int getWeek(int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, day - 1);
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
+
+    public static int calculateDaysInMonth(int year, int month) {
+        // 添加大小月月份并将其转换为list,方便之后的判断
+        String[] bigMonths = {"1", "3", "5", "7", "8", "10", "12"};
+        String[] littleMonths = {"4", "6", "9", "11"};
+        List<String> bigList = Arrays.asList(bigMonths);
+        List<String> littleList = Arrays.asList(littleMonths);
+        // 判断大小月及是否闰年,用来确定"日"的数据
+        if (bigList.contains(String.valueOf(month))) {
+            return 31;
+        } else if (littleList.contains(String.valueOf(month))) {
+            return 30;
+        } else {
+            if (year <= 0) {
+                return 29;
+            }
+            // 是否闰年
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                return 29;
+            } else {
+                return 28;
+            }
+        }
+    }
+
+    public static List<Integer> getDate(int month) {
+        List<Integer> data = new ArrayList<>();
+        if (month < 1 || month > 12) {
+            return data;
+        }
+        Calendar cal = Calendar.getInstance();
+        int monthDays = calculateDaysInMonth(Calendar.YEAR, month); //获取当月天数
+        int lastMonthDays;//上个月的天数
+        if (month == 1) {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR - 1, 11);
+        } else {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
+        }
+        //设置月份
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 0);
+        int col = cal.get(Calendar.DAY_OF_WEEK);   //获取该天在本星期的第几天 ，也就是第几列
+        for (int i = col - 2; i >= 0; i--) {
+            data.add(lastMonthDays - i);
+        }
+
+        for (int i = 1; i <= monthDays; i++) {
+            data.add(i);
+        }
+
+        if (data.size() % 7 != 0) {
+            int size = 7 - data.size() % 7;
+            for (int i = 1; i <= size; i++) {
+                data.add(i);
+            }
+        }
+
+
+        return data;
+    }
+
+    public static List<PopItem> getDate(int month, int select) {
+        List<PopItem> data = new ArrayList<>();
+        if (month < 1 || month > 12) {
+            return null;
+        }
+        PopItem item;
+        Calendar cal = Calendar.getInstance();
+        int curDay = cal.get(Calendar.DAY_OF_MONTH);
+        int curMonth = cal.get(Calendar.MONTH);
+        int monthDays = calculateDaysInMonth(Calendar.YEAR, month); //获取当月天数
+        int lastMonthDays;//上个月的天数
+        if (month == 1) {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR - 1, 11);
+        } else {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
+        }
+
+        //设置月份
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 0);
+        int col = cal.get(Calendar.DAY_OF_WEEK);   //获取该天在本星期的第几天 ，也就是第几列
+        for (int i = col - 2; i >= 0; i--) {
+            item = new PopItem("" + (lastMonthDays - i), false, false);
+            data.add(item);
+        }
+
+        for (int i = 1; i <= monthDays; i++) {
+            if (i < curDay && month == curMonth) {
+                item = new PopItem("" + i, false, false);
+            } else {
+                item = new PopItem("" + i, true, false);
+            }
+            if (select == i) {
+                item.setSelect(true);
+            }
+            data.add(item);
+        }
+
+
+        if (data.size() % 7 != 0) {
+            int size = 7 - data.size() % 7;
+            for (int i = 1; i <= size; i++) {
+                item = new PopItem("" + i, false, false);
+                data.add(item);
+            }
+        }
+        return data;
+    }
+
+
 
 
     /**

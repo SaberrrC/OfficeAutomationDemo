@@ -2,11 +2,11 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -81,6 +81,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     TextView mTvRedDot2;
     @Bind(R.id.tv_red_dot3)
     TextView mTvRedDot3;
+    @Bind(R.id.iv_add_contacts)
+    ImageView mAddContacts;
     private String mEndDate;
     private String mBeginDate;
     private String mMeetingName;
@@ -195,7 +197,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
 
-    @OnClick({R.id.btn_meeting_info_complete})
+    @OnClick({R.id.btn_meeting_info_complete, R.id.iv_add_contacts})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
@@ -235,6 +237,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 httpParams.put("send_type", mSendType);
                 mPresenter.addMeetingRooms(httpParams);
                 break;
+
+            case R.id.iv_add_contacts:
+                break;
+
         }
     }
 
