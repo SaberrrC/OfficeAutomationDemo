@@ -13,12 +13,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.LaunchApprovalActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInviteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectOrdinaryMeetingRoomActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectVedioMeetingRoomActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
@@ -78,13 +73,11 @@ public class TabHomePageFragment extends BaseFragment {
 
     }
 
-    @OnClick({R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me, R.id
-            .rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id
-            .rl_approval_me_launch, R.id.rl_approval_wait_me_approval, R.id
-            .rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id
-            .rl_schedule_meeting_plan, R.id
-            .rl_schedule_create_common_meeting, R.id.rl_schedule_create_video_meeting, R.id
-            .rl_schedule_create_note, R.id.rl_schedule_my_mail, R.id.rl_schedule_note, R.id.rl_schedule_me_launch})
+    @OnClick({R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me,
+            R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report,
+            R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval,
+            R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
+            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting})
 
     public void onClick(View view) {
         Intent intent = null;
@@ -123,37 +116,9 @@ public class TabHomePageFragment extends BaseFragment {
             case R.id.rl_approval_launch_approval:
                 intent = new Intent(mContext, LaunchApprovalActivity.class);
                 break;
-            case R.id.rl_schedule_meeting_plan:
-                intent = new Intent(mContext, ScheduleActivity.class);
-                intent.putExtra("whichId", 1);
-                break;
-            case R.id.rl_schedule_create_common_meeting:
-                //创建普通会议-旧版
-//                intent=new Intent(mContext, SelectMeetingRoomActivity.class);
-//                intent.putExtra("meetingType","1");
-                //创建普通会议-新版
-                intent = new Intent(mContext, SelectOrdinaryMeetingRoomActivity.class);
-                intent.putExtra("meetingType", "1");
-                //今日安排
-//                intent=new Intent(mContext, ViewTheMeetingScheduleActivity.class);
-//                intent.putExtra("meetingType","1");
-                break;
-            case R.id.rl_schedule_create_video_meeting:
-                intent = new Intent(mContext, SelectVedioMeetingRoomActivity.class);
-                intent.putExtra("meetingType", "2");
-                break;
-
-            case R.id.rl_schedule_create_note:
-                intent = new Intent(mContext, CreateNoteActivity.class);
-                break;
-            case R.id.rl_schedule_me_launch:
+            case R.id.rl_schedule_book_meeting:
                 intent = new Intent(mContext, MeetingDetailsActivity.class);
                 break;
-
-            case R.id.rl_schedule_note:
-                intent = new Intent(mContext, MeetingInviteActivity.class);
-                break;
-
         }
         if (intent != null) {
             startActivity(intent);
