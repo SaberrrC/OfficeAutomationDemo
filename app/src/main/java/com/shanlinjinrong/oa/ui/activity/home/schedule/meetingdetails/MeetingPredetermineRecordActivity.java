@@ -86,7 +86,8 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
     private int mMonthPos = 1;
     private int mWeekPos = 1;
 
-    private String[] mMonthArray = {"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"};
+//    private String[] mMonthArray = {"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"};
+    private String[] mMonthArrays = {"1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
     private String[] mWeekArray = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
 
 
@@ -115,7 +116,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         }
 
         mMonthPos = DateUtils.getCurrentMonth();
-        mTvMonth.setText(mMonthArray[mMonthPos]);
+        mTvMonth.setText(mMonthArrays[mMonthPos]);
 
 
         mDayPos = DateUtils.getCurrentDay();
@@ -172,6 +173,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                 Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
                 intent.putExtra("isWriteMeetingInfo", true);
                 intent.putExtra("beginDate", mTvMonth.getText().toString() + mTvDay.getText().toString() + beginDate);
+                intent.putExtra("hoursOfUse", mTvMonth.getText().toString() + mTvDay.getText().toString()+"  " + beginDate + " -- " + endDate);
                 intent.putExtra("endDate", mTvMonth.getText().toString() + mTvDay.getText().toString() + endDate);
                 intent.putExtra("meetingName", getIntent().getStringExtra("meetingName"));
                 intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));
@@ -181,11 +183,8 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                 break;
             case R.id.ll_day_selector:
                 showDatePopWindow(true, mMonthPos + 1, mDayPos);
-
-//                showPopupWindow();
                 break;
             case R.id.ll_month_selector:
-//                showPopupWindow();
                 showDatePopWindow(false, 0, mMonthPos);
                 break;
         }
@@ -207,7 +206,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                     mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
                 } else {
                     mMonthPos = position;
-                    mTvMonth.setText(mMonthArray[mMonthPos]);
+                    mTvMonth.setText(mMonthArrays[mMonthPos]);
                     int maxDay = DateUtils.getCurrentDaysInMonth(mMonthPos + 1);
                     if (mDayPos > maxDay) {
                         mDayPos = maxDay;
@@ -223,37 +222,6 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
             }
         });
     }
-
-
-    private PopupWindow popupWindow;
-    //TODO 时间选择
-    private void showPopupWindow() {
-        View view = View.inflate(this, R.layout.meeting_date_selector_popwindow, null);
-        bind(view);
-        int height = DeviceUtil.getScreenHeight(this) - DeviceUtil.getStatusHeight(this) - mTopView.getHeight() - mDateLayout.getHeight();
-        popupWindow = new PopupWindow(view,
-                LinearLayout.LayoutParams.MATCH_PARENT, height, false);
-//        popupWindow.setOutsideTouchable(true);
-//        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-
-
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-//                WindowManager.LayoutParams lp = MeetingPredetermineRecordActivity.this.getWindow().getAttributes();
-//                lp.alpha = 1f;
-//                MeetingPredetermineRecordActivity.this.getWindow().setAttributes(lp);
-            }
-        });
-        popupWindow.setFocusable(false);
-        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            popupWindow.setAnimationStyle(R.style.top_filter_pop_anim_style);
-        }
-        popupWindow.showAtLocation(mDateLayout, Gravity.START | Gravity.TOP, 0, DeviceUtil.getScreenHeight(this) - height);
-
-    }
-
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

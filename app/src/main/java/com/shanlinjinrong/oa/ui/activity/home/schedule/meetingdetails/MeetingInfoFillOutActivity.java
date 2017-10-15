@@ -88,6 +88,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     private String mMeetingName;
     private String mSendType;
     private int mRoomId;
+    private String mHoursOfUse;
     private boolean isWriteMeetingInfo;
 
     @Override
@@ -170,14 +171,14 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     private void initData() {
         mBeginDate = getIntent().getStringExtra("beginDate");
         mEndDate = getIntent().getStringExtra("endDate");
+        mHoursOfUse = getIntent().getStringExtra("hoursOfUse");
         mMeetingName = getIntent().getStringExtra("meetingName");
         mRoomId = getIntent().getIntExtra("roomId", 0);
         String meetingPeopleNumber = getIntent().getStringExtra("meetingPeopleNumber");
         String meetingDevice = getIntent().getStringExtra("meetingDevice");
 
-        if (mBeginDate != null && mEndDate != null) {
-//            mTvMeetingDate.setText(DateUtils.getDateFormat("MM月dd日").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
-            mTvMeetingDate.setText("10月16日" + "  " + mBeginDate + "-" + mEndDate);
+        if (mHoursOfUse != null) {
+            mTvMeetingDate.setText(mHoursOfUse);
         }
 
         if (mMeetingName != null) {
