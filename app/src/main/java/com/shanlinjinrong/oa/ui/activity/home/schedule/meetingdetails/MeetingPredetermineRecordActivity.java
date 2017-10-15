@@ -223,7 +223,6 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         });
     }
 
-
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         switch (compoundButton.getId()) {
@@ -292,5 +291,4 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                 break;
         }
     }
-
 }

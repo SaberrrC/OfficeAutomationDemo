@@ -62,8 +62,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     CheckBox mCbEmail;
     @Bind(R.id.cb_messages)
     CheckBox mCbMessages;
-    //@Bind(R.id.cb_sms)
-    //CheckBox mCbSms;
     @Bind(R.id.btn_meeting_info_complete)
     TextView mBtnMeetingInfoComplete;
     @Bind(R.id.tv_receive_person)
@@ -237,15 +235,11 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
                 httpParams.put("title", mTvMeetingName.getText().toString());
                 httpParams.put("content", mEdMeetingContent.getText().toString());
-                //TODO参会人待处理
+
                 httpParams.put("part_uid", mEdMeetingPerson.getText().toString());
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-                String date = sdf.format(new Date());
-                String startDate = date + "-" + (mBeginDate.replace("月", "-").replace("日", " ").replace("：", ":"));
-                String endDate = date + "-" + (mEndDate.replace("月", "-").replace("日", " ").replace("：", ":"));
-                httpParams.put("start_time", startDate);
-                httpParams.put("end_time", endDate);
+                httpParams.put("start_time", mStartTime);
+                httpParams.put("end_time", mEndTime);
 
                 if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
                     mSendType = "邮件,消息";
@@ -274,7 +268,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     mBtnMeetingInfoComplete.setEnabled(true);
                     mEdMeetingContent.setEnabled(true);
                     mEdMeetingTheme.setEnabled(true);
-                    mEdMeetingPerson.setEnabled(true);
+                    mEdMeetingPerson.setEnabled(false);
                     mCbEmail.setEnabled(true);
                     mCbMessages.setEnabled(true);
                     mAddContacts.setEnabled(true);
@@ -330,7 +324,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void addMeetingRoomsSuccess() {
 
         Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
-        intent.putExtra("mMeetingDate", DateUtils.getDateFormat("yyyy-MM-dd").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
+        intent.putExtra("mMeetingDate",  mStartTime + " - " + mEndDate);
         intent.putExtra("mMeetingName", mMeetingName);
         startActivity(intent);
         MeetingPredetermineRecordActivity.mRecordActivity.finish();

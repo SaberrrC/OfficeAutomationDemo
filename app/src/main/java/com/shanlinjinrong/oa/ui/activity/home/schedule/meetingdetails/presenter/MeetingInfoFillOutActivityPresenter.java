@@ -28,12 +28,13 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-
+                mView.addMeetingRoomsSuccess();
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                mView.addMeetingRoomsFailed();
             }
 
             @Override
