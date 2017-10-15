@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
+import com.shanlinjinrong.utils.DeviceUtil;
 
 import java.util.List;
 
@@ -41,6 +42,12 @@ public class DatePopAdapter extends RecyclerView.Adapter<DatePopAdapter.ItemHold
         if (mData.get(position).isSelect()) {
             holder.item.setTextColor(ResourcesCompat.getColor(mContext.getResources(), R.color.white, null));
             holder.image.setVisibility(View.VISIBLE);
+            if (holder.item.getText().toString().length() > 2) {
+                ViewGroup.LayoutParams lp = holder.image.getLayoutParams();
+                lp.width = DeviceUtil.dip2px(mContext, 46);
+                lp.height = DeviceUtil.dip2px(mContext, 46);
+                holder.image.setLayoutParams(lp);
+            }
         } else {
             holder.image.setVisibility(View.GONE);
 //            holder.item.setTextColor(ResourcesCompat.getColor(mContext.getResources(), R.color.date_pop_text_selector, null));
@@ -52,6 +59,7 @@ public class DatePopAdapter extends RecyclerView.Adapter<DatePopAdapter.ItemHold
         } else {
             holder.item.setTextColor(0xFF999999);
         }
+
 
         holder.item.setEnabled(mData.get(position).isEnable());
         holder.item.setOnClickListener(new View.OnClickListener() {
