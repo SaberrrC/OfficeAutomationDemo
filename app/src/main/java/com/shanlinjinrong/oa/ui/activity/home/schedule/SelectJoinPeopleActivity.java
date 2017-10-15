@@ -290,7 +290,6 @@ import com.shanlinjinrong.oa.model.selectContacts.Group;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.adapter.SelectJoinPeopleAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.MyJoinPeopleFragment;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.views.ClearEditText;
 
@@ -598,8 +597,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
 
                 Intent intent = new Intent();
                 intent.putParcelableArrayListExtra("contacts", selectedContacts);
-                setResult(WorkReportLaunchActivity.REQUEST_CODE_MULTIPLE,
-                        intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.model.selectContacts.Child;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingInfoFillOutActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingInfoFillOutActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -22,6 +24,7 @@ import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.Bind;
@@ -32,6 +35,7 @@ import butterknife.OnClick;
  * 预订会议室 确认
  */
 public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFillOutActivityPresenter> implements MeetingInfoFillOutActivityContract.View, CompoundButton.OnCheckedChangeListener {
+    private static final int ADD_JOIN_PEOPLE = 100;
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
@@ -90,6 +94,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     private int mRoomId;
     private String mHoursOfUse;
     private boolean isWriteMeetingInfo;
+    private ArrayList<Child> contactsList = new ArrayList<>(); //邀请人参会人
+    private String mStartTime;
+    private String mEndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +173,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mCbEmail.setEnabled(false);
         mCbMessages.setEnabled(false);
         mRbIsMeetingInvite.setOnCheckedChangeListener(this);
+
     }
 
     private void initData() {
@@ -177,26 +185,31 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         String meetingPeopleNumber = getIntent().getStringExtra("meetingPeopleNumber");
         String meetingDevice = getIntent().getStringExtra("meetingDevice");
 
+        mStartTime = getIntent().getStringExtra("start_time");
+        mEndTime = getIntent().getStringExtra("end_time");
         if (mHoursOfUse != null) {
             mTvMeetingDate.setText(mHoursOfUse);
-        }
 
-        if (mMeetingName != null) {
-            mTvMeetingName.setText(mMeetingName);
-        }
+            if (mBeginDate != null && mEndDate != null) {
+//            mTvMeetingDate.setText(DateUtils.getDateFormat("MM月dd日").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
+                mTvMeetingDate.setText(mBeginDate + "-" + mEndDate);
+            }
 
-        if (meetingPeopleNumber != null) {
-            mTvMeetingPersonNumber.setText(meetingPeopleNumber);
-        }
+            if (mMeetingName != null) {
+                mTvMeetingName.setText(mMeetingName);
+            }
 
-        if (meetingDevice != null) {
-            mTvMeetingDevice.setText(meetingDevice);
-        }
+            if (meetingPeopleNumber != null) {
+                mTvMeetingPersonNumber.setText(meetingPeopleNumber);
+            }
 
-        mTvMeetingReceivePerson.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
+            if (meetingDevice != null) {
+                mTvMeetingDevice.setText(meetingDevice);
+            }
+
+            mTvMeetingReceivePerson.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
+        }
     }
-
-
     @OnClick({R.id.btn_meeting_info_complete, R.id.iv_add_contacts})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -224,8 +237,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 //TODO参会人待处理
                 httpParams.put("part_uid", mEdMeetingPerson.getText().toString());
                 //TODO 会议室开始时间跟结束时间
-                httpParams.put("start_time", "2017-10-16 12:00");
-                httpParams.put("end_time", "2017-10-16 13:00");
+                httpParams.put("start_time", mStartTime);
+                httpParams.put("end_time", mEndTime);
 
                 if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
                     mSendType = "邮件，消息";
@@ -240,6 +253,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 break;
 
             case R.id.iv_add_contacts:
+                Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
+                intent.putParcelableArrayListExtra("selectedContacts", contactsList);
+                startActivityForResult(intent, ADD_JOIN_PEOPLE);
                 break;
 
         }
@@ -267,6 +283,34 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     //mCbSms.setEnabled(false);
                 }
                 break;
+        }
+    }
+
+    /**
+     * 添加参会人
+     */
+    private void addCopyPersonOperate(Intent data) {
+        this.contactsList.clear();
+        ArrayList<Child> contacts = data.getParcelableArrayListExtra("contacts");
+        contactsList.addAll(contacts);
+        String person = "";
+        for (int i = 0; i < contactsList.size(); i++) {
+            if (i == contactsList.size() - 1) {
+                person += contactsList.get(i).getUsername();
+            } else {
+                person += contactsList.get(i).getUsername() + ",";
+            }
+
+        }
+        mEdMeetingPerson.setText(person);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == ADD_JOIN_PEOPLE) {
+            addCopyPersonOperate(data);
         }
     }
 

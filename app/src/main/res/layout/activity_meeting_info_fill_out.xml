@@ -282,7 +282,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_is_meeting_invite"
                         android:layout_gravity="center"
-                        android:text="与议人员"
+                        android:text="与会人员"
                         android:textColor="#666666"
                         android:textSize="14sp"/>
 

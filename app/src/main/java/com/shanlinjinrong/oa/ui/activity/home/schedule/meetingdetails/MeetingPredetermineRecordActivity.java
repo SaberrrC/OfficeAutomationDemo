@@ -1,17 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -172,13 +168,17 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
                 Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
                 intent.putExtra("isWriteMeetingInfo", true);
-                intent.putExtra("beginDate", mTvMonth.getText().toString() + mTvDay.getText().toString() + beginDate);
                 intent.putExtra("hoursOfUse", mTvMonth.getText().toString() + mTvDay.getText().toString()+"  " + beginDate + " -- " + endDate);
-                intent.putExtra("endDate", mTvMonth.getText().toString() + mTvDay.getText().toString() + endDate);
+                intent.putExtra("beginDate", (mMonthPos + 1) + "月" + mTvDay.getText().toString() + beginDate);
+                intent.putExtra("endDate", endDate);
                 intent.putExtra("meetingName", getIntent().getStringExtra("meetingName"));
                 intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));
                 intent.putExtra("meetingDevice", getIntent().getStringExtra("meetingDevice"));
                 intent.putExtra("roomId", getIntent().getIntExtra("roomId", 0));
+
+                intent.putExtra("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
+                intent.putExtra("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
+
                 startActivity(intent);
                 break;
             case R.id.ll_day_selector:
@@ -222,6 +222,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
             }
         });
     }
+
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
