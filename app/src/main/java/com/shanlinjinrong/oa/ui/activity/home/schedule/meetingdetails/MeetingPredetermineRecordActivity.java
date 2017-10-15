@@ -82,7 +82,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
     private int mMonthPos = 1;
     private int mWeekPos = 1;
 
-//    private String[] mMonthArray = {"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"};
+    //    private String[] mMonthArray = {"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"};
     private String[] mMonthArrays = {"1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
     private String[] mWeekArray = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
 
@@ -168,8 +168,8 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
                 Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
                 intent.putExtra("isWriteMeetingInfo", true);
-                intent.putExtra("hoursOfUse", mTvMonth.getText().toString() + mTvDay.getText().toString()+"  " + beginDate + " -- " + endDate);
-                intent.putExtra("beginDate", (mMonthPos + 1) + "月" + mTvDay.getText().toString() + beginDate);
+                intent.putExtra("hoursOfUse", (mMonthPos + 1) + "月" + mTvDay.getText().toString() + "  " + beginDate + " -- " + endDate);
+                intent.putExtra("beginDate", (mMonthPos + 1) + "月" + mTvDay.getText().toString() + " " + beginDate);
                 intent.putExtra("endDate", endDate);
                 intent.putExtra("meetingName", getIntent().getStringExtra("meetingName"));
                 intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));

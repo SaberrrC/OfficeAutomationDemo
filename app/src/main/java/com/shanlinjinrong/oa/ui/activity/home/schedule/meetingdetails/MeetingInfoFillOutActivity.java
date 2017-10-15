@@ -193,7 +193,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
             if (mBeginDate != null && mEndDate != null) {
 //            mTvMeetingDate.setText(DateUtils.getDateFormat("MM月dd日").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
-                mTvMeetingDate.setText(mBeginDate + "-" + mEndDate);
+                mTvMeetingDate.setText(mBeginDate + "--" + mEndDate);
             }
 
             if (mMeetingName != null) {
