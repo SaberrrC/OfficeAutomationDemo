@@ -25,6 +25,7 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.Bind;
@@ -210,6 +211,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             mTvMeetingReceivePerson.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
         }
     }
+
+
     @OnClick({R.id.btn_meeting_info_complete, R.id.iv_add_contacts})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -236,12 +239,16 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 httpParams.put("content", mEdMeetingContent.getText().toString());
                 //TODO参会人待处理
                 httpParams.put("part_uid", mEdMeetingPerson.getText().toString());
-                //TODO 会议室开始时间跟结束时间
-                httpParams.put("start_time", mStartTime);
-                httpParams.put("end_time", mEndTime);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+                String date = sdf.format(new Date());
+                String startDate = date + "-" + (mBeginDate.replace("月", "-").replace("日", " ").replace("：", ":"));
+                String endDate = date + "-" + (mEndDate.replace("月", "-").replace("日", " ").replace("：", ":"));
+                httpParams.put("start_time", startDate);
+                httpParams.put("end_time", endDate);
 
                 if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
-                    mSendType = "邮件，消息";
+                    mSendType = "邮件,消息";
                 } else if (mCbMessages.isChecked()) {
                     mSendType = "消息";
                 } else if (mCbEmail.isChecked()) {
@@ -249,9 +256,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 }
                 httpParams.put("send_type", mSendType);
                 mPresenter.addMeetingRooms(httpParams);
-
                 break;
-
             case R.id.iv_add_contacts:
                 Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
                 intent.putParcelableArrayListExtra("selectedContacts", contactsList);
@@ -332,6 +337,5 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void addMeetingRoomsFailed() {
-
     }
 }
