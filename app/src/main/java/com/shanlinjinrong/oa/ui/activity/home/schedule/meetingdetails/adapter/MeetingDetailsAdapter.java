@@ -9,11 +9,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRoomsBean;
+import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
 import java.util.List;
 
@@ -39,13 +43,22 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
 
         baseViewHolder.setText(R.id.tv_meeting_name, workContentBean.getRoomnameX());
         baseViewHolder.setText(R.id.tv_meeting_location, workContentBean.getAddressX());
-        baseViewHolder.setText(R.id.tv_meeting_people_number, workContentBean.getNopX()+"人");
+        baseViewHolder.setText(R.id.tv_meeting_people_number, workContentBean.getNopX() + "人");
         baseViewHolder.setText(R.id.tv_meeting_device, workContentBean.getDeviceX());
 
         final String roomnameX = workContentBean.getRoomnameX();
         final int nopX = workContentBean.getNopX();
         final String deviceX = workContentBean.getDeviceX();
+        final String roomimgX = workContentBean.getRoomimgX();
         final int room_idX = workContentBean.getRoom_idX();
+
+        try {
+            Glide.with(AppManager.mContext)
+                    .load(roomimgX)
+                    .into((ImageView) baseViewHolder.getView(R.id.iv_meeting_details));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
 
         baseViewHolder.setOnClickListener(R.id.btn_meeting_predetermine, new View.OnClickListener() {
             @Override

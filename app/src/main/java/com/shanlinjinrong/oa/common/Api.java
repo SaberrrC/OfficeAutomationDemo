@@ -440,7 +440,7 @@ public class Api {
     /**
      * 新会议室记录信息
      */
-    public static final String NEW_MEETING_RECORD = "/new_meetings";
+    public static final String NEW_MEETING_RECORD = "/new_meetings/reserve";
 
     /**
      * 添加新会议室

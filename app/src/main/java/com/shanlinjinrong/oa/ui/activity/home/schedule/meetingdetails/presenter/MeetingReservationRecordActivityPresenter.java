@@ -10,8 +10,13 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.M
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingReservationRecordActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -26,6 +31,8 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
         super(mKjHttp);
     }
 
+    private ReservationRecordBean.DataBean dataBean;
+
     @Override
     public void getMeetingRecord() {
         mKjHttp.cleanCache();
@@ -35,9 +42,21 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    ReservationRecordBean reservationRecordBean = new Gson().fromJson(t, ReservationRecordBean.class);
+                    List<ReservationRecordBean.DataBean> data = new ArrayList<>();
+                    ReservationRecordBean reservationRecordBean = new ReservationRecordBean();
+                    JSONObject jsonObject = new JSONObject(t);
+                    reservationRecordBean.setCode(jsonObject.getInt("code"));
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
                     if (reservationRecordBean.getCode() == Api.RESPONSES_CODE_OK) {
-                        mView.getMeetingRecordSuccess(reservationRecordBean.getData());
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            dataBean = new ReservationRecordBean.DataBean();
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            dataBean.setContent(jsonObject1.getString("content"));
+                            dataBean.setTitle(jsonObject1.getString("title"));
+                            dataBean.setStart_time(jsonObject1.getString("start_time") + "");
+                            data.add(dataBean);
+                        }
+                        mView.getMeetingRecordSuccess(data);
                     }
 
                 } catch (Throwable e) {
@@ -48,13 +67,11 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-
             }
         });
     }

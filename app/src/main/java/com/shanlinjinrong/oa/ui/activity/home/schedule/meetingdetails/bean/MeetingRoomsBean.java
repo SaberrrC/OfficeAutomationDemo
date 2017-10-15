@@ -141,7 +141,7 @@ public class MeetingRoomsBean {
         @SerializedName("isuse")
         private int isuseX;
         @SerializedName("roomimg")
-        private Object roomimgX;
+        private String roomimgX;
 
         public int getRoom_idX() {
             return room_idX;
@@ -191,11 +191,11 @@ public class MeetingRoomsBean {
             this.isuseX = isuseX;
         }
 
-        public Object getRoomimgX() {
+        public String getRoomimgX() {
             return roomimgX;
         }
 
-        public void setRoomimgX(Object roomimgX) {
+        public void setRoomimgX(String roomimgX) {
             this.roomimgX = roomimgX;
         }
     }

@@ -38,7 +38,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
 
             @Override
             public void onFinish() {
-                super.onFinish();
+                 super.onFinish();
             }
         });
     }

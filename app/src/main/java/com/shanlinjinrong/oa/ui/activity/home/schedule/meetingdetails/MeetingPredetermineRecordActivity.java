@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static butterknife.ButterKnife.bind;
-import static com.shanlinjinrong.oa.utils.DateUtils.getDate;
 
 /**
  * 选择预约时间
@@ -96,6 +95,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_predetermine_record);
         ButterKnife.bind(this);
+        bind(this);
         initView();
     }
 
@@ -126,7 +126,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
     private int findDay(int month, int day) {
         int dayOne = 0;
-        mDays = getDate(month);
+        mDays = DateUtils.getDate(month);
         for (int i = 0; i < mDays.size(); i++) {
             if (mDays.get(i) == 1) {
                 dayOne = i;
@@ -171,8 +171,8 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
                 Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
                 intent.putExtra("isWriteMeetingInfo", true);
-                intent.putExtra("beginDate", beginDate);
-                intent.putExtra("endDate", endDate);
+                intent.putExtra("beginDate", mTvMonth.getText().toString() + mTvDay.getText().toString() + beginDate);
+                intent.putExtra("endDate", mTvMonth.getText().toString() + mTvDay.getText().toString() + endDate);
                 intent.putExtra("meetingName", getIntent().getStringExtra("meetingName"));
                 intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));
                 intent.putExtra("meetingDevice", getIntent().getStringExtra("meetingDevice"));
@@ -226,7 +226,6 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
 
     private PopupWindow popupWindow;
-
     //TODO 时间选择
     private void showPopupWindow() {
         View view = View.inflate(this, R.layout.meeting_date_selector_popwindow, null);

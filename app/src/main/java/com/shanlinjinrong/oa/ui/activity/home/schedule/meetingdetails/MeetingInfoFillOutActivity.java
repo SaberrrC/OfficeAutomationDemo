@@ -120,6 +120,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     private void initReadView() {
+        mTopView.setRightText("取消");
         mTvReceivePerson.setVisibility(View.GONE);
         mTvMeetingReceivePerson.setVisibility(View.GONE);
         mRbIsMeetingInvite.setVisibility(View.GONE);
@@ -127,7 +128,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mEdMeetingTheme.setVisibility(View.GONE);
         mLlMeetingPerson.setVisibility(View.GONE);
         mLlMeetingTheme.setVisibility(View.GONE);
-        mBtnMeetingInfoComplete.setVisibility(View.GONE);
         mEdMeetingPerson.setVisibility(View.GONE);
         mTvMeetingInvite.setVisibility(View.VISIBLE);
         mTvMeetingTheme.setVisibility(View.VISIBLE);
@@ -135,20 +135,19 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTvRedDot1.setVisibility(View.INVISIBLE);
         mTvRedDot2.setVisibility(View.INVISIBLE);
         mTvRedDot3.setVisibility(View.INVISIBLE);
-
+        mBtnMeetingInfoComplete.setText("调期");
         mCbEmail.setEnabled(false);
-        //mCbSms.setEnabled(false);
         mCbMessages.setEnabled(false);
         mEdMeetingContent.setEnabled(false);
     }
 
     private void initWriteView() {
+        mTopView.setRightText("");
         mTvReceivePerson.setVisibility(View.VISIBLE);
         mTvMeetingReceivePerson.setVisibility(View.VISIBLE);
         mRbIsMeetingInvite.setVisibility(View.VISIBLE);
         mTvIsMeetingInvite.setVisibility(View.VISIBLE);
         mEdMeetingTheme.setVisibility(View.VISIBLE);
-        mBtnMeetingInfoComplete.setVisibility(View.VISIBLE);
         mEdMeetingPerson.setVisibility(View.VISIBLE);
         mLlMeetingPerson.setVisibility(View.VISIBLE);
         mLlMeetingTheme.setVisibility(View.VISIBLE);
@@ -158,14 +157,13 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTvMeetingInvite.setVisibility(View.GONE);
         mTvMeetingTheme.setVisibility(View.GONE);
         mTvMeetingPerson.setVisibility(View.GONE);
-
+        mBtnMeetingInfoComplete.setText("完成");
         mBtnMeetingInfoComplete.setEnabled(false);
         mEdMeetingContent.setEnabled(false);
         mEdMeetingTheme.setEnabled(false);
         mEdMeetingPerson.setEnabled(false);
         mCbEmail.setEnabled(false);
         mCbMessages.setEnabled(false);
-        //mCbSms.setEnabled(false);
         mRbIsMeetingInvite.setOnCheckedChangeListener(this);
     }
 
@@ -178,7 +176,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         String meetingDevice = getIntent().getStringExtra("meetingDevice");
 
         if (mBeginDate != null && mEndDate != null) {
-            mTvMeetingDate.setText(DateUtils.getDateFormat("MM月dd日").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
+//            mTvMeetingDate.setText(DateUtils.getDateFormat("MM月dd日").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
+            mTvMeetingDate.setText("10月16日" + "  " + mBeginDate + "-" + mEndDate);
         }
 
         if (mMeetingName != null) {
@@ -217,15 +216,15 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 }
 
                 HttpParams httpParams = new HttpParams();
-                httpParams.put("room_id", 3);
+                httpParams.put("room_id", mRoomId);
                 httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
                 httpParams.put("title", mTvMeetingName.getText().toString());
                 httpParams.put("content", mEdMeetingContent.getText().toString());
                 //TODO参会人待处理
                 httpParams.put("part_uid", mEdMeetingPerson.getText().toString());
                 //TODO 会议室开始时间跟结束时间
-                httpParams.put("start_time", 14);
-                httpParams.put("end_time", 16);
+                httpParams.put("start_time", "2017-10-16 12:00");
+                httpParams.put("end_time", "2017-10-16 13:00");
 
                 if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
                     mSendType = "邮件，消息";
@@ -236,6 +235,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 }
                 httpParams.put("send_type", mSendType);
                 mPresenter.addMeetingRooms(httpParams);
+
                 break;
 
             case R.id.iv_add_contacts:
@@ -276,6 +276,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void addMeetingRoomsSuccess() {
+
         Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
         intent.putExtra("mMeetingDate", DateUtils.getDateFormat("yyyy-MM-dd").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
         intent.putExtra("mMeetingName", mMeetingName);

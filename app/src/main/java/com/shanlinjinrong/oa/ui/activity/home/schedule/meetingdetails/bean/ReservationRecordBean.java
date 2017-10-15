@@ -8,10 +8,11 @@ import java.util.List;
 
 public class ReservationRecordBean {
 
+
     /**
      * code : 200
      * info : success
-     * data : [{"id":10,"uid":1,"title":"1","content":"1","start_time":1,"end_time":1,"meeting_place":"1","room_id":1,"send_type":"1","created":1,"part_name":false},{"id":1,"uid":2,"title":"2","content":"2","start_time":2,"end_time":2,"meeting_place":"2","room_id":2,"send_type":"2","created":2,"part_name":false}]
+     * data : [{"id":13,"uid":618,"title":"1212","content":"萨达","start_time":1507852800,"end_time":1507903200,"meeting_place":"32","room_id":3,"send_type":"邮件","created":1507779610,"part_name":"傅梦婷,邱晓嬿"},{"id":12,"uid":618,"title":"1212","content":"萨达","start_time":1508630400,"end_time":1507903200,"meeting_place":"32","room_id":3,"send_type":"邮件","created":1507779218,"part_name":"顾震平,齐娜,姚嵩庆"}]
      */
 
     private int code;
@@ -44,30 +45,30 @@ public class ReservationRecordBean {
 
     public static class DataBean {
         /**
-         * id : 10
-         * uid : 1
-         * title : 1
-         * content : 1
-         * start_time : 1
-         * end_time : 1
-         * meeting_place : 1
-         * room_id : 1
-         * send_type : 1
-         * created : 1
-         * part_name : false
+         * id : 13
+         * uid : 618
+         * title : 1212
+         * content : 萨达
+         * start_time : 1507852800
+         * end_time : 1507903200
+         * meeting_place : 32
+         * room_id : 3
+         * send_type : 邮件
+         * created : 1507779610
+         * part_name : 傅梦婷,邱晓嬿
          */
 
         private int id;
         private int uid;
         private String title;
         private String content;
-        private int start_time;
-        private int end_time;
+        private String start_time;
+        private String end_time;
         private String meeting_place;
         private int room_id;
         private String send_type;
-        private int created;
-        private boolean part_name;
+        private String created;
+        private String part_name;
 
         public int getId() {
             return id;
@@ -101,19 +102,19 @@ public class ReservationRecordBean {
             this.content = content;
         }
 
-        public int getStart_time() {
+        public String getStart_time() {
             return start_time;
         }
 
-        public void setStart_time(int start_time) {
+        public void setStart_time(String start_time) {
             this.start_time = start_time;
         }
 
-        public int getEnd_time() {
+        public String getEnd_time() {
             return end_time;
         }
 
-        public void setEnd_time(int end_time) {
+        public void setEnd_time(String end_time) {
             this.end_time = end_time;
         }
 
@@ -141,19 +142,19 @@ public class ReservationRecordBean {
             this.send_type = send_type;
         }
 
-        public int getCreated() {
+        public String getCreated() {
             return created;
         }
 
-        public void setCreated(int created) {
+        public void setCreated(String created) {
             this.created = created;
         }
 
-        public boolean isPart_name() {
+        public String getPart_name() {
             return part_name;
         }
 
-        public void setPart_name(boolean part_name) {
+        public void setPart_name(String part_name) {
             this.part_name = part_name;
         }
     }

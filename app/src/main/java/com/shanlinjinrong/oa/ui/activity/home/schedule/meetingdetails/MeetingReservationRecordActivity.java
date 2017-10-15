@@ -49,14 +49,11 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
                 finish();
             }
         });
-
         mPresenter.getMeetingRecord();
         mRecordAdapter = new MeetingReservationRecordAdapter(this, data);
-        View inflate = LayoutInflater.from(this).inflate(R.layout.meeting_record_footer_item, null);
-        mRecordAdapter.addFooterView(inflate);
         mRvMeetingReservationRecord.setLayoutManager(new LinearLayoutManager(this));
         mRvMeetingReservationRecord.setAdapter(mRecordAdapter);
-
+        mRecordAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -72,6 +69,8 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     @Override
     public void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean) {
         mRecordAdapter.setNewData(bean);
+        View inflate = LayoutInflater.from(this).inflate(R.layout.meeting_record_footer_item, null);
+        mRecordAdapter.addFooterView(inflate);
     }
 
     @Override
