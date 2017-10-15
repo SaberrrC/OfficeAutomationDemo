@@ -97,16 +97,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         mTvFindPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(LoginActivity.this, ConfirmCompanyEmailActivity.class));
-                startActivity(new Intent(LoginActivity.this, FindPassWordActivity.class));
-            }
-        });
-
-        mTvFindPwd.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
                 startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class));
-                return false;
             }
         });
     }
@@ -265,7 +256,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     public void uidNull(int code) {
         hideLoadingView();
     }
-
 
 
     private void goToLogin() {

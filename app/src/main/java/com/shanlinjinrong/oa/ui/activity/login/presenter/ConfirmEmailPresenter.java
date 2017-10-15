@@ -25,10 +25,11 @@ public class ConfirmEmailPresenter extends HttpPresenter<ConfirmEmailContract.Vi
 
     @Override
     public void sendEmail(String code, String emailAddress) {
+        mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
-        params.put("code", code);
         params.put("email", emailAddress);
-        mKjHttp.phpJsonPost(Api.USERS_REPWD, params, new HttpCallBack() {
+        params.put("code", code);
+        mKjHttp.phpJsonPost(Api.USERS_REPWD, params, false, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

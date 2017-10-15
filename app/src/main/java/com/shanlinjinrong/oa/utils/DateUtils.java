@@ -249,6 +249,12 @@ public class DateUtils {
         return false;
     }
 
+
+    public static int getCurrentYear() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.YEAR);
+    }
+
     public static int getCurrentMonth() {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.MONTH);
@@ -268,6 +274,32 @@ public class DateUtils {
     }
 
     public static int calculateDaysInMonth(int year, int month) {
+        // 添加大小月月份并将其转换为list,方便之后的判断
+        String[] bigMonths = {"1", "3", "5", "7", "8", "10", "12"};
+        String[] littleMonths = {"4", "6", "9", "11"};
+        List<String> bigList = Arrays.asList(bigMonths);
+        List<String> littleList = Arrays.asList(littleMonths);
+        // 判断大小月及是否闰年,用来确定"日"的数据
+        if (bigList.contains(String.valueOf(month))) {
+            return 31;
+        } else if (littleList.contains(String.valueOf(month))) {
+            return 30;
+        } else {
+            if (year <= 0) {
+                return 29;
+            }
+            // 是否闰年
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                return 29;
+            } else {
+                return 28;
+            }
+        }
+    }
+
+
+    public static int getCurrentDaysInMonth(int month) {
+        int year = getCurrentYear();
         // 添加大小月月份并将其转换为list,方便之后的判断
         String[] bigMonths = {"1", "3", "5", "7", "8", "10", "12"};
         String[] littleMonths = {"4", "6", "9", "11"};
@@ -354,7 +386,7 @@ public class DateUtils {
         }
 
         for (int i = 1; i <= monthDays; i++) {
-            if (i < curDay && month == curMonth) {
+            if (i < curDay && month == curMonth + 1) {
                 item = new PopItem("" + i, false, false);
             } else {
                 item = new PopItem("" + i, true, false);
@@ -375,8 +407,6 @@ public class DateUtils {
         }
         return data;
     }
-
-
 
 
     /**

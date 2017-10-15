@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.shanlinjinrong.oa.views.KeyboardLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/page_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.shanlinjinrong.oa.ui.activity.login.ConfirmCompanyEmailActivity">
-
 
     <com.shanlinjinrong.views.common.CommonTopView
         android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
-        android:layout_alignParentTop="true"
         app:leftDrawable="@drawable/toolbar_back"
         app:topTitle="确认邮箱" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/top_view">
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -83,7 +86,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/common_height44"
                     android:layout_margin="@dimen/common_margin"
                     android:background="@drawable/edittext_input_square_bg"
                     android:gravity="center_vertical"
@@ -93,30 +96,40 @@
                     <EditText
                         android:id="@+id/et_email"
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/common_height44"
-                        android:layout_weight="0.75"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
+                        android:layout_weight="1"
+                        android:background="@null"
                         android:inputType="textEmailAddress"
-                        android:padding="@dimen/common_padding"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:text="email" />
 
                     <AutoCompleteTextView
                         android:id="@+id/tv_email_suffix"
-                        style="?android:editTextStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/common_height44"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
-                        android:layout_weight="1"
+                        android:background="@null"
                         android:completionThreshold="1"
-                        android:drawablePadding="4dp"
-                        android:drawableRight="@drawable/arrow_down_select"
-                        android:dropDownHeight="200dp"
+                        android:enabled="false"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
-                        android:enabled="false"
-                        android:text="\@shanlinjinrong.com"
-                        android:padding="@dimen/common_padding"
-                        android:singleLine="true" />
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:singleLine="true"
+                        android:text="\@shanlinjinrong.com" />
+
+                    <LinearLayout
+                        android:id="@+id/iv_email_select_arrow"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/arrow_down_select" />
+                    </LinearLayout>
+
 
                 </LinearLayout>
             </LinearLayout>
@@ -134,4 +147,4 @@
 
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>
+</com.shanlinjinrong.oa.views.KeyboardLinearLayout>

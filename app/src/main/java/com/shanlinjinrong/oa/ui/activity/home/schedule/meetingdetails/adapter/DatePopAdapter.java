@@ -57,7 +57,7 @@ public class DatePopAdapter extends RecyclerView.Adapter<DatePopAdapter.ItemHold
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setSelect(position);
+//                setSelect(position);
                 if (mOnItemClick != null) {
                     mOnItemClick.onItemClicked(position);
                 }

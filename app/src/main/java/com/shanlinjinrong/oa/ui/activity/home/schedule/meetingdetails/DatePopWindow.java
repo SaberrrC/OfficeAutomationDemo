@@ -79,6 +79,7 @@ public class DatePopWindow {
             public void onItemClicked(int position) {
                 if (mItemClick != null) {
                     mItemClick.onPopItemClick(isDay, position);
+                    hidden();
                 }
             }
         });

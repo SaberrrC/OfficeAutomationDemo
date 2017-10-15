@@ -72,14 +72,20 @@ public class MyKjHttp extends KJHttp {
     }
 
     public Request<byte[]> phpJsonPost(String url, HttpParams params, HttpCallBack callback) {
-        params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
-        params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        return phpJsonPost(url, params, true, callback);
+    }
+
+    public Request<byte[]> phpJsonPost(String url, HttpParams params, boolean hasHeader, HttpCallBack callback) {
+        if (hasHeader) {
+            params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
+            params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        }
         if (BuildConfig.DEBUG) {
             url = Api.PHP_DEBUG_URL + url;
         } else {
             url = Api.PHP_URL + url;
         }
-        return super.jsonPost(url, params, callback);
+        return super.post(url, params, callback);
     }
 
 

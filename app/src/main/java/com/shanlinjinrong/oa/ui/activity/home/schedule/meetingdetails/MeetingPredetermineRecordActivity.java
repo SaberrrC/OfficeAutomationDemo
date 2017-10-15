@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static butterknife.ButterKnife.bind;
+import static com.shanlinjinrong.oa.utils.DateUtils.getDate;
 
 /**
  * 选择预约时间
@@ -95,7 +96,6 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_predetermine_record);
         ButterKnife.bind(this);
-        bind(this);
         initView();
     }
 
@@ -126,7 +126,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
     private int findDay(int month, int day) {
         int dayOne = 0;
-        mDays = DateUtils.getDate(month);
+        mDays = getDate(month);
         for (int i = 0; i < mDays.size(); i++) {
             if (mDays.get(i) == 1) {
                 dayOne = i;
@@ -191,7 +191,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         }
     }
 
-    public void showDatePopWindow(boolean isDay, int month, int selectPos) {
+    public void showDatePopWindow(boolean isDay, final int month, int selectPos) {
         if (datePopWindow == null) {
             int height = DeviceUtil.getScreenHeight(this) - DeviceUtil.getStatusHeight(this) - mTopView.getHeight() - mDateLayout.getHeight();
             int topHeight = DeviceUtil.getScreenHeight(this) - height;
@@ -208,8 +208,17 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                 } else {
                     mMonthPos = position;
                     mTvMonth.setText(mMonthArray[mMonthPos]);
+                    int maxDay = DateUtils.getCurrentDaysInMonth(mMonthPos + 1);
+                    if (mDayPos > maxDay) {
+                        mDayPos = maxDay;
+                    }
+
+                    if (DateUtils.getCurrentMonth() == mMonthPos && mDayPos < DateUtils.getCurrentDay()) {
+                        mDayPos = DateUtils.getCurrentDay();
+                    }
                 }
 
+                mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
                 mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
             }
         });
@@ -217,6 +226,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
 
     private PopupWindow popupWindow;
+
     //TODO 时间选择
     private void showPopupWindow() {
         View view = View.inflate(this, R.layout.meeting_date_selector_popwindow, null);

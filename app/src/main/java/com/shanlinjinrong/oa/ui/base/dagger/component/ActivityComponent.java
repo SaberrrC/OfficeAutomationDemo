@@ -11,7 +11,6 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingReservationRecordActivity;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
@@ -20,7 +19,6 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportUpdateActivity;
 import com.shanlinjinrong.oa.ui.activity.login.ConfirmCompanyEmailActivity;
-import com.shanlinjinrong.oa.ui.activity.login.FindPassWordActivity;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.login.WriteJobNumberActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
@@ -46,8 +44,6 @@ public interface ActivityComponent {
     void inject(MainController activity);
 
     void inject(LoginActivity activity);
-
-    void inject(FindPassWordActivity activity);
 
     void inject(ContactsActivity activity);
 
