@@ -277,6 +277,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     mEdMeetingPerson.setEnabled(true);
                     mCbEmail.setEnabled(true);
                     mCbMessages.setEnabled(true);
+                    mAddContacts.setEnabled(true);
                     //mCbSms.setEnabled(true);
                 } else {
                     mBtnMeetingInfoComplete.setEnabled(false);
@@ -285,6 +286,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     mEdMeetingPerson.setEnabled(false);
                     mCbEmail.setEnabled(false);
                     mCbMessages.setEnabled(false);
+                    mAddContacts.setEnabled(false);
                     //mCbSms.setEnabled(false);
                 }
                 break;
