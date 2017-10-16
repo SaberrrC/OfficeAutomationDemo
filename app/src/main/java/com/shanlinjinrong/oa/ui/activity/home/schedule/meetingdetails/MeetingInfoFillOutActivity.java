@@ -150,6 +150,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTvRedDot1.setVisibility(View.INVISIBLE);
         mTvRedDot2.setVisibility(View.INVISIBLE);
         mTvRedDot3.setVisibility(View.INVISIBLE);
+        if (getIntent().getBooleanExtra("isMeetingUse", false)) {
+            mBtnMeetingInfoComplete.setEnabled(false);
+        }
         mBtnMeetingInfoComplete.setText("调期");
         mCbEmail.setEnabled(false);
         mCbMessages.setEnabled(false);
@@ -213,7 +216,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mEndTime = getIntent().getStringExtra("end_time");
 
         if (mBeginDate != null && mEndDate != null) {
-            mTvMeetingDate.setText(mBeginDate + " - "  +mEndDate);
+            mTvMeetingDate.setText(mBeginDate + " - " + mEndDate);
         }
 
         if (mMeetingName != null) {
@@ -424,6 +427,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     @Override
     public void deleteMeetingRoomsSuccess() {
         Toast.makeText(this, "会议室取消成功!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MeetingReservationRecordActivity.class);
+        startActivity(intent);
         EventBus.getDefault().post("meetingDeleteSuccess");
         finish();
     }
@@ -435,8 +440,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void modifyMeetingRoomsSuccess() {
+        MeetingReservationRecordActivity.mRecordActivity.finish();
         Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
-        intent.putExtra("mReservation","您已经成功调期");
+        intent.putExtra("mReservation", "您已经成功调期");
         intent.putExtra("mMeetingDate", mStartTime.replace(" ", "  ") + " - " + mEndDate);
         intent.putExtra("mMeetingName", mTvMeetingName.getText().toString());
         startActivity(intent);

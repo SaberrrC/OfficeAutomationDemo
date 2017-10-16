@@ -16,6 +16,7 @@ import com.iflytek.cloud.thirdparty.S;
 import com.j256.ormlite.stmt.query.In;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingReservationRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
 import com.shanlinjinrong.oa.utils.DateUtils;
 
@@ -26,12 +27,13 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by tonny on 2017/9/30.
+ * 会议室预订
  */
 
 public class MeetingReservationRecordAdapter extends BaseQuickAdapter<ReservationRecordBean.DataBean> {
 
     private Context mContext;
+    private boolean mIsUse;
     private List<ReservationRecordBean.DataBean> mData;
 
     public MeetingReservationRecordAdapter(Context context, List<ReservationRecordBean.DataBean> data) {
@@ -52,13 +54,13 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
         final int room_id = recordBean.getRoom_id();
         long endTime = Long.parseLong(end_time) * 1000L;
         final boolean isMeetingPast = currentTime < endTime;
-
-
         if (currentTime > endTime) {
+            mIsUse = true;
             baseViewHolder.setText(R.id.tv_meeting_state, "已使用");
             baseViewHolder.setTextColor(R.id.tv_meeting_state, Color.rgb(102, 102, 102));
             baseViewHolder.setImageResource(R.id.tvDot, R.drawable.meeting_record_icon_success);
         } else {
+            mIsUse = false;
             baseViewHolder.setText(R.id.tv_meeting_state, "待使用");
             baseViewHolder.setTextColor(R.id.tv_meeting_state, Color.rgb(85, 187, 255));
             baseViewHolder.setImageResource(R.id.tvDot, R.drawable.meeting_record_icon);
@@ -73,11 +75,13 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MeetingInfoFillOutActivity.class);
                 intent.putExtra("isWriteMeetingInfo", false);
+                intent.putExtra("isMeetingUse", mIsUse);
                 intent.putExtra("isMeetingPast", isMeetingPast);
                 intent.putExtra("isMeetingRecord", true);
                 intent.putExtra("roomId", room_id);
                 intent.putExtra("id", id);
                 mContext.startActivity(intent);
+//                MeetingReservationRecordActivity.mRecordActivity.finish();
             }
         });
     }

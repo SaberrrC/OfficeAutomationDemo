@@ -5,6 +5,8 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.Reser
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
+import org.kymjs.kjframe.http.HttpParams;
+
 import java.util.List;
 
 /**
@@ -22,6 +24,6 @@ public interface MeetingReservationRecordActivityContract {
 
     interface Presenter extends BasePresenter<MeetingReservationRecordActivityContract.View> {
 
-        void getMeetingRecord(); //获取会议室信息
+        void getMeetingRecord(HttpParams httpParams); //获取会议室信息
     }
 }

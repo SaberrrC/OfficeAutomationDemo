@@ -34,9 +34,8 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
     private ReservationRecordBean.DataBean dataBean;
 
     @Override
-    public void getMeetingRecord() {
+    public void getMeetingRecord(HttpParams httpParams) {
         mKjHttp.cleanCache();
-        HttpParams httpParams = new HttpParams();
         mKjHttp.phpJsonGet(Api.NEW_MEETING_RECORD, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {

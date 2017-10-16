@@ -1,12 +1,9 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
-import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import com.shanlinjinrong.oa.R;
@@ -15,12 +12,12 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.Reser
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingReservationRecordActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingReservationRecordActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
-import com.shanlinjinrong.oa.views.AllRecyclerView;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +28,19 @@ import butterknife.ButterKnife;
 /**
  * 会议室 预订记录
  */
-public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingReservationRecordActivityPresenter> implements MeetingReservationRecordActivityContract.View {
+public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingReservationRecordActivityPresenter> implements MeetingReservationRecordActivityContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
     @Bind(R.id.rv_meeting_Reservation_Record)
     RecyclerView mRvMeetingReservationRecord;
+    @Bind(R.id.refresh)
+    SwipeRefreshLayout mRefresh;
+    private int mPage;
+    private int mNum;
     private MeetingReservationRecordAdapter mRecordAdapter;
     private List<ReservationRecordBean.DataBean> data = new ArrayList<>();
+    public static MeetingReservationRecordActivity mRecordActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +54,24 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     }
 
     private void initData() {
-        mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        mPresenter.getMeetingRecord();
+        mRecordActivity = this;
+        refreshData();
+        mTopView.getLeftView().setOnClickListener(this);
         mRecordAdapter = new MeetingReservationRecordAdapter(this, data);
         mRvMeetingReservationRecord.setLayoutManager(new LinearLayoutManager(this));
         mRvMeetingReservationRecord.setAdapter(mRecordAdapter);
         mRecordAdapter.notifyDataSetChanged();
+    }
+
+    private void refreshData() {
+        mRefresh.setOnRefreshListener(this);
+        mRefresh.setRefreshing(true);
+        HttpParams httpParams = new HttpParams();
+        mPage = 0;
+        mNum = 15;
+        httpParams.put("page", mPage);
+        httpParams.put("num", mNum);
+        mPresenter.getMeetingRecord(httpParams);
     }
 
     @Override
@@ -77,19 +86,20 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
 
     @Override
     public void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean) {
+        mRefresh.setRefreshing(false);
         mRecordAdapter.setNewData(bean);
         mRecordAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void getMeetingRecordFailed(String msgStr) {
-
+        mRefresh.setRefreshing(false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void MeetingDeleteSuccess(String str) {
         if (str.equals("meetingDeleteSuccess")) {
-            mPresenter.getMeetingRecord();
+            mRefresh.setRefreshing(true);
         }
     }
 
@@ -99,5 +109,15 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        refreshData();
+    }
+
+    @Override
+    public void onClick(View view) {
+        finish();
     }
 }
