@@ -365,14 +365,14 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             mTvMeetingReceivePerson.setText(info.getData().getSend_user());
             mTvMeetingTheme.setText(info.getData().getTitle());
             List<MeetingRecordInfo.DataBean.PartNameBean> part_name = info.getData().getPart_name();
-            String userName = null;
+            String userName = "";
             for (int i = 0; i < part_name.size(); i++) {
                 if (part_name.get(i).getUsername() != null)
-                    userName += part_name.get(i).getUsername();
+                    userName += part_name.get(i).getUsername() + " ";
             }
 
-            if (userName != null) {
-                mTvMeetingPerson.setText(userName + " ");
+            if (!userName.trim().equals("")) {
+                mTvMeetingPerson.setText(userName);
             }
 
             if (info.getData().getSend_type().equals("邮件,消息")) {
