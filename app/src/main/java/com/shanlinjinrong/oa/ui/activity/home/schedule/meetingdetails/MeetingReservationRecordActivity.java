@@ -78,10 +78,6 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     @Override
     public void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean) {
         mRecordAdapter.setNewData(bean);
-        if (bean.size() > 0) {
-            View inflate = LayoutInflater.from(this).inflate(R.layout.meeting_record_footer_item, null);
-            mRecordAdapter.addFooterView(inflate);
-        }
         mRecordAdapter.notifyDataSetChanged();
     }
 

@@ -114,6 +114,34 @@ public class MyKjHttp extends KJHttp {
     }
 
     /**
+     * 使用JSON传参的put请求
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
+     * @param useCache 是否缓存本条请求
+     */
+    public Request<byte[]> phpJsonPut(String url, HttpParams params,
+                                      boolean useCache, HttpCallBack callback) {
+        params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
+        params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        if (BuildConfig.DEBUG) {
+            url = Api.PHP_DEBUG_URL + url;
+        } else {
+            url = Api.PHP_URL + url;
+        }
+        Request<byte[]> request = new JsonRequest(Request.HttpMethod.PUT, url, params,
+                callback);
+        request.setShouldCache(useCache);
+        doRequest(request);
+        return request;
+    }
+
+    public Request<byte[]> phpJsonPut(String url, HttpParams params, HttpCallBack callback) {
+        return phpJsonPut(url, params, true, callback);
+    }
+
+    /**
      * 使用JSON传参的Delete请求
      *
      * @param url      地址

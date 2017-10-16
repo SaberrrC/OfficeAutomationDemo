@@ -12,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.stmt.query.In;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
@@ -24,6 +25,8 @@ import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
@@ -99,7 +102,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     private ArrayList<Child> contactsList = new ArrayList<>(); //邀请人参会人
     private String mStartTime;
     private String mEndTime;
+    private int mId;
     private String mUid = "";
+    private boolean mModifyMeeting;
 
 
     @Override
@@ -150,15 +155,19 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mCbMessages.setEnabled(false);
         mEdMeetingContent.setEnabled(false);
 
-        final int id = getIntent().getIntExtra("id", 0);
-        mPresenter.lookMeetingRooms(id);
+        mId = getIntent().getIntExtra("id", -1);
+        if (mId != -1) {
+            mPresenter.lookMeetingRooms(mId);
+        }
 
         if (getIntent().getBooleanExtra("isMeetingPast", false)) {
             mTopView.setRightText("取消");
             mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mPresenter.deleteMeetingRooms(id);
+                    if (mId != -1) {
+                        mPresenter.deleteMeetingRooms(mId);
+                    }
                 }
             });
         }
@@ -196,32 +205,30 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mHoursOfUse = getIntent().getStringExtra("hoursOfUse");
         mMeetingName = getIntent().getStringExtra("meetingName");
         mRoomId = getIntent().getIntExtra("roomId", 0);
+        mModifyMeeting = getIntent().getBooleanExtra("modifyMeeting", false);
         String meetingPeopleNumber = getIntent().getStringExtra("meetingPeopleNumber");
         String meetingDevice = getIntent().getStringExtra("meetingDevice");
 
         mStartTime = getIntent().getStringExtra("start_time");
         mEndTime = getIntent().getStringExtra("end_time");
-        if (mHoursOfUse != null) {
-            mTvMeetingDate.setText(mHoursOfUse);
 
-            if (mBeginDate != null && mEndDate != null) {
-                mTvMeetingDate.setText(mBeginDate + "--" + mEndDate);
-            }
-
-            if (mMeetingName != null) {
-                mTvMeetingName.setText(mMeetingName);
-            }
-
-            if (meetingPeopleNumber != null) {
-                mTvMeetingPersonNumber.setText(meetingPeopleNumber);
-            }
-
-            if (meetingDevice != null) {
-                mTvMeetingDevice.setText(meetingDevice);
-            }
-
-            mTvMeetingReceivePerson.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
+        if (mBeginDate != null && mEndDate != null) {
+            mTvMeetingDate.setText(mBeginDate + mEndDate);
         }
+
+        if (mMeetingName != null) {
+            mTvMeetingName.setText(mMeetingName);
+        }
+
+        if (meetingPeopleNumber != null) {
+            mTvMeetingPersonNumber.setText(meetingPeopleNumber);
+        }
+
+        if (meetingDevice != null) {
+            mTvMeetingDevice.setText(meetingDevice);
+        }
+
+        mTvMeetingReceivePerson.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
     }
 
 
@@ -229,7 +236,19 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
-                if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
+                if (mModifyMeeting) {
+                    HttpParams httpParams = new HttpParams();
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("start_time", mStartTime);
+                        jsonObject.put("end_time", mEndTime);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    httpParams.putJsonParams(jsonObject.toString());
+                    mPresenter.modifyMeetingRooms(mId, httpParams);
+                    return;
+                } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
                     if (mRbIsMeetingInvite.isChecked()) {
                         if (mEdMeetingTheme.getText().toString().trim().equals("")) {
                             Toast.makeText(this, "会议主题不能为空", Toast.LENGTH_SHORT).show();
@@ -265,7 +284,12 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     httpParams.put("send_type", mSendType + "");
                     mPresenter.addMeetingRooms(httpParams);
                 } else {
-
+                    Intent intent = new Intent(this, MeetingPredetermineRecordActivity.class);
+                    intent.putExtra("id", mId);
+                    intent.putExtra("modifyMeeting", true);
+                    intent.putExtra("isWriteMeetingInfo", false);
+                    intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
+                    startActivity(intent);
                 }
                 break;
             case R.id.iv_add_contacts:
@@ -341,7 +365,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void addMeetingRoomsSuccess() {
-
         Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
         intent.putExtra("mMeetingDate", mStartTime.replace(" ", "  ") + " - " + mEndDate);
         intent.putExtra("mMeetingName", mMeetingName);
@@ -360,11 +383,13 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         try {
             mTvMeetingName.setText(info.getData().getTitle());
             mTvMeetingPersonNumber.setText(info.getData().getNop());
-            mTvMeetingDate.setText(DateUtils.stringToDate(info.getData().getStart_time()));
+            if (!mModifyMeeting)
+                mTvMeetingDate.setText(DateUtils.stringToDate(info.getData().getStart_time()));
             mTvMeetingDevice.setText(info.getData().getDevice());
             mTvMeetingReceivePerson.setText(info.getData().getSend_user());
             mTvMeetingTheme.setText(info.getData().getTitle());
             List<MeetingRecordInfo.DataBean.PartNameBean> part_name = info.getData().getPart_name();
+
             String userName = "";
             for (int i = 0; i < part_name.size(); i++) {
                 if (part_name.get(i).getUsername() != null)
@@ -403,6 +428,21 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void deleteMeetingRoomsFailed(String strMsg) {
+        Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void modifyMeetingRoomsSuccess() {
+        Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
+        intent.putExtra("mMeetingDate", mStartTime.replace(" ", "  ") + " - " + mEndDate);
+        intent.putExtra("mMeetingName", mMeetingName);
+        startActivity(intent);
+        MeetingPredetermineRecordActivity.mRecordActivity.finish();
+        finish();
+    }
+
+    @Override
+    public void modifyMeetingRoomsFailed(String strMsg) {
         Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
     }
 }

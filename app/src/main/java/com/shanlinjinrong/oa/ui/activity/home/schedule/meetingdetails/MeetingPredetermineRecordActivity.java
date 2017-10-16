@@ -89,9 +89,9 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     private int mMonthPos = 1;
     private int mWeekPos = 1;
 
-    //    private String[] mMonthArray = {"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"};
     private String[] mMonthArrays = {"1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
     private String[] mWeekArray = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
+    private boolean mModifyMeeting;
 
 
     @Override
@@ -136,6 +136,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         if (meetingId != -1) {
             mPresenter.getMeetingPredetermine(meetingId);
         }
+        mModifyMeeting = getIntent().getBooleanExtra("modifyMeeting", false);
     }
 
     private int findDay(int month, int day) {
@@ -184,19 +185,27 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                 }
 
                 Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
-                intent.putExtra("isWriteMeetingInfo", true);
-                intent.putExtra("hoursOfUse", (mMonthPos + 1) + "月" + mTvDay.getText().toString() + "  " + beginDate + " -- " + endDate);
-                intent.putExtra("beginDate", (mMonthPos + 1) + "月" + mTvDay.getText().toString() + " " + beginDate);
                 intent.putExtra("endDate", endDate);
-                intent.putExtra("meetingName", getIntent().getStringExtra("meetingName"));
-                intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));
-                intent.putExtra("meetingDevice", getIntent().getStringExtra("meetingDevice"));
-                intent.putExtra("roomId", getIntent().getIntExtra("roomId", 0));
                 intent.putExtra("isMeetingRecord", false);
+                intent.putExtra("roomId", getIntent().getIntExtra("roomId", 0));
+                intent.putExtra("meetingName", getIntent().getStringExtra("meetingName"));
+                intent.putExtra("meetingDevice", getIntent().getStringExtra("meetingDevice"));
+                intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));
+                intent.putExtra("id", getIntent().getIntExtra("id", getIntent().getIntExtra("id", -1)));
+                intent.putExtra("beginDate", (mMonthPos + 1) + "月" + mTvDay.getText().toString() + " " + beginDate);
+                intent.putExtra("hoursOfUse", (mMonthPos + 1) + "月" + mTvDay.getText().toString() + "  " + beginDate + " -- " + endDate);
+                if (mModifyMeeting) {
+                    intent.putExtra("isWriteMeetingInfo", false);
+                } else {
+                    intent.putExtra("isWriteMeetingInfo", true);
+                }
 
                 intent.putExtra("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
                 intent.putExtra("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
-
+                if (mModifyMeeting) {
+                    intent.putExtra("modifyMeeting", true);
+                    intent.putExtra("isMeetingRecord", true);
+                }
                 startActivity(intent);
                 break;
             case R.id.ll_day_selector:
@@ -335,11 +344,14 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 //            Log.i("MeetingPredetermine", "endTime : " + DateUtils.longToDateString(endTime * 1000, "yyyy-MM-dd HH:MM"));
 
             if (DateUtils.isSameDay(startTime * 1000, date)) {
-                int start = Integer.valueOf(longToDateString(startTime * 1000, "HH"));
-                int end = Integer.valueOf(DateUtils.longToDateString(endTime * 1000, "HH"));
-
-                for (int j = start - 9; j <= end - 10; j++) {
-                    setTimeEnable(j, false);
+                try {
+                    int start = Integer.valueOf(longToDateString(startTime * 1000, "HH"));
+                    int end = Integer.valueOf(DateUtils.longToDateString(endTime * 1000, "HH"));
+                    for (int j = start - 9; j <= end - 10; j++) {
+                        setTimeEnable(j, false);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
             }
         }

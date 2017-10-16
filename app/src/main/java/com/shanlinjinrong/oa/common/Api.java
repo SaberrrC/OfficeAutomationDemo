@@ -455,9 +455,13 @@ public class Api {
     public static final String ADD_NEW_MEETING = "/new_meetings";
 
     /**
-     * 添加新会议室
+     * 取消新会议室
      */
     public static final String DELETE_NEW_MEETING = "/new_meetings";
+    /**
+     * 新会议室调期
+     */
+    public static final String MODIFY_NEW_MEETING = "/new_meetings/";
 
     /**
      * 获取会议详情

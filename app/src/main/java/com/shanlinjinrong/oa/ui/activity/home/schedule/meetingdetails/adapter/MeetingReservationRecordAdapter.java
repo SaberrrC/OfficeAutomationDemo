@@ -49,8 +49,10 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
         String str = formatter.format(curDate);
         long currentTime = DateUtils.getTimestampFromString(str, "yyyy年MM月dd日   HH:mm");
         String end_time = recordBean.getEnd_time();
+        final int room_id = recordBean.getRoom_id();
         long endTime = Long.parseLong(end_time) * 1000L;
         final boolean isMeetingPast = currentTime < endTime;
+
 
         if (currentTime > endTime) {
             baseViewHolder.setText(R.id.tv_meeting_state, "已使用");
@@ -73,6 +75,7 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
                 intent.putExtra("isWriteMeetingInfo", false);
                 intent.putExtra("isMeetingPast", isMeetingPast);
                 intent.putExtra("isMeetingRecord", true);
+                intent.putExtra("roomId", room_id);
                 intent.putExtra("id", id);
                 mContext.startActivity(intent);
             }

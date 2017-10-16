@@ -51,7 +51,6 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
         final String deviceX = workContentBean.getDeviceX();
         final String roomimgX = workContentBean.getRoomimgX();
         final int room_idX = workContentBean.getRoom_idX();
-
         try {
             Glide.with(AppManager.mContext)
                     .load(roomimgX)
