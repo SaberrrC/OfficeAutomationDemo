@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.opengl.Visibility;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.iflytek.cloud.resource.Resource;
@@ -70,6 +72,7 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
                 Intent intent = new Intent(mContext, MeetingInfoFillOutActivity.class);
                 intent.putExtra("isWriteMeetingInfo", false);
                 intent.putExtra("isMeetingPast", isMeetingPast);
+                intent.putExtra("isMeetingRecord", true);
                 intent.putExtra("id", id);
                 mContext.startActivity(intent);
             }

@@ -175,6 +175,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                 intent.putExtra("meetingPeopleNumber", getIntent().getStringExtra("meetingPeopleNumber"));
                 intent.putExtra("meetingDevice", getIntent().getStringExtra("meetingDevice"));
                 intent.putExtra("roomId", getIntent().getIntExtra("roomId", 0));
+                intent.putExtra("isMeetingRecord", false);
 
                 intent.putExtra("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
                 intent.putExtra("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);

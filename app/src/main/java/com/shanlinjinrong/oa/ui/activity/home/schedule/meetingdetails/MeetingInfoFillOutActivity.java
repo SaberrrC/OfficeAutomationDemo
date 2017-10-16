@@ -99,6 +99,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     private ArrayList<Child> contactsList = new ArrayList<>(); //邀请人参会人
     private String mStartTime;
     private String mEndTime;
+    private String mUid = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +152,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
         final int id = getIntent().getIntExtra("id", 0);
         mPresenter.lookMeetingRooms(id);
-        
+
         if (getIntent().getBooleanExtra("isMeetingPast", false)) {
             mTopView.setRightText("取消");
             mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
@@ -227,42 +229,44 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
-                if (mRbIsMeetingInvite.isChecked()) {
-                    if (mEdMeetingTheme.getText().toString().trim().equals("")) {
-                        Toast.makeText(this, "会议主题不能为空", Toast.LENGTH_SHORT).show();
-                        return;
+                if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
+                    if (mRbIsMeetingInvite.isChecked()) {
+                        if (mEdMeetingTheme.getText().toString().trim().equals("")) {
+                            Toast.makeText(this, "会议主题不能为空", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (mEdMeetingPerson.getText().toString().trim().equals("")) {
+                            Toast.makeText(this, "与议人员不能为空", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (!mCbEmail.isChecked() && !mCbMessages.isChecked()) {
+                            Toast.makeText(this, "请选择邀请方式", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }
 
-                    if (mEdMeetingPerson.getText().toString().trim().equals("")) {
-                        Toast.makeText(this, "与议人员不能为空", Toast.LENGTH_SHORT).show();
-                        return;
+                    HttpParams httpParams = new HttpParams();
+                    httpParams.put("room_id", mRoomId);
+                    httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
+                    httpParams.put("title", mTvMeetingName.getText().toString());
+                    httpParams.put("content", mEdMeetingContent.getText().toString() + "");
+                    httpParams.put("part_uid", mUid);
+                    httpParams.put("start_time", mStartTime);
+                    httpParams.put("end_time", mEndTime);
+                    if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
+                        mSendType = "邮件,消息";
+                    } else if (mCbMessages.isChecked()) {
+                        mSendType = "消息";
+                    } else if (mCbEmail.isChecked()) {
+                        mSendType = "邮件";
                     }
+                    httpParams.put("send_type", mSendType + "");
+                    mPresenter.addMeetingRooms(httpParams);
+                } else {
 
-                    if (!mCbEmail.isChecked() && !mCbMessages.isChecked()) {
-                        Toast.makeText(this, "请选择邀请方式", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                 }
-                HttpParams httpParams = new HttpParams();
-                httpParams.put("room_id", mRoomId);
-                httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-                httpParams.put("title", mTvMeetingName.getText().toString());
-                httpParams.put("content", mEdMeetingContent.getText().toString());
-
-                httpParams.put("part_uid", mEdMeetingPerson.getText().toString());
-
-                httpParams.put("start_time", mStartTime);
-                httpParams.put("end_time", mEndTime);
-
-                if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
-                    mSendType = "邮件,消息";
-                } else if (mCbMessages.isChecked()) {
-                    mSendType = "消息";
-                } else if (mCbEmail.isChecked()) {
-                    mSendType = "邮件";
-                }
-                httpParams.put("send_type", mSendType);
-                mPresenter.addMeetingRooms(httpParams);
                 break;
             case R.id.iv_add_contacts:
                 Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
@@ -311,8 +315,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         for (int i = 0; i < contactsList.size(); i++) {
             if (i == contactsList.size() - 1) {
                 person += contactsList.get(i).getUsername();
+                mUid += contactsList.get(i).getUid();
             } else {
                 person += contactsList.get(i).getUsername() + ",";
+                mUid += contactsList.get(i).getUid() + ",";
             }
 
         }
@@ -361,10 +367,14 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             List<MeetingRecordInfo.DataBean.PartNameBean> part_name = info.getData().getPart_name();
             String userName = null;
             for (int i = 0; i < part_name.size(); i++) {
-                userName = (String) part_name.get(i).getUsername();
-                userName += " " + userName;
+                if (part_name.get(i).getUsername() != null)
+                    userName += part_name.get(i).getUsername();
             }
-            mTvMeetingPerson.setText(userName + " ");
+
+            if (userName != null) {
+                mTvMeetingPerson.setText(userName + " ");
+            }
+
             if (info.getData().getSend_type().equals("邮件,消息")) {
                 mCbEmail.setChecked(true);
                 mCbMessages.setChecked(true);
