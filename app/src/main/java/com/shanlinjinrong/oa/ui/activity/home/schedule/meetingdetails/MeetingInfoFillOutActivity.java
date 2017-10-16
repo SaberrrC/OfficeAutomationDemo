@@ -23,6 +23,7 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
@@ -129,7 +130,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     private void initReadView() {
-        mTopView.setRightText("取消");
         mTopView.setAppTitle("预定详情");
         mRbIsMeetingInvite.setVisibility(View.GONE);
         mTvIsMeetingInvite.setVisibility(View.GONE);
@@ -148,8 +148,18 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mCbMessages.setEnabled(false);
         mEdMeetingContent.setEnabled(false);
 
-        int id = getIntent().getIntExtra("id", 0);
+        final int id = getIntent().getIntExtra("id", 0);
         mPresenter.lookMeetingRooms(id);
+        
+        if (getIntent().getBooleanExtra("isMeetingPast", false)) {
+            mTopView.setRightText("取消");
+            mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mPresenter.deleteMeetingRooms(id);
+                }
+            });
+        }
     }
 
     private void initWriteView() {
@@ -168,7 +178,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTvMeetingTheme.setVisibility(View.GONE);
         mTvMeetingPerson.setVisibility(View.GONE);
         mBtnMeetingInfoComplete.setText("完成");
-        mBtnMeetingInfoComplete.setEnabled(false);
+//        mBtnMeetingInfoComplete.setEnabled(false);
         mEdMeetingContent.setEnabled(false);
         mEdMeetingTheme.setEnabled(false);
         mEdMeetingPerson.setEnabled(false);
@@ -217,21 +227,22 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
-                if (mEdMeetingTheme.getText().toString().trim().equals("")) {
-                    Toast.makeText(this, "会议主题不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                if (mRbIsMeetingInvite.isChecked()) {
+                    if (mEdMeetingTheme.getText().toString().trim().equals("")) {
+                        Toast.makeText(this, "会议主题不能为空", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                if (mEdMeetingPerson.getText().toString().trim().equals("")) {
-                    Toast.makeText(this, "与议人员不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    if (mEdMeetingPerson.getText().toString().trim().equals("")) {
+                        Toast.makeText(this, "与议人员不能为空", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                if (!mCbEmail.isChecked() && !mCbMessages.isChecked()) {
-                    Toast.makeText(this, "请选择邀请方式", Toast.LENGTH_SHORT).show();
-                    return;
+                    if (!mCbEmail.isChecked() && !mCbMessages.isChecked()) {
+                        Toast.makeText(this, "请选择邀请方式", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
-
                 HttpParams httpParams = new HttpParams();
                 httpParams.put("room_id", mRoomId);
                 httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
@@ -267,7 +278,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         switch (compoundButton.getId()) {
             case R.id.rb_is_meeting_invite:
                 if (mRbIsMeetingInvite.isChecked()) {
-                    mBtnMeetingInfoComplete.setEnabled(true);
+//                    mBtnMeetingInfoComplete.setEnabled(true);
                     mEdMeetingContent.setEnabled(true);
                     mEdMeetingTheme.setEnabled(true);
                     mEdMeetingPerson.setEnabled(false);
@@ -276,7 +287,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     mAddContacts.setEnabled(true);
                     //mCbSms.setEnabled(true);
                 } else {
-                    mBtnMeetingInfoComplete.setEnabled(false);
+//                    mBtnMeetingInfoComplete.setEnabled(false);
                     mEdMeetingContent.setEnabled(false);
                     mEdMeetingTheme.setEnabled(false);
                     mEdMeetingPerson.setEnabled(false);
@@ -370,6 +381,18 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void lookMeetingRoomsFailed(String strMsg) {
+        Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void deleteMeetingRoomsSuccess() {
+        Toast.makeText(this, "会议室取消成功!", Toast.LENGTH_SHORT).show();
+        EventBus.getDefault().post("meetingDeleteSuccess");
+        finish();
+    }
+
+    @Override
+    public void deleteMeetingRoomsFailed(String strMsg) {
         Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
     }
 }

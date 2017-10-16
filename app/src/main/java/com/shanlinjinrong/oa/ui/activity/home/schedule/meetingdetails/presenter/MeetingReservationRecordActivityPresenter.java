@@ -53,6 +53,7 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                             dataBean.setContent(jsonObject1.getString("content"));
                             dataBean.setTitle(jsonObject1.getString("title"));
+                            dataBean.setEnd_time(jsonObject1.getString("end_time"));
                             dataBean.setId(jsonObject1.getInt("id"));
                             dataBean.setStart_time(jsonObject1.getString("start_time") + "");
                             data.add(dataBean);

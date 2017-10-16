@@ -39,12 +39,12 @@
                     android:gravity="center"/>
             </LinearLayout>
 
-            <View
+            <ImageView
                 android:id="@+id/tvDot"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="25dp"
-                android:background="@mipmap/meeting_record_icon"/>
+                android:background="@drawable/meeting_record_icon"/>
 
         </FrameLayout>
 

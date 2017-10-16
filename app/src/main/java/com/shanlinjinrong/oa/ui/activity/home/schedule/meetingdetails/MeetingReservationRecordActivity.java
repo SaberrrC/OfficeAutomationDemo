@@ -16,6 +16,10 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.views.common.CommonTopView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +43,9 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_reservation_record);
         ButterKnife.bind(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         initData();
     }
 
@@ -73,10 +80,26 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
             View inflate = LayoutInflater.from(this).inflate(R.layout.meeting_record_footer_item, null);
             mRecordAdapter.addFooterView(inflate);
         }
+        mRecordAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void getMeetingRecordFailed(String msgStr) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void MeetingDeleteSuccess(String str) {
+        if (str.equals("meetingDeleteSuccess")) {
+            mPresenter.getMeetingRecord();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

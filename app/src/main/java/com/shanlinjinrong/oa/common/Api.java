@@ -448,6 +448,11 @@ public class Api {
     public static final String ADD_NEW_MEETING = "/new_meetings";
 
     /**
+     * 添加新会议室
+     */
+    public static final String DELETE_NEW_MEETING = "/new_meetings";
+
+    /**
      * 获取会议详情
      */
     public static final String LOOK_NEW_MEETING_INFO = "/new_meetings/meeting_info";

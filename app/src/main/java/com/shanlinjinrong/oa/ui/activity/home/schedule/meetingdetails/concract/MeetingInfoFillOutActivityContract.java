@@ -17,11 +17,15 @@ public interface MeetingInfoFillOutActivityContract {
 
         void addMeetingRoomsSuccess();
 
-        void addMeetingRoomsFailed(String str);
+        void addMeetingRoomsFailed(String strMsg);
 
         void lookMeetingRoomsSuccess(MeetingRecordInfo info);
 
-        void lookMeetingRoomsFailed(String httpParams);
+        void lookMeetingRoomsFailed(String strMsg);
+
+        void deleteMeetingRoomsSuccess();
+
+        void deleteMeetingRoomsFailed(String strMsg);
     }
 
     interface Presenter extends BasePresenter<MeetingInfoFillOutActivityContract.View> {
@@ -29,5 +33,7 @@ public interface MeetingInfoFillOutActivityContract {
         void addMeetingRooms(HttpParams httpParams);
 
         void lookMeetingRooms(int id);
+
+        void deleteMeetingRooms(int id);
     }
 }

@@ -62,6 +62,23 @@ public class DateUtils {
     /**
      * 格式化日期显示 <br/>
      *
+     * @param
+     * @return 时间戳
+     */
+    public static long getTimestampFromString(String time,String pattern) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime();
+    }
+
+    /**
+     * 格式化日期显示 <br/>
+     *
      * @param timestamp 时间戳
      * @return 2016-01-01
      */

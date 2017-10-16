@@ -26,14 +26,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/view_top"
-        android:layout_marginTop="10dp"
         android:fillViewport="true"
         android:overScrollMode="never"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:layout_below="@+id/view_top"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -63,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    android:text="七楼大会议室"
+                    tools:text="七楼大会议室"
                     android:textColor="#333333"
                     android:textSize="14sp"/>
 
@@ -85,7 +84,7 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    android:text="20人"
+                    tools:text="20人"
                     android:textColor="#333333"
                     android:textSize="14sp"/>
 
@@ -107,7 +106,7 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    android:text="9月11日    10：00-12：00"
+                    tools:text="9月11日    10：00-12：00"
                     android:textColor="#333333"
                     android:textSize="14sp"/>
 
@@ -129,7 +128,7 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    android:text="投影"
+                    tools:text="投影"
                     android:textColor="#333333"
                     android:textSize="14sp"/>
 
@@ -151,7 +150,7 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    android:text="朱展宏"
+                    tools:text="朱展宏"
                     android:textColor="#333333"
                     android:textSize="14sp"/>
 
@@ -244,7 +243,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:paddingRight="10dp"
-                        android:text="OA需求评审"
+                        tools:text="OA需求评审"
                         android:textColor="#333333"
                         android:textSize="14sp"
                         android:visibility="gone"/>
@@ -307,7 +306,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:paddingRight="10dp"
-                        android:text="曹燕飞，朱展宏，吴方华"
+                        tools:text="曹燕飞，朱展宏，吴方华"
                         android:textColor="#333333"
                         android:textSize="14sp"
                         android:visibility="gone"/>
