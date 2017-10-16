@@ -21,6 +21,8 @@ public class MeetingReservationSucceedActivity extends AppCompatActivity {
     CommonTopView mTopView;
     @Bind(R.id.tv_tips_Message)
     TextView mTvTipsMessage;
+    @Bind(R.id.tv_reservation_success)
+    TextView mTvReservationSuccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,9 @@ public class MeetingReservationSucceedActivity extends AppCompatActivity {
 
         String mMeetingDate = getIntent().getStringExtra("mMeetingDate");
         String mMeetingName = getIntent().getStringExtra("mMeetingName");
-        mTvTipsMessage.setText(mMeetingDate +"  "+ mMeetingName);
+        String mReservation = getIntent().getStringExtra("mReservation");
+        mTvReservationSuccess.setText(mReservation);
+        mTvTipsMessage.setText(mMeetingDate + "  " + mMeetingName);
     }
 
     @OnClick(R.id.btn_meeting_info_complete)

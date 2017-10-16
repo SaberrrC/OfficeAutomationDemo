@@ -39,10 +39,11 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_reservation_success"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="您已经成功预定"
+            tools:text="您已经成功预定"
             android:textColor="#666666"
             android:textSize="14sp"/>
 

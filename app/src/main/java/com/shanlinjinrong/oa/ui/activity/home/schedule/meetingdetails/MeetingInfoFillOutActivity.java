@@ -213,7 +213,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mEndTime = getIntent().getStringExtra("end_time");
 
         if (mBeginDate != null && mEndDate != null) {
-            mTvMeetingDate.setText(mBeginDate + mEndDate);
+            mTvMeetingDate.setText(mBeginDate + " - "  +mEndDate);
         }
 
         if (mMeetingName != null) {
@@ -290,6 +290,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     intent.putExtra("isWriteMeetingInfo", false);
                     intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
                     startActivity(intent);
+                    finish();
                 }
                 break;
             case R.id.iv_add_contacts:
@@ -368,6 +369,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
         intent.putExtra("mMeetingDate", mStartTime.replace(" ", "  ") + " - " + mEndDate);
         intent.putExtra("mMeetingName", mMeetingName);
+        intent.putExtra("mReservation", "您已经成功预定");
         startActivity(intent);
         MeetingPredetermineRecordActivity.mRecordActivity.finish();
         finish();
@@ -434,8 +436,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     @Override
     public void modifyMeetingRoomsSuccess() {
         Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
+        intent.putExtra("mReservation","您已经成功调期");
         intent.putExtra("mMeetingDate", mStartTime.replace(" ", "  ") + " - " + mEndDate);
-        intent.putExtra("mMeetingName", mMeetingName);
+        intent.putExtra("mMeetingName", mTvMeetingName.getText().toString());
         startActivity(intent);
         MeetingPredetermineRecordActivity.mRecordActivity.finish();
         finish();
