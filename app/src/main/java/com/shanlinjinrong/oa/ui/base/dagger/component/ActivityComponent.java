@@ -10,6 +10,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingReservationRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
@@ -100,5 +101,7 @@ public interface ActivityComponent {
     void inject(MeetingReservationRecordActivity activity);
 
     void inject(MeetingInfoFillOutActivity activity);
+
+    void inject(MeetingPredetermineRecordActivity activity);
 
 }

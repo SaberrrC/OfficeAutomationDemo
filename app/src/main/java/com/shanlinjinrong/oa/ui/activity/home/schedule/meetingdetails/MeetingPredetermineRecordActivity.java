@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -12,11 +11,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingPredetermineContract;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingPredeterminePresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.utils.DeviceUtil;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -24,11 +28,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static butterknife.ButterKnife.bind;
+import static com.shanlinjinrong.oa.utils.DateUtils.longToDateString;
+import static com.shanlinjinrong.oa.utils.DateUtils.stringToDate;
 
 /**
  * 选择预约时间
  */
-public class MeetingPredetermineRecordActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingPredeterminePresenter> implements MeetingPredetermineContract.View, CompoundButton.OnCheckedChangeListener {
 
     @Bind(R.id.selected_meeting_date1)
     CheckBox mSelectedMeetingDate1;
@@ -74,6 +80,7 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
     private List<CheckBox> mCheckBoxes = new ArrayList<>();
 
     private List<Integer> mDays = new ArrayList<>();
+    List<MeetingBookItem.DataBean> mSelectTime = new ArrayList<>();
     public static MeetingPredetermineRecordActivity mRecordActivity;
 
     DatePopWindow datePopWindow;
@@ -94,6 +101,11 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         ButterKnife.bind(this);
         bind(this);
         initView();
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initView() {
@@ -119,6 +131,11 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
         mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
 
         mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
+
+        int meetingId = getIntent().getIntExtra("roomId", -1);
+        if (meetingId != -1) {
+            mPresenter.getMeetingPredetermine(meetingId);
+        }
     }
 
     private int findDay(int month, int day) {
@@ -220,6 +237,9 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
 
                 mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
                 mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
+
+                refreshSelectTime(DateUtils.stringToDate(DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos, "yyyy-MM-dd"));
+
             }
         });
     }
@@ -291,5 +311,82 @@ public class MeetingPredetermineRecordActivity extends AppCompatActivity impleme
                 }
                 break;
         }
+    }
+
+
+    @Override
+    public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
+        mSelectTime = dataBeen;
+        refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
+    }
+
+    private void refreshSelectTime(Date date) {
+        for (int i = 0; i <= 8; i++) {
+            setTimeEnable(i, true);
+        }
+        for (int i = 0; i < mSelectTime.size(); i++) {
+            //接口返回的数据是秒
+            long startTime = Long.parseLong(mSelectTime.get(i).getStart_time());
+            long endTime = Long.parseLong(mSelectTime.get(i).getEnd_time());
+
+//            Log.i("MeetingPredetermine", "startTime : " + DateUtils.longToDateString(startTime * 1000, "yyyy-MM-dd HH:MM"));
+//            Log.i("MeetingPredetermine", "startTime : " + DateUtils.longToDateString(startTime * 1000, "HH"));
+//            Log.i("MeetingPredetermine", "istoday = " + DateUtils.isToday(startTime * 1000));
+//            Log.i("MeetingPredetermine", "endTime : " + DateUtils.longToDateString(endTime * 1000, "yyyy-MM-dd HH:MM"));
+
+            if (DateUtils.isSameDay(startTime * 1000, date)) {
+                int start = Integer.valueOf(longToDateString(startTime * 1000, "HH"));
+                int end = Integer.valueOf(DateUtils.longToDateString(endTime * 1000, "HH"));
+
+                for (int j = start - 9; j <= end - 10; j++) {
+                    setTimeEnable(j, false);
+                }
+            }
+        }
+    }
+
+
+    public void setTimeEnable(int pos, boolean isEnable) {
+        switch (pos) {
+            case 0:
+                mSelectedMeetingDate1.setEnabled(isEnable);
+                break;
+            case 1:
+                mSelectedMeetingDate2.setEnabled(isEnable);
+                break;
+            case 2:
+                mSelectedMeetingDate3.setEnabled(isEnable);
+                break;
+            case 3:
+                mSelectedMeetingDate4.setEnabled(isEnable);
+                break;
+            case 4:
+                mSelectedMeetingDate5.setEnabled(isEnable);
+                break;
+            case 5:
+                mSelectedMeetingDate6.setEnabled(isEnable);
+                break;
+            case 6:
+                mSelectedMeetingDate7.setEnabled(isEnable);
+                break;
+            case 7:
+                mSelectedMeetingDate8.setEnabled(isEnable);
+                break;
+            case 8:
+                mSelectedMeetingDate9.setEnabled(isEnable);
+                break;
+        }
+
+    }
+
+
+    @Override
+    public void getMeetingPredetermineFailed(String msgStr) {
+
+    }
+
+    @Override
+    public void uidNull(int code) {
+
     }
 }

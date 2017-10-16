@@ -555,13 +555,15 @@ public class DateUtils {
         return date;
     }
 
+
+
     /**
      * 判断字符串是否为日期字符串
      */
     public static boolean isDate(String date, String pattern) {
         boolean isDate = false;
         if (date != null) {
-            if (StringToDate(date, pattern) != null) {
+            if (stringToDate(date, pattern) != null) {
                 isDate = true;
             }
         }
@@ -571,7 +573,7 @@ public class DateUtils {
     /**
      * 将日期字符串转化为日期。失败返回null。
      */
-    public static Date StringToDate(String date, String pattern) {
+    public static Date stringToDate(String date, String pattern) {
         Date myDate = null;
         if (date != null) {
             try {
@@ -620,6 +622,7 @@ public class DateUtils {
         return monday + symbol + sunday;
     }
 
+
     public static String stringToDate(String time) {
         SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日  HH:mm");
         @SuppressWarnings("unused")
@@ -627,5 +630,78 @@ public class DateUtils {
         int i = Integer.parseInt(time);
         String times = sdr.format(new Date(i * 1000L));
         return times;
+    }
+
+    /**
+     * 判断给定字符串时间是否为今日
+     */
+    public static boolean isToday(long date) {
+        Calendar c1 = Calendar.getInstance();
+        c1.setTimeInMillis(date);
+        int year1 = c1.get(Calendar.YEAR);
+        int month1 = c1.get(Calendar.MONTH)+1;
+        int day1 = c1.get(Calendar.DAY_OF_MONTH);
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(new Date());
+        int year2 = c2.get(Calendar.YEAR);
+        int month2 = c2.get(Calendar.MONTH)+1;
+        int day2 = c2.get(Calendar.DAY_OF_MONTH);
+        return year1 == year2 && month1 == month2 && day1 == day2;
+    }
+
+
+    public static boolean isSameDay(long date, Date sameDate) {
+
+        if ( null == sameDate) {
+
+            return false;
+
+        }
+
+        Calendar nowCalendar = Calendar.getInstance();
+
+        nowCalendar.setTime(sameDate);
+
+        Calendar dateCalendar = Calendar.getInstance();
+
+        dateCalendar.setTimeInMillis(date);
+
+        if (nowCalendar.get(Calendar.YEAR) == dateCalendar.get(Calendar.YEAR)
+
+                && nowCalendar.get(Calendar.MONTH) == dateCalendar.get(Calendar.MONTH)
+
+                && nowCalendar.get(Calendar.DATE) == dateCalendar.get(Calendar.DATE)) {
+
+            return true;
+
+        }
+
+        // if (date.getYear() == sameDate.getYear() && date.getMonth() == sameDate.getMonth()
+
+        // && date.getDate() == sameDate.getDate()) {
+
+        // return true;
+
+        // }
+
+        return false;
+
+    }
+
+
+    // currentTime要转换的long类型的时间
+    // formatType要转换的时间格式yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日 HH时mm分ss秒
+    public static Date longToDate(long currentTime, String formatType)
+            throws ParseException {
+        Date dateOld = new Date(currentTime); // 根据long类型的毫秒数生命一个date类型的时间
+        String sDateTime = dateToString(dateOld, formatType); // 把date类型的时间转换为string
+        Date date = stringToDate(sDateTime, formatType); // 把String类型转换为Date类型
+        return date;
+    }
+
+    // formatType格式为yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日 HH时mm分ss秒
+    // data Date类型的时间
+    public static String dateToString(Date data, String formatType) {
+        return new SimpleDateFormat(formatType).format(data);
     }
 }

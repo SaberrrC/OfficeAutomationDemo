@@ -7,6 +7,7 @@
     <color name="colorPrimary">#FF000000</color>
     <color name="colorAccent">#666666</color>
     <color name="page_bg">#f2f2f2</color>
+    <color name="gray_99EFEFEF">#99EFEFEF</color>
 
     <color name="tab_bar_text_gray">#999999</color>
     <color name="tab_bar_text_light">#0ea7ed</color>

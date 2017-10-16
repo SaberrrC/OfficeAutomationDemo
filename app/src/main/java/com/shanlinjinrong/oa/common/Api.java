@@ -116,7 +116,7 @@ public class Api {
     /**
      * 登录时间判断接口
      */
-    public static final String  SITE_TIMEOUT="site/timeout";
+    public static final String SITE_TIMEOUT = "site/timeout";
     /**
      * 选择接收人
      */
@@ -132,7 +132,7 @@ public class Api {
     /**
      * 选择会议室新接口
      */
-    public static final String CONFERENCE_SELECTMEETINGROOMNEW="conference/selectmeetingroomnew";
+    public static final String CONFERENCE_SELECTMEETINGROOMNEW = "conference/selectmeetingroomnew";
     /**
      * 选择参加人
      */
@@ -140,7 +140,7 @@ public class Api {
     /**
      * 根据开始时间获取可使用时间
      */
-    public static final String  CONFERENCE_GETOCCUPYTIMEBYBEGINTIME="conference/getoccupytimebybegintime";
+    public static final String CONFERENCE_GETOCCUPYTIMEBYBEGINTIME = "conference/getoccupytimebybegintime";
     /**
      * 获取我发起的工作汇报
      */
@@ -195,7 +195,7 @@ public class Api {
     /**
      * 根据日期获取当天可使用时间接口
      */
-    public static final String  CONFERENCE_GETOCCUPYTIME="conference/getoccupytime";
+    public static final String CONFERENCE_GETOCCUPYTIME = "conference/getoccupytime";
     /**
      * 头像
      */
@@ -290,7 +290,7 @@ public class Api {
     /**
      * 会议室详情接口
      */
-    public static final String  CONFERENCE_CONFERENCEINFO="conference/conferenceinfo";
+    public static final String CONFERENCE_CONFERENCEINFO = "conference/conferenceinfo";
     /**
      * 获取审批人
      */
@@ -441,6 +441,13 @@ public class Api {
      * 新会议室记录信息
      */
     public static final String NEW_MEETING_RECORD = "/new_meetings/reserve";
+
+
+    /**
+     * 新会议室预定时间段情况
+     */
+    public static final String NEW_MEETING_ALR_MEETING = "/new_meetings/alr_meeting?room_id=";
+
 
     /**
      * 添加新会议室

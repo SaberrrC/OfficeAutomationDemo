@@ -136,7 +136,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@drawable/meeting_book_time_text_bg"
             android:gravity="center"
             android:text="9:00——10:00"/>
 
@@ -151,7 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@drawable/meeting_book_time_text_bg"
             android:gravity="center"
             android:text="10:00——11:00"/>
 
@@ -166,7 +166,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@drawable/meeting_book_time_text_bg"
             android:gravity="center"
             android:text="11:00——12:00"/>
 
@@ -181,7 +181,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@drawable/meeting_book_time_text_bg"
             android:gravity="center"
             android:text="12:00——13:00"/>
 
@@ -196,7 +196,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@drawable/meeting_book_time_text_bg"
             android:gravity="center"
             android:text="13:00——14:00"/>
 
@@ -211,7 +211,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@drawable/meeting_book_time_text_bg"
             android:gravity="center"
             android:text="14:00——15:00"/>
 
@@ -226,7 +226,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@drawable/meeting_book_time_text_bg"
             android:gravity="center"
             android:text="15:00——16:00"/>
 
@@ -241,7 +241,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@drawable/meeting_book_time_text_bg"
             android:gravity="center"
             android:text="16:00——17:00"/>
 
@@ -256,7 +256,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@drawable/meeting_book_time_text_bg"
             android:gravity="center"
             android:text="17:00——18:00"/>
 
