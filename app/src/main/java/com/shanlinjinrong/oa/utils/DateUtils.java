@@ -602,4 +602,13 @@ public class DateUtils {
         String sunday = dateFormat.format(cal.getTime());
         return monday + symbol + sunday;
     }
+
+    public static String stringToDate(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日  HH:mm");
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+        int i = Integer.parseInt(time);
+        String times = sdr.format(new Date(i * 1000L));
+        return times;
+    }
 }

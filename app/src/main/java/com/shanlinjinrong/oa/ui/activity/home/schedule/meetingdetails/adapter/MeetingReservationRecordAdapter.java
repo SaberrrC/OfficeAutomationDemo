@@ -39,12 +39,12 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
     @Override
     protected void convert(BaseViewHolder baseViewHolder, ReservationRecordBean.DataBean recordBean) {
 
-        String start_time = recordBean.getStart_time();
-        String timet = timet(start_time);
-        baseViewHolder.setText(R.id.tv_accept_time, timet);
         final int id = recordBean.getId();
+        String todayDate = DateUtils.getTodayDate();
+
         baseViewHolder.setText(R.id.tv_meeting_room_name, recordBean.getTitle());
         baseViewHolder.setText(R.id.tv_meeting_content, recordBean.getContent());
+        baseViewHolder.setText(R.id.tv_accept_time, DateUtils.stringToDate(recordBean.getStart_time()));
 
         baseViewHolder.setOnClickListener(R.id.rlContent, new View.OnClickListener() {
             @Override
@@ -57,12 +57,7 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
         });
     }
 
-    public static String timet(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日  HH:mm");
-        @SuppressWarnings("unused")
-        long lcc = Long.valueOf(time);
-        int i = Integer.parseInt(time);
-        String times = sdr.format(new Date(i * 1000L));
-        return times;
-    }
+
+
+
 }

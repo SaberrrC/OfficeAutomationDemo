@@ -9,7 +9,7 @@
         <TextView
             android:id="@+id/tvBottomLine"
             android:layout_width="1dp"
-            android:layout_marginLeft="35dp"
+            android:layout_marginLeft="34.5dp"
             android:layout_height="match_parent"
             android:background="@color/gray_9b9b9b"
             android:gravity="center"/>

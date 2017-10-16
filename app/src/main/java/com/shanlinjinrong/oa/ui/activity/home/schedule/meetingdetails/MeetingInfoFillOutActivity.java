@@ -130,8 +130,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     private void initReadView() {
         mTopView.setRightText("取消");
-//        mTvReceivePerson.setVisibility(View.GONE);
-//        mTvMeetingReceivePerson.setVisibility(View.GONE);
+        mTopView.setAppTitle("预定详情");
         mRbIsMeetingInvite.setVisibility(View.GONE);
         mTvIsMeetingInvite.setVisibility(View.GONE);
         mEdMeetingTheme.setVisibility(View.GONE);
@@ -155,8 +154,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     private void initWriteView() {
         mTopView.setRightText("");
-//        mTvReceivePerson.setVisibility(View.VISIBLE);
-//        mTvMeetingReceivePerson.setVisibility(View.VISIBLE);
+        mTopView.setAppTitle("选择会议室");
         mRbIsMeetingInvite.setVisibility(View.VISIBLE);
         mTvIsMeetingInvite.setVisibility(View.VISIBLE);
         mEdMeetingTheme.setVisibility(View.VISIBLE);
@@ -195,7 +193,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             mTvMeetingDate.setText(mHoursOfUse);
 
             if (mBeginDate != null && mEndDate != null) {
-//            mTvMeetingDate.setText(DateUtils.getDateFormat("MM月dd日").format(new Date()) + "  " + mBeginDate + "-" + mEndDate);
                 mTvMeetingDate.setText(mBeginDate + "--" + mEndDate);
             }
 
@@ -346,7 +343,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         try {
             mTvMeetingName.setText(info.getData().getTitle());
             mTvMeetingPersonNumber.setText(info.getData().getNop());
-            mTvMeetingDate.setText(info.getData().getStart_time());
+            mTvMeetingDate.setText(DateUtils.stringToDate(info.getData().getStart_time()));
             mTvMeetingDevice.setText(info.getData().getDevice());
             mTvMeetingReceivePerson.setText(info.getData().getSend_user());
             mTvMeetingTheme.setText(info.getData().getTitle());
