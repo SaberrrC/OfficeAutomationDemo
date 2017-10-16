@@ -42,7 +42,7 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
         String start_time = recordBean.getStart_time();
         String timet = timet(start_time);
         baseViewHolder.setText(R.id.tv_accept_time, timet);
-
+        final int id = recordBean.getId();
         baseViewHolder.setText(R.id.tv_meeting_room_name, recordBean.getTitle());
         baseViewHolder.setText(R.id.tv_meeting_content, recordBean.getContent());
 
@@ -51,6 +51,7 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MeetingInfoFillOutActivity.class);
                 intent.putExtra("isWriteMeetingInfo", false);
+                intent.putExtra("id", id);
                 mContext.startActivity(intent);
             }
         });
@@ -63,6 +64,5 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
         int i = Integer.parseInt(time);
         String times = sdr.format(new Date(i * 1000L));
         return times;
-
     }
 }

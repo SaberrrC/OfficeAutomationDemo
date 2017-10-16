@@ -16,6 +16,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRecordInfo;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingInfoFillOutActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingInfoFillOutActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -27,6 +28,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -128,8 +130,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     private void initReadView() {
         mTopView.setRightText("取消");
-        mTvReceivePerson.setVisibility(View.GONE);
-        mTvMeetingReceivePerson.setVisibility(View.GONE);
+//        mTvReceivePerson.setVisibility(View.GONE);
+//        mTvMeetingReceivePerson.setVisibility(View.GONE);
         mRbIsMeetingInvite.setVisibility(View.GONE);
         mTvIsMeetingInvite.setVisibility(View.GONE);
         mEdMeetingTheme.setVisibility(View.GONE);
@@ -146,12 +148,15 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mCbEmail.setEnabled(false);
         mCbMessages.setEnabled(false);
         mEdMeetingContent.setEnabled(false);
+
+        int id = getIntent().getIntExtra("id", 0);
+        mPresenter.lookMeetingRooms(id);
     }
 
     private void initWriteView() {
         mTopView.setRightText("");
-        mTvReceivePerson.setVisibility(View.VISIBLE);
-        mTvMeetingReceivePerson.setVisibility(View.VISIBLE);
+//        mTvReceivePerson.setVisibility(View.VISIBLE);
+//        mTvMeetingReceivePerson.setVisibility(View.VISIBLE);
         mRbIsMeetingInvite.setVisibility(View.VISIBLE);
         mTvIsMeetingInvite.setVisibility(View.VISIBLE);
         mEdMeetingTheme.setVisibility(View.VISIBLE);
@@ -324,7 +329,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void addMeetingRoomsSuccess() {
 
         Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
-        intent.putExtra("mMeetingDate",  mStartTime + " - " + mEndDate);
+        intent.putExtra("mMeetingDate", mStartTime.replace(" ", "  ") + " - " + mEndDate);
         intent.putExtra("mMeetingName", mMeetingName);
         startActivity(intent);
         MeetingPredetermineRecordActivity.mRecordActivity.finish();
@@ -332,6 +337,42 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     @Override
-    public void addMeetingRoomsFailed() {
+    public void addMeetingRoomsFailed(String str) {
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void lookMeetingRoomsSuccess(MeetingRecordInfo info) {
+        try {
+            mTvMeetingName.setText(info.getData().getTitle());
+            mTvMeetingPersonNumber.setText(info.getData().getNop());
+            mTvMeetingDate.setText(info.getData().getStart_time());
+            mTvMeetingDevice.setText(info.getData().getDevice());
+            mTvMeetingReceivePerson.setText(info.getData().getSend_user());
+            mTvMeetingTheme.setText(info.getData().getTitle());
+            List<MeetingRecordInfo.DataBean.PartNameBean> part_name = info.getData().getPart_name();
+            String userName = null;
+            for (int i = 0; i < part_name.size(); i++) {
+                userName = (String) part_name.get(i).getUsername();
+                userName += " " + userName;
+            }
+            mTvMeetingPerson.setText(userName + " ");
+            if (info.getData().getSend_type().equals("邮件,消息")) {
+                mCbEmail.setChecked(true);
+                mCbMessages.setChecked(true);
+            } else if (info.getData().getSend_type().equals("邮件")) {
+                mCbEmail.setChecked(true);
+            } else if (info.getData().getSend_type().equals("消息")) {
+                mCbMessages.setChecked(true);
+            }
+            mEdMeetingContent.setText(info.getData().getContent());
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void lookMeetingRoomsFailed(String strMsg) {
+        Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
     }
 }

@@ -447,6 +447,11 @@ public class Api {
      */
     public static final String ADD_NEW_MEETING = "/new_meetings";
 
+    /**
+     * 获取会议详情
+     */
+    public static final String LOOK_NEW_MEETING_INFO = "/new_meetings/meeting_info";
+
     // 找回密码，确认邮箱
     public static final String USERS_REPWD = "/users/repwd";
 

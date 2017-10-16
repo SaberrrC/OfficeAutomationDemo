@@ -3,18 +3,6 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical">
-
-    <!--<TextView-->
-    <!--android:id="@+id/tv_predetermine_record_time"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="55dp"-->
-    <!--android:background="@drawable/meeting_btn_selector_date"-->
-    <!--android:gravity="center"-->
-    <!--android:layout_marginTop="1dp"-->
-    <!--android:textColor="#333333"-->
-    <!--android:textSize="16sp"-->
-    <!--android:text="12：00——13：00"/>-->
-
     <CheckBox
         android:id="@+id/tv_predetermine_record_time"
         style="@style/meeting_checkbox_style"
