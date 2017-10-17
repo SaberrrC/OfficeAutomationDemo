@@ -1,8 +1,12 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -133,9 +137,14 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
-                        hideSoftInputFromWindow(MeetingInfoFillOutActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                finish();
+                if (mRbIsMeetingInvite.isChecked() && (!mEdMeetingContent.getText().toString().trim().equals("") || !mEdMeetingPerson.getText().toString().trim().equals("")
+                        || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
+                    showBackTip("是否放弃选择会议室", "确定", "取消");
+                } else {
+                    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                            hideSoftInputFromWindow(MeetingInfoFillOutActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    finish();
+                }
             }
         });
     }
@@ -462,5 +471,51 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     @Override
     public void modifyMeetingRoomsFailed(String strMsg) {
         Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mRbIsMeetingInvite.isChecked() && (!mEdMeetingContent.getText().toString().trim().equals("") || !mEdMeetingPerson.getText().toString().trim().equals("")
+                || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
+            showBackTip("是否放弃选择会议室", "确定", "取消");
+        }else {
+            finish();
+        }
+    }
+
+    /**
+     * 验证内容为空的返回提示
+     */
+    public void showBackTip(String msg, final String posiStr, String negaStr) {
+        @SuppressLint("InflateParams")
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
+        TextView title = (TextView) dialogView.findViewById(R.id.title);
+        title.setText("提示");
+        TextView message = (TextView) dialogView.findViewById(R.id.message);
+        message.setText(msg);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this,
+                R.style.AppTheme_Dialog).create();
+        alertDialog.setView(dialogView);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, posiStr,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        alertDialog.show();
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                getResources().getColor(R.color.btn_text_logout));
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                getResources().getColor(R.color.btn_text_logout));
     }
 }
