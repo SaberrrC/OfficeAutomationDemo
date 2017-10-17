@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.utils;
 
 import android.content.Context;
+import android.support.v4.content.res.ResourcesCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,7 +70,6 @@ public class EaseUserUtils {
 
     /**
      * set user avatar
-     *
      */
     public static void setUserAvatarBean(Context context, UserInfoDetailsBean bean, ImageView imageView) {
         if (bean != null) {
@@ -96,7 +96,6 @@ public class EaseUserUtils {
 
     /**
      * set user avatar
-     *
      */
     public static void setUserAvatarBeanSelf(Context context, UserInfoSelfDetailsBean bean, ImageView imageView) {
         if (bean != null) {
@@ -106,6 +105,9 @@ public class EaseUserUtils {
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
+                if (bean.getUsername_self().equals("sl_sl_admin")) {
+                    imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.meeting_invite_icon, null));
+                }
             } catch (Exception e) {
                 //use default avatar
                 String portrait = bean.portrait_self.replace("_self", "");

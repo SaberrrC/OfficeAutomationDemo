@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.adapter;
 
 import android.content.Context;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -156,7 +157,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             String user_Info = lastMessage.getStringAttribute("userInfo", "");
             userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
             userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
-            if (username.equals("sl_" + userInfoDetailsBean.CODE)) {
+            if (userInfoDetailsBean != null && username.equals("sl_" + userInfoDetailsBean.CODE)) {
                 if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
                     String groupId = conversation.conversationId();
                     if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
@@ -183,13 +184,16 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                     holder.name.setText(userInfoDetailsBean.username);
                     holder.motioned.setVisibility(View.GONE);
                 }
-            } else if (username.equals("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+            } else if (userInfoSelfDetailsBean != null && username.equals("sl_" + userInfoSelfDetailsBean.CODE_self)) {
                 try {
                     EaseUserUtils.setUserAvatarBeanSelf(getContext(), userInfoSelfDetailsBean, holder.avatar);
 //                    EaseUserUtils.setUserNick(username, holder.name);
 //                    EaseUserUtils.setUserNickSelfBean(userInfoSelfDetailsBean, holder.name);
                     holder.name.setText(userInfoSelfDetailsBean.username_self);
                     holder.motioned.setVisibility(View.GONE);
+                    if (username.equals("sl_sl_admin")) {
+                        holder.avatar.setImageDrawable(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.meeting_invite_icon, null));
+                    }
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
