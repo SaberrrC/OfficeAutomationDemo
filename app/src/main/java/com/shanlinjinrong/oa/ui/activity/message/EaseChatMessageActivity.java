@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.model.UserInfoDetailsBean;
-import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
@@ -113,9 +112,9 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
         userInfo = getIntent().getStringExtra("userInfo");
         u_id = getIntent().getStringExtra("u_id");
 
-        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
+        UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
 
-        tvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
+        tvTitle.setText(userInfoDetailsBean.getUsername());
 
 
         //传入参数
@@ -126,13 +125,13 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
             args.putString(EaseConstant.EXTRA_USER_ID, u_id);
             //对方的信息
             args.putString("to_user_code", getIntent().getStringExtra("code"));
-            args.putString("to_user_nike", userInfoSelfDetailsBean.getUsername_self());
-            args.putString("to_user_pic", userInfoSelfDetailsBean.getPortrait_self());
-            args.putString("to_user_department", userInfoSelfDetailsBean.getDepartment_name_self());
-            args.putString("to_user_post", userInfoSelfDetailsBean.getPost_title_self());
-            args.putString("to_user_sex", userInfoSelfDetailsBean.getSex_self());
-            args.putString("to_user_phone", userInfoSelfDetailsBean.getPhone_self());
-            args.putString("to_user_email", userInfoSelfDetailsBean.getEmail_self());
+            args.putString("to_user_nike", userInfoDetailsBean.getUsername());
+            args.putString("to_user_pic", userInfoDetailsBean.getPortrait());
+            args.putString("to_user_department", userInfoDetailsBean.getDepartment_name());
+            args.putString("to_user_post", userInfoDetailsBean.getPost_title());
+            args.putString("to_user_sex", userInfoDetailsBean.getSex());
+            args.putString("to_user_phone", userInfoDetailsBean.getPhone());
+            args.putString("to_user_email", userInfoDetailsBean.getEmail());
 
 
             args.putString("userInfo", userInfo);

@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -449,6 +450,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 //在TagAliasCallback 的 gotResult 方法，返回对应的参数 alias, tags。并返回对应的状态码：0为成功，其他返回码请参考错误码定义
                 @Override
                 public void gotResult(int i, String s, Set<String> set) {
+                   Log.i("MainController","MainController : + gotResult"); 
                 }
             });
             Set<String> set = new HashSet<>();
@@ -496,7 +498,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         //添加环信监听
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
         refreshCommCount();
-        refreshUnReadMsgCount();
+//        refreshUnReadMsgCount();
         super.onResume();
     }
 

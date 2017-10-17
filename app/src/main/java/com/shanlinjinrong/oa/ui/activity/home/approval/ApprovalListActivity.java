@@ -39,6 +39,7 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchPublicOutAc
 import com.shanlinjinrong.oa.ui.activity.home.approval.nouse.MeLaunchTravalActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.presenter.ApprovalListPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.utils.BitmapUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.StringUtils;
@@ -459,7 +460,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
      * @param isPull 是否是下拉刷新或加载更多触发的
      */
 
-    private void  loadData(boolean isPull, final boolean loadMore, String time, String where) {
+    private void loadData(boolean isPull, final boolean loadMore, String time, String where) {
         if (!isPull && !loadMore) {
             showLoadingView();
             changeLoadState();
@@ -721,6 +722,9 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
 
     @Override
     public void loadDataSuccess(ArrayList<Approval> listApproval, boolean isMore) {
+        if (currentState == 2) {
+            TabHomePageFragment.clearDot(this, TabHomePageFragment.DOT_APPORVAL);
+        }
         mTvEmptyView.setVisibility(View.GONE);
         if (isMore) {
             //如果是加载更多的话，需要将最后一个view移除了

@@ -21,6 +21,7 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.CheckReportItem;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportCheckContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportCheckPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.utils.DeviceUtil;
 import com.shanlinjinrong.views.common.CommonTopView;
 import com.shanlinjinrong.views.dialog.MaskDialog;
@@ -103,6 +104,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         mRefreshLayout.setRefreshing(true);
         loadData(false);
         showMask();
+        TabHomePageFragment.clearDot(this,TabHomePageFragment.DOT_SEND);
     }
 
     private void showMask() {

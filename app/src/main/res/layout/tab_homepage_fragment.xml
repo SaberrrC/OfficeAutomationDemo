@@ -166,28 +166,43 @@
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color" />
 
-                    <RelativeLayout
-                        android:id="@+id/rl_work_report_send_to_me"
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center">
+                        android:layout_weight="1">
+
+                        <RelativeLayout
+                            android:id="@+id/rl_work_report_send_to_me"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/iv_homepage_wr_send_to_me"
+                                style="@style/home_page_icon_style"
+                                android:src="@mipmap/work_content_send_me" />
+
+                            <TextView
+                                style="@style/common_text_style"
+                                android:layout_below="@+id/iv_homepage_wr_send_to_me"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="8dp"
+                                android:text="发给我的"
+                                android:textSize="@dimen/text_common_icon_tips" />
+
+                        </RelativeLayout>
 
                         <ImageView
-                            android:id="@+id/iv_homepage_wr_send_to_me"
-                            style="@style/home_page_icon_style"
-                            android:src="@mipmap/work_content_send_me" />
+                            android:id="@+id/iv_send_to_me_dot"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="top|end"
+                            android:layout_marginRight="@dimen/horizontal_spacing12"
+                            android:layout_marginTop="@dimen/horizontal_spacing12"
+                            android:src="@drawable/ring_red"
+                            android:visibility="gone"/>
 
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_wr_send_to_me"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="发给我的"
-                            android:textSize="@dimen/text_common_icon_tips" />
-
-
-                    </RelativeLayout>
+                    </FrameLayout>
                 </LinearLayout>
 
                 <View
@@ -258,28 +273,44 @@
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color" />
 
-                    <RelativeLayout
-                        android:id="@+id/rl_approval_wait_me_approval"
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center">
+                        android:layout_weight="1">
+
+                        <RelativeLayout
+                            android:id="@+id/rl_approval_wait_me_approval"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/iv_homepage_approval_wait_me_approval"
+                                style="@style/home_page_icon_style"
+                                android:src="@drawable/icon_homepage_approval_wait_me_approval" />
+
+                            <TextView
+                                style="@style/common_text_style"
+                                android:layout_below="@+id/iv_homepage_approval_wait_me_approval"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="8dp"
+                                android:text="待我审批"
+                                android:textSize="@dimen/text_common_icon_tips" />
+
+
+                        </RelativeLayout>
 
                         <ImageView
-                            android:id="@+id/iv_homepage_approval_wait_me_approval"
-                            style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_approval_wait_me_approval" />
+                            android:id="@+id/iv_wait_me_approval_dot"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="top|end"
+                            android:layout_marginRight="@dimen/horizontal_spacing12"
+                            android:layout_marginTop="@dimen/horizontal_spacing12"
+                            android:src="@drawable/ring_red"
+                            android:visibility="gone"/>
+                    </FrameLayout>
 
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_approval_wait_me_approval"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="待我审批"
-                            android:textSize="@dimen/text_common_icon_tips" />
-
-
-                    </RelativeLayout>
 
                     <View
                         android:layout_width="0.5dp"

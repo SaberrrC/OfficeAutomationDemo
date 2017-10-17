@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class Api {
     public static final String PHP_DEBUG_URL = "http://118.31.18.67:86";
 
-    public static final String PHP_URL = "";
+    public static final String PHP_URL = "http://testoa.shanlinjinrong.com/webApi";
 
     private static final String RESPONSES_KEY_CODE = "code";
 

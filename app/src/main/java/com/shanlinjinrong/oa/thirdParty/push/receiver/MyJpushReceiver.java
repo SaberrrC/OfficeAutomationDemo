@@ -50,10 +50,11 @@ public class MyJpushReceiver extends BroadcastReceiver {
         LogUtils.d("onReceive - " + intent.getAction());
         LogUtils.e("bundleaaa：" + bundle.toString());
 
-        //TODO 2017-8-25 10:03:19 极光逻辑部分走不通
-        EventMessage  eventMessage = new EventMessage();
-        eventMessage.setStr("reFreash");
-        EventBus.getDefault().postSticky(eventMessage);
+//        //TODO 2017-8-25 10:03:19 极光逻辑部分走不通
+//        EventMessage  eventMessage = new EventMessage();
+//        eventMessage.setStr("reFreash");
+//        eventMessage.setType(type);
+//        EventBus.getDefault().postSticky(eventMessage);
 
 //        LogUtils.e("收到了通知:" + bundle.getString(JPushInterface.EXTRA_EXTRA));
         //{"ap_type":2,"type":7,"id":2}
@@ -65,6 +66,11 @@ public class MyJpushReceiver extends BroadcastReceiver {
                 ap_type = Integer.valueOf(jo.getString("ap_type"));
                 list_type = Integer.valueOf(jo.getString("list_id"));
                 LogUtils.e("type->" + type);
+
+                EventMessage eventMessage = new EventMessage();
+                eventMessage.setStr("reFreash");
+                eventMessage.setType(type);
+                EventBus.getDefault().postSticky(eventMessage);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -178,6 +184,5 @@ public class MyJpushReceiver extends BroadcastReceiver {
         synchronized (notification) {
             notification.notify();
         }
-
     }
 }
