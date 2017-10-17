@@ -40,20 +40,22 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, MeetingRoomsBean.DataBean workContentBean) {
+        final String roomnameX = workContentBean.getRoomname();
+        final int nopX = workContentBean.getNop();
+        final String deviceX = workContentBean.getDevice();
+        final String roomimgX = workContentBean.getRoomimg();
+        final int room_idX = workContentBean.getRoom_id();
 
-        baseViewHolder.setText(R.id.tv_meeting_name, workContentBean.getRoomnameX());
-        baseViewHolder.setText(R.id.tv_meeting_location, workContentBean.getAddressX());
-        baseViewHolder.setText(R.id.tv_meeting_people_number, workContentBean.getNopX() + "人");
-        baseViewHolder.setText(R.id.tv_meeting_device, workContentBean.getDeviceX());
+        baseViewHolder.setText(R.id.tv_meeting_name, roomnameX);
+        baseViewHolder.setText(R.id.tv_meeting_location, workContentBean.getAddress());
+        baseViewHolder.setText(R.id.tv_meeting_people_number, workContentBean.getNop() + "人");
+        baseViewHolder.setText(R.id.tv_meeting_device, deviceX);
 
-        final String roomnameX = workContentBean.getRoomnameX();
-        final int nopX = workContentBean.getNopX();
-        final String deviceX = workContentBean.getDeviceX();
-        final String roomimgX = workContentBean.getRoomimgX();
-        final int room_idX = workContentBean.getRoom_idX();
+
         try {
             Glide.with(AppManager.mContext)
                     .load(roomimgX)
+                    .error(R.drawable.video_image_1)
                     .into((ImageView) baseViewHolder.getView(R.id.iv_meeting_details));
         } catch (Throwable e) {
             e.printStackTrace();

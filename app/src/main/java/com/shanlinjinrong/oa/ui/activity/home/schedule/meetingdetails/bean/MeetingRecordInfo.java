@@ -8,11 +8,10 @@ import java.util.List;
 
 public class MeetingRecordInfo {
 
-
     /**
      * code : 200
      * info : success
-     * data : {"id":"92","uid":"618","title":"大会议室1","content":"就回去","start_time":"1508054400","end_time":"1508058000","meeting_place":"星峰企业园2号楼","room_id":"3","send_type":"邮件,消息","created":"1508079980","send_user":"赵贇","part_name":[{"id":null,"username":null},{"id":null,"username":null}],"roomname":"大会议室1","address":"星峰企业园2号楼","device":"投影仪","nop":"10","isuse":"0","roomimg":""}
+     * data : {"id":"41","uid":"618","title":"3","content":"吧","start_time":"1508227200","end_time":"1508230800","meeting_place":"32","room_id":"3","send_type":"邮件,消息","created":"1508228436","send_user":"赵贇","part_name":[{"id":"67874","username":"舒培培"}],"roomname":"3","address":"32","device":"23","nop":"3332","isuse":"123","roomimg":null}
      */
 
     private int code;
@@ -45,24 +44,24 @@ public class MeetingRecordInfo {
 
     public static class DataBean {
         /**
-         * id : 92
+         * id : 41
          * uid : 618
-         * title : 大会议室1
-         * content : 就回去
-         * start_time : 1508054400
-         * end_time : 1508058000
-         * meeting_place : 星峰企业园2号楼
+         * title : 3
+         * content : 吧
+         * start_time : 1508227200
+         * end_time : 1508230800
+         * meeting_place : 32
          * room_id : 3
          * send_type : 邮件,消息
-         * created : 1508079980
+         * created : 1508228436
          * send_user : 赵贇
-         * part_name : [{"id":null,"username":null},{"id":null,"username":null}]
-         * roomname : 大会议室1
-         * address : 星峰企业园2号楼
-         * device : 投影仪
-         * nop : 10
-         * isuse : 0
-         * roomimg :
+         * part_name : [{"id":"67874","username":"舒培培"}]
+         * roomname : 3
+         * address : 32
+         * device : 23
+         * nop : 3332
+         * isuse : 123
+         * roomimg : null
          */
 
         private String id;
@@ -81,7 +80,7 @@ public class MeetingRecordInfo {
         private String device;
         private String nop;
         private String isuse;
-        private String roomimg;
+        private Object roomimg;
         private List<PartNameBean> part_name;
 
         public String getId() {
@@ -212,11 +211,11 @@ public class MeetingRecordInfo {
             this.isuse = isuse;
         }
 
-        public String getRoomimg() {
+        public Object getRoomimg() {
             return roomimg;
         }
 
-        public void setRoomimg(String roomimg) {
+        public void setRoomimg(Object roomimg) {
             this.roomimg = roomimg;
         }
 
@@ -230,26 +229,26 @@ public class MeetingRecordInfo {
 
         public static class PartNameBean {
             /**
-             * id : null
-             * username : null
+             * id : 67874
+             * username : 舒培培
              */
 
-            private Object id;
-            private Object username;
+            private String id;
+            private String username;
 
-            public Object getId() {
+            public String getId() {
                 return id;
             }
 
-            public void setId(Object id) {
+            public void setId(String id) {
                 this.id = id;
             }
 
-            public Object getUsername() {
+            public String getUsername() {
                 return username;
             }
 
-            public void setUsername(Object username) {
+            public void setUsername(String username) {
                 this.username = username;
             }
         }
