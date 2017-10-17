@@ -50,6 +50,8 @@ public class TabHomePageFragment extends BaseFragment {
 
     private RelativeLayout mRootView;
 
+    private static int TYPE_SEND_TO_ME = 0;//发送我的
+    private static int TYPE_WAIT_ME_APPROVAL = 1;//待我审批
     private static String DOT_STATUS = "DOT_STATUS";
     public static String DOT_SEND = "DOT_SEND";
     public static String DOT_APPORVAL = "DOT_APPORVAL";
@@ -99,18 +101,16 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
     /**
-     * 判断去哪个列表
-     * 1:系统消息 2：公司公告 3：部门通知 4：集团公告 5：工作汇报（我发起的） 6：审批申请
-     * 7：审批回复 8：会议 9：视频会议 10：工作汇报(发送我的) 11：工作汇报（抄送我的）
+     * 0:工作汇报(发送我的) 1：流程审批（待我审批）
      */
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void showDot(EventMessage eventMessage) {
-        if (eventMessage.getStr().equals("reFreash")) {
-            if (eventMessage.getType() == 10) {
+        if (eventMessage.getStr().equals("jpush")) {
+            if (eventMessage.getType() == TYPE_SEND_TO_ME) {
                 saveDot(DOT_SEND);
             }
 
-            if (eventMessage.getType() == 6) {
+            if (eventMessage.getType() == TYPE_WAIT_ME_APPROVAL) {
                 saveDot(DOT_APPORVAL);
             }
             refreshDot();
@@ -122,7 +122,7 @@ public class TabHomePageFragment extends BaseFragment {
         sp.edit().putBoolean(name, true).apply();
     }
 
-    public void refreshDot() {
+    private void refreshDot() {
         SharedPreferences sp = getActivity().getSharedPreferences(DOT_STATUS, Context.MODE_PRIVATE);
         if (sp.getBoolean(DOT_SEND, false)) {
             mSendToMeDot.setVisibility(View.VISIBLE);
@@ -136,9 +136,10 @@ public class TabHomePageFragment extends BaseFragment {
         }
     }
 
-    public static void clearDot(Context context, String name) {
+    public void clearDot(Context context, String name) {
         SharedPreferences sp = context.getSharedPreferences(DOT_STATUS, Context.MODE_PRIVATE);
         sp.edit().remove(name).apply();
+        refreshDot();
     }
 
 
@@ -147,46 +148,52 @@ public class TabHomePageFragment extends BaseFragment {
             R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval,
             R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
             R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting})
-
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
             case R.id.rl_schedule_my_mail:
+                //我的邮箱
                 intent = new Intent(mContext, MyMailActivity.class);
                 break;
             case R.id.rl_work_report_launch:
-//                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
+                //我发起的
                 intent = new Intent(mContext, MyLaunchWorkReportActivity.class);
                 break;
             case R.id.rl_work_report_send_to_me:
-//                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
+                //发送给的
                 intent = new Intent(mContext, WorkReportCheckActivity.class);
-
+                clearDot(getContext(), DOT_SEND);
                 break;
             case R.id.rl_work_report_copy_to_me:
-//                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
-//                intent = new Intent(mContext, WorkReportListActivity.class);
+                //发起周报
                 intent = new Intent(mContext, WriteWeeklyNewspaperActivity.class);
                 break;
             case R.id.rl_work_report_launch_report:
+                //发起日报
                 intent = new Intent(mContext, WorkReportLaunchActivity.class);
                 break;
             case R.id.rl_approval_me_launch:
+                //我的申请
                 intent = new Intent(mContext, ApprovalListActivity.class);
                 intent.putExtra("whichList", 1);
                 break;
             case R.id.rl_approval_wait_me_approval:
+                //待我审批
                 intent = new Intent(mContext, ApprovalListActivity.class);
                 intent.putExtra("whichList", 2);
+                clearDot(getContext(), DOT_APPORVAL);
                 break;
             case R.id.rl_approval_me_approvaled:
+                //我审批的
                 intent = new Intent(mContext, ApprovalListActivity.class);
                 intent.putExtra("whichList", 3);
                 break;
             case R.id.rl_approval_launch_approval:
+                //发起审批
                 intent = new Intent(mContext, LaunchApprovalActivity.class);
                 break;
             case R.id.rl_schedule_book_meeting:
+                //会议室预定
                 intent = new Intent(mContext, MeetingDetailsActivity.class);
                 break;
         }

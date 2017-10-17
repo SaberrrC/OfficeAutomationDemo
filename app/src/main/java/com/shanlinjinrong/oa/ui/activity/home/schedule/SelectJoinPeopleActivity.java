@@ -455,11 +455,14 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                     }
                 }
                 if (!isExist) {
+                    groups.get(groupPosition).getChildItem(childPosition).setChecked(true);
                     selectedContacts.add(groups.get(groupPosition).getChildItem(childPosition));
                 }
             }
 
             qty.setText(selectedContacts.size() + "");
+            mAdapter.notifyDataSetChanged();
+
             return false;
         }
     }

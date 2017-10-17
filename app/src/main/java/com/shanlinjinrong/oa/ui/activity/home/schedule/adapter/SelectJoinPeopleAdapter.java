@@ -189,6 +189,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -317,10 +318,10 @@ public class SelectJoinPeopleAdapter extends BaseExpandableListAdapter implement
         TextView tvPost = (TextView) convertView.findViewById(R.id.tvPost);
         tvPost.setText(child.getPost());
 
-//        // 重新產生 CheckBox 時，將存起來的 isChecked 狀態重新設定
-//        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.cbChild);
-//        checkBox.setChecked(child.getChecked());
-//
+        // 重新產生 CheckBox 時，將存起來的 isChecked 狀態重新設定
+        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.cbChild);
+        checkBox.setChecked(child.getChecked());
+
 //        // 點擊 CheckBox 時，將狀態存起來
 //        checkBox.setOnClickListener(new Child_CheckBox_Click(groupPosition, childPosition));
 
@@ -330,7 +331,7 @@ public class SelectJoinPeopleAdapter extends BaseExpandableListAdapter implement
     /**
      * 勾選 Child CheckBox 時，存 Child CheckBox 的狀態
      */
-    class Child_CheckBox_Click implements View.OnClickListener {
+    private class Child_CheckBox_Click implements View.OnClickListener {
         private int groupPosition;
         private int childPosition;
 
@@ -344,21 +345,21 @@ public class SelectJoinPeopleAdapter extends BaseExpandableListAdapter implement
         }
     }
 
-    public void handleClick(int childPosition, int groupPosition) {
+    private void handleClick(int childPosition, int groupPosition) {
         groups.get(groupPosition).getChildItem(childPosition).toggle();
 
-        // 檢查 Child CheckBox 是否有全部勾選，以控制 Group CheckBox
-        int childrenCount = groups.get(groupPosition).getChildrenCount();
-        boolean childrenAllIsChecked = true;
-        for (int i = 0; i < childrenCount; i++) {
-            if (!groups.get(groupPosition).getChildItem(i).getChecked())
-                childrenAllIsChecked = false;
-        }
-
-        groups.get(groupPosition).setChecked(childrenAllIsChecked);
-
-        // 注意，一定要通知 ExpandableListView 資料已經改變，ExpandableListView 會重新產生畫面
-        notifyDataSetChanged();
+//        // 檢查 Child CheckBox 是否有全部勾選，以控制 Group CheckBox
+//        int childrenCount = groups.get(groupPosition).getChildrenCount();
+//        boolean childrenAllIsChecked = true;
+//        for (int i = 0; i < childrenCount; i++) {
+//            if (!groups.get(groupPosition).getChildItem(i).getChecked())
+//                childrenAllIsChecked = false;
+//        }
+//
+//        groups.get(groupPosition).setChecked(childrenAllIsChecked);
+//
+//        // 注意，一定要通知 ExpandableListView 資料已經改變，ExpandableListView 會重新產生畫面
+//        this.notifyDataSetChanged();
     }
 
     @Override

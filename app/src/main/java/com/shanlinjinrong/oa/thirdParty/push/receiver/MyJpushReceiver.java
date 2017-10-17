@@ -47,17 +47,9 @@ public class MyJpushReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         mContext = AppManager.mContext;
         Bundle bundle = intent.getExtras();
-        LogUtils.d("onReceive - " + intent.getAction());
-        LogUtils.e("bundleaaa：" + bundle.toString());
 
-//        //TODO 2017-8-25 10:03:19 极光逻辑部分走不通
-//        EventMessage  eventMessage = new EventMessage();
-//        eventMessage.setStr("reFreash");
-//        eventMessage.setType(type);
-//        EventBus.getDefault().postSticky(eventMessage);
-
-//        LogUtils.e("收到了通知:" + bundle.getString(JPushInterface.EXTRA_EXTRA));
-        //{"ap_type":2,"type":7,"id":2}
+        //推送的内容
+        String pushMessage = bundle.getString(JPushInterface.EXTRA_MESSAGE);
         String pushStr = bundle.getString(JPushInterface.EXTRA_EXTRA);
         if (!StringUtils.isBlank(pushStr)) {
             try {
@@ -68,7 +60,7 @@ public class MyJpushReceiver extends BroadcastReceiver {
                 LogUtils.e("type->" + type);
 
                 EventMessage eventMessage = new EventMessage();
-                eventMessage.setStr("reFreash");
+                eventMessage.setStr("jpush");
                 eventMessage.setType(type);
                 EventBus.getDefault().postSticky(eventMessage);
 
@@ -86,7 +78,6 @@ public class MyJpushReceiver extends BroadcastReceiver {
 
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
             LogUtils.e("收到了通知:" + bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE));
-
            /* // TODO 如果放到这块接收type，变量type在用户点击了通知后是初始值0，不懂为什么？！！！！
             LogUtils.e("收到了通知:" + bundle.getString(JPushInterface.EXTRA_EXTRA));
             //{"ap_type":2,"type":7,"id":2}
@@ -105,18 +96,8 @@ public class MyJpushReceiver extends BroadcastReceiver {
 //                initNotification(bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE));
 //            }
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
-            // 在这里可以自己写代码去定义用户点击后的行为
-            LogUtils.e("用户点击打开了通知");
-
+            // 点击通知栏
             judgeWhereToGo();
-
-          /*  Intent i = new Intent(AppManager.context, PushListActivity.class);  //自定义打开的界面
-            i.putExtras(bundle);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            context.startActivity(i);*/
-
-        } else {
-            LogUtils.d("Unhandled intent - " + intent.getAction());
         }
     }
 
@@ -158,8 +139,6 @@ public class MyJpushReceiver extends BroadcastReceiver {
             case 10:
                 intent = new Intent(mContext, WorkReportCheckActivity.class);
                 break;
-
-
         }
         if (intent != null) {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
