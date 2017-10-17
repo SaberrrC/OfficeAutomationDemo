@@ -184,7 +184,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                     holder.name.setText(userInfoDetailsBean.username);
                     holder.motioned.setVisibility(View.GONE);
                 }
-            } else if (userInfoSelfDetailsBean != null && username.equals("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+            } else if (userInfoSelfDetailsBean != null && username.contains("sl_" + userInfoSelfDetailsBean.CODE_self)) {
                 try {
                     EaseUserUtils.setUserAvatarBeanSelf(getContext(), userInfoSelfDetailsBean, holder.avatar);
 //                    EaseUserUtils.setUserNick(username, holder.name);
