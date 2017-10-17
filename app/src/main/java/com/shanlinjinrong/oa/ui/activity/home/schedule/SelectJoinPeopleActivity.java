@@ -431,10 +431,10 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         mListView.setAdapter(mAdapter);
         //mListView.setOnChildClickListener(mAdapter);
         mListView.setOnChildClickListener(new GetSelectedEmployee());
-
-        //selectedContacts = getIntent().getParcelableArrayListExtra("selectedContacts");
-        selectedContacts = new ArrayList<>();
-
+        selectedContacts = getIntent().getParcelableArrayListExtra("selectedContacts");
+        if (selectedContacts == null) {
+            selectedContacts = new ArrayList<>();
+        }
 
     }
 
@@ -445,11 +445,11 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                                     int childPosition, long id) {
             if (selectedContacts.size() == 0) {
                 selectedContacts.add(groups.get(groupPosition).getChildItem(childPosition));
+                groups.get(groupPosition).getChildItem(childPosition).setChecked(true);
             } else {
                 boolean isExist = false;
                 for (int i = 0; i < selectedContacts.size(); i++) {
-                    if (selectedContacts.get(i).getUid().equals(
-                            groups.get(groupPosition).getChildItem(childPosition).getUid())) {
+                    if (selectedContacts.get(i).getUid().equals(groups.get(groupPosition).getChildItem(childPosition).getUid())) {
                         isExist = true;
                         Toast.makeText(SelectJoinPeopleActivity.this, R.string.selectJoinPeopleHint, Toast.LENGTH_SHORT).show();
                     }
@@ -462,7 +462,6 @@ public class SelectJoinPeopleActivity extends BaseActivity {
 
             qty.setText(selectedContacts.size() + "");
             mAdapter.notifyDataSetChanged();
-
             return false;
         }
     }
@@ -641,6 +640,28 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             qty.setText(msg.what + "");
+            refreshData();
         }
+    }
+
+    private void refreshData() {
+        for (int i = 0; i < groups.size(); i++) {
+            for (int j = 0; j < groups.get(i).getChildrenCount(); j++) {
+                Child child = groups.get(i).getChildItem(j);
+                if (selectedContacts.size() == 0) {
+                    child.setChecked(false);
+                } else {
+                    for (int k = 0; k < selectedContacts.size(); k++) {
+                        String uid = selectedContacts.get(k).getUid();
+                        if (child.getUid().equals(uid)) {
+                            child.setChecked(true);
+                        } else {
+                            child.setChecked(false);
+                        }
+                    }
+                }
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 }
