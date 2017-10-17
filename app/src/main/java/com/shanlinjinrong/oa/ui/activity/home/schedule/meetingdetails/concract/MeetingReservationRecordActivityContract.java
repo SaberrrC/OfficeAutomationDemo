@@ -7,6 +7,7 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,10 +21,14 @@ public interface MeetingReservationRecordActivityContract {
         void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean);
 
         void getMeetingRecordFailed(String msgStr);
+
+        void removeFooterView();
+
+        void getMeetingRecordEmpty();
     }
 
     interface Presenter extends BasePresenter<MeetingReservationRecordActivityContract.View> {
 
-        void getMeetingRecord(HttpParams httpParams); //获取会议室信息
+        void getMeetingRecord(HttpParams httpParams, int page, int num, boolean isLoadMore,List<ReservationRecordBean.DataBean> data); //获取会议室信息
     }
 }

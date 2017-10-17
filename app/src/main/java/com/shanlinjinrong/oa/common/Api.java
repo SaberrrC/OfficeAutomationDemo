@@ -74,6 +74,11 @@ public class Api {
     public static final int RESPONSES_CODE_NO_ACCOUNT = 823;
 
     /**
+     * 暂无数据
+     */
+    public static final int RESPONSES_CODE_NO_CONTENT = 824;
+
+    /**
      * {"code":"393","info":"分页为空"}
      */
     public static final int LIMIT_CONTENT_EMPTY = 393;

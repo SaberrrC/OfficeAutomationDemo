@@ -21,7 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by tonny on 2017/10/11.
+ * 新会议室记录详情
  */
 
 public class MeetingReservationRecordActivityPresenter extends HttpPresenter<MeetingReservationRecordActivityContract.View> implements MeetingReservationRecordActivityContract.Presenter {
@@ -34,19 +34,21 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
     private ReservationRecordBean.DataBean dataBean;
 
     @Override
-    public void getMeetingRecord(HttpParams httpParams) {
+    public void getMeetingRecord(HttpParams httpParams, int page, int num, final boolean isLoadMore, final List<ReservationRecordBean.DataBean> data) {
         mKjHttp.cleanCache();
-        mKjHttp.phpJsonGet(Api.NEW_MEETING_RECORD, httpParams, new HttpCallBack() {
+        mKjHttp.phpJsonGet(Api.NEW_MEETING_RECORD + "?page=" + page + "&num=" + num, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    List<ReservationRecordBean.DataBean> data = new ArrayList<>();
                     ReservationRecordBean reservationRecordBean = new ReservationRecordBean();
                     JSONObject jsonObject = new JSONObject(t);
                     reservationRecordBean.setCode(jsonObject.getInt("code"));
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
                     if (reservationRecordBean.getCode() == Api.RESPONSES_CODE_OK) {
+                        if (!isLoadMore) {
+                            data.clear();
+                        }
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             dataBean = new ReservationRecordBean.DataBean();
                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -59,6 +61,12 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                             data.add(dataBean);
                         }
                         mView.getMeetingRecordSuccess(data);
+                    } else if (reservationRecordBean.getCode() == Api.RESPONSES_CODE_NO_CONTENT) {
+                        if (data.size() == 0) {
+                            mView.getMeetingRecordEmpty();
+                        } else {
+                            mView.removeFooterView();
+                        }
                     }
 
                 } catch (Throwable e) {
@@ -69,6 +77,7 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                mView.getMeetingRecordFailed(strMsg);
             }
 
             @Override

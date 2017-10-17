@@ -1,8 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -131,6 +133,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
+                        hideSoftInputFromWindow(MeetingInfoFillOutActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 finish();
             }
         });
@@ -150,8 +154,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTvRedDot1.setVisibility(View.INVISIBLE);
         mTvRedDot2.setVisibility(View.INVISIBLE);
         mTvRedDot3.setVisibility(View.INVISIBLE);
-        if (getIntent().getBooleanExtra("isMeetingUse", false)) {
+        if (!getIntent().getBooleanExtra("isMeetingPast", false)) {
             mBtnMeetingInfoComplete.setEnabled(false);
+        }else {
+            mBtnMeetingInfoComplete.setEnabled(true);
         }
         mBtnMeetingInfoComplete.setText("调期");
         mCbEmail.setEnabled(false);
@@ -447,6 +453,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         intent.putExtra("mMeetingName", mTvMeetingName.getText().toString());
         startActivity(intent);
         MeetingPredetermineRecordActivity.mRecordActivity.finish();
+        MeetingReservationRecordActivity.mRecordActivity.finish();
         finish();
     }
 
