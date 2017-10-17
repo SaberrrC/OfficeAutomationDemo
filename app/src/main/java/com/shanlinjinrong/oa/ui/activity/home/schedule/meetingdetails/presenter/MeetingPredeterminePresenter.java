@@ -30,9 +30,17 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
 
         mKjHttp.cleanCache();
         mKjHttp.phpJsonGet(Api.NEW_MEETING_ALR_MEETING + meetingId, new HttpParams(), new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                mView.showLoading();
+            }
+
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                mView.requestFinish();
                 try {
                     MeetingBookItem recordBean = new Gson().fromJson(t, MeetingBookItem.class);
                     switch (recordBean.getCode()) {
@@ -56,11 +64,13 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 mView.getMeetingPredetermineFailed(strMsg);
+                mView.requestFinish();
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
+                mView.requestFinish();
             }
         });
     }

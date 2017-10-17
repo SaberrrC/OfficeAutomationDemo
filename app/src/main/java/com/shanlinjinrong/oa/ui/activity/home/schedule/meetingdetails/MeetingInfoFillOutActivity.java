@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,7 +19,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.j256.ormlite.stmt.query.In;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
@@ -36,8 +36,6 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -98,6 +96,15 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     TextView mTvRedDot3;
     @Bind(R.id.iv_add_contacts)
     ImageView mAddContacts;
+    @Bind(R.id.ll_meeting_title)
+    LinearLayout mLlMeetingTitle;
+    @Bind(R.id.ll_invite_mode)
+    LinearLayout mLlInviteMode;
+    @Bind(R.id.ll_meeting_personnel)
+    LinearLayout mLlMeetingPersonnel;
+    @Bind(R.id.ll_is_launch_meeting)
+    LinearLayout mLlIsLaunchMeeting;
+
     private String mEndDate;
     private String mBeginDate;
     private String mMeetingName;
@@ -137,7 +144,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRbIsMeetingInvite.isChecked() && (!mEdMeetingContent.getText().toString().trim().equals("") || !mEdMeetingPerson.getText().toString().trim().equals("")
+                if (!mEdMeetingContent.isEnabled() && (!TextUtils.isEmpty(mEdMeetingContent.getText().toString().trim()) || !mEdMeetingPerson.getText().toString().trim().equals("")
                         || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
                     showBackTip("是否放弃选择会议室", "确定", "取消");
                 } else {
@@ -163,6 +170,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTvRedDot1.setVisibility(View.INVISIBLE);
         mTvRedDot2.setVisibility(View.INVISIBLE);
         mTvRedDot3.setVisibility(View.INVISIBLE);
+
         if (!getIntent().getBooleanExtra("isMeetingPast", false)) {
             mBtnMeetingInfoComplete.setEnabled(false);
         } else {
@@ -208,7 +216,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTvMeetingTheme.setVisibility(View.GONE);
         mTvMeetingPerson.setVisibility(View.GONE);
         mBtnMeetingInfoComplete.setText("完成");
-        mEdMeetingContent.setEnabled(false);
         mEdMeetingTheme.setEnabled(false);
         mEdMeetingPerson.setEnabled(false);
         mCbEmail.setEnabled(false);
@@ -227,7 +234,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mModifyMeeting = getIntent().getBooleanExtra("modifyMeeting", false);
         String meetingPeopleNumber = getIntent().getStringExtra("meetingPeopleNumber");
         String meetingDevice = getIntent().getStringExtra("meetingDevice");
-
         mStartTime = getIntent().getStringExtra("start_time");
         mEndTime = getIntent().getStringExtra("end_time");
 
@@ -256,52 +262,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
                 if (mModifyMeeting) {
-                    HttpParams httpParams = new HttpParams();
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("start_time", mStartTime);
-                        jsonObject.put("end_time", mEndTime);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    httpParams.putJsonParams(jsonObject.toString());
-                    mPresenter.modifyMeetingRooms(mId, httpParams);
+                    modifyMeetingState();
                     return;
                 } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
-                    if (mRbIsMeetingInvite.isChecked()) {
-                        if (mEdMeetingTheme.getText().toString().trim().equals("")) {
-                            Toast.makeText(this, "会议主题不能为空", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        if (mEdMeetingPerson.getText().toString().trim().equals("")) {
-                            Toast.makeText(this, "与议人员不能为空", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        if (!mCbEmail.isChecked() && !mCbMessages.isChecked()) {
-                            Toast.makeText(this, "请选择邀请方式", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }
-
-                    HttpParams httpParams = new HttpParams();
-                    httpParams.put("room_id", mRoomId);
-                    httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-                    httpParams.put("title", mEdMeetingTheme.getText().toString());
-                    httpParams.put("content", mEdMeetingContent.getText().toString() + "");
-                    httpParams.put("part_uid", mUid);
-                    httpParams.put("start_time", mStartTime);
-                    httpParams.put("end_time", mEndTime);
-                    if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
-                        mSendType = "邮件,消息";
-                    } else if (mCbMessages.isChecked()) {
-                        mSendType = "消息";
-                    } else if (mCbEmail.isChecked()) {
-                        mSendType = "邮件";
-                    }
-                    httpParams.put("send_type", mSendType + "");
-                    mPresenter.addMeetingRooms(httpParams);
+                    addMeetingParams();
                 } else {
                     Intent intent = new Intent(this, MeetingPredetermineRecordActivity.class);
                     intent.putExtra("id", mId);
@@ -321,19 +285,72 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         }
     }
 
+    //会议调期
+    private void modifyMeetingState() {
+        HttpParams httpParams = new HttpParams();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("start_time", mStartTime);
+            jsonObject.put("end_time", mEndTime);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        httpParams.putJsonParams(jsonObject.toString());
+        mPresenter.modifyMeetingRooms(mId, httpParams);
+    }
+
+    //添加会议参数
+    private void addMeetingParams() {
+        if (mRbIsMeetingInvite.isChecked()) {
+            if (mEdMeetingTheme.getText().toString().trim().equals("")) {
+                Toast.makeText(this, "会议主题不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (mEdMeetingPerson.getText().toString().trim().equals("")) {
+                Toast.makeText(this, "与议人员不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!mCbEmail.isChecked() && !mCbMessages.isChecked()) {
+                Toast.makeText(this, "请选择邀请方式", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("room_id", mRoomId);
+        httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
+        httpParams.put("title", mEdMeetingTheme.getText().toString());
+        if (mEdMeetingContent.getText().toString().trim().equals("")) {
+            mEdMeetingContent.setText("暂无");
+        }
+        httpParams.put("content", mEdMeetingContent.getText().toString());
+        httpParams.put("part_uid", mUid);
+        httpParams.put("start_time", mStartTime);
+        httpParams.put("end_time", mEndTime);
+        if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
+            mSendType = "邮件,消息";
+        } else if (mCbMessages.isChecked()) {
+            mSendType = "消息";
+        } else if (mCbEmail.isChecked()) {
+            mSendType = "邮件";
+        }
+        httpParams.put("send_type", mSendType + "");
+        mPresenter.addMeetingRooms(httpParams);
+    }
+
+    //判断是否禁用输入框
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         switch (compoundButton.getId()) {
             case R.id.rb_is_meeting_invite:
                 if (mRbIsMeetingInvite.isChecked()) {
-                    mEdMeetingContent.setEnabled(true);
                     mEdMeetingTheme.setEnabled(true);
                     mEdMeetingPerson.setEnabled(false);
                     mCbEmail.setEnabled(true);
                     mCbMessages.setEnabled(true);
                     mAddContacts.setClickable(true);
                 } else {
-                    mEdMeetingContent.setEnabled(false);
                     mEdMeetingTheme.setEnabled(false);
                     mEdMeetingPerson.setEnabled(false);
                     mCbEmail.setEnabled(false);
@@ -344,9 +361,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         }
     }
 
-    /**
-     * 添加参会人
-     */
+    //添加参会人
     private void addCopyPersonOperate(Intent data) {
         this.contactsList.clear();
         ArrayList<Child> contacts = data.getParcelableArrayListExtra("contacts");
@@ -380,6 +395,17 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     @Override
+    public void showLoading() {
+        showLoadingView();
+    }
+
+    @Override
+    public void requestFinish() {
+        hideLoadingView();
+    }
+
+    //添加会议成功跳转
+    @Override
     public void addMeetingRoomsSuccess() {
         Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
         intent.putExtra("mMeetingDate", mStartTime.replace(" ", "  ") + " - " + mEndDate);
@@ -395,39 +421,48 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
+    //会议记录查看
     @Override
     public void lookMeetingRoomsSuccess(MeetingRecordInfo info) {
         try {
             mTvMeetingName.setText(info.getData().getRoomname());
             mTvMeetingPersonNumber.setText(info.getData().getNop());
-
             if (!mModifyMeeting) {
                 int index = DateUtils.stringToDate(info.getData().getEnd_time()).indexOf('日');
                 mTvMeetingDate.setText(DateUtils.stringToDate(info.getData().getStart_time()) + " -" + DateUtils.stringToDate(info.getData().getEnd_time()).substring(index + 2, DateUtils.stringToDate(info.getData().getEnd_time()).length()));
             }
-
             mTvMeetingDevice.setText(info.getData().getDevice());
             mTvMeetingReceivePerson.setText(info.getData().getSend_user());
-            mTvMeetingTheme.setText(info.getData().getTitle());
-            List<MeetingRecordInfo.DataBean.PartNameBean> part_name = info.getData().getPart_name();
-
-            String userName = "";
-            for (int i = 0; i < part_name.size(); i++) {
-                if (part_name.get(i).getUsername() != null)
-                    userName += part_name.get(i).getUsername() + " ";
-            }
-
-            if (!userName.trim().equals("")) {
-                mTvMeetingPerson.setText(userName);
-            }
-
-            if (info.getData().getSend_type().equals("邮件,消息")) {
-                mCbEmail.setChecked(true);
-                mCbMessages.setChecked(true);
-            } else if (info.getData().getSend_type().equals("邮件")) {
-                mCbEmail.setChecked(true);
-            } else if (info.getData().getSend_type().equals("消息")) {
-                mCbMessages.setChecked(true);
+            if (!info.getData().getTitle().trim().equals("")) {
+                mTvMeetingTheme.setText(info.getData().getTitle());
+                List<MeetingRecordInfo.DataBean.PartNameBean> part_name = info.getData().getPart_name();
+                String userName = "";
+                for (int i = 0; i < part_name.size(); i++) {
+                    if (part_name.get(i).getUsername() != null)
+                        userName += part_name.get(i).getUsername() + " ";
+                }
+                if (!userName.trim().equals("")) {
+                    mTvMeetingPerson.setText(userName);
+                }
+                switch (info.getData().getSend_type()) {
+                    case "邮件,消息":
+                        mCbEmail.setChecked(true);
+                        mCbMessages.setChecked(true);
+                        break;
+                    case "邮件":
+                        mCbEmail.setChecked(true);
+                        break;
+                    case "消息":
+                        mCbMessages.setChecked(true);
+                        break;
+                }
+            } else {
+                //会议内容不填默认隐藏
+                mTvMeetingInvite.setVisibility(View.GONE);
+                mLlMeetingTitle.setVisibility(View.GONE);
+                mLlMeetingPersonnel.setVisibility(View.GONE);
+                mLlInviteMode.setVisibility(View.GONE);
+                mLlIsLaunchMeeting.setVisibility(View.GONE);
             }
             mEdMeetingContent.setText(info.getData().getContent());
         } catch (Throwable e) {
@@ -440,6 +475,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
     }
 
+    //删除会议
     @Override
     public void deleteMeetingRoomsSuccess() {
         Toast.makeText(this, "会议室取消成功!", Toast.LENGTH_SHORT).show();
@@ -455,6 +491,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
     }
 
+    //会议室调期
     @Override
     public void modifyMeetingRoomsSuccess() {
         MeetingReservationRecordActivity.mRecordActivity.finish();
@@ -475,10 +512,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void onBackPressed() {
-        if (mRbIsMeetingInvite.isChecked() && (!mEdMeetingContent.getText().toString().trim().equals("") || !mEdMeetingPerson.getText().toString().trim().equals("")
+        if (!mEdMeetingContent.isEnabled() && (!mEdMeetingContent.getText().toString().trim().equals("") || !mEdMeetingPerson.getText().toString().trim().equals("")
                 || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
             showBackTip("是否放弃选择会议室", "确定", "取消");
-        }else {
+        } else {
             finish();
         }
     }

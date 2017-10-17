@@ -15,6 +15,10 @@ public interface MeetingInfoFillOutActivityContract {
 
     interface View extends BaseView {
 
+        void showLoading();
+
+        void requestFinish();
+
         void addMeetingRoomsSuccess();
 
         void addMeetingRoomsFailed(String strMsg);

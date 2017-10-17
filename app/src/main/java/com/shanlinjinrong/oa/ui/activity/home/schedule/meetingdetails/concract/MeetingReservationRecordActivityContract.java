@@ -17,6 +17,9 @@ import java.util.List;
 public interface MeetingReservationRecordActivityContract {
 
     interface View extends BaseView {
+        void showLoading();
+
+        void requestFinish();
 
         void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean);
 

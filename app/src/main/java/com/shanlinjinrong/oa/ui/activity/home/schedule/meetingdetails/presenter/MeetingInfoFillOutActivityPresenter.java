@@ -77,9 +77,17 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         mKjHttp.phpJsonGet(Api.LOOK_NEW_MEETING_INFO + "?id=" + id, httpParams, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                mView.showLoading();
+            }
+
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                mView.requestFinish();
                 try {
                     MeetingRecordInfo meetingRecordInfo = new Gson().fromJson(t, MeetingRecordInfo.class);
                     switch (meetingRecordInfo.getCode()) {
@@ -103,11 +111,13 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 mView.lookMeetingRoomsFailed(strMsg);
+                mView.requestFinish();
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
+                mView.requestFinish();
             }
         });
     }
@@ -118,8 +128,15 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
         HttpParams httpParams = new HttpParams();
         mKjHttp.jsonDelete(Api.DELETE_NEW_MEETING + "/" + id, httpParams, new HttpCallBack() {
             @Override
+            public void onPreStart() {
+                super.onPreStart();
+                mView.showLoading();
+            }
+
+            @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                mView.requestFinish();
                 try {
                     JSONObject jsonObject = new JSONObject(t);
                     switch (jsonObject.getInt("code")) {
@@ -143,11 +160,13 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 mView.deleteMeetingRoomsFailed(strMsg);
+                mView.requestFinish();
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
+                mView.requestFinish();
             }
         });
     }
@@ -156,9 +175,17 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
     public void modifyMeetingRooms(int id, HttpParams httpParams) {
         mKjHttp.cleanCache();
         mKjHttp.phpJsonPut(Api.MODIFY_NEW_MEETING + id, httpParams, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                mView.showLoading();
+            }
+
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                mView.requestFinish();
                 try {
                     JSONObject jsonObject = new JSONObject(t);
                     switch (jsonObject.getInt("code")) {
@@ -182,11 +209,13 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 mView.modifyMeetingRoomsFailed(strMsg);
+                mView.requestFinish();
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
+                mView.requestFinish();
             }
         });
     }

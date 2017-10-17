@@ -14,6 +14,10 @@ public interface MeetingDetailsActivityContract {
 
     interface View extends BaseView {
 
+        void showLoading();
+
+        void requestFinish();
+
         void getMeetingRoomsSuccess(List<MeetingRoomsBean.DataBean> data);
 
         void getMeetingRoomsFailed(String data);

@@ -69,6 +69,14 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
     }
 
     @Override
+    public void showLoading() {
+    }
+
+    @Override
+    public void requestFinish() {
+    }
+
+    @Override
     public void getMeetingRoomsSuccess(List<MeetingRoomsBean.DataBean> data) {
         mMeetingRoomAdapter.setNewData(data);
         mRefreshLayout.setRefreshing(false);

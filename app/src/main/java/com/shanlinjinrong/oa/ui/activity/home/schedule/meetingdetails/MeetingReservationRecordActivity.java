@@ -115,6 +115,14 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     }
 
     @Override
+    public void showLoading() {
+    }
+
+    @Override
+    public void requestFinish() {
+    }
+
+    @Override
     public void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean) {
         mRecordAdapter.setNewData(bean);
         mRecordAdapter.notifyDataSetChanged();
