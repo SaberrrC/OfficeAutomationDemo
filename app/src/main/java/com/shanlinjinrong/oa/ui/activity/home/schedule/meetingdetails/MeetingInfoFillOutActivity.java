@@ -133,7 +133,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
+                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
                         hideSoftInputFromWindow(MeetingInfoFillOutActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 finish();
             }
@@ -156,7 +156,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTvRedDot3.setVisibility(View.INVISIBLE);
         if (!getIntent().getBooleanExtra("isMeetingPast", false)) {
             mBtnMeetingInfoComplete.setEnabled(false);
-        }else {
+        } else {
             mBtnMeetingInfoComplete.setEnabled(true);
         }
         mBtnMeetingInfoComplete.setText("调期");
@@ -278,7 +278,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     HttpParams httpParams = new HttpParams();
                     httpParams.put("room_id", mRoomId);
                     httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-                    httpParams.put("title", mTvMeetingName.getText().toString());
+                    httpParams.put("title", mEdMeetingTheme.getText().toString());
                     httpParams.put("content", mEdMeetingContent.getText().toString() + "");
                     httpParams.put("part_uid", mUid);
                     httpParams.put("start_time", mStartTime);
@@ -392,10 +392,14 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     @Override
     public void lookMeetingRoomsSuccess(MeetingRecordInfo info) {
         try {
-            mTvMeetingName.setText(info.getData().getTitle());
+            mTvMeetingName.setText(info.getData().getRoomname());
             mTvMeetingPersonNumber.setText(info.getData().getNop());
-            if (!mModifyMeeting)
-                mTvMeetingDate.setText(DateUtils.stringToDate(info.getData().getStart_time()));
+
+            if (!mModifyMeeting) {
+                int index = DateUtils.stringToDate(info.getData().getEnd_time()).indexOf('日');
+                mTvMeetingDate.setText(DateUtils.stringToDate(info.getData().getStart_time()) + " -" + DateUtils.stringToDate(info.getData().getEnd_time()).substring(index + 2, DateUtils.stringToDate(info.getData().getEnd_time()).length()));
+            }
+
             mTvMeetingDevice.setText(info.getData().getDevice());
             mTvMeetingReceivePerson.setText(info.getData().getSend_user());
             mTvMeetingTheme.setText(info.getData().getTitle());
