@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
@@ -66,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
-                android:text="2017-09-18    17：00   "
+                tools:text="2017-09-18    17：00   "
                 android:textColor="#999"
                 android:textSize="14sp"/>
 
@@ -77,7 +78,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="12dp"
                 android:layout_marginTop="12dp"
-                android:text="待使用"
+                tools:text="待使用"
                 android:textColor="#55BBFF"/>
 
             <TextView
@@ -99,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_line"
                 android:layout_marginLeft="12dp"
-                android:text="七楼大会议室"
+                tools:text="七楼大会议室"
                 android:textColor="#333333"
                 android:textSize="14sp"/>
 
@@ -110,7 +111,7 @@
                 android:layout_below="@+id/tv_meeting_room_name"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="4dp"
-                android:text="善林系统需求评审会会"
+                tools:text="善林系统需求评审会会"
                 android:textColor="#666666"
                 android:textSize="14sp"/>
 

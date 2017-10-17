@@ -434,6 +434,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     @Override
     public void deleteMeetingRoomsSuccess() {
         Toast.makeText(this, "会议室取消成功!", Toast.LENGTH_SHORT).show();
+        MeetingReservationRecordActivity.mRecordActivity.finish();
         Intent intent = new Intent(this, MeetingReservationRecordActivity.class);
         startActivity(intent);
         EventBus.getDefault().post("meetingDeleteSuccess");

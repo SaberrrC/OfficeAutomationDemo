@@ -1,14 +1,12 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.MeetingReservationRecordAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
@@ -39,6 +37,8 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     RecyclerView mRvMeetingReservationRecord;
     @Bind(R.id.refresh)
     SwipeRefreshLayout mRefresh;
+    @Bind(R.id.tv_empty_view)
+    TextView mTvEmptyView;
     private int mPage;
     private int mNum;
     private MeetingReservationRecordAdapter mRecordAdapter;
@@ -138,6 +138,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     @Override
     public void getMeetingRecordEmpty() {
         mRefresh.setRefreshing(false);
+        mTvEmptyView.setVisibility(View.VISIBLE);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
