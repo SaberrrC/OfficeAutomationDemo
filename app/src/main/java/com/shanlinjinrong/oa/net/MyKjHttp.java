@@ -64,7 +64,7 @@ public class MyKjHttp extends KJHttp {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         if (BuildConfig.DEBUG) {
-            url = Api.PHP_DEBUG_URL + url;
+            url = Api.PHP_URL + url;
         } else {
             url = Api.PHP_URL + url;
         }
@@ -81,7 +81,7 @@ public class MyKjHttp extends KJHttp {
             params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         }
         if (BuildConfig.DEBUG) {
-            url = Api.PHP_DEBUG_URL + url;
+            url = Api.PHP_URL + url;
         } else {
             url = Api.PHP_URL + url;
         }
@@ -126,7 +126,7 @@ public class MyKjHttp extends KJHttp {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         if (BuildConfig.DEBUG) {
-            url = Api.PHP_DEBUG_URL + url;
+            url = Api.PHP_URL + url;
         } else {
             url = Api.PHP_URL + url;
         }
@@ -153,7 +153,7 @@ public class MyKjHttp extends KJHttp {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         if (BuildConfig.DEBUG) {
-            url = Api.PHP_DEBUG_URL + url;
+            url = Api.PHP_URL + url;
         } else {
             url = Api.PHP_URL + url;
         }

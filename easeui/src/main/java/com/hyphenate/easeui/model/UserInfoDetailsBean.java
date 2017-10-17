@@ -17,7 +17,6 @@ public class UserInfoDetailsBean implements Serializable {
     public String post_title;
     public String sex;
     public String username;
-
     public String getCODE() {
         return CODE;
     }

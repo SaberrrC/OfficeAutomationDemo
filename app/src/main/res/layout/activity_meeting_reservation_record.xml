@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         app:leftDrawable="@drawable/toolbar_back"
-        app:topTitle="预订记录"/>
+        app:topTitle="预定记录"/>
 
     <View
         android:layout_width="match_parent"

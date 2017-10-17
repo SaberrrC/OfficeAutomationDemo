@@ -105,7 +105,7 @@ public class EaseUserUtils {
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
-                if (bean.getUsername_self().equals("sl_sl_admin")) {
+                if (bean.getUsername_self().equals("sl_admin")) {
                     imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.meeting_invite_icon, null));
                 }
             } catch (Exception e) {
