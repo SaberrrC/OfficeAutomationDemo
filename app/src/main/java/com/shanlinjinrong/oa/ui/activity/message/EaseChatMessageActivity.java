@@ -221,7 +221,7 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
 
     @Override
     public void clickUserInfo(String userinfo, EMMessage emMessage) {
-        if (userinfo.equals("sl_admin")) {
+        if (userinfo.contains("sl_admin")) {
             return;
         }
         Intent intent = new Intent(this, Contact_Details_Activity.class);

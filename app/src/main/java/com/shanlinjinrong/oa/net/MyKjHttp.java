@@ -21,6 +21,7 @@ import org.kymjs.kjframe.http.Request;
 public class MyKjHttp extends KJHttp {
     private String baseUrl;
     private String baseJavaUrl;
+    private String phpNewUrl;
 
 
     public MyKjHttp() {
@@ -29,6 +30,11 @@ public class MyKjHttp extends KJHttp {
         baseUrl = BuildConfig.BASE_URL;
         baseJavaUrl = BuildConfig.BASE_JAVA_URL;
         HttpConfig.TIMEOUT = 10000;
+        if (BuildConfig.DEBUG) {
+            phpNewUrl = Api.PHP_URL;
+        } else {
+            phpNewUrl = Api.PHP_URL;
+        }
     }
 
 
@@ -63,11 +69,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> phpJsonGet(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-        if (BuildConfig.DEBUG) {
-            url = Api.PHP_URL + url;
-        } else {
-            url = Api.PHP_URL + url;
-        }
+        url = phpNewUrl + url;
         return super.jsonGet(url, params, callback);
     }
 
@@ -80,11 +82,7 @@ public class MyKjHttp extends KJHttp {
             params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
             params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         }
-        if (BuildConfig.DEBUG) {
-            url = Api.PHP_URL + url;
-        } else {
-            url = Api.PHP_URL + url;
-        }
+        url = phpNewUrl + url;
         return super.post(url, params, callback);
     }
 
@@ -125,11 +123,7 @@ public class MyKjHttp extends KJHttp {
                                       boolean useCache, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-        if (BuildConfig.DEBUG) {
-            url = Api.PHP_URL + url;
-        } else {
-            url = Api.PHP_URL + url;
-        }
+        url = phpNewUrl + url;
         Request<byte[]> request = new JsonRequest(Request.HttpMethod.PUT, url, params,
                 callback);
         request.setShouldCache(useCache);
@@ -152,11 +146,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> jsonDelete(String url, HttpParams params, boolean useCache, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-        if (BuildConfig.DEBUG) {
-            url = Api.PHP_URL + url;
-        } else {
-            url = Api.PHP_URL + url;
-        }
+        url = phpNewUrl + url;
         Request<byte[]> request = new JsonRequest(Request.HttpMethod.DELETE, url, params,
                 callback);
         request.setShouldCache(useCache);

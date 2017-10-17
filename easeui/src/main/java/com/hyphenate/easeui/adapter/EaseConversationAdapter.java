@@ -191,7 +191,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
 //                    EaseUserUtils.setUserNickSelfBean(userInfoSelfDetailsBean, holder.name);
                     holder.name.setText(userInfoSelfDetailsBean.username_self);
                     holder.motioned.setVisibility(View.GONE);
-                    if (username.equals("sl_admin")) {
+                    if (username.contains("sl_admin")) {
                         holder.avatar.setImageDrawable(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.meeting_invite_icon, null));
                     }
                 } catch (Throwable throwable) {
