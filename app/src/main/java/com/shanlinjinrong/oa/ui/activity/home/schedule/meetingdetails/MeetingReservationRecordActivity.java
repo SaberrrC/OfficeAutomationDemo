@@ -65,26 +65,31 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         mRvMeetingReservationRecord.setAdapter(mRecordAdapter);
         mRecordAdapter.notifyDataSetChanged();
 
-//        mRvMeetingReservationRecord.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//                if (newState == 0 && data.size() > 10) {
-//                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-//                    if (lastVisibleItemPosition == data.size() - 1) {
-//                        View view = View.inflate(MeetingReservationRecordActivity.this, R.layout.load_more_layout, null);
-//                        try {
-//                            if (!data.isEmpty())
-//                                mRecordAdapter.addFooterView(view);
-//                            LoadMore();
-//                        } catch (Throwable e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }
-//        });
+        mRvMeetingReservationRecord.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                try {
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (newState == 0 && data.size() > 10) {
+                        int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                        if (lastVisibleItemPosition == data.size() - 1) {
+                            View view = View.inflate(MeetingReservationRecordActivity.this, R.layout.load_more_layout, null);
+                            try {
+                                if (!data.isEmpty())
+                                    mRecordAdapter.addFooterView(view);
+                                mRecordAdapter.notifyDataSetChanged();
+                                LoadMore();
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void refreshData() {
@@ -110,6 +115,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
 
     @Override
     public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 
     @Override
@@ -129,12 +135,13 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     @Override
     public void removeFooterView() {
         mRecordAdapter.removeAllFooterView();
+        mRecordAdapter.notifyDataSetChanged();
         showToast("没有更多了");
     }
 
     @Override
     public void getMeetingRecordEmpty() {
-        mRecordAdapter.removeAllFooterView();
+        mRefresh.setRefreshing(false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

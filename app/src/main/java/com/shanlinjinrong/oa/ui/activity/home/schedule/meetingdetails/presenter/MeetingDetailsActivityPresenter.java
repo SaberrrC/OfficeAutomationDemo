@@ -19,7 +19,7 @@ import javax.inject.Inject;
  * Created by tonny on 2017/10/11.
  */
 
-    public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetailsActivityContract.View> implements MeetingDetailsActivityContract.Presenter {
+public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetailsActivityContract.View> implements MeetingDetailsActivityContract.Presenter {
 
 
     @Inject
@@ -38,8 +38,14 @@ import javax.inject.Inject;
                 super.onSuccess(t);
                 try {
                     MeetingRoomsBean meetingRoomsBean = new Gson().fromJson(t, MeetingRoomsBean.class);
-                    if (meetingRoomsBean.getCode() == Api.RESPONSES_CODE_OK) {
-                        mView.getMeetingRoomsSuccess(meetingRoomsBean.getData());
+                    switch (meetingRoomsBean.getCode()) {
+                        case Api.RESPONSES_CODE_OK:
+                            mView.getMeetingRoomsSuccess(meetingRoomsBean.getData());
+                            break;
+                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            mView.uidNull(meetingRoomsBean.getCode());
+                            break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
