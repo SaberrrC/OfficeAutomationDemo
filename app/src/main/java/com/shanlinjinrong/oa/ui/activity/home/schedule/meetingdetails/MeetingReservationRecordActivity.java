@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -92,6 +93,11 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         });
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
     private void refreshData() {
         mRefresh.setOnRefreshListener(this);
         mRefresh.setRefreshing(true);
@@ -106,16 +112,6 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         mPage++;
         mNum = 15;
         mPresenter.getMeetingRecord(httpParams, mPage, mNum, true, data);
-    }
-
-    @Override
-    protected void initInject() {
-        getActivityComponent().inject(this);
-    }
-
-    @Override
-    public void uidNull(int code) {
-        catchWarningByCode(code);
     }
 
     @Override
@@ -167,6 +163,11 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     @Override
     public void onClick(View view) {
         finish();
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 
 }

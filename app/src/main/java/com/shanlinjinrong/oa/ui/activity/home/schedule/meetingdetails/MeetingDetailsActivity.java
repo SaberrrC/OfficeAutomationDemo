@@ -81,6 +81,7 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
 
     @Override
     public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 
     @Override

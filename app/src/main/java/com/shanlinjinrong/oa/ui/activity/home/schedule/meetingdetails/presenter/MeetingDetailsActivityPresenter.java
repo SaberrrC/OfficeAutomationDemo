@@ -16,7 +16,8 @@ import org.kymjs.kjframe.http.HttpParams;
 import javax.inject.Inject;
 
 /**
- * Created by tonny on 2017/10/11.
+ * 获取会议详情
+ *
  */
 
 public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetailsActivityContract.View> implements MeetingDetailsActivityContract.Presenter {

@@ -370,7 +370,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void uidNull(int code) {
-
+        catchWarningByCode(code);
     }
 
     @Override

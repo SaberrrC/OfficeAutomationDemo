@@ -14,7 +14,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import javax.inject.Inject;
 
 /**
- * Created by tonny on 2017/10/11.
+ * 获取会议室占用时间段
  */
 
 public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredetermineContract.View> implements MeetingPredetermineContract.Presenter {
@@ -33,11 +33,22 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                MeetingBookItem recordBean = new Gson().fromJson(t, MeetingBookItem.class);
-                if (recordBean.getCode() == Api.RESPONSES_CODE_OK) {
-                    mView.getMeetingPredetermineSuccess(recordBean.getData());
-                } else {
-                    mView.getMeetingPredetermineFailed(recordBean.getInfo());
+                try {
+                    MeetingBookItem recordBean = new Gson().fromJson(t, MeetingBookItem.class);
+                    switch (recordBean.getCode()) {
+                        case Api.RESPONSES_CODE_OK:
+                            mView.getMeetingPredetermineSuccess(recordBean.getData());
+                            break;
+                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            mView.uidNull(recordBean.getCode());
+                            break;
+                        default:
+                            mView.getMeetingPredetermineFailed(recordBean.getInfo());
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
             }
 

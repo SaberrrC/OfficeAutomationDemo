@@ -43,31 +43,39 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                     ReservationRecordBean reservationRecordBean = new ReservationRecordBean();
                     JSONObject jsonObject = new JSONObject(t);
                     reservationRecordBean.setCode(jsonObject.getInt("code"));
-                    if (reservationRecordBean.getCode() == Api.RESPONSES_CODE_OK) {
-                        if (!isLoadMore) {
-                            data.clear();
-                        }
-                        JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            dataBean = new ReservationRecordBean.DataBean();
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                            dataBean.setContent(jsonObject1.getString("content"));
-                            dataBean.setTitle(jsonObject1.getString("title"));
-                            dataBean.setEnd_time(jsonObject1.getString("end_time"));
-                            dataBean.setRoom_id(jsonObject1.getInt("room_id"));
-                            dataBean.setId(jsonObject1.getInt("id"));
-                            dataBean.setStart_time(jsonObject1.getString("start_time") + "");
-                            data.add(dataBean);
-                        }
-                        mView.getMeetingRecordSuccess(data);
-                    } else if (reservationRecordBean.getCode() == Api.RESPONSES_CODE_NO_CONTENT) {
-                        if (data.size() == 0) {
-                            mView.getMeetingRecordEmpty();
-                        } else {
-                            mView.removeFooterView();
-                        }
+                    switch (reservationRecordBean.getCode()) {
+                        case Api.RESPONSES_CODE_OK:
+                            if (!isLoadMore) {
+                                data.clear();
+                            }
+                            JSONArray jsonArray = jsonObject.getJSONArray("data");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                dataBean = new ReservationRecordBean.DataBean();
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                dataBean.setContent(jsonObject1.getString("content"));
+                                dataBean.setTitle(jsonObject1.getString("title"));
+                                dataBean.setEnd_time(jsonObject1.getString("end_time"));
+                                dataBean.setRoom_id(jsonObject1.getInt("room_id"));
+                                dataBean.setId(jsonObject1.getInt("id"));
+                                dataBean.setStart_time(jsonObject1.getString("start_time") + "");
+                                data.add(dataBean);
+                            }
+                            mView.getMeetingRecordSuccess(data);
+                            break;
+                        case Api.RESPONSES_CODE_NO_CONTENT:
+                            if (data.size() == 0) {
+                                mView.getMeetingRecordEmpty();
+                            } else {
+                                mView.removeFooterView();
+                            }
+                            break;
+                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+                        case Api.RESPONSES_CODE_UID_NULL:
+                            mView.uidNull(jsonObject.getInt("code"));
+                            break;
+                        default:
+                            break;
                     }
-
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
