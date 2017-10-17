@@ -60,9 +60,7 @@
         android:id="@+id/bottomsheet"
         android:layout_width="match_parent"
         android:layout_above="@+id/rel_tanchu"
-        android:layout_height="wrap_content">
-
-    </com.flipboard.bottomsheet.BottomSheetLayout>
+        android:layout_height="wrap_content"/>
     <RelativeLayout
         android:id="@+id/rel_tanchu"
         android:layout_alignParentBottom="true"
