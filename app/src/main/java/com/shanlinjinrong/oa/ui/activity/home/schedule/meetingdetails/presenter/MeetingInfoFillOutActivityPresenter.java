@@ -47,6 +47,9 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(jsonObject.getInt("code"));
                             break;
+                        default:
+                            mView.addMeetingRoomsFailed(jsonObject.getString("info"));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -87,6 +90,9 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(meetingRecordInfo.getCode());
                             break;
+                        default:
+                            mView.lookMeetingRoomsFailed(meetingRecordInfo.getInfo());
+                            break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -124,6 +130,9 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(jsonObject.getInt("code"));
                             break;
+                        default:
+                            mView.deleteMeetingRoomsFailed(jsonObject.getString("info"));
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -159,6 +168,9 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(jsonObject.getInt("code"));
+                            break;
+                        default:
+                            mView.modifyMeetingRoomsFailed(jsonObject.getString("info"));
                             break;
                     }
                 } catch (JSONException e) {

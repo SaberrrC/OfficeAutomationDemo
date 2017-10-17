@@ -47,6 +47,9 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(meetingRoomsBean.getCode());
                             break;
+                        default:
+                            mView.getMeetingRoomsFailed(meetingRoomsBean.getInfo());
+                            break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();

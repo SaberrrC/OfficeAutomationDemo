@@ -74,6 +74,7 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                             mView.uidNull(jsonObject.getInt("code"));
                             break;
                         default:
+                            mView.getMeetingRecordFailed(jsonObject.getString("info"));
                             break;
                     }
                 } catch (Throwable e) {

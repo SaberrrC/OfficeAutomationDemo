@@ -54,7 +54,7 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
                 baseViewHolder.setImageResource(R.id.tvDot, R.drawable.meeting_record_icon);
             }
 
-            baseViewHolder.setText(R.id.tv_meeting_room_name, recordBean.getTitle());
+            baseViewHolder.setText(R.id.tv_meeting_room_name, recordBean.getMeeting_place());
             baseViewHolder.setText(R.id.tv_meeting_content, recordBean.getContent());
             baseViewHolder.setText(R.id.tv_accept_time, DateUtils.stringToDate(recordBean.getStart_time()));
 

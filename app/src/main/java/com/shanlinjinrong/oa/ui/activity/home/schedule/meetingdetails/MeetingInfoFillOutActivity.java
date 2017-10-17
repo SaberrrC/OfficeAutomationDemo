@@ -162,6 +162,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mBtnMeetingInfoComplete.setText("调期");
         mCbEmail.setEnabled(false);
         mCbMessages.setEnabled(false);
+        mAddContacts.setClickable(false);
         mEdMeetingContent.setEnabled(false);
 
         mId = getIntent().getIntExtra("id", -1);
@@ -198,12 +199,12 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTvMeetingTheme.setVisibility(View.GONE);
         mTvMeetingPerson.setVisibility(View.GONE);
         mBtnMeetingInfoComplete.setText("完成");
-//        mBtnMeetingInfoComplete.setEnabled(false);
         mEdMeetingContent.setEnabled(false);
         mEdMeetingTheme.setEnabled(false);
         mEdMeetingPerson.setEnabled(false);
         mCbEmail.setEnabled(false);
         mCbMessages.setEnabled(false);
+        mAddContacts.setClickable(false);
         mRbIsMeetingInvite.setOnCheckedChangeListener(this);
 
     }
@@ -316,23 +317,19 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         switch (compoundButton.getId()) {
             case R.id.rb_is_meeting_invite:
                 if (mRbIsMeetingInvite.isChecked()) {
-//                    mBtnMeetingInfoComplete.setEnabled(true);
                     mEdMeetingContent.setEnabled(true);
                     mEdMeetingTheme.setEnabled(true);
                     mEdMeetingPerson.setEnabled(false);
                     mCbEmail.setEnabled(true);
                     mCbMessages.setEnabled(true);
-                    mAddContacts.setEnabled(true);
-                    //mCbSms.setEnabled(true);
+                    mAddContacts.setClickable(true);
                 } else {
-//                    mBtnMeetingInfoComplete.setEnabled(false);
                     mEdMeetingContent.setEnabled(false);
                     mEdMeetingTheme.setEnabled(false);
                     mEdMeetingPerson.setEnabled(false);
                     mCbEmail.setEnabled(false);
                     mCbMessages.setEnabled(false);
-                    mAddContacts.setEnabled(false);
-                    //mCbSms.setEnabled(false);
+                    mAddContacts.setClickable(false);
                 }
                 break;
         }
