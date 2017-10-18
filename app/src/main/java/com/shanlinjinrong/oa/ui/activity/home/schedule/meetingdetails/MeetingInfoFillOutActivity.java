@@ -322,9 +322,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
         httpParams.put("title", mEdMeetingTheme.getText().toString());
         if (mEdMeetingContent.getText().toString().trim().equals("")) {
-            mEdMeetingContent.setText("暂无");
+            httpParams.put("content", "暂无");
+        } else {
+            httpParams.put("content", mEdMeetingContent.getText().toString());
         }
-        httpParams.put("content", mEdMeetingContent.getText().toString());
         httpParams.put("part_uid", mUid);
         httpParams.put("start_time", mStartTime);
         httpParams.put("end_time", mEndTime);
