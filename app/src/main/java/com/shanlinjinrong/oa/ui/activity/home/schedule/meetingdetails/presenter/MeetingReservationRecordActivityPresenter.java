@@ -40,13 +40,11 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
             @Override
             public void onPreStart() {
                 super.onPreStart();
-                mView.showLoading();
             }
 
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                mView.requestFinish();
                 try {
                     ReservationRecordBean reservationRecordBean = new ReservationRecordBean();
                     JSONObject jsonObject = new JSONObject(t);
@@ -100,14 +98,8 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 mView.getMeetingRecordFailed(strMsg);
-                mView.requestFinish();
             }
 
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                mView.requestFinish();
-            }
         });
     }
 }
