@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.model.UserInfoDetailsBean;
+import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
@@ -113,8 +114,13 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
         u_id = getIntent().getStringExtra("u_id");
 
         UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
+        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
 
-        tvTitle.setText(userInfoDetailsBean.getUsername());
+        if (userInfoDetailsBean != null && u_id.contains(userInfoDetailsBean.getCODE()))
+            tvTitle.setText(userInfoDetailsBean.getUsername());
+        else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
+            tvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
+        }
 
 
         //传入参数
