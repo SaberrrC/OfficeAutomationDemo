@@ -128,12 +128,14 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         mRecordAdapter.notifyDataSetChanged();
         mRefresh.setRefreshing(false);
         mRecordAdapter.removeAllFooterView();
+        mRecordAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void getMeetingRecordFailed(String msgStr) {
         mRefresh.setRefreshing(false);
         mRecordAdapter.removeAllFooterView();
+        mRecordAdapter.notifyDataSetChanged();
     }
 
     @Override

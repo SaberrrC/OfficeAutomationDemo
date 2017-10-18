@@ -144,7 +144,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mEdMeetingContent.isEnabled() && (!TextUtils.isEmpty(mEdMeetingContent.getText().toString().trim()) || !mEdMeetingPerson.getText().toString().trim().equals("")
+                if (isWriteMeetingInfo && (!TextUtils.isEmpty(mEdMeetingContent.getText().toString().trim()) || !mEdMeetingPerson.getText().toString().trim().equals("")
                         || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
                     showBackTip("是否放弃选择会议室", "确定", "取消");
                 } else {
@@ -512,7 +512,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void onBackPressed() {
-        if (!mEdMeetingContent.isEnabled() && (!mEdMeetingContent.getText().toString().trim().equals("") || !mEdMeetingPerson.getText().toString().trim().equals("")
+        if (isWriteMeetingInfo && (!mEdMeetingContent.getText().toString().trim().equals("") || !mEdMeetingPerson.getText().toString().trim().equals("")
                 || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
             showBackTip("是否放弃选择会议室", "确定", "取消");
         } else {
