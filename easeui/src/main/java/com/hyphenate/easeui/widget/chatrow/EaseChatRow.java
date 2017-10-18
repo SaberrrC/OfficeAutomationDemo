@@ -140,18 +140,27 @@ public abstract class EaseChatRow extends LinearLayout {
                 String user_Info = mPrevMessage.getStringAttribute("userInfo", "");
                 userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
                 userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
+
+
+                //角色转换
+                if (!EMClient.getInstance().getCurrentUser().contains(userInfoDetailsBean.getCODE())) {
+                    UserInfoDetailsBean userInfoDetailsBeanTemp = userInfoDetailsBean;
+                    userInfoDetailsBean = EaseUserUtils.changeSelfToUserInfo(userInfoSelfDetailsBean);
+                    userInfoSelfDetailsBean = EaseUserUtils.changeUserInfoToSelf(userInfoDetailsBeanTemp);
+                }
+
                 //set nickname and avatar
                 if (message.direct() == Direct.SEND) {
-                    if (message.getFrom().equals("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+                    if (message.getFrom().contains(userInfoSelfDetailsBean.CODE_self)) {
                         EaseUserUtils.setUserAvatarBeanSelf(context, userInfoSelfDetailsBean, userAvatarView);
-                    } else if (message.getFrom().equals("sl_" + userInfoDetailsBean.CODE)) {
+                    } else if (message.getFrom().contains(userInfoDetailsBean.CODE)) {
                         EaseUserUtils.setUserAvatarBean(context, userInfoDetailsBean, userAvatarView);
                     }
                 } else {
-                    if (message.getFrom().equals("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+                    if (message.getFrom().contains(userInfoSelfDetailsBean.CODE_self)) {
                         EaseUserUtils.setUserAvatarBeanSelf(context, userInfoSelfDetailsBean, userAvatarView);
                         usernickView.setText(userInfoSelfDetailsBean.username_self);
-                    } else if (message.getFrom().equals("sl_" + userInfoDetailsBean.CODE)) {
+                    } else if (message.getFrom().contains(userInfoDetailsBean.CODE)) {
                         EaseUserUtils.setUserAvatarBean(context, userInfoDetailsBean, userAvatarView);
                         usernickView.setText(userInfoDetailsBean.username);
                     }

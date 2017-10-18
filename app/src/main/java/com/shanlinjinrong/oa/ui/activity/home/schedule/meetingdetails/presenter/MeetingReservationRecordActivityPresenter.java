@@ -1,12 +1,8 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingDetailsActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingReservationRecordActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
@@ -15,7 +11,6 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;

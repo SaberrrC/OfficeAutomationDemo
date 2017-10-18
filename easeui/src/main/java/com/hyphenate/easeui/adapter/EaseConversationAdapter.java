@@ -1,7 +1,6 @@
 package com.hyphenate.easeui.adapter;
 
 import android.content.Context;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -157,6 +156,15 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             String user_Info = lastMessage.getStringAttribute("userInfo", "");
             userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
             userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
+
+            String user = EMClient.getInstance().getCurrentUser();
+            //角色转换
+            if (!EMClient.getInstance().getCurrentUser().contains(userInfoDetailsBean.getCODE())){
+                UserInfoDetailsBean userInfoDetailsBeanTemp = userInfoDetailsBean;
+                userInfoDetailsBean = EaseUserUtils.changeSelfToUserInfo(userInfoSelfDetailsBean);
+                userInfoSelfDetailsBean = EaseUserUtils.changeUserInfoToSelf(userInfoDetailsBeanTemp);
+            }
+
             if (userInfoDetailsBean != null && username.equals("sl_" + userInfoDetailsBean.CODE)) {
                 if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
                     String groupId = conversation.conversationId();
@@ -191,9 +199,6 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
 //                    EaseUserUtils.setUserNickSelfBean(userInfoSelfDetailsBean, holder.name);
                     holder.name.setText(userInfoSelfDetailsBean.username_self);
                     holder.motioned.setVisibility(View.GONE);
-                    if (username.contains("sl_admin")) {
-                        holder.avatar.setImageDrawable(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.meeting_invite_icon, null));
-                    }
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
