@@ -40,11 +40,11 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
             Date curDate = new Date(System.currentTimeMillis());
             String str = formatter.format(curDate);
             long currentTime = DateUtils.getTimestampFromString(str, "yyyy年MM月dd日   HH:mm");
-            String end_time = recordBean.getEnd_time();
+            String start_time = recordBean.getStart_time();
             final int room_id = recordBean.getRoom_id();
-            long endTime = Long.parseLong(end_time) * 1000L;
-            final boolean isMeetingPast = currentTime < endTime;
-            if (currentTime > endTime) {
+            long startTime = Long.parseLong(start_time) * 1000L;
+            final boolean isMeetingPast = currentTime < startTime;
+            if (currentTime > startTime) {
                 baseViewHolder.setText(R.id.tv_meeting_state, "已使用");
                 baseViewHolder.setTextColor(R.id.tv_meeting_state, Color.rgb(102, 102, 102));
                 baseViewHolder.setImageResource(R.id.tvDot, R.drawable.meeting_record_icon_success);

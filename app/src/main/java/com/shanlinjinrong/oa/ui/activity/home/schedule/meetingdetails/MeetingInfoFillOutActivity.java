@@ -271,6 +271,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     intent.putExtra("id", mId);
                     intent.putExtra("modifyMeeting", true);
                     intent.putExtra("isWriteMeetingInfo", false);
+                    intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
                     intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
                     startActivity(intent);
                     finish();
@@ -434,37 +435,37 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             }
             mTvMeetingDevice.setText(info.getData().getDevice());
             mTvMeetingReceivePerson.setText(info.getData().getSend_user());
-            if (!info.getData().getTitle().trim().equals("")) {
-                mTvMeetingTheme.setText(info.getData().getTitle());
-                List<MeetingRecordInfo.DataBean.PartNameBean> part_name = info.getData().getPart_name();
-                String userName = "";
-                for (int i = 0; i < part_name.size(); i++) {
-                    if (part_name.get(i).getUsername() != null)
-                        userName += part_name.get(i).getUsername() + " ";
-                }
-                if (!userName.trim().equals("")) {
-                    mTvMeetingPerson.setText(userName);
-                }
-                switch (info.getData().getSend_type()) {
-                    case "邮件,消息":
-                        mCbEmail.setChecked(true);
-                        mCbMessages.setChecked(true);
-                        break;
-                    case "邮件":
-                        mCbEmail.setChecked(true);
-                        break;
-                    case "消息":
-                        mCbMessages.setChecked(true);
-                        break;
-                }
-            } else {
-                //会议内容不填默认隐藏
-                mTvMeetingInvite.setVisibility(View.GONE);
-                mLlMeetingTitle.setVisibility(View.GONE);
-                mLlMeetingPersonnel.setVisibility(View.GONE);
-                mLlInviteMode.setVisibility(View.GONE);
-                mLlIsLaunchMeeting.setVisibility(View.GONE);
+            //if (!info.getData().getTitle().trim().equals("")) {
+            mTvMeetingTheme.setText(info.getData().getTitle());
+            List<MeetingRecordInfo.DataBean.PartNameBean> part_name = info.getData().getPart_name();
+            String userName = "";
+            for (int i = 0; i < part_name.size(); i++) {
+                if (part_name.get(i).getUsername() != null)
+                    userName += part_name.get(i).getUsername() + " ";
             }
+            if (!userName.trim().equals("")) {
+                mTvMeetingPerson.setText(userName);
+            }
+            switch (info.getData().getSend_type()) {
+                case "邮件,消息":
+                    mCbEmail.setChecked(true);
+                    mCbMessages.setChecked(true);
+                    break;
+                case "邮件":
+                    mCbEmail.setChecked(true);
+                    break;
+                case "消息":
+                    mCbMessages.setChecked(true);
+                    break;
+            }
+            //} else {
+            //会议内容不填默认隐藏
+//                mTvMeetingInvite.setVisibility(View.GONE);
+//                mLlMeetingTitle.setVisibility(View.GONE);
+//                mLlMeetingPersonnel.setVisibility(View.GONE);
+//                mLlInviteMode.setVisibility(View.GONE);
+//                mLlIsLaunchMeeting.setVisibility(View.GONE);
+            //}
             mEdMeetingContent.setText(info.getData().getContent());
         } catch (Throwable e) {
             e.printStackTrace();

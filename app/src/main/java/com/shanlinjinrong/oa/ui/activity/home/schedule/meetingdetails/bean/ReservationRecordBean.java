@@ -45,7 +45,7 @@ public class ReservationRecordBean {
         this.data = data;
     }
 
-    public static class DataBean  {
+    public static class DataBean implements MultiItemEntity {
         /**
          * id : 13
          * uid : 618
@@ -71,6 +71,7 @@ public class ReservationRecordBean {
         private String send_type;
         private String created;
         private String part_name;
+        private int itemType;
 
         public int getId() {
             return id;
@@ -160,5 +161,14 @@ public class ReservationRecordBean {
             this.part_name = part_name;
         }
 
+        public void setItemType(int type) {
+            this.itemType = type;
+        }
+
+
+        @Override
+        public int getItemType() {
+            return itemType;
+        }
     }
 }

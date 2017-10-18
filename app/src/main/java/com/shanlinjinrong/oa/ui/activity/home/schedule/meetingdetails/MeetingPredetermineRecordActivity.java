@@ -205,6 +205,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                 if (mModifyMeeting) {
                     intent.putExtra("modifyMeeting", true);
                     intent.putExtra("isMeetingRecord", true);
+                    intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
                 }
                 startActivity(intent);
                 break;
