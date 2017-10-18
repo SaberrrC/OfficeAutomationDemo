@@ -7,7 +7,8 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 import java.util.List;
 
 /**
- * Created by tonny on 2017/10/11.
+ * 获取会议详情
+ *
  */
 
 public interface MeetingDetailsActivityContract {

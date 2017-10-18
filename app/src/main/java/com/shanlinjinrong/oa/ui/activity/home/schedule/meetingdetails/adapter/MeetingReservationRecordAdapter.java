@@ -68,7 +68,6 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
                     intent.putExtra("roomId", room_id);
                     intent.putExtra("id", id);
                     mContext.startActivity(intent);
-//                MeetingReservationRecordActivity.mRecordActivity.finish();
                 }
             });
         } catch (Throwable e) {

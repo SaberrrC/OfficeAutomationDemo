@@ -7,9 +7,8 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 import org.kymjs.kjframe.http.HttpParams;
 
 /**
- * Created by tonny on 2017/10/12.
+ * 选择会议室
  */
-
 public interface MeetingInfoFillOutActivityContract {
 
 

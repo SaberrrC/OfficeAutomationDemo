@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by tonny on 2017/10/11.
+ * 新会议室记录详情
  */
 
 public interface MeetingReservationRecordActivityContract {
