@@ -14,10 +14,6 @@ public interface MeetingPredetermineContract {
 
     interface View extends BaseView {
 
-        void showLoading();
-
-        void requestFinish();
-
         void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen);
 
         void getMeetingPredetermineFailed(String msgStr);

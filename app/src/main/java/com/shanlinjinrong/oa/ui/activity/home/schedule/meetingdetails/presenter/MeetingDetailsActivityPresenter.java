@@ -36,15 +36,8 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
         mKjHttp.phpJsonGet(Api.NEW_MEETINGROOMS, httpParams, new HttpCallBack() {
 
             @Override
-            public void onPreStart() {
-                super.onPreStart();
-                mView.showLoading();
-            }
-
-            @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                mView.requestFinish();
                 try {
                     MeetingRoomsBean meetingRoomsBean = new Gson().fromJson(t, MeetingRoomsBean.class);
                     switch (meetingRoomsBean.getCode()) {
@@ -68,13 +61,6 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 mView.getMeetingRoomsFailed(strMsg);
-                mView.requestFinish();
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                mView.requestFinish();
             }
         });
 

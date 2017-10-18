@@ -323,17 +323,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         }
     }
 
-
-    @Override
-    public void showLoading() {
-        showLoadingView();
-    }
-
-    @Override
-    public void requestFinish() {
-        hideLoadingView();
-    }
-
     @Override
     public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
         mSelectTime = dataBeen;

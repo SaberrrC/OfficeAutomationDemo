@@ -141,19 +141,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         } else {
             initReadView();
         }
-        mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isWriteMeetingInfo && (!TextUtils.isEmpty(mEdMeetingContent.getText().toString().trim()) || !mEdMeetingPerson.getText().toString().trim().equals("")
-                        || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
-                    showBackTip("是否放弃选择会议室", "确定", "取消");
-                } else {
-                    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
-                            hideSoftInputFromWindow(MeetingInfoFillOutActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    finish();
-                }
-            }
-        });
+        backTip();
     }
 
     private void initReadView() {
@@ -282,7 +270,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 intent.putParcelableArrayListExtra("selectedContacts", contactsList);
                 startActivityForResult(intent, ADD_JOIN_PEOPLE);
                 break;
-
         }
     }
 
@@ -435,7 +422,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             }
             mTvMeetingDevice.setText(info.getData().getDevice());
             mTvMeetingReceivePerson.setText(info.getData().getSend_user());
-            //if (!info.getData().getTitle().trim().equals("")) {
             mTvMeetingTheme.setText(info.getData().getTitle());
             List<MeetingRecordInfo.DataBean.PartNameBean> part_name = info.getData().getPart_name();
             String userName = "";
@@ -458,14 +444,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     mCbMessages.setChecked(true);
                     break;
             }
-            //} else {
-            //会议内容不填默认隐藏
-//                mTvMeetingInvite.setVisibility(View.GONE);
-//                mLlMeetingTitle.setVisibility(View.GONE);
-//                mLlMeetingPersonnel.setVisibility(View.GONE);
-//                mLlInviteMode.setVisibility(View.GONE);
-//                mLlIsLaunchMeeting.setVisibility(View.GONE);
-            //}
             mEdMeetingContent.setText(info.getData().getContent());
         } catch (Throwable e) {
             e.printStackTrace();
@@ -556,5 +534,22 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 getResources().getColor(R.color.btn_text_logout));
         alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
                 getResources().getColor(R.color.btn_text_logout));
+    }
+
+    //返回提示
+    private void backTip() {
+        mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isWriteMeetingInfo && (!TextUtils.isEmpty(mEdMeetingContent.getText().toString().trim()) || !mEdMeetingPerson.getText().toString().trim().equals("")
+                        || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
+                    showBackTip("是否放弃选择会议室", "确定", "取消");
+                } else {
+                    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                            hideSoftInputFromWindow(MeetingInfoFillOutActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    finish();
+                }
+            }
+        });
     }
 }

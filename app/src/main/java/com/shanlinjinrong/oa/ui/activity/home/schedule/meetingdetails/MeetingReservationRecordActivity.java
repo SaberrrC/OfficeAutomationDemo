@@ -43,7 +43,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     @Bind(R.id.tv_meeting_Reservation_Record)
     TextView mTvMeetingReservationRecord;
     private int mPage;
-    private int mNum;
+    private int mNum = 15;
     private MeetingReservationRecordAdapter mRecordAdapter;
     private List<ReservationRecordBean.DataBean> data = new ArrayList<>();
     public static MeetingReservationRecordActivity mRecordActivity;
@@ -106,14 +106,12 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         mRefresh.setRefreshing(true);
         HttpParams httpParams = new HttpParams();
         mPage = 1;
-        mNum = 15;
         mPresenter.getMeetingRecord(httpParams, mPage, mNum, false, data);
     }
 
     public void LoadMore() {
         HttpParams httpParams = new HttpParams();
         mPage++;
-        mNum = 15;
         mPresenter.getMeetingRecord(httpParams, mPage, mNum, true, data);
     }
 
@@ -157,14 +155,6 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
-    }
-
-    @Override
     public void onRefresh() {
         refreshData();
     }
@@ -177,6 +167,14 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     @Override
     public void uidNull(int code) {
         catchWarningByCode(code);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
 }
