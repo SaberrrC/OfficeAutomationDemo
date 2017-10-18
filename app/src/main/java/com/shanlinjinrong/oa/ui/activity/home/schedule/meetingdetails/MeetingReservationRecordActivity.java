@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.MeetingReservationRecordAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
@@ -39,6 +40,8 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     SwipeRefreshLayout mRefresh;
     @Bind(R.id.tv_empty_view)
     TextView mTvEmptyView;
+    @Bind(R.id.tv_meeting_Reservation_Record)
+    TextView mTvMeetingReservationRecord;
     private int mPage;
     private int mNum;
     private MeetingReservationRecordAdapter mRecordAdapter;
@@ -115,15 +118,9 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     }
 
     @Override
-    public void showLoading() {
-    }
-
-    @Override
-    public void requestFinish() {
-    }
-
-    @Override
     public void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean) {
+        mTvMeetingReservationRecord.setVisibility(View.VISIBLE);
+        mTvEmptyView.setVisibility(View.GONE);
         mRecordAdapter.setNewData(bean);
         mRecordAdapter.notifyDataSetChanged();
         mRefresh.setRefreshing(false);
@@ -133,6 +130,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
 
     @Override
     public void getMeetingRecordFailed(String msgStr) {
+        mTvEmptyView.setVisibility(View.GONE);
         mRefresh.setRefreshing(false);
         mRecordAdapter.removeAllFooterView();
         mRecordAdapter.notifyDataSetChanged();

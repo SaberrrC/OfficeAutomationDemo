@@ -28,10 +28,25 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_view">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_meeting_Reservation_Record"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_meeting_Reservation_Record"
+                android:layout_width="1dp"
+                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="34.5dp"
+                android:background="@color/gray_E5E5E5"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_meeting_Reservation_Record"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_height="match_parent"/>
+
+        </FrameLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -40,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone"
-        android:text="暂无预订记录"/>
+        android:text="暂无预订记录"
+        android:visibility="gone"/>
 
 </RelativeLayout>

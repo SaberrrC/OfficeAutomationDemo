@@ -19,18 +19,18 @@
             android:layout_gravity="center"
             android:layout_marginLeft="20dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center">-->
 
-                <TextView
-                    android:id="@+id/tvBottomLine"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/gray_9b9b9b"
-                    android:gravity="center"/>
-            </LinearLayout>
+            <!--<TextView-->
+            <!--android:id="@+id/tvBottomLine"-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/gray_9b9b9b"-->
+            <!--android:gravity="center"/>-->
+            <!--</LinearLayout>-->
 
             <ImageView
                 android:id="@+id/tvDot"
@@ -110,13 +110,5 @@
 
         </RelativeLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_ll"
-        android:layout_width="1dp"
-        android:visibility="gone"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="34.5dp"
-        android:background="@color/gray_9b9b9b"/>
 </LinearLayout>
 
