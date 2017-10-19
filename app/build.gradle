@@ -75,10 +75,6 @@ android {
     }
 
     productFlavors{
-        WanDouJia{
-            resValue "string","app_name","OA-豌豆荚版"
-        }
-
         OA{
             resValue "string","app_name","OA"
         }
