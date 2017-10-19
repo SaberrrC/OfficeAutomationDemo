@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/ll_meeting_rooms"
     android:layout_height="match_parent"
     android:background="@color/page_bg"
     android:orientation="vertical"
@@ -23,10 +24,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/meeting_details_list"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp" />
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_network_error"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:gravity="center"
+                android:visibility="gone"
+                tools:text="当前网络不可用!"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/meeting_details_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"/>
+        </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
