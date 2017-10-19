@@ -4,17 +4,21 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +32,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.M
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingInfoFillOutActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
+import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -180,9 +185,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mId != -1) {
-                        mPresenter.deleteMeetingRooms(mId);
-                    }
+                    showBackTip("您确定要取消会议", "确定", "取消", true);
                 }
             });
         }
@@ -494,7 +497,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void onBackPressed() {
         if (isWriteMeetingInfo && (!mEdMeetingContent.getText().toString().trim().equals("") || !mEdMeetingPerson.getText().toString().trim().equals("")
                 || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
-            showBackTip("是否放弃选择会议室", "确定", "取消");
+            showBackTip("是否放弃选择会议室", "确定", "取消", false);
         } else {
             finish();
         }
@@ -503,7 +506,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     /**
      * 验证内容为空的返回提示
      */
-    public void showBackTip(String msg, final String posiStr, String negaStr) {
+    public void showBackTip(String msg, final String posiStr, String negaStr, final boolean isCancelMeeting) {
         @SuppressLint("InflateParams")
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
         TextView title = (TextView) dialogView.findViewById(R.id.title);
@@ -518,8 +521,15 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        finish();
+                        if (isCancelMeeting) {
+                            if (mId != -1) {
+                                mPresenter.deleteMeetingRooms(mId);
+                            }
+                            dialog.dismiss();
+                        } else {
+                            dialog.dismiss();
+                            finish();
+                        }
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr,
@@ -543,7 +553,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             public void onClick(View view) {
                 if (isWriteMeetingInfo && (!TextUtils.isEmpty(mEdMeetingContent.getText().toString().trim()) || !mEdMeetingPerson.getText().toString().trim().equals("")
                         || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
-                    showBackTip("是否放弃选择会议室", "确定", "取消");
+                    showBackTip("是否放弃选择会议室", "确定", "取消", false);
                 } else {
                     ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
                             hideSoftInputFromWindow(MeetingInfoFillOutActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
