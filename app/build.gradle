@@ -31,7 +31,7 @@ android {
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME: "com.shanlinjinrong.oa",
-                JPUSH_APPKEY : "79537adda5099d4387ace607", //JPush上注册的包名对应的appkey.
+                JPUSH_APPKEY : "50d12d9432e476ed5a6a0352", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
         ]
 

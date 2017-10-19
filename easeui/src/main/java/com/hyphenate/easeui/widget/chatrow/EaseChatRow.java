@@ -141,7 +141,6 @@ public abstract class EaseChatRow extends LinearLayout {
                 userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
                 userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
 
-
                 //角色转换
                 if (!EMClient.getInstance().getCurrentUser().contains(userInfoDetailsBean.getCODE())) {
                     UserInfoDetailsBean userInfoDetailsBeanTemp = userInfoDetailsBean;

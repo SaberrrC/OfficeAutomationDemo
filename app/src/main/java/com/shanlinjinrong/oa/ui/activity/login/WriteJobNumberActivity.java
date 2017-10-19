@@ -118,6 +118,7 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
 
     @Override
     public void getIdentifyingCodeFailed(int errorCode) {
+        Log.i("WriteJobNumberActivity", "失败 : " + errorCode);
         mIdentifyingCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.user_code_default, null));
     }
 
