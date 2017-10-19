@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
 
@@ -42,6 +43,16 @@ android {
             }
         }
     }
+
+    signingConfigs {
+        release {
+            storeFile file("$keystore_path")
+            storePassword "$keystore_password"
+            keyAlias "$keyalias_name"
+            keyPassword "$key_password"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -62,6 +73,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors{
+        WanDouJia{
+            resValue "string","app_name","OA-豌豆荚版"
+        }
+
+        OA{
+            resValue "string","app_name","OA"
+        }
+    }
+
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
