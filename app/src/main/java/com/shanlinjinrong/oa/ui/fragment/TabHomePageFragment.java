@@ -118,12 +118,12 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
     private void saveDot(String name) {
-        SharedPreferences sp = getActivity().getSharedPreferences(DOT_STATUS, Context.MODE_PRIVATE);
+        SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid()+DOT_STATUS, Context.MODE_PRIVATE);
         sp.edit().putBoolean(name, true).apply();
     }
 
     private void refreshDot() {
-        SharedPreferences sp = getActivity().getSharedPreferences(DOT_STATUS, Context.MODE_PRIVATE);
+        SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid()+DOT_STATUS, Context.MODE_PRIVATE);
         if (sp.getBoolean(DOT_SEND, false)) {
             mSendToMeDot.setVisibility(View.VISIBLE);
         } else {
@@ -137,7 +137,7 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
     public void clearDot(Context context, String name) {
-        SharedPreferences sp = context.getSharedPreferences(DOT_STATUS, Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid()+DOT_STATUS, Context.MODE_PRIVATE);
         sp.edit().remove(name).apply();
         refreshDot();
     }

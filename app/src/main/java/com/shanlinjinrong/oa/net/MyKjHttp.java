@@ -70,7 +70,7 @@ public class MyKjHttp extends KJHttp {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         url = phpNewUrl + url;
-        return super.jsonGet(url, params, callback);
+        return super.get(url, params, callback);
     }
 
     public Request<byte[]> phpJsonPost(String url, HttpParams params, HttpCallBack callback) {
@@ -158,4 +158,9 @@ public class MyKjHttp extends KJHttp {
         return jsonDelete(url, params, false, callback);
     }
 
+
+    @Override
+    public void finish(Request<?> request) {
+        super.finish(request);
+    }
 }

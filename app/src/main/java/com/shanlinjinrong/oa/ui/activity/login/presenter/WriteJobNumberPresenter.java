@@ -31,6 +31,7 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
     @Override
     public void getIdentifyingCode() {
         mKjHttp.cleanCache();
+
         mKjHttp.phpJsonGet(Api.SENDS_CAPTCHA, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {

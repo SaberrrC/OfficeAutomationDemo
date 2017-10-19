@@ -3,7 +3,6 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -54,9 +53,9 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
             e.printStackTrace();
         }
 
-        baseViewHolder.setOnItemClickListener(R.id.meeting_select_item, new AdapterView.OnItemClickListener() {
+        baseViewHolder.setOnClickListener(R.id.meeting_select_item, new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
                 Intent intent = new Intent(mContext, MeetingPredetermineRecordActivity.class);
                 intent.putExtra("meetingName", roomnameX);
                 intent.putExtra("meetingPeopleNumber", nopX + "人");
