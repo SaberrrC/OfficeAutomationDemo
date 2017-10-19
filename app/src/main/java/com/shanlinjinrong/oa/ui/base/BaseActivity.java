@@ -65,7 +65,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         //将activity加入到AppManager堆栈中
         AppManager.sharedInstance().addActivity(this);
 
@@ -291,6 +291,20 @@ public class BaseActivity extends AppCompatActivity {
             ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
             imageView.setImageResource(resId);
         }
+        TextView msg = (TextView) empty.findViewById(R.id.message);
+        msg.setText(str);
+        view.addView(empty);
+    }
+
+    /**
+     * @param view
+     * @param str    要显示的文字
+     */
+    public void showEmptyView(ViewGroup view, String str) {
+        empty = LayoutInflater.from(this).inflate(R.layout.public_empty_view, null);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        empty.setLayoutParams(lp);
         TextView msg = (TextView) empty.findViewById(R.id.message);
         msg.setText(str);
         view.addView(empty);

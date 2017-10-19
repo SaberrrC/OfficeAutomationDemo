@@ -17,7 +17,6 @@ import javax.inject.Inject;
 
 /**
  * 获取会议详情
- *
  */
 
 public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetailsActivityContract.View> implements MeetingDetailsActivityContract.Presenter {
@@ -48,8 +47,11 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(meetingRoomsBean.getCode());
                             break;
+                        case Api.RESPONSES_CODE_NO_CONTENT:
+                            mView.getMeetingRoomsEmpty();
+                            break;
                         default:
-                            mView.getMeetingRoomsFailed(meetingRoomsBean.getInfo());
+                            mView.getMeetingRoomsFailed(meetingRoomsBean.getCode(), meetingRoomsBean.getInfo());
                             break;
                     }
                 } catch (Throwable e) {
@@ -60,7 +62,7 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getMeetingRoomsFailed(strMsg);
+                mView.getMeetingRoomsFailed(errorNo, strMsg);
             }
         });
 

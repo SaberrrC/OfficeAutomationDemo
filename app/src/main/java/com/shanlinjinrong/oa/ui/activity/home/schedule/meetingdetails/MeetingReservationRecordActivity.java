@@ -62,6 +62,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     private void initData() {
         mRecordActivity = this;
         refreshData();
+        mRefresh.setColorSchemeResources(android.R.color.holo_blue_dark);
         mTopView.getLeftView().setOnClickListener(this);
         mRecordAdapter = new MeetingReservationRecordAdapter(this, data);
 
@@ -127,8 +128,16 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     }
 
     @Override
-    public void getMeetingRecordFailed(String msgStr) {
-        mTvEmptyView.setVisibility(View.GONE);
+    public void getMeetingRecordFailed(int errorCode, String msgStr) {
+        switch (errorCode) {
+            case -1:
+                mTvEmptyView.setText(R.string.string_not_network);
+                mTvEmptyView.setVisibility(View.VISIBLE);
+                break;
+            default:
+                mTvEmptyView.setVisibility(View.GONE);
+                break;
+        }
         mRefresh.setRefreshing(false);
         mRecordAdapter.removeAllFooterView();
         mRecordAdapter.notifyDataSetChanged();
@@ -138,13 +147,14 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     public void removeFooterView() {
         mRecordAdapter.removeAllFooterView();
         mRecordAdapter.notifyDataSetChanged();
-        showToast("没有更多了");
+        showToast(getString(R.string.string_not_more));
     }
 
     @Override
     public void getMeetingRecordEmpty() {
         mRefresh.setRefreshing(false);
         mTvEmptyView.setVisibility(View.VISIBLE);
+        mTvEmptyView.setText(R.string.string_meeting_record_not_available);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

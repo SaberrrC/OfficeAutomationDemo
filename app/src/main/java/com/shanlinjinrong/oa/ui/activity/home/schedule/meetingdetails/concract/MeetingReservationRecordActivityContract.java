@@ -20,7 +20,7 @@ public interface MeetingReservationRecordActivityContract {
 
         void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean);
 
-        void getMeetingRecordFailed(String msgStr);
+        void getMeetingRecordFailed(int errorCode, String msgStr);
 
         void removeFooterView();
 
@@ -29,6 +29,6 @@ public interface MeetingReservationRecordActivityContract {
 
     interface Presenter extends BasePresenter<MeetingReservationRecordActivityContract.View> {
 
-        void getMeetingRecord(HttpParams httpParams, int page, int num, boolean isLoadMore,List<ReservationRecordBean.DataBean> data); //获取会议室信息
+        void getMeetingRecord(HttpParams httpParams, int page, int num, boolean isLoadMore, List<ReservationRecordBean.DataBean> data); //获取会议室信息
     }
 }

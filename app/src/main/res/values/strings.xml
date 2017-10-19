@@ -158,5 +158,9 @@
     <string name="weekly_add_work_content">+ 添加一项工作</string>
     <string name="write_job_number_text">填写工号</string>
     <string name="find_email_failed">提示：未找到您的邮箱，请手动输入</string>
+    <string name="string_meeting_rooms_not_available">暂无会议室</string>
+    <string name="string_not_network">当前网络不可用!</string>
+    <string name="string_meeting_record_not_available">暂无预订记录!</string>
+    <string name="string_not_more">没有更多了</string>
 
 </resources>
