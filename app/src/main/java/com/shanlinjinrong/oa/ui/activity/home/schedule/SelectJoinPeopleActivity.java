@@ -535,6 +535,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                             }
                             hideEmptyView();
                             mListView.setVisibility(View.VISIBLE);
+                            mToolBarText.setVisibility(View.VISIBLE);
                             mAdapter.notifyDataSetChanged();
                             break;
                         case Api.RESPONSES_CODE_DATA_EMPTY:
@@ -589,7 +590,6 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                 finish();
             }
         });
-        mToolBarText.setVisibility(View.VISIBLE);
         mToolBarText.setText("下一步");
         mToolBarText.setVisibility(View.VISIBLE);
         mToolBarText.setOnClickListener(new View.OnClickListener() {
