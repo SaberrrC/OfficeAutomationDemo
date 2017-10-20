@@ -47,8 +47,11 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(jsonObject.getInt("code"));
                             break;
+                        case Api.RESPONSES_CODE_NO_CONTENT:
+                            mView.requestNetworkError();
+                            break;
                         default:
-                            mView.addMeetingRoomsFailed(jsonObject.getString("info"));
+                            mView.addMeetingRoomsFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
                             break;
                     }
                 } catch (JSONException e) {
@@ -59,7 +62,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.addMeetingRoomsFailed(strMsg);
+                mView.addMeetingRoomsFailed(errorNo, strMsg);
             }
 
             @Override
@@ -97,6 +100,9 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(meetingRecordInfo.getCode());
+                            break;
+                        case Api.RESPONSES_CODE_NO_CONTENT:
+                            mView.requestNetworkError();
                             break;
                         default:
                             mView.lookMeetingRoomsFailed(meetingRecordInfo.getInfo());
@@ -147,6 +153,9 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(jsonObject.getInt("code"));
                             break;
+                        case Api.RESPONSES_CODE_NO_CONTENT:
+                            mView.requestNetworkError();
+                            break;
                         default:
                             mView.deleteMeetingRoomsFailed(jsonObject.getString("info"));
                             break;
@@ -195,6 +204,9 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(jsonObject.getInt("code"));
+                            break;
+                        case Api.RESPONSES_CODE_NO_CONTENT:
+                            mView.requestNetworkError();
                             break;
                         default:
                             mView.modifyMeetingRoomsFailed(jsonObject.getString("info"));

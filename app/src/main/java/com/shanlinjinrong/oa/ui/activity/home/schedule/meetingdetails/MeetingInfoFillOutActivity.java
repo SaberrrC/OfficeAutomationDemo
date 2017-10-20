@@ -254,9 +254,11 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             case R.id.btn_meeting_info_complete:
                 if (mModifyMeeting) {
                     modifyMeetingState();
+                    mBtnMeetingInfoComplete.setClickable(false);
                     return;
                 } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
                     addMeetingParams();
+                    mBtnMeetingInfoComplete.setClickable(false);
                 } else {
                     Intent intent = new Intent(this, MeetingPredetermineRecordActivity.class);
                     intent.putExtra("id", mId);
@@ -377,6 +379,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == ADD_JOIN_PEOPLE) {
+            mUid = "";
+            mEdMeetingPerson.setText("");
             addCopyPersonOperate(data);
         }
     }
@@ -394,6 +398,12 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     @Override
     public void requestFinish() {
         hideLoadingView();
+        mBtnMeetingInfoComplete.setClickable(true);
+    }
+
+    @Override
+    public void requestNetworkError() {
+
     }
 
     //添加会议成功跳转
@@ -409,8 +419,16 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     @Override
-    public void addMeetingRoomsFailed(String str) {
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+    public void addMeetingRoomsFailed(int errorCode, String strMsg) {
+        switch (errorCode) {
+            case -1:
+                showToast(getString(R.string.net_no_connection));
+                break;
+            default:
+                mBtnMeetingInfoComplete.setClickable(true);
+                Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     //会议记录查看
@@ -490,6 +508,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void modifyMeetingRoomsFailed(String strMsg) {
+        mBtnMeetingInfoComplete.setClickable(true);
         Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
     }
 

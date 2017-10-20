@@ -18,9 +18,12 @@ public interface MeetingInfoFillOutActivityContract {
 
         void requestFinish();
 
+
+        void requestNetworkError();
+
         void addMeetingRoomsSuccess();
 
-        void addMeetingRoomsFailed(String strMsg);
+        void addMeetingRoomsFailed(int errorCode,String strMsg);
 
         void lookMeetingRoomsSuccess(MeetingRecordInfo info);
 

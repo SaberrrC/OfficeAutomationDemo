@@ -435,7 +435,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         if (selectedContacts == null) {
             selectedContacts = new ArrayList<>();
         }
-
+        qty.setText(selectedContacts.size() + "");
     }
 
 
@@ -467,8 +467,6 @@ public class SelectJoinPeopleActivity extends BaseActivity {
     }
 
     //底部弹出框的点击事件
-
-
     private void loadData() {
         if (isFirstLoad) {
             showLoadingView("正在获取联系人列表");
