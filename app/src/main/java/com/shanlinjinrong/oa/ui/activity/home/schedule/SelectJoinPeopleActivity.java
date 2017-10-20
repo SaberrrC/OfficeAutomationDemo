@@ -434,6 +434,8 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         selectedContacts = getIntent().getParcelableArrayListExtra("selectedContacts");
         if (selectedContacts == null) {
             selectedContacts = new ArrayList<>();
+        } else {
+            qty.setText(selectedContacts.size() + "");
         }
         qty.setText(selectedContacts.size() + "");
     }
