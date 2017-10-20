@@ -45,7 +45,7 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
                             mView.uidNull(recordBean.getCode());
                             break;
                         default:
-                            mView.getMeetingPredetermineFailed(recordBean.getInfo());
+                            mView.getMeetingPredetermineFailed(recordBean.getCode(), recordBean.getInfo());
                             break;
                     }
                 } catch (Throwable e) {
@@ -56,7 +56,7 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getMeetingPredetermineFailed(strMsg);
+                mView.getMeetingPredetermineFailed(errorNo, strMsg);
             }
         });
     }

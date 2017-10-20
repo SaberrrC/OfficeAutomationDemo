@@ -15,7 +15,7 @@ public interface MeetingPredetermineContract {
 
         void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen);
 
-        void getMeetingPredetermineFailed(String msgStr);
+        void getMeetingPredetermineFailed(int errorCode, String msgStr);
     }
 
     interface Presenter extends BasePresenter<MeetingPredetermineContract.View> {

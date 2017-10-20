@@ -66,16 +66,15 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     CommonTopView mTopView;
     @Bind(R.id.tv_month)
     TextView mTvMonth;
-
     @Bind(R.id.tv_day)
     TextView mTvDay;
-
     @Bind(R.id.tv_week)
     TextView mTvWeek;
 
     private int DateIndex;
     private String endDate;
     private int indexStart;
+    private boolean isNetwork;
     private String beginDate;
     private List<CheckBox> mCheckBoxes = new ArrayList<>();
 
@@ -92,6 +91,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     private String[] mMonthArrays = {"1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
     private String[] mWeekArray = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
     private boolean mModifyMeeting;
+    private int mMeetingId;
 
 
     @Override
@@ -132,9 +132,9 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
         mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
 
-        int meetingId = getIntent().getIntExtra("roomId", -1);
-        if (meetingId != -1) {
-            mPresenter.getMeetingPredetermine(meetingId);
+        mMeetingId = getIntent().getIntExtra("roomId", -1);
+        if (mMeetingId != -1) {
+            mPresenter.getMeetingPredetermine(mMeetingId);
         }
         mModifyMeeting = getIntent().getBooleanExtra("modifyMeeting", false);
     }
@@ -163,6 +163,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
             case R.id.btn_meeting_info_complete:
                 beginDate = null;
                 DateIndex = 0;
+                if (!isNetwork){
+                    showToast(getString(R.string.net_no_connection));
+                    return;
+                }
                 for (int i = 0; i < mCheckBoxes.size(); i++) {
                     if (mCheckBoxes.get(i).isChecked()) {
                         if (i - DateIndex == 1 || (DateIndex == 0 && beginDate == null)) {
@@ -256,6 +260,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (!isNetwork) {
+            mPresenter.getMeetingPredetermine(mMeetingId);
+            return;
+        }
         switch (compoundButton.getId()) {
             case R.id.selected_meeting_date1:
                 if (mSelectedMeetingDate1.isChecked()) {
@@ -326,6 +334,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     @Override
     public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
         mSelectTime = dataBeen;
+        isNetwork = true;
         refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
     }
 
@@ -393,8 +402,13 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
 
     @Override
-    public void getMeetingPredetermineFailed(String msgStr) {
-
+    public void getMeetingPredetermineFailed(int errorCode, String msgStr) {
+        switch (errorCode) {
+            case -1:
+                isNetwork = false;
+                showToast(getString(R.string.net_no_connection));
+                break;
+        }
     }
 
     @Override

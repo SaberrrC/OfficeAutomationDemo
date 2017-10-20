@@ -265,7 +265,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
                     intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
                     startActivity(intent);
-                    finish();
                 }
                 break;
             case R.id.iv_add_contacts:
