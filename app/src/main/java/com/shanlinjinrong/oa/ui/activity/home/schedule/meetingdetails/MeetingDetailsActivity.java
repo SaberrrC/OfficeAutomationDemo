@@ -102,9 +102,9 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
     public void getMeetingRoomsFailed(int errorCode, String data) {
         switch (errorCode) {
             case -1:
+                showToast(getString(R.string.net_no_connection));
                 mTvNetworkError.setText(R.string.string_not_network);
                 mTvNetworkError.setVisibility(View.VISIBLE);
-                mTvNetworkError.setOnClickListener(this);
                 break;
             default:
                 mTvNetworkError.setVisibility(View.GONE);

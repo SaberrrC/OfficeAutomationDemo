@@ -131,6 +131,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     public void getMeetingRecordFailed(int errorCode, String msgStr) {
         switch (errorCode) {
             case -1:
+                showToast(getString(R.string.net_no_connection));
                 mTvEmptyView.setText(R.string.string_not_network);
                 mTvEmptyView.setVisibility(View.VISIBLE);
                 break;
