@@ -254,11 +254,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             case R.id.btn_meeting_info_complete:
                 if (mModifyMeeting) {
                     modifyMeetingState();
-                    mBtnMeetingInfoComplete.setClickable(false);
                     return;
                 } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
                     addMeetingParams();
-                    mBtnMeetingInfoComplete.setClickable(false);
                 } else {
                     Intent intent = new Intent(this, MeetingPredetermineRecordActivity.class);
                     intent.putExtra("id", mId);
@@ -398,7 +396,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     @Override
     public void requestFinish() {
         hideLoadingView();
-        mBtnMeetingInfoComplete.setClickable(true);
     }
 
     @Override
@@ -425,7 +422,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 showToast(getString(R.string.net_no_connection));
                 break;
             default:
-                mBtnMeetingInfoComplete.setClickable(true);
                 Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -472,8 +468,15 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     @Override
-    public void lookMeetingRoomsFailed(String strMsg) {
-        Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+    public void lookMeetingRoomsFailed(int errorCoe, String strMsg) {
+        switch (errorCoe) {
+            case -1:
+                showToast(getString(R.string.net_no_connection));
+                break;
+            default:
+                Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     //删除会议
@@ -488,8 +491,15 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     @Override
-    public void deleteMeetingRoomsFailed(String strMsg) {
-        Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+    public void deleteMeetingRoomsFailed(int errorCode, String strMsg) {
+        switch (errorCode){
+            case -1:
+                showToast(getString(R.string.net_no_connection));
+                break;
+            default:
+                Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     //会议室调期
@@ -507,9 +517,15 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     @Override
-    public void modifyMeetingRoomsFailed(String strMsg) {
-        mBtnMeetingInfoComplete.setClickable(true);
-        Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+    public void modifyMeetingRoomsFailed(int errorCode,String strMsg) {
+        switch (errorCode){
+            case -1:
+                showToast(getString(R.string.net_no_connection));
+                break;
+            default:
+                Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override

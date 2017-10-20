@@ -23,19 +23,19 @@ public interface MeetingInfoFillOutActivityContract {
 
         void addMeetingRoomsSuccess();
 
-        void addMeetingRoomsFailed(int errorCode,String strMsg);
+        void addMeetingRoomsFailed(int errorCode, String strMsg);
 
         void lookMeetingRoomsSuccess(MeetingRecordInfo info);
 
-        void lookMeetingRoomsFailed(String strMsg);
+        void lookMeetingRoomsFailed(int errorCode, String strMsg);
 
         void deleteMeetingRoomsSuccess();
 
-        void deleteMeetingRoomsFailed(String strMsg);
+        void deleteMeetingRoomsFailed(int errorCode, String strMsg);
 
         void modifyMeetingRoomsSuccess();
 
-        void modifyMeetingRoomsFailed(String strMsg);
+        void modifyMeetingRoomsFailed(int errorCode,String strMsg);
     }
 
     interface Presenter extends BasePresenter<MeetingInfoFillOutActivityContract.View> {

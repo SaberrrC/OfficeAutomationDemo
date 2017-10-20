@@ -105,7 +105,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                             mView.requestNetworkError();
                             break;
                         default:
-                            mView.lookMeetingRoomsFailed(meetingRecordInfo.getInfo());
+                            mView.lookMeetingRoomsFailed(meetingRecordInfo.getCode(), meetingRecordInfo.getInfo());
                             break;
                     }
                 } catch (Throwable e) {
@@ -116,7 +116,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.lookMeetingRoomsFailed(strMsg);
+                mView.lookMeetingRoomsFailed(errorNo, strMsg);
                 mView.requestFinish();
             }
 
@@ -157,7 +157,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                             mView.requestNetworkError();
                             break;
                         default:
-                            mView.deleteMeetingRoomsFailed(jsonObject.getString("info"));
+                            mView.deleteMeetingRoomsFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
                             break;
                     }
                 } catch (JSONException e) {
@@ -168,7 +168,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.deleteMeetingRoomsFailed(strMsg);
+                mView.deleteMeetingRoomsFailed(errorNo, strMsg);
                 mView.requestFinish();
             }
 
@@ -209,7 +209,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                             mView.requestNetworkError();
                             break;
                         default:
-                            mView.modifyMeetingRoomsFailed(jsonObject.getString("info"));
+                            mView.modifyMeetingRoomsFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
                             break;
                     }
                 } catch (JSONException e) {
@@ -220,7 +220,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.modifyMeetingRoomsFailed(strMsg);
+                mView.modifyMeetingRoomsFailed(errorNo, strMsg);
                 mView.requestFinish();
             }
 
