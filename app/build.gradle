@@ -44,15 +44,6 @@ android {
         }
     }
 
-    signingConfigs {
-        release {
-            storeFile file("$keystore_path")
-            storePassword "$keystore_password"
-            keyAlias "$keyalias_name"
-            keyPassword "$key_password"
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -74,16 +65,14 @@ android {
         }
     }
 
-    productFlavors{
-        OA{
-            resValue "string","app_name","OA"
-        }
-    }
-
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
         }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 

@@ -23,6 +23,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
@@ -42,10 +43,12 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * 预订会议室 确认
@@ -123,7 +126,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     private int mId;
     private String mUid = "";
     private boolean mModifyMeeting;
-
+    private boolean isMeetingRequestComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,24 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     private void initView() {
+//        RxView.clicks(mBtnMeetingInfoComplete).throttleFirst(1000, TimeUnit.MILLISECONDS)
+//                .subscribeOn(AndroidSchedulers.mainThread())
+//                .subscribe(aVoid -> {
+//                    if (mModifyMeeting) {
+//                        modifyMeetingState();
+//                        return;
+//                    } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
+//                        addMeetingParams();
+//                    } else {
+//                        Intent intent = new Intent(this, MeetingPredetermineRecordActivity.class);
+//                        intent.putExtra("id", mId);
+//                        intent.putExtra("modifyMeeting", true);
+//                        intent.putExtra("isWriteMeetingInfo", false);
+//                        intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
+//                        intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
+//                        startActivity(intent);
+//                    }
+//                });
         isWriteMeetingInfo = getIntent().getBooleanExtra("isWriteMeetingInfo", true);
         if (isWriteMeetingInfo) {
             initWriteView();
@@ -227,7 +248,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         String meetingDevice = getIntent().getStringExtra("meetingDevice");
         mStartTime = getIntent().getStringExtra("start_time");
         mEndTime = getIntent().getStringExtra("end_time");
-
+        isMeetingRequestComplete = true;
         if (mBeginDate != null && mEndDate != null) {
             mTvMeetingDate.setText(mBeginDate + " - " + mEndDate);
         }
@@ -252,19 +273,23 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
-                if (mModifyMeeting) {
-                    modifyMeetingState();
-                    return;
-                } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
-                    addMeetingParams();
-                } else {
-                    Intent intent = new Intent(this, MeetingPredetermineRecordActivity.class);
-                    intent.putExtra("id", mId);
-                    intent.putExtra("modifyMeeting", true);
-                    intent.putExtra("isWriteMeetingInfo", false);
-                    intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
-                    intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
-                    startActivity(intent);
+                if (isMeetingRequestComplete) {
+                    if (mModifyMeeting) {
+                        modifyMeetingState();
+                        isMeetingRequestComplete = false;
+                        return;
+                    } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
+                        addMeetingParams();
+                        isMeetingRequestComplete = false;
+                    } else {
+                        Intent intent = new Intent(this, MeetingPredetermineRecordActivity.class);
+                        intent.putExtra("id", mId);
+                        intent.putExtra("modifyMeeting", true);
+                        intent.putExtra("isWriteMeetingInfo", false);
+                        intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
+                        intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
+                        startActivity(intent);
+                    }
                 }
                 break;
             case R.id.iv_add_contacts:
@@ -421,6 +446,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 showToast(getString(R.string.net_no_connection));
                 break;
             default:
+                isMeetingRequestComplete = true;
+                if (!strMsg.equals(""))
                 Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -473,6 +500,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 showToast(getString(R.string.net_no_connection));
                 break;
             default:
+                isMeetingRequestComplete = true;
+                if (!strMsg.equals(""))
                 Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -491,11 +520,12 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void deleteMeetingRoomsFailed(int errorCode, String strMsg) {
-        switch (errorCode){
+        switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));
                 break;
             default:
+                if (!strMsg.equals(""))
                 Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -516,12 +546,14 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     @Override
-    public void modifyMeetingRoomsFailed(int errorCode,String strMsg) {
-        switch (errorCode){
+    public void modifyMeetingRoomsFailed(int errorCode, String strMsg) {
+        switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));
                 break;
             default:
+                isMeetingRequestComplete = true;
+                if (!strMsg.equals(""))
                 Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -552,26 +584,19 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 R.style.AppTheme_Dialog).create();
         alertDialog.setView(dialogView);
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, posiStr,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (isCancelMeeting) {
-                            if (mId != -1) {
-                                mPresenter.deleteMeetingRooms(mId);
-                            }
-                            dialog.dismiss();
-                        } else {
-                            dialog.dismiss();
-                            finish();
+                (dialog, which) -> {
+                    if (isCancelMeeting) {
+                        if (mId != -1) {
+                            mPresenter.deleteMeetingRooms(mId);
                         }
+                        dialog.dismiss();
+                    } else {
+                        dialog.dismiss();
+                        finish();
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
+                (dialog, which) -> {
                 });
         alertDialog.show();
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(

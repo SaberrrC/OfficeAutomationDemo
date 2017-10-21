@@ -68,6 +68,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onFinish() {
                 super.onFinish();
+                mView.addMeetingRoomsFailed(-2, "");
             }
         });
     }
@@ -228,6 +229,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             public void onFinish() {
                 super.onFinish();
                 mView.requestFinish();
+                mView.modifyMeetingRoomsFailed(-2, "");
             }
         });
     }
