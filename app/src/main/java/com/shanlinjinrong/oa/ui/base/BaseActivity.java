@@ -37,6 +37,7 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
+import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
 
@@ -135,7 +136,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void gotoLoginPage() {
-        showToast("您的帐号已在其他设备上登录，请您及时查验！");
+//        showToast("您的帐号已在其他设备上登录，请您及时查验！");
         JPushInterface.setAlias(this, null, null);
         JPushInterface.setTags(this, null, null);
         if (EMClient.getInstance().isConnected()) {
