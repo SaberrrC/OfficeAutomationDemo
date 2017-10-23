@@ -648,26 +648,33 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         }
     }
 
+    private CustomDialogUtils mDialog;
+
     //环线 多地登陆退出
     private void NonTokenDialog() {
-        //获取屏幕高宽
-        DisplayMetrics metric = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metric);
-        int windowsHeight= metric.heightPixels;
-        int windowsWight= metric.widthPixels;
-
-        CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(this);
-        final CustomDialogUtils dialog = builder.cancelTouchout(false)
-                .view(R.layout.common_custom_dialog)
-                .heightpx((int) (windowsHeight/4.5))
-                .widthpx((int) (windowsWight/1.4))
-                .style(R.style.dialog)
-                .addViewOnclick(R.id.tv_non_token_confirm, view -> {
-                    catchWarningByCode(Api.RESPONSES_CODE_TOKEN_NO_MATCH);
-
-                })
-                .build();
-        dialog.setCancelable(false);
-        dialog.show();
+        try {
+            //获取屏幕高宽
+            DisplayMetrics metric = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metric);
+            int windowsHeight = metric.heightPixels;
+            int windowsWight = metric.widthPixels;
+            CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(this);
+            mDialog = builder.cancelTouchout(false)
+                    .view(R.layout.common_custom_dialog)
+                    .heightpx((int) (windowsHeight / 4.5))
+                    .widthpx((int) (windowsWight / 1.4))
+                    .style(R.style.dialog)
+                    .addViewOnclick(R.id.tv_non_token_confirm, view -> {
+                        catchWarningByCode(Api.RESPONSES_CODE_TOKEN_NO_MATCH);
+                    })
+                    .build();
+            if (mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
+            mDialog.setCancelable(false);
+            mDialog.show();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }
