@@ -19,6 +19,7 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.LaunchApprovalActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MineWorkRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
@@ -89,6 +90,11 @@ public class TabHomePageFragment extends BaseFragment {
         mTvTitle.setText(AppConfig.getAppConfig(mContext).get(AppConfig.PREF_KEY_COMPANY_NAME));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshDot();
+    }
 
     @Override
     public void onDestroyView() {
@@ -118,12 +124,12 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
     private void saveDot(String name) {
-        SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid()+DOT_STATUS, Context.MODE_PRIVATE);
+        SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
         sp.edit().putBoolean(name, true).apply();
     }
 
     private void refreshDot() {
-        SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid()+DOT_STATUS, Context.MODE_PRIVATE);
+        SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
         if (sp.getBoolean(DOT_SEND, false)) {
             mSendToMeDot.setVisibility(View.VISIBLE);
         } else {
@@ -137,7 +143,9 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
     public void clearDot(Context context, String name) {
-        SharedPreferences sp = context.getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid()+DOT_STATUS, Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
+        sp.edit().clear().apply();
+
         sp.edit().remove(name).apply();
         refreshDot();
     }
@@ -147,7 +155,7 @@ public class TabHomePageFragment extends BaseFragment {
             R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report,
             R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval,
             R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
-            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting})
+            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_schedule_note})
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -163,6 +171,7 @@ public class TabHomePageFragment extends BaseFragment {
                 //发送给的
                 intent = new Intent(mContext, WorkReportCheckActivity.class);
                 clearDot(getContext(), DOT_SEND);
+                EventBus.getDefault().removeAllStickyEvents();
                 break;
             case R.id.rl_work_report_copy_to_me:
                 //发起周报
@@ -182,6 +191,7 @@ public class TabHomePageFragment extends BaseFragment {
                 intent = new Intent(mContext, ApprovalListActivity.class);
                 intent.putExtra("whichList", 2);
                 clearDot(getContext(), DOT_APPORVAL);
+                EventBus.getDefault().removeAllStickyEvents();
                 break;
             case R.id.rl_approval_me_approvaled:
                 //我审批的
@@ -195,6 +205,10 @@ public class TabHomePageFragment extends BaseFragment {
             case R.id.rl_schedule_book_meeting:
                 //会议室预定
                 intent = new Intent(mContext, MeetingDetailsActivity.class);
+                break;
+            case R.id.rl_schedule_note:
+                //会议室预定
+                intent = new Intent(mContext, MineWorkRecordActivity.class);
                 break;
         }
         if (intent != null) {
