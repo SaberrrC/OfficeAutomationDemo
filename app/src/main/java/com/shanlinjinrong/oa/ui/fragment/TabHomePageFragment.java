@@ -63,9 +63,6 @@ public class TabHomePageFragment extends BaseFragment {
         mRootView = (RelativeLayout) inflater.inflate(R.layout.tab_homepage_fragment, container,
                 false);
         ButterKnife.bind(this, mRootView);
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
         return mRootView;
     }
 
@@ -100,32 +97,6 @@ public class TabHomePageFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
-
-    }
-
-    /**
-     * 0:工作汇报(发送我的) 1：流程审批（待我审批）
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void showDot(EventMessage eventMessage) {
-        if (eventMessage.getStr().equals("jpush")) {
-            if (eventMessage.getType() == TYPE_SEND_TO_ME) {
-                saveDot(DOT_SEND);
-            }
-
-            if (eventMessage.getType() == TYPE_WAIT_ME_APPROVAL) {
-                saveDot(DOT_APPORVAL);
-            }
-            refreshDot();
-        }
-    }
-
-    private void saveDot(String name) {
-        SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
-        sp.edit().putBoolean(name, true).apply();
     }
 
     private void refreshDot() {
@@ -144,8 +115,6 @@ public class TabHomePageFragment extends BaseFragment {
 
     public void clearDot(Context context, String name) {
         SharedPreferences sp = context.getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
-        sp.edit().clear().apply();
-
         sp.edit().remove(name).apply();
         refreshDot();
     }
@@ -171,7 +140,6 @@ public class TabHomePageFragment extends BaseFragment {
                 //发送给的
                 intent = new Intent(mContext, WorkReportCheckActivity.class);
                 clearDot(getContext(), DOT_SEND);
-                EventBus.getDefault().removeAllStickyEvents();
                 break;
             case R.id.rl_work_report_copy_to_me:
                 //发起周报
@@ -191,7 +159,6 @@ public class TabHomePageFragment extends BaseFragment {
                 intent = new Intent(mContext, ApprovalListActivity.class);
                 intent.putExtra("whichList", 2);
                 clearDot(getContext(), DOT_APPORVAL);
-                EventBus.getDefault().removeAllStickyEvents();
                 break;
             case R.id.rl_approval_me_approvaled:
                 //我审批的

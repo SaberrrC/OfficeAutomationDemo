@@ -6,10 +6,13 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.EventMessage;
 import com.shanlinjinrong.oa.ui.activity.push.PushListActivity;
@@ -36,6 +39,12 @@ public class MyJpushReceiver extends BroadcastReceiver {
     private Integer type = 0;//推送的类型
     private Integer ap_type = 0;//审批的类型
     private Integer list_type = 0;//列表的类型
+    private static String DOT_STATUS = "DOT_STATUS";
+
+    private static int TYPE_SEND_TO_ME = 0;//发送我的
+    private static int TYPE_WAIT_ME_APPROVAL = 1;//待我审批
+    public static String DOT_SEND = "DOT_SEND";
+    public static String DOT_APPORVAL = "DOT_APPORVAL";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -49,14 +58,13 @@ public class MyJpushReceiver extends BroadcastReceiver {
             try {
                 JSONObject jo = new JSONObject(pushStr);
                 this.type = Integer.valueOf(jo.getString("type"));
-//                ap_type = Integer.valueOf(jo.getString("ap_type"));
-//                list_type = Integer.valueOf(jo.getString("list_id"));
 
-                EventMessage eventMessage = new EventMessage();
-                eventMessage.setStr("jpush");
-                eventMessage.setType(type);
-                EventBus.getDefault().postSticky(eventMessage);
-
+                SharedPreferences sp = mContext.getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
+                if (type == TYPE_SEND_TO_ME) {
+                    sp.edit().putBoolean("DOT_SEND", true).apply();
+                } else if (type == TYPE_WAIT_ME_APPROVAL) {
+                    sp.edit().putBoolean("DOT_APPORVAL", true).apply();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
