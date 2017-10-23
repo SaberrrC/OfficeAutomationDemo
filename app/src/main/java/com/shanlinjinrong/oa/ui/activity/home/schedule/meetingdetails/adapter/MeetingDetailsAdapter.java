@@ -46,7 +46,7 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
 
         try {
             Glide.with(AppManager.mContext)
-                    .load(roomimgX)
+                    .load("http://"+roomimgX)
                     .error(R.drawable.video_image_1)
                     .into((ImageView) baseViewHolder.getView(R.id.iv_meeting_details));
         } catch (Throwable e) {
