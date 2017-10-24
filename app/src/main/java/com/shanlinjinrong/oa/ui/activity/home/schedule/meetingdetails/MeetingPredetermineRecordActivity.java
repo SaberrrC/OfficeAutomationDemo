@@ -163,7 +163,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
             case R.id.btn_meeting_info_complete:
                 beginDate = null;
                 DateIndex = 0;
-                if (!isNetwork){
+                if (!isNetwork) {
                     showToast(getString(R.string.net_no_connection));
                     return;
                 }
@@ -371,30 +371,48 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         switch (pos) {
             case 0:
                 mSelectedMeetingDate1.setEnabled(isEnable);
+                if (!isEnable)
+                mSelectedMeetingDate1.setChecked(isEnable);
                 break;
             case 1:
                 mSelectedMeetingDate2.setEnabled(isEnable);
+                if (!isEnable)
+                mSelectedMeetingDate2.setChecked(isEnable);
                 break;
             case 2:
                 mSelectedMeetingDate3.setEnabled(isEnable);
+                if (!isEnable)
+                mSelectedMeetingDate3.setChecked(isEnable);
                 break;
             case 3:
                 mSelectedMeetingDate4.setEnabled(isEnable);
+                if (!isEnable)
+                mSelectedMeetingDate4.setChecked(isEnable);
                 break;
             case 4:
                 mSelectedMeetingDate5.setEnabled(isEnable);
+                if (!isEnable)
+                mSelectedMeetingDate5.setChecked(isEnable);
                 break;
             case 5:
                 mSelectedMeetingDate6.setEnabled(isEnable);
+                if (!isEnable)
+                mSelectedMeetingDate6.setChecked(isEnable);
                 break;
             case 6:
                 mSelectedMeetingDate7.setEnabled(isEnable);
+                if (!isEnable)
+                mSelectedMeetingDate7.setChecked(isEnable);
                 break;
             case 7:
                 mSelectedMeetingDate8.setEnabled(isEnable);
+                if (!isEnable)
+                mSelectedMeetingDate8.setChecked(isEnable);
                 break;
             case 8:
                 mSelectedMeetingDate9.setEnabled(isEnable);
+                if (!isEnable)
+                mSelectedMeetingDate9.setChecked(isEnable);
                 break;
         }
 

@@ -2,28 +2,23 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jakewharton.rxbinding2.view.RxView;
+import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
@@ -33,7 +28,6 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.M
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingInfoFillOutActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
-import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,12 +37,10 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * 预订会议室 确认
@@ -112,6 +104,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     LinearLayout mLlMeetingPersonnel;
     @Bind(R.id.ll_is_launch_meeting)
     LinearLayout mLlIsLaunchMeeting;
+    @Bind(R.id.tv_rb_is_meeting_invite)
+    TextView mTvRbIsMeetingInvite;
 
     private String mEndDate;
     private String mBeginDate;
@@ -143,25 +137,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     private void initView() {
-//        RxView.clicks(mBtnMeetingInfoComplete).throttleFirst(1000, TimeUnit.MILLISECONDS)
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .subscribe(aVoid -> {
-//                    if (mModifyMeeting) {
-//                        modifyMeetingState();
-//                        return;
-//                    } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
-//                        addMeetingParams();
-//                    } else {
-//                        Intent intent = new Intent(this, MeetingPredetermineRecordActivity.class);
-//                        intent.putExtra("id", mId);
-//                        intent.putExtra("modifyMeeting", true);
-//                        intent.putExtra("isWriteMeetingInfo", false);
-//                        intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
-//                        intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
-//                        startActivity(intent);
-//                    }
-//                });
         isWriteMeetingInfo = getIntent().getBooleanExtra("isWriteMeetingInfo", true);
+
+
         if (isWriteMeetingInfo) {
             initWriteView();
         } else {
@@ -269,7 +247,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
 
-    @OnClick({R.id.btn_meeting_info_complete, R.id.iv_add_contacts})
+    @OnClick({R.id.btn_meeting_info_complete, R.id.iv_add_contacts, R.id.tv_rb_is_meeting_invite})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
@@ -296,6 +274,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
                 intent.putParcelableArrayListExtra("selectedContacts", contactsList);
                 startActivityForResult(intent, ADD_JOIN_PEOPLE);
+                break;
+            case R.id.tv_rb_is_meeting_invite:
+                mRbIsMeetingInvite.setChecked(false);
                 break;
         }
     }
@@ -335,22 +316,29 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         HttpParams httpParams = new HttpParams();
         httpParams.put("room_id", mRoomId);
         httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        httpParams.put("title", mEdMeetingTheme.getText().toString());
         if (mEdMeetingContent.getText().toString().trim().equals("")) {
             httpParams.put("content", "暂无");
         } else {
             httpParams.put("content", mEdMeetingContent.getText().toString());
         }
-        httpParams.put("part_uid", mUid);
         httpParams.put("start_time", mStartTime);
         httpParams.put("end_time", mEndTime);
-        if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
-            mSendType = "邮件,消息";
-        } else if (mCbMessages.isChecked()) {
-            mSendType = "消息";
-        } else if (mCbEmail.isChecked()) {
-            mSendType = "邮件";
+
+        if (mRbIsMeetingInvite.isChecked()) {
+            httpParams.put("part_uid", mUid);
+            httpParams.put("title", mEdMeetingTheme.getText().toString());
+            if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
+                mSendType = "邮件,消息";
+            } else if (mCbMessages.isChecked()) {
+                mSendType = "消息";
+            } else if (mCbEmail.isChecked()) {
+                mSendType = "邮件";
+            }
+        } else {
+            httpParams.put("part_uid", "");
+            httpParams.put("title", "");
         }
+
         httpParams.put("send_type", mSendType + "");
         mPresenter.addMeetingRooms(httpParams);
     }
@@ -366,12 +354,14 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     mCbEmail.setEnabled(true);
                     mCbMessages.setEnabled(true);
                     mAddContacts.setClickable(true);
+                    mTvRbIsMeetingInvite.setVisibility(View.VISIBLE);
                 } else {
                     mEdMeetingTheme.setEnabled(false);
                     mEdMeetingPerson.setEnabled(false);
                     mCbEmail.setEnabled(false);
                     mCbMessages.setEnabled(false);
                     mAddContacts.setClickable(false);
+                    mTvRbIsMeetingInvite.setVisibility(View.GONE);
                 }
                 break;
         }
@@ -448,7 +438,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             default:
                 isMeetingRequestComplete = true;
                 if (!strMsg.equals(""))
-                Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -502,7 +492,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             default:
                 isMeetingRequestComplete = true;
                 if (!strMsg.equals(""))
-                Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -526,7 +516,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 break;
             default:
                 if (!strMsg.equals(""))
-                Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -554,7 +544,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             default:
                 isMeetingRequestComplete = true;
                 if (!strMsg.equals(""))
-                Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -607,17 +597,14 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     //返回提示
     private void backTip() {
-        mTopView.getLeftView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isWriteMeetingInfo && (!TextUtils.isEmpty(mEdMeetingContent.getText().toString().trim()) || !mEdMeetingPerson.getText().toString().trim().equals("")
-                        || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
-                    showBackTip("是否放弃选择会议室", "确定", "取消", false);
-                } else {
-                    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
-                            hideSoftInputFromWindow(MeetingInfoFillOutActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    finish();
-                }
+        mTopView.getLeftView().setOnClickListener(view -> {
+            if (isWriteMeetingInfo && (!TextUtils.isEmpty(mEdMeetingContent.getText().toString().trim()) || !mEdMeetingPerson.getText().toString().trim().equals("")
+                    || !mEdMeetingTheme.getText().toString().trim().equals("") || mCbMessages.isChecked() || mCbEmail.isChecked())) {
+                showBackTip("是否放弃选择会议室", "确定", "取消", false);
+            } else {
+                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                        hideSoftInputFromWindow(MeetingInfoFillOutActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                finish();
             }
         });
     }

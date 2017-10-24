@@ -26,13 +26,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        android:layout_below="@+id/view_top"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_below="@+id/view_top"
+        android:layout_alignParentStart="true"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -42,11 +42,11 @@
                 android:id="@+id/rv_meeting_show"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="12dp"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/white"
+                android:padding="12dp">
 
                 <TextView
                     android:id="@+id/tv_resource_name"
@@ -62,9 +62,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    tools:text="七楼大会议室"
                     android:textColor="#333333"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    tools:text="七楼大会议室"/>
 
                 <TextView
                     android:id="@+id/tv_resource_specification"
@@ -84,9 +84,9 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    tools:text="20人"
                     android:textColor="#333333"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    tools:text="20人"/>
 
                 <TextView
                     android:id="@+id/tv_employ_time"
@@ -106,9 +106,9 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    tools:text="9月11日    10：00-12：00"
                     android:textColor="#333333"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    tools:text="9月11日    10：00-12：00"/>
 
                 <TextView
                     android:id="@+id/tv_device_condition"
@@ -128,9 +128,9 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    tools:text="投影"
                     android:textColor="#333333"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    tools:text="投影"/>
 
                 <TextView
                     android:id="@+id/tv_receive_person"
@@ -150,9 +150,9 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/tv_resource_name"
-                    tools:text="朱展宏"
                     android:textColor="#333333"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    tools:text="朱展宏"/>
 
             </RelativeLayout>
 
@@ -182,14 +182,25 @@
                         android:textSize="14sp"
                         android:visibility="gone"/>
 
-                    <RadioButton
-                        android:id="@+id/rb_is_meeting_invite"
+                    <FrameLayout
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:layout_marginRight="12dp"
-                        android:background="@drawable/meeting_enable_checkbox_selector"
-                        android:button="@null"
-                        android:gravity="center"/>
+                        android:layout_marginRight="12dp">
+
+                        <RadioButton
+                            android:id="@+id/rb_is_meeting_invite"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:background="@drawable/meeting_enable_checkbox_selector"
+                            android:button="@null"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/tv_rb_is_meeting_invite"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:visibility="gone"/>
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/tv_is_meeting_invite"
@@ -243,10 +254,10 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:paddingRight="10dp"
-                        tools:text="OA需求评审"
                         android:textColor="#333333"
                         android:textSize="14sp"
-                        android:visibility="gone"/>
+                        android:visibility="gone"
+                        tools:text="OA需求评审"/>
 
                     <LinearLayout
                         android:id="@+id/ll_meeting_theme"
@@ -306,10 +317,10 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:paddingRight="10dp"
-                        tools:text="曹燕飞，朱展宏，吴方华"
                         android:textColor="#333333"
                         android:textSize="14sp"
-                        android:visibility="gone"/>
+                        android:visibility="gone"
+                        tools:text="曹燕飞，朱展宏，吴方华"/>
 
                     <LinearLayout
                         android:id="@+id/ll_meeting_person"
@@ -376,9 +387,9 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_marginRight="8dp"
-                        android:gravity="center"
+                        android:background="@drawable/meeting_enable_checkbox_selected"
                         android:button="@null"
-                        android:background="@drawable/meeting_enable_checkbox_selected"/>
+                        android:gravity="center"/>
 
 
                     <TextView
@@ -395,9 +406,9 @@
                         android:layout_height="22dp"
                         android:layout_marginLeft="27dp"
                         android:layout_marginRight="8dp"
-                        android:gravity="center"
+                        android:background="@drawable/meeting_enable_checkbox_selected"
                         android:button="@null"
-                        android:background="@drawable/meeting_enable_checkbox_selected"/>
+                        android:gravity="center"/>
 
                     <TextView
                         android:layout_width="wrap_content"
