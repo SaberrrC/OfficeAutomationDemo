@@ -104,6 +104,10 @@ public class EaseUserUtils {
                     imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.meeting_invite_icon, null));
                     return;
                 }
+                if (bean.getCODE_self().contains("notice")){
+                    imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.notice_message_icon, null));
+                    return;
+                }
                 String portrait = bean.portrait_self.replace("_self", "");
                 Glide.with(context).load(portrait)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
