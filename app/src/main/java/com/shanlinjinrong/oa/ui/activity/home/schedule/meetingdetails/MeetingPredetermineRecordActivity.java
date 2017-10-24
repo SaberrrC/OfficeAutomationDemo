@@ -269,63 +269,72 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                 if (mSelectedMeetingDate1.isChecked()) {
                     mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
                 } else {
-                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.white));
+                    if (mSelectedMeetingDate1.isEnabled())
+                        mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 break;
             case R.id.selected_meeting_date2:
                 if (mSelectedMeetingDate2.isChecked()) {
                     mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
                 } else {
-                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.white));
+                    if (mSelectedMeetingDate2.isEnabled())
+                        mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 break;
             case R.id.selected_meeting_date3:
                 if (mSelectedMeetingDate3.isChecked()) {
                     mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
                 } else {
-                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.white));
+                    if (mSelectedMeetingDate3.isEnabled())
+                        mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 break;
             case R.id.selected_meeting_date4:
                 if (mSelectedMeetingDate4.isChecked()) {
                     mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
                 } else {
-                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.white));
+                    if (mSelectedMeetingDate4.isEnabled())
+                        mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 break;
             case R.id.selected_meeting_date5:
                 if (mSelectedMeetingDate5.isChecked()) {
                     mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
                 } else {
-                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.white));
+                    if (mSelectedMeetingDate5.isEnabled())
+                        mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 break;
             case R.id.selected_meeting_date6:
                 if (mSelectedMeetingDate6.isChecked()) {
                     mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
                 } else {
-                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.white));
+                    if (mSelectedMeetingDate6.isEnabled())
+                        mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 break;
             case R.id.selected_meeting_date7:
                 if (mSelectedMeetingDate7.isChecked()) {
                     mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
                 } else {
-                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.white));
+                    if (mSelectedMeetingDate7.isEnabled())
+                        mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 break;
             case R.id.selected_meeting_date8:
                 if (mSelectedMeetingDate8.isChecked()) {
                     mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
                 } else {
-                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.white));
+                    if (mSelectedMeetingDate8.isEnabled())
+                        mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 break;
             case R.id.selected_meeting_date9:
                 if (mSelectedMeetingDate9.isChecked()) {
                     mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
                 } else {
-                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.white));
+                    if (mSelectedMeetingDate9.isEnabled())
+                        mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.white));
                 }
                 break;
         }
@@ -340,7 +349,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     private void refreshSelectTime(Date date) {
         for (int i = 0; i <= 8; i++) {
-            setTimeEnable(i, true);
+            setTimeEnable(i, true, false);
         }
         for (int i = 0; i < mSelectTime.size(); i++) {
             //接口返回的数据是秒
@@ -357,7 +366,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                     int start = Integer.valueOf(longToDateString(startTime * 1000, "HH"));
                     int end = Integer.valueOf(DateUtils.longToDateString(endTime * 1000, "HH"));
                     for (int j = start - 9; j <= end - 10; j++) {
-                        setTimeEnable(j, false);
+                        setTimeEnable(j, false, false);
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -367,52 +376,88 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     }
 
 
-    public void setTimeEnable(int pos, boolean isEnable) {
+    public void setTimeEnable(int pos, boolean isEnable, boolean isChecked) {
         switch (pos) {
             case 0:
+                mSelectedMeetingDate1.setChecked(isChecked);
                 mSelectedMeetingDate1.setEnabled(isEnable);
-                if (!isEnable)
-                mSelectedMeetingDate1.setChecked(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else {
+                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 break;
             case 1:
+                mSelectedMeetingDate2.setChecked(isChecked);
                 mSelectedMeetingDate2.setEnabled(isEnable);
-                if (!isEnable)
-                mSelectedMeetingDate2.setChecked(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else {
+                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 break;
             case 2:
+                mSelectedMeetingDate3.setChecked(isChecked);
                 mSelectedMeetingDate3.setEnabled(isEnable);
-                if (!isEnable)
-                mSelectedMeetingDate3.setChecked(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else {
+                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 break;
             case 3:
+                mSelectedMeetingDate4.setChecked(isChecked);
                 mSelectedMeetingDate4.setEnabled(isEnable);
-                if (!isEnable)
-                mSelectedMeetingDate4.setChecked(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else {
+                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 break;
             case 4:
+                mSelectedMeetingDate5.setChecked(isChecked);
                 mSelectedMeetingDate5.setEnabled(isEnable);
-                if (!isEnable)
-                mSelectedMeetingDate5.setChecked(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else {
+                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 break;
             case 5:
+                mSelectedMeetingDate6.setChecked(isChecked);
                 mSelectedMeetingDate6.setEnabled(isEnable);
-                if (!isEnable)
-                mSelectedMeetingDate6.setChecked(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else {
+                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 break;
             case 6:
+                mSelectedMeetingDate7.setChecked(isChecked);
                 mSelectedMeetingDate7.setEnabled(isEnable);
-                if (!isEnable)
-                mSelectedMeetingDate7.setChecked(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else {
+                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 break;
             case 7:
+                mSelectedMeetingDate8.setChecked(isChecked);
                 mSelectedMeetingDate8.setEnabled(isEnable);
-                if (!isEnable)
-                mSelectedMeetingDate8.setChecked(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else {
+                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 break;
             case 8:
+                mSelectedMeetingDate9.setChecked(isChecked);
                 mSelectedMeetingDate9.setEnabled(isEnable);
-                if (!isEnable)
-                mSelectedMeetingDate9.setChecked(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else {
+                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.white));
+                }
                 break;
         }
 
