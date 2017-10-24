@@ -28,6 +28,7 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
 
     @Override
     public void upLoadPortrait(String departmentId, String portrait, File file) {
+        mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
         params.put("department_id", departmentId);
         params.put("file", file);
