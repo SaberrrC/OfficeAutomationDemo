@@ -162,5 +162,7 @@
     <string name="string_not_network">当前网络不可用!</string>
     <string name="string_meeting_record_not_available">暂无预订记录!</string>
     <string name="string_not_more">没有更多了</string>
+    <string name="str_mine_work_record">我的考勤</string>
+    <string name="str_mission_work_title">出差申请</string>
 
 </resources>
