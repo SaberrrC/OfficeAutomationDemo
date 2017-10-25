@@ -62,7 +62,11 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getMeetingRoomsFailed(errorNo, strMsg);
+                try {
+                    mView.getMeetingRoomsFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
 

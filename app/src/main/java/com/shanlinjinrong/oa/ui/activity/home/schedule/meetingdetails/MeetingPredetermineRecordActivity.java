@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingPredetermineContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingPredeterminePresenter;
@@ -71,6 +71,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     TextView mTvDay;
     @Bind(R.id.tv_week)
     TextView mTvWeek;
+    @Bind(R.id.tv_not_network)
+    TextView mTvNotNetwork;
+    @Bind(R.id.ll_content_show)
+    LinearLayout mLlContentShow;
 
     private int DateIndex;
     private String endDate;
@@ -130,8 +134,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
         mMonthPos = DateUtils.getCurrentMonth();
         mTvMonth.setText(mMonthArrays[mMonthPos]);
-
-
         mDayPos = DateUtils.getCurrentDay();
         mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
 
@@ -162,7 +164,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         return pos % 7;
     }
 
-    @OnClick({R.id.btn_meeting_info_complete, R.id.ll_day_selector, R.id.ll_month_selector})
+    @OnClick({R.id.btn_meeting_info_complete, R.id.ll_day_selector, R.id.ll_month_selector, R.id.tv_not_network})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
@@ -224,43 +226,81 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
             case R.id.ll_month_selector:
                 showDatePopWindow(false, 0, mMonthPos);
                 break;
+            case R.id.tv_not_network:
+                mPresenter.getMeetingPredetermine(mMeetingId);
+                break;
         }
     }
 
-    public void showDatePopWindow(boolean isDay, final int month, int selectPos) {
-        if (datePopWindow == null) {
-            int height = DeviceUtil.getScreenHeight(this) - DeviceUtil.getStatusHeight(this) - mTopView.getHeight() - mDateLayout.getHeight();
-            int topHeight = DeviceUtil.getScreenHeight(this) - height;
-            datePopWindow = new DatePopWindow(this, mDateLayout, topHeight, height);
+    private void refreshSelectTime(Date date) {
+        for (int i = 0; i <= 8; i++) {
+            setTimeEnable(i, true, false);
         }
-        datePopWindow.setData(isDay, month, selectPos);
-        datePopWindow.show();
-        datePopWindow.setItemClick(new DatePopWindow.PopItemClick() {
-            @Override
-            public void onPopItemClick(boolean isDay, int position) {
-                if (isDay) {
-                    mDayPos = mDays.get(position);
-                    mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
-                } else {
-                    mMonthPos = position;
-                    mTvMonth.setText(mMonthArrays[mMonthPos]);
-                    int maxDay = DateUtils.getCurrentDaysInMonth(mMonthPos + 1);
-                    if (mDayPos > maxDay) {
-                        mDayPos = maxDay;
-                    }
+        for (int i = 0; i < mSelectTime.size(); i++) {
+            //接口返回的数据是秒
+            long startTime = Long.parseLong(mSelectTime.get(i).getStart_time());
+            long endTime = Long.parseLong(mSelectTime.get(i).getEnd_time());
 
-                    if (DateUtils.getCurrentMonth() == mMonthPos && mDayPos < DateUtils.getCurrentDay()) {
-                        mDayPos = DateUtils.getCurrentDay();
+            if (DateUtils.isSameDay(startTime * 1000, date)) {
+                try {
+                    mStart = Integer.valueOf(longToDateString(startTime * 1000, "HH"));
+                    mEnd = Integer.valueOf(DateUtils.longToDateString(endTime * 1000, "HH"));
+
+                    mBeginDate = getIntent().getStringExtra("startTime");
+                    mEndDate = getIntent().getStringExtra("endTime");
+                    if (mBeginDate != null && mEndDate != null) {
+                        String day = mBeginDate.substring(mBeginDate.indexOf("日") - 2, mBeginDate.indexOf("日"));
+                        if (mBeginDate.contains(mStart + "") && mEndDate.contains(mEnd + "") && day.contains(mDayPos + "")) {
+                            for (int j = mStart - 9; j <= mEnd - 10; j++) {
+                                setTimeEnable(j, true, true);
+                                mBtnMeetingInfoComplete.setEnabled(false);
+                            }
+                            return;
+                        }
                     }
+                    for (int j = mStart - 9; j <= mEnd - 10; j++) {
+                        setTimeEnable(j, false, false);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
-
-                mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
-                mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
-
-                refreshSelectTime(DateUtils.stringToDate(DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos, "yyyy-MM-dd"));
-
             }
-        });
+        }
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
+        mTvNotNetwork.setVisibility(View.GONE);
+        mLlContentShow.setVisibility(View.VISIBLE);
+        mSelectTime = dataBeen;
+        isNetwork = true;
+        refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
+    }
+
+    @Override
+    public void getMeetingPredetermineFailed(int errorCode, String msgStr) {
+        switch (errorCode) {
+            case -1:
+                isNetwork = false;
+                showToast(getString(R.string.net_no_connection));
+                mTvNotNetwork.setVisibility(View.VISIBLE);
+                mLlContentShow.setVisibility(View.GONE);
+                break;
+            case Api.RESPONSES_CODE_DATA_EMPTY:
+                mTvNotNetwork.setText("会议室预定错误，请重试");
+                mTvNotNetwork.setVisibility(View.VISIBLE);
+                mLlContentShow.setVisibility(View.GONE);
+                break;
+            default:
+                mTvNotNetwork.setVisibility(View.GONE);
+                mLlContentShow.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     @Override
@@ -336,55 +376,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                 break;
         }
     }
-
-    @Override
-    public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
-        mSelectTime = dataBeen;
-        isNetwork = true;
-        refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
-    }
-
-    private void refreshSelectTime(Date date) {
-        for (int i = 0; i <= 8; i++) {
-            setTimeEnable(i, true, false);
-        }
-        for (int i = 0; i < mSelectTime.size(); i++) {
-            //接口返回的数据是秒
-            long startTime = Long.parseLong(mSelectTime.get(i).getStart_time());
-            long endTime = Long.parseLong(mSelectTime.get(i).getEnd_time());
-
-//            Log.i("MeetingPredetermine", "startTime : " + DateUtils.longToDateString(startTime * 1000, "yyyy-MM-dd HH:MM"));
-//            Log.i("MeetingPredetermine", "startTime : " + DateUtils.longToDateString(startTime * 1000, "HH"));
-//            Log.i("MeetingPredetermine", "istoday = " + DateUtils.isToday(startTime * 1000));
-//            Log.i("MeetingPredetermine", "endTime : " + DateUtils.longToDateString(endTime * 1000, "yyyy-MM-dd HH:MM"));
-
-            if (DateUtils.isSameDay(startTime * 1000, date)) {
-                try {
-                    mStart = Integer.valueOf(longToDateString(startTime * 1000, "HH"));
-                    mEnd = Integer.valueOf(DateUtils.longToDateString(endTime * 1000, "HH"));
-
-                    mBeginDate = getIntent().getStringExtra("startTime");
-                    mEndDate = getIntent().getStringExtra("endTime");
-                    if (mBeginDate != null && mEndDate != null) {
-                        String day = mBeginDate.substring(mBeginDate.indexOf("日") - 2, mBeginDate.indexOf("日"));
-                        if (mBeginDate.contains(mStart + "") && mEndDate.contains(mEnd + "") && day.contains(mDayPos + "")) {
-                            for (int j = mStart - 9; j <= mEnd - 10; j++) {
-                                setTimeEnable(j, true, true);
-                                mBtnMeetingInfoComplete.setEnabled(false);
-                            }
-                            return;
-                        }
-                    }
-                    for (int j = mStart - 9; j <= mEnd - 10; j++) {
-                        setTimeEnable(j, false, false);
-                    }
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
 
     public void setTimeEnable(int pos, boolean isEnable, boolean isChecked) {
         switch (pos) {
@@ -470,22 +461,41 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                 }
                 break;
         }
-
     }
 
-
-    @Override
-    public void getMeetingPredetermineFailed(int errorCode, String msgStr) {
-        switch (errorCode) {
-            case -1:
-                isNetwork = false;
-                showToast(getString(R.string.net_no_connection));
-                break;
+    public void showDatePopWindow(boolean isDay, final int month, int selectPos) {
+        if (datePopWindow == null) {
+            int height = DeviceUtil.getScreenHeight(this) - DeviceUtil.getStatusHeight(this) - mTopView.getHeight() - mDateLayout.getHeight();
+            int topHeight = DeviceUtil.getScreenHeight(this) - height;
+            datePopWindow = new DatePopWindow(this, mDateLayout, topHeight, height);
         }
-    }
+        datePopWindow.setData(isDay, month, selectPos);
+        datePopWindow.show();
+        datePopWindow.setItemClick(new DatePopWindow.PopItemClick() {
+            @Override
+            public void onPopItemClick(boolean isDay, int position) {
+                if (isDay) {
+                    mDayPos = mDays.get(position);
+                    mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
+                } else {
+                    mMonthPos = position;
+                    mTvMonth.setText(mMonthArrays[mMonthPos]);
+                    int maxDay = DateUtils.getCurrentDaysInMonth(mMonthPos + 1);
+                    if (mDayPos > maxDay) {
+                        mDayPos = maxDay;
+                    }
 
-    @Override
-    public void uidNull(int code) {
-        catchWarningByCode(code);
+                    if (DateUtils.getCurrentMonth() == mMonthPos && mDayPos < DateUtils.getCurrentDay()) {
+                        mDayPos = DateUtils.getCurrentDay();
+                    }
+                }
+
+                mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
+                mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
+
+                refreshSelectTime(DateUtils.stringToDate(DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos, "yyyy-MM-dd"));
+
+            }
+        });
     }
 }
