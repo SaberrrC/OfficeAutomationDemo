@@ -365,13 +365,15 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
                     mBeginDate = getIntent().getStringExtra("startTime");
                     mEndDate = getIntent().getStringExtra("endTime");
-                    String day = mBeginDate.substring(mBeginDate.indexOf("日") - 2,mBeginDate.indexOf("日"));
-                    if (mBeginDate.contains(mStart + "") && mEndDate.contains(mEnd + "") && day.contains(mDayPos + "")) {
-                        for (int j = mStart - 9; j <= mEnd - 10; j++) {
-                            setTimeEnable(j, true, true);
-                            mBtnMeetingInfoComplete.setEnabled(false);
+                    if (mBeginDate != null && mEndDate != null) {
+                        String day = mBeginDate.substring(mBeginDate.indexOf("日") - 2, mBeginDate.indexOf("日"));
+                        if (mBeginDate.contains(mStart + "") && mEndDate.contains(mEnd + "") && day.contains(mDayPos + "")) {
+                            for (int j = mStart - 9; j <= mEnd - 10; j++) {
+                                setTimeEnable(j, true, true);
+                                mBtnMeetingInfoComplete.setEnabled(false);
+                            }
+                            return;
                         }
-                        return;
                     }
                     for (int j = mStart - 9; j <= mEnd - 10; j++) {
                         setTimeEnable(j, false, false);

@@ -56,7 +56,11 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getMeetingPredetermineFailed(errorNo, strMsg);
+                try {
+                    mView.getMeetingPredetermineFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
