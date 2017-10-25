@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingPredetermineContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingPredeterminePresenter;
@@ -70,6 +71,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     TextView mTvDay;
     @Bind(R.id.tv_week)
     TextView mTvWeek;
+    @Bind(R.id.tv_not_network)
+    TextView mTvNotNetwork;
+    @Bind(R.id.ll_content_show)
+    LinearLayout mLlContentShow;
 
     private int DateIndex;
     private String endDate;
@@ -92,6 +97,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     private String[] mWeekArray = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
     private boolean mModifyMeeting;
     private int mMeetingId;
+    private String mBeginDate;
+    private String mEndDate;
+    private int mStart;
+    private int mEnd;
 
 
     @Override
@@ -125,8 +134,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
         mMonthPos = DateUtils.getCurrentMonth();
         mTvMonth.setText(mMonthArrays[mMonthPos]);
-
-
         mDayPos = DateUtils.getCurrentDay();
         mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
 
@@ -157,7 +164,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         return pos % 7;
     }
 
-    @OnClick({R.id.btn_meeting_info_complete, R.id.ll_day_selector, R.id.ll_month_selector})
+    @OnClick({R.id.btn_meeting_info_complete, R.id.ll_day_selector, R.id.ll_month_selector, R.id.tv_not_network})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_meeting_info_complete:
@@ -219,6 +226,240 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
             case R.id.ll_month_selector:
                 showDatePopWindow(false, 0, mMonthPos);
                 break;
+            case R.id.tv_not_network:
+                mPresenter.getMeetingPredetermine(mMeetingId);
+                break;
+        }
+    }
+
+    private void refreshSelectTime(Date date) {
+        for (int i = 0; i <= 8; i++) {
+            setTimeEnable(i, true, false);
+        }
+        for (int i = 0; i < mSelectTime.size(); i++) {
+            //接口返回的数据是秒
+            long startTime = Long.parseLong(mSelectTime.get(i).getStart_time());
+            long endTime = Long.parseLong(mSelectTime.get(i).getEnd_time());
+
+            if (DateUtils.isSameDay(startTime * 1000, date)) {
+                try {
+                    mStart = Integer.valueOf(longToDateString(startTime * 1000, "HH"));
+                    mEnd = Integer.valueOf(DateUtils.longToDateString(endTime * 1000, "HH"));
+
+                    mBeginDate = getIntent().getStringExtra("startTime");
+                    mEndDate = getIntent().getStringExtra("endTime");
+                    if (mBeginDate != null && mEndDate != null) {
+                        String day = mBeginDate.substring(mBeginDate.indexOf("日") - 2, mBeginDate.indexOf("日"));
+                        if (mBeginDate.contains(mStart + "") && mEndDate.contains(mEnd + "") && day.contains(mDayPos + "")) {
+                            for (int j = mStart - 9; j <= mEnd - 10; j++) {
+                                setTimeEnable(j, true, true);
+                                mBtnMeetingInfoComplete.setEnabled(false);
+                            }
+                            return;
+                        }
+                    }
+                    for (int j = mStart - 9; j <= mEnd - 10; j++) {
+                        setTimeEnable(j, false, false);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
+        mTvNotNetwork.setVisibility(View.GONE);
+        mLlContentShow.setVisibility(View.VISIBLE);
+        mSelectTime = dataBeen;
+        isNetwork = true;
+        refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
+    }
+
+    @Override
+    public void getMeetingPredetermineFailed(int errorCode, String msgStr) {
+        switch (errorCode) {
+            case -1:
+                isNetwork = false;
+                showToast(getString(R.string.net_no_connection));
+                mTvNotNetwork.setVisibility(View.VISIBLE);
+                mLlContentShow.setVisibility(View.GONE);
+                break;
+            case Api.RESPONSES_CODE_DATA_EMPTY:
+                mTvNotNetwork.setText("会议室预定错误，请重试");
+                mTvNotNetwork.setVisibility(View.VISIBLE);
+                mLlContentShow.setVisibility(View.GONE);
+                break;
+            default:
+                mTvNotNetwork.setVisibility(View.GONE);
+                mLlContentShow.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (!isNetwork) {
+            mPresenter.getMeetingPredetermine(mMeetingId);
+            return;
+        }
+        mBtnMeetingInfoComplete.setEnabled(true);
+        switch (compoundButton.getId()) {
+            case R.id.selected_meeting_date1:
+                if (mSelectedMeetingDate1.isChecked()) {
+                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
+                } else {
+                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case R.id.selected_meeting_date2:
+                if (mSelectedMeetingDate2.isChecked()) {
+                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
+                } else {
+                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case R.id.selected_meeting_date3:
+                if (mSelectedMeetingDate3.isChecked()) {
+                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
+                } else {
+                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case R.id.selected_meeting_date4:
+                if (mSelectedMeetingDate4.isChecked()) {
+                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
+                } else {
+                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case R.id.selected_meeting_date5:
+                if (mSelectedMeetingDate5.isChecked()) {
+                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
+                } else {
+                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case R.id.selected_meeting_date6:
+                if (mSelectedMeetingDate6.isChecked()) {
+                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
+                } else {
+                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case R.id.selected_meeting_date7:
+                if (mSelectedMeetingDate7.isChecked()) {
+                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
+                } else {
+                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case R.id.selected_meeting_date8:
+                if (mSelectedMeetingDate8.isChecked()) {
+                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
+                } else {
+                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case R.id.selected_meeting_date9:
+                if (mSelectedMeetingDate9.isChecked()) {
+                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
+                } else {
+                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+        }
+    }
+
+    public void setTimeEnable(int pos, boolean isEnable, boolean isChecked) {
+        switch (pos) {
+            case 0:
+                mSelectedMeetingDate1.setChecked(isChecked);
+                mSelectedMeetingDate1.setEnabled(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else if (!isChecked) {
+                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case 1:
+                mSelectedMeetingDate2.setChecked(isChecked);
+                mSelectedMeetingDate2.setEnabled(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else if (!isChecked) {
+                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case 2:
+                mSelectedMeetingDate3.setChecked(isChecked);
+                mSelectedMeetingDate3.setEnabled(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else if (!isChecked) {
+                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case 3:
+                mSelectedMeetingDate4.setChecked(isChecked);
+                mSelectedMeetingDate4.setEnabled(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else if (!isChecked) {
+                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case 4:
+                mSelectedMeetingDate5.setChecked(isChecked);
+                mSelectedMeetingDate5.setEnabled(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else if (!isChecked) {
+                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case 5:
+                mSelectedMeetingDate6.setChecked(isChecked);
+                mSelectedMeetingDate6.setEnabled(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else if (!isChecked) {
+                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case 6:
+                mSelectedMeetingDate7.setChecked(isChecked);
+                mSelectedMeetingDate7.setEnabled(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else if (!isChecked) {
+                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case 7:
+                mSelectedMeetingDate8.setChecked(isChecked);
+                mSelectedMeetingDate8.setEnabled(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else if (!isChecked) {
+                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
+            case 8:
+                mSelectedMeetingDate9.setChecked(isChecked);
+                mSelectedMeetingDate9.setEnabled(isEnable);
+                if (!isEnable) {
+                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
+                } else if (!isChecked) {
+                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                break;
         }
     }
 
@@ -256,226 +497,5 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
             }
         });
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (!isNetwork) {
-            mPresenter.getMeetingPredetermine(mMeetingId);
-            return;
-        }
-        switch (compoundButton.getId()) {
-            case R.id.selected_meeting_date1:
-                if (mSelectedMeetingDate1.isChecked()) {
-                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
-                } else {
-                    if (mSelectedMeetingDate1.isEnabled())
-                        mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case R.id.selected_meeting_date2:
-                if (mSelectedMeetingDate2.isChecked()) {
-                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
-                } else {
-                    if (mSelectedMeetingDate2.isEnabled())
-                        mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case R.id.selected_meeting_date3:
-                if (mSelectedMeetingDate3.isChecked()) {
-                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
-                } else {
-                    if (mSelectedMeetingDate3.isEnabled())
-                        mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case R.id.selected_meeting_date4:
-                if (mSelectedMeetingDate4.isChecked()) {
-                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
-                } else {
-                    if (mSelectedMeetingDate4.isEnabled())
-                        mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case R.id.selected_meeting_date5:
-                if (mSelectedMeetingDate5.isChecked()) {
-                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
-                } else {
-                    if (mSelectedMeetingDate5.isEnabled())
-                        mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case R.id.selected_meeting_date6:
-                if (mSelectedMeetingDate6.isChecked()) {
-                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
-                } else {
-                    if (mSelectedMeetingDate6.isEnabled())
-                        mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case R.id.selected_meeting_date7:
-                if (mSelectedMeetingDate7.isChecked()) {
-                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
-                } else {
-                    if (mSelectedMeetingDate7.isEnabled())
-                        mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case R.id.selected_meeting_date8:
-                if (mSelectedMeetingDate8.isChecked()) {
-                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
-                } else {
-                    if (mSelectedMeetingDate8.isEnabled())
-                        mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case R.id.selected_meeting_date9:
-                if (mSelectedMeetingDate9.isChecked()) {
-                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.text_blue_color));
-                } else {
-                    if (mSelectedMeetingDate9.isEnabled())
-                        mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
-        mSelectTime = dataBeen;
-        isNetwork = true;
-        refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
-    }
-
-    private void refreshSelectTime(Date date) {
-        for (int i = 0; i <= 8; i++) {
-            setTimeEnable(i, true, false);
-        }
-        for (int i = 0; i < mSelectTime.size(); i++) {
-            //接口返回的数据是秒
-            long startTime = Long.parseLong(mSelectTime.get(i).getStart_time());
-            long endTime = Long.parseLong(mSelectTime.get(i).getEnd_time());
-
-//            Log.i("MeetingPredetermine", "startTime : " + DateUtils.longToDateString(startTime * 1000, "yyyy-MM-dd HH:MM"));
-//            Log.i("MeetingPredetermine", "startTime : " + DateUtils.longToDateString(startTime * 1000, "HH"));
-//            Log.i("MeetingPredetermine", "istoday = " + DateUtils.isToday(startTime * 1000));
-//            Log.i("MeetingPredetermine", "endTime : " + DateUtils.longToDateString(endTime * 1000, "yyyy-MM-dd HH:MM"));
-
-            if (DateUtils.isSameDay(startTime * 1000, date)) {
-                try {
-                    int start = Integer.valueOf(longToDateString(startTime * 1000, "HH"));
-                    int end = Integer.valueOf(DateUtils.longToDateString(endTime * 1000, "HH"));
-                    for (int j = start - 9; j <= end - 10; j++) {
-                        setTimeEnable(j, false, false);
-                    }
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
-    public void setTimeEnable(int pos, boolean isEnable, boolean isChecked) {
-        switch (pos) {
-            case 0:
-                mSelectedMeetingDate1.setChecked(isChecked);
-                mSelectedMeetingDate1.setEnabled(isEnable);
-                if (!isEnable) {
-                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-                } else {
-                    mSelectedMeetingDate1.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case 1:
-                mSelectedMeetingDate2.setChecked(isChecked);
-                mSelectedMeetingDate2.setEnabled(isEnable);
-                if (!isEnable) {
-                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-                } else {
-                    mSelectedMeetingDate2.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case 2:
-                mSelectedMeetingDate3.setChecked(isChecked);
-                mSelectedMeetingDate3.setEnabled(isEnable);
-                if (!isEnable) {
-                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-                } else {
-                    mSelectedMeetingDate3.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case 3:
-                mSelectedMeetingDate4.setChecked(isChecked);
-                mSelectedMeetingDate4.setEnabled(isEnable);
-                if (!isEnable) {
-                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-                } else {
-                    mSelectedMeetingDate4.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case 4:
-                mSelectedMeetingDate5.setChecked(isChecked);
-                mSelectedMeetingDate5.setEnabled(isEnable);
-                if (!isEnable) {
-                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-                } else {
-                    mSelectedMeetingDate5.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case 5:
-                mSelectedMeetingDate6.setChecked(isChecked);
-                mSelectedMeetingDate6.setEnabled(isEnable);
-                if (!isEnable) {
-                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-                } else {
-                    mSelectedMeetingDate6.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case 6:
-                mSelectedMeetingDate7.setChecked(isChecked);
-                mSelectedMeetingDate7.setEnabled(isEnable);
-                if (!isEnable) {
-                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-                } else {
-                    mSelectedMeetingDate7.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case 7:
-                mSelectedMeetingDate8.setChecked(isChecked);
-                mSelectedMeetingDate8.setEnabled(isEnable);
-                if (!isEnable) {
-                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-                } else {
-                    mSelectedMeetingDate8.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-            case 8:
-                mSelectedMeetingDate9.setChecked(isChecked);
-                mSelectedMeetingDate9.setEnabled(isEnable);
-                if (!isEnable) {
-                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-                } else {
-                    mSelectedMeetingDate9.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-                break;
-        }
-
-    }
-
-
-    @Override
-    public void getMeetingPredetermineFailed(int errorCode, String msgStr) {
-        switch (errorCode) {
-            case -1:
-                isNetwork = false;
-                showToast(getString(R.string.net_no_connection));
-                break;
-        }
-    }
-
-    @Override
-    public void uidNull(int code) {
-        catchWarningByCode(code);
     }
 }

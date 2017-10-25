@@ -44,6 +44,9 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(recordBean.getCode());
                             break;
+                        case Api.RESPONSES_CODE_DATA_EMPTY:
+                            mView.getMeetingPredetermineFailed(Api.RESPONSES_CODE_DATA_EMPTY, "");
+                            break;
                         default:
                             mView.getMeetingPredetermineFailed(recordBean.getCode(), recordBean.getInfo());
                             break;
@@ -56,7 +59,11 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getMeetingPredetermineFailed(errorNo, strMsg);
+                try {
+                    mView.getMeetingPredetermineFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
