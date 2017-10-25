@@ -19,14 +19,14 @@ android {
         applicationId "com.shanlinjinrong.oa"
         minSdkVersion 16
         targetSdkVersion 25
-
+        multiDexEnabled true
         //Error:(com.baidu.mapapi.utils.b) that doesn't come with an 这个是安卓的方法数量不够了，
         // 只能6w个方法。 我在项目build.gradle这里添加这句就可以了。
         multiDexEnabled true
 
         //pwd:13579
-        versionCode 20
-        versionName "v1.3.2.0"
+        versionCode 21
+        versionName "v1.3.2.1"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
@@ -144,6 +144,9 @@ dependencies {
     compile project(':calendarlibrary')
     compile project(':uilibrary')
 
+
+
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -175,13 +178,13 @@ dependencies {
     compile 'com.facebook.stetho:stetho:1.5.0'
     compile 'com.google.dagger:dagger:2.11'
     compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.github.markzhai:blockcanary-android:1.5.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-
-    compile 'com.github.markzhai:blockcanary-android:1.5.0'
-
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-
+    //分包
+    compile "com.android.support:multidex:1.0.1"
 }

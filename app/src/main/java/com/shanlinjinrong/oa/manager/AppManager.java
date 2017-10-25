@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -52,7 +53,7 @@ import cn.jpush.android.api.JPushInterface;
  * Created by KevinMeng on 2016/5/6.
  */
 
-public class AppManager extends Application {
+public class AppManager extends MultiDexApplication {
     // 共享变量
     private SelectJoinPeopleActivity.MyJoinHandler joinhandler = null;
 
