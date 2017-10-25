@@ -122,6 +122,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     private boolean mModifyMeeting;
     private boolean isMeetingRequestComplete;
 
+    private String currentStartTime;
+    private String currentEndTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -266,6 +269,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                         intent.putExtra("isWriteMeetingInfo", false);
                         intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
                         intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
+                        intent.putExtra("startTime",currentStartTime);
+                        intent.putExtra("endTime",currentEndTime);
                         startActivity(intent);
                     }
                 }
@@ -451,6 +456,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             mTvMeetingPersonNumber.setText(info.getData().getNop());
             if (!mModifyMeeting) {
                 int index = DateUtils.stringToDate(info.getData().getEnd_time()).indexOf('日');
+                currentStartTime = DateUtils.stringToDate(info.getData().getStart_time());
+                currentEndTime = DateUtils.stringToDate(info.getData().getEnd_time());
                 mTvMeetingDate.setText(DateUtils.stringToDate(info.getData().getStart_time()) + " -" + DateUtils.stringToDate(info.getData().getEnd_time()).substring(index + 2, DateUtils.stringToDate(info.getData().getEnd_time()).length()));
             }
             mTvMeetingDevice.setText(info.getData().getDevice());

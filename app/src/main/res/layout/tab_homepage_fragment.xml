@@ -394,7 +394,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="10dp"
-                    android:text="办公日程"
+                    android:text="日程管理"
                     android:textColor="#333333"
                     android:textSize="@dimen/text_sixteen_dp" />
 
