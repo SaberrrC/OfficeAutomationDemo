@@ -729,6 +729,11 @@
         <activity
             android:name=".ui.activity.home.schedule.MeetingInviteActivity"
             android:screenOrientation="portrait"/>
+
+        <!--会议邀请-->
+        <activity
+            android:name=".ui.activity.work.WorkMonthActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
