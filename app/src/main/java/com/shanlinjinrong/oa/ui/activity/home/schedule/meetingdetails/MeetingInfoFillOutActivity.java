@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.baidu.platform.comapi.map.E;
 import com.iflytek.cloud.thirdparty.V;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
@@ -40,10 +42,12 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 
 /**
  * 预订会议室 确认
@@ -135,9 +139,44 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        initListener();
         initData();
         initView();
     }
+
+    private void initListener() {
+        //下单重复点击设置
+        RxView.clicks(mBtnMeetingInfoComplete).throttleFirst(1, TimeUnit.SECONDS).subscribe(new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                if (mModifyMeeting) {
+//                        modifyMeetingState();
+                    return;
+                } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
+                    addMeetingParams();
+                } else {
+                    Intent intent = new Intent(MeetingInfoFillOutActivity.this, MeetingPredetermineRecordActivity.class);
+                    intent.putExtra("id", mId);
+                    intent.putExtra("modifyMeeting", true);
+                    intent.putExtra("isWriteMeetingInfo", false);
+                    intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
+                    intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
+                    intent.putExtra("startTime", currentStartTime);
+                    intent.putExtra("endTime", currentEndTime);
+                    intent.putExtra("start_time", mStartTime);
+                    intent.putExtra("meeting_name", mTvMeetingName.getText().toString());
+                    intent.putExtra("end_time", mEndTime);
+                    startActivity(intent);
+                }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throwable.printStackTrace();
+            }
+        });
+    }
+
 
     @Override
     protected void initInject() {
@@ -146,8 +185,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     private void initView() {
         isWriteMeetingInfo = getIntent().getBooleanExtra("isWriteMeetingInfo", true);
-
-
         if (isWriteMeetingInfo) {
             initWriteView();
         } else {
@@ -253,30 +290,9 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
 
-    @OnClick({R.id.btn_meeting_info_complete, R.id.iv_add_contacts, R.id.tv_rb_is_meeting_invite})
+    @OnClick({ R.id.iv_add_contacts, R.id.tv_rb_is_meeting_invite})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_meeting_info_complete:
-                if (mModifyMeeting) {
-//                        modifyMeetingState();
-                    return;
-                } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
-                    addMeetingParams();
-                } else {
-                    Intent intent = new Intent(this, MeetingPredetermineRecordActivity.class);
-                    intent.putExtra("id", mId);
-                    intent.putExtra("modifyMeeting", true);
-                    intent.putExtra("isWriteMeetingInfo", false);
-                    intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
-                    intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
-                    intent.putExtra("startTime", currentStartTime);
-                    intent.putExtra("endTime", currentEndTime);
-                    intent.putExtra("start_time", mStartTime);
-                    intent.putExtra("meeting_name", mTvMeetingName.getText().toString());
-                    intent.putExtra("end_time", mEndTime);
-                    startActivity(intent);
-                }
-                break;
             case R.id.iv_add_contacts:
                 Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
                 intent.putParcelableArrayListExtra("selectedContacts", contactsList);
