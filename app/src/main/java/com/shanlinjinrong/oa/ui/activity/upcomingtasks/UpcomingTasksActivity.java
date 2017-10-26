@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,6 +50,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     SwipeRefreshLayout mSrRefresh;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
+    private boolean hasMore      = false;
 
     @Override
     protected void initInject() {
@@ -94,6 +96,37 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         getData();
         mFinalRecycleAdapter = new FinalRecycleAdapter(mDatas, map, this);
         mRvList.setAdapter(mFinalRecycleAdapter);
+        mRvList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                // 0屏幕停止滚动；1:滚动且用户仍在触碰或手指还在屏幕上2：随用户的操作，屏幕上产生的惯性滑动；
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (newState == 0 && mDatas.size() > 9) {
+                    hasMore = true;
+                    // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+                    int lastPosition = layoutManager.findLastVisibleItemPosition();
+                    if (lastPosition == mDatas.size() - 1) {
+                        //看到了最后一条，显示加载更多的状态
+                        View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.load_more_layout, null, false);
+//                        if (hasMore) {
+//                            try {
+//                                //如果没有在加载，才去加载
+//                                if (!isLoading) {
+//                                    isLoading = true;
+//                                    if (!list.isEmpty()) {
+//                                        mAdapter.addFooterView(view, list.size());
+//                                    }
+//                                    handler.sendEmptyMessageDelayed(LOAD_MORE_CONTENT, 1000);
+//                                }
+//                            } catch (Exception e) {
+//                            }
+//
+//                        }
+                    }
+                }
+            }
+        });
     }
 
     private void getData() {

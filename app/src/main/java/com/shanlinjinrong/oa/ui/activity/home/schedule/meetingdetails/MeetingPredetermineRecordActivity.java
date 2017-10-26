@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -38,49 +37,49 @@ import static com.shanlinjinrong.oa.utils.DateUtils.stringToDate;
 public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingPredeterminePresenter> implements MeetingPredetermineContract.View, CompoundButton.OnCheckedChangeListener {
 
     @Bind(R.id.selected_meeting_date1)
-    CheckBox mSelectedMeetingDate1;
+    CheckBox      mSelectedMeetingDate1;
     @Bind(R.id.selected_meeting_date2)
-    CheckBox mSelectedMeetingDate2;
+    CheckBox      mSelectedMeetingDate2;
     @Bind(R.id.selected_meeting_date3)
-    CheckBox mSelectedMeetingDate3;
+    CheckBox      mSelectedMeetingDate3;
     @Bind(R.id.selected_meeting_date4)
-    CheckBox mSelectedMeetingDate4;
+    CheckBox      mSelectedMeetingDate4;
     @Bind(R.id.selected_meeting_date5)
-    CheckBox mSelectedMeetingDate5;
+    CheckBox      mSelectedMeetingDate5;
     @Bind(R.id.selected_meeting_date6)
-    CheckBox mSelectedMeetingDate6;
+    CheckBox      mSelectedMeetingDate6;
     @Bind(R.id.selected_meeting_date7)
-    CheckBox mSelectedMeetingDate7;
+    CheckBox      mSelectedMeetingDate7;
     @Bind(R.id.selected_meeting_date8)
-    CheckBox mSelectedMeetingDate8;
+    CheckBox      mSelectedMeetingDate8;
     @Bind(R.id.selected_meeting_date9)
-    CheckBox mSelectedMeetingDate9;
+    CheckBox      mSelectedMeetingDate9;
     @Bind(R.id.btn_meeting_info_complete)
-    TextView mBtnMeetingInfoComplete;
+    TextView      mBtnMeetingInfoComplete;
     @Bind(R.id.ll_day_selector)
-    LinearLayout mLlDaySelector;
+    LinearLayout  mLlDaySelector;
     @Bind(R.id.ll_month_selector)
-    LinearLayout mLlMonthSelector;
+    LinearLayout  mLlMonthSelector;
     @Bind(R.id.ll_date_layout)
-    LinearLayout mDateLayout;
+    LinearLayout  mDateLayout;
     @Bind(R.id.top_view)
     CommonTopView mTopView;
     @Bind(R.id.tv_month)
-    TextView mTvMonth;
+    TextView      mTvMonth;
     @Bind(R.id.tv_day)
-    TextView mTvDay;
+    TextView      mTvDay;
     @Bind(R.id.tv_week)
-    TextView mTvWeek;
+    TextView      mTvWeek;
     @Bind(R.id.tv_not_network)
-    TextView mTvNotNetwork;
+    TextView      mTvNotNetwork;
     @Bind(R.id.ll_content_show)
-    LinearLayout mLlContentShow;
+    LinearLayout  mLlContentShow;
 
-    private int DateIndex;
-    private String endDate;
-    private int indexStart;
+    private int     DateIndex;
+    private String  endDate;
+    private int     indexStart;
     private boolean isNetwork;
-    private String beginDate;
+    private String  beginDate;
     private List<CheckBox> mCheckBoxes = new ArrayList<>();
 
     private List<Integer> mDays = new ArrayList<>();
@@ -89,18 +88,18 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     DatePopWindow datePopWindow;
 
-    private int mDayPos = 1;
+    private int mDayPos   = 1;
     private int mMonthPos = 1;
-    private int mWeekPos = 1;
+    private int mWeekPos  = 1;
 
     private String[] mMonthArrays = {"1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
-    private String[] mWeekArray = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
+    private String[] mWeekArray   = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
     private boolean mModifyMeeting;
-    private int mMeetingId;
-    private String mBeginDate;
-    private String mEndDate;
-    private int mStart;
-    private int mEnd;
+    private int     mMeetingId;
+    private String  mBeginDate;
+    private String  mEndDate;
+    private int     mStart;
+    private int     mEnd;
 
 
     @Override
@@ -159,7 +158,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     }
 
     public int getWeek(int month, int day) {
-        Log.i("MeetingPredetermine", "month = " + month + ";;;;day = " + day);
         int pos = DateUtils.getWeek(month, day) - 1;
         return pos % 7;
     }
@@ -277,9 +275,11 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
         mTvNotNetwork.setVisibility(View.GONE);
         mLlContentShow.setVisibility(View.VISIBLE);
-        mSelectTime = dataBeen;
-        isNetwork = true;
-        refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
+        if (dataBeen != null) {
+            mSelectTime = dataBeen;
+            isNetwork = true;
+            refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
+        }
     }
 
     @Override
