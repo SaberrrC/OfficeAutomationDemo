@@ -1,4 +1,5 @@
-package com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.widget;
+package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget;
+
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,13 +11,11 @@ import android.util.TypedValue;
 import android.view.View;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkContentBean;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
 
 import java.util.List;
 
-public class WeekReportDecorationLine extends RecyclerView.ItemDecoration {
-    private List<WorkContentBean> mData;
+public class ApproveDecorationLine extends RecyclerView.ItemDecoration {
+    private List<String> mData;
 
     private Paint mPaint;
     private Rect mBounds;//用于存放测量文字Rect
@@ -28,7 +27,7 @@ public class WeekReportDecorationLine extends RecyclerView.ItemDecoration {
     private Context mContext;
 
 
-    public WeekReportDecorationLine(Context context, List<WorkContentBean> mData) {
+    public ApproveDecorationLine(Context context, List<String> mData) {
         mContext = context;
         this.mData = mData;
         mPaint = new Paint();
@@ -41,18 +40,20 @@ public class WeekReportDecorationLine extends RecyclerView.ItemDecoration {
         mPaint.setStyle(Paint.Style.FILL);
     }
 
+
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDraw(c, parent, state);
         drawVertical(c, parent);
     }
 
+
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
         int position = parent.getChildViewHolder(view).getAdapterPosition();
         if (position > 0) {
-                outRect.set(0, mLineHeight, 0, 0);
+            outRect.set(0, mLineHeight, 0, 0);
         }
     }
 
@@ -66,9 +67,9 @@ public class WeekReportDecorationLine extends RecyclerView.ItemDecoration {
                     .getLayoutParams();
             int position = params.getViewLayoutPosition();
             if (position > 0) {
-                    //绘制分割线
-                    mPaint.setColor(ResourcesCompat.getColor(mContext.getResources(), R.color.text_common_dark_color, null));
-                    c.drawLine(left + mMarginLeft, child.getY(), right, child.getY(), mPaint);
+                //绘制分割线
+                mPaint.setColor(ResourcesCompat.getColor(mContext.getResources(), R.color.gray_d5d5d5, null));
+                c.drawLine(left + mMarginLeft, child.getY(), right - mMarginLeft, child.getY(), mPaint);
             }
         }
     }

@@ -730,6 +730,36 @@
             android:name=".ui.activity.home.schedule.MeetingInviteActivity"
             android:screenOrientation="portrait"/>
 
+        <!-- 我的考勤 -->
+        <activity
+            android:name=".ui.activity.home.schedule.staffselfhelp.MineWorkRecordActivity"
+            android:screenOrientation="portrait"/>
+
+        <!--  -->
+        <activity
+            android:name=".ui.activity.home.schedule.staffselfhelp.ClockingInMonthlyCalendarActivity"
+            android:screenOrientation="portrait"/>
+
+        <!-- 出差申请 -->
+        <activity
+            android:name=".ui.activity.home.schedule.initiateapproval.MissionWorkRequestActivity"
+            android:screenOrientation="portrait"/>
+
+        <!-- 加班申请 -->
+        <activity
+            android:name=".ui.activity.home.schedule.initiateapproval.OverTimeWorkingActivity"
+            android:screenOrientation="portrait"/>
+
+        <!-- 休假申请 -->
+        <activity
+            android:name=".ui.activity.home.schedule.initiateapproval.AnnualLeaveRequestActivity"
+            android:screenOrientation="portrait"/>
+
+        <!-- 签卡申请 -->
+        <activity
+            android:name=".ui.activity.home.schedule.initiateapproval.RegistrationCardRequestActivity"
+            android:screenOrientation="portrait"/>
+
         <!--会议邀请-->
         <activity
             android:name=".ui.activity.work.WorkMonthActivity"

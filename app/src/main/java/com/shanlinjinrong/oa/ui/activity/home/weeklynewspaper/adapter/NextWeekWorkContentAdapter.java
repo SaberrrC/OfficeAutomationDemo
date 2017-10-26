@@ -9,10 +9,6 @@ import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.bean.WorkContentBe
 
 import java.util.List;
 
-/**
- * Created by tonny on 2017/9/20.
- */
-
 public class NextWeekWorkContentAdapter extends BaseQuickAdapter<WorkContentBean> {
     public NextWeekWorkContentAdapter(List<WorkContentBean> data) {
         super(R.layout.work_content_list_item,data);

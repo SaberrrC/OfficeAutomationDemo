@@ -26,6 +26,10 @@ public class CustomDialogUtils extends Dialog {
         view = builder.view;
     }
 
+    @Override
+    public void setCanceledOnTouchOutside(boolean cancel) {
+        super.setCanceledOnTouchOutside(cancel);
+    }
 
     private CustomDialogUtils(Builder builder, int resStyle) {
         super(builder.context, resStyle);
@@ -47,7 +51,11 @@ public class CustomDialogUtils extends Dialog {
         Window win = getWindow();
         WindowManager.LayoutParams lp = win.getAttributes();
         lp.gravity = Gravity.CENTER;
-        lp.height = height;
+        if (height != 0) {
+            lp.height = height;
+        } else {
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        }
         lp.width = width;
         win.setAttributes(lp);
     }
@@ -69,6 +77,12 @@ public class CustomDialogUtils extends Dialog {
             view = LayoutInflater.from(context).inflate(resView, null);
             return this;
         }
+
+        public Builder view(View newView) {
+            view = newView;
+            return this;
+        }
+
 
         public Builder heightpx(int val) {
             height = val;
@@ -110,7 +124,7 @@ public class CustomDialogUtils extends Dialog {
             return this;
         }
 
-        public Builder addViewOnclick(int viewRes,View.OnClickListener listener){
+        public Builder addViewOnclick(int viewRes, View.OnClickListener listener) {
             view.findViewById(viewRes).setOnClickListener(listener);
             return this;
         }
