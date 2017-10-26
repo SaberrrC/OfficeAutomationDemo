@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,7 +53,10 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     SwipeRefreshLayout mSrRefresh;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
-    private boolean hasMore      = false;
+    private boolean hasMore         = false;
+    private int     lastVisibleItem = 0;
+    private LinearLayoutManager mLinearLayoutManager;
+    private Dialog              mChooseDialog;
 
     @Override
     protected void initInject() {
@@ -83,14 +89,19 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         mSrRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
+                if (mDatas.size() > 0) {
+                    mDatas.clear();
+                }
+                mFinalRecycleAdapter.notifyDataSetChanged();
                 mSrRefresh.setRefreshing(false);
             }
         });
-
     }
 
     private void initList() {
-        mRvList.setLayoutManager(new LinearLayoutManager(this));
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRvList.setLayoutManager(mLinearLayoutManager);
         Map<Class, Integer> map = FinalRecycleAdapter.getMap();
         map.put(UpcomingTaskItemBean.class, R.layout.layout_item_upcoming_task);
         getData();
@@ -100,37 +111,26 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                // 0屏幕停止滚动；1:滚动且用户仍在触碰或手指还在屏幕上2：随用户的操作，屏幕上产生的惯性滑动；
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (newState == 0 && mDatas.size() > 9) {
-                    hasMore = true;
-                    // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
-                    int lastPosition = layoutManager.findLastVisibleItemPosition();
-                    if (lastPosition == mDatas.size() - 1) {
-                        //看到了最后一条，显示加载更多的状态
-                        View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.load_more_layout, null, false);
-//                        if (hasMore) {
-//                            try {
-//                                //如果没有在加载，才去加载
-//                                if (!isLoading) {
-//                                    isLoading = true;
-//                                    if (!list.isEmpty()) {
-//                                        mAdapter.addFooterView(view, list.size());
-//                                    }
-//                                    handler.sendEmptyMessageDelayed(LOAD_MORE_CONTENT, 1000);
-//                                }
-//                            } catch (Exception e) {
-//                            }
-//
-//                        }
+                //RecyclerView没有拖动而且已经到达了最后一个item，执行自动加载
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mFinalRecycleAdapter.getItemCount() && mDatas.size() > 9) {
+                    mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.LOAD;
+                    for (int i = 0; i < 3; i++) {
+                        mDatas.add(new UpcomingTaskItemBean());
                     }
+                    mFinalRecycleAdapter.notifyDataSetChanged();
                 }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
             }
         });
     }
 
     private void getData() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 10; i++) {
             mDatas.add(new UpcomingTaskItemBean());
         }
     }
@@ -162,8 +162,27 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
             case R.id.toolbar_image_btn:
                 break;
             case R.id.tv_approval:
+                showChooseDialog();
                 break;
         }
+    }
+
+    private void showChooseDialog() {
+        if (mChooseDialog == null) {
+            mChooseDialog = new Dialog(this, R.style.DialogChoose);
+            //点击其他地方消失
+            mChooseDialog.setCanceledOnTouchOutside(true);
+            //填充对话框的布局
+            View viewGateOpen = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_dialog_upcoming_choose, null, false);
+
+            mChooseDialog.setContentView(viewGateOpen);
+            Window dialogWindow = mChooseDialog.getWindow();
+            dialogWindow.setGravity(Gravity.CENTER);
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            dialogWindow.setAttributes(lp);
+        }
+        mChooseDialog.show();//显示对话框
     }
 
     @Override
