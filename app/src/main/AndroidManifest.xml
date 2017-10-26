@@ -734,6 +734,10 @@
         <activity
             android:name=".ui.activity.work.WorkMonthActivity"
             android:screenOrientation="portrait"/>
+        <!--待办事宜-->
+        <activity
+            android:name=".ui.activity.upcomingtasks.UpcomingTasksActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -31,6 +31,7 @@ import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticesSingleInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.push.PushListActivity;
 import com.shanlinjinrong.oa.ui.activity.push.SystemNoticesActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.UpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.dagger.annotation.PerActivity;
 import com.shanlinjinrong.oa.ui.base.dagger.module.ActivityModule;
 
@@ -104,4 +105,5 @@ public interface ActivityComponent {
 
     void inject(MeetingPredetermineRecordActivity activity);
 
+    void inject(UpcomingTasksActivity upcomingTasksActivity);
 }
