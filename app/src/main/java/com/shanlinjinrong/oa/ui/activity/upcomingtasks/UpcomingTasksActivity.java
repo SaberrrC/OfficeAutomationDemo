@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -12,9 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,7 +31,7 @@ import butterknife.OnClick;
  * Created by saberrrc on 2017/10/26.
  */
 
-public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View {
+public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener {
 
     @Bind(R.id.tv_title)
     TextView           mTvTitle;
@@ -40,6 +47,8 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     RecyclerView       mRvList;
     @Bind(R.id.sr_refresh)
     SwipeRefreshLayout mSrRefresh;
+    private List<Object> mDatas = new ArrayList<>();
+    private FinalRecycleAdapter mFinalRecycleAdapter;
 
     @Override
     protected void initInject() {
@@ -61,6 +70,36 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
 
     private void init() {
         initToolbar();
+        initList();
+        initPullToRefresh();
+    }
+
+    private void initPullToRefresh() {
+        //下拉刷新颜色设置
+        mSrRefresh.setColorSchemeColors(getResources().getColor(R.color.tab_bar_text_light));
+        //下拉刷新监听
+        mSrRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSrRefresh.setRefreshing(false);
+            }
+        });
+
+    }
+
+    private void initList() {
+        mRvList.setLayoutManager(new LinearLayoutManager(this));
+        Map<Class, Integer> map = FinalRecycleAdapter.getMap();
+        map.put(UpcomingTaskItemBean.class, R.layout.layout_item_upcoming_task);
+        getData();
+        mFinalRecycleAdapter = new FinalRecycleAdapter(mDatas, map, this);
+        mRvList.setAdapter(mFinalRecycleAdapter);
+    }
+
+    private void getData() {
+        for (int i = 0; i < 3; i++) {
+            mDatas.add(new UpcomingTaskItemBean());
+        }
     }
 
     private void initToolbar() {
@@ -69,18 +108,12 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         }
         mToolbar.setTitle("");//必须在setSupportActionBar之前调用
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
-        mTvTitle.setText("审批列表");
+        mTvTitle.setText("待办事宜");
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         mTvTitle.setLayoutParams(lp);
         mTolbarTextBtn.setImageResource(R.mipmap.upcoming_filter);
         mTolbarTextBtn.setVisibility(View.VISIBLE);
-        mTolbarTextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showToast("111");
-            }
-        });
         mToolbar.setNavigationIcon(R.drawable.toolbar_back);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +130,13 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                 break;
             case R.id.tv_approval:
                 break;
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(FinalRecycleAdapter.ViewHolder holder, int position, Object itemData) {
+        if (itemData instanceof UpcomingTaskItemBean) {
+
         }
     }
 }
