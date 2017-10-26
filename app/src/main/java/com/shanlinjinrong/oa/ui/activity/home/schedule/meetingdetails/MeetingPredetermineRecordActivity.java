@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
@@ -231,9 +232,9 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                 } else {
                     intent.putExtra("isWriteMeetingInfo", true);
                 }
-
+                String replace = endDate.replace("—", "");
                 intent.putExtra("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
-                intent.putExtra("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
+                intent.putExtra("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + replace);
                 if (mModifyMeeting) {
                     intent.putExtra("modifyMeeting", true);
                     intent.putExtra("isMeetingRecord", true);

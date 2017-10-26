@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/common_padding"
-                    android:text="若有误，请向HR部门的XXX联系修改！"
+                    android:text="若有误，请向HR部门联系修改！"
                     android:textColor="#666666" />
 
             </LinearLayout>
