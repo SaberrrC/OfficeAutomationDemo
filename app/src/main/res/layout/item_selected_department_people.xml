@@ -36,15 +36,23 @@
     <LinearLayout android:gravity="right"
         android:layout_alignParentRight="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
+        android:layout_height="match_parent">
+
+        <RelativeLayout
             android:id="@+id/iv_resume"
-            android:src="@mipmap/search_clear_normal"
-            android:minWidth="20dp"
-            android:layout_gravity="center_vertical"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="50dp"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <ImageView
+                android:src="@mipmap/search_clear_normal"
+                android:minWidth="20dp"
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
     </LinearLayout>
 </LinearLayout>

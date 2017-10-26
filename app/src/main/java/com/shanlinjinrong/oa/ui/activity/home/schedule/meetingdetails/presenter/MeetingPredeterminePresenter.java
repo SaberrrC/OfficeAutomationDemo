@@ -37,6 +37,7 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
                 try {
                     MeetingBookItem recordBean = new Gson().fromJson(t, MeetingBookItem.class);
                     switch (recordBean.getCode()) {
+                        case Api.RESPONSES_CODE_DATA_EMPTY:
                         case Api.RESPONSES_CODE_OK:
                             mView.getMeetingPredetermineSuccess(recordBean.getData());
                             break;
@@ -44,9 +45,9 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
                         case Api.RESPONSES_CODE_UID_NULL:
                             mView.uidNull(recordBean.getCode());
                             break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            mView.getMeetingPredetermineFailed(Api.RESPONSES_CODE_DATA_EMPTY, "");
-                            break;
+//                        case Api.RESPONSES_CODE_DATA_EMPTY:
+//                            mView.getMeetingPredetermineFailed(Api.RESPONSES_CODE_DATA_EMPTY, "");
+//                            break;
                         default:
                             mView.getMeetingPredetermineFailed(recordBean.getCode(), recordBean.getInfo());
                             break;

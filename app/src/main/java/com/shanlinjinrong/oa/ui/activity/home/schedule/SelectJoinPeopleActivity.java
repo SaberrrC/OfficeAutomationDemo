@@ -372,10 +372,8 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                     //--------------
                     new MyJoinPeopleFragment(selectedContacts).show(getSupportFragmentManager(), R.id.bottomsheet);
                 }
-
             }
         });
-
     }
 
     //搜索事件

@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.widget.RadioButton;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ReportCheckAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.CheckReportItem;
