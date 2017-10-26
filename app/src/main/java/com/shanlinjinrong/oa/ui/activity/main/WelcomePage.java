@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
+import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -31,10 +32,8 @@ public class WelcomePage extends Activity {
         setContentView(view);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         startAnimation(view);
-        uid = AppConfig.getAppConfig(AppManager.mContext)
-                .get(AppConfig.PREF_KEY_USER_UID);
-        token = AppConfig.getAppConfig(AppManager.mContext)
-                .get(AppConfig.PREF_KEY_TOKEN);
+        uid = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID);
+        token = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN);
     }
 
 
@@ -43,7 +42,11 @@ public class WelcomePage extends Activity {
         AlphaAnimation aa = new AlphaAnimation(0.1f, 1.0f);
         view.startAnimation(aa);
         aa.setFillAfter(true);
-        aa.setDuration(3000);
+        if (BuildConfig.DEBUG) {
+            aa.setDuration(0);
+        } else {
+            aa.setDuration(3000);
+        }
         aa.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
