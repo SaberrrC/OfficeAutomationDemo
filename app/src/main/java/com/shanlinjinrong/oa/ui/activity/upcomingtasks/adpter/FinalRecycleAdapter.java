@@ -14,8 +14,10 @@ public class FinalRecycleAdapter extends RecyclerView.Adapter<FinalRecycleAdapte
     private List<? extends Object> mDatas;
     private OnViewAttachListener   mOnViewAttachListener;
     private             Map<Class, Integer> mClassIntegerHashMap = new HashMap<>();
+    public              int                 currentAction        = 0;//记录当前用户手势是下拉刷新还是上拉更多，默认下拉刷新
     public static final int                 REFRESH              = 0;
     public static final int                 LOAD                 = 1;
+    public              boolean             isLoadOver           = false;
 
     /**
      * 获取map
