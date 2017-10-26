@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
@@ -171,7 +172,9 @@ public class TabHomePageFragment extends BaseFragment {
             case R.id.rl_schedule_note:
                 //会议室预定
 //                intent = new Intent(mContext, MineWorkRecordActivity.class);
-                intent = new Intent(mContext, UpcomingTasksActivity.class);
+                if (BuildConfig.DEBUG) {
+                    intent = new Intent(mContext, UpcomingTasksActivity.class);
+                }
                 break;
         }
         if (intent != null) {
