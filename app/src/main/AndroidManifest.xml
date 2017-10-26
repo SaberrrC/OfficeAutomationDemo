@@ -762,7 +762,7 @@
 
         <!--会议邀请-->
         <activity
-            android:name=".ui.activity.work.WorkMonthActivity"
+            android:name=".ui.activity.home.schedule.staffselfhelp.WorkMonthActivity"
             android:screenOrientation="portrait"/>
         <!--待办事宜-->
         <activity
