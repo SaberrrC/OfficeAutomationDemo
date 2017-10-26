@@ -33,9 +33,9 @@ public interface MeetingInfoFillOutActivityContract {
 
         void deleteMeetingRoomsFailed(int errorCode, String strMsg);
 
-        void modifyMeetingRoomsSuccess();
-
-        void modifyMeetingRoomsFailed(int errorCode,String strMsg);
+//        void modifyMeetingRoomsSuccess();
+//
+//        void modifyMeetingRoomsFailed(int errorCode,String strMsg);
     }
 
     interface Presenter extends BasePresenter<MeetingInfoFillOutActivityContract.View> {
@@ -46,6 +46,6 @@ public interface MeetingInfoFillOutActivityContract {
 
         void deleteMeetingRooms(int id);
 
-        void modifyMeetingRooms(int id, HttpParams httpParams);
+//        void modifyMeetingRooms(int id, HttpParams httpParams);
     }
 }

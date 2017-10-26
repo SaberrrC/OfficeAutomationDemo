@@ -7,6 +7,7 @@ import android.widget.EditText;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -62,7 +63,7 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<String> {
         }
 
         baseViewHolder.setOnClickListener(R.id.img_delete_detail, view -> {
-            EventBus.getDefault().post("removeDetail");
+            EventBus.getDefault().post(new SelectedTypeBean("removeDetail"));
         });
     }
 

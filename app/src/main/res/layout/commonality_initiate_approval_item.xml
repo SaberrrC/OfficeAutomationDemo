@@ -44,6 +44,13 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_commonality_begin_dot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* "
+                android:textColor="@color/text_red_color"/>
+
+            <TextView
                 android:id="@+id/tv_commonality_begin_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -69,6 +76,13 @@
             android:layout_height="38dp"
             android:layout_marginBottom="12dp"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_commonality_end_dot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* "
+                android:textColor="@color/text_red_color"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -122,6 +136,13 @@
             android:layout_height="38dp"
             android:layout_marginBottom="12dp"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_commonality_show1_dot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* "
+                android:textColor="@color/text_red_color"/>
 
             <TextView
                 android:id="@+id/tv_commonality_show1"
