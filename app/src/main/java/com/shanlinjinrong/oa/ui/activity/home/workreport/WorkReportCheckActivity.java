@@ -372,9 +372,9 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     public void loadDataFailed(int errCode, String errMsg) {
 //        mReportCheckList.loadMoreError(errCode, errMsg);
         if (errCode == -1) {
-            if (errMsg.equals("auth error")){
+            if (errMsg.equals("auth error")) {
                 catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
-            }else {
+            } else {
                 showToast(getString(R.string.net_no_connection));
             }
         } else {
@@ -390,18 +390,21 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     @Override
     public void loadDataEmpty() {
-        if (mReportStatus == 1) {
-            mReportNoCheckData.clear();
-            mNoCheckAdapter.notifyDataSetChanged();
-            mReportNoCheckList.loadMoreFinish(true, false);
-            mReportNoCheckList.setVisibility(View.VISIBLE);
-        } else {
-            mReportCheckData.clear();
-            mCheckAdapter.notifyDataSetChanged();
-            mReportCheckList.loadMoreFinish(true, false);
-            mReportCheckList.setVisibility(View.VISIBLE);
+        try {
+            if (mReportStatus == 1) {
+                mReportNoCheckData.clear();
+                mNoCheckAdapter.notifyDataSetChanged();
+                mReportNoCheckList.loadMoreFinish(true, false);
+                mReportNoCheckList.setVisibility(View.VISIBLE);
+            } else {
+                mReportCheckData.clear();
+                mCheckAdapter.notifyDataSetChanged();
+                mReportCheckList.loadMoreFinish(true, false);
+                mReportCheckList.setVisibility(View.VISIBLE);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
-
     }
 
     @Override

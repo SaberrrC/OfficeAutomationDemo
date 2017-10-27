@@ -187,7 +187,8 @@
                 android:layout_marginLeft="12dp"
                 android:background="@drawable/edittext_input_square_bg"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <TextView
                     android:layout_width="0dp"
@@ -201,7 +202,7 @@
                     android:layout_width="15dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="12dp"
-                    android:src="@drawable/ic_launcher"/>
+                    android:src="@drawable/arrow_down_select"/>
             </LinearLayout>
 
 

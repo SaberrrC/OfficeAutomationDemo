@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.Calendar;
 
@@ -30,8 +32,11 @@ public class AttandenceMonthActivity extends BaseActivity  {
     Toolbar toolbar;
     @Bind(R.id.ll_chose_time)
     LinearLayout mLlChoseTime;
+    @Bind(R.id.ll_count_people)
+    LinearLayout ll_count_people;
 
     private DatePicker picker;
+
 
 
     @Override
@@ -49,23 +54,28 @@ public class AttandenceMonthActivity extends BaseActivity  {
         mLlChoseTime.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (picker == null) {
-                    picker = new DatePicker(AttandenceMonthActivity.this, DatePicker.YEAR_MONTH_DAY);
+                    picker = new DatePicker(AttandenceMonthActivity.this, DatePicker.YEAR_MONTH);
                 }
                 Calendar cal = Calendar.getInstance();
-                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
-                        cal.get(Calendar.DAY_OF_MONTH));
+                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1
+                        );
                 picker.setSubmitText("完成");
                 picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
                 picker.setTextColor(Color.parseColor("#2d9dff"));
-                picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+                picker.setOnDatePickListener(new DatePicker.OnYearMonthPickListener() {
                     @Override
-                    public void onDatePicked(String year, String month, String day) {
-
-//                        tv.setText(year + "/" + month + "/" + day);
+                    public void onDatePicked(String year, String month) {
 
                     }
                 });
                 picker.show();
+            }
+        });
+        ll_count_people.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AttandenceMonthActivity.this,CountPeopleActivity.class);
+                startActivity(intent);
             }
         });
     }

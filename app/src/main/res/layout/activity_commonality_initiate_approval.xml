@@ -7,14 +7,14 @@
     android:layout_height="match_parent"
     android:background="@color/page_bg"
     android:orientation="vertical"
-    tools:context="com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.MissionWorkRequestActivity">
+    tools:context="com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity">
 
     <com.shanlinjinrong.views.common.CommonTopView
         android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:rightText="@string/work_report_right_btn_text"
+        app:rightText="提交"
         app:topTitle="@string/str_mission_work_title"/>
 
     <View
@@ -181,28 +181,28 @@
 
                     <LinearLayout
                         android:id="@+id/ll_commonality_date"
-                        android:layout_width="120dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_marginLeft="12dp"
-                        android:background="@drawable/edittext_input_square_bg">
+                        android:background="@drawable/edittext_input_square_bg"
+                        android:gravity="center"
+                        android:paddingLeft="13dp"
+                        android:paddingRight="13dp">
 
                         <TextView
                             android:id="@+id/tv_commonality_type_date"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginRight="10dp"
-                            android:layout_weight="1"
                             android:gravity="right|center_vertical"
                             android:text="2017"
                             android:textColor="@color/black_333333"
                             android:textSize="14sp"/>
 
                         <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="11dp"
-                            android:layout_weight="1"
-                            android:src="@drawable/icon_login_user"/>
+                            android:layout_width="11.5dp"
+                            android:layout_height="11.5dp"
+                            android:src="@drawable/arrow_down_select"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

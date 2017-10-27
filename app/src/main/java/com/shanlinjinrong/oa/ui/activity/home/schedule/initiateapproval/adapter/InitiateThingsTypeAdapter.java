@@ -13,12 +13,12 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 
 
-public class MissionWorkTypeAdapter extends BaseQuickAdapter<String> {
+public class InitiateThingsTypeAdapter extends BaseQuickAdapter<String> {
 
     private Context mContext;
     private List<String> mData;
 
-    public MissionWorkTypeAdapter(Context context, List<String> data) {
+    public InitiateThingsTypeAdapter(Context context, List<String> data) {
         super(R.layout.item_common_selected_type, data);
         mContext = context;
         mData = data;

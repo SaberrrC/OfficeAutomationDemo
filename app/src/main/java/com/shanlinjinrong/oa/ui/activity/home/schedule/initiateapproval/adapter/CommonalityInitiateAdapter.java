@@ -33,6 +33,7 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<String> {
                 baseViewHolder.setVisible(R.id.ll_commonality_show1, false);
                 baseViewHolder.setVisible(R.id.ll_commonality_show3, false);
                 baseViewHolder.setText(R.id.tv_commonality_show2, "加班原因");
+                baseViewHolder.setText(R.id.tv_commonality_detail, "加班明细");
                 EditText editText1 = baseViewHolder.getView(R.id.et_commonality_show2);
                 editText1.setHint("请填写加班原因");
                 break;
@@ -55,6 +56,7 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<String> {
                 baseViewHolder.setText(R.id.tv_commonality_begin_time, "签卡时间");
                 baseViewHolder.setText(R.id.tv_commonality_show2, "签卡原因");
                 baseViewHolder.setText(R.id.tv_commonality_show3, "签卡说明");
+                baseViewHolder.setText(R.id.tv_commonality_detail, "签卡明细");
                 EditText editText4 = baseViewHolder.getView(R.id.et_commonality_show2);
                 EditText editText5 = baseViewHolder.getView(R.id.et_commonality_show3);
                 editText4.setHint("请选择签卡原因");
