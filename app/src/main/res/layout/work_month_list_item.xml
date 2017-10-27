@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     >
     <LinearLayout
+        android:id="@+id/ll_currentday_state"
         android:orientation="vertical"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
