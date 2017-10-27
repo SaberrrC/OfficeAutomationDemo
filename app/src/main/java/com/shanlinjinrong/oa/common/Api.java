@@ -9,9 +9,14 @@ import org.json.JSONObject;
  * Created by KevinMeng on 2016/7/28.
  */
 public class Api {
+
     public static final String PHP_DEBUG_URL = "http://118.31.18.67:86";
 
+    //TODO会议室管理、找回密码 测试环境
     public static final String PHP_URL = "http://testoa.shanlinjinrong.com/webApi";
+
+    //TODO会议室管理、找回密码 生产环境
+//    public static final String PHP_URL = "http://oa.shanlinjinrong.com/webApi";
 
     private static final String RESPONSES_KEY_CODE = "code";
 
@@ -478,6 +483,9 @@ public class Api {
 
     // 获取单据编号接口
     public static final String GET_MONOCODE = "/queryMonocode";
+
+    // 发起申请
+    public static final String INITIARE_REQUEST = "/queryMonocode";
 
     //*****************************************************************//
 

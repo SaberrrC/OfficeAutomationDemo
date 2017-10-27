@@ -8,7 +8,7 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalReplyActivity
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateMeetingActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.MissionWorkRequestActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity;
@@ -109,8 +109,7 @@ public interface ActivityComponent {
 
     void inject(UpcomingTasksActivity upcomingTasksActivity);
 
-    void inject(MissionWorkRequestActivity activity);
-
     void inject(UpcomingTasksInfoActivity upcomingTasksInfoActivity);
 
+    void inject(InitiateThingsRequestActivity activity);
 }

@@ -742,7 +742,7 @@
 
         <!-- 出差申请 -->
         <activity
-            android:name=".ui.activity.home.schedule.initiateapproval.MissionWorkRequestActivity"
+            android:name=".ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity"
             android:screenOrientation="portrait"/>
 
         <!-- 加班申请 -->

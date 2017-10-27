@@ -12,7 +12,12 @@ import android.widget.TextView;
 import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.CommonalityInitiateAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +41,6 @@ public class AnnualLeaveRequestActivity extends AppCompatActivity {
     TextView mTvCommonalityType;
     @Bind(R.id.tv_commonality_request_date)
     TextView mTvCommonalityRequestDate;
-    @Bind(R.id.tv_commonality_detail)
-    TextView mTvCommonalityDetail;
     @Bind(R.id.rv_commonality_show)
     RecyclerView mRvCommonalityShow;
     @Bind(R.id.ll_commonality_date)
@@ -53,6 +56,9 @@ public class AnnualLeaveRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commonality_initiate_approval);
         ButterKnife.bind(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         initData();
         initView();
     }
@@ -99,6 +105,30 @@ public class AnnualLeaveRequestActivity extends AppCompatActivity {
                 mAdapter.setNewData(mData);
                 mAdapter.notifyDataSetChanged();
                 break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void removeDeatls(SelectedTypeBean bean) {
+        if (bean.getEvent().equals("removeDetail")) {
+            mData.remove(1);
+            mAdapter.setNewData(mData);
+            mAdapter.notifyDataSetChanged();
+            mBtnAddDetails.setVisibility(View.VISIBLE);
+            mBtnAddDetails.setClickable(true);
+        } else if (bean.getEvent().equals("selectedType")) {
+//            mTvCommonalityTypeSelected.setText(bean.getSelectedType());
+//            if (mDialog != null) {
+//                mDialog.cancel();
+//            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
     }
 }
