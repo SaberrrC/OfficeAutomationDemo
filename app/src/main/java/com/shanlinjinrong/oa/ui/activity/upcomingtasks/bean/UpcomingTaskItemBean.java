@@ -29,6 +29,15 @@ public class UpcomingTaskItemBean {
     private int code;
     private DataBean data;
     private String   msg;
+    private boolean isChecked = false;
+
+    public boolean getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(boolean checked) {
+        this.isChecked = checked;
+    }
 
     public int getCode() {
         return code;

@@ -12,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
@@ -22,6 +24,7 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +48,14 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     Toolbar            mToolbar;
     @Bind(R.id.et_content)
     EditText           mEtContent;
-    @Bind(R.id.tv_approval)
-    TextView           mTvApproval;
     @Bind(R.id.rv_list)
     RecyclerView       mRvList;
     @Bind(R.id.sr_refresh)
     SwipeRefreshLayout mSrRefresh;
+    @Bind(R.id.tv_approval)
+    TextView           mTvApproval;
+    @Bind(R.id.rl_check)
+    RelativeLayout     mRlCheck;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
     private boolean hasMore         = false;
@@ -69,6 +74,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     private TextView            mTvRest;
     private TextView            mTvSign;
     private TextView            mTvOk;
+    private boolean isShowCheck = false;
 
     @Override
     protected void initInject() {
@@ -171,15 +177,54 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         });
     }
 
-    @OnClick({R.id.toolbar_image_btn, R.id.tv_approval})
+    @OnClick({R.id.toolbar_image_btn, R.id.tv_approval, R.id.iv_agree, R.id.tv_agree, R.id.iv_disagree, R.id.tv_disagree})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toolbar_image_btn:
-                break;
-            case R.id.tv_approval:
                 showChooseDialog();
                 break;
+            case R.id.tv_approval:
+                setApproval();
+                break;
+            case R.id.iv_agree:
+            case R.id.tv_agree:
+                break;
+            case R.id.iv_disagree:
+            case R.id.tv_disagree:
+                break;
         }
+    }
+
+    private void setApproval() {
+        isShowCheck = !isShowCheck;
+        if (isShowCheck) {
+            mRlCheck.setVisibility(View.VISIBLE);
+            mTvTitle.setText("选择单据");
+            mTolbarTextBtn.setVisibility(View.GONE);
+            mTvApproval.setVisibility(View.GONE);
+        } else {
+            mRlCheck.setVisibility(View.GONE);
+            mTvTitle.setText("待办事宜");
+            mTvApproval.setVisibility(View.VISIBLE);
+            mTolbarTextBtn.setVisibility(View.VISIBLE);
+        }
+        ThreadUtils.runSub(new Runnable() {
+            @Override
+            public void run() {
+                for (Object data : mDatas) {
+                    if (data instanceof UpcomingTaskItemBean) {
+                        UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
+                        bean.setIsChecked(false);
+                    }
+                }
+                ThreadUtils.runMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFinalRecycleAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
     }
 
     private void showChooseDialog() {
@@ -232,7 +277,26 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     @Override
     public void onBindViewHolder(FinalRecycleAdapter.ViewHolder holder, int position, Object itemData) {
         if (itemData instanceof UpcomingTaskItemBean) {
-
+            UpcomingTaskItemBean bean = (UpcomingTaskItemBean) itemData;
+            CheckBox cbCheck = (CheckBox) holder.getViewById(R.id.cb_check);
+            ImageView ivIcon = (ImageView) holder.getViewById(R.id.iv_icon);
+            TextView tvName = (TextView) holder.getViewById(R.id.tv_name);
+            TextView tvReason = (TextView) holder.getViewById(R.id.tv_reason);
+            TextView tvTime = (TextView) holder.getViewById(R.id.tv_time);
+            TextView tvState = (TextView) holder.getViewById(R.id.tv_state);
+            if (isShowCheck) {
+                cbCheck.setVisibility(View.VISIBLE);
+                cbCheck.setChecked(bean.getIsChecked());
+            } else {
+                cbCheck.setVisibility(View.GONE);
+            }
+            holder.getRootView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    bean.setIsChecked(!bean.getIsChecked());
+                    cbCheck.setChecked(bean.getIsChecked());
+                }
+            });
         }
     }
 
@@ -320,5 +384,42 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         mTvOvertime.setTextColor(getResources().getColor(R.color.black_333333));
         mTvRest.setTextColor(getResources().getColor(R.color.black_333333));
         mTvSign.setTextColor(getResources().getColor(R.color.black_333333));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isShowCheck) {
+            isShowCheck = !isShowCheck;
+            if (isShowCheck) {
+                mTvTitle.setText("选择单据");
+                mRlCheck.setVisibility(View.VISIBLE);
+                mTolbarTextBtn.setVisibility(View.GONE);
+                mTvApproval.setVisibility(View.GONE);
+            } else {
+                mTvTitle.setText("待办事宜");
+                mRlCheck.setVisibility(View.GONE);
+                mTvApproval.setVisibility(View.VISIBLE);
+                mTolbarTextBtn.setVisibility(View.VISIBLE);
+            }
+            ThreadUtils.runSub(new Runnable() {
+                @Override
+                public void run() {
+                    for (Object data : mDatas) {
+                        if (data instanceof UpcomingTaskItemBean) {
+                            UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
+                            bean.setIsChecked(false);
+                        }
+                    }
+                    ThreadUtils.runMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            mFinalRecycleAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            });
+        } else {
+            super.onBackPressed();
+        }
     }
 }
