@@ -39,6 +39,7 @@ public class CountPeopleActivity  extends BaseActivity{
         View leftView = mTopView.getLeftView();
         leftView.setOnClickListener(view -> {
             finish();
+
         });
     }
 }

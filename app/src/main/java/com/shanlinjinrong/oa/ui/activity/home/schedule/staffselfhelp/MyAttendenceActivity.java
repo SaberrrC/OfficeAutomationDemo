@@ -40,6 +40,7 @@ public class MyAttendenceActivity extends AppCompatActivity {
         rightView.setOnClickListener(view -> {
             Intent intent = new Intent(MyAttendenceActivity.this,AttandenceMonthActivity.class);
             startActivity(intent);
+
         });
     }
 

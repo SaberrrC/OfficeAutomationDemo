@@ -38,6 +38,7 @@ public class AttandenceRecorderActivity extends BaseActivity{
         View leftView = mTopView.getLeftView();
         leftView.setOnClickListener(view -> {
             finish();
+
         });
     }
 
