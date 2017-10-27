@@ -171,7 +171,7 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_schedule_note:
                 //会议室预定
-//                intent = new Intent(mContext, MineWorkRecordActivity.class);
+//                intent = new Intent(mContext, MyAttendence.class);
                 if (BuildConfig.DEBUG) {
                     intent = new Intent(mContext, UpcomingTasksActivity.class);
                 }
