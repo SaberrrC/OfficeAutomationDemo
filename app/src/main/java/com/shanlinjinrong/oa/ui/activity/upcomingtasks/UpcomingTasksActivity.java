@@ -105,6 +105,9 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                 if (mDatas.size() > 0) {
                     mDatas.clear();
                 }
+                for (int i = 0; i < 10; i++) {
+                    mDatas.add(new UpcomingTaskItemBean());
+                }
                 mFinalRecycleAdapter.notifyDataSetChanged();
                 mSrRefresh.setRefreshing(false);
             }
