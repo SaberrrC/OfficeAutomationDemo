@@ -32,7 +32,6 @@
             android:gravity="center">
 
             <EditText
-
                 android:id="@+id/et_content"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
@@ -42,6 +41,7 @@
                 android:background="@null"
                 android:hint="请输入发起人姓名或单号"
                 android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:textAllCaps="false"
                 android:textColorHint="#9B9B9B"
                 android:textSize="14sp"/>
@@ -69,7 +69,8 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sr_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_list"
@@ -78,5 +79,61 @@
 
         </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:visibility="visible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EFEFEF"/>
+
+        <ImageView
+            android:id="@+id/iv_agree"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="7dp"
+            android:background="@mipmap/upcoming_agree_arrow"/>
+
+        <TextView
+            android:id="@+id/tv_agree"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/iv_agree"
+            android:layout_below="@+id/iv_agree"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingTop="4dp"
+            android:text="同意"
+            android:textColor="#56B76A"
+            android:textSize="12sp"/>
+
+        <ImageView
+            android:id="@+id/iv_disagree"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="120dp"
+            android:layout_marginTop="7dp"
+            android:background="@mipmap/upcoming_disagree"/>
+
+        <TextView
+            android:id="@+id/tv_disagree"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/iv_disagree"
+            android:layout_below="@+id/iv_disagree"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingTop="4dp"
+            android:text="驳回"
+            android:textColor="#F26B76"
+            android:textSize="12sp"/>
+    </RelativeLayout>
 
 </LinearLayout>
