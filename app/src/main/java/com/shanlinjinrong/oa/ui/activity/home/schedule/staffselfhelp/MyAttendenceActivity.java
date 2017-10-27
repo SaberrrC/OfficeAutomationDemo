@@ -27,6 +27,7 @@ public class MyAttendenceActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initData();
         initView();
+
     }
 
     private void initData() {
