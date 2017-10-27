@@ -732,7 +732,7 @@
 
         <!-- 我的考勤 -->
         <activity
-            android:name=".ui.activity.home.schedule.staffselfhelp.MyAttendence"
+            android:name=".ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity"
             android:screenOrientation="portrait"/>
 
         <!--  -->
@@ -764,9 +764,15 @@
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.AttandenceMonthActivity"
             android:screenOrientation="portrait"/>
+
         <!--待办事宜-->
         <activity
             android:name=".ui.activity.upcomingtasks.UpcomingTasksActivity"
+            android:screenOrientation="portrait"/>
+
+        <!--统计人员-->
+        <activity
+            android:name=".ui.activity.home.schedule.staffselfhelp.CountPeopleActivity"
             android:screenOrientation="portrait"/>
     </application>
 
