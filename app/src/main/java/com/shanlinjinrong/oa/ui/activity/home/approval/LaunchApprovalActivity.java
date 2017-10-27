@@ -65,7 +65,7 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
     private void initListData() {
         mListData = new ArrayList<>();
         mListData.add(new LaunchApprovalItem(getString(R.string.approval_office_supplies), R.drawable.icon_launch_approval_supplies));
-        mListData.add(new LaunchApprovalItem("出差申请", R.drawable.icon_launch_approval_supplies));
+//        mListData.add(new LaunchApprovalItem("出差申请", R.drawable.icon_launch_approval_supplies));
 //        mListData.add(new LaunchApprovalItem("加班申请", R.drawable.icon_launch_approval_supplies));
 //        mListData.add(new LaunchApprovalItem("办休假申", R.drawable.icon_launch_approval_supplies));
 //        mListData.add(new LaunchApprovalItem("签卡申请", R.drawable.icon_launch_approval_supplies));
@@ -101,11 +101,12 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
                 Intent intent0 = new Intent(this, ApplyForOfficeSuppliesActivity.class);
                 startActivity(intent0);
                 break;
-            case 1:
-                Intent intent1 = new Intent(this, MissionWorkRequestActivity.class);
-                startActivity(intent1);
-                break;
+//            case 1:
+//                Intent intent1 = new Intent(this, MissionWorkRequestActivity.class);
+//                startActivity(intent1);
+//                break;
 //            case 2:
+
 //                Intent intent2 = new Intent(this, OverTimeWorkingActivity.class);
 //                startActivity(intent2);
 //                break;

@@ -732,7 +732,7 @@
 
         <!-- 我的考勤 -->
         <activity
-            android:name=".ui.activity.home.schedule.staffselfhelp.MineWorkRecordActivity"
+            android:name=".ui.activity.home.schedule.staffselfhelp.MyAttendence"
             android:screenOrientation="portrait"/>
 
         <!--  -->
@@ -762,7 +762,7 @@
 
         <!--会议邀请-->
         <activity
-            android:name=".ui.activity.home.schedule.staffselfhelp.WorkMonthActivity"
+            android:name=".ui.activity.home.schedule.staffselfhelp.AttandenceMonthActivity"
             android:screenOrientation="portrait"/>
         <!--待办事宜-->
         <activity

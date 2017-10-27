@@ -476,6 +476,9 @@ public class Api {
     // 找回密码，确认邮箱
     public static final String USERS_REPWD = "/users/repwd";
 
+    // 获取单据编号接口
+    public static final String GET_MONOCODE = "/queryMonocode";
+
     //*****************************************************************//
 
     /**

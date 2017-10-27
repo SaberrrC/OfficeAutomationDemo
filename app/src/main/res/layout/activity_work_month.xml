@@ -30,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
             <LinearLayout
+                android:id="@+id/ll_chose_time"
                 android:layout_marginLeft="6dp"
                 android:padding="3dp"
                 android:background="@drawable/edittext_input_square_bg"

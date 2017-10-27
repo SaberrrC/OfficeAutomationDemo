@@ -4,33 +4,70 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 
+import java.util.Calendar;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.qqtheme.framework.picker.DatePicker;
 
 /**
  * Created by Administrator on 2017/10/25 0025.
  */
 
-public class WorkMonthActivity extends BaseActivity {
+public class AttandenceMonthActivity extends BaseActivity  {
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.ll_chose_time)
+    LinearLayout mLlChoseTime;
+
+    private DatePicker picker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_month);
         ButterKnife.bind(this);
+        initListener();
         initToolBar();
         setTranslucentStatus(this);
+
+    }
+
+    private void initListener() {
+        mLlChoseTime.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (picker == null) {
+                    picker = new DatePicker(AttandenceMonthActivity.this, DatePicker.YEAR_MONTH_DAY);
+                }
+                Calendar cal = Calendar.getInstance();
+                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
+                        cal.get(Calendar.DAY_OF_MONTH));
+                picker.setSubmitText("完成");
+                picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
+                picker.setTextColor(Color.parseColor("#2d9dff"));
+                picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+                    @Override
+                    public void onDatePicked(String year, String month, String day) {
+
+//                        tv.setText(year + "/" + month + "/" + day);
+
+                    }
+                });
+                picker.show();
+            }
+        });
     }
 
 

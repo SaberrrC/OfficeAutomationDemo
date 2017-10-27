@@ -57,6 +57,7 @@ public class DatePopWindow {
         // 设置弹框的宽度跟高度
         int width = ViewGroup.LayoutParams.MATCH_PARENT;
         mPopWindow = new PopupWindow(rootView, width, mHeight, false);
+
         mPopWindow.setFocusable(false);
 
         mData = new ArrayList<>();
@@ -74,6 +75,7 @@ public class DatePopWindow {
         mTopList.setLayoutManager(new GridLayoutManager(mContext, isDay ? 7 : 6));
         mAdapter = new DatePopAdapter(mData);
         mTopList.setAdapter(mAdapter);
+
         mAdapter.setOnItemClick(new DatePopAdapter.OnItemClick() {
             @Override
             public void onItemClicked(int position) {

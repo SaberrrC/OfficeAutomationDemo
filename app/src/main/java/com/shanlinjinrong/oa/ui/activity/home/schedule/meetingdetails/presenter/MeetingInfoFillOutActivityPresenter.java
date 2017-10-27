@@ -181,58 +181,58 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
         });
     }
 
-    @Override
-    public void modifyMeetingRooms(int id, HttpParams httpParams) {
-        mKjHttp.cleanCache();
-        mKjHttp.phpJsonPut(Api.MODIFY_NEW_MEETING + id, httpParams, new HttpCallBack() {
-
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-                mView.showLoading();
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                mView.requestFinish();
-                try {
-                    JSONObject jsonObject = new JSONObject(t);
-                    switch (jsonObject.getInt("code")) {
-                        case Api.RESPONSES_CODE_OK:
-                            mView.modifyMeetingRoomsSuccess();
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(jsonObject.getInt("code"));
-                            break;
-                        case Api.RESPONSES_CODE_NO_CONTENT:
-                            mView.requestNetworkError();
-                            break;
-                        default:
-                            mView.modifyMeetingRoomsFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                mView.modifyMeetingRoomsFailed(errorNo, strMsg);
-                mView.requestFinish();
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                mView.requestFinish();
-                mView.modifyMeetingRoomsFailed(-2, "");
-            }
-        });
-    }
+//    @Override
+//    public void modifyMeetingRooms(int id, HttpParams httpParams) {
+//        mKjHttp.cleanCache();
+//        mKjHttp.phpJsonPut(Api.MODIFY_NEW_MEETING + id, httpParams, new HttpCallBack() {
+//
+//            @Override
+//            public void onPreStart() {
+//                super.onPreStart();
+//                mView.showLoading();
+//            }
+//
+//            @Override
+//            public void onSuccess(String t) {
+//                super.onSuccess(t);
+//                mView.requestFinish();
+//                try {
+//                    JSONObject jsonObject = new JSONObject(t);
+//                    switch (jsonObject.getInt("code")) {
+//                        case Api.RESPONSES_CODE_OK:
+//                            mView.modifyMeetingRoomsSuccess();
+//                            break;
+//                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+//                        case Api.RESPONSES_CODE_UID_NULL:
+//                            mView.uidNull(jsonObject.getInt("code"));
+//                            break;
+//                        case Api.RESPONSES_CODE_NO_CONTENT:
+//                            mView.requestNetworkError();
+//                            break;
+//                        default:
+//                            mView.modifyMeetingRoomsFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
+//                            break;
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int errorNo, String strMsg) {
+//                super.onFailure(errorNo, strMsg);
+//                mView.modifyMeetingRoomsFailed(errorNo, strMsg);
+//                mView.requestFinish();
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                super.onFinish();
+//                mView.requestFinish();
+//                mView.modifyMeetingRoomsFailed(-2, "");
+//            }
+//        });
+//    }
 
 
 }
