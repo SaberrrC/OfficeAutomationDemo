@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -293,8 +294,14 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
             holder.getRootView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    bean.setIsChecked(!bean.getIsChecked());
-                    cbCheck.setChecked(bean.getIsChecked());
+                    if (isShowCheck) {
+                        bean.setIsChecked(!bean.getIsChecked());
+                        cbCheck.setChecked(bean.getIsChecked());
+                        return;
+                    }
+                    Intent intent = new Intent(UpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
+                    //                    intent.putExtra();
+                    startActivity(intent);
                 }
             });
         }

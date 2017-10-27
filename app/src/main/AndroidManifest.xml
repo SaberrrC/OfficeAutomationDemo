@@ -638,14 +638,14 @@
             android:name=".ui.activity.message.VoiceCallActivity"
             android:screenOrientation="portrait"/>
 
-        <!--发起周报界面-->
+        <!-- 发起周报界面 -->
         <activity
             android:name=".ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
-        <!--发起周报、下周计划 内容界面-->
+        <!-- 发起周报、下周计划 内容界面 -->
         <activity
             android:name=".ui.activity.home.weeklynewspaper.WeeklyWorkContentActivity"
             android:screenOrientation="portrait"
@@ -661,71 +661,71 @@
             </intent-filter>
         </receiver>
 
-        <!--发给我的-->
+        <!-- 发给我的 -->
         <activity
             android:name=".ui.activity.home.workreport.WorkReportCheckActivity"
             android:screenOrientation="portrait"/>
 
-        <!--我发起的-->
+        <!-- 我发起的 -->
         <activity
             android:name=".ui.activity.home.workreport.MyLaunchWorkReportActivity"
             android:screenOrientation="portrait"/>
 
-        <!--审核日报-->
+        <!-- 审核日报 -->
         <activity
             android:name=".ui.activity.home.workreport.CheckDailyReportActivity"
             android:screenOrientation="portrait"/>
 
-        <!--日报更新-->
+        <!-- 日报更新 -->
         <activity
             android:name=".ui.activity.home.workreport.WorkReportUpdateActivity"
             android:screenOrientation="portrait"/>
 
-        <!--新 获取会议室-->
+        <!-- 新 获取会议室 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
-        <!--新 获取会议室预约时间-->
+        <!-- 新 获取会议室预约时间 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
-        <!--新 会议室完善-->
+        <!-- 新 会议室完善 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
-        <!--新 会议室预订成功-->
+        <!-- 新 会议室预订成功 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingReservationSucceedActivity"
             android:screenOrientation="portrait"/>
 
-        <!--新 会议室预订记录-->
+        <!-- 新 会议室预订记录 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingReservationRecordActivity"
             android:screenOrientation="portrait"/>
 
-        <!--找回密码填写工号-->
+        <!-- 找回密码填写工号 -->
         <activity
             android:name=".ui.activity.login.WriteJobNumberActivity"
             android:screenOrientation="portrait"/>
 
-        <!--找回密码 确认邮箱1-->
+        <!-- 找回密码 确认邮箱1 -->
         <activity
             android:name=".ui.activity.login.ConfirmCompanyEmailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
 
-        <!--找回密码 确认邮箱2-->
+        <!-- 找回密码 确认邮箱2 -->
         <activity
             android:name=".ui.activity.login.EmailConfirmFinishActivity"
             android:screenOrientation="portrait"/>
 
-        <!--会议邀请-->
+        <!-- 会议邀请 -->
         <activity
             android:name=".ui.activity.home.schedule.MeetingInviteActivity"
             android:screenOrientation="portrait"/>
@@ -760,14 +760,16 @@
             android:name=".ui.activity.home.schedule.initiateapproval.RegistrationCardRequestActivity"
             android:screenOrientation="portrait"/>
 
-        <!--会议邀请-->
+        <!-- 会议邀请 -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.AttandenceMonthActivity"
             android:screenOrientation="portrait"/>
-        <!--待办事宜-->
+        <!-- 待办事宜 -->
         <activity
             android:name=".ui.activity.upcomingtasks.UpcomingTasksActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.upcomingtasks.UpcomingTasksInfoActivity">
+        </activity>
     </application>
 
 </manifest>
