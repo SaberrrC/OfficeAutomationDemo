@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -26,19 +27,23 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener {
 
     @Bind(R.id.tv_title)
     TextView     mTvTitle;
-    @Bind(R.id.toolbar_text_btn)
-    TextView     mToolbarTextBtn;
     @Bind(R.id.toolbar)
     Toolbar      mToolbar;
     @Bind(R.id.rv_content)
     RecyclerView mRecyclerView;
+    @Bind(R.id.toolbar_text_btn)
+    TextView     mToolbarTextBtn;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
+    private int     mIndex = 0;
+    private boolean mMove  = false;
 
     @Override
     protected void initInject() {
@@ -71,14 +76,33 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         map.put(UpcomingInfoDetailBodyBean.class, R.layout.layout_item_upcominginfo_detail_body);
         map.put(UpcomingInfobottomBean.class, R.layout.layout_item_upcominginfoo_bottom);
         mFinalRecycleAdapter = new FinalRecycleAdapter(mDatas, map, this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mFinalRecycleAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //在这里进行第二次滚动（最后的100米！）
+                if (mMove) {
+                    mMove = false;
+                    //获取要置顶的项在当前屏幕的位置，mIndex是记录的要置顶项在RecyclerView中的位置
+                    int n = mIndex - mLinearLayoutManager.findFirstVisibleItemPosition();
+                    if (0 <= n && n < mRecyclerView.getChildCount()) {
+                        //获取要置顶的项顶部离RecyclerView顶部的距离
+                        int top = mRecyclerView.getChildAt(n).getTop();
+                        //最后的移动
+                        mRecyclerView.scrollBy(0, top);
+                    }
+                }
+            }
+        });
     }
 
     private void initData() {
         mDatas.add(new UpcomingInfoTopBean());
         mDatas.add(new UpcomingInfoStateBean());
-        mDatas.add(new UpcomingInfoDetailBodyBean());
         mDatas.add(new UpcomingInfobottomBean());
     }
 
@@ -106,5 +130,49 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     @Override
     public void onBindViewHolder(FinalRecycleAdapter.ViewHolder holder, int position, Object itemData) {
 
+    }
+
+    private void moveToPosition(int n) {
+        mIndex = n;
+        int firstItem = this.mLinearLayoutManager.findFirstVisibleItemPosition();
+        int lastItem = this.mLinearLayoutManager.findLastVisibleItemPosition();
+        if (n <= firstItem) {
+            mRecyclerView.scrollToPosition(n);
+        } else if (n <= lastItem) {
+            int top = mRecyclerView.getChildAt(n - firstItem).getTop();
+            mRecyclerView.scrollBy(0, top);
+        } else {
+            mRecyclerView.scrollToPosition(n);
+            mMove = true;
+        }
+
+    }
+
+    @OnClick({R.id.toolbar_text_btn, R.id.tv_agree, R.id.tv_disagree})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.toolbar_text_btn:
+                if (TextUtils.equals(mToolbarTextBtn.getText().toString().trim(), "评阅情况")) {
+                    mToolbarTextBtn.setText("查看明细");
+                    mDatas.remove(1);
+                    mDatas.add(1, new UpcomingInfoDetailBodyBean());
+                    mFinalRecycleAdapter.notifyDataSetChanged();
+                    mRecyclerView.scrollTo(0, 0);
+                    mRecyclerView.scrollToPosition(0);
+                    return;
+                }
+                if (TextUtils.equals(mToolbarTextBtn.getText().toString().trim(), "查看明细")) {
+                    mToolbarTextBtn.setText("评阅情况");
+                    mDatas.remove(1);
+                    mDatas.add(1, new UpcomingInfoStateBean());
+                    mFinalRecycleAdapter.notifyDataSetChanged();
+                    mRecyclerView.scrollToPosition(0);
+                }
+                break;
+            case R.id.tv_agree:
+                break;
+            case R.id.tv_disagree:
+                break;
+        }
     }
 }
