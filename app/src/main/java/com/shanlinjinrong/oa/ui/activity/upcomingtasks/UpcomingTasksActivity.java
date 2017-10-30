@@ -91,7 +91,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upcoming_tasks);
         ButterKnife.bind(this);
-        setTranslucentStatus(this);
+        //        setTranslucentStatus(this);
         init();
     }
 
