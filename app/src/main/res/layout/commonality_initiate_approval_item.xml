@@ -124,6 +124,7 @@
                 android:textSize="16sp"/>
 
             <TextView
+                android:id="@+id/tv_commonality"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="32dp"

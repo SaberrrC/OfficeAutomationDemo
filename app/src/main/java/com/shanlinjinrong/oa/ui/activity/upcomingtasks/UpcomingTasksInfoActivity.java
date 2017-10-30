@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
@@ -42,8 +45,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
     private LinearLayoutManager mLinearLayoutManager;
-    private int mIndex;
-    private boolean mMove;
+    private int                 mIndex;
+    private boolean             mMove;
 
     @Override
     protected void initInject() {
@@ -110,7 +113,34 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onBindViewHolder(FinalRecycleAdapter.ViewHolder holder, int position, Object itemData) {
-
+        if (itemData instanceof UpcomingInfoTopBean) {
+            TextView tvId = (TextView) holder.getViewById(R.id.tv_id);
+            LinearLayout llType = (LinearLayout) holder.getViewById(R.id.ll_type);
+            TextView tvType = (TextView) holder.getViewById(R.id.tv_type);
+            TextView tvApplyTime = (TextView) holder.getViewById(R.id.tv_apply_time);
+            return;
+        }
+        if (itemData instanceof UpcomingInfoStateBean) {
+            ImageView imgDeleteDetail = (ImageView) holder.getViewById(R.id.img_delete_detail);
+            TextView etCommonalityBeginTime = (TextView) holder.getViewById(R.id.et_commonality_begin_time);
+            TextView etCommonalityEndTime = (TextView) holder.getViewById(R.id.et_commonality_end_time);
+            TextView tvCommonality = (TextView) holder.getViewById(R.id.tv_commonality);
+            EditText etCommonalityShow1 = (EditText) holder.getViewById(R.id.et_commonality_show1);//出差地点
+            EditText etCommonalityShow2 = (EditText) holder.getViewById(R.id.et_commonality_show2);//出差原因
+            EditText etCommonalityShow3 = (EditText) holder.getViewById(R.id.et_commonality_show3);//交接人
+            imgDeleteDetail.setVisibility(View.GONE);
+            return;
+        }
+        if (itemData instanceof UpcomingInfoDetailBodyBean) {
+            TextView tvApprover = (TextView) holder.getViewById(R.id.tv_approver);
+            TextView tvTime = (TextView) holder.getViewById(R.id.tv_time);
+            TextView tvState = (TextView) holder.getViewById(R.id.tv_state);
+            TextView tvOption = (TextView) holder.getViewById(R.id.tv_option);
+            return;
+        }
+        if (itemData instanceof UpcomingInfobottomBean) {
+            EditText etOpinion = (EditText) holder.getViewById(R.id.et_opinion);
+        }
     }
 
     @OnClick({R.id.toolbar_text_btn, R.id.tv_agree, R.id.tv_disagree})
