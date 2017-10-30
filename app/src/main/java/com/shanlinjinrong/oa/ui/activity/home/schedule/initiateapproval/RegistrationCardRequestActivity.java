@@ -65,7 +65,7 @@ public class RegistrationCardRequestActivity extends AppCompatActivity {
         mLlCommonalityType.setVisibility(View.GONE);
         mTvCommonalityDetail.setText("签卡明细");
         mBtnAddDetails.setText("+ 添加签卡明细");
-        mAdapter = new CommonalityInitiateAdapter(mData);
+        mAdapter = new CommonalityInitiateAdapter(this,mData);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {

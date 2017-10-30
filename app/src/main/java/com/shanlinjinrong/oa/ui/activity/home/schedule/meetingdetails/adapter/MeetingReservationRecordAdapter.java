@@ -32,6 +32,12 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
         mData = data;
     }
 
+    public static String getWeek(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String week = sdf.format(date);
+        return week;
+    }
+
     @Override
     protected void convert(BaseViewHolder baseViewHolder, ReservationRecordBean.DataBean recordBean) {
         try {
@@ -39,10 +45,14 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");
             Date curDate = new Date(System.currentTimeMillis());
             String str = formatter.format(curDate);
+
             long currentTime = DateUtils.getTimestampFromString(str, "yyyy年MM月dd日   HH:mm");
             String start_time = recordBean.getStart_time();
             final int room_id = recordBean.getRoom_id();
             long startTime = Long.parseLong(start_time) * 1000L;
+
+            String week = getWeek(new Date(startTime));
+
             final boolean isMeetingPast = currentTime < startTime;
             if (currentTime > startTime) {
                 baseViewHolder.setText(R.id.tv_meeting_state, "已使用");
@@ -54,9 +64,9 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
                 baseViewHolder.setImageResource(R.id.tvDot, R.drawable.meeting_record_icon);
             }
 
-            baseViewHolder.setText(R.id.tv_meeting_room_name, recordBean.getMeeting_place());
-            baseViewHolder.setText(R.id.tv_meeting_content, recordBean.getContent());
-            baseViewHolder.setText(R.id.tv_accept_time, DateUtils.stringToDate(recordBean.getStart_time()));
+            baseViewHolder.setText(R.id.tv_meeting_room_name, recordBean.getTitle());
+            baseViewHolder.setText(R.id.tv_meeting_content, recordBean.getRoomname());
+            baseViewHolder.setText(R.id.tv_accept_time, DateUtils.stringToDateTransform(recordBean.getStart_time(),"yyyy年MM月dd日  HH时mm分  ") + week);
 
             baseViewHolder.setOnClickListener(R.id.rlContent, new View.OnClickListener() {
                 @Override

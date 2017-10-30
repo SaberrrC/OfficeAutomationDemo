@@ -71,7 +71,16 @@ public class ReservationRecordBean {
         private String send_type;
         private String created;
         private String part_name;
+        private String roomname;
         private int itemType;
+
+        public String getRoomname() {
+            return roomname;
+        }
+
+        public void setRoomname(String roomname) {
+            this.roomname = roomname;
+        }
 
         public int getId() {
             return id;

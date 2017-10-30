@@ -91,7 +91,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upcoming_tasks);
         ButterKnife.bind(this);
-        setTranslucentStatus(this);
+        //        setTranslucentStatus(this);
         init();
     }
 
@@ -102,9 +102,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     }
 
     private void initPullToRefresh() {
-        //下拉刷新颜色设置
         mSrRefresh.setColorSchemeColors(getResources().getColor(R.color.tab_bar_text_light));
-        //下拉刷新监听
         mSrRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -173,7 +171,39 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                if (isShowCheck) {
+                    isShowCheck = !isShowCheck;
+                    if (isShowCheck) {
+                        mTvTitle.setText("选择单据");
+                        mRlCheck.setVisibility(View.VISIBLE);
+                        mTolbarTextBtn.setVisibility(View.GONE);
+                        mTvApproval.setVisibility(View.GONE);
+                    } else {
+                        mTvTitle.setText("待办事宜");
+                        mRlCheck.setVisibility(View.GONE);
+                        mTvApproval.setVisibility(View.VISIBLE);
+                        mTolbarTextBtn.setVisibility(View.VISIBLE);
+                    }
+                    ThreadUtils.runSub(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (Object data : mDatas) {
+                                if (data instanceof UpcomingTaskItemBean) {
+                                    UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
+                                    bean.setIsChecked(false);
+                                }
+                            }
+                            ThreadUtils.runMain(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mFinalRecycleAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    finish();
+                }
             }
         });
     }

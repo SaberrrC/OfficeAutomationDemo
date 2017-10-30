@@ -59,9 +59,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
                 android:layout_marginTop="12dp"
                 android:textColor="#999"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 tools:text="2017-09-18    17：00   "/>
 
             <TextView
@@ -69,9 +70,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="12dp"
                 android:layout_marginTop="12dp"
                 android:textColor="#55BBFF"
+                android:textSize="13sp"
                 tools:text="待使用"/>
 
             <TextView
@@ -81,7 +82,6 @@
                 android:layout_below="@id/tv_accept_time"
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
                 android:layout_marginTop="5dp"
                 android:background="@color/gray_9b9b9b"
                 />

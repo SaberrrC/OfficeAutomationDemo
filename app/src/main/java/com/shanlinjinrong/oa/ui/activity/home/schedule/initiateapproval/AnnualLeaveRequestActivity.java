@@ -79,7 +79,7 @@ public class AnnualLeaveRequestActivity extends AppCompatActivity {
         mTvCommonalityType.setText("休假类别");
         mBtnAddDetails.setText("+ 添加休假明细");
         mLlCommonalityAnnualLeave.setVisibility(View.VISIBLE);
-        mAdapter = new CommonalityInitiateAdapter(mData);
+        mAdapter = new CommonalityInitiateAdapter(this,mData);
         mLlCommonalityDate.setVisibility(View.VISIBLE);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
