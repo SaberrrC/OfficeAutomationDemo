@@ -59,6 +59,8 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                                 dataBean.setMeeting_place(jsonObject1.getString("meeting_place"));
                                 dataBean.setRoom_id(jsonObject1.getInt("room_id"));
                                 dataBean.setId(jsonObject1.getInt("id"));
+                                dataBean.setTitle(jsonObject1.getString("title"));
+                                dataBean.setRoomname(jsonObject1.getString("roomname"));
                                 dataBean.setStart_time(jsonObject1.getString("start_time") + "");
                                 if (i == jsonArray.length() - 1) {
                                     dataBean.setItemType(0);
@@ -86,6 +88,7 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
+                    mView.getMeetingRecordFailed(-2,e.getMessage());
                 }
             }
 

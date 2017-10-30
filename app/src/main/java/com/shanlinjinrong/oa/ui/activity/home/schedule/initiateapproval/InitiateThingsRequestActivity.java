@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.CommonalityInitiateAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.InitiateThingsTypeAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Dialog_Common_bean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract.InitiateThingsRequestActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter.InitiateThingsRequestActivityPresenter;
@@ -67,7 +68,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     @Bind(R.id.ll_commonality_annual_leave)
     LinearLayout mLlCommonalityAnnualLeave;
 
-    private List<String> data; //Dialog 数据源
+    private List<Dialog_Common_bean> data = new ArrayList<>(); //Dialog 数据源
     private List<String> mData = new ArrayList<>(); //明细数据源
     private CustomDialogUtils mDialog;
     private CommonalityInitiateAdapter mAdapter;
@@ -92,8 +93,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     private void initData() {
-        mData.add(getIntent().getIntExtra("type", -1) + "");
         initMonoCode();
+        mData.add(getIntent().getIntExtra("type", -1) + "");
+        switch (getIntent().getIntExtra("type", -1)) {
+            case 0://出差类别
+                data.add(new Dialog_Common_bean("出差", true));
+                data.add(new Dialog_Common_bean("外出", false));
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
     }
 
     //获取编码
@@ -128,15 +139,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         }
 
         mTopView.getRightView().setOnClickListener(view -> {
-            switch (getIntent().getIntExtra("type",-1)){
+            switch (getIntent().getIntExtra("type", -1)) {
                 case 0:
                     //mPresenter.initiateThingsRequest();  //TODO 提交
                     break;
                 case 1:
+                    //mPresenter.initiateThingsRequest();  //TODO 提交
                     break;
                 case 2:
+                    //mPresenter.initiateThingsRequest();  //TODO 提交
                     break;
                 case 3:
+                    //mPresenter.initiateThingsRequest();  //TODO 提交
                     break;
                 default:
                     break;
@@ -146,7 +160,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     //出差申请
     private void onBusinessRequest() {
-        mAdapter = new CommonalityInitiateAdapter(mData);
+        mAdapter = new CommonalityInitiateAdapter(this, mData);
         mRvCommonalityShow.setLayoutManager(mLinearLayoutManager);
         mRvCommonalityShow.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -161,7 +175,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLlCommonalitySelected.setVisibility(View.GONE);
         mTvCommonalityTypeDot.setVisibility(View.GONE);
         mTvCommonalityOverTime.setVisibility(View.VISIBLE);
-        mAdapter = new CommonalityInitiateAdapter(mData);
+        mAdapter = new CommonalityInitiateAdapter(this, mData);
         mRvCommonalityShow.setLayoutManager(mLinearLayoutManager);
         mRvCommonalityShow.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -174,7 +188,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTvCommonalityType.setText("休假类别");
         mBtnAddDetails.setText("+ 添加休假明细");
         mLlCommonalityAnnualLeave.setVisibility(View.VISIBLE);
-        mAdapter = new CommonalityInitiateAdapter(mData);
+        mAdapter = new CommonalityInitiateAdapter(this, mData);
         mLlCommonalityDate.setVisibility(View.VISIBLE);
         mRvCommonalityShow.setLayoutManager(mLinearLayoutManager);
         mRvCommonalityShow.setAdapter(mAdapter);
@@ -186,7 +200,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTopView.setAppTitle("签卡申请");
         mLlCommonalityType.setVisibility(View.GONE);
         mBtnAddDetails.setText("+ 添加签卡明细");
-        mAdapter = new CommonalityInitiateAdapter(mData);
+        mAdapter = new CommonalityInitiateAdapter(this, mData);
         mRvCommonalityShow.setLayoutManager(mLinearLayoutManager);
         mRvCommonalityShow.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -247,6 +261,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             mBtnAddDetails.setClickable(true);
         } else if (bean.getEvent().equals("selectedType")) {
             mTvCommonalityTypeSelected.setText(bean.getSelectedType());
+            for (int i = 0; i < data.size(); i++) {
+                if (i == bean.getPosition()) {
+                    data.get(i).setSelected(true);
+                } else {
+                    data.get(i).setSelected(false);
+                }
+            }
+            mTypeAdapter.setNewData(data);
             if (mDialog != null) {
                 mDialog.cancel();
             }
@@ -267,6 +289,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             mDialog = builder.cancelTouchout(false)
                     .view(view)
                     .heightpx(view.getHeight())
+//                    .heightpx(windowsHeight/4)
                     .widthpx((int) (windowsWight / 1.1))
                     .style(R.style.dialog)
                     .build();
@@ -286,14 +309,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         View inflate = LayoutInflater.from(this).inflate(R.layout.dialog_common_selected_type, null);
         RecyclerView rvSelectedType = (RecyclerView) inflate.findViewById(R.id.rv_selected_type);
         TextView tvTitle = (TextView) inflate.findViewById(R.id.tv_common_type_title);
-        switch (getIntent().getIntExtra("type", -1)) {
-            case 0:
-                data = new ArrayList<>();
-                tvTitle.setText("出差类别");
-                data.add("出差");
-                data.add("外出");
-                break;
-        }
+        tvTitle.setText("出差类别");
         mTypeAdapter = new InitiateThingsTypeAdapter(this, data);
         rvSelectedType.setLayoutManager(new LinearLayoutManager(this));
         rvSelectedType.addItemDecoration(new ApproveDecorationLine(this, data));

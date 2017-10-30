@@ -11,11 +11,12 @@ import android.util.TypedValue;
 import android.view.View;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Dialog_Common_bean;
 
 import java.util.List;
 
 public class ApproveDecorationLine extends RecyclerView.ItemDecoration {
-    private List<String> mData;
+    private List<Dialog_Common_bean> mData;
 
     private Paint mPaint;
     private Rect mBounds;//用于存放测量文字Rect
@@ -27,7 +28,7 @@ public class ApproveDecorationLine extends RecyclerView.ItemDecoration {
     private Context mContext;
 
 
-    public ApproveDecorationLine(Context context, List<String> mData) {
+    public ApproveDecorationLine(Context context, List<Dialog_Common_bean> mData) {
         mContext = context;
         this.mData = mData;
         mPaint = new Paint();

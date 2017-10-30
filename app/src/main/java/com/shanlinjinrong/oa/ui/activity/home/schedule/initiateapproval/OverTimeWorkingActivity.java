@@ -84,7 +84,7 @@ public class OverTimeWorkingActivity extends AppCompatActivity {
         mTvCommonalityTypeDot.setVisibility(View.GONE);
         mTvCommonalityOverTime.setVisibility(View.VISIBLE);
 
-        mAdapter = new CommonalityInitiateAdapter(mData);
+        mAdapter = new CommonalityInitiateAdapter(this,mData);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {

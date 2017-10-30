@@ -34,6 +34,8 @@ import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerAppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.module.AppManagerModule;
 import com.shanlinjinrong.oa.ui.base.dagger.module.KjHttpModule;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.BufferedReader;
@@ -72,16 +74,16 @@ public class AppManager extends MultiDexApplication {
     public static Context mContext;
 
     private AppComponent appComponent;
-//
-//    //内存检测start
-//    public static RefWatcher getRefWatcher(Context context) {
-//        AppManager application = (AppManager) context
-//                .getApplicationContext();
-//        return application.refWatcher;
-//    }
-//
-//    private RefWatcher refWatcher;
-    //内存检测end
+
+    //内存检测start
+    public static RefWatcher getRefWatcher(Context context) {
+        AppManager application = (AppManager) context
+                .getApplicationContext();
+        return application.refWatcher;
+    }
+
+    private RefWatcher refWatcher;
+//    内存检测end
 
     public AppManager() {
 
@@ -136,23 +138,17 @@ public class AppManager extends MultiDexApplication {
         strategy.setUploadProcess(processName == null || processName.equals(packageName));
         CrashReport.initCrashReport(AppManager.mContext, "071245370e", false, strategy);
 
-      /*  //内存检测,打包提测时给注释掉
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        refWatcher = LeakCanary.install(this);*/
-
         //解决7.0拍照文件uri闪退问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             StrictMode.VmPolicy.Builder vmPolicyBuilder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(vmPolicyBuilder.build());
         }
+
         //leakCanary
 //        if (!LeakCanary.isInAnalyzerProcess(this)) {
-//            LeakCanary.install(this);
+            LeakCanary.install(this);
 //        }
+
         //blockCanary
 //        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 

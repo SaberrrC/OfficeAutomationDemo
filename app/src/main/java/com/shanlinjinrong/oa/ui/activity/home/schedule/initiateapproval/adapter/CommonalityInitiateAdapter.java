@@ -1,8 +1,11 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter;
 
 
+import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -13,12 +16,15 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
+import butterknife.OnClick;
+
 public class CommonalityInitiateAdapter extends BaseQuickAdapter<String> {
 
+    private Context mContext;
 
-    public CommonalityInitiateAdapter(List<String> data) {
+    public CommonalityInitiateAdapter(Context context, List<String> data) {
         super(R.layout.commonality_initiate_approval_item, data);
-
+        mContext = context;
     }
 
     @Override
@@ -28,6 +34,16 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<String> {
         }
         switch (s) {
             case "0":
+                TextView begin_time = baseViewHolder.getView(R.id.et_commonality_begin_time);
+                TextView end_time = baseViewHolder.getView(R.id.et_commonality_end_time);
+//                begin_time.setEnabled(false);
+//                end_time.setEnabled(false);
+                baseViewHolder.setOnClickListener(R.id.et_commonality_begin_time, view -> {
+                    Toast.makeText(mContext,"开始时间",Toast.LENGTH_SHORT).show();
+                });
+                baseViewHolder.setOnClickListener(R.id.et_commonality_end_time, view -> {
+                    Toast.makeText(mContext,"结束时间",Toast.LENGTH_SHORT).show();
+                });
                 break;
             case "1":
                 baseViewHolder.setVisible(R.id.ll_commonality_show1, false);
@@ -67,7 +83,7 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<String> {
         baseViewHolder.setOnClickListener(R.id.img_delete_detail, view -> {
             EventBus.getDefault().post(new SelectedTypeBean("removeDetail"));
         });
-    }
 
+    }
 
 }
