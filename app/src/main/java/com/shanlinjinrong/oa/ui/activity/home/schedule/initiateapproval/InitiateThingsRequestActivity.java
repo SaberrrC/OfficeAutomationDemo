@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import butterknife.Bind;
@@ -100,9 +101,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 data.add(new Dialog_Common_bean("出差", true));
                 data.add(new Dialog_Common_bean("外出", false));
                 break;
-            case 1:
-                break;
             case 2:
+                data.add(new Dialog_Common_bean("事假", true));
+                data.add(new Dialog_Common_bean("婚假", false));
+                data.add(new Dialog_Common_bean("年假", false));
+                data.add(new Dialog_Common_bean("丧假", false));
+                data.add(new Dialog_Common_bean("工伤", false));
+                break;
+            case 3:
+                data.add(new Dialog_Common_bean("忘记打卡", true));
+                data.add(new Dialog_Common_bean("考勤机故障", false));
+                data.add(new Dialog_Common_bean("地铁故障", false));
                 break;
         }
     }
@@ -262,6 +271,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         } else if (bean.getEvent().equals("selectedType")) {
             mTvCommonalityTypeSelected.setText(bean.getSelectedType());
             for (int i = 0; i < data.size(); i++) {
+                //TODO 数据团传递
+                if (bean.getPosition() == 3) {
+
+                }
                 if (i == bean.getPosition()) {
                     data.get(i).setSelected(true);
                 } else {
@@ -272,10 +285,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             if (mDialog != null) {
                 mDialog.cancel();
             }
+        }else if (bean.getEvent().equals("showDialog")){
+            NonTokenDialog();
         }
     }
 
-    //TODO 存在问题 选中item 颜色没有改变
     private void NonTokenDialog() {
         try {
             //获取屏幕高宽
@@ -286,13 +300,26 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             View view = initTypeData();
 
             CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(this);
-            mDialog = builder.cancelTouchout(false)
-                    .view(view)
-                    .heightpx(view.getHeight())
-//                    .heightpx(windowsHeight/4)
-                    .widthpx((int) (windowsWight / 1.1))
-                    .style(R.style.dialog)
-                    .build();
+
+            switch (getIntent().getIntExtra("type", -1)) {
+                case 2:
+                    mDialog = builder.cancelTouchout(false)
+                            .view(view)
+                            .heightpx((int) (windowsHeight / 2.5))
+                            .widthpx((int) (windowsWight / 1.1))
+                            .style(R.style.dialog)
+                            .build();
+                    break;
+                default:
+                    mDialog = builder.cancelTouchout(false)
+                            .view(view)
+                            .heightpx(view.getHeight())
+                            .widthpx((int) (windowsWight / 1.1))
+                            .style(R.style.dialog)
+                            .build();
+                    break;
+            }
+
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
             }
@@ -309,7 +336,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         View inflate = LayoutInflater.from(this).inflate(R.layout.dialog_common_selected_type, null);
         RecyclerView rvSelectedType = (RecyclerView) inflate.findViewById(R.id.rv_selected_type);
         TextView tvTitle = (TextView) inflate.findViewById(R.id.tv_common_type_title);
-        tvTitle.setText("出差类别");
+        switch (getIntent().getIntExtra("type", -1)) {
+            case 0:
+                tvTitle.setText("出差类别");
+                break;
+            case 2:
+                tvTitle.setText("休假类别");
+                break;
+            case 3:
+                tvTitle.setText("签卡原因");
+                break;
+        }
         mTypeAdapter = new InitiateThingsTypeAdapter(this, data);
         rvSelectedType.setLayoutManager(new LinearLayoutManager(this));
         rvSelectedType.addItemDecoration(new ApproveDecorationLine(this, data));

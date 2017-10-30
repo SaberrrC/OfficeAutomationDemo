@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter
 
 import android.content.Context;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,10 +40,10 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<String> {
 //                begin_time.setEnabled(false);
 //                end_time.setEnabled(false);
                 baseViewHolder.setOnClickListener(R.id.et_commonality_begin_time, view -> {
-                    Toast.makeText(mContext,"开始时间",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "开始时间", Toast.LENGTH_SHORT).show();
                 });
                 baseViewHolder.setOnClickListener(R.id.et_commonality_end_time, view -> {
-                    Toast.makeText(mContext,"结束时间",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "结束时间", Toast.LENGTH_SHORT).show();
                 });
                 break;
             case "1":
@@ -83,7 +84,8 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<String> {
         baseViewHolder.setOnClickListener(R.id.img_delete_detail, view -> {
             EventBus.getDefault().post(new SelectedTypeBean("removeDetail"));
         });
-
+        baseViewHolder.setOnClickListener(R.id.ll_registration_card_detail, view -> {
+            EventBus.getDefault().post(new SelectedTypeBean("showDialog"));
+        });
     }
-
 }
