@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
-        android:gravity="center_verticrecyclerview scrollToPosition无法滚动到顶部al">
+        android:gravity="center">
 
         <TextView
             android:id="@+id/tv_title"
@@ -42,26 +42,26 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-<!--
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <LinearLayout
+    <!--
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <include layout="@layout/layout_item_upcominginfo_top"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <include layout="@layout/commonality_initiate_approval_item"/>
+                <include layout="@layout/layout_item_upcominginfo_top"/>
 
-            <include layout="@layout/layout_item_upcominginfo_detail_body"/>
+                <include layout="@layout/commonality_initiate_approval_item"/>
 
-            <include layout="@layout/layout_item_upcominginfoo_bottom"/>
-        </LinearLayout>
-    </ScrollView>-->
+                <include layout="@layout/layout_item_upcominginfo_detail_body"/>
+
+                <include layout="@layout/layout_item_upcominginfoo_bottom"/>
+            </LinearLayout>
+        </ScrollView>-->
 
     <RelativeLayout
         android:id="@+id/rl_check"

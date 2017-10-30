@@ -42,8 +42,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
     private LinearLayoutManager mLinearLayoutManager;
-    private int     mIndex = 0;
-    private boolean mMove  = false;
+    private int mIndex;
+    private boolean mMove;
 
     @Override
     protected void initInject() {
@@ -79,25 +79,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mFinalRecycleAdapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                //在这里进行第二次滚动（最后的100米！）
-                if (mMove) {
-                    mMove = false;
-                    //获取要置顶的项在当前屏幕的位置，mIndex是记录的要置顶项在RecyclerView中的位置
-                    int n = mIndex - mLinearLayoutManager.findFirstVisibleItemPosition();
-                    if (0 <= n && n < mRecyclerView.getChildCount()) {
-                        //获取要置顶的项顶部离RecyclerView顶部的距离
-                        int top = mRecyclerView.getChildAt(n).getTop();
-                        //最后的移动
-                        mRecyclerView.scrollBy(0, top);
-                    }
-                }
-            }
-        });
     }
 
     private void initData() {
@@ -132,22 +113,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     }
 
-    private void moveToPosition(int n) {
-        mIndex = n;
-        int firstItem = this.mLinearLayoutManager.findFirstVisibleItemPosition();
-        int lastItem = this.mLinearLayoutManager.findLastVisibleItemPosition();
-        if (n <= firstItem) {
-            mRecyclerView.scrollToPosition(n);
-        } else if (n <= lastItem) {
-            int top = mRecyclerView.getChildAt(n - firstItem).getTop();
-            mRecyclerView.scrollBy(0, top);
-        } else {
-            mRecyclerView.scrollToPosition(n);
-            mMove = true;
-        }
-
-    }
-
     @OnClick({R.id.toolbar_text_btn, R.id.tv_agree, R.id.tv_disagree})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -157,7 +122,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     mDatas.remove(1);
                     mDatas.add(1, new UpcomingInfoDetailBodyBean());
                     mFinalRecycleAdapter.notifyDataSetChanged();
-                    mRecyclerView.scrollTo(0, 0);
                     mRecyclerView.scrollToPosition(0);
                     return;
                 }
