@@ -129,6 +129,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
 
     @Override
     public void getMeetingRecordFailed(int errorCode, String msgStr) {
+        mRefresh.setRefreshing(false);
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));

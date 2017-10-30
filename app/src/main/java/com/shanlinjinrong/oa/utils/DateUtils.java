@@ -623,8 +623,8 @@ public class DateUtils {
     }
 
 
-    public static String stringToDate(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日  HH:mm");
+    public static String stringToDateTransform(String time,String pattern) {
+        SimpleDateFormat sdr = new SimpleDateFormat(pattern);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);

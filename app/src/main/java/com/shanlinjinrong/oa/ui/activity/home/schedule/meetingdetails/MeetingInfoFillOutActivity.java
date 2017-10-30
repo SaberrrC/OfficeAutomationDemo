@@ -272,7 +272,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         mStartTime = getIntent().getStringExtra("start_time");
         mEndTime = getIntent().getStringExtra("end_time");
         if (mBeginDate != null && mEndDate != null) {
-            mTvMeetingDate.setText(mBeginDate + " - " + mEndDate);
+            mTvMeetingDate.setText(mBeginDate + " -- " + mEndDate);
         }
 
         if (mMeetingName != null) {
@@ -290,7 +290,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
 
-    @OnClick({ R.id.iv_add_contacts, R.id.tv_rb_is_meeting_invite})
+    @OnClick({R.id.iv_add_contacts, R.id.tv_rb_is_meeting_invite})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_add_contacts:
@@ -473,10 +473,11 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             mTvMeetingName.setText(info.getData().getRoomname());
             mTvMeetingPersonNumber.setText(info.getData().getNop());
             if (!mModifyMeeting) {
-                int index = DateUtils.stringToDate(info.getData().getEnd_time()).indexOf('日');
-                currentStartTime = DateUtils.stringToDate(info.getData().getStart_time());
-                currentEndTime = DateUtils.stringToDate(info.getData().getEnd_time());
-                mTvMeetingDate.setText(DateUtils.stringToDate(info.getData().getStart_time()) + " -" + DateUtils.stringToDate(info.getData().getEnd_time()).substring(index + 2, DateUtils.stringToDate(info.getData().getEnd_time()).length()));
+                currentStartTime = DateUtils.stringToDateTransform(info.getData().getStart_time(), "yyyy年MM月dd日  HH:mm");
+                currentEndTime = DateUtils.stringToDateTransform(info.getData().getEnd_time(), "yyyy年MM月dd日  HH:mm");
+                String startTime = DateUtils.stringToDateTransform(info.getData().getStart_time(), "MM月dd日  HH:mm");
+                String endTime = DateUtils.stringToDateTransform(info.getData().getEnd_time(), "HH:mm");
+                mTvMeetingDate.setText(startTime + " -- " + endTime);
             }
             mTvMeetingDevice.setText(info.getData().getDevice());
             mTvMeetingReceivePerson.setText(info.getData().getSend_user());
