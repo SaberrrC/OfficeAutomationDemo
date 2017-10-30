@@ -776,6 +776,12 @@
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.CountPeopleActivity"
             android:screenOrientation="portrait"/>
+
+        <!--我的考勤-->
+        <activity
+            android:name=".ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>
