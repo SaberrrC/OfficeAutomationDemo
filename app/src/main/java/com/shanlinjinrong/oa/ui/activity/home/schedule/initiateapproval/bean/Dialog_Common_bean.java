@@ -9,6 +9,8 @@ public class Dialog_Common_bean {
 
     private String title;
 
+    private String selectedTitle;
+
     public Dialog_Common_bean() {
 
     }
@@ -22,6 +24,14 @@ public class Dialog_Common_bean {
         this.content = content;
         this.isSelected = isSelected;
         this.title = title;
+    }
+
+    public String getSelectedTitle() {
+        return selectedTitle;
+    }
+
+    public void setSelectedTitle(String selectedTitle) {
+        this.selectedTitle = selectedTitle;
     }
 
     public boolean isSelected() {

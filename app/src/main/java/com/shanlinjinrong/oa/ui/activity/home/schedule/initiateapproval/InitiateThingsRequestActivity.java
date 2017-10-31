@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.CommonalityInitiateAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.InitiateThingsTypeAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.CommonalityInitiateBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Dialog_Common_bean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract.InitiateThingsRequestActivityContract;
@@ -70,11 +71,12 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     LinearLayout mLlCommonalityAnnualLeave;
 
     private List<Dialog_Common_bean> data = new ArrayList<>(); //Dialog 数据源
-    private List<String> mData = new ArrayList<>(); //明细数据源
+    private List<CommonalityInitiateBean> mData = new ArrayList<>(); //明细数据源
     private CustomDialogUtils mDialog;
     private CommonalityInitiateAdapter mAdapter;
     private InitiateThingsTypeAdapter mTypeAdapter;
     private LinearLayoutManager mLinearLayoutManager;
+    private CommonalityInitiateBean mInitiateBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +97,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     private void initData() {
         initMonoCode();
-        mData.add(getIntent().getIntExtra("type", -1) + "");
+        mInitiateBean = new CommonalityInitiateBean("", "忘记打卡", getIntent().getIntExtra("type", -1) + "");
+        mData.add(mInitiateBean);
         switch (getIntent().getIntExtra("type", -1)) {
             case 0://出差类别
                 data.add(new Dialog_Common_bean("出差", true));
@@ -219,7 +222,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_add_details:
-                mData.add(getIntent().getIntExtra("type", -1) + "");
+                mInitiateBean = new CommonalityInitiateBean("", "忘记打卡", getIntent().getIntExtra("type", -1) + "");
+                mData.add(mInitiateBean);
                 mAdapter.setNewData(mData);
                 mAdapter.notifyDataSetChanged();
                 if (mData.size() > 1) {
@@ -271,10 +275,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         } else if (bean.getEvent().equals("selectedType")) {
             mTvCommonalityTypeSelected.setText(bean.getSelectedType());
             for (int i = 0; i < data.size(); i++) {
-                //TODO 数据团传递
-                if (bean.getPosition() == 3) {
-
-                }
+                mData.get(mData.size() - 1).setSelectedTitle(bean.getSelectedType());
+                mAdapter.setNewData(mData);
+                mAdapter.notifyDataSetChanged();
                 if (i == bean.getPosition()) {
                     data.get(i).setSelected(true);
                 } else {
@@ -285,7 +288,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             if (mDialog != null) {
                 mDialog.cancel();
             }
-        }else if (bean.getEvent().equals("showDialog")){
+        } else if (bean.getEvent().equals("showDialog")) {
             NonTokenDialog();
         }
     }
