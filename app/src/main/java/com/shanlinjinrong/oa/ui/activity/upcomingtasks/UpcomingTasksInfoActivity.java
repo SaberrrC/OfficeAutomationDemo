@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,13 +8,19 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalBaseAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoDetailBodyBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoStateBean;
@@ -24,6 +31,7 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksIn
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +40,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener {
+public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
 
     @Bind(R.id.tv_title)
     TextView     mTvTitle;
@@ -47,6 +55,15 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private LinearLayoutManager mLinearLayoutManager;
     private int                 mIndex;
     private boolean             mMove;
+    private Dialog              mChooseDialog;
+    private ListView            mLvList;
+    public static String[] type_0 = {"出差", "外出"};
+    public static String[] type_1 = {"type_1", "type_1"};
+    public static String[] type_2 = {"事假", "婚假", "年假", "丧假"};
+    public static String[] type_3 = {"忘记打卡", "考勤机故障", "地铁故障"};
+    private FinalBaseAdapter<String> mFinalBaseAdapter;
+    private List<String> typeData          = new ArrayList<>();
+    private int          clickItemPosition = 0;
 
     @Override
     protected void initInject() {
@@ -64,6 +81,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         setContentView(R.layout.activity_upcoming_tasks_info);
         ButterKnife.bind(this);
         initView();
+        initData();
     }
 
     private void initView() {
@@ -72,7 +90,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     }
 
     private void initList() {
-        initData();
         Map<Class, Integer> map = new HashMap<>();
         map.put(UpcomingInfoTopBean.class, R.layout.layout_item_upcominginfo_top);
         map.put(UpcomingInfoStateBean.class, R.layout.commonality_initiate_approval_item);
@@ -118,6 +135,12 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             LinearLayout llType = (LinearLayout) holder.getViewById(R.id.ll_type);
             TextView tvType = (TextView) holder.getViewById(R.id.tv_type);
             TextView tvApplyTime = (TextView) holder.getViewById(R.id.tv_apply_time);
+            llType.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showTypeDialog();
+                }
+            });
             return;
         }
         if (itemData instanceof UpcomingInfoStateBean) {
@@ -141,6 +164,54 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         if (itemData instanceof UpcomingInfobottomBean) {
             EditText etOpinion = (EditText) holder.getViewById(R.id.et_opinion);
         }
+    }
+
+    private void showTypeDialog() {
+        if (mChooseDialog == null) {
+            mChooseDialog = new Dialog(this, R.style.DialogChoose);
+            //点击其他地方消失
+            mChooseDialog.setCanceledOnTouchOutside(true);
+            //填充对话框的布局
+            View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_dialog_upcominginfo_choose, null, false);
+            mLvList = (ListView) dialogView.findViewById(R.id.lv_content);
+            mFinalBaseAdapter = null;
+            int type = getIntent().getIntExtra("type", -1);
+            type = 1;
+            if (typeData.size() > 0) {
+                typeData.clear();
+            }
+            if (type == 0) {
+                typeData.addAll(Arrays.asList(type_0));
+            }
+            if (type == 1) {
+                typeData.addAll(Arrays.asList(type_1));
+            }
+            if (type == 2) {
+                typeData.addAll(Arrays.asList(type_2));
+            }
+            if (type == 3) {
+                typeData.addAll(Arrays.asList(type_3));
+            }
+            mFinalBaseAdapter = new FinalBaseAdapter<String>(typeData, R.layout.layout_item_upcominginfo, this);
+            mLvList.setAdapter(mFinalBaseAdapter);
+            mLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    clickItemPosition = i;
+                    mFinalBaseAdapter.notifyDataSetChanged();
+                    if (mChooseDialog != null) {
+                        mChooseDialog.dismiss();
+                    }
+                }
+            });
+            mChooseDialog.setContentView(dialogView);
+            Window dialogWindow = mChooseDialog.getWindow();
+            dialogWindow.setGravity(Gravity.CENTER);
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            dialogWindow.setAttributes(lp);
+        }
+        mChooseDialog.show();//显示对话框
     }
 
     @OnClick({R.id.toolbar_text_btn, R.id.tv_agree, R.id.tv_disagree})
@@ -167,6 +238,24 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 break;
             case R.id.tv_disagree:
                 break;
+        }
+    }
+
+    @Override
+    public void bindView(FinalBaseAdapter.FinalViewHolder viewHolder, Object dataBean, int position) {
+        TextView tvItem = (TextView) viewHolder.getViewById(R.id.tv_item);
+        View stork = viewHolder.getViewById(R.id.stork);
+        String text = (String) dataBean;
+        tvItem.setText(text);
+        if (position == clickItemPosition) {
+            tvItem.setTextColor(getResources().getColor(R.color.blue_69B0F2));
+        } else {
+            tvItem.setTextColor(getResources().getColor(R.color.grey));
+        }
+        if (position == mFinalBaseAdapter.getCount() - 1) {
+            stork.setVisibility(View.INVISIBLE);
+        } else {
+            stork.setVisibility(View.VISIBLE);
         }
     }
 }
