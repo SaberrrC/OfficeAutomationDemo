@@ -1,7 +1,7 @@
 package com.example.retrofit.net;
 
 /**
- * Created by zhaojian on 2017/8/14.
+ * Created by gaobin on 2017/8/14.
  */
 public class ApiException extends RuntimeException {
 

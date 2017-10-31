@@ -3,10 +3,10 @@ package com.example.retrofit.net;
 
 import com.example.retrofit.BuildConfig;
 import com.example.retrofit.net.api.UserApi;
-import com.example.retrofit.retrofit.RestBuilder;
+import com.example.retrofit.retrofit.ClientBuilder;
 
 /**
- * Created by zhaojian on 2017/8/14.
+ * Created by gaobin on 2017/8/14.
  */
 public class ApiFactory {
 
@@ -19,7 +19,7 @@ public class ApiFactory {
         } else {
             userHost = ApiConstant.USERINFO_DEV_HOST;
         }
-        userApi = RestBuilder.build(userHost, UserApi.class);
+        userApi = ClientBuilder.build(userHost, UserApi.class);
     }
 
     public static UserApi getUserApi() {

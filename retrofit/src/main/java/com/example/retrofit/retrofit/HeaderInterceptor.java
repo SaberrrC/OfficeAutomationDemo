@@ -5,7 +5,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created by zhaojian on 2017/8/14.
+ * Created by gaobin on 2017/8/14.
  * API请求拦截器
  */
 public class HeaderInterceptor implements Interceptor {

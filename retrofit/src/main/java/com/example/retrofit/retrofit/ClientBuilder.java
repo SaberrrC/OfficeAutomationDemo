@@ -8,9 +8,9 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by zhaojian on 2017/8/14.
+ * Created by gaobin on 2017/8/14.
  */
-public class RestBuilder {
+public class ClientBuilder {
 
     private static final String DEBUG = "debug";
 

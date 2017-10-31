@@ -74,6 +74,12 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    packagingOptions {
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 def preAppName() {
@@ -197,4 +203,5 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     //分包
     compile 'com.android.support:multidex:1.0.1'
+    compile project(':retrofit')
 }
