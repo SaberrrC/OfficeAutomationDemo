@@ -746,19 +746,10 @@
             android:screenOrientation="portrait"/>
 
         <!-- 加班申请 -->
-        <activity
-            android:name=".ui.activity.home.schedule.initiateapproval.OverTimeWorkingActivity"
-            android:screenOrientation="portrait"/>
 
         <!-- 休假申请 -->
-        <activity
-            android:name=".ui.activity.home.schedule.initiateapproval.AnnualLeaveRequestActivity"
-            android:screenOrientation="portrait"/>
 
         <!-- 签卡申请 -->
-        <activity
-            android:name=".ui.activity.home.schedule.initiateapproval.RegistrationCardRequestActivity"
-            android:screenOrientation="portrait"/>
 
         <!--会议邀请-->
         <activity

@@ -19,6 +19,11 @@ public class SelectedTypeBean {
         this.selectedType = selectedType;
     }
 
+    public SelectedTypeBean(String event, int position) {
+        this.event = event;
+        this.position = position;
+    }
+
     public SelectedTypeBean(String event, String selectedType, int position) {
         this.event = event;
         this.selectedType = selectedType;
