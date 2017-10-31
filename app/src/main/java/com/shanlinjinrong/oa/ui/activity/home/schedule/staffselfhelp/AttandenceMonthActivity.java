@@ -4,21 +4,34 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.DatePopWindow;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.DatePopAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandanceMonthContract;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.MyAttendenceActivityContract;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.AttandanceMonthPresenter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.MyAttendenceActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.utils.DeviceUtil;
 import com.shanlinjinrong.views.common.CommonTopView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,7 +41,7 @@ import cn.qqtheme.framework.picker.DatePicker;
  * Created by Administrator on 2017/10/25 0025.
  */
 
-public class AttandenceMonthActivity extends BaseActivity implements View.OnClickListener {
+public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPresenter> implements AttandanceMonthContract.View,View.OnClickListener {
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.toolbar)
@@ -39,9 +52,22 @@ public class AttandenceMonthActivity extends BaseActivity implements View.OnClic
     LinearLayout ll_count_people;
     @Bind(R.id.ll_currentday_state)
     LinearLayout mLlCurrentdayState;
+    @Bind(R.id.tv_time)
+    TextView tv_time;
+    @Bind(R.id.ll_month)
+    LinearLayout mDateLayout;
+    @Bind(R.id.iv_divider)
+    ImageView iv_divider;
+
+
+
 
     private DatePicker picker;
     DatePopWindow datePopWindow;
+    private List<PopItem> mData;
+    private List<Integer> mDays = new ArrayList<>();
+    private int mDayPos = 1;
+    private int mMonthPos = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +75,64 @@ public class AttandenceMonthActivity extends BaseActivity implements View.OnClic
         setContentView(R.layout.activity_work_month);
         ButterKnife.bind(this);
         initToolBar();
+        initData();
         setTranslucentStatus(this);
+//        mPresenter.searchDayRecorder("sd0","sd");
 
+    }
+
+    RecyclerView mTopList;
+    DatePopAdapter mAdapter;
+    View rootView;
+
+    private void initData() {
+        iv_divider.setVisibility(View.GONE);
+        mLlChoseTime.setOnClickListener(this);
+        ll_count_people.setOnClickListener(this);
+        rootView = View.inflate(AttandenceMonthActivity.this, R.layout.date_select_attandance, null);
+        mDateLayout.addView(rootView);
+        mTopList = (RecyclerView) rootView.findViewById(R.id.top_data_list);
+
+        mData = new ArrayList<>();
+        mData = DateUtils.getDate(5, 20);
+        setData(true,5,2);
+    }
+
+    public void setData(final boolean isDay, int month, int selectPos) {
+        mData.clear();
+        if (isDay) {
+            mData = DateUtils.getDate(month, selectPos);
+        } else {
+            creatMonth(selectPos);
+        }
+        mTopList.setLayoutManager(new GridLayoutManager(AttandenceMonthActivity.this, isDay ? 7 : 6));
+        mAdapter = new DatePopAdapter(mData);
+        mTopList.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClick(new DatePopAdapter.OnItemClick() {
+            @Override
+            public void onItemClicked(int position) {
+//                if (mItemClick != null) {
+//                    mItemClick.onPopItemClick(isDay, position);
+//                    hidden();
+//                }
+            }
+        });
+    }
+
+    public void creatMonth(int selectPos) {
+        String[] numArray = {"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"};
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH);
+        for (int i = 0; i < numArray.length; i++) {
+            PopItem item = new PopItem(numArray[i], !(i < month), i == selectPos);
+            mData.add(item);
+        }
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     @Override
@@ -111,6 +193,26 @@ public class AttandenceMonthActivity extends BaseActivity implements View.OnClic
         });
     }
 
+    @Override
+    public void uidNull(int code) {
+
+    }
+
+    @Override
+    public void sendDataSuccess() {
+
+    }
+
+    @Override
+    public void sendDataFailed(int errCode, String msg) {
+
+    }
+
+    @Override
+    public void sendDataFinish() {
+
+    }
+
 //    public void showDatePopWindow(boolean isDay, final int month, int selectPos) {
 //        if (datePopWindow == null) {
 //            int height = DeviceUtil.getScreenHeight(this) - DeviceUtil.getStatusHeight(this) - mTopView.getHeight() - mDateLayout.getHeight();
@@ -147,11 +249,18 @@ public class AttandenceMonthActivity extends BaseActivity implements View.OnClic
 //        });
 //    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
-    }
 
+
+    private int findDay(int month, int day) {
+        int dayOne = 0;
+        mDays = DateUtils.getDate(month);
+        for (int i = 0; i < mDays.size(); i++) {
+            if (mDays.get(i) == 1) {
+                dayOne = i;
+                break;
+            }
+        }
+        return mDays.get(dayOne + day - 1);
+    }
 
 }

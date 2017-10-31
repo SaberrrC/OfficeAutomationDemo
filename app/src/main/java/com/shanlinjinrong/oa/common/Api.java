@@ -487,6 +487,9 @@ public class Api {
     // 发起申请
     public static final String INITIARE_REQUEST = "/queryMonocode";
 
+    //考勤月历查询
+    public static final String ATTANDANCE_MONTH_SEARCH = "/queryTimeTagForOnDay";
+
     //*****************************************************************//
 
     /**

@@ -786,6 +786,11 @@
             android:name=".ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity"
             android:screenOrientation="portrait"/>
 
+        <!--考勤记录-->
+        <activity
+            android:name=".ui.activity.home.schedule.staffselfhelp.AttandenceRecorderActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>
