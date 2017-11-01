@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,7 +19,12 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.presenter.CreateMeetingPr
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.MyAttendenceActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.MyAttendenceActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 
@@ -44,8 +51,15 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     LinearLayout ll_time;
     @Bind(R.id.tv_time)
     TextView tv_time;
+    @Bind(R.id.ll_rootView)
+    LinearLayout mRootView;
 
     private DatePicker picker;
+    MonthSelectPopWindow monthSelectPopWindow;
+    String selectedYear="";
+    String selectedMonth="";
+
+
 
 
     @Override
@@ -64,6 +78,7 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     }
 
     private void initData() {
+
         iv_state1.setOnClickListener(this);
         iv_state2.setOnClickListener(this);
         iv_state3.setOnClickListener(this);
@@ -114,26 +129,43 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
                 startActivity(intent);
                 break;
             case R.id.ll_time:
-                if (picker == null) {
-                    picker = new DatePicker(MyAttendenceActivity.this, DatePicker.YEAR_MONTH);
-                }
-                Calendar cal = Calendar.getInstance();
-                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1
-                );
-                picker.setSubmitText("完成");
-                picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
-                picker.setTextColor(Color.parseColor("#2d9dff"));
-                picker.setOnDatePickListener(new DatePicker.OnYearMonthPickListener() {
+                 monthSelectPopWindow = new MonthSelectPopWindow(MyAttendenceActivity.this,
+                         new MonthSelectPopWindow.PopListener() {
                     @Override
-                    public void onDatePicked(String year, String month) {
+                    public void cancle() {
+                        monthSelectPopWindow.dismiss();
+                    }
+                    @Override
+                    public void confirm(String year, String month) {
+                        selectedYear=year;
+                        selectedMonth=month;
                         tv_time.setText(year+"年"+month+"月");
+                        monthSelectPopWindow.dismiss();
                     }
                 });
-                picker.show();
+                monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM,0,0);
+//                if (picker == null) {
+//                    picker = new DatePicker(MyAttendenceActivity.this, DatePicker.YEAR_MONTH);
+//                }
+//                Calendar cal = Calendar.getInstance();
+//                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1
+//                );
+//                picker.setSubmitText("完成");
+//                picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
+//                picker.setTextColor(Color.parseColor("#2d9dff"));
+//                picker.setOnDatePickListener(new DatePicker.OnYearMonthPickListener() {
+//                    @Override
+//                    public void onDatePicked(String year, String month) {
+//                        tv_time.setText(year+"年"+month+"月");
+//                    }
+//                });
+//                picker.show();
                 break;
             default:
                 break;
 
         }
     }
+
+
 }

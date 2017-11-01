@@ -416,6 +416,27 @@
                     <!---->
 
                     <RelativeLayout
+                        android:id="@+id/rl_my_attandance"
+                        android:layout_width="0dp"
+                        android:layout_height="84dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/iv_my_attandance"
+                            style="@style/home_page_icon_style"
+                            android:src="@mipmap/my_attandance" />
+
+                        <TextView
+                            style="@style/common_text_style"
+                            android:layout_below="@+id/iv_my_attandance"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:text="我的考勤"
+                            android:textSize="@dimen/text_common_icon_tips" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:id="@+id/rl_schedule_book_meeting"
                         android:layout_width="0dp"
                         android:layout_height="84dp"
@@ -468,30 +489,6 @@
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color" />
 
-                    <RelativeLayout
-                        android:id="@+id/rl_schedule_note"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/iv_homepage_schedule_note"
-                            style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_schedule_note"
-                            android:visibility="gone" />
-
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_schedule_note"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="记事本"
-                            android:textSize="@dimen/text_common_icon_tips"
-                            android:visibility="gone" />
-
-
-                    </RelativeLayout>
 
 
                     <View

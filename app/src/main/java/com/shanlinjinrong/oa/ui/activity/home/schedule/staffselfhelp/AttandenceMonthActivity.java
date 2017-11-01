@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -14,11 +15,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.event.PeopeNameEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.DatePopWindow;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.DatePopAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.DatePopAttandanceAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandanceMonthContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.MyAttendenceActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.AttandanceMonthPresenter;
@@ -26,8 +30,13 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.M
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
+import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
 import com.shanlinjinrong.utils.DeviceUtil;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,6 +67,13 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     LinearLayout mDateLayout;
     @Bind(R.id.iv_divider)
     ImageView iv_divider;
+    @Bind(R.id.tv_people)
+    TextView tv_people;
+    @Bind(R.id.layout_root)
+    LinearLayout mRootView;
+
+
+
 
 
 
@@ -66,8 +82,12 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     DatePopWindow datePopWindow;
     private List<PopItem> mData;
     private List<Integer> mDays = new ArrayList<>();
-    private int mDayPos = 1;
-    private int mMonthPos = 1;
+    private String mCurrentDay = "";
+    private String mSelectedMonth = "";
+    private String mSelectedYear = "";
+    MonthSelectPopWindow monthSelectPopWindow;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +102,13 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     }
 
     RecyclerView mTopList;
-    DatePopAdapter mAdapter;
+    DatePopAttandanceAdapter mAdapter;
     View rootView;
 
     private void initData() {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         iv_divider.setVisibility(View.GONE);
         mLlChoseTime.setOnClickListener(this);
         ll_count_people.setOnClickListener(this);
@@ -106,16 +129,13 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             creatMonth(selectPos);
         }
         mTopList.setLayoutManager(new GridLayoutManager(AttandenceMonthActivity.this, isDay ? 7 : 6));
-        mAdapter = new DatePopAdapter(mData);
+        mAdapter = new DatePopAttandanceAdapter(mData);
         mTopList.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClick(new DatePopAdapter.OnItemClick() {
+        mAdapter.setOnItemClick(new DatePopAttandanceAdapter.OnItemClick() {
             @Override
             public void onItemClicked(int position) {
-//                if (mItemClick != null) {
-//                    mItemClick.onPopItemClick(isDay, position);
-//                    hidden();
-//                }
+                Toast.makeText(AttandenceMonthActivity.this,""+position,Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -141,22 +161,40 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         switch (v.getId()){
             //统计时间选择
             case R.id.ll_chose_time:
-                if (picker == null) {
-                    picker = new DatePicker(AttandenceMonthActivity.this, DatePicker.YEAR_MONTH);
-                }
-                Calendar cal = Calendar.getInstance();
-                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1
-                );
-                picker.setSubmitText("完成");
-                picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
-                picker.setTextColor(Color.parseColor("#2d9dff"));
-                picker.setOnDatePickListener(new DatePicker.OnYearMonthPickListener() {
-                    @Override
-                    public void onDatePicked(String year, String month) {
-
-                    }
-                });
-                picker.show();
+                monthSelectPopWindow = new MonthSelectPopWindow(AttandenceMonthActivity.this,
+                        new MonthSelectPopWindow.PopListener() {
+                            @Override
+                            public void cancle() {
+                                monthSelectPopWindow.dismiss();
+                            }
+                            @Override
+                            public void confirm(String year, String month) {
+                                mSelectedYear=year;
+                                mSelectedMonth=month;
+                                tv_time.setText(year+"年"+month+"月");
+                                mData.clear();
+                                mData = DateUtils.getDate(Integer.parseInt(month), 1);
+                                mAdapter.notifyDataSetChanged();
+                                monthSelectPopWindow.dismiss();
+                            }
+                        });
+                monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM,0,0);
+//                if (picker == null) {
+//                    picker = new DatePicker(AttandenceMonthActivity.this, DatePicker.YEAR_MONTH);
+//                }
+//                Calendar cal = Calendar.getInstance();
+//                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1
+//                );
+//                picker.setSubmitText("完成");
+//                picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
+//                picker.setTextColor(Color.parseColor("#2d9dff"));
+//                picker.setOnDatePickListener(new DatePicker.OnYearMonthPickListener() {
+//                    @Override
+//                    public void onDatePicked(String year, String month) {
+//
+//                    }
+//                });
+//                picker.show();
                 break;
             //统计人员选择
             case R.id.ll_count_people:
@@ -213,41 +251,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
     }
 
-//    public void showDatePopWindow(boolean isDay, final int month, int selectPos) {
-//        if (datePopWindow == null) {
-//            int height = DeviceUtil.getScreenHeight(this) - DeviceUtil.getStatusHeight(this) - mTopView.getHeight() - mDateLayout.getHeight();
-//            int topHeight = DeviceUtil.getScreenHeight(this) - height;
-//            datePopWindow = new DatePopWindow(this, mDateLayout, topHeight, height);
-//        }
-//        datePopWindow.setData(isDay, month, selectPos);
-//        datePopWindow.show();
-//        datePopWindow.setItemClick(new DatePopWindow.PopItemClick() {
-//            @Override
-//            public void onPopItemClick(boolean isDay, int position) {
-//                if (isDay) {
-//                    mDayPos = mDays.get(position);
-//                    mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
-//                } else {
-//                    mMonthPos = position;
-//                    mTvMonth.setText(mMonthArrays[mMonthPos]);
-//                    int maxDay = DateUtils.getCurrentDaysInMonth(mMonthPos + 1);
-//                    if (mDayPos > maxDay) {
-//                        mDayPos = maxDay;
-//                    }
-//
-//                    if (DateUtils.getCurrentMonth() == mMonthPos && mDayPos < DateUtils.getCurrentDay()) {
-//                        mDayPos = DateUtils.getCurrentDay();
-//                    }
-//                }
-//
-//                mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
-//                mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
-//
-//                refreshSelectTime(DateUtils.stringToDate(DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos, "yyyy-MM-dd"));
-//
-//            }
-//        });
-//    }
 
 
 
@@ -262,5 +265,22 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         }
         return mDays.get(dayOne + day - 1);
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFinish(PeopeNameEvent peopeNameEvent) {
+        if(!TextUtils.isEmpty(peopeNameEvent.name)){
+            tv_people.setText(peopeNameEvent.name);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+
 
 }

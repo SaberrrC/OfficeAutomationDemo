@@ -19,6 +19,7 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.LaunchApprovalActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
@@ -120,7 +121,7 @@ public class TabHomePageFragment extends BaseFragment {
             R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report,
             R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval,
             R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
-            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_schedule_note})
+            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_schedule_note,R.id.rl_my_attandance})
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -173,8 +174,12 @@ public class TabHomePageFragment extends BaseFragment {
                 //会议室预定
 //                intent = new Intent(mContext, MyAttendence.class);
                 if (BuildConfig.DEBUG) {
-                    intent = new Intent(mContext, UpcomingTasksActivity.class);
+                    intent = new Intent(mContext, MyAttendenceActivity.class);
                 }
+                break;
+            case R.id.rl_my_attandance:
+                //我的考勤
+                intent = new Intent(mContext, MyAttendenceActivity.class);
                 break;
         }
         if (intent != null) {
