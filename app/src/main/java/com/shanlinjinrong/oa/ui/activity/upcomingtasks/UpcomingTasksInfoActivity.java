@@ -32,6 +32,7 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,9 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.qqtheme.framework.picker.DatePicker;
+
+import static com.shanlinjinrong.oa.R.id.tv_time;
 
 public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
 
@@ -64,6 +68,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private FinalBaseAdapter<String> mFinalBaseAdapter;
     private List<String> typeData          = new ArrayList<>();
     private int          clickItemPosition = 0;
+    private DatePicker mBeginTimePicker;
+    private DatePicker mEndTimePicker;
 
     @Override
     protected void initInject() {
@@ -152,11 +158,51 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             EditText etCommonalityShow2 = (EditText) holder.getViewById(R.id.et_commonality_show2);//出差原因
             EditText etCommonalityShow3 = (EditText) holder.getViewById(R.id.et_commonality_show3);//交接人
             imgDeleteDetail.setVisibility(View.GONE);
+            etCommonalityBeginTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mBeginTimePicker == null) {
+                        mBeginTimePicker = new DatePicker(UpcomingTasksInfoActivity.this, DatePicker.YEAR_MONTH_DAY);
+                    }
+                    Calendar cal = Calendar.getInstance();
+                    mBeginTimePicker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1);
+                    mBeginTimePicker.setSubmitText("完成");
+                    mBeginTimePicker.setSubmitTextColor(Color.parseColor("#2d9dff"));
+                    mBeginTimePicker.setTextColor(Color.parseColor("#2d9dff"));
+                    mBeginTimePicker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+                        @Override
+                        public void onDatePicked(String year, String month, String day) {
+                            etCommonalityBeginTime.setText(year + "年" + month + "月" + day + "日");
+                        }
+                    });
+                    mBeginTimePicker.show();
+                }
+            });
+            etCommonalityEndTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mEndTimePicker == null) {
+                        mEndTimePicker = new DatePicker(UpcomingTasksInfoActivity.this, DatePicker.YEAR_MONTH_DAY);
+                    }
+                    Calendar cal = Calendar.getInstance();
+                    mEndTimePicker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1);
+                    mEndTimePicker.setSubmitText("完成");
+                    mEndTimePicker.setSubmitTextColor(Color.parseColor("#2d9dff"));
+                    mEndTimePicker.setTextColor(Color.parseColor("#2d9dff"));
+                    mEndTimePicker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+                        @Override
+                        public void onDatePicked(String year, String month, String day) {
+                            etCommonalityEndTime.setText(year + "年" + month + "月" + day + "日");
+                        }
+                    });
+                    mEndTimePicker.show();
+                }
+            });
             return;
         }
         if (itemData instanceof UpcomingInfoDetailBodyBean) {
             TextView tvApprover = (TextView) holder.getViewById(R.id.tv_approver);
-            TextView tvTime = (TextView) holder.getViewById(R.id.tv_time);
+            TextView tvTime = (TextView) holder.getViewById(tv_time);
             TextView tvState = (TextView) holder.getViewById(R.id.tv_state);
             TextView tvOption = (TextView) holder.getViewById(R.id.tv_option);
             return;

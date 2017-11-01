@@ -19,7 +19,6 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.LaunchApprovalActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
@@ -48,17 +47,15 @@ public class TabHomePageFragment extends BaseFragment {
 
     private RelativeLayout mRootView;
 
-    private static int TYPE_SEND_TO_ME = 0;//发送我的
-    private static int TYPE_WAIT_ME_APPROVAL = 1;//待我审批
-    private static String DOT_STATUS = "DOT_STATUS";
-    public static String DOT_SEND = "DOT_SEND";
-    public static String DOT_APPORVAL = "DOT_APPORVAL";
+    private static int    TYPE_SEND_TO_ME       = 0;//发送我的
+    private static int    TYPE_WAIT_ME_APPROVAL = 1;//待我审批
+    private static String DOT_STATUS            = "DOT_STATUS";
+    public static  String DOT_SEND              = "DOT_SEND";
+    public static  String DOT_APPORVAL          = "DOT_APPORVAL";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        mRootView = (RelativeLayout) inflater.inflate(R.layout.tab_homepage_fragment, container,
-                false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mRootView = (RelativeLayout) inflater.inflate(R.layout.tab_homepage_fragment, container, false);
         ButterKnife.bind(this, mRootView);
         return mRootView;
     }
@@ -117,11 +114,7 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me,
-            R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report,
-            R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval,
-            R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
-            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_schedule_note,R.id.rl_my_attandance})
+    @OnClick({R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me, R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_schedule_note})
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -171,15 +164,9 @@ public class TabHomePageFragment extends BaseFragment {
                 intent = new Intent(mContext, MeetingDetailsActivity.class);
                 break;
             case R.id.rl_schedule_note:
-                //会议室预定
-//                intent = new Intent(mContext, MyAttendence.class);
-                if (BuildConfig.DEBUG) {
-                    intent = new Intent(mContext, MyAttendenceActivity.class);
-                }
-                break;
-            case R.id.rl_my_attandance:
-                //我的考勤
-                intent = new Intent(mContext, MyAttendenceActivity.class);
+                //日程管理
+                //                intent = new Intent(mContext, MyAttendence.class);
+                intent = new Intent(mContext, UpcomingTasksActivity.class);
                 break;
         }
         if (intent != null) {

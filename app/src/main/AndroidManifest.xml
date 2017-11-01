@@ -777,11 +777,12 @@
             android:name=".ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity"
             android:screenOrientation="portrait"/>
 
-        <!--考勤记录-->
+        <!-- 考勤记录 -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.AttandenceRecorderActivity"
             android:screenOrientation="portrait"/>
-
+        <activity android:name=".ui.activity.calendar.MouthCalenderActivity">
+        </activity>
     </application>
 
 </manifest>
