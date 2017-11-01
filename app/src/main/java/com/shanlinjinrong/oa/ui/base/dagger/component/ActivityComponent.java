@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.base.dagger.component;
 
+import com.shanlinjinrong.oa.ui.activity.calendar.MouthCalenderActivity;
 import com.shanlinjinrong.oa.ui.activity.contracts.ContactsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApplyForOfficeSuppliesActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
@@ -120,4 +121,5 @@ public interface ActivityComponent {
     void inject(AttandenceMonthActivity activity);
 
 
+    void inject(MouthCalenderActivity mouthCalenderActivity);
 }
