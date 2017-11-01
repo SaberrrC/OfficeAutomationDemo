@@ -204,4 +204,5 @@ dependencies {
     //分包
     compile 'com.android.support:multidex:1.0.1'
     compile project(':retrofit')
+    compile 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
 }
