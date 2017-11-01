@@ -1,6 +1,8 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.CommonalityInitiateAdapter;
@@ -16,17 +19,20 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.CommonalityInitiateBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Dialog_Common_bean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SubmitRequestBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract.InitiateThingsRequestActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter.InitiateThingsRequestActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
+import com.shanlinjinrong.oa.utils.TimeDialogFragment;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
@@ -77,6 +83,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private InitiateThingsTypeAdapter mTypeAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private CommonalityInitiateBean mInitiateBean;
+    private SubmitRequestBean mSubmitRequestBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +133,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     private void initView() {
 
+        mSubmitRequestBean = new SubmitRequestBean();
+
         mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
@@ -153,6 +162,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTopView.getRightView().setOnClickListener(view -> {
             switch (getIntent().getIntExtra("type", -1)) {
                 case 0:
+                    TimeDialogFragment m = new TimeDialogFragment();
+                    m.show(getSupportFragmentManager(),"2");
+                    Toast.makeText(this, mSubmitRequestBean.getBeginTime() + mSubmitRequestBean.getEndTime() + mSubmitRequestBean.getRequestDuration(), Toast.LENGTH_SHORT).show();
                     //mPresenter.initiateThingsRequest();  //TODO 提交
                     break;
                 case 1:
@@ -168,11 +180,15 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                     break;
             }
         });
+
+
     }
 
     //出差申请
     private void onBusinessRequest() {
-        mAdapter = new CommonalityInitiateAdapter(this, mData);
+
+
+        mAdapter = new CommonalityInitiateAdapter(this, mData, mSubmitRequestBean);
         mRvCommonalityShow.setLayoutManager(mLinearLayoutManager);
         mRvCommonalityShow.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -187,7 +203,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLlCommonalitySelected.setVisibility(View.GONE);
         mTvCommonalityTypeDot.setVisibility(View.GONE);
         mTvCommonalityOverTime.setVisibility(View.VISIBLE);
-        mAdapter = new CommonalityInitiateAdapter(this, mData);
+        mAdapter = new CommonalityInitiateAdapter(this, mData, mSubmitRequestBean);
         mRvCommonalityShow.setLayoutManager(mLinearLayoutManager);
         mRvCommonalityShow.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -200,7 +216,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTvCommonalityType.setText("休假类别");
         mBtnAddDetails.setText("+ 添加休假明细");
         mLlCommonalityAnnualLeave.setVisibility(View.VISIBLE);
-        mAdapter = new CommonalityInitiateAdapter(this, mData);
+        mAdapter = new CommonalityInitiateAdapter(this, mData, mSubmitRequestBean);
         mLlCommonalityDate.setVisibility(View.VISIBLE);
         mRvCommonalityShow.setLayoutManager(mLinearLayoutManager);
         mRvCommonalityShow.setAdapter(mAdapter);
@@ -212,7 +228,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTopView.setAppTitle("签卡申请");
         mLlCommonalityType.setVisibility(View.GONE);
         mBtnAddDetails.setText("+ 添加签卡明细");
-        mAdapter = new CommonalityInitiateAdapter(this, mData);
+        mAdapter = new CommonalityInitiateAdapter(this, mData, mSubmitRequestBean);
         mRvCommonalityShow.setLayoutManager(mLinearLayoutManager);
         mRvCommonalityShow.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();

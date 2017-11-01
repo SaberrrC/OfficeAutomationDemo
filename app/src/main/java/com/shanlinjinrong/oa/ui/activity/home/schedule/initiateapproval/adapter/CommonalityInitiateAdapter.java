@@ -2,6 +2,8 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter
 
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -13,6 +15,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.CommonalityInitiateBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SubmitRequestBean;
+import com.shanlinjinrong.oa.utils.TimeDialogFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -23,9 +27,13 @@ import butterknife.OnClick;
 public class CommonalityInitiateAdapter extends BaseQuickAdapter<CommonalityInitiateBean> {
 
     private Context mContext;
+    private int pos;
 
-    public CommonalityInitiateAdapter(Context context, List<CommonalityInitiateBean> data) {
+    private SubmitRequestBean mSubmitRequestBean;
+
+    public CommonalityInitiateAdapter(Context context, List<CommonalityInitiateBean> data,SubmitRequestBean submitRequestBean) {
         super(R.layout.commonality_initiate_approval_item, data);
+        mSubmitRequestBean = submitRequestBean;
         mContext = context;
     }
 
@@ -34,12 +42,29 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<CommonalityInit
         if (baseViewHolder.getPosition() == 0) {
             baseViewHolder.setVisible(R.id.img_delete_detail, false);
         }
+        TextView view1 = baseViewHolder.getView(R.id.tv_commonality);
+        EditText view2 = baseViewHolder.getView(R.id.et_commonality_show1);
+        EditText view3 = baseViewHolder.getView(R.id.et_commonality_show2);
+        EditText view4 = baseViewHolder.getView(R.id.et_commonality_show3);
+        TextView view5 = baseViewHolder.getView(R.id.tv_selected_show);
         switch (s.getIndex()) {
             case "0":
                 TextView begin_time = baseViewHolder.getView(R.id.et_commonality_begin_time);
                 TextView end_time = baseViewHolder.getView(R.id.et_commonality_end_time);
-//                begin_time.setEnabled(false);
-//                end_time.setEnabled(false);
+
+                String s1 = begin_time.getText().toString();
+                String s2 = end_time.getText().toString();
+
+
+                String s3 = view1.getText().toString();
+                String s4 = view2.getText().toString();
+                String s5 = view3.getText().toString();
+                String s6 = view4.getText().toString();
+
+                mSubmitRequestBean.setBeginTime(s1);
+                mSubmitRequestBean.setEndTime(s2);
+                mSubmitRequestBean.setRequestDuration(s3);
+
                 baseViewHolder.setOnClickListener(R.id.et_commonality_begin_time, view -> {
                     Toast.makeText(mContext, "开始时间", Toast.LENGTH_SHORT).show();
                 });
@@ -78,6 +103,7 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<CommonalityInit
                 baseViewHolder.setText(R.id.tv_selected_show, s.getSelectedTitle());
                 EditText editText4 = baseViewHolder.getView(R.id.et_commonality_show2);
                 EditText editText5 = baseViewHolder.getView(R.id.et_commonality_show3);
+
                 editText4.setHint("请选择签卡原因");
                 editText5.setHint("请填写签卡说明");
                 break;
@@ -88,7 +114,7 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<CommonalityInit
         });
 
         baseViewHolder.setOnClickListener(R.id.ll_registration_card_detail, view -> {
-            EventBus.getDefault().post(new SelectedTypeBean("showDialog",baseViewHolder.getPosition()));
+            EventBus.getDefault().post(new SelectedTypeBean("showDialog", baseViewHolder.getPosition()));
         });
     }
 }
