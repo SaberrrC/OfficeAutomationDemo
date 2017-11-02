@@ -497,6 +497,7 @@
                         android:background="@color/grid_layout_line_color" />
 
                     <RelativeLayout
+                        android:id="@+id/rl_test"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
