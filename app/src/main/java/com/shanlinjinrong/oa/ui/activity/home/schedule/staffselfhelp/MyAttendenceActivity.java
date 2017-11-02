@@ -53,6 +53,19 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     TextView tv_time;
     @Bind(R.id.ll_rootView)
     LinearLayout mRootView;
+    @Bind(R.id.tv_delay)
+    TextView tv_delay;
+    @Bind(R.id.tv_leave_early)
+    TextView tv_leave_early;
+    @Bind(R.id.tv_business_travel)
+    TextView tv_business_travel;
+    @Bind(R.id.tv_absenteeism)
+    TextView tv_absenteeism;
+    @Bind(R.id.tv_sign_card_num)
+    TextView tv_sign_card_num;
+
+
+
 
     private DatePicker picker;
     MonthSelectPopWindow monthSelectPopWindow;
