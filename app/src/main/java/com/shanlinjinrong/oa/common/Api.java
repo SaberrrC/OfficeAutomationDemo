@@ -18,6 +18,7 @@ public class Api {
     //TODO会议室管理、找回密码 生产环境
 //    public static final String PHP_URL = "http://oa.shanlinjinrong.com/webApi";
 
+
     private static final String RESPONSES_KEY_CODE = "code";
 
     private static final String RESPONSES_KEY_INFO = "info";
@@ -480,9 +481,6 @@ public class Api {
 
     // 找回密码，确认邮箱
     public static final String USERS_REPWD = "/users/repwd";
-
-    // 获取单据编号接口
-    public static final String GET_MONOCODE = "/queryMonocode";
 
     // 发起申请
     public static final String INITIARE_REQUEST = "/queryMonocode";

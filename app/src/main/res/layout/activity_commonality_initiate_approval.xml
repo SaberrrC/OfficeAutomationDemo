@@ -207,16 +207,21 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/ll_container_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:descendantFocusability="blocksDescendants">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_commonality_show"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </RelativeLayout>
+                <!--<android.support.v7.widget.RecyclerView-->
+                    <!--android:id="@+id/rv_commonality_show"-->
+                    <!--android:focusableInTouchMode="true"-->
+                    <!--android:descendantFocusability="beforeDescendants"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"/>-->
+
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/btn_add_details"

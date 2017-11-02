@@ -39,14 +39,6 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<CommonalityInit
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, CommonalityInitiateBean s) {
-        if (baseViewHolder.getPosition() == 0) {
-            baseViewHolder.setVisible(R.id.img_delete_detail, false);
-        }
-        TextView view1 = baseViewHolder.getView(R.id.tv_commonality);
-        EditText view2 = baseViewHolder.getView(R.id.et_commonality_show1);
-        EditText view3 = baseViewHolder.getView(R.id.et_commonality_show2);
-        EditText view4 = baseViewHolder.getView(R.id.et_commonality_show3);
-        TextView view5 = baseViewHolder.getView(R.id.tv_selected_show);
         switch (s.getIndex()) {
             case "0":
                 TextView begin_time = baseViewHolder.getView(R.id.et_commonality_begin_time);
@@ -54,16 +46,6 @@ public class CommonalityInitiateAdapter extends BaseQuickAdapter<CommonalityInit
 
                 String s1 = begin_time.getText().toString();
                 String s2 = end_time.getText().toString();
-
-
-                String s3 = view1.getText().toString();
-                String s4 = view2.getText().toString();
-                String s5 = view3.getText().toString();
-                String s6 = view4.getText().toString();
-
-                mSubmitRequestBean.setBeginTime(s1);
-                mSubmitRequestBean.setEndTime(s2);
-                mSubmitRequestBean.setRequestDuration(s3);
 
                 baseViewHolder.setOnClickListener(R.id.et_commonality_begin_time, view -> {
                     Toast.makeText(mContext, "开始时间", Toast.LENGTH_SHORT).show();
