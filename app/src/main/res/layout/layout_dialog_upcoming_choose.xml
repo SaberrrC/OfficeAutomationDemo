@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="412dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:background="@drawable/shape_upcoming_dialog_bg"
@@ -98,6 +98,48 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="12dp"
+            android:text="状态"
+            android:textColor="#898989"
+            android:textSize="14sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_all_state"
+                style="@style/textview_upcoming_dialog"
+                android:background="@drawable/shape_upcoming_dialog_item_bg_checked"
+                android:text="全部"
+                android:textColor="@color/color_white"/>
+
+            <TextView
+                android:id="@+id/tv_state_checked"
+                style="@style/textview_upcoming_dialog"
+                android:text="已审批"/>
+
+            <TextView
+                android:id="@+id/tv_state_unchecked"
+                style="@style/textview_upcoming_dialog"
+                android:text="待审批"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="12dp"
+            android:background="#EFEFEF"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="12dp"
             android:text="申请类型"
             android:textColor="#898989"
             android:textSize="14sp"/>
@@ -116,15 +158,16 @@
                 android:text="全部"
                 android:textColor="@color/color_white"/>
 
-            <TextView
-                android:id="@+id/tv_office_supplies"
-                style="@style/textview_upcoming_dialog"
-                android:text="办公用品申请"/>
 
             <TextView
                 android:id="@+id/tv_travel"
                 style="@style/textview_upcoming_dialog"
                 android:text="出差申请"/>
+
+            <TextView
+                android:id="@+id/tv_overtime"
+                style="@style/textview_upcoming_dialog"
+                android:text="加班申请"/>
         </LinearLayout>
 
         <LinearLayout
@@ -135,11 +178,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_overtime"
-                style="@style/textview_upcoming_dialog"
-                android:text="加班申请"/>
-
-            <TextView
                 android:id="@+id/tv_rest"
                 style="@style/textview_upcoming_dialog"
                 android:text="休假申请"/>
@@ -148,6 +186,12 @@
                 android:id="@+id/tv_sign"
                 style="@style/textview_upcoming_dialog"
                 android:text="签卡申请"/>
+
+            <TextView
+                android:id="@+id/tv_office_supplies"
+                style="@style/textview_upcoming_dialog"
+                android:text="办公用品申请"
+                android:visibility="invisible"/>
         </LinearLayout>
 
         <TextView
@@ -155,6 +199,7 @@
             android:layout_width="80dp"
             android:layout_height="38dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/shape_upcoming_dialog_ok"
             android:gravity="center"

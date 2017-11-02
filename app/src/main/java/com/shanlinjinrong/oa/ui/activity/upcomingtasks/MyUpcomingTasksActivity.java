@@ -67,6 +67,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private TextView            mTvSign;
     private TextView            mTvOk;
     private boolean isShowCheck = false;
+    private TextView tvAllState;
+    private TextView tvStateChecked;
+    private TextView tvStateUnchecked;
 
     @Override
     protected void initInject() {
@@ -195,6 +198,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvRest = (TextView) dialogView.findViewById(R.id.tv_rest);
             mTvSign = (TextView) dialogView.findViewById(R.id.tv_sign);
             mTvOk = (TextView) dialogView.findViewById(R.id.tv_ok);
+            tvAllState = (TextView) dialogView.findViewById(R.id.tv_all_state);
+            tvStateChecked = (TextView) dialogView.findViewById(R.id.tv_state_checked);
+            tvStateUnchecked = (TextView) dialogView.findViewById(R.id.tv_state_unchecked);
             mTvAll.setOnClickListener(this);
             mTvToday.setOnClickListener(this);
             mTvThree.setOnClickListener(this);
@@ -207,6 +213,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvRest.setOnClickListener(this);
             mTvSign.setOnClickListener(this);
             mTvOk.setOnClickListener(this);
+            mTvOk.setOnClickListener(this);
+            mTvOk.setOnClickListener(this);
+            mTvOk.setOnClickListener(this);
+            tvAllState.setOnClickListener(this);
+            tvStateChecked.setOnClickListener(this);
+            tvStateUnchecked.setOnClickListener(this);
             mChooseDialog.setContentView(dialogView);
             Window dialogWindow = mChooseDialog.getWindow();
             dialogWindow.setGravity(Gravity.CENTER);
@@ -216,6 +228,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         setTimeTextDefault();
         setTypeTextDefault();
+        setStateTextDefault();
         mTvAll.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
         mTvAllType.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
         mTvAll.setTextColor(getResources().getColor(R.color.white));
@@ -302,6 +315,18 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 setTypeTextDefault();
                 setTextChecked(mTvSign);
                 break;
+            case R.id.tv_all_state:
+                setStateTextDefault();
+                setTextChecked(tvAllState);
+                break;
+            case R.id.tv_state_checked:
+                setStateTextDefault();
+                setTextChecked(tvStateChecked);
+                break;
+            case R.id.tv_state_unchecked:
+                setStateTextDefault();
+                setTextChecked(tvStateUnchecked);
+                break;
             case R.id.tv_ok:
                 mChooseDialog.dismiss();
                 break;
@@ -339,5 +364,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mTvOvertime.setTextColor(getResources().getColor(R.color.black_333333));
         mTvRest.setTextColor(getResources().getColor(R.color.black_333333));
         mTvSign.setTextColor(getResources().getColor(R.color.black_333333));
+    }
+
+    private void setStateTextDefault() {
+        tvAllState.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        tvStateChecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        tvStateUnchecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        tvAllState.setTextColor(getResources().getColor(R.color.black_333333));
+        tvStateChecked.setTextColor(getResources().getColor(R.color.black_333333));
+        tvStateUnchecked.setTextColor(getResources().getColor(R.color.black_333333));
     }
 }
