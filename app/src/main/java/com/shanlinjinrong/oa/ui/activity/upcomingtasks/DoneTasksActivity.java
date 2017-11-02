@@ -40,7 +40,7 @@ import butterknife.OnClick;
  * Created by saberrrc on 2017/10/26.
  */
 
-public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
+public class DoneTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
 
     @Bind(R.id.tv_title)
     TextView           mTvTitle;
@@ -92,7 +92,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upcoming_tasks);
+        setContentView(R.layout.activity_done_tasks);
         ButterKnife.bind(this);
         //        setTranslucentStatus(this);
         init();
@@ -164,7 +164,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         }
         mToolbar.setTitle("");//必须在setSupportActionBar之前调用
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
-        mTvTitle.setText("待办事宜");
+        mTvTitle.setText("已办事宜");
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         mTvTitle.setLayoutParams(lp);
@@ -184,7 +184,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                         mTvApproval.setVisibility(View.GONE);
                     } else {
                         mLlTop.setVisibility(View.VISIBLE);
-                        mTvTitle.setText("待办事宜");
+                        mTvTitle.setText("已办事宜");
                         mRlCheck.setVisibility(View.GONE);
                         mTvApproval.setVisibility(View.VISIBLE);
                         mTolbarTextBtn.setVisibility(View.VISIBLE);
@@ -242,7 +242,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         } else {
             mLlTop.setVisibility(View.VISIBLE);
             mRlCheck.setVisibility(View.GONE);
-            mTvTitle.setText("待办事宜");
+            mTvTitle.setText("已办事宜");
             mTvApproval.setVisibility(View.VISIBLE);
             mTolbarTextBtn.setVisibility(View.VISIBLE);
         }
@@ -271,7 +271,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
             //点击其他地方消失
             mChooseDialog.setCanceledOnTouchOutside(true);
             //填充对话框的布局
-            View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_dialog_upcoming_choose, null, false);
+            View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_dialog_done_choose, null, false);
             mTvAll = (TextView) dialogView.findViewById(R.id.tv_all);
             mTvToday = (TextView) dialogView.findViewById(R.id.tv_today);
             mTvThree = (TextView) dialogView.findViewById(R.id.tv_three);
@@ -336,7 +336,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                         cbCheck.setChecked(bean.getIsChecked());
                         return;
                     }
-                    Intent intent = new Intent(UpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
+                    Intent intent = new Intent(DoneTasksActivity.this, DoneTasksInfoActivity.class);
                     startActivity(intent);
                 }
             });
@@ -442,7 +442,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
             } else {
                 mLlTop.setVisibility(View.VISIBLE);
                 mRlCheck.setVisibility(View.GONE);
-                mTvTitle.setText("待办事宜");
+                mTvTitle.setText("已办事宜");
                 mTvApproval.setVisibility(View.VISIBLE);
                 mTolbarTextBtn.setVisibility(View.VISIBLE);
             }

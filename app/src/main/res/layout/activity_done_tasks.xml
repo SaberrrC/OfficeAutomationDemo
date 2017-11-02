@@ -106,8 +106,8 @@
             android:gravity="center"
             android:paddingLeft="16dp"
             android:text="批量审批"
-            android:textAllCaps="false"
-            android:visibility="visible"/>
+            android:visibility="gone"
+            android:textAllCaps="false"/>
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout

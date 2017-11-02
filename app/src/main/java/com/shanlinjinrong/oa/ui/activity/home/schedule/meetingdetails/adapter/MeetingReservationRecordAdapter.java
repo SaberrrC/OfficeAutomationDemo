@@ -32,7 +32,7 @@ public class MeetingReservationRecordAdapter extends BaseQuickAdapter<Reservatio
         mData = data;
     }
 
-    public static String getWeek(Date date){
+    public  String getWeek(Date date){
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         String week = sdf.format(date);
         return week;

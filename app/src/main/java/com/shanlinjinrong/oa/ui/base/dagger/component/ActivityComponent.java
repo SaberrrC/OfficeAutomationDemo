@@ -35,6 +35,9 @@ import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticesSingleInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.push.PushListActivity;
 import com.shanlinjinrong.oa.ui.activity.push.SystemNoticesActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.DoneTasksActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.DoneTasksInfoActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.UpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.UpcomingTasksInfoActivity;
 import com.shanlinjinrong.oa.ui.base.dagger.annotation.PerActivity;
@@ -122,4 +125,10 @@ public interface ActivityComponent {
 
 
     void inject(MouthCalenderActivity mouthCalenderActivity);
+
+    void inject(MyUpcomingTasksActivity myUpcomingTasksActivity);
+
+    void inject(DoneTasksInfoActivity myUpcomingTasksInfoActivity);
+
+    void inject(DoneTasksActivity doneTasksActivity);
 }

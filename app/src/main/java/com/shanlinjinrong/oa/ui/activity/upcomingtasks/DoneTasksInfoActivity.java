@@ -47,7 +47,7 @@ import butterknife.OnClick;
 
 import static com.shanlinjinrong.oa.R.id.tv_time;
 
-public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
+public class DoneTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
 
     @Bind(R.id.tv_title)
     TextView     mTvTitle;
@@ -89,9 +89,9 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upcoming_tasks_info);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_done_tasks_info);
         EventBus.getDefault().register(this);
+        ButterKnife.bind(this);
         initView();
         initData();
     }
@@ -162,7 +162,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             EditText etCommonalityShow2 = (EditText) holder.getViewById(R.id.et_commonality_show2);//出差原因
             EditText etCommonalityShow3 = (EditText) holder.getViewById(R.id.et_commonality_show3);//交接人
             imgDeleteDetail.setVisibility(View.GONE);
-
             mEtCommonalityBeginTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -286,6 +285,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             stork.setVisibility(View.VISIBLE);
         }
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setTime(SelectedTypeBean bean) {

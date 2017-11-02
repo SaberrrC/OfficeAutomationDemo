@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,10 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
@@ -26,7 +22,6 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
-import com.shanlinjinrong.oa.utils.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +35,7 @@ import butterknife.OnClick;
  * Created by saberrrc on 2017/10/26.
  */
 
-public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
+public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
 
     @Bind(R.id.tv_title)
     TextView           mTvTitle;
@@ -48,18 +43,10 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     ImageView          mTolbarTextBtn;
     @Bind(R.id.toolbar)
     Toolbar            mToolbar;
-    @Bind(R.id.et_content)
-    EditText           mEtContent;
     @Bind(R.id.rv_list)
     RecyclerView       mRvList;
     @Bind(R.id.sr_refresh)
     SwipeRefreshLayout mSrRefresh;
-    @Bind(R.id.tv_approval)
-    TextView           mTvApproval;
-    @Bind(R.id.rl_check)
-    RelativeLayout     mRlCheck;
-    @Bind(R.id.ll_top)
-    LinearLayout       mLlTop;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
     private boolean hasMore         = false;
@@ -79,6 +66,9 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     private TextView            mTvSign;
     private TextView            mTvOk;
     private boolean isShowCheck = false;
+    private TextView tvAllState;
+    private TextView tvStateChecked;
+    private TextView tvStateUnchecked;
 
     @Override
     protected void initInject() {
@@ -92,7 +82,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upcoming_tasks);
+        setContentView(R.layout.activity_myupcoming_tasks);
         ButterKnife.bind(this);
         //        setTranslucentStatus(this);
         init();
@@ -164,7 +154,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         }
         mToolbar.setTitle("");//必须在setSupportActionBar之前调用
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
-        mTvTitle.setText("待办事宜");
+        mTvTitle.setText("我的申请");
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         mTvTitle.setLayoutParams(lp);
@@ -174,95 +164,18 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isShowCheck) {
-                    isShowCheck = !isShowCheck;
-                    if (isShowCheck) {
-                        mLlTop.setVisibility(View.GONE);
-                        mTvTitle.setText("选择单据");
-                        mRlCheck.setVisibility(View.VISIBLE);
-                        mTolbarTextBtn.setVisibility(View.GONE);
-                        mTvApproval.setVisibility(View.GONE);
-                    } else {
-                        mLlTop.setVisibility(View.VISIBLE);
-                        mTvTitle.setText("待办事宜");
-                        mRlCheck.setVisibility(View.GONE);
-                        mTvApproval.setVisibility(View.VISIBLE);
-                        mTolbarTextBtn.setVisibility(View.VISIBLE);
-                    }
-                    ThreadUtils.runSub(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (Object data : mDatas) {
-                                if (data instanceof UpcomingTaskItemBean) {
-                                    UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
-                                    bean.setIsChecked(false);
-                                }
-                            }
-                            ThreadUtils.runMain(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mFinalRecycleAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    finish();
-                }
+                finish();
             }
         });
     }
 
-    @OnClick({R.id.toolbar_image_btn, R.id.tv_approval, R.id.iv_agree, R.id.tv_agree, R.id.iv_disagree, R.id.tv_disagree})
+    @OnClick({R.id.toolbar_image_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toolbar_image_btn:
                 showChooseDialog();
                 break;
-            case R.id.tv_approval:
-                setApproval();
-                break;
-            case R.id.iv_agree:
-            case R.id.tv_agree:
-                break;
-            case R.id.iv_disagree:
-            case R.id.tv_disagree:
-                break;
         }
-    }
-
-    private void setApproval() {
-        isShowCheck = !isShowCheck;
-        if (isShowCheck) {
-            mLlTop.setVisibility(View.GONE);
-            mRlCheck.setVisibility(View.VISIBLE);
-            mTvTitle.setText("选择单据");
-            mTolbarTextBtn.setVisibility(View.GONE);
-            mTvApproval.setVisibility(View.GONE);
-        } else {
-            mLlTop.setVisibility(View.VISIBLE);
-            mRlCheck.setVisibility(View.GONE);
-            mTvTitle.setText("待办事宜");
-            mTvApproval.setVisibility(View.VISIBLE);
-            mTolbarTextBtn.setVisibility(View.VISIBLE);
-        }
-        ThreadUtils.runSub(new Runnable() {
-            @Override
-            public void run() {
-                for (Object data : mDatas) {
-                    if (data instanceof UpcomingTaskItemBean) {
-                        UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
-                        bean.setIsChecked(false);
-                    }
-                }
-                ThreadUtils.runMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        mFinalRecycleAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
     }
 
     private void showChooseDialog() {
@@ -284,6 +197,9 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
             mTvRest = (TextView) dialogView.findViewById(R.id.tv_rest);
             mTvSign = (TextView) dialogView.findViewById(R.id.tv_sign);
             mTvOk = (TextView) dialogView.findViewById(R.id.tv_ok);
+            tvAllState = (TextView) dialogView.findViewById(R.id.tv_all_state);
+            tvStateChecked = (TextView) dialogView.findViewById(R.id.tv_state_checked);
+            tvStateUnchecked = (TextView) dialogView.findViewById(R.id.tv_state_unchecked);
             mTvAll.setOnClickListener(this);
             mTvToday.setOnClickListener(this);
             mTvThree.setOnClickListener(this);
@@ -296,6 +212,12 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
             mTvRest.setOnClickListener(this);
             mTvSign.setOnClickListener(this);
             mTvOk.setOnClickListener(this);
+            mTvOk.setOnClickListener(this);
+            mTvOk.setOnClickListener(this);
+            mTvOk.setOnClickListener(this);
+            tvAllState.setOnClickListener(this);
+            tvStateChecked.setOnClickListener(this);
+            tvStateUnchecked.setOnClickListener(this);
             mChooseDialog.setContentView(dialogView);
             Window dialogWindow = mChooseDialog.getWindow();
             dialogWindow.setGravity(Gravity.CENTER);
@@ -305,6 +227,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         }
         setTimeTextDefault();
         setTypeTextDefault();
+        setStateTextDefault();
         mTvAll.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
         mTvAllType.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
         mTvAll.setTextColor(getResources().getColor(R.color.white));
@@ -336,8 +259,6 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                         cbCheck.setChecked(bean.getIsChecked());
                         return;
                     }
-                    Intent intent = new Intent(UpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
-                    startActivity(intent);
                 }
             });
         }
@@ -390,6 +311,18 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                 setTypeTextDefault();
                 setTextChecked(mTvSign);
                 break;
+            case R.id.tv_all_state:
+                setStateTextDefault();
+                setTextChecked(tvAllState);
+                break;
+            case R.id.tv_state_checked:
+                setStateTextDefault();
+                setTextChecked(tvStateChecked);
+                break;
+            case R.id.tv_state_unchecked:
+                setStateTextDefault();
+                setTextChecked(tvStateUnchecked);
+                break;
             case R.id.tv_ok:
                 mChooseDialog.dismiss();
                 break;
@@ -429,42 +362,12 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         mTvSign.setTextColor(getResources().getColor(R.color.black_333333));
     }
 
-    @Override
-    public void onBackPressed() {
-        if (isShowCheck) {
-            isShowCheck = !isShowCheck;
-            if (isShowCheck) {
-                mLlTop.setVisibility(View.GONE);
-                mRlCheck.setVisibility(View.VISIBLE);
-                mTvTitle.setText("选择单据");
-                mTolbarTextBtn.setVisibility(View.GONE);
-                mTvApproval.setVisibility(View.GONE);
-            } else {
-                mLlTop.setVisibility(View.VISIBLE);
-                mRlCheck.setVisibility(View.GONE);
-                mTvTitle.setText("待办事宜");
-                mTvApproval.setVisibility(View.VISIBLE);
-                mTolbarTextBtn.setVisibility(View.VISIBLE);
-            }
-            ThreadUtils.runSub(new Runnable() {
-                @Override
-                public void run() {
-                    for (Object data : mDatas) {
-                        if (data instanceof UpcomingTaskItemBean) {
-                            UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
-                            bean.setIsChecked(false);
-                        }
-                    }
-                    ThreadUtils.runMain(new Runnable() {
-                        @Override
-                        public void run() {
-                            mFinalRecycleAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            });
-        } else {
-            super.onBackPressed();
-        }
+    private void setStateTextDefault() {
+        tvAllState.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        tvStateChecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        tvStateUnchecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        tvAllState.setTextColor(getResources().getColor(R.color.black_333333));
+        tvStateChecked.setTextColor(getResources().getColor(R.color.black_333333));
+        tvStateUnchecked.setTextColor(getResources().getColor(R.color.black_333333));
     }
 }

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.LaunchApprovalActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
@@ -24,6 +23,8 @@ import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspap
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.DoneTasksActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.UpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
@@ -142,18 +143,21 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_approval_me_launch:
                 //我的申请
-                intent = new Intent(mContext, ApprovalListActivity.class);
+//                intent = new Intent(mContext, ApprovalListActivity.class);
+                intent = new Intent(mContext, MyUpcomingTasksActivity.class);
                 intent.putExtra("whichList", 1);
                 break;
             case R.id.rl_approval_wait_me_approval:
                 //待我审批
-                intent = new Intent(mContext, ApprovalListActivity.class);
+//                intent = new Intent(mContext, ApprovalListActivity.class);
+                intent = new Intent(mContext, UpcomingTasksActivity.class);
                 intent.putExtra("whichList", 2);
                 clearDot(getContext(), DOT_APPORVAL);
                 break;
             case R.id.rl_approval_me_approvaled:
                 //我审批的
-                intent = new Intent(mContext, ApprovalListActivity.class);
+//                intent = new Intent(mContext, ApprovalListActivity.class);
+                intent = new Intent(mContext, DoneTasksActivity.class);
                 intent.putExtra("whichList", 3);
                 break;
             case R.id.rl_approval_launch_approval:
@@ -167,11 +171,10 @@ public class TabHomePageFragment extends BaseFragment {
             case R.id.rl_my_attandance:
                 //我的考勤
                 intent = new Intent(mContext, MyAttendenceActivity.class);
-                //                intent = new Intent(mContext, UpcomingTasksActivity.class);
                 break;
             case R.id.rl_test:
                 if (BuildConfig.DEBUG) {
-                    intent = new Intent(mContext, UpcomingTasksActivity.class);
+//                    intent = new Intent(mContext, UpcomingTasksActivity.class);
                 }
                 break;
         }

@@ -65,7 +65,7 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
         if (BuildConfig.DEBUG) {
             mListData.add(new LaunchApprovalItem("出差申请", R.drawable.icon_on_business_request));
             mListData.add(new LaunchApprovalItem("加班申请", R.drawable.icon_over_time_work_request));
-            mListData.add(new LaunchApprovalItem("办休假申", R.drawable.icon_annual_leave_request));
+            mListData.add(new LaunchApprovalItem("休假申请", R.drawable.icon_annual_leave_request));
             mListData.add(new LaunchApprovalItem("签卡申请", R.drawable.icon_registration_card_request));
         }
     }

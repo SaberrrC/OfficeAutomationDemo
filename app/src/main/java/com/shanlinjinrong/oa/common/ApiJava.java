@@ -81,4 +81,8 @@ public class ApiJava {
     // 更新周报
     public static final String UPDATE_WEEK_REPORT = "weekreport/upd";
 
+
+    // 获取单据编号接口
+    public static final String GET_MONOCODE = "nchrcommon/getBillCode";
+
 }
