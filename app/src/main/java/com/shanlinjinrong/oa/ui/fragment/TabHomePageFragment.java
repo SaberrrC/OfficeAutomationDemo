@@ -24,7 +24,7 @@ import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspap
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.UpcomingTasksActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
 import butterknife.Bind;
@@ -142,7 +142,8 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_approval_me_launch:
                 //我的申请
-                intent = new Intent(mContext, ApprovalListActivity.class);
+//                intent = new Intent(mContext, ApprovalListActivity.class);
+                intent = new Intent(mContext, MyUpcomingTasksActivity.class);
                 intent.putExtra("whichList", 1);
                 break;
             case R.id.rl_approval_wait_me_approval:
@@ -167,11 +168,10 @@ public class TabHomePageFragment extends BaseFragment {
             case R.id.rl_my_attandance:
                 //我的考勤
                 intent = new Intent(mContext, MyAttendenceActivity.class);
-                //                intent = new Intent(mContext, UpcomingTasksActivity.class);
                 break;
             case R.id.rl_test:
                 if (BuildConfig.DEBUG) {
-                    intent = new Intent(mContext, UpcomingTasksActivity.class);
+//                    intent = new Intent(mContext, UpcomingTasksActivity.class);
                 }
                 break;
         }
