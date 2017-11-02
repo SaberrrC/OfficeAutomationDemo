@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter;
 
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract.InitiateThingsRequestActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -11,7 +12,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import javax.inject.Inject;
 
 /**
- *出差想申请
+ * 出差想申请
  */
 public class InitiateThingsRequestActivityPresenter extends HttpPresenter<InitiateThingsRequestActivityContract.View> implements InitiateThingsRequestActivityContract.Presenter {
 
@@ -24,7 +25,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
     public void getQueryMonoCode(int type) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(Api.GET_MONOCODE + "?type=" + "2", httpParams, new HttpCallBack() {
+        mKjHttp.jsonGet(ApiJava.GET_MONOCODE + "?type=" + type, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

@@ -5,6 +5,7 @@ public class SelectedTypeBean {
     private String event;
     private String selectedType;
     private int position;
+    private int isBegin;
 
     public SelectedTypeBean() {
 
@@ -30,6 +31,13 @@ public class SelectedTypeBean {
         this.position = position;
     }
 
+    public SelectedTypeBean(String event, String selectedType, int position, int isBegin) {
+        this.event = event;
+        this.selectedType = selectedType;
+        this.position = position;
+        this.isBegin = isBegin;
+    }
+
     public String getEvent() {
         return event;
     }
@@ -52,5 +60,13 @@ public class SelectedTypeBean {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public int getIsBegin() {
+        return isBegin;
+    }
+
+    public void setIsBegin(int isBegin) {
+        this.isBegin = isBegin;
     }
 }
