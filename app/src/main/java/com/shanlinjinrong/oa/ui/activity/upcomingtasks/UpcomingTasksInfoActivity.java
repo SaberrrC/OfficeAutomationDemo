@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalBaseAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoDetailBodyBean;
@@ -28,6 +29,11 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoTopBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksInfoContract;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksInfoPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.TimeDialogFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,8 +71,10 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private FinalBaseAdapter<String> mFinalBaseAdapter;
     private List<String> typeData          = new ArrayList<>();
     private int          clickItemPosition = 0;
-//    private DatePicker mBeginTimePicker;
-//    private DatePicker mEndTimePicker;
+    private TextView mEtCommonalityBeginTime;
+    private TextView mEtCommonalityEndTime;
+    //    private DatePicker mBeginTimePicker;
+    //    private DatePicker mEndTimePicker;
 
     @Override
     protected void initInject() {
@@ -83,6 +91,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upcoming_tasks_info);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         initView();
         initData();
     }
@@ -146,53 +155,34 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         if (itemData instanceof UpcomingInfoStateBean) {
             ImageView imgDeleteDetail = (ImageView) holder.getViewById(R.id.img_delete_detail);
-            TextView etCommonalityBeginTime = (TextView) holder.getViewById(R.id.et_commonality_begin_time);
-            TextView etCommonalityEndTime = (TextView) holder.getViewById(R.id.et_commonality_end_time);
+            mEtCommonalityBeginTime = (TextView) holder.getViewById(R.id.et_commonality_begin_time);
+            mEtCommonalityEndTime = (TextView) holder.getViewById(R.id.et_commonality_end_time);
             TextView tvCommonality = (TextView) holder.getViewById(R.id.tv_commonality);
             EditText etCommonalityShow1 = (EditText) holder.getViewById(R.id.et_commonality_show1);//出差地点
             EditText etCommonalityShow2 = (EditText) holder.getViewById(R.id.et_commonality_show2);//出差原因
             EditText etCommonalityShow3 = (EditText) holder.getViewById(R.id.et_commonality_show3);//交接人
             imgDeleteDetail.setVisibility(View.GONE);
-//            etCommonalityBeginTime.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (mBeginTimePicker == null) {
-//                        mBeginTimePicker = new DatePicker(UpcomingTasksInfoActivity.this, DatePicker.YEAR_MONTH_DAY);
-//                    }
-//                    Calendar cal = Calendar.getInstance();
-//                    mBeginTimePicker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1);
-//                    mBeginTimePicker.setSubmitText("完成");
-//                    mBeginTimePicker.setSubmitTextColor(Color.parseColor("#2d9dff"));
-//                    mBeginTimePicker.setTextColor(Color.parseColor("#2d9dff"));
-//                    mBeginTimePicker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
-//                        @Override
-//                        public void onDatePicked(String year, String month, String day) {
-//                            etCommonalityBeginTime.setText(year + "年" + month + "月" + day + "日");
-//                        }
-//                    });
-//                    mBeginTimePicker.show();
-//                }
-//            });
-//            etCommonalityEndTime.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (mEndTimePicker == null) {
-//                        mEndTimePicker = new DatePicker(UpcomingTasksInfoActivity.this, DatePicker.YEAR_MONTH_DAY);
-//                    }
-//                    Calendar cal = Calendar.getInstance();
-//                    mEndTimePicker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1);
-//                    mEndTimePicker.setSubmitText("完成");
-//                    mEndTimePicker.setSubmitTextColor(Color.parseColor("#2d9dff"));
-//                    mEndTimePicker.setTextColor(Color.parseColor("#2d9dff"));
-//                    mEndTimePicker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
-//                        @Override
-//                        public void onDatePicked(String year, String month, String day) {
-//                            etCommonalityEndTime.setText(year + "年" + month + "月" + day + "日");
-//                        }
-//                    });
-//                    mEndTimePicker.show();
-//                }
-//            });
+
+            mEtCommonalityBeginTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    TimeDialogFragment timeDialogFragment = new TimeDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", "开始时间");
+                    timeDialogFragment.setArguments(bundle);
+                    timeDialogFragment.show(getSupportFragmentManager(), "0");
+                }
+            });
+            mEtCommonalityEndTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    TimeDialogFragment timeDialogFragment = new TimeDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", "结束时间");
+                    timeDialogFragment.setArguments(bundle);
+                    timeDialogFragment.show(getSupportFragmentManager(), "1");
+                }
+            });
             return;
         }
         if (itemData instanceof UpcomingInfoDetailBodyBean) {
@@ -295,5 +285,23 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         } else {
             stork.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setTime(SelectedTypeBean bean) {
+        String tag = bean.getTag();
+        if (TextUtils.equals(tag, "0")) {
+            mEtCommonalityBeginTime.setText(bean.getSelectedType());
+            return;
+        }
+        if (TextUtils.equals(tag, "1")) {
+            mEtCommonalityEndTime.setText(bean.getSelectedType());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

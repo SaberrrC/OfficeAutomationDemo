@@ -6,6 +6,15 @@ public class SelectedTypeBean {
     private String selectedType;
     private int position;
     private int isBegin;
+    public String tag;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public SelectedTypeBean() {
 

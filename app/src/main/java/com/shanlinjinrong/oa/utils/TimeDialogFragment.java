@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.aigestudio.wheelpicker.WheelPicker;
-import com.baidu.platform.comapi.map.E;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
 
@@ -51,6 +51,7 @@ public class TimeDialogFragment extends DialogFragment {
     TextView mTvTitle;
     private String mWeek;
     private String mSelectedDate;
+    private String tag;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,7 +116,7 @@ public class TimeDialogFragment extends DialogFragment {
 
         //分钟 处理
         minList = new ArrayList<>();
-        for (int i = 0; i < 59; i++) {
+        for (int i = 0; i < 60; i++) {
             if (i < 10) {
                 String s = "0" + i;
                 minList.add(s);
@@ -243,7 +244,11 @@ public class TimeDialogFragment extends DialogFragment {
 //                    else if (){
 //
 //                    }
-                    EventBus.getDefault().post(new SelectedTypeBean("selectedDate", mSelectedDate, getArguments().getInt("index"), getArguments().getInt("isBegin")));
+                    SelectedTypeBean event = new SelectedTypeBean("selectedDate", mSelectedDate, getArguments().getInt("index"), getArguments().getInt("isBegin"));
+                    if (!TextUtils.isEmpty(tag)) {
+                        event.setTag(tag);
+                    }
+                    EventBus.getDefault().post(event);
                 }
 
 //                EventBus.getDefault().post(new SelectedTypeBean("date", ));
@@ -297,6 +302,7 @@ public class TimeDialogFragment extends DialogFragment {
     public void show(FragmentManager manager, String tag) {
         if (!isAdded() && !isVisible() && !isRemoving()) {
             FragmentTransaction ft = manager.beginTransaction();
+            this.tag = tag;
             ft.add(this, tag);
             ft.commitAllowingStateLoss();
         }
