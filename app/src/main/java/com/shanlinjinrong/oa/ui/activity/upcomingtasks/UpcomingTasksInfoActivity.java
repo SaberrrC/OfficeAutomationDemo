@@ -25,7 +25,6 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapte
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoDetailBodyBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoStateBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoTopBean;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfobottomBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksInfoContract;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksInfoPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -96,9 +95,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private void initList() {
         Map<Class, Integer> map = new HashMap<>();
         map.put(UpcomingInfoTopBean.class, R.layout.layout_item_upcominginfo_top);
-        map.put(UpcomingInfoStateBean.class, R.layout.commonality_initiate_approval_item);
+        map.put(UpcomingInfoStateBean.class, R.layout.upcoming_item);
         map.put(UpcomingInfoDetailBodyBean.class, R.layout.layout_item_upcominginfo_detail_body);
-        map.put(UpcomingInfobottomBean.class, R.layout.layout_item_upcominginfoo_bottom);
         mFinalRecycleAdapter = new FinalRecycleAdapter(mDatas, map, this);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -108,7 +106,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private void initData() {
         mDatas.add(new UpcomingInfoTopBean());
         mDatas.add(new UpcomingInfoStateBean());
-        mDatas.add(new UpcomingInfobottomBean());
     }
 
     private void initToolbar() {
@@ -204,9 +201,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             TextView tvState = (TextView) holder.getViewById(R.id.tv_state);
             TextView tvOption = (TextView) holder.getViewById(R.id.tv_option);
             return;
-        }
-        if (itemData instanceof UpcomingInfobottomBean) {
-            EditText etOpinion = (EditText) holder.getViewById(R.id.et_opinion);
         }
     }
 

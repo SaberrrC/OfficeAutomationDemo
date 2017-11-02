@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -260,9 +259,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         cbCheck.setChecked(bean.getIsChecked());
                         return;
                     }
-                    Intent intent = new Intent(MyUpcomingTasksActivity.this, MyUpcomingTasksInfoActivity.class);
-                    //                    intent.putExtra();
-                    startActivity(intent);
                 }
             });
         }
