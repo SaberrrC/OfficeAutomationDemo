@@ -157,22 +157,22 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
                     }
                 });
                 monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM,0,0);
-//                if (picker == null) {
-//                    picker = new DatePicker(MyAttendenceActivity.this, DatePicker.YEAR_MONTH);
-//                }
-//                Calendar cal = Calendar.getInstance();
-//                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1
-//                );
-//                picker.setSubmitText("完成");
-//                picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
-//                picker.setTextColor(Color.parseColor("#2d9dff"));
-//                picker.setOnDatePickListener(new DatePicker.OnYearMonthPickListener() {
-//                    @Override
-//                    public void onDatePicked(String year, String month) {
-//                        tv_time.setText(year+"年"+month+"月");
-//                    }
-//                });
-//                picker.show();
+                if (picker == null) {
+                    picker = new DatePicker(MyAttendenceActivity.this, DatePicker.YEAR_MONTH);
+                }
+                Calendar cal = Calendar.getInstance();
+                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1
+                );
+                picker.setSubmitText("完成");
+                picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
+                picker.setTextColor(Color.parseColor("#2d9dff"));
+                picker.setOnDatePickListener(new DatePicker.OnYearMonthPickListener() {
+                    @Override
+                    public void onDatePicked(String year, String month) {
+                        tv_time.setText(year+"年"+month+"月");
+                    }
+                });
+                picker.show();
                 break;
             default:
                 break;
