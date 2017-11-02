@@ -260,7 +260,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         cbCheck.setChecked(bean.getIsChecked());
                         return;
                     }
-                    Intent intent = new Intent(MyUpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
+                    Intent intent = new Intent(MyUpcomingTasksActivity.this, MyUpcomingTasksInfoActivity.class);
                     //                    intent.putExtra();
                     startActivity(intent);
                 }

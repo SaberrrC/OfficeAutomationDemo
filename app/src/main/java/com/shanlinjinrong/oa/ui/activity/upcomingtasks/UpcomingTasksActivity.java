@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -57,6 +57,8 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     TextView           mTvApproval;
     @Bind(R.id.rl_check)
     RelativeLayout     mRlCheck;
+    @Bind(R.id.ll_top)
+    LinearLayout       mLlTop;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
     private boolean hasMore         = false;
@@ -174,11 +176,13 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                 if (isShowCheck) {
                     isShowCheck = !isShowCheck;
                     if (isShowCheck) {
+                        mLlTop.setVisibility(View.GONE);
                         mTvTitle.setText("选择单据");
                         mRlCheck.setVisibility(View.VISIBLE);
                         mTolbarTextBtn.setVisibility(View.GONE);
                         mTvApproval.setVisibility(View.GONE);
                     } else {
+                        mLlTop.setVisibility(View.VISIBLE);
                         mTvTitle.setText("待办事宜");
                         mRlCheck.setVisibility(View.GONE);
                         mTvApproval.setVisibility(View.VISIBLE);
@@ -229,11 +233,13 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
     private void setApproval() {
         isShowCheck = !isShowCheck;
         if (isShowCheck) {
+            mLlTop.setVisibility(View.GONE);
             mRlCheck.setVisibility(View.VISIBLE);
             mTvTitle.setText("选择单据");
             mTolbarTextBtn.setVisibility(View.GONE);
             mTvApproval.setVisibility(View.GONE);
         } else {
+            mLlTop.setVisibility(View.VISIBLE);
             mRlCheck.setVisibility(View.GONE);
             mTvTitle.setText("待办事宜");
             mTvApproval.setVisibility(View.VISIBLE);
@@ -321,19 +327,6 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
             } else {
                 cbCheck.setVisibility(View.GONE);
             }
-            holder.getRootView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isShowCheck) {
-                        bean.setIsChecked(!bean.getIsChecked());
-                        cbCheck.setChecked(bean.getIsChecked());
-                        return;
-                    }
-                    Intent intent = new Intent(UpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
-                    //                    intent.putExtra();
-                    startActivity(intent);
-                }
-            });
         }
     }
 
@@ -428,13 +421,15 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         if (isShowCheck) {
             isShowCheck = !isShowCheck;
             if (isShowCheck) {
-                mTvTitle.setText("选择单据");
+                mLlTop.setVisibility(View.GONE);
                 mRlCheck.setVisibility(View.VISIBLE);
+                mTvTitle.setText("选择单据");
                 mTolbarTextBtn.setVisibility(View.GONE);
                 mTvApproval.setVisibility(View.GONE);
             } else {
-                mTvTitle.setText("待办事宜");
+                mLlTop.setVisibility(View.VISIBLE);
                 mRlCheck.setVisibility(View.GONE);
+                mTvTitle.setText("待办事宜");
                 mTvApproval.setVisibility(View.VISIBLE);
                 mTolbarTextBtn.setVisibility(View.VISIBLE);
             }
