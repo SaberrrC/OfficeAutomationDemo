@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.retrofit.net.RetrofitConfig;
 import com.shanlinjinrong.oa.model.User;
 
 
@@ -166,8 +167,10 @@ public class AppConfig {
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
                 Context.MODE_PRIVATE).edit();
         editor.putString(PREF_KEY_TOKEN, user.getToken());
+        RetrofitConfig.setAuthToken(user.getToken());
         editor.putString(PREF_KEY_CODE, user.getCode());
         editor.putString(PREF_KEY_USER_UID, user.getUid());
+        RetrofitConfig.setUserId(user.getUid());
         editor.putString(PREF_KEY_USER_EMAIL, user.getEmail());
         editor.putString(PREF_KEY_DEPARTMENT_ID, user.getDepartmentId());
         editor.putString(PREF_KEY_POST_ID, user.getPostId());

@@ -1,5 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract;
 
+import android.content.Context;
+
 import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.CreateMeetingContract;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -20,6 +22,6 @@ public interface MyAttendenceActivityContract {
     interface Presenter extends BasePresenter<MyAttendenceActivityContract.View> {
 
 
-        void sendData(String beginTime, String endTime, String date, String theme, String attentees, String type, String roomId);
+        void sendData(Context context);
     }
 }

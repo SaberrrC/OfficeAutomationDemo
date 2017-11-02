@@ -67,7 +67,7 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
             public void onClick(View v) {
 //                setSelect(position);
                 if (mOnItemClick != null) {
-                    mOnItemClick.onItemClicked(position);
+                    mOnItemClick.onItemClicked(v,position);
                 }
             }
         });
@@ -105,7 +105,7 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
      * PopWindow点击事件回调接口
      */
     public interface OnItemClick {
-        void onItemClicked(int position);
+        void onItemClicked(View v,int position);
     }
 
     public DatePopAttandanceAdapter setOnItemClick(OnItemClick mOnItemClick) {

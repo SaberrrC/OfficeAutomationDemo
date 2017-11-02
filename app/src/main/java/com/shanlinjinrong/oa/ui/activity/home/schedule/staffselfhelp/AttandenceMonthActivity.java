@@ -1,38 +1,29 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.event.PeopeNameEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.DatePopWindow;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.DatePopAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.DatePopAttandanceAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandanceMonthContract;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.MyAttendenceActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.AttandanceMonthPresenter;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.MyAttendenceActivityPresenter;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
-import com.shanlinjinrong.utils.DeviceUtil;
-import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,6 +62,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     TextView tv_people;
     @Bind(R.id.layout_root)
     LinearLayout mRootView;
+    private String[] mMonthArrays = {"1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
 
 
 
@@ -81,11 +73,15 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     private DatePicker picker;
     DatePopWindow datePopWindow;
     private List<PopItem> mData;
-    private List<Integer> mDays = new ArrayList<>();
-    private String mCurrentDay = "";
-    private String mSelectedMonth = "";
-    private String mSelectedYear = "";
+    private int mSelectedDay ;
+    private int mCurrentDay ;
+    private int mCurrentYear;
+    private int mCurrentMonth ;
+    private int mSelectedMonth;
+    private int mSelectedYear ;
     MonthSelectPopWindow monthSelectPopWindow;
+    private List<Integer> mDays = new ArrayList<>();
+    Calendar cal;
 
 
 
@@ -101,7 +97,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
     }
 
-    RecyclerView mTopList;
+    RecyclerView mRecyclerView;
     DatePopAttandanceAdapter mAdapter;
     View rootView;
 
@@ -109,12 +105,17 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        cal = Calendar.getInstance();
+        mCurrentDay=cal.get(Calendar.DAY_OF_MONTH);
+        mCurrentMonth=cal.get(Calendar.MONTH)+1;
+        mSelectedDay=mCurrentDay;
+        tv_time.setText(mCurrentYear+"年"+mCurrentMonth+"月");
         iv_divider.setVisibility(View.GONE);
         mLlChoseTime.setOnClickListener(this);
         ll_count_people.setOnClickListener(this);
         rootView = View.inflate(AttandenceMonthActivity.this, R.layout.date_select_attandance, null);
         mDateLayout.addView(rootView);
-        mTopList = (RecyclerView) rootView.findViewById(R.id.top_data_list);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.top_data_list);
 
         mData = new ArrayList<>();
         mData = DateUtils.getDate(5, 20);
@@ -128,16 +129,32 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         } else {
             creatMonth(selectPos);
         }
-        mTopList.setLayoutManager(new GridLayoutManager(AttandenceMonthActivity.this, isDay ? 7 : 6));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(AttandenceMonthActivity.this, isDay ? 7 : 6));
         mAdapter = new DatePopAttandanceAdapter(mData);
-        mTopList.setAdapter(mAdapter);
-
         mAdapter.setOnItemClick(new DatePopAttandanceAdapter.OnItemClick() {
             @Override
-            public void onItemClicked(int position) {
-                Toast.makeText(AttandenceMonthActivity.this,""+position,Toast.LENGTH_SHORT).show();
+            public void onItemClicked(View v, int position) {
+                int arr = 0;
+                for(int i=0;i<mData.size();i++){
+                    PopItem popItem = mData.get(i);
+                    boolean enable = popItem.isEnable();
+
+                    if(!enable){
+                        if(!popItem.getContent().equals("1")){
+                            arr=arr+1;
+                        }else {
+//                            return;
+                        }
+
+                    }
+                }
+                mSelectedDay=position-arr;
+                Toast.makeText(AttandenceMonthActivity.this,"当前时间--"+mSelectedDay ,Toast.LENGTH_SHORT).show();
+//                setData(true, mSelectedMonth,mSelectedDay);
+                mAdapter.notifyDataSetChanged();
             }
         });
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void creatMonth(int selectPos) {
@@ -169,11 +186,17 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                             }
                             @Override
                             public void confirm(String year, String month) {
-                                mSelectedYear=year;
-                                mSelectedMonth=month;
+
+                                mSelectedYear=Integer.parseInt(year);
+                                mSelectedMonth =Integer.parseInt(month);
+                                Toast.makeText(AttandenceMonthActivity.this,"当前月份--"+mSelectedYear+"--"+ mSelectedMonth,Toast.LENGTH_SHORT).show();
                                 tv_time.setText(year+"年"+month+"月");
-                                mData.clear();
-                                mData = DateUtils.getDate(Integer.parseInt(month), 1);
+                                if(mSelectedMonth ==mCurrentMonth){
+                                    setData(true, mSelectedMonth,mCurrentDay);
+                                }else {
+                                    setData(true, mSelectedMonth,1);
+                                }
+
                                 mAdapter.notifyDataSetChanged();
                                 monthSelectPopWindow.dismiss();
                             }
@@ -280,6 +303,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             EventBus.getDefault().unregister(this);
         }
     }
+
 
 
 
