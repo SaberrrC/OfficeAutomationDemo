@@ -8,6 +8,7 @@ import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.http.HttpParams;
+import org.kymjs.kjframe.http.JsonRequest;
 import org.kymjs.kjframe.http.Request;
 
 /**
@@ -57,6 +58,30 @@ public class MyKjHttp extends KJHttp {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         return super.jsonGet(baseJavaUrl + url, params, callback);
+    }
+
+    /**
+     * 使用JSON传参的put请求
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
+     * @param useCache 是否缓存本条请求
+     */
+    public Request<byte[]> jsonPut(String url, HttpParams params,
+                                   boolean useCache, HttpCallBack callback) {
+        params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
+        params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+
+        Request<byte[]> request = new JsonRequest(Request.HttpMethod.PUT, baseJavaUrl + url, params,
+                callback);
+        request.setShouldCache(useCache);
+        doRequest(request);
+        return request;
+    }
+
+    public Request<byte[]> jsonPut(String url, HttpParams params, HttpCallBack callback) {
+        return jsonPut(url, params, true, callback);
     }
 
 }

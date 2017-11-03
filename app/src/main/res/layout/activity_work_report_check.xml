@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/page_bg"
+    android:orientation="vertical"
+    tools:context="com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity">
+
+    <com.shanlinjinrong.views.common.CommonTopView
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_height_48"
+        app:leftDrawable="@drawable/toolbar_back"
+        app:rightDrawable="@mipmap/report_change_btn"
+        app:topTitle="@string/title_work_report_approval" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/tv_check_pending"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/wrok_report_check_activity_tab_left"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/work_report_check_pending_text"
+            android:textColor="@color/work_report_check_activity_check_text_color"
+            android:textSize="@dimen/common_text_size" />
+
+        <RadioButton
+            android:id="@+id/tv_checked"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/wrok_report_check_activity_tab_right"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/work_report_checked_text"
+            android:textColor="@color/work_report_check_activity_check_text_color"
+            android:textSize="@dimen/common_text_size" />
+
+    </RadioGroup>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.shanlinjinrong.views.swipeRecycleview.SwipeMenuRecyclerView
+                android:id="@+id/report_no_check_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.shanlinjinrong.views.swipeRecycleview.SwipeMenuRecyclerView
+                android:id="@+id/report_check_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>

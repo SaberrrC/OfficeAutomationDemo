@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -130,6 +131,22 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
                 Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setEnabled(true);
+
+        mContactList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem == 0) {
+                    mSwipeRefreshLayout.setEnabled(true);
+                } else {
+                    mSwipeRefreshLayout.setEnabled(false);
+                }
+            }
+        });
     }
 
     public void handleClick(int childPosition, int groupPosition) {
@@ -217,7 +234,7 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     }
 
     private void loadData(String name) {
-        if (!mSwipeRefreshLayout.isRefreshing()){
+        if (!mSwipeRefreshLayout.isRefreshing()) {
             showLoadingView("正在获取联系人列表");
         }
         mContentEmpty.setVisibility(View.GONE);

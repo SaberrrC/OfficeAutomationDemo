@@ -14,7 +14,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.approval.adapter.LaunchApprovalListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.approval.bean.LaunchApprovalItem;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.views.listview.GridItemDecoration;
+import com.shanlinjinrong.views.listview.decoration.GridItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;

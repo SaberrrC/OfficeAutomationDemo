@@ -26,6 +26,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
@@ -83,15 +84,16 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void showLoadingView() {
-        if (!loadingDialog.isShowing()) {
-            LogUtils.e("showLoadingView");
+        if (loadingDialog != null && !loadingDialog.isShowing()) {
             loadingDialog.show();
+            LogUtils.e("showLoadingView " + getActivity());
         }
+
     }
 
     public void showLoadingView(String text) {
         msg.setText(text);
-        loadingDialog.show();
+        showLoadingView();
     }
 
     /**
@@ -151,18 +153,19 @@ public abstract class BaseFragment extends Fragment {
                     }
                 });
                 JPushInterface.setTags(getContext(), null, null);
-
-                AppConfig.getAppConfig(getContext()).clearLoginInfo();
-                startActivity(new Intent(getContext(), LoginActivity.class));
-//                MainController.instance.finish();
+                toLoginActivity();
             } catch (Exception e) {
                 LogUtils.e("退出环信抛出异常" + e.toString());
-                AppConfig.getAppConfig(getContext()).clearLoginInfo();
-                startActivity(new Intent(getContext(), LoginActivity.class));
-//                MainController.instance.finish();
+                toLoginActivity();
             }
         }
+        toLoginActivity();
+    }
+
+    private void toLoginActivity() {
+        AppConfig.getAppConfig(getContext()).clearLoginInfo();
         startActivity(new Intent(getActivity(), LoginActivity.class));
+        AppManager.sharedInstance().finishAllActivity();
     }
 
     public void showTips(String msg) {
@@ -199,16 +202,16 @@ public abstract class BaseFragment extends Fragment {
 
     public void showEmptyView(ViewGroup view, String str, int resId, boolean isShow) {
 //        if (empty == null) {
-            empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            empty.setLayoutParams(lp);
-            if (isShow) {
-                ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
-                imageView.setImageResource(resId);
-            }
-            TextView msg = (TextView) empty.findViewById(R.id.message);
-            msg.setText(str);
+        empty = LayoutInflater.from(getActivity()).inflate(R.layout.public_empty_view, null);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        empty.setLayoutParams(lp);
+        if (isShow) {
+            ImageView imageView = (ImageView) empty.findViewById(R.id.empty_image);
+            imageView.setImageResource(resId);
+        }
+        TextView msg = (TextView) empty.findViewById(R.id.message);
+        msg.setText(str);
 //        }
         view.addView(empty);
     }
@@ -223,7 +226,7 @@ public abstract class BaseFragment extends Fragment {
      * @param view 移除空的view，如果有
      */
     public void removeEmptyView(ViewGroup view) {
-         // modify by lvdinghao 2017/8/10 之前view使用findviewbyid，始终是一个新的对象，无法把原来的view删除
+        // modify by lvdinghao 2017/8/10 之前view使用findviewbyid，始终是一个新的对象，无法把原来的view删除
         try {
             for (int i = 0; i < view.getChildCount(); i++) {
                 LogUtils.d(view.getChildAt(i).getId() + "");
@@ -240,6 +243,7 @@ public abstract class BaseFragment extends Fragment {
 
     public void hideLoadingView() {
         LogUtils.e("hideLoadingView");
+        LogUtils.e("getClass " + getClass());
         loadingDialog.dismiss();
     }
 

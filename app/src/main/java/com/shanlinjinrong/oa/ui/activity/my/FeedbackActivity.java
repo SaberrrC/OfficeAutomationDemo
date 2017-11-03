@@ -53,7 +53,7 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
 
     @Override
     protected void initInject() {
-         getActivityComponent().inject(this);
+        getActivityComponent().inject(this);
     }
 
     @OnClick(R.id.toolbar_text_btn)
@@ -61,7 +61,7 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
         String tvContent = this.feedbackText.getText().toString();
         if (feedbackText.getText().toString().equals("")) {
             showToast("提交内容不能为空");
-        } else if(StringUtils.isEmoji(tvContent)){
+        } else if (StringUtils.isEmoji(tvContent)) {
             showToast("反馈内容不能包含特殊字符");
         } else {
             sendFeedback();
@@ -70,7 +70,7 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
 
     private void sendFeedback() {
         showLoadingView();
-        mPresenter.sendFeedback(AppConfig.getAppConfig(this).getDepartmentId(),feedbackText.getText().toString());
+        mPresenter.sendFeedback(AppConfig.getAppConfig(this).getDepartmentId(), feedbackText.getText().toString());
     }
 
     private void initToolBar() {
@@ -162,7 +162,7 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
 
     @Override
     public void feedbackFailed(int errorNo, String strMsg) {
-        showToast(strMsg);
+        showToast("网络超时，请重试");
     }
 
     @Override

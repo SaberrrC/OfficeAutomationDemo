@@ -30,8 +30,10 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
     public void upLoadPortrait(String departmentId, String portrait, File file) {
         HttpParams params = new HttpParams();
         params.put("department_id", departmentId);
-        params.put("file", portrait);
-        params.put("portrait", file);
+        params.put("file", file);
+
+//        params.put("file", portrait);
+//        params.put("portrait", file);
         mKjHttp.post(Api.PERSON_UPLOAD, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {

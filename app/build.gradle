@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
 
-    compileSdkVersion 24
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.3'
     lintOptions {
         checkReleaseBuilds false
 // Or, if you prefer, you can continue to check for errors in release builds,
@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "com.shanlinjinrong.oa"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
 
         //Error:(com.baidu.mapapi.utils.b) that doesn't come with an 这个是安卓的方法数量不够了，
         // 只能6w个方法。 我在项目build.gradle这里添加这句就可以了。
@@ -25,7 +25,7 @@ android {
 
         //pwd:13579
         versionCode 20
-        versionName "v1.2.0"
+        versionName "v1.3.0.0"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64', "arm64-v8a"
         }
@@ -56,8 +56,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "BASE_URL", devPHPAddress()
-            buildConfigField "String", "BASE_JAVA_URL", devJavaAddress()
+            buildConfigField "String", "BASE_URL", prePHPAddress()
+            buildConfigField "String", "BASE_JAVA_URL", preJavaAddress()
             resValue "string", "app_name", devAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -81,22 +81,23 @@ def devJavaAddress() {
     return "\"http://118.31.18.67:8090/\""
 }
 
-//def preJavaAddress() {
-//    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
-//}
-//
-//def prePHPAddress() {
-//    return "\"http://api.testoa.shanlinjinrong.com/\""
-//}
+// 测试环境
+def preJavaAddress() {
+    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
+}
+
+def prePHPAddress() {
+    return "\"http://api.testoa.shanlinjinrong.com/\""
+}
 
 //TODO 生产环境
-def preJavaAddress(){
-    return  "\"http://oa.shanlinjinrong.com/oa-api/\""
-}
-
-def prePHPAddress(){
-    return  "\"http://api.oa.shanlinjinrong.com/\""
-}
+//def preJavaAddress(){
+//    return  "\"http://oa.shanlinjinrong.com/oa-api/\""
+//}
+//
+//def prePHPAddress(){
+//    return  "\"http://api.oa.shanlinjinrong.com/\""
+//}
 
 def devAppName() {
     return '善林OA-Dev版'
@@ -136,8 +137,8 @@ dependencies {
     compile project(':calendarlibrary')
     compile project(':uilibrary')
 
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'org.kymjs.kjframe:kjframe:2.6'
@@ -165,13 +166,15 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.parse:parse-android:1.13.1'
     compile 'com.facebook.stetho:stetho:1.5.0'
-    compile 'com.github.markzhai:blockcanary-android:1.5.0'
     compile 'com.google.dagger:dagger:2.11'
-    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+    compile 'com.github.markzhai:blockcanary-android:1.5.0'
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
 }

@@ -1,6 +1,9 @@
 package com.shanlinjinrong.oa.ui.activity.my.presenter;
 
+import android.widget.Toast;
+
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.FeedbackActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -43,9 +46,13 @@ public class FeedbackActivityPresenter extends HttpPresenter<FeedbackActivityCon
                 LogUtils.d("data-->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
+                    LogUtils.d("data-->" + Api.getCode(jo));
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
                             mView.feedbackSuccess();
+                            break;
+                        case Api.RESPONSES_CODE_TOKEN_FEEDBACK_FAILURE:
+                            Toast.makeText(AppManager.sharedInstance(), "反馈失败", Toast.LENGTH_SHORT).show();
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:

@@ -69,10 +69,12 @@
 
     <!--发起日报-->
     <string name="work_report_launch_title">发起工作日报</string>
+    <string name="work_weekly_newspaper_launch_title">发起工作周报</string>
     <string name="work_report_right_btn_text">发起</string>
     <string name="work_report_select_date_text">请选择需要填写的时间</string>
     <string name="work_report_please_select">请选择</string>
     <string name="work_report_tomorrow_plan">明日计划</string>
+    <string name="work_report_this_week_work">本周工作</string>
     <string name="work_report_please_write_tomorrow_plan">请在此填写您的明日计划.</string>
     <string name="work_report_receiver">接收人</string>
     <string name="work_report_no_write">未填写</string>
@@ -81,7 +83,7 @@
     <string name="work_report_professional_qualities">职业素养</string>
     <string name="work_report_personal_behavior">个人行为</string>
     <string name="work_report_environmental_hygiene">环境卫生</string>
-    <string name="work_report_save">节约    </string>
+    <string name="work_report_save">节约　　</string>
     <string name="work_report_communication_skills">沟通能力</string>
     <string name="work_report_appearance">仪容仪表</string>
     <string name="work_report_work_discipline">工作纪律</string>
@@ -95,6 +97,8 @@
     <string name="work_report_plan_work">计划工作</string>
     <string name="work_report_real_work">实际工作</string>
     <string name="work_report_self_evaluate">自评</string>
+    <string name="work_report_quantitative">量化数据/结果</string>
+    <string name="work_report_write_quantitative">量化</string>
     <string name="work_report_write_work_plan">请在此填写您的计划工作.\n1\n2</string>
     <string name="work_report_write_real_work">请在此填写您的实际工作.\n1\n2</string>
     <string name="work_report_write_self_evaluate">请在此填写您的自评.\n1\n2</string>
@@ -105,9 +109,50 @@
     <string name="work_report_data_write_not_full">当前有未填写汇报内容，请检查</string>
     <string name="work_report_current_date_had_report">当前日期已有汇报，请重新选择日期</string>
     <string name="work_report_send_sucess">日报提交成功</string>
+    <string name="work_weekly_send_success">周报提交成功</string>
     <string name="work_report_send_failed">日报提交失败，请稍后重试</string>
+    <string name="work_weekly_send_failed">周报提交失败，请稍后重试</string>
     <string name="work_report_please_write_receiver">请选择接收人</string>
 
     <!--审批流程-->
     <string name="approval_office_supplies">办公用品</string>
+    <string name="title_work_report_approval">审核汇报</string>
+    <string name="work_report_check_pending_text">待审核</string>
+    <string name="work_report_checked_text">已审核</string>
+    <string name="launch_work_report">发起日报</string>
+    <string name="title_work_report_all_report">我发起的</string>
+
+    <string name="work_report_type_text">类型</string>
+    <string name="work_report_report_time_text">汇报时间</string>
+    <string name="work_report_commit_time_text">提交时间</string>
+    <string name="work_report_status_text">状态</string>
+    <string name="work_report_account_text">汇报人</string>
+
+    <!--审核日报-->
+    <string name="work_report_check_right_btn_text">提交</string>
+    <string name="work_report_check_title">工作日报</string>
+    <string name="work_report_check_evaluation_text">一键评价</string>
+    <string name="work_report_no_evaluation">待评价</string>
+    <string name="work_report_has_evaluation">已评价</string>
+    <string name="work_report_check_work_score">工作评分</string>
+    <string name="work_report_check_work_content">工作内容</string>
+    <string name="work_report_check_professional_qualities">职业素养</string>
+    <string name="work_report_check_teamwork">团队合作</string>
+    <string name="work_report_check_man_evaluate">检查人评价</string>
+    <string name="work_report_supervisor_evaluate">监督人评价</string>
+    <string name="work_report_please_write">请输入</string>
+    <string name="no_problem">无问题</string>
+    <string name="net_no_connection">网络未连接，请检查网络！</string>
+    <string name="data_load_error">数据加载失败，请稍后重试！</string>
+    <string name="load_report_data_error">加载日报信息失败！</string>
+    <string name="work_report_update_text">更新</string>
+    <string name="work_report_edit_report_title">编辑工作日报</string>
+    <string name="work_report_update_success">日报更新成功！</string>
+    <string name="work_report_update_failed">日报更新失败！</string>
+    <string name="work_report_data_no_evaluation">时报信息评价未完成！</string>
+    <string name="work_report_data_work_score_limit">工作内容打分不能低于0分或者超过60分！</string>
+    <string name="work_report_data_professional_score_limit">职业素养打分不能低于0分或者超过20分！</string>
+    <string name="work_report_data_team_score_limit">团队合作打分不能低于0分或者超过20分！</string>
+    <string name="weekly_add_work_plan">+ 添加一项计划</string>
+    <string name="weekly_add_work_content">+ 添加一项工作</string>
 </resources>

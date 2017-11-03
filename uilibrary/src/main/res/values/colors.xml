@@ -5,8 +5,16 @@
 
     <!--白色-->
     <color name="white">#ffffff</color>
-    <color name="black">#000000</color>
 
+
+    <!--黑色-->
+    <color name="black">#000000</color>
+    <color name="black_99">#99000000</color>
+    <color name="black_333333">#333333</color>
+
+    <color name="black_99333333">#99000000</color>
+
+    <!--灰色-->
     <color name="gray_d5d5d5">#d5d5d5</color>
     <color name="gray_9b9b9b">#9B9B9B</color>
 
@@ -23,4 +31,10 @@
     <!--覆盖颜色-->
     <color name="bgColor_overlay">#60000000</color>
     <color name="lineColor">#babdbf</color>
+
+    <!--recycler_swipe-->
+    <color name="recycler_swipe_color_text_gray">#FF777777</color>
+    <color name="recycler_swipe_color_loading_color1">#55777777</color>
+    <color name="recycler_swipe_color_loading_color2">#B1777777</color>
+    <color name="recycler_swipe_color_loading_color3">#FF777777</color>
 </resources>

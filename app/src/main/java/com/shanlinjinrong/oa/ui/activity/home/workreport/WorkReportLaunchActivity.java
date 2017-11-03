@@ -21,32 +21,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
-import com.shanlinjinrong.views.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportLaunchListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.ItemBean;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.WorkReportLaunchActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.WorkReportLaunchActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.EmojiFilter;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
+import com.shanlinjinrong.oa.views.DatePicker;
 import com.shanlinjinrong.oa.views.KeyboardLinearLayout;
+import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.qqtheme.framework.picker.DatePicker;
+
 
 /**
  * create by lvdinghao
@@ -88,7 +88,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
     private List<HourReportBean> mHourReportData;
 
-    private List<ItemBean> mWorkReportListData;//日报列表数据
+    private List<LaunchReportItem> mWorkReportListData;//日报列表数据
 
     private DatePicker picker;
 
@@ -97,7 +97,6 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     private String mReceiverId; //接收人ID
     private String mReceiverName; //接收人名称
     private String mReceiverPost; //接收人ID
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,7 +171,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     private List<HourReportBean> initHourReportData() {
         List<HourReportBean> list = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            HourReportBean hourReport = new HourReportBean("", "", "");
+            HourReportBean hourReport = new HourReportBean("", "", "", "");
             list.add(hourReport);
         }
         return list;
@@ -218,6 +217,17 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
         jsonObject.put("workSix", mHourReportData.get(5).getRealWork());
         jsonObject.put("workSeven", mHourReportData.get(6).getRealWork());
         jsonObject.put("workEigth", mHourReportData.get(7).getRealWork());
+
+
+        //数据量化
+        jsonObject.put("workResultOne", mHourReportData.get(0).getQuantitative());
+        jsonObject.put("workResultTwo", mHourReportData.get(1).getQuantitative());
+        jsonObject.put("workResultThree", mHourReportData.get(2).getQuantitative());
+        jsonObject.put("workResultFour", mHourReportData.get(3).getQuantitative());
+        jsonObject.put("workResultFive", mHourReportData.get(4).getQuantitative());
+        jsonObject.put("workResultSix", mHourReportData.get(5).getQuantitative());
+        jsonObject.put("workResultSeven", mHourReportData.get(6).getQuantitative());
+        jsonObject.put("workResultEigth", mHourReportData.get(7).getQuantitative());
 
         //职业素养
         jsonObject.put("selfBehavior", mWorkReportListData.get(8).getContent()); // 个人言行
@@ -302,38 +312,38 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     /**
      * 初始化整个列表的显示数据
      *
-     * @return List<ItemBean>
+     * @return List<LaunchReportItem>
      */
-    private List<ItemBean> initListData() {
-        List<ItemBean> listData = new ArrayList<>();
+    private List<LaunchReportItem> initListData() {
+        List<LaunchReportItem> listData = new ArrayList<>();
         //时报 上午九点到12点
         for (int i = 9; i < 12; i++) {
             String title = i + ":00~" + (i + 1) + ":00";
-            listData.add(new ItemBean(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
+            listData.add(new LaunchReportItem(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
         }
 
         //下午一点到五点
         for (int i = 13; i < 17; i++) {
             String title = i + ":00~" + (i + 1) + ":00";
-            listData.add(new ItemBean(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
+            listData.add(new LaunchReportItem(title, getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
         }
 
         //下午五点到五点半
-        listData.add(new ItemBean("17:00~17:30", getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
+        listData.add(new LaunchReportItem("17:00~17:30", getString(R.string.work_report_no_write), WorkReportLaunchListAdapter.CLICK_TYPE));
 
         //职业素养
-        listData.add(new ItemBean(getString(R.string.work_report_personal_behavior), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
-        listData.add(new ItemBean(getString(R.string.work_report_environmental_hygiene), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_save), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_communication_skills), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_appearance), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_work_discipline), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_personal_behavior), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_environmental_hygiene), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_save), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_communication_skills), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_appearance), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_work_discipline), "", WorkReportLaunchListAdapter.WRITE_TYPE));
 
         //团队合作
-        listData.add(new ItemBean(getString(R.string.work_report_initiative), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_teamwork)));
-        listData.add(new ItemBean(getString(R.string.work_report_cooperation), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_dedication), "", WorkReportLaunchListAdapter.WRITE_TYPE));
-        listData.add(new ItemBean(getString(R.string.work_report_obey), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_initiative), "", WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_teamwork)));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_cooperation), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_dedication), "", WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_obey), "", WorkReportLaunchListAdapter.WRITE_TYPE));
 
         return listData;
     }
@@ -403,15 +413,14 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
      */
     private void showDoneDatePicker(final TextView tv) {
         if (picker == null) {
-            picker = new DatePicker(this, DatePicker.YEAR_MONTH_DAY);
+            picker = new DatePicker(this, true);
         }
-        Calendar cal = Calendar.getInstance();
+
         if (!TextUtils.isEmpty(tv.getText().toString())) {
             String[] srtArr = tv.getText().toString().split("-");
             picker.setSelectedItem(Integer.valueOf(srtArr[0]), Integer.valueOf(srtArr[1]), Integer.valueOf(srtArr[2]));
         } else {
-            picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
-                    cal.get(Calendar.DAY_OF_MONTH));
+            picker.setCurrentDate();
         }
         picker.setSubmitText("确认");
         picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
@@ -448,8 +457,8 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     @Override
     public void reportSuccess(String msg) {
         Toast.makeText(this, getString(R.string.work_report_send_sucess), Toast.LENGTH_SHORT).show();
-        onBackPressed();
         clearLocalData();
+        finish();
     }
 
     @Override
@@ -494,6 +503,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
             edit.putString("HourReportData_RealWork" + i, mHourReportData.get(i).getRealWork());
             edit.putString("HourReportData_WorkPlan" + i, mHourReportData.get(i).getWorkPlan());
             edit.putString("HourReportData_SelfEvaluate" + i, mHourReportData.get(i).getSelfEvaluate());
+            edit.putString("HourReportData_Quantitative" + i, mHourReportData.get(i).getQuantitative());
         }
 
         for (int i = 8; i < mWorkReportListData.size(); i++) {
@@ -524,6 +534,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
             bean.setWorkPlan(sp.getString("HourReportData_WorkPlan" + i, ""));
             bean.setRealWork(sp.getString("HourReportData_RealWork" + i, ""));
             bean.setSelfEvaluate(sp.getString("HourReportData_SelfEvaluate" + i, ""));
+            bean.setQuantitative(sp.getString("HourReportData_Quantitative" + i, ""));
             mWorkReportListData.get(i).setContent(getString(R.string.work_report_has_write));
         }
 
@@ -547,5 +558,10 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     @Override
     public void getDefaultReceiverEmpty(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        showBackTip("是否放弃编辑", "确定", "取消");
     }
 }

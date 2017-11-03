@@ -1,10 +1,15 @@
 package com.shanlinjinrong.oa.utils;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -239,5 +244,200 @@ public class DateUtils {
             ex.printStackTrace();
         }
         return false;
+    }
+
+
+    /**
+     * 获取当前日期之前的所有周一时间
+     */
+    public static List<String> getMondayData(String pattern) {
+        return getMondayData("", pattern);
+    }
+
+    /**
+     * 获取某个日期到当前日期之间的所有周一时间
+     */
+    public static List<String> getMondayData(String date, String pattern) {
+        List<String> mondays = new ArrayList<>();
+        String monday = getCurrentMonday(pattern);
+        for (; ; ) {
+            monday = getIntervalDate(monday, -7, pattern);
+            long l = dateToLong(monday, pattern);
+            if (dateToLong(monday, pattern) > dateToLong(date, pattern)) {
+                String currentYear = monday.replace("年", "-");
+                String currentMonth = currentYear.replace("月", "-");
+                String currentDay = currentMonth.replace("日", "");
+                mondays.add(currentDay);
+            } else {
+                break;
+            }
+        }
+        return mondays;
+    }
+
+    /**
+     * 获取某个日期到当前日期之后的所有周一时间
+     */
+    public static List<String> getMondayData1(String date, String pattern) {
+        List<String> mondays = new ArrayList<>();
+        String monday = getCurrentMonday(pattern);
+        String currentYear = monday.replace("年", "-");
+        String currentMonth = currentYear.replace("月", "-");
+        String currentDay = currentMonth.replace("日", "");
+        mondays.add(currentDay);
+        for (; ; ) {
+            monday = getIntervalDate(monday, +7, pattern);
+            if (dateToLong(monday, pattern) < dateToLong(date, pattern)) {
+                String currentYear1 = monday.replace("年", "-");
+                String currentMonth1 = currentYear1.replace("月", "-");
+                String currentDay1 = currentMonth1.replace("日", "");
+                mondays.add(currentDay1);
+            } else {
+                break;
+            }
+        }
+        return mondays;
+    }
+
+    /**
+     * 获取某个日期到当前日期之间的所有周一时间
+     */
+    public static List<String> getMondayData1(String pattern) {
+        List<String> mondays = new ArrayList<>();
+        String monday = getCurrentMonday(pattern);
+        mondays.add(monday);
+        for (int i = 0; i < 52; i++) {
+            monday = getIntervalDate(monday, -7, pattern);
+            mondays.add(monday);
+        }
+        return mondays;
+    }
+
+    /**
+     * 获取某个日期到当前日期之后的所有周一时间
+     */
+    public static List<String> getMondayData2(String pattern) {
+        List<String> mondays = new ArrayList<>();
+        String monday = getCurrentMonday(pattern);
+        mondays.add(monday);
+        for (int i = 0; i < 52; i++) {
+            monday = getIntervalDate(monday, +7, pattern);
+            mondays.add(monday);
+        }
+        return mondays;
+    }
+
+
+    /**
+     * 获取与某个日期间隔几天的日期
+     */
+    public static String getIntervalDate(String date, int day, String pattern) {
+        if (isDate(date, pattern)) {
+            long otherTime = dateToLong(date, pattern) + day * 24 * 60 * 60 * 1000;
+            return longToDateString(otherTime, pattern);
+        }
+        return "";
+    }
+
+    /**
+     * 获取与某个日期间隔几天的日期
+     */
+    public static String getIntervalDate1(String date, int day, String pattern) {
+        long otherTime = dateToLong(date, pattern) + day * 24 * 60 * 60 * 1000;
+        return longToDateString(otherTime, pattern);
+    }
+
+    /**
+     * 日期转换为时间戳
+     */
+    public static long dateToLong(String date, String pattern) {
+        long time = 0;
+        try {
+            time = getDateFormat(pattern).parse(date).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return time;
+    }
+
+
+    /**
+     * 将时间戳转化为日期字符串
+     */
+    public static String longToDateString(long time, String pattern) {
+        String date = "";
+        if (time != 0) {
+            try {
+                date = getDateFormat(pattern).format(time);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return date;
+    }
+
+    /**
+     * 判断字符串是否为日期字符串
+     */
+    public static boolean isDate(String date, String pattern) {
+        boolean isDate = false;
+        if (date != null) {
+            if (StringToDate(date, pattern) != null) {
+                isDate = true;
+            }
+        }
+        return isDate;
+    }
+
+    /**
+     * 将日期字符串转化为日期。失败返回null。
+     */
+    public static Date StringToDate(String date, String pattern) {
+        Date myDate = null;
+        if (date != null) {
+            try {
+                myDate = getDateFormat(pattern).parse(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return myDate;
+    }
+
+    /**
+     * 获取当前日期所在的周一
+     */
+    public static String getCurrentMonday(String pattern) {
+        SimpleDateFormat dateFormat = getDateFormat(pattern);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        //周一
+        Date time = cal.getTime();
+        return dateFormat.format(time);
+    }
+
+    public static String getDateWeek(String dateMonday, String symbol, String pattern) {
+        return dateMonday + symbol + getIntervalDate(dateMonday, 6, pattern);
+    }
+
+    @NonNull
+    private static SimpleDateFormat getDateFormat(String pattern) {
+        return new SimpleDateFormat(pattern, Locale.CHINA);
+    }
+
+    /**
+     * 获取当前日期所在的周
+     * symbol : 连接的符号
+     */
+    public static String getCurrentWeek(String symbol, String pattern) {
+        SimpleDateFormat dateFormat = getDateFormat(pattern);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        //周一
+        String monday = dateFormat.format(cal.getTime());
+        //周日
+        cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 6);
+        String sunday = dateFormat.format(cal.getTime());
+        return monday + symbol + sunday;
     }
 }

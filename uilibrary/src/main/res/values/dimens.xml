@@ -11,9 +11,33 @@
     <!-- 选项文字大小 需要配合 bools.xml 的 pickerview_customTextSize 为 true 才有效果-->
     <dimen name="pickerview_textsize">20sp</dimen>
 
-    <dimen name="vertical_spacing16">16dp</dimen>
-    <dimen name="common_title_size16">16sp</dimen>
-    <dimen name="common_height_48">48dp</dimen>
-    <dimen name="common_margin">12dp</dimen>
+    <!--horizontal-->
     <dimen name="horizontal_spacing5">5dp</dimen>
+    <dimen name="horizontal_spacing12">12dp</dimen>
+    <dimen name="horizontal_spacing16">16dp</dimen>
+    <dimen name="horizontal_spacing32">32dp</dimen>
+
+    <!--vertical-->
+    <dimen name="vertical_spacing10">10dp</dimen>
+    <dimen name="vertical_spacing12">12dp</dimen>
+    <dimen name="vertical_spacing16">16dp</dimen>
+
+    <!--common-->
+    <dimen name="common_corner">8dp</dimen>
+    <dimen name="common_top_space">8dp</dimen>
+    <dimen name="common_padding">10dp</dimen>
+    <dimen name="common_margin">12dp</dimen>
+    <dimen name="common_margin14">14dp</dimen>
+    <dimen name="common_height_48">48dp</dimen>
+    <dimen name="common_image_width">80dp</dimen>
+    <dimen name="common_list_item_height">48dp</dimen>
+
+
+    <dimen name="card_corner">5dp</dimen>
+
+    <!--text size-->
+    <dimen name="common_text_size">14sp</dimen>
+    <dimen name="text_size14">14sp</dimen>
+    <dimen name="text_size16">16sp</dimen>
+
 </resources>

@@ -22,7 +22,8 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.PushMsg;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInfoActivity;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportListActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlinjinrong.oa.ui.activity.push.contract.PushListContract;
 import com.shanlinjinrong.oa.ui.activity.push.presenter.PushListPresenter;
@@ -124,8 +125,7 @@ public class PushListActivity extends HttpBaseActivity<PushListPresenter> implem
                         break;
                     case 5://工作汇报：我发起的
                         intent = new Intent(PushListActivity.this,
-                                WorkReportListActivity.class);
-                        intent.putExtra("whichList", 1);
+                                MyLaunchWorkReportActivity.class);
                         break;
                     case 6:
                         intent = new Intent(PushListActivity.this,
@@ -143,14 +143,9 @@ public class PushListActivity extends HttpBaseActivity<PushListPresenter> implem
                         break;
                     case 10://工作汇报：发送我的
                         intent = new Intent(PushListActivity.this,
-                                WorkReportListActivity.class);
-                        intent.putExtra("whichList", 2);
+                                WorkReportCheckActivity.class);
                         break;
-                    case 11://工作汇报：抄送我的
-                        intent = new Intent(PushListActivity.this,
-                                WorkReportListActivity.class);
-                        intent.putExtra("whichList", 3);
-                        break;
+
                 }
 
                 if (intent != null) {

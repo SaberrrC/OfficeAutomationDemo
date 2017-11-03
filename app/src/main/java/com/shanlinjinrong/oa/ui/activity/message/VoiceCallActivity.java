@@ -699,7 +699,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         String from = message.getFrom();
         //  userInfo_self = message.getStringAttribute("userInfo_self", "");
         //   userInfo = message.getStringAttribute("userInfo", "");
-        //UserInfoSelfDetailsBean bean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
+        //UserInfoSelfDetailsBean btestean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
         try {
             String newUserInfo_self = null;
             String newUserInfo = null;

@@ -37,7 +37,7 @@ public class Approval {
                 appr_id = jsonObject.getString("appr_id");
                 appr_name = jsonObject.getString("appr_name");
                 create_time = jsonObject.getString("create_time");
-                oa_id = jsonObject.getString("oa_id");
+               // oa_id = jsonObject.getString("oa_id");
                 oal_id = jsonObject.getString("oal_id");
                 status = jsonObject.getString("status");
                 username = jsonObject.getString("username");

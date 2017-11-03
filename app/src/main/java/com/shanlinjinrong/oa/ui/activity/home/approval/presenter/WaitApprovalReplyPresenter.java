@@ -1,12 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.approval.presenter;
 
-import android.content.Intent;
-
 import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.net.MyKjHttp;
-import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
-import com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalReplyActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.contract.WaitApprovalReplyContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -33,11 +28,11 @@ public class WaitApprovalReplyPresenter extends HttpPresenter<WaitApprovalReplyC
     @Override
     public void finishReply(boolean isReject, String apprId, String oaId, String reply) {
         HttpParams params = new HttpParams();
-        params.put("appr_id", apprId);
-        params.put("oa_id", oaId);
+
+        params.put("oa_id", oaId == null ? "" : oaId);
         params.put("reply", reply);
 
-       // 1公告 2办公用品3请假4出差
+        // 1公告 2办公用品3请假4出差
         String url = "";
         if (isReject) {
             if (apprId.equals("1")) {

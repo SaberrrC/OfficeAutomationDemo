@@ -32,12 +32,13 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.EventMessage;
 import com.shanlinjinrong.oa.model.PushMsg;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInfoActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
+import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportListActivity;
-import com.shanlinjinrong.oa.ui.fragment.adapter.TabMsgListAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
+import com.shanlinjinrong.oa.ui.fragment.adapter.TabMsgListAdapter;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -102,7 +103,6 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
     private Integer NO_MORE_CONTENT = 0;//没有更多内容的标识
     private Integer LOAD_MORE_CONTENT = 1;//jia zai更多内容的标识
     private boolean isLoading = false;
-    private boolean isFirst = true;
     public Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -177,8 +177,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                         break;
                     case 5://工作汇报：我发起的
                         intent = new Intent(mContext,
-                                WorkReportListActivity.class);
-                        intent.putExtra("whichList", 1);
+                                MyLaunchWorkReportActivity.class);
                         break;
                     case 6:
                         intent = new Intent(mContext,
@@ -200,13 +199,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                         break;
                     case 10://工作汇报：发送我的
                         intent = new Intent(mContext,
-                                WorkReportListActivity.class);
-                        intent.putExtra("whichList", 2);
-                        break;
-                    case 11://工作汇报：抄送我的
-                        intent = new Intent(mContext,
-                                WorkReportListActivity.class);
-                        intent.putExtra("whichList", 3);
+                                WorkReportCheckActivity.class);
                         break;
                 }
 
@@ -264,6 +257,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
             public void onClick(View v) {
                 Integer dateValue = checkCheckedListDateRb();
                 Integer typeValue = checkCheckedListTypeRb();
+                changeLoadState();
                 loadData(false, false, String.valueOf(dateValue), String.valueOf(typeValue));
                 popupWindow.dismiss();
             }
@@ -390,15 +384,9 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         initKjHttp().post(Api.MESSAGE_READPUSH, params, new HttpCallBack() {
 
             @Override
-            public void onPreStart() {
-                super.onPreStart();
-                showLoadingView();
-            }
-
-            @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                LogUtils.e(t);
+                LogUtils.e("read : " + t);
                 try {
                     JSONObject jo = new JSONObject(t);
                     switch (Api.getCode(jo)) {
@@ -420,11 +408,6 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                 }
             }
 
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
@@ -434,40 +417,17 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         });
     }
 
-    boolean isResume;
-
-    @Override
-    public void onResume() {
-        isResume = true;
-        currentPage = 1;
-        reFresUnRedCount();
-        if (!isFirst) {
-            onRefresh();
-        }
-        super.onResume();
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            isResume = true;
             currentPage = 1;
-            reFresUnRedCount();
-            if (!isFirst) {
-                onRefresh();
-            }
         } else {
             //相当于Fragment的onPause
         }
     }
 
-    @Override
-    public void onPause() {
-        isResume = false;
-        isFirst = false;
-        super.onPause();
-    }
 
     @Override
     protected void lazyLoadData() {
@@ -489,7 +449,7 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
         } catch (Exception e) {
         }
 
-        loadData(false, false, "", "");
+        loadData(true, false, "", "");
         reFresUnRedCount();
     }
 
@@ -504,13 +464,13 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                 mSwipeRefreshLayout.setRefreshing(true);
                 changeLoadState();
             }
-            if (!isPull && !loadMore && isResume) {
-                isResume = false;
-                showLoadingView();
+            if (!isPull && !loadMore) {
                 changeLoadState();
             }
             if (loadMore) {
                 currentPage++;
+            } else {
+                currentPage = 1;
             }
             HttpParams params = new HttpParams();
             params.put("limit", limit);
@@ -533,20 +493,20 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                 @Override
                 public void onPreStart() {
                     super.onPreStart();
-
+                    if (mSwipeRefreshLayout != null)
+                        mSwipeRefreshLayout.setRefreshing(true);
                 }
 
                 @Override
                 public void onSuccess(String t) {
                     super.onSuccess(t);
-                    LogUtils.e(t);
-                    hideLoadingView();
+                    LogUtils.e("push : " + t);
                     removeEmptyView(mContentView);
                     try {
                         JSONObject jo = new JSONObject(t);
                         switch (Api.getCode(jo)) {
                             case Api.RESPONSES_CODE_OK:
-                                list.clear();
+                                //list.clear();
                                 ArrayList<PushMsg> listPushMsgs = new ArrayList<>();
                                 JSONArray notices = Api.getDataToJSONArray(jo);
                                 for (int i = 0; i < notices.length(); i++) {
@@ -588,7 +548,6 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                 @Override
                 public void onFinish() {
                     super.onFinish();
-                    hideLoadingView();
                     if (null != mSwipeRefreshLayout) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
@@ -597,7 +556,6 @@ public class TabMsgListFragment extends BaseFragment implements SwipeRefreshLayo
                 @Override
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);
-                    hideLoadingView();
                     LogUtils.e("onFailure->" + errorNo + strMsg);
                     catchWarningByCode(errorNo);
                 }

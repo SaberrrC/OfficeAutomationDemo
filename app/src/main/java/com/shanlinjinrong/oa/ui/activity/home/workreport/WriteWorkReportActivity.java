@@ -9,16 +9,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.shanlinjinrong.views.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
+import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +38,8 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
 
     private int mPosition; //条目位置
 
+    private int mPageStatus;//是否来自审核页面
+
     private List<WriteReportFragment> mFragmentList;
     private List<HourReportBean> mHourReportList;
 
@@ -60,17 +60,21 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             mPosition = extra.getInt("position");
-            mTitles = createTitles(changeDateFormat(extra.getString("date")));
+            mPageStatus = extra.getInt(WriteReportFragment.PAGE_STATUS);
+            mTitles = createTitles(changeDateFormat(extra.getString("date", "")));
             mTopView.setAppTitle(mTitles.get(mPosition));
             mHourReportList = extra.getParcelableArrayList("hour_report_list");
         }
 
         mFragmentList = new ArrayList<>();
+
+        //初始化页面数据
         for (int i = 0; i < 8; i++) {
             WriteReportFragment fragment = new WriteReportFragment();
             Bundle fragmentArg = new Bundle();
             fragmentArg.putParcelable("hour_report", mHourReportList.get(i));
             fragmentArg.putInt("page", i);
+            fragmentArg.putInt(WriteReportFragment.PAGE_STATUS, mPageStatus);
             fragment.setArguments(fragmentArg);
             fragment.setChangeListener(this);
             fragment.setPageBtnClickListener(this);
@@ -87,10 +91,8 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
             @Override
             public void onPageSelected(int position) {
                 mTopView.setAppTitle(mTitles.get(position));
-                Log.i("WriteWorkRepor", "前onPageSelected:::mPosition = " + mPosition);
                 mFragmentList.get(mPosition).fragmentChange(mPosition);
-                mPosition = position;
-                Log.i("WriteWorkRepor", "后onPageSelected:::mPosition = " + mPosition);
+                mPosition = position;//当前页面位置
             }
 
             @Override
@@ -165,9 +167,6 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
         isBack = true;
         int curPage = mViewPager.getCurrentItem();
         mFragmentList.get(curPage).fragmentChange(curPage);
-        Log.i("WriteWorkRepor", "onBackPressed ::::curPage = " + curPage);
-
-//        setFinishResult();
     }
 
     /**
@@ -189,8 +188,14 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
     }
 
     @Override
-    public void fragmentStartChange(int position, String planWork, String realWork, String selfEvaluate) {
-        mHourReportList.get(position).setRealWork(realWork).setWorkPlan(planWork).setSelfEvaluate(selfEvaluate);
+    public void fragmentStartChange(int position, String planWork, String realWork, String selfEvaluate, String quantitative, String checkManEvaluate, String supervisorEvaluate) {
+        mHourReportList.get(position)
+                .setRealWork(realWork)
+                .setWorkPlan(planWork)
+                .setSelfEvaluate(selfEvaluate)
+                .setQuantitative(quantitative)
+                .setCheckManEvaluate(checkManEvaluate)
+                .setSupervisorEvaluate(supervisorEvaluate);
         if (isBack) {
             setFinishResult();
         }
@@ -201,8 +206,6 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
         int curPage = mViewPager.getCurrentItem();
         if (curPage > 0) {
             mViewPager.setCurrentItem(--curPage);
-        } else {
-            Toast.makeText(this, "已经是第一项", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -211,10 +214,7 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
     public void onNextPageClick() {
         int curPage = mViewPager.getCurrentItem();
         if (curPage < mFragmentList.size() - 1) {
-//            lastPage = curPage;
             mViewPager.setCurrentItem(++curPage);
-        } else {
-            Toast.makeText(this, "已经是最后一项", Toast.LENGTH_SHORT).show();
         }
     }
 }

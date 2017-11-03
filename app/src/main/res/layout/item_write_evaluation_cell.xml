@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/tv_left_title"
+        style="@style/work_report_launch_left_text_style"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="0dp"
+        android:padding="@dimen/common_margin" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tv_left_title"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_show_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:paddingBottom="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
+            android:paddingTop="@dimen/common_margin"
+            android:textSize="@dimen/common_text_size" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/lineColor" />
+
+        <EditText
+            android:id="@+id/et_supervisor_evaluate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:hint="@string/work_report_supervisor_evaluate"
+            android:maxLength="50"
+            android:paddingBottom="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
+            android:paddingTop="@dimen/common_margin"
+            android:textColorHint="@color/gray_9b9b9b"
+            android:textSize="@dimen/common_text_size" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/lineColor" />
+
+        <EditText
+            android:id="@+id/et_check_man_evaluate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:hint="@string/work_report_check_man_evaluate"
+            android:maxLength="50"
+            android:paddingBottom="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
+            android:paddingTop="@dimen/common_margin"
+            android:textColorHint="@color/gray_9b9b9b"
+            android:textSize="@dimen/common_text_size" />
+    </LinearLayout>
+
+</RelativeLayout>

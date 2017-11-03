@@ -93,7 +93,7 @@ public class ViewTheMeetingScheduleActivity extends BaseActivity {
         });
     }
     private void initData() {
-        currentDate = DateUtils.getTodayDate();
+        currentDate = DateUtils.getTodayDate(false);
 //        dayArrangement.setText(currentDate);
         LoadData(currentDate);
     }

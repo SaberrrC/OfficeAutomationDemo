@@ -6,12 +6,11 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.ItemBean;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
  * recycleview的间隔线
  */
 public class DecorationLine extends RecyclerView.ItemDecoration {
-    private List<ItemBean> mData;
+    private List<LaunchReportItem> mData;
 
     private Paint mPaint;
     private Rect mBounds;//用于存放测量文字Rect
@@ -32,7 +31,7 @@ public class DecorationLine extends RecyclerView.ItemDecoration {
     private Context mContext;
 
 
-    public DecorationLine(Context context, List<ItemBean> mData) {
+    public DecorationLine(Context context, List<LaunchReportItem> mData) {
         mContext = context;
         this.mData = mData;
         mPaint = new Paint();

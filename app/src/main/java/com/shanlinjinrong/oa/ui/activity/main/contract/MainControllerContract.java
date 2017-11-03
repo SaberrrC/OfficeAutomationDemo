@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.main.contract;
 
 import android.app.Activity;
-import android.content.Context;
 
 import com.hyphenate.chat.EMConversation;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -35,9 +34,9 @@ public interface MainControllerContract {
         void loadUnReadMsg(); //获取未读消息数量
 
         List<EMConversation> loadConversationList();
-
-        void loginIm(Context context);//登录环信
-
-        void initEase(AbortableFuture<LoginInfo> loginRequest, String account, String token); //登录云信
+//
+//        void loginIm(Context context);//登录环信
+//
+//        void initEase(AbortableFuture<LoginInfo> loginRequest, String account, String token); //登录云信
     }
 }

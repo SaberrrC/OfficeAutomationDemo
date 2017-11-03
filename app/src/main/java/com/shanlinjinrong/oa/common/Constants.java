@@ -2,6 +2,9 @@ package com.shanlinjinrong.oa.common;
 
 import android.os.Environment;
 
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
+
 /**
  * 概述：常量类
  * Created by KevinMeng on 2016/5/9.
@@ -32,6 +35,9 @@ public class Constants {
 
     //日报临时数据
     public final static String WORK_REPORT_TEMP_DATA = "work_report_temp_data";
+
+    //周报临时数据
+    public final static String WORK_WEEKLY_TEMP_DATA ="work_weekly_temp_data";
 
 
     /**

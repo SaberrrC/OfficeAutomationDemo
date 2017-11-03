@@ -48,6 +48,8 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                         mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_USER_FREEZE)) {
                         mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
+                    } else {
+                        mView.loginOtherError();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

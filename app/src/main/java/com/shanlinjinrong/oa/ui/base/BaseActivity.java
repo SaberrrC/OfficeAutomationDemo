@@ -106,7 +106,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showLoadingView(String text) {
         msg.setText(text);
-        loadingDialog.show();
+        showLoadingView();
     }
 
     /**
@@ -166,17 +166,20 @@ public class BaseActivity extends AppCompatActivity {
                 });
                 JPushInterface.setTags(this, null, null);
 
-                AppConfig.getAppConfig(this).clearLoginInfo();
-                startActivity(new Intent(this, LoginActivity.class));
-//                MainController.instance.finish();
+                toLoginActivity();
+
             } catch (Exception e) {
                 LogUtils.e("退出环信抛出异常" + e.toString());
-                AppConfig.getAppConfig(this).clearLoginInfo();
-                startActivity(new Intent(this, LoginActivity.class));
-//                MainController.instance.finish();
+                toLoginActivity();
             }
         }
+        toLoginActivity();
+    }
+
+    private void toLoginActivity() {
+        AppConfig.getAppConfig(this).clearLoginInfo();
         startActivity(new Intent(this, LoginActivity.class));
+        AppManager.sharedInstance().finishAllActivity();
     }
 
     /**

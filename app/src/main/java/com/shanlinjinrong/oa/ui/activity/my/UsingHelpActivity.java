@@ -2,18 +2,20 @@ package com.shanlinjinrong.oa.ui.activity.my;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.hyphenate.util.NetUtils;
+import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.views.ProgressWebView;
 
@@ -60,8 +62,18 @@ public class UsingHelpActivity extends BaseActivity {
                 view.loadUrl(url);
                 return true;
             }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    view.loadUrl(request.getUrl().toString());
+                }
+                return true;
+            }
+
         });
-        webView.loadUrl(AppConfig.getAppConfig(this).get(AppConfig.BASE_URL) + Api.USINGHELP
+        
+        webView.loadUrl(BuildConfig.BASE_URL + Api.USINGHELP
                 + "?time=" + new Date().getTime());
     }
 

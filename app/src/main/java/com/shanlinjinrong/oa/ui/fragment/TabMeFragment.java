@@ -23,13 +23,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.pgyersdk.update.PgyUpdateManager;
+import com.pgyersdk.update.UpdateManagerListener;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.helper.UpdateHelper;
 import com.shanlinjinrong.oa.listener.PermissionListener;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.my.AboutUsActivity;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
@@ -41,6 +42,7 @@ import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
@@ -50,6 +52,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
+ * ；
  * <h3>Description: 首页我的页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
@@ -68,6 +71,9 @@ public class TabMeFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_me_fragment, container, false);
         ButterKnife.bind(this, view);
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         return view;
     }
 
@@ -81,7 +87,7 @@ public class TabMeFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         displayVersionName();
-        Glide.with(AppManager.mContext).load( AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
+        Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
                 .placeholder(R.drawable.ease_default_avatar)
                 .error(R.drawable.ease_default_avatar)
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
@@ -94,7 +100,10 @@ public class TabMeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Glide.with(AppManager.mContext).load( AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
+        userName.setText(AppConfig.getAppConfig(getContext()).get(AppConfig.PREF_KEY_USERNAME));
+        position.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_POST_NAME));
+
+        Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
                 .placeholder(R.drawable.ease_default_avatar)
                 .error(R.drawable.ease_default_avatar)
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
@@ -107,6 +116,7 @@ public class TabMeFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.user_info://用户信息
                 startActivity(new Intent(getActivity(), UserInfoActivity.class));
+
                 break;
             case R.id.btn_modify_pwd://修改密码
                 startActivity(new Intent(getActivity(), ModifyPwdActivity.class));
@@ -167,8 +177,17 @@ public class TabMeFragment extends BaseFragment {
             }
 
         } else {
-            PgyUpdateManager.register(getActivity(),
-                    "com.shanlinjinrong.oa.fileprovider");
+            PgyUpdateManager.register(getActivity(), "com.shanlinjinrong.oa.fileprovider", new UpdateManagerListener() {
+                @Override
+                public void onNoUpdateAvailable() {
+                   Toast.makeText(getContext(),"当前已是最新版本！",Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onUpdateAvailable(String s) {
+
+                }
+            });
         }
     }
 
@@ -221,7 +240,6 @@ public class TabMeFragment extends BaseFragment {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                hideLoadingView();
                 LogUtils.e("onSuccess-->" + t);
                 try {
                     JSONObject jo = new JSONObject(t);
@@ -252,7 +270,6 @@ public class TabMeFragment extends BaseFragment {
                 super.onFailure(errorNo, strMsg);
                 LogUtils.e(errorNo + strMsg);
                 catchWarningByCode(errorNo);
-                hideLoadingView();
             }
         });
     }
@@ -282,8 +299,6 @@ public class TabMeFragment extends BaseFragment {
                                 }
                                 UpdateHelper helper = new UpdateHelper(getActivity(), apkUrl);
                                 helper.showUpdateView();
-
-
                             }
 
                             @Override
@@ -337,5 +352,8 @@ public class TabMeFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/layout_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/page_bg"
+              android:orientation="vertical">
+
+    <com.shanlinjinrong.views.common.CommonTopView
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        app:leftDrawable="@drawable/toolbar_back"
+        app:rightText="@string/work_report_right_btn_text"
+        app:topTitle="@string/work_weekly_newspaper_launch_title"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/gray_E5E5E5"/>
+
+    <ScrollView
+        android:id="@+id/report_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/common_margin_top"
+        android:background="@color/page_bg"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/report_content_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/ll_select_date"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    style="@style/work_report_launch_right_text_style"
+                    android:drawableRight="@drawable/arrow_right"
+                    android:enabled="true"/>
+
+                <TextView
+                    style="@style/work_report_launch_left_text_style"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginStart="14dp"
+                    android:text="@string/work_report_select_date_text"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_report_date"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_report_date"
+                    style="@style/work_report_launch_right_text_style"
+                    android:layout_marginRight="@dimen/common_margin14"
+                    android:enabled="true"/>
+
+                <TextView
+                    style="@style/work_report_launch_left_text_style"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginStart="14dp"
+                    android:text="@string/work_report_report_time_text"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/common_margin_left"
+                android:text="@string/work_report_this_week_work"
+                android:textColor="@color/gray_9b9b9b"
+                android:textSize="@dimen/common_text_size"/>
+
+            <com.shanlinjinrong.oa.views.AllRecyclerView
+                android:id="@+id/rv_work_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"></com.shanlinjinrong.oa.views.AllRecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gray_E5E5E5"/>
+
+            <TextView
+                android:id="@+id/btn_add_this_week_work"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_round_black"
+                android:gravity="center"
+                android:text="@string/weekly_add_work_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/common_margin_left"
+                android:text="下周计划"
+                android:textColor="@color/gray_9b9b9b"
+                android:textSize="@dimen/common_text_size"/>
+
+            <LinearLayout
+                android:id="@+id/ll_next_work_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.shanlinjinrong.oa.views.AllRecyclerView
+                    android:id="@+id/rv_next_work_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"></com.shanlinjinrong.oa.views.AllRecyclerView>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/btn_add_next_week_work"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_round_black"
+                android:gravity="center"
+                android:text="@string/weekly_add_work_plan"/>
+
+            <LinearLayout
+                android:id="@+id/ll_week_report_evaluation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/common_margin_left"
+                    android:text="评语(选填)"
+                    android:textColor="@color/gray_9b9b9b"
+                    android:textSize="@dimen/common_text_size"/>
+
+                <EditText
+                    android:id="@+id/et_work_report_evaluation"
+                    android:layout_width="match_parent"
+                    android:layout_height="82dp"
+                    android:background="@color/white"
+                    android:gravity="left|top"
+                    android:hint="请输入评语（选填）"
+                    android:padding="@dimen/common_margin_left"
+                    android:textSize="@dimen/common_text_size"/>
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/ll_select_receiver"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:layout_marginTop="@dimen/common_margin_top"
+                android:background="@color/white"
+                android:gravity="center_vertical">
+
+                <TextView
+                    style="@style/work_report_launch_left_text_style"
+                    android:text="@string/work_report_receiver"/>
+
+                <TextView
+                    android:id="@+id/tv_receiver"
+                    style="@style/work_report_launch_right_text_style"
+                    android:drawableRight="@drawable/arrow_right"
+                    android:text="@string/work_report_please_select"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
