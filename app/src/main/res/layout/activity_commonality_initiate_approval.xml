@@ -62,7 +62,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="12dp"
                         android:gravity="center"
-                        android:text="CC201710091351450916"
+                        tools:text="CC201710091351450916"
                         android:textSize="14sp"/>
                 </LinearLayout>
 

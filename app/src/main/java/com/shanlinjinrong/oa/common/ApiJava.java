@@ -85,4 +85,7 @@ public class ApiJava {
     // 获取单据编号接口
     public static final String GET_MONOCODE = "nchrcommon/getBillCode";
 
+    // 获取出差类别接口
+    public static final String EVENCTIONTYPE = "nchrEvection/queryBilltype";
+
 }

@@ -246,15 +246,16 @@
                 android:text="工作交接人"
                 android:textSize="14sp"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/et_commonality_show3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
                 android:layout_weight="1"
+                android:clickable="true"
                 android:background="@drawable/edittext_input_square_bg"
                 android:gravity="center_vertical"
-                android:hint="请填写工作交接人"
+                android:text="请填写工作交接人"
                 android:paddingLeft="12dp"
                 android:textSize="14sp"/>
         </LinearLayout>
