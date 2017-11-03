@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shanlinjinrong.oa.views.KeyboardLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/page_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.shanlinjinrong.oa.ui.activity.login.ConfirmCompanyEmailActivity">
+
+    <com.shanlinjinrong.views.common.CommonTopView
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_height_48"
+        app:leftDrawable="@drawable/toolbar_back"
+        app:topTitle="确认邮箱" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="103dp"
+                android:layout_height="103dp"
+                android:layout_marginTop="54dp" />
+
+            <LinearLayout
+                android:id="@+id/ll_find_email_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/common_padding"
+                    android:text="您的邮箱是："
+                    android:textColor="#666666" />
+
+                <TextView
+                    android:id="@+id/tv_email_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/common_padding"
+                    android:text="zhanzhanhong@shanlinjinrong.com"
+                    android:textColor="#151515" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/common_padding"
+                    android:text="若有误，请向HR部门的XXX联系修改！"
+                    android:textColor="#666666" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_confirm_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_confirm_email_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/common_padding"
+                    android:text="@string/find_email_failed"
+                    android:textColor="#999999" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/common_height44"
+                    android:layout_margin="@dimen/common_margin"
+                    android:background="@drawable/edittext_input_square_bg"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+
+                    <EditText
+                        android:id="@+id/et_email"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tv_email_suffix"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:background="@null"
+                        android:completionThreshold="1"
+                        android:enabled="false"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:singleLine="true"
+                        android:text="\@shanlinjinrong.com" />
+
+                    <LinearLayout
+                        android:id="@+id/iv_email_select_arrow"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/arrow_down_select" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_sure"
+                android:layout_width="253dp"
+                android:layout_height="@dimen/common_height44"
+                android:layout_marginTop="31dp"
+                android:background="@drawable/write_report_bth_bg_selector"
+                android:gravity="center"
+                android:text="确定"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_title_size16" />
+
+        </LinearLayout>
+    </ScrollView>
+</com.shanlinjinrong.oa.views.KeyboardLinearLayout>

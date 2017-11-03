@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.utils;
 
 import android.content.Context;
+import android.support.v4.content.res.ResourcesCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,7 +70,6 @@ public class EaseUserUtils {
 
     /**
      * set user avatar
-     *
      */
     public static void setUserAvatarBean(Context context, UserInfoDetailsBean bean, ImageView imageView) {
         if (bean != null) {
@@ -96,16 +96,24 @@ public class EaseUserUtils {
 
     /**
      * set user avatar
-     *
      */
     public static void setUserAvatarBeanSelf(Context context, UserInfoSelfDetailsBean bean, ImageView imageView) {
         if (bean != null) {
             try {
+                if (bean.getCODE_self().contains("admin")) {
+                    imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.meeting_invite_icon, null));
+                    return;
+                }
+                if (bean.getCODE_self().contains("notice")){
+                    imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.notice_message_icon, null));
+                    return;
+                }
                 String portrait = bean.portrait_self.replace("_self", "");
                 Glide.with(context).load(portrait)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
+
             } catch (Exception e) {
                 //use default avatar
                 String portrait = bean.portrait_self.replace("_self", "");
@@ -170,5 +178,32 @@ public class EaseUserUtils {
             }
         }
     }
+
+    public static UserInfoSelfDetailsBean changeUserInfoToSelf(UserInfoDetailsBean bean) {
+        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new UserInfoSelfDetailsBean();
+        userInfoSelfDetailsBean.setCODE_self(bean.getCODE());
+        userInfoSelfDetailsBean.setDepartment_name_self(bean.getDepartment_name());
+        userInfoSelfDetailsBean.setEmail_self(bean.getEmail());
+        userInfoSelfDetailsBean.setPhone_self(bean.getPhone());
+        userInfoSelfDetailsBean.setPortrait_self(bean.getPortrait());
+        userInfoSelfDetailsBean.setPost_title_self(bean.getPost_title());
+        userInfoSelfDetailsBean.setSex_self(bean.getSex());
+        userInfoSelfDetailsBean.setUsername_self(bean.getUsername());
+        return userInfoSelfDetailsBean;
+    }
+
+    public static UserInfoDetailsBean changeSelfToUserInfo(UserInfoSelfDetailsBean bean) {
+        UserInfoDetailsBean userInfoDetailsBean = new UserInfoDetailsBean();
+        userInfoDetailsBean.setCODE(bean.getCODE_self());
+        userInfoDetailsBean.setDepartment_name(bean.getDepartment_name_self());
+        userInfoDetailsBean.setEmail(bean.getEmail_self());
+        userInfoDetailsBean.setPhone(bean.getPhone_self());
+        userInfoDetailsBean.setPortrait(bean.getPortrait_self());
+        userInfoDetailsBean.setPost_title(bean.getPost_title_self());
+        userInfoDetailsBean.setSex(bean.getSex_self());
+        userInfoDetailsBean.setUsername(bean.getUsername_self());
+        return userInfoDetailsBean;
+    }
+
 
 }

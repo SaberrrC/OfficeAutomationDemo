@@ -7,6 +7,7 @@
     <color name="colorPrimary">#FF000000</color>
     <color name="colorAccent">#666666</color>
     <color name="page_bg">#f2f2f2</color>
+    <color name="gray_99EFEFEF">#99EFEFEF</color>
 
     <color name="tab_bar_text_gray">#999999</color>
     <color name="tab_bar_text_light">#0ea7ed</color>
@@ -22,6 +23,7 @@
     <color name="text_common_color">#333333</color>
     <color name="text_common_dark_color">#999999</color>
     <color name="text_common_blue_color">#0EA7ED</color>
+    <color name="text_blue_color">#e0f5ff</color>
     <color name="part_lint_color">#e3e3e3</color>
     <color name="text_red_color">#C1272D</color>
 
@@ -58,11 +60,12 @@
     <!--driver line color-->
     <color name="gray_E5E5E5">#E5E5E5</color>
 
-    <color name="work_report_button_enable">#1a9afa</color>
+    <color name="work_report_button_enable">#FF69B0F2</color>
     <color name="work_report_button_disenable">#bfbaba</color>
 
     <color name="blue_69B0F2">#69B0F2</color>
 
     <color name="red">#ff0000</color>
+    <color name="grey">#FF898989</color>
 
 </resources>

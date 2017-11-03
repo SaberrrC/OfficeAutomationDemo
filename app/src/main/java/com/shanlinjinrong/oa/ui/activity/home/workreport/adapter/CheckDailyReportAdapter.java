@@ -258,13 +258,15 @@ public class CheckDailyReportAdapter extends RecyclerView.Adapter<RecyclerView.V
             } else {
                 // 当EditText数据发生改变的时候存到data变量中
                 mData.get(position).setContent(str);
-                int score = Integer.valueOf(str);
-                if (position == mData.size() - 3 && (score > 60 || score < 0)) {
-                    Toast.makeText(mContext, mContext.getString(R.string.work_report_data_work_score_limit), Toast.LENGTH_SHORT).show();
-                } else if (position == mData.size() - 2 && (score > 20 || score < 0)) {
-                    Toast.makeText(mContext, mContext.getString(R.string.work_report_data_professional_score_limit), Toast.LENGTH_SHORT).show();
-                } else if (position == mData.size() - 1 && (score > 20 || score < 0)) {
-                    Toast.makeText(mContext, mContext.getString(R.string.work_report_data_team_score_limit), Toast.LENGTH_SHORT).show();
+                if (!TextUtils.isEmpty(str)) {
+                    int score = Integer.valueOf(str);
+                    if (position == mData.size() - 3 && (score > 60 || score < 0)) {
+                        Toast.makeText(mContext, mContext.getString(R.string.work_report_data_work_score_limit), Toast.LENGTH_SHORT).show();
+                    } else if (position == mData.size() - 2 && (score > 20 || score < 0)) {
+                        Toast.makeText(mContext, mContext.getString(R.string.work_report_data_professional_score_limit), Toast.LENGTH_SHORT).show();
+                    } else if (position == mData.size() - 1 && (score > 20 || score < 0)) {
+                        Toast.makeText(mContext, mContext.getString(R.string.work_report_data_team_score_limit), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

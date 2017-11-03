@@ -36,8 +36,12 @@ public class User implements MultiItemEntity,Serializable {
     private String isleader;//
 
     private String code;//员工工号
+
+    public User() {
+    }
+
     public User(String username, String phone, String portraits, String sex, String postId, String code
-            , String departmentId, String postName, String departmentName,String email, String isshow){
+            , String departmentId, String postName, String departmentName, String email, String isshow){
         this.username=username;
         this.phone=phone;
         this.portraits=portraits;
@@ -204,7 +208,6 @@ public class User implements MultiItemEntity,Serializable {
 
     public User(JSONObject jsonObject) {
         try {
-
             code = jsonObject.getString("CODE");
             uid = jsonObject.getString("uid");
             token = jsonObject.getString("token");

@@ -47,6 +47,7 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             mView.uidNull(0);
                             break;
                         default:
@@ -88,6 +89,7 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             mView.uidNull(0);
                             break;
                         default:

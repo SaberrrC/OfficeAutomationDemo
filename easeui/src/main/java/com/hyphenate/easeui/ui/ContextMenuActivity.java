@@ -55,12 +55,13 @@ public class ContextMenuActivity extends BaseActivity {
                 setContentView(R.layout.em_context_menu_for_image);
             } else {
                 setContentView(R.layout.em_context_menu_for_text);
+                //不显示撤回消息
                 linearLayout = (LinearLayout) findViewById(R.id.ll_recall_view);
-                if (userInfo.equals(userName)) {
-                    linearLayout.setVisibility(View.VISIBLE);
-                } else {linearLayout = (LinearLayout) findViewById(R.id.ll_recall_view);
+//                if (userInfo.equals(userName)) {
+//                    linearLayout.setVisibility(View.VISIBLE);
+//                } else {linearLayout = (LinearLayout) findViewById(R.id.ll_recall_view);
                     linearLayout.setVisibility(View.GONE);
-                }
+//                }
             }
         } else if (type == EMMessage.Type.LOCATION.ordinal()) {
             setContentView(R.layout.em_context_menu_for_location);

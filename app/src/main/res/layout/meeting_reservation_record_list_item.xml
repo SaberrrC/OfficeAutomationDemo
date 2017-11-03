@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/ll"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <FrameLayout
+            android:id="@+id/rlTimeline"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp">
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/tvBottomLine"-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/gray_9b9b9b"-->
+            <!--android:gravity="center"/>-->
+            <!--</LinearLayout>-->
+
+            <ImageView
+                android:id="@+id/tvDot"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/meeting_record_icon"
+                android:scaleType="fitXY"/>
+
+        </FrameLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rlContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/meeting_record_bg_item"
+            android:paddingBottom="6dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/tv_accept_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:textColor="#999"
+                android:textSize="14sp"
+                tools:text="2017-09-18    17：00   "/>
+
+            <TextView
+                android:id="@+id/tv_meeting_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="12dp"
+                android:textColor="#55BBFF"
+                tools:text="待使用"/>
+
+            <TextView
+                android:id="@+id/tv_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_below="@id/tv_accept_time"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray_9b9b9b"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_meeting_room_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_line"
+                android:layout_marginLeft="12dp"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                tools:text="七楼大会议室"/>
+
+            <TextView
+                android:id="@+id/tv_meeting_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_meeting_room_name"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="4dp"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                tools:text="善林系统需求评审会会"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
+

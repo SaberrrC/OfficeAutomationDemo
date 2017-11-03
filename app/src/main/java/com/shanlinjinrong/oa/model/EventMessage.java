@@ -5,7 +5,10 @@ package com.shanlinjinrong.oa.model;
  */
 
 public class EventMessage {
-    public EventMessage(){
+    private String str;
+    private int type;
+
+    public EventMessage() {
 
     }
 
@@ -17,6 +20,12 @@ public class EventMessage {
         this.str = str;
     }
 
-    private String str;
+    public int getType() {
+        return type;
+    }
 
+    public EventMessage setType(int type) {
+        this.type = type;
+        return this;
+    }
 }

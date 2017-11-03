@@ -9,14 +9,14 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
-import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.model.UserInfoDetailsBean;
+import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
@@ -24,7 +24,6 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.utils.StringUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,17 +42,17 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.layout_root)
-    RelativeLayout mRootView;
+    LinearLayout mRootView;
     private String u_id;
     private EaseChatFragment chatFragment;
-    private String to_user_nike;
-    private String to_code;
-    private String department_name;
-    private String post_name;
-    private String sex;
-    private String phone;
-    private String email;
-    private String to_user_pic;
+    //    private String to_user_nike;
+//    private String to_code;
+//    private String department_name;
+//    private String post_name;
+//    private String sex;
+//    private String phone;
+//    private String email;
+//    private String to_user_pic;
     private static final int REQUEST_CODE_CONTEXT_MENU = 14;
 
     @Override
@@ -65,7 +64,6 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
         //TODO 暂时注释掉
 //        setTranslucentStatus(this);
 //        initWidget();
-        initData();
     }
 
     private void initWidget() {
@@ -87,27 +85,43 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     }
 
     private void initData() {
-        to_user_nike = getIntent().getStringExtra("usernike");
-        to_user_pic = getIntent().getStringExtra("user_pic");
+
+//        to_user_nike = getIntent().getStringExtra("usernike");
+//        to_user_pic = getIntent().getStringExtra("user_pic");
+
+//        department_name = getIntent().getStringExtra("department_name");
+//        post_name = getIntent().getStringExtra("post_name");
+//        sex = getIntent().getStringExtra("sex");
+//        phone = getIntent().getStringExtra("phone");
+//        email = getIntent().getStringExtra("email");
+//        to_code = getIntent().getStringExtra("code");
+//        if ("http://".equals(to_user_pic)) {
+//            to_user_pic = "";
+//        }
+//
+//        boolean blank = StringUtils.isBlank(to_user_nike);
+//        if (!blank) {
+//            tvTitle.setText(to_user_nike);
+//        } else {
+//            if (!StringUtils.isBlank(String.valueOf(u_id))) {
+//                tvTitle.setText(FriendsInfoCacheSvc.getInstance(this).getNickName(u_id));
+//            }
+//        }
+
+
+        userInfo_self = getIntent().getStringExtra("userInfo_self");
+        userInfo = getIntent().getStringExtra("userInfo");
         u_id = getIntent().getStringExtra("u_id");
-        department_name = getIntent().getStringExtra("department_name");
-        post_name = getIntent().getStringExtra("post_name");
-        sex = getIntent().getStringExtra("sex");
-        phone = getIntent().getStringExtra("phone");
-        email = getIntent().getStringExtra("email");
-        to_code = getIntent().getStringExtra("code");
-        if ("http://".equals(to_user_pic)) {
-            to_user_pic = "";
+
+        UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
+        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
+
+        if (userInfoDetailsBean != null && u_id.contains(userInfoDetailsBean.getCODE()))
+            tvTitle.setText(userInfoDetailsBean.getUsername());
+        else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
+            tvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
         }
 
-        boolean blank = StringUtils.isBlank(to_user_nike);
-        if (!blank) {
-            tvTitle.setText(to_user_nike);
-        } else {
-            if (!StringUtils.isBlank(String.valueOf(u_id))) {
-                tvTitle.setText(FriendsInfoCacheSvc.getInstance(this).getNickName(u_id));
-            }
-        }
 
         //传入参数
         Bundle args = new Bundle();
@@ -117,16 +131,15 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
             args.putString(EaseConstant.EXTRA_USER_ID, u_id);
             //对方的信息
             args.putString("to_user_code", getIntent().getStringExtra("code"));
-            args.putString("to_user_nike", to_user_nike);
-            args.putString("to_user_pic", to_user_pic);
-            args.putString("to_user_department", department_name);
-            args.putString("to_user_post", post_name);
-            args.putString("to_user_sex", sex);
-            args.putString("to_user_phone", phone);
-            args.putString("to_user_email", email);
+            args.putString("to_user_nike", userInfoDetailsBean.getUsername());
+            args.putString("to_user_pic", userInfoDetailsBean.getPortrait());
+            args.putString("to_user_department", userInfoDetailsBean.getDepartment_name());
+            args.putString("to_user_post", userInfoDetailsBean.getPost_title());
+            args.putString("to_user_sex", userInfoDetailsBean.getSex());
+            args.putString("to_user_phone", userInfoDetailsBean.getPhone());
+            args.putString("to_user_email", userInfoDetailsBean.getEmail());
 
-            userInfo_self = getIntent().getStringExtra("userInfo_self");
-            userInfo = getIntent().getStringExtra("userInfo");
+
             args.putString("userInfo", userInfo);
             args.putString("userInfo_self", userInfo_self);
 
@@ -214,6 +227,9 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
 
     @Override
     public void clickUserInfo(String userinfo, EMMessage emMessage) {
+        if (userinfo.contains("admin") || userinfo.contains("notice")) {
+            return;
+        }
         Intent intent = new Intent(this, Contact_Details_Activity.class);
         intent.putExtra("user_code", userinfo);
         intent.putExtra("isSession", true);
@@ -225,4 +241,9 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
 }

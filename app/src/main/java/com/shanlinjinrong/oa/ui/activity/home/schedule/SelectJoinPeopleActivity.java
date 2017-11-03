@@ -290,7 +290,6 @@ import com.shanlinjinrong.oa.model.selectContacts.Group;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.adapter.SelectJoinPeopleAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.MyJoinPeopleFragment;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.views.ClearEditText;
 
@@ -432,11 +431,13 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         mListView.setAdapter(mAdapter);
         //mListView.setOnChildClickListener(mAdapter);
         mListView.setOnChildClickListener(new GetSelectedEmployee());
-
-        //selectedContacts = getIntent().getParcelableArrayListExtra("selectedContacts");
-        selectedContacts = new ArrayList<>();
-
-
+        selectedContacts = getIntent().getParcelableArrayListExtra("selectedContacts");
+        if (selectedContacts == null) {
+            selectedContacts = new ArrayList<>();
+        } else {
+            qty.setText(selectedContacts.size() + "");
+        }
+        qty.setText(selectedContacts.size() + "");
     }
 
 
@@ -446,28 +447,28 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                                     int childPosition, long id) {
             if (selectedContacts.size() == 0) {
                 selectedContacts.add(groups.get(groupPosition).getChildItem(childPosition));
+                groups.get(groupPosition).getChildItem(childPosition).setChecked(true);
             } else {
                 boolean isExist = false;
                 for (int i = 0; i < selectedContacts.size(); i++) {
-                    if (selectedContacts.get(i).getUid().equals(
-                            groups.get(groupPosition).getChildItem(childPosition).getUid())) {
+                    if (selectedContacts.get(i).getUid().equals(groups.get(groupPosition).getChildItem(childPosition).getUid())) {
                         isExist = true;
                         Toast.makeText(SelectJoinPeopleActivity.this, R.string.selectJoinPeopleHint, Toast.LENGTH_SHORT).show();
                     }
                 }
                 if (!isExist) {
+                    groups.get(groupPosition).getChildItem(childPosition).setChecked(true);
                     selectedContacts.add(groups.get(groupPosition).getChildItem(childPosition));
                 }
             }
 
             qty.setText(selectedContacts.size() + "");
+            mAdapter.notifyDataSetChanged();
             return false;
         }
     }
 
     //底部弹出框的点击事件
-
-
     private void loadData() {
         if (isFirstLoad) {
             showLoadingView("正在获取联系人列表");
@@ -534,6 +535,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                             }
                             hideEmptyView();
                             mListView.setVisibility(View.VISIBLE);
+                            mToolBarText.setVisibility(View.VISIBLE);
                             mAdapter.notifyDataSetChanged();
                             break;
                         case Api.RESPONSES_CODE_DATA_EMPTY:
@@ -588,7 +590,6 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                 finish();
             }
         });
-        mToolBarText.setVisibility(View.VISIBLE);
         mToolBarText.setText("下一步");
         mToolBarText.setVisibility(View.VISIBLE);
         mToolBarText.setOnClickListener(new View.OnClickListener() {
@@ -598,8 +599,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
 
                 Intent intent = new Intent();
                 intent.putParcelableArrayListExtra("contacts", selectedContacts);
-                setResult(WorkReportLaunchActivity.REQUEST_CODE_MULTIPLE,
-                        intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -640,6 +640,28 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             qty.setText(msg.what + "");
+            refreshData();
         }
+    }
+
+    private void refreshData() {
+        for (int i = 0; i < groups.size(); i++) {
+            for (int j = 0; j < groups.get(i).getChildrenCount(); j++) {
+                Child child = groups.get(i).getChildItem(j);
+                if (selectedContacts.size() == 0) {
+                    child.setChecked(false);
+                } else {
+                    for (int k = 0; k < selectedContacts.size(); k++) {
+                        String uid = selectedContacts.get(k).getUid();
+                        if (child.getUid().equals(uid)) {
+                            child.setChecked(true);
+                        } else {
+                            child.setChecked(false);
+                        }
+                    }
+                }
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 }

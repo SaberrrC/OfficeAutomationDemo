@@ -1,28 +1,34 @@
 package com.shanlinjinrong.oa.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.model.EventMessage;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.LaunchApprovalActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectOrdinaryMeetingRoomActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectVedioMeetingRoomActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MineWorkRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,7 +42,20 @@ public class TabHomePageFragment extends BaseFragment {
 
     @Bind(R.id.title)
     TextView mTvTitle;
+
+    @Bind(R.id.iv_send_to_me_dot)
+    ImageView mSendToMeDot;
+
+    @Bind(R.id.iv_wait_me_approval_dot)
+    ImageView mWaitMeApprovalDot;
+
     private RelativeLayout mRootView;
+
+    private static int TYPE_SEND_TO_ME = 0;//发送我的
+    private static int TYPE_WAIT_ME_APPROVAL = 1;//待我审批
+    private static String DOT_STATUS = "DOT_STATUS";
+    public static String DOT_SEND = "DOT_SEND";
+    public static String DOT_APPORVAL = "DOT_APPORVAL";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -68,82 +87,96 @@ public class TabHomePageFragment extends BaseFragment {
         mTvTitle.setText(AppConfig.getAppConfig(mContext).get(AppConfig.PREF_KEY_COMPANY_NAME));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshDot();
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-
     }
 
-    @OnClick({R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me, R.id
-            .rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id
-            .rl_approval_me_launch, R.id.rl_approval_wait_me_approval, R.id
-            .rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id
-            .rl_schedule_meeting_plan, R.id
-            .rl_schedule_create_common_meeting, R.id.rl_schedule_create_video_meeting, R.id
-            .rl_schedule_create_note, R.id.rl_schedule_my_mail})
+    private void refreshDot() {
+        SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
+        if (sp.getBoolean(DOT_SEND, false)) {
+            mSendToMeDot.setVisibility(View.VISIBLE);
+        } else {
+            mSendToMeDot.setVisibility(View.GONE);
+        }
+        if (sp.getBoolean(DOT_APPORVAL, false)) {
+            mWaitMeApprovalDot.setVisibility(View.VISIBLE);
+        } else {
+            mWaitMeApprovalDot.setVisibility(View.GONE);
+        }
+    }
+
+    public void clearDot(Context context, String name) {
+        SharedPreferences sp = context.getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
+        sp.edit().remove(name).apply();
+        refreshDot();
+    }
+
+
+    @OnClick({R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me,
+            R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report,
+            R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval,
+            R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
+            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_schedule_note})
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
             case R.id.rl_schedule_my_mail:
+                //我的邮箱
                 intent = new Intent(mContext, MyMailActivity.class);
                 break;
             case R.id.rl_work_report_launch:
-//                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
+                //我发起的
                 intent = new Intent(mContext, MyLaunchWorkReportActivity.class);
                 break;
             case R.id.rl_work_report_send_to_me:
-//                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
+                //发送给的
                 intent = new Intent(mContext, WorkReportCheckActivity.class);
+                clearDot(getContext(), DOT_SEND);
                 break;
             case R.id.rl_work_report_copy_to_me:
-//                Toast.makeText(mContext, "新功能程序员正在加紧开发中哦～", Toast.LENGTH_SHORT).show();
-//                intent = new Intent(mContext, WorkReportListActivity.class);
+                //发起周报
                 intent = new Intent(mContext, WriteWeeklyNewspaperActivity.class);
                 break;
             case R.id.rl_work_report_launch_report:
+                //发起日报
                 intent = new Intent(mContext, WorkReportLaunchActivity.class);
                 break;
             case R.id.rl_approval_me_launch:
+                //我的申请
                 intent = new Intent(mContext, ApprovalListActivity.class);
                 intent.putExtra("whichList", 1);
                 break;
             case R.id.rl_approval_wait_me_approval:
+                //待我审批
                 intent = new Intent(mContext, ApprovalListActivity.class);
                 intent.putExtra("whichList", 2);
+                clearDot(getContext(), DOT_APPORVAL);
                 break;
             case R.id.rl_approval_me_approvaled:
+                //我审批的
                 intent = new Intent(mContext, ApprovalListActivity.class);
                 intent.putExtra("whichList", 3);
                 break;
             case R.id.rl_approval_launch_approval:
+                //发起审批
                 intent = new Intent(mContext, LaunchApprovalActivity.class);
                 break;
-            case R.id.rl_schedule_meeting_plan:
-                intent = new Intent(mContext, ScheduleActivity.class);
-                intent.putExtra("whichId", 1);
+            case R.id.rl_schedule_book_meeting:
+                //会议室预定
+                intent = new Intent(mContext, MeetingDetailsActivity.class);
                 break;
-            case R.id.rl_schedule_create_common_meeting:
-                //创建普通会议-旧版
-//                intent=new Intent(mContext, SelectMeetingRoomActivity.class);
-//                intent.putExtra("meetingType","1");
-                //创建普通会议-新版
-                intent = new Intent(mContext, SelectOrdinaryMeetingRoomActivity.class);
-                intent.putExtra("meetingType", "1");
-                //今日安排
-//                intent=new Intent(mContext, ViewTheMeetingScheduleActivity.class);
-//                intent.putExtra("meetingType","1");
+            case R.id.rl_schedule_note:
+                //会议室预定
+                intent = new Intent(mContext, MineWorkRecordActivity.class);
                 break;
-            case R.id.rl_schedule_create_video_meeting:
-                intent = new Intent(mContext, SelectVedioMeetingRoomActivity.class);
-                intent.putExtra("meetingType", "2");
-                break;
-
-            case R.id.rl_schedule_create_note:
-                intent = new Intent(mContext, CreateNoteActivity.class);
-                break;
-
         }
         if (intent != null) {
             startActivity(intent);

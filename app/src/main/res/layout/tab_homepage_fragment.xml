@@ -49,10 +49,10 @@
         android:fadingEdge="none"
         android:overScrollMode="never">
 
-        <RelativeLayout
-
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/ll_work_report_container"
@@ -166,28 +166,43 @@
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color" />
 
-                    <RelativeLayout
-                        android:id="@+id/rl_work_report_send_to_me"
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center">
+                        android:layout_weight="1">
+
+                        <RelativeLayout
+                            android:id="@+id/rl_work_report_send_to_me"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/iv_homepage_wr_send_to_me"
+                                style="@style/home_page_icon_style"
+                                android:src="@mipmap/work_content_send_me" />
+
+                            <TextView
+                                style="@style/common_text_style"
+                                android:layout_below="@+id/iv_homepage_wr_send_to_me"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="8dp"
+                                android:text="发给我的"
+                                android:textSize="@dimen/text_common_icon_tips" />
+
+                        </RelativeLayout>
 
                         <ImageView
-                            android:id="@+id/iv_homepage_wr_send_to_me"
-                            style="@style/home_page_icon_style"
-                            android:src="@mipmap/work_content_send_me" />
+                            android:id="@+id/iv_send_to_me_dot"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="top|end"
+                            android:layout_marginRight="@dimen/horizontal_spacing12"
+                            android:layout_marginTop="@dimen/horizontal_spacing12"
+                            android:src="@drawable/ring_red"
+                            android:visibility="gone"/>
 
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_wr_send_to_me"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="发给我的"
-                            android:textSize="@dimen/text_common_icon_tips" />
-
-
-                    </RelativeLayout>
+                    </FrameLayout>
                 </LinearLayout>
 
                 <View
@@ -258,28 +273,44 @@
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color" />
 
-                    <RelativeLayout
-                        android:id="@+id/rl_approval_wait_me_approval"
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center">
+                        android:layout_weight="1">
+
+                        <RelativeLayout
+                            android:id="@+id/rl_approval_wait_me_approval"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/iv_homepage_approval_wait_me_approval"
+                                style="@style/home_page_icon_style"
+                                android:src="@drawable/icon_homepage_approval_wait_me_approval" />
+
+                            <TextView
+                                style="@style/common_text_style"
+                                android:layout_below="@+id/iv_homepage_approval_wait_me_approval"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="8dp"
+                                android:text="待我审批"
+                                android:textSize="@dimen/text_common_icon_tips" />
+
+
+                        </RelativeLayout>
 
                         <ImageView
-                            android:id="@+id/iv_homepage_approval_wait_me_approval"
-                            style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_approval_wait_me_approval" />
+                            android:id="@+id/iv_wait_me_approval_dot"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="top|end"
+                            android:layout_marginRight="@dimen/horizontal_spacing12"
+                            android:layout_marginTop="@dimen/horizontal_spacing12"
+                            android:src="@drawable/ring_red"
+                            android:visibility="gone"/>
+                    </FrameLayout>
 
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_approval_wait_me_approval"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="待我审批"
-                            android:textSize="@dimen/text_common_icon_tips" />
-
-
-                    </RelativeLayout>
 
                     <View
                         android:layout_width="0.5dp"
@@ -363,7 +394,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="10dp"
-                    android:text="办公日程"
+                    android:text="日程管理"
                     android:textColor="#333333"
                     android:textSize="@dimen/text_sixteen_dp" />
 
@@ -373,120 +404,6 @@
                     android:layout_marginTop="10dp"
                     android:background="@color/grid_layout_line_color" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="84dp">
-
-                    <RelativeLayout
-                        android:id="@+id/rl_schedule_meeting_plan"
-                        android:layout_width="0dp"
-                        android:layout_height="84dp"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/iv_schedule_meeting_plan"
-                            style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_schedule_meeting_plan" />
-
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_schedule_meeting_plan"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="日程安排"
-                            android:textSize="@dimen/text_common_icon_tips" />
-
-
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl_schedule_create_common_meeting"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/iv_homepage_schedule_create_common_meeting"
-                            style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_schedule_create_common_meet" />
-
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_schedule_create_common_meeting"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="创建普通会议"
-                            android:textSize="@dimen/text_common_icon_tips" />
-
-
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl_schedule_create_video_meeting"
-                        android:layout_width="0dp"
-                        android:layout_height="84dp"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/iv_schedule_create_video_meeting"
-                            style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_schedule_create_vedio_meet" />
-
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_schedule_create_video_meeting"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="创建视频会议"
-                            android:textSize="@dimen/text_common_icon_tips" />
-
-
-                    </RelativeLayout>
-
-
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl_schedule_create_note"
-                        android:layout_width="0dp"
-                        android:layout_height="84dp"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/iv_homepage_schedule_create_note"
-                            style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_schedule_create_note" />
-
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_schedule_create_note"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="创建记事本"
-                            android:textSize="@dimen/text_common_icon_tips" />
-
-
-                    </RelativeLayout>
-
-
-                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -497,6 +414,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="84dp">
                     <!---->
+
+                    <RelativeLayout
+                        android:id="@+id/rl_schedule_book_meeting"
+                        android:layout_width="0dp"
+                        android:layout_height="84dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/iv_homepage_schedule_me_launch"
+                            style="@style/home_page_icon_style"
+                            android:src="@drawable/meeting_room_book" />
+
+                        <TextView
+                            style="@style/common_text_style"
+                            android:layout_below="@+id/iv_homepage_schedule_me_launch"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:text="会议室预定"
+                            android:textSize="@dimen/text_common_icon_tips" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color" />
+
                     <RelativeLayout
                         android:id="@+id/rl_schedule_my_mail"
                         android:layout_width="0dp"
@@ -518,34 +462,6 @@
                             android:textSize="@dimen/text_common_icon_tips" />
                     </RelativeLayout>
 
-
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl_schedule_me_launch"
-                        android:layout_width="0dp"
-                        android:layout_height="84dp"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/iv_homepage_schedule_me_launch"
-                            style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_schedule_meeting_me_launch"
-                            android:visibility="gone" />
-
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_homepage_schedule_me_launch"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="我发起的"
-                            android:textSize="@dimen/text_common_icon_tips"
-                            android:visibility="gone" />
-                    </RelativeLayout>
 
                     <View
                         android:layout_width="0.5dp"
@@ -597,6 +513,6 @@
                     android:layout_height="0.5dp"
                     android:background="@color/grid_layout_line_color" />
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 </RelativeLayout>

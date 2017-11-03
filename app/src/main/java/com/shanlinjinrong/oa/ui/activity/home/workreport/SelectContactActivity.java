@@ -14,17 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
-import com.shanlinjinrong.views.common.CommonTopView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.model.selectContacts.Group;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ContactAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.SelectContactActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.SelectContactActivityPresenter;
-import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ContactAdapter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.views.ClearEditText;
+import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -211,6 +212,10 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     @Override
     public void loadDataFailed(int errCode, String errMsg) {
+        if (errMsg.equals("auth error")) {
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            return;
+        }
         mContentEmpty.setVisibility(View.VISIBLE);
         mContentEmpty.setText("没有搜索到该员工，请重新搜索");
 //        showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);

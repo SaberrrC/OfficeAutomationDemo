@@ -79,6 +79,7 @@
     <string name="work_report_receiver">接收人</string>
     <string name="work_report_no_write">未填写</string>
     <string name="work_report_has_write">已填写</string>
+    <string name="work_report_need_perfect">待完善</string>
     <string name="work_report_click_write">点击输入</string>
     <string name="work_report_professional_qualities">职业素养</string>
     <string name="work_report_personal_behavior">个人行为</string>
@@ -155,4 +156,13 @@
     <string name="work_report_data_team_score_limit">团队合作打分不能低于0分或者超过20分！</string>
     <string name="weekly_add_work_plan">+ 添加一项计划</string>
     <string name="weekly_add_work_content">+ 添加一项工作</string>
+    <string name="write_job_number_text">填写工号</string>
+    <string name="find_email_failed">提示：未找到您的邮箱，请手动输入</string>
+    <string name="string_meeting_rooms_not_available">暂无会议室</string>
+    <string name="string_not_network">当前网络不可用!</string>
+    <string name="string_meeting_record_not_available">暂无预订记录!</string>
+    <string name="string_not_more">没有更多了</string>
+    <string name="str_mine_work_record">我的考勤</string>
+    <string name="str_mission_work_title">出差申请</string>
+
 </resources>

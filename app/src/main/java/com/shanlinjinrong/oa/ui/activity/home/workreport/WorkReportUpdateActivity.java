@@ -442,10 +442,12 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
      */
     private void freshHourReportList() {
         for (int i = 0; i < mHourReportData.size(); i++) {
-            if (mHourReportData.get(i).checkHasEmpty()) {
+            if (mHourReportData.get(i).checkAllEmpty()) {
                 mWorkReportListData.get(i).setContent(getString(R.string.work_report_no_write));
-            } else {
+            } else if (mHourReportData.get(i).checkIsFull()) {
                 mWorkReportListData.get(i).setContent(getString(R.string.work_report_has_write));
+            } else {
+                mWorkReportListData.get(i).setContent(getString(R.string.work_report_need_perfect));
             }
             mWorkReportListAdapter.notifyItemChanged(i);
         }
@@ -508,6 +510,10 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void getReportFailed(String errCode, String errMsg) {
+        if (errMsg.equals("auth error")) {
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            return;
+        }
         showToast(getString(R.string.load_report_data_error));
         onBackPressed();
     }
@@ -532,6 +538,9 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void updateReportFailed(String errMsg) {
+        if (errMsg.equals("auth error")){
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+        }
         showToast(getString(R.string.work_report_update_failed));
     }
 

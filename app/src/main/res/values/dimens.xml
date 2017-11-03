@@ -17,5 +17,6 @@
     <dimen name="driver_height">1dp</dimen>
     <dimen name="common_image_width">36dp</dimen>
     <dimen name="common_title_size16">16sp</dimen>
+    <dimen name="common_height44">44dp</dimen>
 
 </resources>

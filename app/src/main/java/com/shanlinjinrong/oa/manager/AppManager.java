@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -33,8 +34,6 @@ import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerAppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.module.AppManagerModule;
 import com.shanlinjinrong.oa.ui.base.dagger.module.KjHttpModule;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.BufferedReader;
@@ -54,7 +53,7 @@ import cn.jpush.android.api.JPushInterface;
  * Created by KevinMeng on 2016/5/6.
  */
 
-public class AppManager extends Application {
+public class AppManager extends MultiDexApplication {
     // 共享变量
     private SelectJoinPeopleActivity.MyJoinHandler joinhandler = null;
 
@@ -73,15 +72,15 @@ public class AppManager extends Application {
     public static Context mContext;
 
     private AppComponent appComponent;
-
-    //内存检测start
-    public static RefWatcher getRefWatcher(Context context) {
-        AppManager application = (AppManager) context
-                .getApplicationContext();
-        return application.refWatcher;
-    }
-
-    private RefWatcher refWatcher;
+//
+//    //内存检测start
+//    public static RefWatcher getRefWatcher(Context context) {
+//        AppManager application = (AppManager) context
+//                .getApplicationContext();
+//        return application.refWatcher;
+//    }
+//
+//    private RefWatcher refWatcher;
     //内存检测end
 
     public AppManager() {
@@ -151,9 +150,9 @@ public class AppManager extends Application {
             StrictMode.setVmPolicy(vmPolicyBuilder.build());
         }
         //leakCanary
-        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this);
-        }
+//        if (!LeakCanary.isInAnalyzerProcess(this)) {
+//            LeakCanary.install(this);
+//        }
         //blockCanary
 //        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
@@ -167,7 +166,7 @@ public class AppManager extends Application {
         // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
         config.notificationEntrance = WelcomePage.class; // 点击通知栏跳转到该Activity
-        config.notificationSmallIconId = R.mipmap.ic_launcher;
+        config.notificationSmallIconId = R.mipmap.oa_logo;
         // 呼吸灯配置
         config.ledARGB = Color.GREEN;
         config.ledOnMs = 1000;
@@ -199,7 +198,7 @@ public class AppManager extends Application {
 
             @Override
             public int getDefaultIconResId() {
-                return R.mipmap.ic_launcher;
+                return R.mipmap.oa_logo;
             }
 
             @Override

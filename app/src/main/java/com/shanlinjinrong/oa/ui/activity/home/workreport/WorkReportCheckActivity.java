@@ -103,6 +103,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         mRefreshLayout.setRefreshing(true);
         loadData(false);
         showMask();
+//        TabHomePageFragment.clearDot(this,TabHomePageFragment.DOT_SEND);
     }
 
     private void showMask() {
@@ -369,7 +370,11 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     public void loadDataFailed(int errCode, String errMsg) {
 //        mReportCheckList.loadMoreError(errCode, errMsg);
         if (errCode == -1) {
-            showToast(getString(R.string.net_no_connection));
+            if (errMsg.equals("auth error")){
+                catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            }else {
+                showToast(getString(R.string.net_no_connection));
+            }
         } else {
             showToast(getString(R.string.data_load_error));
         }

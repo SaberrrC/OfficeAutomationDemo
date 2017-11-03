@@ -156,7 +156,16 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             String user_Info = lastMessage.getStringAttribute("userInfo", "");
             userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
             userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
-            if (username.equals("sl_" + userInfoDetailsBean.CODE)) {
+
+            String user = EMClient.getInstance().getCurrentUser();
+            //角色转换
+            if (!EMClient.getInstance().getCurrentUser().contains(userInfoDetailsBean.getCODE())){
+                UserInfoDetailsBean userInfoDetailsBeanTemp = userInfoDetailsBean;
+                userInfoDetailsBean = EaseUserUtils.changeSelfToUserInfo(userInfoSelfDetailsBean);
+                userInfoSelfDetailsBean = EaseUserUtils.changeUserInfoToSelf(userInfoDetailsBeanTemp);
+            }
+
+            if (userInfoDetailsBean != null && username.equals("sl_" + userInfoDetailsBean.CODE)) {
                 if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
                     String groupId = conversation.conversationId();
                     if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
@@ -183,7 +192,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                     holder.name.setText(userInfoDetailsBean.username);
                     holder.motioned.setVisibility(View.GONE);
                 }
-            } else if (username.equals("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+            } else if (userInfoSelfDetailsBean != null && username.contains("sl_" + userInfoSelfDetailsBean.CODE_self)) {
                 try {
                     EaseUserUtils.setUserAvatarBeanSelf(getContext(), userInfoSelfDetailsBean, holder.avatar);
 //                    EaseUserUtils.setUserNick(username, holder.name);

@@ -9,12 +9,9 @@ import org.json.JSONObject;
  * Created by KevinMeng on 2016/7/28.
  */
 public class Api {
-    /**
-     * 原始url
-     */
-    public static final String ORIGINAL_URL = "http://www.zhitongoa.com/getapidomain.php";
+    public static final String PHP_DEBUG_URL = "http://118.31.18.67:86";
 
-//    private static final String BASE_URL = "http://api.shanlin.zhitongoa.com/";
+    public static final String PHP_URL = "http://testoa.shanlinjinrong.com/webApi";
 
     private static final String RESPONSES_KEY_CODE = "code";
 
@@ -72,6 +69,16 @@ public class Api {
     public static final int RESPONSES_CONTENT_EMPTY = 365;
 
     /**
+     * 没有这个用户
+     */
+    public static final int RESPONSES_CODE_NO_ACCOUNT = 823;
+
+    /**
+     * 暂无数据
+     */
+    public static final int RESPONSES_CODE_NO_CONTENT = 824;
+
+    /**
      * {"code":"393","info":"分页为空"}
      */
     public static final int LIMIT_CONTENT_EMPTY = 393;
@@ -114,7 +121,7 @@ public class Api {
     /**
      * 登录时间判断接口
      */
-    public static final String  SITE_TIMEOUT="site/timeout";
+    public static final String SITE_TIMEOUT = "site/timeout";
     /**
      * 选择接收人
      */
@@ -130,7 +137,7 @@ public class Api {
     /**
      * 选择会议室新接口
      */
-    public static final String CONFERENCE_SELECTMEETINGROOMNEW="conference/selectmeetingroomnew";
+    public static final String CONFERENCE_SELECTMEETINGROOMNEW = "conference/selectmeetingroomnew";
     /**
      * 选择参加人
      */
@@ -138,7 +145,7 @@ public class Api {
     /**
      * 根据开始时间获取可使用时间
      */
-    public static final String  CONFERENCE_GETOCCUPYTIMEBYBEGINTIME="conference/getoccupytimebybegintime";
+    public static final String CONFERENCE_GETOCCUPYTIMEBYBEGINTIME = "conference/getoccupytimebybegintime";
     /**
      * 获取我发起的工作汇报
      */
@@ -193,7 +200,7 @@ public class Api {
     /**
      * 根据日期获取当天可使用时间接口
      */
-    public static final String  CONFERENCE_GETOCCUPYTIME="conference/getoccupytime";
+    public static final String CONFERENCE_GETOCCUPYTIME = "conference/getoccupytime";
     /**
      * 头像
      */
@@ -288,7 +295,7 @@ public class Api {
     /**
      * 会议室详情接口
      */
-    public static final String  CONFERENCE_CONFERENCEINFO="conference/conferenceinfo";
+    public static final String CONFERENCE_CONFERENCEINFO = "conference/conferenceinfo";
     /**
      * 获取审批人
      */
@@ -422,6 +429,52 @@ public class Api {
      * 聊天个人信息
      */
     public static final String COMMUNICATION_USERINFO = "user/detail";
+
+    // 获取验证码
+    public static final String SENDS_CAPTCHA = "/users/code";
+
+    // 查询工号信息
+    public static final String USERS_SEARCH = "/users/search?code=";
+
+
+    /**
+     * 新会议室信息
+     */
+    public static final String NEW_MEETINGROOMS = "/new_meetingrooms";
+
+    /**
+     * 新会议室记录信息
+     */
+    public static final String NEW_MEETING_RECORD = "/new_meetings/reserve";
+
+
+    /**
+     * 新会议室预定时间段情况
+     */
+    public static final String NEW_MEETING_ALR_MEETING = "/new_meetings/alr_meeting?room_id=";
+
+
+    /**
+     * 添加新会议室
+     */
+    public static final String ADD_NEW_MEETING = "/new_meetings";
+
+    /**
+     * 取消新会议室
+     */
+    public static final String DELETE_NEW_MEETING = "/new_meetings";
+    /**
+     * 新会议室调期
+     */
+    public static final String MODIFY_NEW_MEETING = "/new_meetings/";
+
+    /**
+     * 获取会议详情
+     */
+    public static final String LOOK_NEW_MEETING_INFO = "/new_meetings/meeting_info";
+
+    // 找回密码，确认邮箱
+    public static final String USERS_REPWD = "/users/repwd";
 
     //*****************************************************************//
 

@@ -50,6 +50,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             mView.uidNull(0);
                             break;
                         default:
@@ -97,6 +98,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             mView.uidNull(0);
                             break;
                         default:
@@ -140,6 +142,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             mView.uidNull(0);
                             break;
                         default:
@@ -184,6 +187,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                         break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             mView.uidNull(0);
                             break;
                         default:
@@ -227,6 +231,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
 
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             mView.uidNull(0);
                             break;
                         default:
@@ -280,6 +285,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             mView.uidNull(0);
                             break;
 

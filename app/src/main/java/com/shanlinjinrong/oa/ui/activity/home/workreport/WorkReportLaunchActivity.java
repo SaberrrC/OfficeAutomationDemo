@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
@@ -397,10 +398,12 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
      */
     private void freshHourReportList() {
         for (int i = 0; i < mHourReportData.size(); i++) {
-            if (mHourReportData.get(i).checkHasEmpty()) {
+            if (mHourReportData.get(i).checkAllEmpty()) {
                 mWorkReportListData.get(i).setContent(getString(R.string.work_report_no_write));
-            } else {
+            } else if (mHourReportData.get(i).checkIsFull()) {
                 mWorkReportListData.get(i).setContent(getString(R.string.work_report_has_write));
+            } else {
+                mWorkReportListData.get(i).setContent(getString(R.string.work_report_need_perfect));
             }
             mWorkReportListAdapter.notifyItemChanged(i);
         }
@@ -463,6 +466,11 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
     @Override
     public void reportFailed(String errCode, String errMsg) {
+
+        if (errMsg.equals("auth error")) {
+            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            return;
+        }
         switch (errCode) {
             case ApiJava.REQUEST_HAD_REPORTED:
                 Toast.makeText(this, getString(R.string.work_report_current_date_had_report), Toast.LENGTH_SHORT).show();

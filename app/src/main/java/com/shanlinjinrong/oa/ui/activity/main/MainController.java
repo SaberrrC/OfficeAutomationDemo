@@ -12,6 +12,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -28,10 +32,12 @@ import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.util.NetUtils;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
@@ -44,6 +50,8 @@ import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.BadgeUtil;
+import com.shanlinjinrong.oa.utils.CustomDialogUtils;
+import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
 import java.util.ArrayList;
@@ -170,8 +178,8 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         setTranslucentStatus(this);
         initWidget();
         initData();
-//        LoginIm();//登录环信
-//        initEaseData();//初始化登录云信
+        LoginIm();//登录环信
+        initEaseData();//初始化登录云信
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
@@ -236,7 +244,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 Intent intent = new Intent(MainController.this, ModifyPwdActivity.class);
                 startActivity(intent);
                 dialog.dismiss();
-                MainController.this.finish();
             }
         });
         dialog = new AlertDialog.Builder(this, R.style.AppTheme_Dialog).create();
@@ -265,22 +272,19 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     }
 
 
-//    /**
-//     * 初始化云信视频的相关数据
-//     */
-//    private void initEaseData() {
-//        String account = "SL_" + AppConfig.getAppConfig(
-//                MainController.this).get(AppConfig.PREF_KEY_CODE);
-//        String token = AppConfig.getAppConfig(MainController.this).get(
-//                AppConfig.PREF_KEY_YX_TOKEN);
-//        mPresenter.initEase(loginRequest, account, token);
-//    }
-//
-//
-//    //登录环信
-//    public void LoginIm() {
-//        mPresenter.loginIm(this);
-//    }
+    //登录环信
+    public void LoginIm() {
+        //注册一个监听连接状态的listener
+        EMClient.getInstance().addConnectionListener(new MyConnectionListener());
+        LoginUtils.loginIm(MainController.this, null);
+    }
+
+    /**
+     * 初始化云信视频的相关数据
+     */
+    private void initEaseData() {
+        LoginUtils.initEase(MainController.this, null);
+    }
 
     public void refreshCommCount() {
         new Thread(new Runnable() {
@@ -454,6 +458,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 //在TagAliasCallback 的 gotResult 方法，返回对应的参数 alias, tags。并返回对应的状态码：0为成功，其他返回码请参考错误码定义
                 @Override
                 public void gotResult(int i, String s, Set<String> set) {
+                    Log.i("MainController", "MainController : + gotResult");
                 }
             });
             Set<String> set = new HashSet<>();
@@ -501,7 +506,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         //添加环信监听
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
         refreshCommCount();
-        refreshUnReadMsgCount();
+//        refreshUnReadMsgCount();
         super.onResume();
     }
 
@@ -619,4 +624,57 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         super.onDestroy();
     }
 
+    //实现ConnectionListener接口
+    private class MyConnectionListener implements EMConnectionListener {
+        @Override
+        public void onConnected() {
+        }
+
+        @Override
+        public void onDisconnected(final int error) {
+            runOnUiThread(() -> {
+                if (error == EMError.USER_REMOVED) {
+                    NonTokenDialog();
+                } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                    NonTokenDialog();
+                } else {
+                    if (NetUtils.hasNetwork(MainController.this)) {
+                        //连接不到聊天服务器
+                    } else {
+                        //当前网络不可用，请检查网络设置
+                    }
+                }
+            });
+        }
+    }
+
+    private CustomDialogUtils mDialog;
+
+    //环线 多地登陆退出
+    private void NonTokenDialog() {
+        try {
+            //获取屏幕高宽
+            DisplayMetrics metric = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metric);
+            int windowsHeight = metric.heightPixels;
+            int windowsWight = metric.widthPixels;
+            CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(this);
+            mDialog = builder.cancelTouchout(false)
+                    .view(R.layout.common_custom_dialog)
+                    .heightpx((int) (windowsHeight / 4.5))
+                    .widthpx((int) (windowsWight / 1.4))
+                    .style(R.style.dialog)
+                    .addViewOnclick(R.id.tv_non_token_confirm, view -> {
+                        catchWarningByCode(Api.RESPONSES_CODE_TOKEN_NO_MATCH);
+                    })
+                    .build();
+            if (mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
+            mDialog.setCancelable(false);
+            mDialog.show();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 }

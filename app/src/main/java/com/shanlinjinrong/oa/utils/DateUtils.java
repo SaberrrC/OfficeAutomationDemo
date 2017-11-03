@@ -3,9 +3,12 @@ package com.shanlinjinrong.oa.utils;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +50,23 @@ public class DateUtils {
      */
     public static long getTimestampFromString(String time) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime();
+    }
+
+    /**
+     * 格式化日期显示 <br/>
+     *
+     * @param
+     * @return 时间戳
+     */
+    public static long getTimestampFromString(String time,String pattern) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         Date date = null;
         try {
             date = simpleDateFormat.parse(time);
@@ -247,6 +267,165 @@ public class DateUtils {
     }
 
 
+    public static int getCurrentYear() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public static int getCurrentMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.MONTH);
+    }
+
+
+    public static int getCurrentDay() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static int getWeek(int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, day - 1);
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
+
+    public static int calculateDaysInMonth(int year, int month) {
+        // 添加大小月月份并将其转换为list,方便之后的判断
+        String[] bigMonths = {"1", "3", "5", "7", "8", "10", "12"};
+        String[] littleMonths = {"4", "6", "9", "11"};
+        List<String> bigList = Arrays.asList(bigMonths);
+        List<String> littleList = Arrays.asList(littleMonths);
+        // 判断大小月及是否闰年,用来确定"日"的数据
+        if (bigList.contains(String.valueOf(month))) {
+            return 31;
+        } else if (littleList.contains(String.valueOf(month))) {
+            return 30;
+        } else {
+            if (year <= 0) {
+                return 29;
+            }
+            // 是否闰年
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                return 29;
+            } else {
+                return 28;
+            }
+        }
+    }
+
+
+    public static int getCurrentDaysInMonth(int month) {
+        int year = getCurrentYear();
+        // 添加大小月月份并将其转换为list,方便之后的判断
+        String[] bigMonths = {"1", "3", "5", "7", "8", "10", "12"};
+        String[] littleMonths = {"4", "6", "9", "11"};
+        List<String> bigList = Arrays.asList(bigMonths);
+        List<String> littleList = Arrays.asList(littleMonths);
+        // 判断大小月及是否闰年,用来确定"日"的数据
+        if (bigList.contains(String.valueOf(month))) {
+            return 31;
+        } else if (littleList.contains(String.valueOf(month))) {
+            return 30;
+        } else {
+            if (year <= 0) {
+                return 29;
+            }
+            // 是否闰年
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                return 29;
+            } else {
+                return 28;
+            }
+        }
+    }
+
+    public static List<Integer> getDate(int month) {
+        List<Integer> data = new ArrayList<>();
+        if (month < 1 || month > 12) {
+            return data;
+        }
+        Calendar cal = Calendar.getInstance();
+        int monthDays = calculateDaysInMonth(Calendar.YEAR, month); //获取当月天数
+        int lastMonthDays;//上个月的天数
+        if (month == 1) {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR - 1, 11);
+        } else {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
+        }
+        //设置月份
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 0);
+        int col = cal.get(Calendar.DAY_OF_WEEK);   //获取该天在本星期的第几天 ，也就是第几列
+        for (int i = col - 2; i >= 0; i--) {
+            data.add(lastMonthDays - i);
+        }
+
+        for (int i = 1; i <= monthDays; i++) {
+            data.add(i);
+        }
+
+        if (data.size() % 7 != 0) {
+            int size = 7 - data.size() % 7;
+            for (int i = 1; i <= size; i++) {
+                data.add(i);
+            }
+        }
+
+
+        return data;
+    }
+
+    public static List<PopItem> getDate(int month, int select) {
+        List<PopItem> data = new ArrayList<>();
+        if (month < 1 || month > 12) {
+            return null;
+        }
+        PopItem item;
+        Calendar cal = Calendar.getInstance();
+        int curDay = cal.get(Calendar.DAY_OF_MONTH);
+        int curMonth = cal.get(Calendar.MONTH);
+        int monthDays = calculateDaysInMonth(Calendar.YEAR, month); //获取当月天数
+        int lastMonthDays;//上个月的天数
+        if (month == 1) {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR - 1, 11);
+        } else {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
+        }
+
+        //设置月份
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 0);
+        int col = cal.get(Calendar.DAY_OF_WEEK);   //获取该天在本星期的第几天 ，也就是第几列
+        for (int i = col - 2; i >= 0; i--) {
+            item = new PopItem("" + (lastMonthDays - i), false, false);
+            data.add(item);
+        }
+
+        for (int i = 1; i <= monthDays; i++) {
+            if (i < curDay && month == curMonth + 1) {
+                item = new PopItem("" + i, false, false);
+            } else {
+                item = new PopItem("" + i, true, false);
+            }
+            if (select == i) {
+                item.setSelect(true);
+            }
+            data.add(item);
+        }
+
+
+        if (data.size() % 7 != 0) {
+            int size = 7 - data.size() % 7;
+            for (int i = 1; i <= size; i++) {
+                item = new PopItem("" + i, false, false);
+                data.add(item);
+            }
+        }
+        return data;
+    }
+
+
     /**
      * 获取当前日期之前的所有周一时间
      */
@@ -376,13 +555,15 @@ public class DateUtils {
         return date;
     }
 
+
+
     /**
      * 判断字符串是否为日期字符串
      */
     public static boolean isDate(String date, String pattern) {
         boolean isDate = false;
         if (date != null) {
-            if (StringToDate(date, pattern) != null) {
+            if (stringToDate(date, pattern) != null) {
                 isDate = true;
             }
         }
@@ -392,7 +573,7 @@ public class DateUtils {
     /**
      * 将日期字符串转化为日期。失败返回null。
      */
-    public static Date StringToDate(String date, String pattern) {
+    public static Date stringToDate(String date, String pattern) {
         Date myDate = null;
         if (date != null) {
             try {
@@ -421,7 +602,7 @@ public class DateUtils {
     }
 
     @NonNull
-    private static SimpleDateFormat getDateFormat(String pattern) {
+    public static SimpleDateFormat getDateFormat(String pattern) {
         return new SimpleDateFormat(pattern, Locale.CHINA);
     }
 
@@ -439,5 +620,88 @@ public class DateUtils {
         cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 6);
         String sunday = dateFormat.format(cal.getTime());
         return monday + symbol + sunday;
+    }
+
+
+    public static String stringToDate(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日  HH:mm");
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+        int i = Integer.parseInt(time);
+        String times = sdr.format(new Date(i * 1000L));
+        return times;
+    }
+
+    /**
+     * 判断给定字符串时间是否为今日
+     */
+    public static boolean isToday(long date) {
+        Calendar c1 = Calendar.getInstance();
+        c1.setTimeInMillis(date);
+        int year1 = c1.get(Calendar.YEAR);
+        int month1 = c1.get(Calendar.MONTH)+1;
+        int day1 = c1.get(Calendar.DAY_OF_MONTH);
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(new Date());
+        int year2 = c2.get(Calendar.YEAR);
+        int month2 = c2.get(Calendar.MONTH)+1;
+        int day2 = c2.get(Calendar.DAY_OF_MONTH);
+        return year1 == year2 && month1 == month2 && day1 == day2;
+    }
+
+
+    public static boolean isSameDay(long date, Date sameDate) {
+
+        if ( null == sameDate) {
+
+            return false;
+
+        }
+
+        Calendar nowCalendar = Calendar.getInstance();
+
+        nowCalendar.setTime(sameDate);
+
+        Calendar dateCalendar = Calendar.getInstance();
+
+        dateCalendar.setTimeInMillis(date);
+
+        if (nowCalendar.get(Calendar.YEAR) == dateCalendar.get(Calendar.YEAR)
+
+                && nowCalendar.get(Calendar.MONTH) == dateCalendar.get(Calendar.MONTH)
+
+                && nowCalendar.get(Calendar.DATE) == dateCalendar.get(Calendar.DATE)) {
+
+            return true;
+
+        }
+
+        // if (date.getYear() == sameDate.getYear() && date.getMonth() == sameDate.getMonth()
+
+        // && date.getDate() == sameDate.getDate()) {
+
+        // return true;
+
+        // }
+
+        return false;
+
+    }
+
+
+    // currentTime要转换的long类型的时间
+    // formatType要转换的时间格式yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日 HH时mm分ss秒
+    public static Date longToDate(long currentTime, String formatType)
+            throws ParseException {
+        Date dateOld = new Date(currentTime); // 根据long类型的毫秒数生命一个date类型的时间
+        String sDateTime = dateToString(dateOld, formatType); // 把date类型的时间转换为string
+        Date date = stringToDate(sDateTime, formatType); // 把String类型转换为Date类型
+        return date;
+    }
+
+    // formatType格式为yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日 HH时mm分ss秒
+    // data Date类型的时间
+    public static String dateToString(Date data, String formatType) {
+        return new SimpleDateFormat(formatType).format(data);
     }
 }

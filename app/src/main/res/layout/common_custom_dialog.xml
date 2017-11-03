@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/schedule_popup_window_bg"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_non_token_tip"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.3"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="该账户已经下线、请重新登陆，如不不是本人操作，请前往修改密码。"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/gray_d5d5d5"/>
+    <TextView
+        android:id="@+id/tv_non_token_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/btn_blue_pressed"
+        android:text="确定"
+        android:layout_weight="1"/>
+</LinearLayout>
