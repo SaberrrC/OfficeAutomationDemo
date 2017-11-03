@@ -24,4 +24,5 @@ public interface UserApi {
     @GET("/user/userApi/getAuthCode")
     Observable<HttpResult<String>> getValidCode1(@Body AliCheckRequestBean getValidCodeBody);
 
+
 }

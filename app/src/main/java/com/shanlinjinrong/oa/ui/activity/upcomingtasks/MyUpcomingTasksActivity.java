@@ -132,6 +132,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     }
                     mFinalRecycleAdapter.notifyDataSetChanged();
                 }
+                mPresenter.getData();
             }
 
             @Override
