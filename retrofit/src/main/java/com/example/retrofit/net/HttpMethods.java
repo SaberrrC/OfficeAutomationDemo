@@ -22,7 +22,7 @@ public class HttpMethods {
         toSubscribe(observable, subscriber);
     }
 
-    public void getQueryUserSetting1(Map<String ,String> body, Subscriber<String> subscriber) {
+    public void getApproveData(Map<String ,String> body, Subscriber<String> subscriber) {
         Observable<String> upcomingData = ApiFactory.getJavaApi().getUpcomingData(body);
 
         toSubscribe(upcomingData, subscriber);

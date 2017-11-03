@@ -85,4 +85,6 @@ public class ApiJava {
     // 获取单据编号接口
     public static final String GET_MONOCODE = "nchrcommon/getBillCode";
 
+    //我的申请接口
+    public static final String MYAPPLY_QUERY_APPROVE = "myApply/queryApproveByAll";
 }

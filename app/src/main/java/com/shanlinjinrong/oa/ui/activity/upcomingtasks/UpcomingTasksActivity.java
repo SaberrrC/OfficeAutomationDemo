@@ -195,7 +195,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                             for (Object data : mDatas) {
                                 if (data instanceof UpcomingTaskItemBean) {
                                     UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
-                                    bean.setIsChecked(false);
+//                                    bean.setIsChecked(false);
                                 }
                             }
                             ThreadUtils.runMain(new Runnable() {
@@ -252,7 +252,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                 for (Object data : mDatas) {
                     if (data instanceof UpcomingTaskItemBean) {
                         UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
-                        bean.setIsChecked(false);
+//                        bean.setIsChecked(false);
                     }
                 }
                 ThreadUtils.runMain(new Runnable() {
@@ -324,7 +324,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
             TextView tvState = (TextView) holder.getViewById(R.id.tv_state);
             if (isShowCheck) {
                 cbCheck.setVisibility(View.VISIBLE);
-                cbCheck.setChecked(bean.getIsChecked());
+//                cbCheck.setChecked(bean.getIsChecked());
             } else {
                 cbCheck.setVisibility(View.GONE);
             }
@@ -332,8 +332,8 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                 @Override
                 public void onClick(View view) {
                     if (isShowCheck) {
-                        bean.setIsChecked(!bean.getIsChecked());
-                        cbCheck.setChecked(bean.getIsChecked());
+//                        bean.setIsChecked(!bean.getIsChecked());
+//                        cbCheck.setChecked(bean.getIsChecked());
                         return;
                     }
                     Intent intent = new Intent(UpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
@@ -452,7 +452,7 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
                     for (Object data : mDatas) {
                         if (data instanceof UpcomingTaskItemBean) {
                             UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
-                            bean.setIsChecked(false);
+//                            bean.setIsChecked(false);
                         }
                     }
                     ThreadUtils.runMain(new Runnable() {
@@ -466,5 +466,15 @@ public class UpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresent
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onGetApproveDataSuccess(UpcomingTaskItemBean bean) {
+
+    }
+
+    @Override
+    public void onGetApproveDataFailure(int errorNo, String strMsg) {
+
     }
 }

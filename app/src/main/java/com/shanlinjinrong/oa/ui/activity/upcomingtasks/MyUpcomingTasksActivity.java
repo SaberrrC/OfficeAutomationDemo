@@ -37,6 +37,10 @@ import butterknife.OnClick;
 
 public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
 
+    public static final String PAGE_SIZE     = "20";
+    public static final String TIME          = "0";
+    public static final String BILL_TYPE     = "6402";
+    public static final String APPROVE_STATE = "-1";
     @Bind(R.id.tv_title)
     TextView           mTvTitle;
     @Bind(R.id.toolbar_image_btn)
@@ -65,10 +69,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private TextView            mTvRest;
     private TextView            mTvSign;
     private TextView            mTvOk;
-    private boolean isShowCheck = false;
-    private TextView tvAllState;
-    private TextView tvStateChecked;
-    private TextView tvStateUnchecked;
+    private TextView            tvAllState;
+    private TextView            tvStateChecked;
+    private TextView            tvStateUnchecked;
+    private int     pageNum    = 1;
+    private boolean isLoadOver = false;
 
     @Override
     protected void initInject() {
@@ -100,14 +105,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             @Override
             public void onRefresh() {
                 mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
+                isLoadOver = false;
+                pageNum = 1;
                 if (mDatas.size() > 0) {
                     mDatas.clear();
                 }
-                for (int i = 0; i < 10; i++) {
-                    mDatas.add(new UpcomingTaskItemBean());
-                }
-                mFinalRecycleAdapter.notifyDataSetChanged();
-                mSrRefresh.setRefreshing(false);
+                mPresenter.getApproveData(null, null, String.valueOf(pageNum), PAGE_SIZE, TIME);
             }
         });
     }
@@ -116,7 +119,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRvList.setLayoutManager(mLinearLayoutManager);
         Map<Class, Integer> map = FinalRecycleAdapter.getMap();
-        map.put(UpcomingTaskItemBean.class, R.layout.layout_item_upcoming_task);
+        map.put(UpcomingTaskItemBean.DataBean.DataListBean.class, R.layout.layout_item_upcoming_task);
         getData();
         mFinalRecycleAdapter = new FinalRecycleAdapter(mDatas, map, this);
         mRvList.setAdapter(mFinalRecycleAdapter);
@@ -127,12 +130,13 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 //RecyclerView没有拖动而且已经到达了最后一个item，执行自动加载
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mFinalRecycleAdapter.getItemCount() && mDatas.size() > 9) {
                     mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.LOAD;
-                    for (int i = 0; i < 3; i++) {
-                        mDatas.add(new UpcomingTaskItemBean());
+                    if (isLoadOver) {
+                        showToast("没有更多了");
+                        return;
                     }
-                    mFinalRecycleAdapter.notifyDataSetChanged();
+                    pageNum++;
+                    mPresenter.getApproveData(null, null, String.valueOf(pageNum), PAGE_SIZE, TIME);
                 }
-                mPresenter.getData();
             }
 
             @Override
@@ -144,9 +148,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void getData() {
-        for (int i = 0; i < 10; i++) {
-            mDatas.add(new UpcomingTaskItemBean());
-        }
+        //approveState	单据状态	string	非必传，单据状态 -1=自由，0=审批未通过，1=审批通过，2=审批进行中，3=提交
+        //billType	单据类型	string	非必传，单据类型 6402=签卡申请 6405=加班申请 6403=出差申请 6404休假申请
+        //pageNum	当前第几页	string	必传，当前第几页
+        //pageSize	每页要显示的条数	string	必传，每页要显示的条数
+        //time	申请时间	string	非必传，申请时间0-全部，1-本月，2上月，3-近两月，4-近三个月，5-近六个月
+        mPresenter.getApproveData(null, null, String.valueOf(pageNum), PAGE_SIZE, TIME);
     }
 
     private void initToolbar() {
@@ -238,30 +245,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onBindViewHolder(FinalRecycleAdapter.ViewHolder holder, int position, Object itemData) {
-        if (itemData instanceof UpcomingTaskItemBean) {
-            UpcomingTaskItemBean bean = (UpcomingTaskItemBean) itemData;
+        if (itemData instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+            UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) itemData;
             CheckBox cbCheck = (CheckBox) holder.getViewById(R.id.cb_check);
             ImageView ivIcon = (ImageView) holder.getViewById(R.id.iv_icon);
             TextView tvName = (TextView) holder.getViewById(R.id.tv_name);
             TextView tvReason = (TextView) holder.getViewById(R.id.tv_reason);
             TextView tvTime = (TextView) holder.getViewById(R.id.tv_time);
             TextView tvState = (TextView) holder.getViewById(R.id.tv_state);
-            if (isShowCheck) {
-                cbCheck.setVisibility(View.VISIBLE);
-                cbCheck.setChecked(bean.getIsChecked());
-            } else {
-                cbCheck.setVisibility(View.GONE);
-            }
-            holder.getRootView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isShowCheck) {
-                        bean.setIsChecked(!bean.getIsChecked());
-                        cbCheck.setChecked(bean.getIsChecked());
-                        return;
-                    }
-                }
-            });
         }
     }
 
@@ -370,5 +361,37 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         tvAllState.setTextColor(getResources().getColor(R.color.black_333333));
         tvStateChecked.setTextColor(getResources().getColor(R.color.black_333333));
         tvStateUnchecked.setTextColor(getResources().getColor(R.color.black_333333));
+    }
+
+    @Override
+    public void onGetApproveDataSuccess(UpcomingTaskItemBean bean) {
+        mSrRefresh.setRefreshing(false);
+        if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
+            if (mDatas.size() > 0) {
+                mDatas.clear();
+            }
+        }
+        List<UpcomingTaskItemBean.DataBean.DataListBean> dataList = bean.getData().getDataList();
+        if (dataList == null) {
+            showToast("没有更多了");
+            return;
+        }
+        if (dataList.size() < Integer.parseInt(PAGE_SIZE)) {
+            isLoadOver = true;
+        }
+        mDatas.addAll(dataList);
+        mRvList.requestLayout();
+        mFinalRecycleAdapter.notifyDataSetChanged();
+        if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
+            if (mFinalRecycleAdapter.getItemCount() - 1 >= 0) {
+                mRvList.scrollToPosition(0);
+            }
+        }
+    }
+
+    @Override
+    public void onGetApproveDataFailure(int errorNo, String strMsg) {
+        showToast(strMsg);
+        mSrRefresh.setRefreshing(false);
     }
 }

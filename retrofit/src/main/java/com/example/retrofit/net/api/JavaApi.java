@@ -13,6 +13,6 @@ import rx.Observable;
  */
 public interface JavaApi {
 
-    @GET("MyAplication/selectMyAplication")
+    @GET("myApply/queryApproveByAll")
     Observable<String> getUpcomingData(@QueryMap Map<String, String> map);
 }
