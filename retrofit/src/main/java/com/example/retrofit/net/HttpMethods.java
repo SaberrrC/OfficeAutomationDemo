@@ -3,6 +3,8 @@ package com.example.retrofit.net;
 import com.example.retrofit.model.HttpResult;
 import com.example.retrofit.model.requestbody.AliCheckRequestBean;
 
+import java.util.Map;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -18,6 +20,12 @@ public class HttpMethods {
         Observable<String> observable = ApiFactory.getUserApi().getValidCode(body)
                 .map(new HttpResultFuncType1<String>());
         toSubscribe(observable, subscriber);
+    }
+
+    public void getQueryUserSetting1(Map<String ,String> body, Subscriber<String> subscriber) {
+        Observable<String> upcomingData = ApiFactory.getJavaApi().getUpcomingData(body);
+
+        toSubscribe(upcomingData, subscriber);
     }
 
 

@@ -12,5 +12,6 @@ public interface UpcomingTasksContract {
     }
 
     interface Presenter extends BasePresenter<View> {
+        void getData();
     }
 }
