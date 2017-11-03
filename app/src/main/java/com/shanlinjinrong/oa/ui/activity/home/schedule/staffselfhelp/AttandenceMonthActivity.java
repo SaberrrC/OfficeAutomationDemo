@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,7 +36,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.qqtheme.framework.picker.DatePicker;
 
 /**
  * Created by Administrator on 2017/10/25 0025.
@@ -70,9 +70,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
 
 
-    private DatePicker picker;
     DatePopWindow datePopWindow;
-    private List<PopItem> mData;
+    private List<PopItem> mData = new ArrayList<>();;
     private int mSelectedDay ;
     private int mCurrentDay ;
     private int mCurrentYear;
@@ -108,7 +107,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         cal = Calendar.getInstance();
         mCurrentDay=cal.get(Calendar.DAY_OF_MONTH);
         mCurrentMonth=cal.get(Calendar.MONTH)+1;
+        mCurrentYear=cal.get(Calendar.YEAR);
+
         mSelectedDay=mCurrentDay;
+        mSelectedMonth=mCurrentMonth;
         tv_time.setText(mCurrentYear+"年"+mCurrentMonth+"月");
         iv_divider.setVisibility(View.GONE);
         mLlChoseTime.setOnClickListener(this);
@@ -116,16 +118,17 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         rootView = View.inflate(AttandenceMonthActivity.this, R.layout.date_select_attandance, null);
         mDateLayout.addView(rootView);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.top_data_list);
-
-        mData = new ArrayList<>();
         mData = DateUtils.getDate(5, 20);
         setData(true,5,2);
     }
 
     public void setData(final boolean isDay, int month, int selectPos) {
-        mData.clear();
+        if(mData!=null){
+            mData.clear();
+        }
         if (isDay) {
-            mData = DateUtils.getDate(month, selectPos);
+            List<PopItem> date = DateUtils.getDate(month, selectPos);
+            mData.addAll(date);
         } else {
             creatMonth(selectPos);
         }
@@ -135,22 +138,22 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             @Override
             public void onItemClicked(View v, int position) {
                 int arr = 0;
+                boolean isFinish =false;
                 for(int i=0;i<mData.size();i++){
                     PopItem popItem = mData.get(i);
                     boolean enable = popItem.isEnable();
-
-                    if(!enable){
-                        if(!popItem.getContent().equals("1")){
-                            arr=arr+1;
-                        }else {
-//                            return;
-                        }
-
+                    if(popItem.getContent().equals("1")){
+                        isFinish=true;
                     }
+                    if(!isFinish){
+                        arr=arr+1;
+                    }
+
                 }
-                mSelectedDay=position-arr;
+                Log.i("hahaha","位置:"+position+"--arr"+arr);
+                mSelectedDay=position-arr+1;
                 Toast.makeText(AttandenceMonthActivity.this,"当前时间--"+mSelectedDay ,Toast.LENGTH_SHORT).show();
-//                setData(true, mSelectedMonth,mSelectedDay);
+                setData(true, mSelectedMonth,mSelectedDay);
                 mAdapter.notifyDataSetChanged();
             }
         });
