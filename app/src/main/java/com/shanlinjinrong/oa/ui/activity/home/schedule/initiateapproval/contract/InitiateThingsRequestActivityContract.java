@@ -37,6 +37,14 @@ public interface InitiateThingsRequestActivityContract {
 
         void submitEvectionApplyFailure(int errorCode, String str);
 
+        void addWorkApplySuccess(String bean);
+
+        void addWorkApplyFailure(int errorCode, String str);
+
+        void submitFurloughSuccess(String bean);
+
+        void submitFurloughFailure(int errorCode, String str);
+
     }
 
     interface Presenter extends BasePresenter<InitiateThingsRequestActivityContract.View> {
@@ -44,13 +52,19 @@ public interface InitiateThingsRequestActivityContract {
         //获取申请编码
         void getQueryMonoCode(int type);
 
-        //申请出差
-        void submitEvectionApply(HttpParams httpParams);
-
         //发起类别
         void queryEvectionType(int type);
 
         //申请时长
         void queryDuration(String beginTime, String endTime, int type, String billCode);
+
+        //申请出差
+        void submitEvectionApply(HttpParams httpParams);
+
+        //加班申请
+        void addWorkApply(HttpParams httpParams);
+
+        //休假申请
+        void submitFurlough(HttpParams httpParams);
     }
 }

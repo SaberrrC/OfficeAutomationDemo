@@ -96,4 +96,10 @@ public class ApiJava {
 
     //我的申请接口
     public static final String MYAPPLY_QUERY_APPROVE = "myApply/queryApproveByAll";
+    //申请加班接口
+    public static final String ADDWEORKAPPLY = "WorkApply/addWorkApply";
+
+    //申请休假接口
+    public static final String SUBMITFURLOUGH = "nchrFurlough/submitFurlough";
+
 }

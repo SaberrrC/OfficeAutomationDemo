@@ -63,28 +63,6 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
         });
     }
 
-    //申请出差
-    @Override
-    public void submitEvectionApply(HttpParams httpParams) {
-        mKjHttp.cleanCache();
-        mKjHttp.jsonPost(ApiJava.EVECTIONAPPLY, httpParams, new HttpCallBack() {
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
-        });
-    }
-
     //申请类型
     @Override
     public void queryEvectionType(int type) {
@@ -129,7 +107,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
 
     //申请时长
     @Override
-    public void queryDuration(String beginTime, String endTime, int type,String billCode) {
+    public void queryDuration(String beginTime, String endTime, int type, String billCode) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         mKjHttp.jsonGet(ApiJava.QUERYDURATION + "?endTime=" + endTime + ":00" + "&startTime=" + beginTime + ":00" + "&type=" + type + "&billCode=" + billCode, httpParams, new HttpCallBack() {
@@ -164,6 +142,152 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
             @Override
             public void onFinish() {
                 super.onFinish();
+            }
+        });
+    }
+
+    //申请出差
+    @Override
+    public void submitEvectionApply(HttpParams httpParams) {
+        mKjHttp.cleanCache();
+        mKjHttp.jsonPost(ApiJava.EVECTIONAPPLY, httpParams, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                mView.showLoading();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    QueryMonoBean queryMonoBean = new Gson().fromJson(t, QueryMonoBean.class);
+                    switch (queryMonoBean.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.submitEvectionApplySuccess(queryMonoBean.getData());
+                            break;
+                        default:
+                            mView.submitEvectionApplyFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    mView.submitEvectionApplyFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.requestFinish();
+            }
+        });
+    }
+
+    //申请加班
+    @Override
+    public void addWorkApply(HttpParams httpParams) {
+        mKjHttp.cleanCache();
+        mKjHttp.jsonPost(ApiJava.ADDWEORKAPPLY, httpParams, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                mView.showLoading();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    QueryMonoBean queryMonoBean = new Gson().fromJson(t, QueryMonoBean.class);
+                    switch (queryMonoBean.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.addWorkApplySuccess(queryMonoBean.getData());
+                            break;
+
+                        default:
+                            mView.addWorkApplyFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    mView.addWorkApplyFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.requestFinish();
+            }
+        });
+    }
+
+    //申请休假
+    @Override
+    public void submitFurlough(HttpParams httpParams) {
+        mKjHttp.cleanCache();
+        mKjHttp.jsonPost(ApiJava.SUBMITFURLOUGH, httpParams, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                mView.showLoading();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    QueryMonoBean queryMonoBean = new Gson().fromJson(t, QueryMonoBean.class);
+                    switch (queryMonoBean.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.submitFurloughSuccess(queryMonoBean.getData());
+                            break;
+
+                        default:
+                            mView.submitFurloughFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    mView.submitFurloughFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.requestFinish();
             }
         });
     }

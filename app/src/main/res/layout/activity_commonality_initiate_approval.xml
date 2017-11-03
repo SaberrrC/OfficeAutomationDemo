@@ -119,7 +119,7 @@
 
                         <TextView
                             android:id="@+id/tv_commonality_type_selected"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginRight="12dp"
                             android:layout_weight="1"

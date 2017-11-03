@@ -18,11 +18,9 @@ import android.widget.Toast;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.InitiateThingsTypeAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.BusinessTypeBean;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.CommonalityInitiateBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Dialog_Common_bean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.QueryMonoBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SubmitRequestBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract.InitiateThingsRequestActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter.InitiateThingsRequestActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
@@ -95,14 +93,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     private int mIndex = 1;
     private ImageView mDelete;
+    private boolean isNextDate;
     private View mContentView1;
     private CustomDialogUtils mDialog;
-    private SubmitRequestBean mSubmitRequestBean;
-    private CommonalityInitiateBean mInitiateBean;
     private InitiateThingsTypeAdapter mTypeAdapter;
-    private LinearLayoutManager mLinearLayoutManager;
     private List<Dialog_Common_bean> data = new ArrayList<>(); //Dialog 数据源
-    private List<CommonalityInitiateBean> mData = new ArrayList<>(); //明细数据源
+    private String selectedRequestType;
+    private String mBeginDate, mEndDate, mNext_begin_date, mNext_end_date; //时间选取
+    private int REQUESTCODE1 = 6402, REQUESTCODE2 = 6403, REQUESTCODE3 = 6404, REQUESTCODE4 = 6405; //6402签卡申请,6403出差申请,6404休假申请,6405加班申请
     private String mReceiverId, mReceiverName, mReceiverPost, mNextReceiverId, mNextReceiverName, mNextReceiverPost; //交接人
     private LinearLayout mLl_common_show1, mLl_common_next_show1, mLl_common_show3, mLl_common_next_show3, mLl_common_end_time, mLl_common_next_end_time,
             mLl_common_duration, mLl_common_next_duration, mLl_common_card_detail, mLl_common_next_card_detail;
@@ -110,8 +108,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             mTv_common_detail, mTv_common_next_detail, mTv_common_begin_time, mTv_common_next_begin_time, mTv_selected_show, mTv_selected_next_show,
             mBegin_time, mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number;
     private EditText mEt_common_show2, mEt_common_next_show2, mEt_common_show1, mEt_common_next_show1;
-    private String mBeginDate;
-    private String mEndDate;
+    private String mSelectedTypeID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,45 +128,39 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     private void initData() {
-        initMonoCode();
-        mInitiateBean = new CommonalityInitiateBean("", "忘记打卡", getIntent().getIntExtra("type", -1) + "");
-        mData.add(mInitiateBean);
-
+        initMonoCode();//获取编码
     }
 
     //获取编码
     private void initMonoCode() {
         switch (getIntent().getIntExtra("type", 0)) {
             case 0://出差编号
-                mPresenter.getQueryMonoCode(6403);
+                mPresenter.getQueryMonoCode(REQUESTCODE2);
                 break;
             case 1://加班
-                mPresenter.getQueryMonoCode(6405);
+                mPresenter.getQueryMonoCode(REQUESTCODE4);
                 break;
             case 2:
-                mPresenter.getQueryMonoCode(6404);
+                mPresenter.getQueryMonoCode(REQUESTCODE3);
                 break;
             case 3:
-                mPresenter.getQueryMonoCode(6403);
+                mPresenter.getQueryMonoCode(REQUESTCODE1);
                 break;
         }
 
     }
 
     private void initView() {
+        initContentView();
+        submitRequest();
+    }
+
+    private void initContentView() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date currentDate = new Date(System.currentTimeMillis());
         String currentTime = formatter.format(currentDate);
-        mTvRequestDate.setText(currentTime);
-        mSubmitRequestBean = new SubmitRequestBean();
-        mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        //加载初始化布局
-        View contentView = LayoutInflater.from(this).inflate(R.layout.commonality_initiate_approval_item, null);
+        mTvRequestDate.setText(currentTime); //申请日期
+        View contentView = LayoutInflater.from(this).inflate(R.layout.commonality_initiate_approval_item, null);  //加载初始化布局
         ButterKnife.bind(contentView);
         mLlContainerView.addView(contentView);
         initContentView0(contentView);
@@ -189,93 +180,44 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             default:
                 break;
         }
+    }
+
+    private void submitRequest() {
         mTopView.getRightView().setOnClickListener(view -> {
             switch (getIntent().getIntExtra("type", -1)) {
-                case 0:
-                    try {//出差提交
-                        JSONObject jsonObject = new JSONObject();
-                        JSONArray jsonArray = new JSONArray();
-                        JSONObject jsonObject1 = new JSONObject();
-                        jsonObject1.put("evectionAddress", mEt_common_show1.getText().toString());
-                        jsonObject1.put("evectionRemark", mEt_common_show2.getText().toString());
-                        jsonObject1.put("endTime", mEndDate);
-                        jsonObject1.put("startTime", mBeginDate);
-                        jsonObject1.put("handOverPepole", mReceiverId);
-                        jsonObject1.put("timeDifference", mTvCoderNumber.getText().toString());
-                        jsonArray.put(jsonObject1);
-                        if (mIndex > 1) {
-                            JSONObject jsonObject2 = new JSONObject();
-                            jsonObject2.put("address", mEt_common_next_show1.getText().toString());
-                            jsonObject2.put("cause", mEt_common_next_show2.getText().toString());
-                            jsonObject2.put("endTime", mNext_end_time.getText().toString());
-                            jsonObject2.put("startTime", mNext_begin_time.getText().toString());
-                            jsonObject2.put("handOverPepole", mEt_common_next_show3.getText().toString());//TODO Number
-                            jsonObject2.put("timeDifference", mTv_common_next_duration.getText().toString());//TODO Number
-                            jsonArray.put(jsonObject2);
-                        }
-                        jsonObject.put("detailList", jsonArray);
-                        jsonObject.put("billCode", mTvCoderNumber.getText().toString());
-                        jsonObject.put("type", 6403);
-                        jsonObject.put("applyDate", mTvRequestDate.getText().toString());
-                        HttpParams httpParams = new HttpParams();
-                        httpParams.putJsonParams(jsonObject.toString());
-
-                        mPresenter.submitEvectionApply(httpParams);  //TODO 提交
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                case 0://出差
+                    submitEvectionApply();
                     break;
-                case 1:
-                    try {//加班申请
-                        JSONObject jsonObject = new JSONObject();
-                        JSONArray jsonArray = new JSONArray();
-                        JSONObject jsonObject1 = new JSONObject();
-                        jsonObject1.put("cause", mEt_common_show2.getText().toString());
-                        jsonObject1.put("endTime", mEnd_time.getText().toString());
-                        jsonObject1.put("startTime", mBegin_time.getText().toString());
-                        jsonObject1.put("timeDifference", mTv_common_duration.getText().toString());//TODO Number
-                        jsonArray.put(jsonObject1);
-                        if (mIndex > 1) {
-                            JSONObject jsonObject2 = new JSONObject();
-                            jsonObject2.put("cause", mEt_common_next_show2.getText().toString());
-                            jsonObject2.put("endTime", mNext_end_time.getText().toString());
-                            jsonObject2.put("startTime", mNext_begin_time.getText().toString());
-                            jsonObject2.put("timeDifference", mTv_common_next_duration.getText().toString());//TODO Number
-                            jsonArray.put(jsonObject2);
-                        }
-                        jsonObject.put("detailList", jsonArray);
-                        jsonObject.put("monocode", mTvCoderNumber.getText().toString());
-                        jsonObject.put("type", 1);
-                        //mPresenter.initiateThingsRequest();  //TODO 提交
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                case 1://加班
+                    addWorkApply();
                     break;
                 case 2:
                     try {//休假申请
                         JSONObject jsonObject = new JSONObject();
                         JSONArray jsonArray = new JSONArray();
                         JSONObject jsonObject1 = new JSONObject();
-                        jsonObject1.put("endTime", mEnd_time);
-                        jsonObject1.put("startTime", mBegin_time);
-                        jsonObject1.put("handOverPepole", mEt_common_show3.getText().toString());
-                        jsonObject1.put("messge", mEt_common_show2.getText().toString());
-                        jsonObject1.put("timeDifference", mTv_common_duration.getText().toString());
+                        jsonObject1.put("endTime", mEndDate);
+                        jsonObject1.put("startTime", mBeginDate);
+                        jsonObject1.put("handOverPepole", mReceiverId);
+                        jsonObject1.put("FurloughRemark", mEt_common_show2.getText().toString());
+                        jsonObject1.put("timeDifference", mTv_duration_number.getText().toString());
                         jsonArray.put(jsonObject1);
                         if (mIndex > 1) {
                             JSONObject jsonObject2 = new JSONObject();
-                            jsonObject1.put("endTime", mNext_end_time.getText().toString());
-                            jsonObject1.put("startTime", mNext_begin_time.getText().toString());
-                            jsonObject1.put("handOverPepole", mEt_common_next_show3.getText().toString());
-                            jsonObject1.put("messge", mEt_common_next_show2.getText().toString());
-                            jsonObject1.put("timeDifference", mTv_common_next_duration.getText().toString());
+                            jsonObject1.put("endTime", mNext_end_date);
+                            jsonObject1.put("startTime", mNext_begin_date);
+                            jsonObject1.put("handOverPepole", mNextReceiverId);
+                            jsonObject1.put("FurloughRemark", mEt_common_next_show2.getText().toString());
+                            jsonObject1.put("timeDifference", mTv_duration_next_number.getText().toString());
                             jsonArray.put(jsonObject2);
                         }
-                        jsonObject.put("applyDate", jsonArray);
-                        jsonObject.put("date", jsonArray);
-                        jsonObject.put("monocode", mTvCoderNumber.getText().toString());
-                        jsonObject.put("type", 2);
-                        //mPresenter.initiateThingsRequest();  //TODO 提交
+                        jsonObject.put("nchrfurloughApplyDetail", jsonArray);
+                        jsonObject.put("date", "2017");
+                        jsonObject.put("billCode", mTvCoderNumber.getText().toString());
+                        jsonObject.put("applyDate", mTvRequestDate.getText().toString());
+                        HttpParams httpParams = new HttpParams();
+                        httpParams.putJsonParams(jsonObject.toString());
+                        mPresenter.submitFurlough(httpParams);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -304,6 +246,72 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             }
         });
     }
+
+    //出差提交
+    private void submitEvectionApply() {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("evectionAddress", mEt_common_show1.getText().toString());
+            jsonObject1.put("evectionRemark", mEt_common_show2.getText().toString());
+            jsonObject1.put("endTime", mEndDate);
+            jsonObject1.put("startTime", mBeginDate);
+            jsonObject1.put("handOverPepole", mReceiverId);
+            jsonObject1.put("timeDifference", mTvCoderNumber.getText().toString());
+            jsonArray.put(jsonObject1);
+            if (mIndex > 1) {
+                JSONObject jsonObject2 = new JSONObject();
+                jsonObject2.put("evectionAddress", mEt_common_next_show1.getText().toString());
+                jsonObject2.put("evectionRemark", mEt_common_next_show2.getText().toString());
+                jsonObject2.put("endTime", mNext_end_date);
+                jsonObject2.put("startTime", mNext_begin_date);
+                jsonObject2.put("handOverPepole", mNextReceiverId);
+                jsonObject2.put("timeDifference", mTvCoderNumber.getText().toString());
+                jsonArray.put(jsonObject2);
+            }
+            jsonObject.put("detailList", jsonArray);
+            jsonObject.put("billCode", mTvCoderNumber.getText().toString());
+            jsonObject.put("type", 6403);
+            jsonObject.put("applyDate", mTvRequestDate.getText().toString());
+            HttpParams httpParams = new HttpParams();
+            httpParams.putJsonParams(jsonObject.toString());
+            mPresenter.submitEvectionApply(httpParams);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //加班申请
+    private void addWorkApply() {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("cause", mEt_common_show2.getText().toString());
+            jsonObject1.put("endTime", mEndDate);
+            jsonObject1.put("startTime", mBeginDate);
+            jsonObject1.put("timeDifference", mTv_duration_number.getText().toString());
+            jsonArray.put(jsonObject1);
+            if (mIndex > 1) {
+                JSONObject jsonObject2 = new JSONObject();
+                jsonObject2.put("cause", mEt_common_next_show2.getText().toString());
+                jsonObject2.put("endTime", mNext_end_date);
+                jsonObject2.put("startTime", mNext_begin_date);
+                jsonObject2.put("timeDifference", mTv_duration_next_number.getText().toString());
+                jsonArray.put(jsonObject2);
+            }
+            jsonObject.put("detailList", jsonArray);
+            jsonObject.put("monocode", mTvCoderNumber.getText().toString());
+            jsonObject.put("type", mSelectedTypeID);
+            HttpParams httpParams = new HttpParams();
+            httpParams.putJsonParams(jsonObject.toString());
+            mPresenter.addWorkApply(httpParams);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void initContentView0(View contentView) {
         mEnd_time = (TextView) contentView.findViewById(R.id.et_commonality_end_time);
@@ -376,7 +384,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             bundle.putInt("isBegin", 1);
             timeDialogFragment.setArguments(bundle);
         });
-        mEt_common_show3.setOnClickListener(view -> {
+        mEt_common_show3.setOnClickListener(view -> { //交接人
             Intent intent = new Intent(this, SelectContactActivity.class);
             intent.putExtra("childId", mReceiverId);
             startActivityForResult(intent, SELECT_OK);
@@ -402,7 +410,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             bundle.putInt("isBegin", 1);
             timeDialogFragment.setArguments(bundle);
         });
-        mEt_common_next_show3.setOnClickListener(view -> {
+        mEt_common_next_show3.setOnClickListener(view -> { //交接人
             Intent intent = new Intent(this, SelectContactActivity.class);
             intent.putExtra("childId", mReceiverId);
             intent.putExtra("nextReceiver", 1);
@@ -452,10 +460,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mEt_common_show3.setHint("请填写签卡说明");
     }
 
-    //出差申请
-    private void onBusinessRequest1() {
-    }
-
     //加班申请
     private void overTimeWorkRequest1() {
         mLl_common_next_show1.setVisibility(View.GONE);
@@ -490,11 +494,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mEt_common_next_show3.setHint("请填写签卡说明");
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_delete_detail:
+            case R.id.img_delete_detail: //删除详情
                 mLlContainerView.removeView(mContentView1);
                 mBtnAddDetails.setVisibility(View.VISIBLE);
                 mBtnAddDetails.setClickable(true);
@@ -523,7 +526,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         initContentView1(mContentView1);
         switch (getIntent().getIntExtra("type", -1)) {
             case 0://出差申请
-                onBusinessRequest1();
                 break;
             case 1://加班申请
                 overTimeWorkRequest1();
@@ -567,8 +569,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     public void getQueryMonoCodeSuccess(QueryMonoBean bean) {
         if (bean != null) {
             mTvCoderNumber.setText(bean.getData());
-
-
         }
         switch (getIntent().getIntExtra("type", -1)) {
             case 0://出差类别
@@ -579,11 +579,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 break;
             case 2://休假
                 mPresenter.queryEvectionType(0);
-                data.add(new Dialog_Common_bean("事假", true));
-                data.add(new Dialog_Common_bean("婚假", false));
-                data.add(new Dialog_Common_bean("年假", false));
-                data.add(new Dialog_Common_bean("丧假", false));
-                data.add(new Dialog_Common_bean("工伤", false));
                 break;
             case 3://签卡
                 data.add(new Dialog_Common_bean("忘记打卡", true));
@@ -600,6 +595,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast(getString(R.string.net_no_connection));
                 mTvNotNetwork.setText(R.string.string_not_network);
                 mTvNotNetwork.setVisibility(View.VISIBLE);
+                hideLoadingView();
                 break;
         }
 
@@ -624,36 +620,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void queryEvectionTypeSuccess(BusinessTypeBean bean) {
-        switch (getIntent().getIntExtra("type", -1)) {
-            case 0://出差类别
-                for (int i = 0; i < bean.getData().size(); i++) {
-                    if (i == 0) {
-                        mTvCommonalityTypeSelected.setText(bean.getData().get(i).getName());
-                        data.add(new Dialog_Common_bean(bean.getData().get(i).getName(), true));
-                    } else {
-                        data.add(new Dialog_Common_bean(bean.getData().get(i).getName(), false));
-                    }
+        if (bean != null) {
+            for (int i = 0; i < bean.getData().size(); i++) {
+                if (i == 0) {
+                    mSelectedTypeID = bean.getData().get(i).getId();
+                    mTvCommonalityTypeSelected.setText(bean.getData().get(i).getName());
+                    data.add(new Dialog_Common_bean(bean.getData().get(i).getName(), true, bean.getData().get(i).getId()));
+                } else {
+                    data.add(new Dialog_Common_bean(bean.getData().get(i).getName(), false, bean.getData().get(i).getId()));
                 }
-                break;
-            case 1:
-                mPresenter.queryEvectionType(1);
-                break;
-            case 2://休假
-                mPresenter.queryEvectionType(0);
-                data.add(new Dialog_Common_bean("事假", true));
-                data.add(new Dialog_Common_bean("婚假", false));
-                data.add(new Dialog_Common_bean("年假", false));
-                data.add(new Dialog_Common_bean("丧假", false));
-                data.add(new Dialog_Common_bean("工伤", false));
-                break;
-            case 3://签卡
-                data.add(new Dialog_Common_bean("忘记打卡", true));
-                data.add(new Dialog_Common_bean("考勤机故障", false));
-                data.add(new Dialog_Common_bean("地铁故障", false));
-                break;
+            }
         }
-
-
     }
 
     @Override
@@ -664,7 +641,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     @Override
     public void queryDurationSuccess(QueryMonoBean bean) {
         if (bean != null) {
-            mTv_duration_number.setText(bean.getData());
+            if (isNextDate) {
+                mTv_duration_next_number.setText(bean.getData());
+            } else {
+                mTv_duration_number.setText(bean.getData());
+            }
         }
     }
 
@@ -681,10 +662,42 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void submitEvectionApplyFailure(int errorCode, String str) {
-        switch (errorCode){
+        switch (errorCode) {
             case -1:
                 showToast(getString(R.string.string_not_network));
-                break;
+                return;
+        }
+        Toast.makeText(this, "提交申请失败!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void addWorkApplySuccess(String bean) {
+        finish();
+        showToast("提交申请成功!");
+    }
+
+    @Override
+    public void addWorkApplyFailure(int errorCode, String str) {
+        switch (errorCode) {
+            case -1:
+                showToast(getString(R.string.string_not_network));
+                return;
+        }
+        Toast.makeText(this, "提交申请失败!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void submitFurloughSuccess(String bean) {
+        finish();
+        showToast("提交申请成功!");
+    }
+
+    @Override
+    public void submitFurloughFailure(int errorCode, String str) {
+        switch (errorCode) {
+            case -1:
+                showToast(getString(R.string.string_not_network));
+                return;
         }
         Toast.makeText(this, "提交申请失败!", Toast.LENGTH_SHORT).show();
     }
@@ -693,12 +706,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     public void removeDeatls(SelectedTypeBean bean) {
         switch (bean.getEvent()) {
             case "removeDetail": //删除明细
-                mData.remove(1);
                 mBtnAddDetails.setVisibility(View.VISIBLE);
                 mBtnAddDetails.setClickable(true);
                 break;
             case "selectedType": //选择类型
                 mTvCommonalityTypeSelected.setText(bean.getSelectedType());
+                int position = bean.getPosition();
+                mSelectedTypeID = data.get(position).getSelectedID();
                 for (int i = 0; i < data.size(); i++) {
                     if (i == bean.getPosition()) {
                         data.get(i).setSelected(true);
@@ -720,19 +734,23 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                         mBegin_time.setText(bean.getSelectedType());
                     } else {
                         mEnd_time.setText(bean.getSelectedType());
+                        if (!TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
+                            isNextDate = false;
+                            mBeginDate = mBegin_time.getText().toString().replace(" ", "%20");
+                            mEndDate = mEnd_time.getText().toString().replace(" ", "%20");
+                        }
                         switch (getIntent().getIntExtra("type", -1)) {
                             case 0:
-                                if (!TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
-                                    mBeginDate = mBegin_time.getText().toString().replace(" ", "%20");
-                                    mEndDate = mEnd_time.getText().toString().replace(" ", "%20");
-                                    mPresenter.queryDuration(mBeginDate, mEndDate, 6403, mTvCoderNumber.getText().toString());
-                                }
+                                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE2, mTvCoderNumber.getText().toString());
                                 break;
                             case 1:
+                                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE4, mTvCoderNumber.getText().toString());
                                 break;
                             case 2:
+                                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE3, mTvCoderNumber.getText().toString());
                                 break;
                             case 3:
+                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE1, mTvCoderNumber.getText().toString());
                                 break;
                         }
                     }
@@ -741,6 +759,25 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                         mNext_begin_time.setText(bean.getSelectedType());
                     } else {
                         mNext_end_time.setText(bean.getSelectedType());
+                        if (!TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
+                            isNextDate = true;
+                            mNext_begin_date = mNext_begin_time.getText().toString().replace(" ", "%20");
+                            mNext_end_date = mNext_end_time.getText().toString().replace(" ", "%20");
+                        }
+                        switch (getIntent().getIntExtra("type", -1)) {
+                            case 0:
+                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE2, mTvCoderNumber.getText().toString());
+                                break;
+                            case 1:
+                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE4, mTvCoderNumber.getText().toString());
+                                break;
+                            case 2:
+                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE3, mTvCoderNumber.getText().toString());
+                                break;
+                            case 3:
+                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE1, mTvCoderNumber.getText().toString());
+                                break;
+                        }
                     }
                 }
                 break;
@@ -811,6 +848,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         return inflate;
     }
 
+    //交接人
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

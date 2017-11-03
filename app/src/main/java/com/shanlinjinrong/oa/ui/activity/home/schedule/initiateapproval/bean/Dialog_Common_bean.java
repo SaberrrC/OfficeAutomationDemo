@@ -11,6 +11,8 @@ public class Dialog_Common_bean {
 
     private String selectedTitle;
 
+    private String selectedID;
+
     public Dialog_Common_bean() {
 
     }
@@ -20,10 +22,18 @@ public class Dialog_Common_bean {
         this.isSelected = isSelected;
     }
 
-    public Dialog_Common_bean(String content, boolean isSelected, String title) {
+    public Dialog_Common_bean(String content, boolean isSelected, String selectedID) {
         this.content = content;
         this.isSelected = isSelected;
-        this.title = title;
+        this.selectedID = selectedID;
+    }
+
+    public String getSelectedID() {
+        return selectedID;
+    }
+
+    public void setSelectedID(String selectedID) {
+        this.selectedID = selectedID;
     }
 
     public String getSelectedTitle() {
