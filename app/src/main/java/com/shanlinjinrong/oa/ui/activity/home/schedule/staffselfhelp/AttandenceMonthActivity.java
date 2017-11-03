@@ -50,8 +50,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     LinearLayout mLlChoseTime;
     @Bind(R.id.ll_count_people)
     LinearLayout ll_count_people;
-    @Bind(R.id.ll_currentday_state)
-    LinearLayout mLlCurrentdayState;
     @Bind(R.id.tv_time)
     TextView tv_time;
     @Bind(R.id.ll_month)
@@ -62,15 +60,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     TextView tv_people;
     @Bind(R.id.layout_root)
     LinearLayout mRootView;
-    private String[] mMonthArrays = {"1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
-
-
-
-
-
-
-
-    DatePopWindow datePopWindow;
     private List<PopItem> mData = new ArrayList<>();;
     private int mSelectedDay ;
     private int mCurrentDay ;
@@ -78,10 +67,11 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     private int mCurrentMonth ;
     private int mSelectedMonth;
     private int mSelectedYear ;
-    MonthSelectPopWindow monthSelectPopWindow;
-    private List<Integer> mDays = new ArrayList<>();
-    Calendar cal;
-
+    private RecyclerView mRecyclerView;
+    private DatePopAttandanceAdapter mAdapter;
+    private View rootView;
+    private MonthSelectPopWindow monthSelectPopWindow;
+    private Calendar cal;
 
 
     @Override
@@ -92,13 +82,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         initToolBar();
         initData();
         setTranslucentStatus(this);
-//        mPresenter.searchDayRecorder("sd0","sd");
-
     }
 
-    RecyclerView mRecyclerView;
-    DatePopAttandanceAdapter mAdapter;
-    View rootView;
 
     private void initData() {
         if (!EventBus.getDefault().isRegistered(this)) {
@@ -118,8 +103,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         rootView = View.inflate(AttandenceMonthActivity.this, R.layout.date_select_attandance, null);
         mDateLayout.addView(rootView);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.top_data_list);
-        mData = DateUtils.getDate(5, 20);
-        setData(true,5,2);
+        setData(true,mSelectedMonth,mSelectedDay);
     }
 
     public void setData(final boolean isDay, int month, int selectPos) {
@@ -137,21 +121,9 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         mAdapter.setOnItemClick(new DatePopAttandanceAdapter.OnItemClick() {
             @Override
             public void onItemClicked(View v, int position) {
-                int arr = 0;
-                boolean isFinish =false;
-                for(int i=0;i<mData.size();i++){
-                    PopItem popItem = mData.get(i);
-                    boolean enable = popItem.isEnable();
-                    if(popItem.getContent().equals("1")){
-                        isFinish=true;
-                    }
-                    if(!isFinish){
-                        arr=arr+1;
-                    }
-
-                }
-                Log.i("hahaha","位置:"+position+"--arr"+arr);
-                mSelectedDay=position-arr+1;
+                String content = mData.get(position).getContent();
+                int i1 = Integer.parseInt(content);
+                mSelectedDay=i1;
                 Toast.makeText(AttandenceMonthActivity.this,"当前时间--"+mSelectedDay ,Toast.LENGTH_SHORT).show();
                 setData(true, mSelectedMonth,mSelectedDay);
                 mAdapter.notifyDataSetChanged();
@@ -205,32 +177,12 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                             }
                         });
                 monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM,0,0);
-//                if (picker == null) {
-//                    picker = new DatePicker(AttandenceMonthActivity.this, DatePicker.YEAR_MONTH);
-//                }
-//                Calendar cal = Calendar.getInstance();
-//                picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1
-//                );
-//                picker.setSubmitText("完成");
-//                picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
-//                picker.setTextColor(Color.parseColor("#2d9dff"));
-//                picker.setOnDatePickListener(new DatePicker.OnYearMonthPickListener() {
-//                    @Override
-//                    public void onDatePicked(String year, String month) {
-//
-//                    }
-//                });
-//                picker.show();
                 break;
             //统计人员选择
             case R.id.ll_count_people:
                 Intent intent = new Intent(AttandenceMonthActivity.this,CountPeopleActivity.class);
                 startActivity(intent);
                 break;
-            //考勤记录
-            case R.id.ll_currentday_state:
-                break;
-
         }
     }
 
@@ -275,21 +227,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     @Override
     public void sendDataFinish() {
 
-    }
-
-
-
-
-    private int findDay(int month, int day) {
-        int dayOne = 0;
-        mDays = DateUtils.getDate(month);
-        for (int i = 0; i < mDays.size(); i++) {
-            if (mDays.get(i) == 1) {
-                dayOne = i;
-                break;
-            }
-        }
-        return mDays.get(dayOne + day - 1);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
