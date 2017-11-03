@@ -51,7 +51,9 @@ public class TimeDialogFragment extends DialogFragment {
     TextView mTvTitle;
     private String mWeek;
     private String mSelectedDate;
+    private int mSelectTime;
     private String tag;
+    private String mHour;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -162,46 +164,9 @@ public class TimeDialogFragment extends DialogFragment {
         return mWeek;
     }
 
-//    /**
-//     * 返回当前时间是上午还是下午
-//     *
-//     * @return
-//     */
-//    public static Integer getCurrDateAMorPM() {
-//        Calendar calendar = Calendar.getInstance();
-//        return calendar.get(Calendar.AM_PM);
-//    }
-
-
-    //天
-//        dayList = new ArrayList<>();
-//        dayList.add("今天");
-//        dayList.add("明天");
-//        wheelDayPicker.setData(dayList);
-    //小时
-//        hoursList = new ArrayList<>();
-//        for (int i = 1; i <= 24; i++) {
-//            hoursList.add(i + "");
-//        }
-//        wheelHoursPicker.setData(hoursList);
-//        wheelHoursPicker.setSelectedItemPosition(8);
-    //分钟
-//        minList = new ArrayList<>();
-//        for (int i = 0; i < 6; i++) {
-//            if (i == 0) {
-//                minList.add("00");
-//            } else {
-//                minList.add(i * 10 + "");
-//            }
-//        }
-//        wheelMinPicker.setData(minList);
-//        wheelMinPicker.setSelectedItemPosition(3);
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        unbinder.unbind();
         ButterKnife.unbind(this);
     }
 
@@ -212,8 +177,6 @@ public class TimeDialogFragment extends DialogFragment {
                 dismiss();
                 break;
             case R.id.sureButton:
-
-
                 int currentItemPosition0 = mWheelDayPickerMonth.getCurrentItemPosition();
                 int currentItemPosition1 = mWheelMinPickerHour.getCurrentItemPosition();
                 int currentItemPosition2 = mWheelHoursPickerMinutes.getCurrentItemPosition();
@@ -222,74 +185,47 @@ public class TimeDialogFragment extends DialogFragment {
                 String hour = hoursList.get(currentItemPosition1);
                 String min = minList.get(currentItemPosition2);
                 String time = timeFrameList.get(currentItemPosition3);
-//                day.replace("")
-
+                int number = Integer.parseInt(hour);
                 if (time.equals("下午")) {
-                    int number = Integer.parseInt(hour);
-                    int selectTime = number + 12;
-                    if (currentItemPosition0 == 30) {
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                        Date currentDate = new Date(System.currentTimeMillis());
-                        String format = formatter.format(currentDate);
-                        mSelectedDate = format + " " + selectTime + ":" + min;
-
-                    }
-
-//                    else xif (){
-//                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
-//                        Calendar calendar = Calendar.getInstance();
-//                        calendar.setTime(new Date());
-//                        calendar.add();
-//                    }
-//                    else if (){
-//
-//                    }
-                    SelectedTypeBean event = new SelectedTypeBean("selectedDate", mSelectedDate, getArguments().getInt("index"), getArguments().getInt("isBegin"));
-                    if (!TextUtils.isEmpty(tag)) {
-                        event.setTag(tag);
-                    }
-                    EventBus.getDefault().post(event);
+                    mSelectTime = number + 12;
+                } else {
+                    mSelectTime = number;
+                }
+                if (mSelectTime < 10) {
+                    mHour = "0" + mSelectTime;
+                } else {
+                    mHour = "" + mSelectTime;
+                }
+                if (currentItemPosition0 == 30) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date currentDate = new Date(System.currentTimeMillis());
+                    String format = formatter.format(currentDate);
+                    mSelectedDate = format + " " + mHour + ":" + min;
+                } else if (currentItemPosition0 < 30) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date());
+                    calendar.add(Calendar.DAY_OF_MONTH, -(30 - currentItemPosition0));
+                    String format = simpleDateFormat.format(calendar.getTimeInMillis());
+                    mSelectedDate = format + " " + mHour + ":" + min;
+                } else if (currentItemPosition0 > 30) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date());
+                    calendar.add(Calendar.DAY_OF_MONTH, 30 - (60 - currentItemPosition0));
+                    String format = simpleDateFormat.format(calendar.getTimeInMillis());
+                    mSelectedDate = format + " " + mHour + ":" + min;
                 }
 
-//                EventBus.getDefault().post(new SelectedTypeBean("date", ));
-
-
-//                int currentDayItemPosition = wheelDayPicker.getCurrentItemPosition();
-//                int currentHourItemPosition = wheelHoursPicker.getCurrentItemPosition();
-//                int currentMinItemPosition = wheelMinPicker.getCurrentItemPosition();
-//                String day = dayList.get(currentDayItemPosition);
-//                String hour = hoursList.get(currentHourItemPosition);
-//                String min = minList.get(currentMinItemPosition);
-//                Calendar calendar = Calendar.getInstance();
-//                int year = calendar.get(Calendar.YEAR);
-//                int month = calendar.get(Calendar.MONTH);
-//                int dayOfMon = calendar.get(Calendar.DAY_OF_MONTH);
-//                if (currentDayItemPosition == 1 && day.equals("明天")) {
-//                    calendar.set(year, month, dayOfMon + 1, Integer.parseInt(hour), Integer.parseInt(min));
-//                } else if (currentDayItemPosition == 0 && day.equals("今天")) {
-//                    calendar.set(year, month, dayOfMon, Integer.parseInt(hour), Integer.parseInt(min));
-//                }
-//                Date time = calendar.getTime();
-//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                String formatTime = simpleDateFormat.format(time);
-//                if (dialogFragmentCallBack != null) {
-//                    TimePickerBean timePickerBean = new TimePickerBean();
-//                    timePickerBean.postTime = formatTime;
-//                    timePickerBean.showTime = day + " " + hour + ":" + min;
-//                    dialogFragmentCallBack.successDialog(timePickerBean);
-//                }
-//                PromptBoxUtil.showInfo(formatTime);
-
-
+                SelectedTypeBean event = new SelectedTypeBean("selectedDate", mSelectedDate, getArguments().getInt("index"), getArguments().getInt("isBegin"));
+                if (!TextUtils.isEmpty(tag)) {
+                    event.setTag(tag);
+                }
+                EventBus.getDefault().post(event);
                 dismiss();
                 break;
         }
     }
-
-
-//    public void setDialogCallBack(DialogFragmentCallBack dialogCallBack) {
-//        this.dialogFragmentCallBack = dialogCallBack;
-//    }
 
     class TimePickerBean {
         //格式：yyyy-MM-dd HH:mm:ss

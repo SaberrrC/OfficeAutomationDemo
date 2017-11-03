@@ -169,6 +169,7 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     private void setFinishResult() {
         Intent intent = new Intent();
+        intent.putExtra("nextReceiver",getIntent().getIntExtra("nextReceiver",0));
         intent.putExtra("uid", mSelectChild.getUid());
         intent.putExtra("name", mSelectChild.getUsername());
         intent.putExtra("post", mSelectChild.getPost());
@@ -180,16 +181,20 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     //搜索事件
     private void autoSearch() {
         //EditText 自动搜索,间隔->输入停止1秒后自动搜索
-        RxTextView.textChanges(mSearchEdit)
-                .debounce(1000, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<CharSequence>() {
-                    @Override
-                    public void accept(CharSequence charSequence) throws Exception {
-                        loadData(mSearchEdit.getText().toString().trim());
-                    }
-                });
+        try {
+            RxTextView.textChanges(mSearchEdit)
+                    .debounce(1000, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Consumer<CharSequence>() {
+                        @Override
+                        public void accept(CharSequence charSequence) throws Exception {
+                            loadData(mSearchEdit.getText().toString().trim());
+                        }
+                    });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

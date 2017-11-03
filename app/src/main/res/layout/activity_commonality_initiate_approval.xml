@@ -22,6 +22,14 @@
         android:layout_height="0.1dp"
         android:background="@color/gray_E5E5E5"/>
 
+    <TextView
+        android:id="@+id/tv_not_network"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/net_no_connection"
+        android:visibility="gone"/>
+
     <ScrollView
         android:id="@+id/sv_container_show"
         android:layout_width="match_parent"
@@ -62,8 +70,8 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="12dp"
                         android:gravity="center"
-                        android:text="CC201710091351450916"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        tools:text="CC201710091351450916"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -116,9 +124,9 @@
                             android:layout_marginRight="12dp"
                             android:layout_weight="1"
                             android:gravity="right|center_vertical"
-                            android:text="外出"
                             android:textColor="@color/black_333333"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp"
+                            tools:text="外出"/>
 
                         <ImageView
                             android:layout_width="11.5dp"
@@ -214,11 +222,11 @@
                 android:orientation="vertical">
 
                 <!--<android.support.v7.widget.RecyclerView-->
-                    <!--android:id="@+id/rv_commonality_show"-->
-                    <!--android:focusableInTouchMode="true"-->
-                    <!--android:descendantFocusability="beforeDescendants"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"/>-->
+                <!--android:id="@+id/rv_commonality_show"-->
+                <!--android:focusableInTouchMode="true"-->
+                <!--android:descendantFocusability="beforeDescendants"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"/>-->
 
 
             </LinearLayout>
