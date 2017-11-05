@@ -19,6 +19,8 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.Hol
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.event.HolidayEvent;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
+import com.shanlinjinrong.oa.utils.YearDateSelected;
+import com.shanlinjinrong.oa.utils.YearTimeSelectedListener;
 import com.shanlinjinrong.oa.views.HolidaySearchItem;
 import com.shanlinjinrong.views.common.CommonTopView;
 
@@ -26,8 +28,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -38,7 +42,7 @@ import rx.Subscriber;
  * Created by Administrator on 2017/11/5 0005.
  */
 
-public class HolidaySearchActivity extends BaseActivity {
+public class HolidaySearchActivity extends BaseActivity  implements YearTimeSelectedListener{
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
@@ -83,8 +87,10 @@ public class HolidaySearchActivity extends BaseActivity {
     private HolidayAdapter mTypeAdapter;
     private List<String> data = new ArrayList<>();
     private int searchType = 0 ;
-    private int searchYear;
-    private  List<String> list = new ArrayList<>();
+    private String searchYear;
+    private  List<String> mDate = new ArrayList<>();
+    YearDateSelected mYearDateSelected;
+
 
 
     @Override
@@ -97,8 +103,20 @@ public class HolidaySearchActivity extends BaseActivity {
             EventBus.getDefault().register(this);
         }
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        mTvSelectTime.setText(simpleDateFormat.format(calendar.getTimeInMillis()));
+        String year = simpleDateFormat.format(calendar.getTimeInMillis()).replace("年", "");
+        mDate.add(simpleDateFormat.format(calendar.getTimeInMillis()));
+        for (int i = 0; i < 23; i++) {
+            calendar.add(Calendar.MONTH, -1);
+            String date = simpleDateFormat.format(calendar.getTimeInMillis());
+            mDate.add(0, date);
+        }
 
-        searchYear = Calendar.getInstance().get(Calendar.YEAR);
+
+        searchYear = Calendar.getInstance().get(Calendar.YEAR)+"";
         searchType=0;
         data.add("年假查询");
         data.add("带薪病假");
@@ -114,10 +132,11 @@ public class HolidaySearchActivity extends BaseActivity {
             }
         });
 
+
         mTvSelectTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mYearDateSelected = new YearDateSelected(HolidaySearchActivity.this, HolidaySearchActivity.this, mDate, "选择查询时间");
             }
         });
 
@@ -243,5 +262,9 @@ public class HolidaySearchActivity extends BaseActivity {
     }
 
 
-
+    @Override
+    public void onSelected(String date) {
+        searchYear=date;
+        doHttp();
+    }
 }
