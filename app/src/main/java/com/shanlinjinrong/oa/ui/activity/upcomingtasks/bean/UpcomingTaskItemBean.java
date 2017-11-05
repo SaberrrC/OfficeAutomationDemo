@@ -396,6 +396,15 @@ public class UpcomingTaskItemBean implements Serializable {
             private String orgName;
             private String approveState;
             private String approveStateName;
+            public boolean isChecked = false;
+
+            public boolean getIsChecked() {
+                return isChecked;
+            }
+
+            public void setIsChecked(boolean checked) {
+                isChecked = checked;
+            }
 
             public String getBillType() {
                 return billType;
