@@ -33,8 +33,8 @@ public class HeaderInterceptor implements Interceptor {
 
     private Request addHeaders(Request request) {
         return request.newBuilder()
-                .addHeader("token", RetrofitConfig.getAuthToken())
-                .addHeader("uid",RetrofitConfig.getUserId())
+                .addHeader("token", RetrofitConfig.getInstance().getAuthToken())
+                .addHeader("uid",RetrofitConfig.getInstance().getUserId())
                 .build();
     }
 

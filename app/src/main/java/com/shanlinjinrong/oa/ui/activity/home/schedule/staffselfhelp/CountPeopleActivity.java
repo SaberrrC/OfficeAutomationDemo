@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.example.retrofit.model.responsebody.CountResponse1;
+import com.example.retrofit.net.HttpMethods;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.event.PeopeNameEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.CountPeopleAdapter;
@@ -25,6 +27,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 
 /**
  * Created by Administrator on 2017/10/27 0027.
@@ -43,7 +46,7 @@ public class CountPeopleActivity  extends BaseActivity implements View.OnClickLi
     RecyclerView mRecyclerView;
 
     String mSearchContent="";
-    List<String> mData = new ArrayList<>();
+    List<CountResponse1> mData = new ArrayList<>();
     CountPeopleAdapter mCountPeopleAdapter;
 
     @Override
@@ -57,6 +60,7 @@ public class CountPeopleActivity  extends BaseActivity implements View.OnClickLi
 
     private void initView() {
         View leftView = mTopView.getLeftView();
+        mTopView.setAppTitle("统计人员");
         mIvClearHistory.setOnClickListener(this);
         mTvConfirm.setOnClickListener(this);
         leftView.setOnClickListener(view -> {
@@ -65,9 +69,6 @@ public class CountPeopleActivity  extends BaseActivity implements View.OnClickLi
     }
 
     private void initData() {
-        mData.add("ahah");
-        mData.add("ahah");
-        mData.add("ahah");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(CountPeopleActivity.this));
         mRecyclerView.addOnItemTouchListener(new SearchResultItemClick());
         mCountPeopleAdapter = new CountPeopleAdapter(mData);
@@ -92,9 +93,36 @@ public class CountPeopleActivity  extends BaseActivity implements View.OnClickLi
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             PeopeNameEvent peopeNameEvent = new PeopeNameEvent();
-            peopeNameEvent.name="ssd";
-            EventBus.getDefault().post(peopeNameEvent);
+            CountResponse1 countResponse1 = mData.get(i);
+            EventBus.getDefault().post(countResponse1);
             finish();
         }
     }
+
+    private void doHttp(){
+
+        HttpMethods.getInstance().getAcountData(new Subscriber<ArrayList<CountResponse1>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ArrayList<CountResponse1> countResponse1s) {
+                if(countResponse1s!=null&&countResponse1s.size()!=0){
+                    mData.clear();
+                    mData.addAll(countResponse1s);
+                    mCountPeopleAdapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+    }
+
+
 }

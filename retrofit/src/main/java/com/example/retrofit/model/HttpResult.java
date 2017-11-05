@@ -5,25 +5,17 @@ package com.example.retrofit.model;
  */
 public class HttpResult<T>  extends BaseResult<T>  {
 
-    private int t;
-    private int code;
+    private String code;
     private String message;
     private T data;
-    private T payload;
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public T getPayload() {
-        return payload;
-    }
 
-    public void setPayload(T payload) {
-        this.payload = payload;
-    }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

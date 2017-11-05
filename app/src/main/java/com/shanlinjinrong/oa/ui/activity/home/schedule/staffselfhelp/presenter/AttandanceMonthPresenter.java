@@ -1,5 +1,11 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.example.retrofit.model.responsebody.MyAttandanceResponse;
+import com.example.retrofit.net.ApiException;
+import com.example.retrofit.net.HttpMethods;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.CreateNoteContract;
@@ -13,7 +19,11 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
+
+import rx.Subscriber;
 
 /**
  * Created by Administrator on 2017/10/31 0031.
@@ -27,56 +37,34 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
     }
 
     @Override
-    public void searchDayRecorder(String data, String id) {
-        HttpParams params = new HttpParams();
-        params.put("date", "2017-10-17");
-        params.put("userId","id");
-
-
-        mKjHttp.post("http://apimock.shanlinjinrong.online/mockjs/115/queryTimeTagForOnDay", params, new HttpCallBack() {
+    public void sendData(String userId,String year,String month , Context context) {
+        HashMap<String ,String> map = new HashMap<>();
+        map.put("userCode",userId);
+        map.put("date",year+"-"+month);
+        HttpMethods.getInstance().getMyAttantanceData(map, new Subscriber<MyAttandanceResponse>() {
             @Override
-            public void onPreStart() {
-                super.onPreStart();
+            public void onCompleted() {
+
+            }
+            @Override
+            public void onError(Throwable e) {
+
+                if(e instanceof ApiException){
+                    ApiException baseException = (ApiException)e;
+                    String code = baseException.getCode();
+                    String message = baseException.getMessage();
+                    mView.sendDataFailed(code,message);
+                }else {
+                    mView.sendDataFailed("555","请检查网络！");
+                }
             }
 
             @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-
-                LogUtils.e("onSuccess->" + t);
-//                try {
-//                    JSONObject jo = new JSONObject(t);
-//                    switch (Api.getCode(jo)) {
-//                        case Api.RESPONSES_CODE_OK:
-//                            mView.loadDataSuccess(Api.getDataToJSONObject(jo));
-//                            break;
-//                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-//                        case Api.RESPONSES_CODE_UID_NULL:
-//                            mView.uidNull(Api.getCode(jo));
-//                            break;
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-//                mView.loadDataFinish();
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-//                mView.loadDataFailed(errorNo, strMsg);
+            public void onNext(MyAttandanceResponse myAttandanceResponse) {
+                mView.sendDataSuccess(myAttandanceResponse);
+                Log.i("hahaha",myAttandanceResponse.toString());
             }
         });
-    }
-
-    @Override
-    public void sendData(String str) {
-
     }
 
 

@@ -1,5 +1,8 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract;
 
+import android.content.Context;
+
+import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
@@ -9,15 +12,14 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 
 public interface AttandanceMonthContract {
     interface View extends BaseView {
-        void sendDataSuccess();
+        void sendDataSuccess(MyAttandanceResponse myAttandanceResponse);
 
-        void sendDataFailed(int errCode, String msg);
+        void sendDataFailed(String errCode, String msg);
 
         void sendDataFinish();
     }
 
     interface Presenter extends BasePresenter<AttandanceMonthContract.View> {
-        void searchDayRecorder(String data,String id);
-        void sendData(String str);
+        void sendData(String userId,String year,String minth ,Context context);
     }
 }
