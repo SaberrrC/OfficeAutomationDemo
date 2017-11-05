@@ -1,11 +1,11 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -79,6 +79,58 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 super.onSuccess(t);
                 UpcomingTaskItemBean bean = new Gson().fromJson(t, UpcomingTaskItemBean.class);
                 mView.onGetApproveDataSuccess(bean);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.onGetApproveDataFailure(errorNo, strMsg);
+            }
+        });
+    }
+
+    @Override
+    public void getSelectData(String privateCode, String noCheck, String pageNum, String pageSize, String time, String billType, String userName) {
+        HttpParams httpParams = new HttpParams();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(ApiJava.MYAPPLY_QUERY_APPROVE);
+        if (!TextUtils.isEmpty(pageNum)) {
+            stringBuilder.append("?" + "pageNum=" + pageNum);
+        }
+        if (!TextUtils.isEmpty(pageSize)) {
+            stringBuilder.append("&" + "pageSize=" + pageSize);
+        }
+        if (!TextUtils.isEmpty(privateCode)) {
+            stringBuilder.append("&" + "privateCode=" + privateCode);
+        }
+        if (!TextUtils.isEmpty(noCheck)) {
+            stringBuilder.append("&" + "noCheck=" + noCheck);
+        }
+        if (!TextUtils.isEmpty(billType)) {
+            stringBuilder.append("&" + "billType=" + billType);
+        }
+        if (!TextUtils.isEmpty(time)) {
+            stringBuilder.append("&" + "time=" + time);
+        }
+        if (!TextUtils.isEmpty(userName)) {
+            stringBuilder.append("&" + "userName=" + userName);
+        }
+        mKjHttp.jsonGet(stringBuilder.toString(), httpParams, new HttpCallBack() {
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                UpcomingSearchResultBean bean = new Gson().fromJson(t, UpcomingSearchResultBean.class);
+                mView.onSearchSuccess(bean);
             }
 
             @Override

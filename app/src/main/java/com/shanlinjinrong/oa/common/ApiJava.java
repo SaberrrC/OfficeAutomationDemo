@@ -104,4 +104,7 @@ public class ApiJava {
 
     //查看申请详情
     public static final String MYAPPLY_QUERY_APPROVE_INFO = "myApply/queryApproveDetailByBillCode";
+
+    //查看申请详情
+    public static final String TACK_BACK = "myApply/approveCallBack";
 }
