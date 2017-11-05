@@ -273,6 +273,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             case R.id.iv_search:
                 break;
             case R.id.tv_approval:
+                if (mDatas.size() == 0) {
+                    showToast("无单据");
+                    return;
+                }
                 setApproval();
                 break;
             case R.id.iv_agree:

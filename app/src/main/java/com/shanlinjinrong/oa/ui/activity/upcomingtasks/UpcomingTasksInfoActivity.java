@@ -167,7 +167,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mTvTitle.setText(mSearchBean.getUserName() + "的" + mSearchBean.getBillTypeName());
             }
         }
-
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         mToolbarTextBtn.setVisibility(View.VISIBLE);
@@ -256,11 +255,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             etCommonalityShow1.setEnabled(false);
             etCommonalityShow2.setEnabled(false);
             etCommonalityShow3.setEnabled(false);
-            if (position != 1) {
-                rlTop.setVisibility(View.GONE);
-            } else {
-                rlTop.setVisibility(View.VISIBLE);
-            }
+            rlTop.setVisibility(View.VISIBLE);
             mEtCommonalityBeginTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -284,8 +279,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean) {
                 CardResultBean.DataBean.NchrSignDetailsBean bean = (CardResultBean.DataBean.NchrSignDetailsBean) itemData;
                 mTvType.setText(TextUtils.isEmpty(bean.getSignRemark()) ? "" : bean.getSignRemark());
-                mEtCommonalityBeginTime.setText(mCardResultBean.getData().getApplyWorkFlows().get(0).getSendDate());
-                mEtCommonalityEndTime.setText(mCardResultBean.getData().getApplyWorkFlows().get(0).getDealDate());
                 tvCommonalityDetail.setText("签卡明细");
                 llCommonalityShow1.setVisibility(View.VISIBLE);
                 llCommonalityShow2.setVisibility(View.VISIBLE);
@@ -329,7 +322,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             }
             if (itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean) {
                 RestResultBean.DataBean.NchrfurloughApplyDetailBean bean = (RestResultBean.DataBean.NchrfurloughApplyDetailBean) itemData;
-                mTvType.setText(TextUtils.isEmpty(bean.getFurloughRemark()) ? "" : bean.getFurloughRemark());
+//                mTvType.setText(TextUtils.isEmpty(bean.getsen()) ? "" : bean.getSignRemark());
                 tvCommonalityDetail.setText("休假明细");
                 llCommonalityBeginTime.setVisibility(View.VISIBLE);
                 llCommonalityEndTime.setVisibility(View.VISIBLE);
@@ -571,20 +564,38 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         mDatas.add(mBean);
         if (TextUtils.equals(billType, "6402")) {//签卡申请
             mCardResultBean = gson.fromJson(json, CardResultBean.class);
-            //            mCardResultBean.getData().getNchrSignDetails().get()
             mDatas.addAll(mCardResultBean.getData().getNchrSignDetails());
+            for (CardResultBean.DataBean.ApplyWorkFlowsBean bean : mCardResultBean.getData().getApplyWorkFlows()) {
+                if (TextUtils.equals(bean.getIsCheck(), "N")) {
+                    mRlTackBack.setVisibility(View.VISIBLE);
+                }
+            }
         }
         if (TextUtils.equals(billType, "6403")) {//出差申请
             mTraverResultBean = gson.fromJson(json, TraverResultBean.class);
             mDatas.addAll(mTraverResultBean.getData().getNchrevectionApplyDetail());
+            for (TraverResultBean.DataBean.NchrapplyWorkFlowBean bean : mTraverResultBean.getData().getNchrapplyWorkFlow()) {
+                if (TextUtils.equals(bean.getIsCheck(), "N")) {
+                    mRlTackBack.setVisibility(View.VISIBLE);
+                }
+            }
         }
         if (TextUtils.equals(billType, "6404")) {//休假申请
             mRestResultBean = gson.fromJson(json, RestResultBean.class);
             mDatas.addAll(mRestResultBean.getData().getNchrfurloughApplyDetail());
+            for (RestResultBean.DataBean.NchrapplyWorkFlowBean bean : mRestResultBean.getData().getNchrapplyWorkFlow()) {
+                TextUtils.equals(bean.getIsCheck(), "N");
+                mRlTackBack.setVisibility(View.VISIBLE);
+            }
         }
         if (TextUtils.equals(billType, "6405")) {//加班申请
             mOverTimeResultBean = gson.fromJson(json, OverTimeResultBean.class);
             mDatas.addAll(mOverTimeResultBean.getData().getNchroverTimeApplyDetail());
+            for (OverTimeResultBean.DataBean.NchrapplyWorkFlowBean bean : mOverTimeResultBean.getData().getNchrapplyWorkFlow()) {
+                if (TextUtils.equals(bean.getIsCheck(), "N")) {
+                    mRlTackBack.setVisibility(View.VISIBLE);
+                }
+            }
         }
         mFinalRecycleAdapter.notifyDataSetChanged();
     }

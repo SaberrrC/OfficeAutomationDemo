@@ -2,17 +2,62 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean;
 
 import java.util.List;
 
+/**
+ {
+ "code": "000000",
+ "message": "success",
+ "data": {
+ "billCode": "QK20171105000064",
+ "userName": "周威",
+ "psnName": "周威",
+ "orgName": "善林（上海）金融信息服务有限公司",
+ "deptName": "善贷宝",
+ "jobName": "周威",
+ "postName": "Java开发工程师",
+ "applyDate": "2017-11-05",
+ "nchrSignDetails": [
+ {
+ "signCauseId": "1001A110000000014XEW",
+ "signCause": "地铁故障",
+ "signRemark": "吧",
+ "signTime": "2017-11-05 14:21:00"
+ },
+ {
+ "signCauseId": "1001A110000000014XEU",
+ "signCause": "考勤机故障",
+ "signRemark": "哦哦",
+ "signTime": "2017-11-05 14:21:00"
+ }
+ ],
+ "applyWorkFlows": [
+ {
+ "billCode": "QK20171105000064",
+ "sendUserName": "周威",
+ "sendDate": "2017-11-05 14:23:24",
+ "checkUserName": "王涛",
+ "dealDate": "周威",
+ "approveResult": "周威",
+ "approveResultCH": "周威",
+ "isCheck": "N",
+ "isCheckCH": "未审批",
+ "checkNote": "周威"
+ }
+ ]
+ }
+ }
+ */
 public class CardResultBean {
+
 
     /**
      * code : 000000
+     * data : {"applyDate":"2017-11-05","applyWorkFlows":[{"approveResult":"周威","approveResultCH":"周威","billCode":"QK20171105000064","checkNote":"周威","checkUserName":"王涛","dealDate":"周威","isCheck":"N","isCheckCH":"","sendDate":"2017-11-05 14:23:24","sendUserName":"周威"}],"billCode":"QK20171105000064","deptName":"善贷宝","jobName":"周威","nchrSignDetails":[{"signCause":"地铁故障","signCauseId":"1001A110000000014XEW","signRemark":"吧","signTime":"2017-11-05 14:21:00"},{"signCause":"考勤机故障","signCauseId":"1001A110000000014XEU","signRemark":"哦哦","signTime":"2017-11-05 14:21:00"}],"orgName":"善林（上海）金融信息服务有限公司","postName":"Java开发工程师","psnName":"周威","userName":"周威"}
      * message : success
-     * data : {"billCode":"QK201706050924394105","userName":"赵赟","psnName":"赵贇","orgName":"善林（上海）金融信息服务有限公司","deptName":"善贷宝","jobName":null,"postName":"Android开发","applyDate":"2017-06-05","nchrSignDetails":[{"signCauseId":"1001A110000000014XET","signCause":"忘记打卡","signRemark":"忘记打卡","signTime":"2017-06-05 09:00:00"}],"applyWorkFlows":[{"billCode":"QK201706050924394105","sendUserName":"赵赟","sendDate":"2017-06-05 09:25:09","checkUserName":"王涛","dealDate":"2017-06-06 18:29:11","approveResult":"Y","approveResultCH":"批准","isCheck":"Y","isCheckCH":"已审批","checkNote":"同意"}]}
      */
 
     private String code;
-    private String   message;
     private DataBean data;
+    private String   message;
 
     public String getCode() {
         return code;
@@ -20,14 +65,6 @@ public class CardResultBean {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public DataBean getData() {
@@ -38,30 +75,46 @@ public class CardResultBean {
         this.data = data;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public static class DataBean {
         /**
-         * billCode : QK201706050924394105
-         * userName : 赵赟
-         * psnName : 赵贇
-         * orgName : 善林（上海）金融信息服务有限公司
+         * applyDate : 2017-11-05
+         * applyWorkFlows : [{"approveResult":"周威","approveResultCH":"周威","billCode":"QK20171105000064","checkNote":"周威","checkUserName":"王涛","dealDate":"周威","isCheck":"N","isCheckCH":"","sendDate":"2017-11-05 14:23:24","sendUserName":"周威"}]
+         * billCode : QK20171105000064
          * deptName : 善贷宝
-         * jobName : null
-         * postName : Android开发
-         * applyDate : 2017-06-05
-         * nchrSignDetails : [{"signCauseId":"1001A110000000014XET","signCause":"忘记打卡","signRemark":"忘记打卡","signTime":"2017-06-05 09:00:00"}]
-         * applyWorkFlows : [{"billCode":"QK201706050924394105","sendUserName":"赵赟","sendDate":"2017-06-05 09:25:09","checkUserName":"王涛","dealDate":"2017-06-06 18:29:11","approveResult":"Y","approveResultCH":"批准","isCheck":"Y","isCheckCH":"已审批","checkNote":"同意"}]
+         * jobName : 周威
+         * nchrSignDetails : [{"signCause":"地铁故障","signCauseId":"1001A110000000014XEW","signRemark":"吧","signTime":"2017-11-05 14:21:00"},{"signCause":"考勤机故障","signCauseId":"1001A110000000014XEU","signRemark":"哦哦","signTime":"2017-11-05 14:21:00"}]
+         * orgName : 善林（上海）金融信息服务有限公司
+         * postName : Java开发工程师
+         * psnName : 周威
+         * userName : 周威
          */
 
-        private String billCode;
-        private String                    userName;
-        private String                    psnName;
-        private String                    orgName;
+        private String applyDate;
+        private String                    billCode;
         private String                    deptName;
         private String                    jobName;
+        private String                    orgName;
         private String                    postName;
-        private String                    applyDate;
-        private List<NchrSignDetailsBean> nchrSignDetails;
+        private String                    psnName;
+        private String                    userName;
         private List<ApplyWorkFlowsBean>  applyWorkFlows;
+        private List<NchrSignDetailsBean> nchrSignDetails;
+
+        public String getApplyDate() {
+            return applyDate;
+        }
+
+        public void setApplyDate(String applyDate) {
+            this.applyDate = applyDate;
+        }
 
         public String getBillCode() {
             return billCode;
@@ -69,30 +122,6 @@ public class CardResultBean {
 
         public void setBillCode(String billCode) {
             this.billCode = billCode;
-        }
-
-        public String getUserName() {
-            return userName;
-        }
-
-        public void setUserName(String userName) {
-            this.userName = userName;
-        }
-
-        public String getPsnName() {
-            return psnName;
-        }
-
-        public void setPsnName(String psnName) {
-            this.psnName = psnName;
-        }
-
-        public String getOrgName() {
-            return orgName;
-        }
-
-        public void setOrgName(String orgName) {
-            this.orgName = orgName;
         }
 
         public String getDeptName() {
@@ -111,6 +140,14 @@ public class CardResultBean {
             this.jobName = jobName;
         }
 
+        public String getOrgName() {
+            return orgName;
+        }
+
+        public void setOrgName(String orgName) {
+            this.orgName = orgName;
+        }
+
         public String getPostName() {
             return postName;
         }
@@ -119,20 +156,20 @@ public class CardResultBean {
             this.postName = postName;
         }
 
-        public String getApplyDate() {
-            return applyDate;
+        public String getPsnName() {
+            return psnName;
         }
 
-        public void setApplyDate(String applyDate) {
-            this.applyDate = applyDate;
+        public void setPsnName(String psnName) {
+            this.psnName = psnName;
         }
 
-        public List<NchrSignDetailsBean> getNchrSignDetails() {
-            return nchrSignDetails;
+        public String getUserName() {
+            return userName;
         }
 
-        public void setNchrSignDetails(List<NchrSignDetailsBean> nchrSignDetails) {
-            this.nchrSignDetails = nchrSignDetails;
+        public void setUserName(String userName) {
+            this.userName = userName;
         }
 
         public List<ApplyWorkFlowsBean> getApplyWorkFlows() {
@@ -143,76 +180,54 @@ public class CardResultBean {
             this.applyWorkFlows = applyWorkFlows;
         }
 
-        public static class NchrSignDetailsBean {
-            /**
-             * signCauseId : 1001A110000000014XET
-             * signCause : 忘记打卡
-             * signRemark : 忘记打卡
-             * signTime : 2017-06-05 09:00:00
-             */
+        public List<NchrSignDetailsBean> getNchrSignDetails() {
+            return nchrSignDetails;
+        }
 
-            private String signCauseId;
-            private String signCause;
-            private String signRemark;
-            private String signTime;
-
-            public String getSignCauseId() {
-                return signCauseId;
-            }
-
-            public void setSignCauseId(String signCauseId) {
-                this.signCauseId = signCauseId;
-            }
-
-            public String getSignCause() {
-                return signCause;
-            }
-
-            public void setSignCause(String signCause) {
-                this.signCause = signCause;
-            }
-
-            public String getSignRemark() {
-                return signRemark;
-            }
-
-            public void setSignRemark(String signRemark) {
-                this.signRemark = signRemark;
-            }
-
-            public String getSignTime() {
-                return signTime;
-            }
-
-            public void setSignTime(String signTime) {
-                this.signTime = signTime;
-            }
+        public void setNchrSignDetails(List<NchrSignDetailsBean> nchrSignDetails) {
+            this.nchrSignDetails = nchrSignDetails;
         }
 
         public static class ApplyWorkFlowsBean {
             /**
-             * billCode : QK201706050924394105
-             * sendUserName : 赵赟
-             * sendDate : 2017-06-05 09:25:09
+             * approveResult : 周威
+             * approveResultCH : 周威
+             * billCode : QK20171105000064
+             * checkNote : 周威
              * checkUserName : 王涛
-             * dealDate : 2017-06-06 18:29:11
-             * approveResult : Y
-             * approveResultCH : 批准
-             * isCheck : Y
-             * isCheckCH : 已审批
-             * checkNote : 同意
+             * dealDate : 周威
+             * isCheck : N
+             * isCheckCH :
+             * sendDate : 2017-11-05 14:23:24
+             * sendUserName : 周威
              */
 
-            private String billCode;
-            private String sendUserName;
-            private String sendDate;
-            private String checkUserName;
-            private String dealDate;
             private String approveResult;
             private String approveResultCH;
+            private String billCode;
+            private String checkNote;
+            private String checkUserName;
+            private String dealDate;
             private String isCheck;
             private String isCheckCH;
-            private String checkNote;
+            private String sendDate;
+            private String sendUserName;
+
+            public String getApproveResult() {
+                return approveResult;
+            }
+
+            public void setApproveResult(String approveResult) {
+                this.approveResult = approveResult;
+            }
+
+            public String getApproveResultCH() {
+                return approveResultCH;
+            }
+
+            public void setApproveResultCH(String approveResultCH) {
+                this.approveResultCH = approveResultCH;
+            }
 
             public String getBillCode() {
                 return billCode;
@@ -222,20 +237,12 @@ public class CardResultBean {
                 this.billCode = billCode;
             }
 
-            public String getSendUserName() {
-                return sendUserName;
+            public String getCheckNote() {
+                return checkNote;
             }
 
-            public void setSendUserName(String sendUserName) {
-                this.sendUserName = sendUserName;
-            }
-
-            public String getSendDate() {
-                return sendDate;
-            }
-
-            public void setSendDate(String sendDate) {
-                this.sendDate = sendDate;
+            public void setCheckNote(String checkNote) {
+                this.checkNote = checkNote;
             }
 
             public String getCheckUserName() {
@@ -254,22 +261,6 @@ public class CardResultBean {
                 this.dealDate = dealDate;
             }
 
-            public String getApproveResult() {
-                return approveResult;
-            }
-
-            public void setApproveResult(String approveResult) {
-                this.approveResult = approveResult;
-            }
-
-            public String getApproveResultCH() {
-                return approveResultCH;
-            }
-
-            public void setApproveResultCH(String approveResultCH) {
-                this.approveResultCH = approveResultCH;
-            }
-
             public String getIsCheck() {
                 return isCheck;
             }
@@ -286,12 +277,66 @@ public class CardResultBean {
                 this.isCheckCH = isCheckCH;
             }
 
-            public String getCheckNote() {
-                return checkNote;
+            public String getSendDate() {
+                return sendDate;
             }
 
-            public void setCheckNote(String checkNote) {
-                this.checkNote = checkNote;
+            public void setSendDate(String sendDate) {
+                this.sendDate = sendDate;
+            }
+
+            public String getSendUserName() {
+                return sendUserName;
+            }
+
+            public void setSendUserName(String sendUserName) {
+                this.sendUserName = sendUserName;
+            }
+        }
+
+        public static class NchrSignDetailsBean {
+            /**
+             * signCause : 地铁故障
+             * signCauseId : 1001A110000000014XEW
+             * signRemark : 吧
+             * signTime : 2017-11-05 14:21:00
+             */
+
+            private String signCause;
+            private String signCauseId;
+            private String signRemark;
+            private String signTime;
+
+            public String getSignCause() {
+                return signCause;
+            }
+
+            public void setSignCause(String signCause) {
+                this.signCause = signCause;
+            }
+
+            public String getSignCauseId() {
+                return signCauseId;
+            }
+
+            public void setSignCauseId(String signCauseId) {
+                this.signCauseId = signCauseId;
+            }
+
+            public String getSignRemark() {
+                return signRemark;
+            }
+
+            public void setSignRemark(String signRemark) {
+                this.signRemark = signRemark;
+            }
+
+            public String getSignTime() {
+                return signTime;
+            }
+
+            public void setSignTime(String signTime) {
+                this.signTime = signTime;
             }
         }
     }

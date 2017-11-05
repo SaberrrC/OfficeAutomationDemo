@@ -107,4 +107,7 @@ public class ApiJava {
 
     //查看申请详情
     public static final String TACK_BACK = "myApply/approveCallBack";
+
+    //待办事宜
+    public static final String SEARCH_APPLICATION = "MyAplication/selectMyAplication";
 }

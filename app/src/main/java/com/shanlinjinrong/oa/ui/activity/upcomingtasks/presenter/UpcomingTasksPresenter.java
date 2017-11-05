@@ -9,6 +9,7 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResult
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
@@ -98,7 +99,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
     public void getSelectData(String privateCode, String noCheck, String pageNum, String pageSize, String time, String billType, String userName) {
         HttpParams httpParams = new HttpParams();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(ApiJava.MYAPPLY_QUERY_APPROVE);
+        stringBuilder.append(ApiJava.SEARCH_APPLICATION);
         if (!TextUtils.isEmpty(pageNum)) {
             stringBuilder.append("?" + "pageNum=" + pageNum);
         }
@@ -106,13 +107,13 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             stringBuilder.append("&" + "pageSize=" + pageSize);
         }
         if (!TextUtils.isEmpty(privateCode)) {
-            stringBuilder.append("&" + "privateCode=" + privateCode);
+            stringBuilder.append("&" + "checkmanId=" + privateCode);
         }
         if (!TextUtils.isEmpty(noCheck)) {
-            stringBuilder.append("&" + "noCheck=" + noCheck);
+            stringBuilder.append("&" + "isCheck=" + noCheck);
         }
         if (!TextUtils.isEmpty(billType)) {
-            stringBuilder.append("&" + "billType=" + billType);
+            stringBuilder.append("&" + "pkBillType=" + billType);
         }
         if (!TextUtils.isEmpty(time)) {
             stringBuilder.append("&" + "time=" + time);
@@ -129,6 +130,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                LogUtils.d(t);
                 UpcomingSearchResultBean bean = new Gson().fromJson(t, UpcomingSearchResultBean.class);
                 mView.onSearchSuccess(bean);
             }

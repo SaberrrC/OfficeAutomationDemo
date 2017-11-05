@@ -144,7 +144,7 @@
         <LinearLayout
             android:id="@+id/ll_commonality_show1"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
@@ -163,7 +163,7 @@
             <TextView
                 android:id="@+id/tv_commonality_show1"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="38dp"
                 android:gravity="center_vertical"
                 android:text="title1"
                 android:textColor="#151515"
@@ -186,7 +186,7 @@
         <LinearLayout
             android:id="@+id/ll_commonality_show2"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
@@ -202,7 +202,7 @@
             <TextView
                 android:id="@+id/tv_commonality_show2"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="38dp"
                 android:gravity="center_vertical"
                 android:text="title1"
                 android:textColor="#151515"
@@ -253,10 +253,11 @@
         <LinearLayout
             android:id="@+id/ll_commonality_show3"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -269,24 +270,36 @@
             <TextView
                 android:id="@+id/tv_commonality_show3"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="38dp"
                 android:gravity="center_vertical"
                 android:text="title3"
                 android:textColor="#151515"
                 android:textSize="16sp"/>
 
-            <EditText
-                android:id="@+id/et_commonality_show3"
+            <FrameLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="12dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_input_square_bg"
-                android:gravity="center_vertical"
-                android:hint="请填写工作交接人"
-                android:paddingLeft="12dp"
-                android:textColor="#898989"
-                android:textSize="14sp"/>
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <EditText
+                    android:id="@+id/et_commonality_show3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="请填写工作交接人"
+                    android:textColor="#898989"
+                    android:textSize="14sp"/>
+            </FrameLayout>
+
         </LinearLayout>
     </LinearLayout>
 
