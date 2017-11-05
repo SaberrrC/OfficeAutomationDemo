@@ -42,10 +42,7 @@ import butterknife.OnClick;
 
 public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
 
-    public static final String PAGE_SIZE     = "20";
-    public static final String TIME          = "0";
-    public static final String BILL_TYPE     = "6402";
-    public static final String APPROVE_STATE = "-1";
+    public static final String PAGE_SIZE = "20";
     @Bind(R.id.tv_title)
     TextView           mTvTitle;
     @Bind(R.id.toolbar_image_btn)
@@ -80,15 +77,18 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private TextView            mTvRest;
     private TextView            mTvSign;
     private TextView            mTvOk;
-    private TextView            tvAllState;
-    private TextView            tvStateChecked;
-    private TextView            tvStateUnchecked;
+    private TextView            mTvAllState;
+    private TextView            mTvStateChecked;
+    private TextView            mTvStateUnchecked;
     private int     pageNum    = 1;
     private boolean isLoadOver = false;
     private String       mWhichList;
     private LinearLayout mLlState;
     private boolean isShowCheck = false;
     private View mStork;
+    private String mTime         = "0";
+    private String mBillType     = "";
+    private String mApproveState = "";
 
     @Override
     protected void initInject() {
@@ -125,7 +125,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 if (mDatas.size() > 0) {
                     mDatas.clear();
                 }
-                mPresenter.getApproveData(null, null, String.valueOf(pageNum), PAGE_SIZE, TIME);
+                mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
             }
         });
     }
@@ -150,7 +150,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         return;
                     }
                     pageNum++;
-                    mPresenter.getApproveData(null, null, String.valueOf(pageNum), PAGE_SIZE, TIME);
+                    mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
                 }
             }
 
@@ -168,7 +168,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         //pageNum	当前第几页	string	必传，当前第几页
         //pageSize	每页要显示的条数	string	必传，每页要显示的条数
         //time	申请时间	string	非必传，申请时间0-全部，1-本月，2上月，3-近两月，4-近三个月，5-近六个月
-        mPresenter.getApproveData(null, null, String.valueOf(pageNum), PAGE_SIZE, TIME);
+        mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
     }
 
     private void initToolbar() {
@@ -220,9 +220,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         @Override
                         public void run() {
                             for (Object data : mDatas) {
-                                if (data instanceof UpcomingTaskItemBean) {
-                                    UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
-                                    //                                    bean.setIsChecked(false);
+                                if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                                    UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
+                                    bean.setIsChecked(false);
                                 }
                             }
                             ThreadUtils.runMain(new Runnable() {
@@ -279,9 +279,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             @Override
             public void run() {
                 for (Object data : mDatas) {
-                    if (data instanceof UpcomingTaskItemBean) {
-                        UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
-                        //bean.setIsChecked(false);
+                    if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                        UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
+                        bean.setIsChecked(false);
                     }
                 }
                 ThreadUtils.runMain(new Runnable() {
@@ -313,9 +313,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvRest = (TextView) dialogView.findViewById(R.id.tv_rest);
             mTvSign = (TextView) dialogView.findViewById(R.id.tv_sign);
             mTvOk = (TextView) dialogView.findViewById(R.id.tv_ok);
-            tvAllState = (TextView) dialogView.findViewById(R.id.tv_all_state);
-            tvStateChecked = (TextView) dialogView.findViewById(R.id.tv_state_checked);
-            tvStateUnchecked = (TextView) dialogView.findViewById(R.id.tv_state_unchecked);
+            mTvAllState = (TextView) dialogView.findViewById(R.id.tv_all_state);
+            mTvStateChecked = (TextView) dialogView.findViewById(R.id.tv_state_checked);
+            mTvStateUnchecked = (TextView) dialogView.findViewById(R.id.tv_state_unchecked);
             mLlState = (LinearLayout) dialogView.findViewById(R.id.ll_state);
             mStork = dialogView.findViewById(R.id.stork);
             if (TextUtils.equals(mWhichList, "1")) {
@@ -340,9 +340,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvOk.setOnClickListener(this);
             mTvOk.setOnClickListener(this);
             mTvOk.setOnClickListener(this);
-            tvAllState.setOnClickListener(this);
-            tvStateChecked.setOnClickListener(this);
-            tvStateUnchecked.setOnClickListener(this);
+            mTvAllState.setOnClickListener(this);
+            mTvStateChecked.setOnClickListener(this);
+            mTvStateUnchecked.setOnClickListener(this);
             mChooseDialog.setContentView(dialogView);
             Window dialogWindow = mChooseDialog.getWindow();
             dialogWindow.setGravity(Gravity.CENTER);
@@ -350,14 +350,16 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             dialogWindow.setAttributes(lp);
         }
-        setTimeTextDefault();
-        setTypeTextDefault();
-        setStateTextDefault();
-        mTvAll.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
-        mTvAllType.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
-        mTvAll.setTextColor(getResources().getColor(R.color.white));
-        mTvAllType.setTextColor(getResources().getColor(R.color.white));
-        mChooseDialog.show();//显示对话框
+//        setTimeTextDefault();
+//        setTypeTextDefault();
+//        setStateTextDefault();
+//        mTvAll.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
+//        mTvAllType.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
+//        mTvAllState.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
+//        mTvAll.setTextColor(getResources().getColor(R.color.white));
+//        mTvAllType.setTextColor(getResources().getColor(R.color.white));
+//        mTvAllState.setTextColor(getResources().getColor(R.color.white));
+        mChooseDialog.show();
     }
 
     @Override
@@ -370,6 +372,29 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             TextView tvReason = (TextView) holder.getViewById(R.id.tv_reason);
             TextView tvTime = (TextView) holder.getViewById(R.id.tv_time);
             TextView tvState = (TextView) holder.getViewById(R.id.tv_state);
+            String billType = bean.getBillType();
+            if (TextUtils.equals(billType, "6402")) {//签卡申请
+                ivIcon.setBackgroundResource(R.mipmap.upcoming_card);
+            }
+            if (TextUtils.equals(billType, "6405")) {//加班申请
+                ivIcon.setBackgroundResource(R.mipmap.upcoming_overtime);
+            }
+            if (TextUtils.equals(billType, "6403")) {//出差申请
+                ivIcon.setBackgroundResource(R.mipmap.upcoming_travel);
+            }
+            if (TextUtils.equals(billType, "6404")) {//休假申请
+                ivIcon.setBackgroundResource(R.mipmap.upcoming_holiday);
+            }
+            tvName.setText(bean.getUserName());
+            tvReason.setText(bean.getBillTypeName());
+            tvTime.setText(bean.getCreationTime());
+            tvState.setText(bean.getApproveStateName());
+            String approveState = bean.getApproveState();
+            if (TextUtils.equals(approveState, "1")) {
+                tvState.setTextColor(Color.parseColor("#57C887"));
+            } else {
+                tvState.setTextColor(getResources().getColor(R.color.black));
+            }
             if (isShowCheck) {
                 cbCheck.setVisibility(View.VISIBLE);
                 //                cbCheck.setChecked(bean.getIsChecked());
@@ -380,8 +405,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 @Override
                 public void onClick(View view) {
                     if (isShowCheck) {
-                        //                        bean.setIsChecked(!bean.getIsChecked());
-                        //                        cbCheck.setChecked(bean.getIsChecked());
+                        bean.setIsChecked(!bean.getIsChecked());
+                        cbCheck.setChecked(bean.getIsChecked());
                         return;
                     }
                     Intent intent = new Intent(MyUpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
@@ -398,26 +423,32 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             case R.id.tv_all:
                 setTimeTextDefault();
                 setTextChecked(mTvAll);
+                mTime = "0";
                 break;
             case R.id.tv_today:
                 setTimeTextDefault();
                 setTextChecked(mTvToday);
+                mTime = "1";
                 break;
             case R.id.tv_three:
                 setTimeTextDefault();
                 setTextChecked(mTvThree);
+                mTime = "2";
                 break;
             case R.id.tv_week:
                 setTimeTextDefault();
                 setTextChecked(mTvWeek);
+                mTime = "3";
                 break;
             case R.id.tv_mouth:
                 setTimeTextDefault();
                 setTextChecked(mTvMouth);
+                mTime = "4";
                 break;
             case R.id.tv_all_type:
                 setTypeTextDefault();
                 setTextChecked(mTvAllType);
+                mBillType = "";
                 break;
             case R.id.tv_office_supplies:
                 setTypeTextDefault();
@@ -426,32 +457,43 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             case R.id.tv_travel:
                 setTypeTextDefault();
                 setTextChecked(mTvTravel);
+                mBillType = "6403";
                 break;
             case R.id.tv_overtime:
                 setTypeTextDefault();
                 setTextChecked(mTvOvertime);
+                mBillType = "6405";
                 break;
             case R.id.tv_rest:
                 setTypeTextDefault();
                 setTextChecked(mTvRest);
+                mBillType = "6404";
                 break;
             case R.id.tv_sign:
                 setTypeTextDefault();
                 setTextChecked(mTvSign);
+                mBillType = "6402";
                 break;
             case R.id.tv_all_state:
                 setStateTextDefault();
-                setTextChecked(tvAllState);
+                setTextChecked(mTvAllState);
+                mApproveState = "";
                 break;
             case R.id.tv_state_checked:
                 setStateTextDefault();
-                setTextChecked(tvStateChecked);
+                setTextChecked(mTvStateChecked);
+                mApproveState = "1";
                 break;
             case R.id.tv_state_unchecked:
                 setStateTextDefault();
-                setTextChecked(tvStateUnchecked);
+                setTextChecked(mTvStateUnchecked);
+                mApproveState = "2";
                 break;
             case R.id.tv_ok:
+                mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
+                isLoadOver = false;
+                pageNum = 1;
+                mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
                 mChooseDialog.dismiss();
                 break;
         }
@@ -491,12 +533,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void setStateTextDefault() {
-        tvAllState.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
-        tvStateChecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
-        tvStateUnchecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
-        tvAllState.setTextColor(getResources().getColor(R.color.black_333333));
-        tvStateChecked.setTextColor(getResources().getColor(R.color.black_333333));
-        tvStateUnchecked.setTextColor(getResources().getColor(R.color.black_333333));
+        mTvAllState.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        mTvStateChecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        mTvStateUnchecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        mTvAllState.setTextColor(getResources().getColor(R.color.black_333333));
+        mTvStateChecked.setTextColor(getResources().getColor(R.color.black_333333));
+        mTvStateUnchecked.setTextColor(getResources().getColor(R.color.black_333333));
     }
 
     @Override
