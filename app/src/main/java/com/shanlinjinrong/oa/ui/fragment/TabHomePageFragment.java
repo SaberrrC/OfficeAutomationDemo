@@ -23,9 +23,7 @@ import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspap
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.DoneTasksActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.UpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
 import butterknife.Bind;
@@ -145,20 +143,20 @@ public class TabHomePageFragment extends BaseFragment {
                 //我的申请
 //                intent = new Intent(mContext, ApprovalListActivity.class);
                 intent = new Intent(mContext, MyUpcomingTasksActivity.class);
-                intent.putExtra("whichList", 1);
+                intent.putExtra("whichList", "1");
                 break;
             case R.id.rl_approval_wait_me_approval:
                 //待我审批
 //                intent = new Intent(mContext, ApprovalListActivity.class);
-                intent = new Intent(mContext, UpcomingTasksActivity.class);
-                intent.putExtra("whichList", 2);
+                intent = new Intent(mContext, MyUpcomingTasksActivity.class);
+                intent.putExtra("whichList", "2");
                 clearDot(getContext(), DOT_APPORVAL);
                 break;
             case R.id.rl_approval_me_approvaled:
                 //我审批的
 //                intent = new Intent(mContext, ApprovalListActivity.class);
-                intent = new Intent(mContext, DoneTasksActivity.class);
-                intent.putExtra("whichList", 3);
+                intent = new Intent(mContext, MyUpcomingTasksActivity.class);
+                intent.putExtra("whichList", "3");
                 break;
             case R.id.rl_approval_launch_approval:
                 //发起审批

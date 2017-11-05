@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
@@ -22,6 +25,7 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +55,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     RecyclerView       mRvList;
     @Bind(R.id.sr_refresh)
     SwipeRefreshLayout mSrRefresh;
+    @Bind(R.id.ll_search)
+    LinearLayout       mLlSearch;
+    @Bind(R.id.tv_approval)
+    TextView           mTvApproval;
+    @Bind(R.id.rl_check)
+    RelativeLayout     mRlCheck;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
     private boolean hasMore         = false;
@@ -74,6 +84,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private TextView            tvStateUnchecked;
     private int     pageNum    = 1;
     private boolean isLoadOver = false;
+    private String       mWhichList;
+    private LinearLayout mLlState;
+    private boolean isShowCheck = false;
 
     @Override
     protected void initInject() {
@@ -162,7 +175,21 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         mToolbar.setTitle("");//必须在setSupportActionBar之前调用
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
-        mTvTitle.setText("我的申请");
+        mWhichList = getIntent().getStringExtra("whichList");
+        if (TextUtils.equals(mWhichList, "1")) {
+            mTvTitle.setText("我的申请");
+            mLlSearch.setVisibility(View.GONE);
+        }
+        if (TextUtils.equals(mWhichList, "2")) {
+            mTvTitle.setText("待办事宜");
+            mLlSearch.setVisibility(View.VISIBLE);
+            mTvApproval.setVisibility(View.VISIBLE);
+        }
+        if (TextUtils.equals(mWhichList, "3")) {
+            mTvTitle.setText("已办事宜");
+            mLlSearch.setVisibility(View.VISIBLE);
+            mTvApproval.setVisibility(View.GONE);
+        }
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         mTvTitle.setLayoutParams(lp);
@@ -172,18 +199,97 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                if (isShowCheck) {
+                    isShowCheck = !isShowCheck;
+                    if (isShowCheck) {
+                        mLlSearch.setVisibility(View.GONE);
+                        mTvTitle.setText("选择单据");
+                        mRlCheck.setVisibility(View.VISIBLE);
+                        mTolbarTextBtn.setVisibility(View.GONE);
+                        mTvApproval.setVisibility(View.GONE);
+                    } else {
+                        mLlSearch.setVisibility(View.VISIBLE);
+                        mTvTitle.setText("待办事宜");
+                        mRlCheck.setVisibility(View.GONE);
+                        mTvApproval.setVisibility(View.VISIBLE);
+                        mTolbarTextBtn.setVisibility(View.VISIBLE);
+                    }
+                    ThreadUtils.runSub(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (Object data : mDatas) {
+                                if (data instanceof UpcomingTaskItemBean) {
+                                    UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
+                                    //                                    bean.setIsChecked(false);
+                                }
+                            }
+                            ThreadUtils.runMain(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mFinalRecycleAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    finish();
+                }
             }
         });
     }
 
-    @OnClick({R.id.toolbar_image_btn})
+    @OnClick({R.id.toolbar_image_btn, R.id.iv_search, R.id.tv_approval, R.id.iv_agree, R.id.tv_agree, R.id.iv_disagree, R.id.tv_disagree})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toolbar_image_btn:
                 showChooseDialog();
                 break;
+            case R.id.iv_search:
+                break;
+            case R.id.tv_approval:
+                setApproval();
+                break;
+            case R.id.iv_agree:
+            case R.id.tv_agree:
+                break;
+            case R.id.iv_disagree:
+            case R.id.tv_disagree:
+                break;
         }
+    }
+
+    private void setApproval() {
+        isShowCheck = !isShowCheck;
+        if (isShowCheck) {
+            mLlSearch.setVisibility(View.GONE);
+            mRlCheck.setVisibility(View.VISIBLE);
+            mTvTitle.setText("选择单据");
+            mTolbarTextBtn.setVisibility(View.GONE);
+            mTvApproval.setVisibility(View.GONE);
+        } else {
+            mLlSearch.setVisibility(View.VISIBLE);
+            mRlCheck.setVisibility(View.GONE);
+            mTvTitle.setText("待办事宜");
+            mTvApproval.setVisibility(View.VISIBLE);
+            mTolbarTextBtn.setVisibility(View.VISIBLE);
+        }
+        ThreadUtils.runSub(new Runnable() {
+            @Override
+            public void run() {
+                for (Object data : mDatas) {
+                    if (data instanceof UpcomingTaskItemBean) {
+                        UpcomingTaskItemBean bean = (UpcomingTaskItemBean) data;
+                        //bean.setIsChecked(false);
+                    }
+                }
+                ThreadUtils.runMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFinalRecycleAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
     }
 
     private void showChooseDialog() {
@@ -208,6 +314,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             tvAllState = (TextView) dialogView.findViewById(R.id.tv_all_state);
             tvStateChecked = (TextView) dialogView.findViewById(R.id.tv_state_checked);
             tvStateUnchecked = (TextView) dialogView.findViewById(R.id.tv_state_unchecked);
+            mLlState = (LinearLayout) dialogView.findViewById(R.id.ll_state);
+            if (TextUtils.equals(mWhichList, "1")) {
+                mLlState.setVisibility(View.VISIBLE);
+            } else {
+                mLlState.setVisibility(View.GONE);
+            }
             mTvAll.setOnClickListener(this);
             mTvToday.setOnClickListener(this);
             mTvThree.setOnClickListener(this);
