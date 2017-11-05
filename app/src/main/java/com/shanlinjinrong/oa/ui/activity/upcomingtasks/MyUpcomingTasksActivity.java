@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApproveBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
@@ -271,6 +272,17 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 showChooseDialog();
                 break;
             case R.id.iv_search:
+                if (TextUtils.equals(mWhichList, "1")) {
+                    mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+                    return;
+                }
+                String privateCode = AppConfig.getAppConfig(this).getPrivateCode();
+                if (TextUtils.equals(mWhichList, "2")) {
+                    mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
+                }
+                if (TextUtils.equals(mWhichList, "3")) {
+                    mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
+                }
                 break;
             case R.id.tv_approval:
                 if (mDatas.size() == 0) {
@@ -281,9 +293,41 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 break;
             case R.id.iv_agree:
             case R.id.tv_agree:
+                List<ApproveBean> approveBeanList = new ArrayList<>();
+                for (int i = 0; i < mDatas.size(); i++) {
+                    if (mDatas.get(i) instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                        UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) mDatas.get(i);
+                        if (bean.getIsChecked()) {
+                            approveBeanList.add(new ApproveBean(bean.getBillNo(), "true", bean.getPkBillType()));
+                        }
+                    }
+                    if (mDatas.get(i) instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                        UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) mDatas.get(i);
+                        if (bean.getIsChecked()) {
+                            approveBeanList.add(new ApproveBean(bean.getBillCode(), "true", bean.getBillType()));
+                        }
+                    }
+                }
+//                mPresenter.postAgree();
                 break;
             case R.id.iv_disagree:
             case R.id.tv_disagree:
+                List<ApproveBean> disApproveBeanList = new ArrayList<>();
+                for (int i = 0; i < mDatas.size(); i++) {
+                    if (mDatas.get(i) instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                        UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) mDatas.get(i);
+                        if (bean.getIsChecked()) {
+                            disApproveBeanList.add(new ApproveBean(bean.getBillNo(), "false", bean.getPkBillType()));
+                        }
+                    }
+                    if (mDatas.get(i) instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                        UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) mDatas.get(i);
+                        if (bean.getIsChecked()) {
+                            disApproveBeanList.add(new ApproveBean(bean.getBillCode(), "false", bean.getBillType()));
+                        }
+                    }
+                }
+//                mPresenter.postDisagree();
                 break;
         }
     }
