@@ -730,11 +730,6 @@
             android:name=".ui.activity.home.schedule.MeetingInviteActivity"
             android:screenOrientation="portrait"/>
 
-        <!-- 我的考勤 -->
-        <activity
-            android:name=".ui.activity.home.schedule.staffselfhelp.MyAttendence"
-            android:screenOrientation="portrait"/>
-
         <!--  -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.ClockingInMonthlyCalendarActivity"
@@ -750,21 +745,8 @@
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.AttandenceMonthActivity"
             android:screenOrientation="portrait"/>
-        <!-- 待办事宜 -->
-        <activity
-            android:name=".ui.activity.upcomingtasks.UpcomingTasksActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.activity.upcomingtasks.MyUpcomingTasksActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.activity.upcomingtasks.DoneTasksInfoActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.activity.upcomingtasks.DoneTasksActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
 

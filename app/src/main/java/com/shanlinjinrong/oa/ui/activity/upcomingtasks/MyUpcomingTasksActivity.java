@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -87,6 +88,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private String       mWhichList;
     private LinearLayout mLlState;
     private boolean isShowCheck = false;
+    private View mStork;
 
     @Override
     protected void initInject() {
@@ -315,10 +317,13 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             tvStateChecked = (TextView) dialogView.findViewById(R.id.tv_state_checked);
             tvStateUnchecked = (TextView) dialogView.findViewById(R.id.tv_state_unchecked);
             mLlState = (LinearLayout) dialogView.findViewById(R.id.ll_state);
+            mStork = dialogView.findViewById(R.id.stork);
             if (TextUtils.equals(mWhichList, "1")) {
                 mLlState.setVisibility(View.VISIBLE);
+                mStork.setVisibility(View.VISIBLE);
             } else {
                 mLlState.setVisibility(View.GONE);
+                mStork.setVisibility(View.GONE);
             }
             mTvAll.setOnClickListener(this);
             mTvToday.setOnClickListener(this);
@@ -365,6 +370,25 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             TextView tvReason = (TextView) holder.getViewById(R.id.tv_reason);
             TextView tvTime = (TextView) holder.getViewById(R.id.tv_time);
             TextView tvState = (TextView) holder.getViewById(R.id.tv_state);
+            if (isShowCheck) {
+                cbCheck.setVisibility(View.VISIBLE);
+                //                cbCheck.setChecked(bean.getIsChecked());
+            } else {
+                cbCheck.setVisibility(View.GONE);
+            }
+            holder.getRootView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isShowCheck) {
+                        //                        bean.setIsChecked(!bean.getIsChecked());
+                        //                        cbCheck.setChecked(bean.getIsChecked());
+                        return;
+                    }
+                    Intent intent = new Intent(MyUpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
+                    intent.putExtra("WhichList", mWhichList);
+                    startActivity(intent);
+                }
+            });
         }
     }
 

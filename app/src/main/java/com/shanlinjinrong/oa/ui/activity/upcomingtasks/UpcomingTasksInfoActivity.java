@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
@@ -50,13 +52,17 @@ import static com.shanlinjinrong.oa.R.id.tv_time;
 public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
 
     @Bind(R.id.tv_title)
-    TextView     mTvTitle;
+    TextView       mTvTitle;
     @Bind(R.id.toolbar)
-    Toolbar      mToolbar;
+    Toolbar        mToolbar;
     @Bind(R.id.rv_content)
-    RecyclerView mRecyclerView;
+    RecyclerView   mRecyclerView;
     @Bind(R.id.toolbar_text_btn)
-    TextView     mToolbarTextBtn;
+    TextView       mToolbarTextBtn;
+    @Bind(R.id.rl_check)
+    RelativeLayout mRlCheck;
+    @Bind(R.id.rl_tack_back)
+    RelativeLayout mRlTackBack;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
     private LinearLayoutManager mLinearLayoutManager;
@@ -73,8 +79,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private int          clickItemPosition = 0;
     private TextView mEtCommonalityBeginTime;
     private TextView mEtCommonalityEndTime;
-    //    private DatePicker mBeginTimePicker;
-    //    private DatePicker mEndTimePicker;
+    private String   mWhichList;
 
     @Override
     protected void initInject() {
@@ -121,8 +126,24 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         if (mToolbar == null) {
             return;
         }
-        mToolbar.setTitle("");//必须在setSupportActionBar之前调用
+        mToolbar.setTitle("");
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
+        Intent intent = getIntent();
+        if (intent != null) {
+            mWhichList = intent.getStringExtra("WhichList");
+            if (TextUtils.equals(mWhichList, "1")) {
+                mRlCheck.setVisibility(View.GONE);
+                mRlTackBack.setVisibility(View.VISIBLE);
+            }
+            if (TextUtils.equals(mWhichList, "2")) {
+                mRlCheck.setVisibility(View.VISIBLE);
+                mRlTackBack.setVisibility(View.GONE);
+            }
+            if (TextUtils.equals(mWhichList, "3")) {
+                mRlCheck.setVisibility(View.GONE);
+                mRlTackBack.setVisibility(View.GONE);
+            }
+        }
         mTvTitle.setText("朱展宏的出差申请");
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
@@ -242,7 +263,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         mChooseDialog.show();//显示对话框
     }
 
-    @OnClick({R.id.toolbar_text_btn, R.id.tv_agree, R.id.tv_disagree})
+    @OnClick({R.id.toolbar_text_btn, R.id.tv_agree, R.id.tv_disagree, R.id.tv_tack_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toolbar_text_btn:
@@ -265,6 +286,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             case R.id.tv_agree:
                 break;
             case R.id.tv_disagree:
+                break;
+            case R.id.tv_tack_back:
                 break;
         }
     }
