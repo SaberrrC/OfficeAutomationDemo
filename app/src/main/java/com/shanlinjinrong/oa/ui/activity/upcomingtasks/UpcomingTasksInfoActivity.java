@@ -21,13 +21,17 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalBaseAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.CardResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OverTimeResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.RestResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.TraverResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoDetailBodyBean;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoStateBean;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoTopBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksInfoContract;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksInfoPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -38,7 +42,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +50,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.shanlinjinrong.oa.R.id.tv_star;
 import static com.shanlinjinrong.oa.R.id.tv_time;
 
 public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
@@ -64,22 +68,24 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     @Bind(R.id.rl_tack_back)
     RelativeLayout mRlTackBack;
     private List<Object> mDatas = new ArrayList<>();
-    private FinalRecycleAdapter mFinalRecycleAdapter;
-    private LinearLayoutManager mLinearLayoutManager;
-    private int                 mIndex;
-    private boolean             mMove;
-    private Dialog              mChooseDialog;
-    private ListView            mLvList;
-    public static String[] type_0 = {"出差", "外出"};
-    public static String[] type_1 = {"type_1", "type_1"};
-    public static String[] type_2 = {"事假", "婚假", "年假", "丧假"};
-    public static String[] type_3 = {"忘记打卡", "考勤机故障", "地铁故障"};
+    private FinalRecycleAdapter      mFinalRecycleAdapter;
+    private LinearLayoutManager      mLinearLayoutManager;
+    private int                      mIndex;
+    private boolean                  mMove;
+    private Dialog                   mChooseDialog;
+    private ListView                 mLvList;
     private FinalBaseAdapter<String> mFinalBaseAdapter;
     private List<String> typeData          = new ArrayList<>();
     private int          clickItemPosition = 0;
-    private TextView mEtCommonalityBeginTime;
-    private TextView mEtCommonalityEndTime;
-    private String   mWhichList;
+    private TextView                                   mEtCommonalityBeginTime;
+    private TextView                                   mEtCommonalityEndTime;
+    private String                                     mWhichList;
+    private UpcomingTaskItemBean.DataBean.DataListBean mBean;
+    private TextView                                   mTvType;
+    private CardResultBean                             mCardResultBean;
+    private TraverResultBean                           mTraverResultBean;
+    private RestResultBean                             mRestResultBean;
+    private OverTimeResultBean                         mOverTimeResultBean;
 
     @Override
     protected void initInject() {
@@ -108,8 +114,11 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     private void initList() {
         Map<Class, Integer> map = new HashMap<>();
-        map.put(UpcomingInfoTopBean.class, R.layout.layout_item_upcominginfo_top);
-        map.put(UpcomingInfoStateBean.class, R.layout.upcoming_item);
+        map.put(UpcomingTaskItemBean.DataBean.DataListBean.class, R.layout.layout_item_upcominginfo_top);
+        map.put(CardResultBean.DataBean.NchrSignDetailsBean.class, R.layout.upcoming_item);
+        map.put(TraverResultBean.DataBean.NchrevectionApplyDetailBean.class, R.layout.upcoming_item);
+        map.put(RestResultBean.DataBean.NchrfurloughApplyDetailBean.class, R.layout.upcoming_item);
+        map.put(OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean.class, R.layout.upcoming_item);
         map.put(UpcomingInfoDetailBodyBean.class, R.layout.layout_item_upcominginfo_detail_body);
         mFinalRecycleAdapter = new FinalRecycleAdapter(mDatas, map, this);
         mLinearLayoutManager = new LinearLayoutManager(this);
@@ -118,8 +127,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     }
 
     private void initData() {
-        mDatas.add(new UpcomingInfoTopBean());
-        mDatas.add(new UpcomingInfoStateBean());
+        mPresenter.getInfoData(mBean.getBillType(), mBean.getBillCode());
     }
 
     private void initToolbar() {
@@ -131,6 +139,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         Intent intent = getIntent();
         if (intent != null) {
             mWhichList = intent.getStringExtra("WhichList");
+            mBean = (UpcomingTaskItemBean.DataBean.DataListBean) intent.getSerializableExtra("UPCOMING_INFO");
             if (TextUtils.equals(mWhichList, "1")) {
                 mRlCheck.setVisibility(View.GONE);
                 mRlTackBack.setVisibility(View.VISIBLE);
@@ -144,7 +153,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mRlTackBack.setVisibility(View.GONE);
             }
         }
-        mTvTitle.setText("朱展宏的出差申请");
+        mTvTitle.setText(mBean.getUserName() + "的" + mBean.getBillTypeName());
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         mToolbarTextBtn.setVisibility(View.VISIBLE);
@@ -161,29 +170,92 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onBindViewHolder(FinalRecycleAdapter.ViewHolder holder, int position, Object itemData) {
-        if (itemData instanceof UpcomingInfoTopBean) {
+        if (itemData instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+            UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) itemData;
+            TextView tvIdTitle = (TextView) holder.getViewById(R.id.tv_id_title);
+            ImageView ivArrow = (ImageView) holder.getViewById(R.id.iv_arrow);
             TextView tvId = (TextView) holder.getViewById(R.id.tv_id);
+            TextView tvStar = (TextView) holder.getViewById(tv_star);
+            TextView tvTypeTitle = (TextView) holder.getViewById(R.id.tv_type_title);
             LinearLayout llType = (LinearLayout) holder.getViewById(R.id.ll_type);
-            TextView tvType = (TextView) holder.getViewById(R.id.tv_type);
+            mTvType = (TextView) holder.getViewById(R.id.tv_type);
+            TextView tvApplyTimeTitle = (TextView) holder.getViewById(R.id.tv_apply_time_title);
+            LinearLayout llTypeAll = (LinearLayout) holder.getViewById(R.id.ll_type_all);
             TextView tvApplyTime = (TextView) holder.getViewById(R.id.tv_apply_time);
-            llType.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showTypeDialog();
-                }
-            });
+            tvId.setText(bean.getBillCode());
+            tvApplyTime.setText(bean.getCreationTime());
+            if (TextUtils.equals(mBean.getBillType(), "6402")) {//签卡申请
+                tvTypeTitle.setText("签卡类别");
+                llTypeAll.setVisibility(View.GONE);
+                tvIdTitle.setText("签卡单编码");
+            }
+            if (TextUtils.equals(mBean.getBillType(), "6403")) {//出差申请
+                tvTypeTitle.setText("出差类别");
+                llTypeAll.setVisibility(View.VISIBLE);
+                tvIdTitle.setText("出差编码");
+            }
+            if (TextUtils.equals(mBean.getBillType(), "6404")) {//休假申请
+                tvTypeTitle.setText("休假类别");
+                llTypeAll.setVisibility(View.VISIBLE);
+                tvIdTitle.setText("休假单编码");
+            }
+            if (TextUtils.equals(mBean.getBillType(), "6405")) {//加班申请
+                tvTypeTitle.setText("加班类别");
+                llTypeAll.setVisibility(View.VISIBLE);
+                tvIdTitle.setText("加班单编码");
+            }
             return;
         }
-        if (itemData instanceof UpcomingInfoStateBean) {
+        if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean ||
+                itemData instanceof TraverResultBean.DataBean.NchrevectionApplyDetailBean ||
+                itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean ||
+                itemData instanceof OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) {
+            RelativeLayout rlTop = (RelativeLayout) holder.getViewById(R.id.rl_top);
             ImageView imgDeleteDetail = (ImageView) holder.getViewById(R.id.img_delete_detail);
+            imgDeleteDetail.setVisibility(View.GONE);
             mEtCommonalityBeginTime = (TextView) holder.getViewById(R.id.et_commonality_begin_time);
             mEtCommonalityEndTime = (TextView) holder.getViewById(R.id.et_commonality_end_time);
+            TextView tvCommonalityDetail = (TextView) holder.getViewById(R.id.tv_commonality_detail);
+            LinearLayout llCommonalityBeginTime = (LinearLayout) holder.getViewById(R.id.ll_commonality_begin_time);
+            llCommonalityBeginTime.setVisibility(View.GONE);
+            TextView tvCommonalityBeginDot = (TextView) holder.getViewById(R.id.tv_commonality_begin_dot);
+            TextView tvCommonalityBeginTime = (TextView) holder.getViewById(R.id.tv_commonality_begin_time);
+            LinearLayout llCommonalityEndTime = (LinearLayout) holder.getViewById(R.id.ll_commonality_end_time);
+            llCommonalityEndTime.setVisibility(View.GONE);
+            TextView tvCommonalityEndDot = (TextView) holder.getViewById(R.id.tv_commonality_end_dot);
+            LinearLayout llCommonalityDuration = (LinearLayout) holder.getViewById(R.id.ll_commonality_duration);
+            llCommonalityDuration.setVisibility(View.GONE);
+            TextView tvCommonalityDuration = (TextView) holder.getViewById(R.id.tv_commonality_duration);
             TextView tvCommonality = (TextView) holder.getViewById(R.id.tv_commonality);
-            EditText etCommonalityShow1 = (EditText) holder.getViewById(R.id.et_commonality_show1);//出差地点
-            EditText etCommonalityShow2 = (EditText) holder.getViewById(R.id.et_commonality_show2);//出差原因
-            EditText etCommonalityShow3 = (EditText) holder.getViewById(R.id.et_commonality_show3);//交接人
-            imgDeleteDetail.setVisibility(View.GONE);
-
+            LinearLayout llCommonalityShow1 = (LinearLayout) holder.getViewById(R.id.ll_commonality_show1);
+            llCommonalityShow1.setVisibility(View.GONE);
+            TextView tvCommonalityShow1Dot = (TextView) holder.getViewById(R.id.tv_commonality_show1_dot);
+            tvCommonalityShow1Dot.setVisibility(View.GONE);
+            TextView tvCommonalityShow1 = (TextView) holder.getViewById(R.id.tv_commonality_show1);
+            EditText etCommonalityShow1 = (EditText) holder.getViewById(R.id.et_commonality_show1);
+            LinearLayout llCommonalityShow2 = (LinearLayout) holder.getViewById(R.id.ll_commonality_show2);
+            llCommonalityShow2.setVisibility(View.GONE);
+            TextView tvCommonalityShow2 = (TextView) holder.getViewById(R.id.tv_commonality_show2);
+            TextView tvCommonalityShow2Dot = (TextView) holder.getViewById(R.id.tv_commonality_show2_dot);
+            tvCommonalityShow2Dot.setVisibility(View.GONE);
+            LinearLayout llRegistrationCardDetail = (LinearLayout) holder.getViewById(R.id.ll_registration_card_detail);
+            llRegistrationCardDetail.setVisibility(View.GONE);
+            EditText etCommonalityShow2 = (EditText) holder.getViewById(R.id.et_commonality_show2);
+            LinearLayout llCommonalityShow3 = (LinearLayout) holder.getViewById(R.id.ll_commonality_show3);
+            llCommonalityShow3.setVisibility(View.GONE);
+            TextView tvCommonalityShow3 = (TextView) holder.getViewById(R.id.tv_commonality_show3);
+            EditText etCommonalityShow3 = (EditText) holder.getViewById(R.id.et_commonality_show3);
+            TextView tvCommonalityShow3Dot = (TextView) holder.getViewById(R.id.tv_commonality_show3_dot);
+            mEtCommonalityBeginTime.setEnabled(false);
+            mEtCommonalityEndTime.setEnabled(false);
+            etCommonalityShow1.setEnabled(false);
+            etCommonalityShow2.setEnabled(false);
+            etCommonalityShow3.setEnabled(false);
+            if (position != 1) {
+                rlTop.setVisibility(View.GONE);
+            } else {
+                rlTop.setVisibility(View.VISIBLE);
+            }
             mEtCommonalityBeginTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -204,6 +276,89 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     timeDialogFragment.show(getSupportFragmentManager(), "1");
                 }
             });
+            if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean) {
+                CardResultBean.DataBean.NchrSignDetailsBean bean = (CardResultBean.DataBean.NchrSignDetailsBean) itemData;
+                mTvType.setText(TextUtils.isEmpty(bean.getSignRemark()) ? "" : bean.getSignRemark());
+                mEtCommonalityBeginTime.setText(mCardResultBean.getData().getApplyWorkFlows().get(0).getSendDate());
+                mEtCommonalityEndTime.setText(mCardResultBean.getData().getApplyWorkFlows().get(0).getDealDate());
+                tvCommonalityDetail.setText("签卡明细");
+                llCommonalityShow1.setVisibility(View.VISIBLE);
+                llCommonalityShow2.setVisibility(View.VISIBLE);
+                llCommonalityShow3.setVisibility(View.VISIBLE);
+                tvCommonalityShow1Dot.setVisibility(View.VISIBLE);
+                tvCommonalityShow2Dot.setVisibility(View.VISIBLE);
+                tvCommonalityShow3Dot.setVisibility(View.VISIBLE);
+                tvCommonalityShow1.setText("签卡时间");
+                tvCommonalityShow2.setText("签卡原因");
+                tvCommonalityShow3.setText("签卡说明");
+                etCommonalityShow1.setText(bean.getSignTime());
+                etCommonalityShow2.setText(bean.getSignCause());
+                etCommonalityShow3.setText(bean.getSignRemark());
+                return;
+            }
+            if (itemData instanceof TraverResultBean.DataBean.NchrevectionApplyDetailBean) {
+                TraverResultBean.DataBean.NchrevectionApplyDetailBean bean = (TraverResultBean.DataBean.NchrevectionApplyDetailBean) itemData;
+                mTvType.setText(TextUtils.isEmpty(bean.getEvectionRemark()) ? "" : bean.getEvectionRemark());
+                tvCommonalityDetail.setText("出差明细");
+                llCommonalityBeginTime.setVisibility(View.VISIBLE);
+                llCommonalityEndTime.setVisibility(View.VISIBLE);
+                llCommonalityDuration.setVisibility(View.VISIBLE);
+                llCommonalityShow1.setVisibility(View.VISIBLE);
+                llCommonalityShow2.setVisibility(View.VISIBLE);
+                llCommonalityShow3.setVisibility(View.VISIBLE);
+                tvCommonalityShow1Dot.setVisibility(View.VISIBLE);
+                tvCommonalityShow2Dot.setVisibility(View.GONE);
+                tvCommonalityShow3Dot.setVisibility(View.GONE);
+                mEtCommonalityBeginTime.setText(bean.getStartTime());
+                mEtCommonalityEndTime.setText(bean.getEndTime());
+                tvCommonalityDuration.setText("申请时长");
+                tvCommonality.setText(bean.getTimeDifference() + "小时");
+                tvCommonalityShow1.setText("出差地点");
+                tvCommonalityShow2.setText("出差原因");
+                tvCommonalityShow3.setText("工作交接人");
+                etCommonalityShow1.setText(bean.getEvectionAddress());
+                etCommonalityShow2.setText(bean.getEvectionRemark());
+                etCommonalityShow3.setText(bean.getHandOverPepole());
+                return;
+
+            }
+            if (itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean) {
+                RestResultBean.DataBean.NchrfurloughApplyDetailBean bean = (RestResultBean.DataBean.NchrfurloughApplyDetailBean) itemData;
+                mTvType.setText(TextUtils.isEmpty(bean.getFurloughRemark()) ? "" : bean.getFurloughRemark());
+                tvCommonalityDetail.setText("休假明细");
+                llCommonalityBeginTime.setVisibility(View.VISIBLE);
+                llCommonalityEndTime.setVisibility(View.VISIBLE);
+                llCommonalityDuration.setVisibility(View.VISIBLE);
+                llCommonalityShow1.setVisibility(View.VISIBLE);
+                llCommonalityShow2.setVisibility(View.VISIBLE);
+                tvCommonalityShow1Dot.setVisibility(View.GONE);
+                tvCommonalityShow2Dot.setVisibility(View.GONE);
+                mEtCommonalityBeginTime.setText(bean.getStartTime());
+                mEtCommonalityEndTime.setText(bean.getEndTime());
+                tvCommonalityDuration.setText("休假时长");
+                tvCommonality.setText(bean.getTimeDifference() + "小时");
+                tvCommonalityShow1.setText("休假事由");
+                tvCommonalityShow2.setText("工作交接人");
+                etCommonalityShow1.setText(bean.getFurloughRemark());
+                etCommonalityShow2.setText(bean.getHandOverPepole());
+                return;
+            }
+            if (itemData instanceof OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) {
+                OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean bean = (OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) itemData;
+                mTvType.setText(TextUtils.isEmpty(bean.getOverTimeRemark()) ? "" : bean.getOverTimeRemark());
+                tvCommonalityDetail.setText("加班明细");
+                llCommonalityBeginTime.setVisibility(View.VISIBLE);
+                llCommonalityEndTime.setVisibility(View.VISIBLE);
+                llCommonalityDuration.setVisibility(View.VISIBLE);
+                llCommonalityShow1.setVisibility(View.VISIBLE);
+                tvCommonalityShow1Dot.setVisibility(View.VISIBLE);
+                mEtCommonalityBeginTime.setText(bean.getOverTimeBeginTime());
+                mEtCommonalityEndTime.setText(bean.getOverTimeEndTime());
+                tvCommonalityDuration.setText("申请时长");
+                tvCommonality.setText(bean.getOverTimeHour() + "小时");
+                tvCommonalityShow1.setText("休假事由");
+                etCommonalityShow1.setText(bean.getOverTimeRemark());
+            }
             return;
         }
         if (itemData instanceof UpcomingInfoDetailBodyBean) {
@@ -224,22 +379,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_dialog_upcominginfo_choose, null, false);
             mLvList = (ListView) dialogView.findViewById(R.id.lv_content);
             mFinalBaseAdapter = null;
-            int type = getIntent().getIntExtra("type", -1);
-            type = 1;
             if (typeData.size() > 0) {
                 typeData.clear();
-            }
-            if (type == 0) {
-                typeData.addAll(Arrays.asList(type_0));
-            }
-            if (type == 1) {
-                typeData.addAll(Arrays.asList(type_1));
-            }
-            if (type == 2) {
-                typeData.addAll(Arrays.asList(type_2));
-            }
-            if (type == 3) {
-                typeData.addAll(Arrays.asList(type_3));
             }
             mFinalBaseAdapter = new FinalBaseAdapter<String>(typeData, R.layout.layout_item_upcominginfo, this);
             mLvList.setAdapter(mFinalBaseAdapter);
@@ -278,7 +419,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 if (TextUtils.equals(mToolbarTextBtn.getText().toString().trim(), "查看明细")) {
                     mToolbarTextBtn.setText("评阅情况");
                     mDatas.remove(1);
-                    mDatas.add(1, new UpcomingInfoStateBean());
+                    //                    mDatas.add(1, new UpcomingInfoStateBean());
                     mFinalRecycleAdapter.notifyDataSetChanged();
                     mRecyclerView.scrollToPosition(0);
                 }
@@ -326,5 +467,37 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onGetApproveInfoSuccess(String json) {
+        String billType = mBean.getBillType();
+        Gson gson = new Gson();
+        if (mDatas.size() >= 0) {
+            mDatas.clear();
+        }
+        mDatas.add(mBean);
+        if (TextUtils.equals(billType, "6402")) {//签卡申请
+            mCardResultBean = gson.fromJson(json, CardResultBean.class);
+            mDatas.addAll(mCardResultBean.getData().getNchrSignDetails());
+        }
+        if (TextUtils.equals(billType, "6403")) {//出差申请
+            mTraverResultBean = gson.fromJson(json, TraverResultBean.class);
+            mDatas.addAll(mTraverResultBean.getData().getNchrevectionApplyDetail());
+        }
+        if (TextUtils.equals(billType, "6404")) {//休假申请
+            mRestResultBean = gson.fromJson(json, RestResultBean.class);
+            mDatas.addAll(mRestResultBean.getData().getNchrfurloughApplyDetail());
+        }
+        if (TextUtils.equals(billType, "6405")) {//加班申请
+            mOverTimeResultBean = gson.fromJson(json, OverTimeResultBean.class);
+            mDatas.addAll(mOverTimeResultBean.getData().getNchroverTimeApplyDetail());
+        }
+        mFinalRecycleAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onGetApproveInfoFailure(int errorNo, String strMsg) {
+        showToast(strMsg);
     }
 }

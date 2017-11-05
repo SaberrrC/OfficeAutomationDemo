@@ -5,8 +5,10 @@
               android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/rl_top"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:background="#FAFAFA"
         android:padding="12dp">
 
         <TextView
@@ -15,9 +17,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="出差明细"
-            android:textColor="#ff898989"
             android:textSize="14sp"/>
-
 
         <ImageView
             android:id="@+id/img_delete_detail"
@@ -31,8 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:orientation="vertical">
 
 
         <LinearLayout
@@ -40,6 +39,9 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal">
 
             <TextView
@@ -55,7 +57,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="开始时间"
-                android:textSize="14sp"/>
+                android:textColor="#151515"
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/et_commonality_begin_time"
@@ -76,6 +79,8 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:orientation="horizontal">
 
             <TextView
@@ -87,10 +92,11 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="39dp"
                 android:gravity="center_vertical"
                 android:text="结束时间"
-                android:textSize="14sp"/>
+                android:textColor="#151515"
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/et_commonality_end_time"
@@ -110,7 +116,8 @@
             android:id="@+id/ll_commonality_duration"
             android:layout_width="match_parent"
             android:layout_height="38dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:orientation="horizontal">
 
             <TextView
@@ -139,6 +146,9 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="12dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="horizontal">
@@ -155,8 +165,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="出差地点"
-                android:textSize="14sp"/>
+                android:text="title1"
+                android:textColor="#151515"
+                android:textSize="16sp"/>
 
             <EditText
                 android:id="@+id/et_commonality_show1"
@@ -168,6 +179,7 @@
                 android:gravity="center_vertical"
                 android:hint="请填写出差地点"
                 android:paddingLeft="12dp"
+                android:textColor="#898989"
                 android:textSize="14sp"/>
         </LinearLayout>
 
@@ -176,15 +188,25 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_commonality_show2_dot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* "
+                android:textColor="@color/text_red_color"/>
 
             <TextView
                 android:id="@+id/tv_commonality_show2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="出差原因"
-                android:textSize="14sp"/>
+                android:text="title1"
+                android:textColor="#151515"
+                android:textSize="16sp"/>
 
             <LinearLayout
                 android:id="@+id/ll_registration_card_detail"
@@ -223,22 +245,35 @@
                 android:gravity="center_vertical"
                 android:hint="请填写出差原因"
                 android:paddingLeft="12dp"
-                android:textSize="14sp"/>
+                android:textColor="#898989"
+                android:textSize="14sp"
+                android:visibility="visible"/>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_commonality_show3"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_commonality_show3_dot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* "
+                android:textColor="@color/text_red_color"/>
 
             <TextView
                 android:id="@+id/tv_commonality_show3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="工作交接人"
-                android:textSize="14sp"/>
+                android:text="title3"
+                android:textColor="#151515"
+                android:textSize="16sp"/>
 
             <EditText
                 android:id="@+id/et_commonality_show3"
@@ -250,6 +285,7 @@
                 android:gravity="center_vertical"
                 android:hint="请填写工作交接人"
                 android:paddingLeft="12dp"
+                android:textColor="#898989"
                 android:textSize="14sp"/>
         </LinearLayout>
     </LinearLayout>

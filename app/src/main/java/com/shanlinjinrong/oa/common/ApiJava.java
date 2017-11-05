@@ -102,4 +102,6 @@ public class ApiJava {
     //申请休假接口
     public static final String SUBMITFURLOUGH = "nchrFurlough/submitFurlough";
 
+    //查看申请详情
+    public static final String MYAPPLY_QUERY_APPROVE_INFO = "myApply/queryApproveDetailByBillCode";
 }

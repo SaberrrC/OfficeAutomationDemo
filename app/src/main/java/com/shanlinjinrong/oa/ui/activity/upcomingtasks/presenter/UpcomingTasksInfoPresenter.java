@@ -1,8 +1,14 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter;
 
+import android.text.TextUtils;
+
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksInfoContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+
+import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpParams;
 
 import javax.inject.Inject;
 
@@ -17,4 +23,39 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
         super(mKjHttp);
     }
 
+    @Override
+    public void getInfoData(String billType, String billCode) {
+        HttpParams httpParams = new HttpParams();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(ApiJava.MYAPPLY_QUERY_APPROVE_INFO);
+        if (!TextUtils.isEmpty(billType)) {
+            stringBuilder.append("?" + "billType=" + billType);
+        }
+        if (!TextUtils.isEmpty(billCode)) {
+            stringBuilder.append("&" + "billCode=" + billCode);
+        }
+        mKjHttp.jsonGet(stringBuilder.toString(), httpParams, new HttpCallBack() {
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+            }
+
+            @Override
+            public void onSuccess(String json) {
+                super.onSuccess(json);
+                mView.onGetApproveInfoSuccess(json);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.onGetApproveInfoFailure(errorNo, strMsg);
+            }
+        });
+    }
 }

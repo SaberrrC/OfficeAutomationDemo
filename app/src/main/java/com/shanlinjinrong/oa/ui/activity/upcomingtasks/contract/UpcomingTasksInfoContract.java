@@ -9,8 +9,12 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
  */
 public interface UpcomingTasksInfoContract {
     interface View extends BaseView {
+        void onGetApproveInfoSuccess(String json);
+
+        void onGetApproveInfoFailure(int errorNo, String strMsg);
     }
 
     interface Presenter extends BasePresenter<View> {
+        void getInfoData(String billType, String billCode);
     }
 }

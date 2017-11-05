@@ -411,6 +411,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     }
                     Intent intent = new Intent(MyUpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
                     intent.putExtra("WhichList", mWhichList);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("UPCOMING_INFO", bean);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
             });
@@ -549,9 +552,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mDatas.clear();
             }
         }
+        if (bean.getData() == null) {
+            return;
+        }
         List<UpcomingTaskItemBean.DataBean.DataListBean> dataList = bean.getData().getDataList();
         if (dataList == null) {
-            showToast("没有更多了");
             return;
         }
         if (dataList.size() < Integer.parseInt(PAGE_SIZE)) {
