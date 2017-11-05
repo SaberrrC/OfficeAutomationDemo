@@ -13,6 +13,15 @@ public class RetrofitConfig {
     private static String authToken;
     private static String userId;
     private static String cid;
+    private String userCode = "";
+
+    public String getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
 
     private boolean isGson;
 
@@ -42,20 +51,17 @@ public class RetrofitConfig {
     public static final String KEY_DEVICEID = "deviceId";
     public static final String VALUE_DEVICEID = "";
 
-    /**
-     * Creates a new instance of Config.
-     *
-     * @param host
-     * @param version
-     * @param privateKey API加密的秘钥
-     * @param apiEnv     API的使用环境：beta | GA等
-     */
-    public RetrofitConfig(String host, String version, String privateKey, String apiEnv, boolean isGson) {
-        this.privateKey = privateKey;
-        this.apiEnv = apiEnv;
-        this.host = host;
-        this.version = version;
-        this.isGson = isGson;
+    private static RetrofitConfig retrofitConfig = null;
+
+    public static RetrofitConfig getInstance() {
+        if (retrofitConfig == null) {
+            synchronized (RetrofitConfig.class) {
+                if (retrofitConfig == null) {
+                    retrofitConfig = new RetrofitConfig();
+                }
+            }
+        }
+        return retrofitConfig;
     }
 
     public String getPrivateKey() {

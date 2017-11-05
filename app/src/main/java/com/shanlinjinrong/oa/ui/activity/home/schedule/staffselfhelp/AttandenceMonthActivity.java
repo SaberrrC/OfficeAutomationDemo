@@ -7,7 +7,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,9 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.event.PeopeNameEvent;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.DatePopWindow;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.DatePopAttandanceAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandanceMonthContract;
@@ -32,6 +33,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -60,6 +62,18 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     TextView tv_people;
     @Bind(R.id.layout_root)
     LinearLayout mRootView;
+
+    @Bind(R.id.tv_date)
+    TextView tv_date;
+    @Bind(R.id.tv_name)
+    TextView tv_name;
+    @Bind(R.id.tv_gowork_time)
+    TextView tv_gowork_time;
+    @Bind(R.id.tv_off_gowork_time)
+    TextView tv_off_gowork_time;
+
+
+
     private List<PopItem> mData = new ArrayList<>();;
     private int mSelectedDay ;
     private int mCurrentDay ;
@@ -72,7 +86,11 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     private View rootView;
     private MonthSelectPopWindow monthSelectPopWindow;
     private Calendar cal;
-
+    private String mPrivateCode = "";
+    private MyAttandanceResponse myAttandanceResponse  = new MyAttandanceResponse();
+    private List<String> mDateTypeList = new ArrayList<>();
+    private HashMap<String,String> mDataTypeMap = new HashMap<>();
+    private List<MyAttandanceResponse.AllWorkAttendanceListBean> mAllWorkAttendanceList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +112,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         mCurrentMonth=cal.get(Calendar.MONTH)+1;
         mCurrentYear=cal.get(Calendar.YEAR);
 
+        mSelectedYear=mCurrentYear;
         mSelectedDay=mCurrentDay;
         mSelectedMonth=mCurrentMonth;
+
         tv_time.setText(mCurrentYear+"年"+mCurrentMonth+"月");
         iv_divider.setVisibility(View.GONE);
         mLlChoseTime.setOnClickListener(this);
@@ -104,6 +124,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         mDateLayout.addView(rootView);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.top_data_list);
         setData(true,mSelectedMonth,mSelectedDay);
+        mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+        doHttp();
     }
 
     public void setData(final boolean isDay, int month, int selectPos) {
@@ -171,9 +193,9 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                                 }else {
                                     setData(true, mSelectedMonth,1);
                                 }
-
                                 mAdapter.notifyDataSetChanged();
                                 monthSelectPopWindow.dismiss();
+                                doHttp();
                             }
                         });
                 monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM,0,0);
@@ -214,13 +236,61 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
     }
 
+
     @Override
-    public void sendDataSuccess() {
+    public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
+        mAllWorkAttendanceList.clear();
+         mAllWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
+        List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();
+        for (MyAttandanceResponse.CcWorkAttendanceListBean item:ccWorkAttendanceList){
+            String key = Integer.parseInt(item.getCalendar().split("-")[2])+"";
+            mDataTypeMap.put(key,getType(item.getTbmstatus())+"");
+        }
+        List<MyAttandanceResponse.ZtWorkAttendanceListBean> ztWorkAttendanceList = myAttandanceResponse.getZtWorkAttendanceList();
+        for (MyAttandanceResponse.ZtWorkAttendanceListBean item:ztWorkAttendanceList){
+            String key = Integer.parseInt(item.getCalendar().split("-")[2])+"";
+            mDataTypeMap.put(key,getType(item.getTbmstatus())+"");
+        }
+        List<MyAttandanceResponse.KgWorkAttendanceListBean> kgWorkAttendanceList = myAttandanceResponse.getKgWorkAttendanceList();
+        for (MyAttandanceResponse.KgWorkAttendanceListBean item:kgWorkAttendanceList){
+            String key = Integer.parseInt(item.getCalendar().split("-")[2])+"";
+            mDataTypeMap.put(key,getType(item.getTbmstatus())+"");
+        }
+        for(PopItem mDataItrm:mData){
+            String content = mDataItrm.getContent();
+            if(mDataItrm.isEnable()){
+                if(mDataTypeMap.containsKey(content)){
+                    mDataItrm.setDateType(Integer.parseInt(mDataTypeMap.get(content)));
+                }
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+        tv_date.setText(mSelectedYear+"-"+mSelectedMonth+"-"+mSelectedDay);
+        MyAttandanceResponse.AllWorkAttendanceListBean allWorkAttendanceListBean = mAllWorkAttendanceList.get(mSelectedDay);
+        if(allWorkAttendanceListBean==null)
+            return;
+        String calendar = allWorkAttendanceListBean.getCalendar();
+        if(!TextUtils.isEmpty(calendar)){
+            tv_date.setText(calendar);
+        }
+        if(!TextUtils.isEmpty(allWorkAttendanceListBean.getPsname())){
+            tv_name.setText(allWorkAttendanceListBean.getPsname());
+        }
+        if(!TextUtils.isEmpty(allWorkAttendanceListBean.getOnebegintime())){
+            tv_gowork_time.setText(allWorkAttendanceListBean.getOnebegintime());
+        }
+        if(!TextUtils.isEmpty(allWorkAttendanceListBean.getTwoendtime())){
+            tv_off_gowork_time.setText(allWorkAttendanceListBean.getTwoendtime());
+        }
+
+
+
+
 
     }
 
     @Override
-    public void sendDataFailed(int errCode, String msg) {
+    public void sendDataFailed(String errCode, String msg) {
 
     }
 
@@ -231,8 +301,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFinish(PeopeNameEvent peopeNameEvent) {
-        if(!TextUtils.isEmpty(peopeNameEvent.name)){
-            tv_people.setText(peopeNameEvent.name);
+        if(peopeNameEvent!=null){
+            tv_people.setText(peopeNameEvent.getCountResponse1().getPsname());
+            mPrivateCode=peopeNameEvent.getCountResponse1().getCode();
+            doHttp();
         }
     }
 
@@ -242,6 +314,27 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    public void doHttp(){
+        mPresenter.sendData(mPrivateCode,mSelectedYear+"", mSelectedMonth+"",AttandenceMonthActivity.this);
+    }
+
+    public int getType(String str){
+        if(!TextUtils.isEmpty(str)){
+            if(str.equals("[正常]")){
+                return 1;
+            }else if(str.equals("[迟到]")){
+                return 2;
+            }else if(str.equals("[早退]")){
+                return 3;
+            }else if(str.equals("[矿工]")){
+                return 4;
+            }else if(str.equals("[其他]")){
+                return 5;
+            }
+        }
+        return 1;
     }
 
 

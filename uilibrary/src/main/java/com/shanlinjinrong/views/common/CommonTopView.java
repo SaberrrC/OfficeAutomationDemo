@@ -335,6 +335,32 @@ public class CommonTopView extends RelativeLayout {
         setAppTitle(content);
     }
 
+    public TextView getTitleView(){
+        View view = findViewById(R.id.topview_app_title);
+        TextView titleView;
+        if (view != null && !(view instanceof TextView)) {
+            throw new RuntimeException(view.getClass().getName() + " cannot set a text.");
+        }
+
+        if (view == null) {
+            titleView = new TextView(mContext);
+            titleView.setTextColor(mTitleColor);
+            titleView.setTextSize(mTitleSize);
+            titleView.setGravity(Gravity.CENTER);
+            titleView.setId(R.id.topview_app_title);
+            titleView.setSingleLine();
+            titleView.setEllipsize(TextUtils.TruncateAt.END);
+            LayoutParams lp = new LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            lp.setMargins(DeviceUtil.dip2px(mContext, 70), 0, DeviceUtil.dip2px(mContext, 70), 0);
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+            addView(titleView, lp);
+        } else {
+            titleView = (TextView) view;
+        }
+        return titleView;
+    }
+
     /**
      * 设置title
      */

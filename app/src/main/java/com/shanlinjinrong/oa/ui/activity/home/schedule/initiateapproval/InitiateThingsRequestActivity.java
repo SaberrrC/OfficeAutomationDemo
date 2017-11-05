@@ -843,7 +843,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         }
         mTypeAdapter = new InitiateThingsTypeAdapter(this, data);
         rvSelectedType.setLayoutManager(new LinearLayoutManager(this));
-        rvSelectedType.addItemDecoration(new ApproveDecorationLine(this, data));
+        rvSelectedType.addItemDecoration(new ApproveDecorationLine(this));
         rvSelectedType.setAdapter(mTypeAdapter);
         return inflate;
     }

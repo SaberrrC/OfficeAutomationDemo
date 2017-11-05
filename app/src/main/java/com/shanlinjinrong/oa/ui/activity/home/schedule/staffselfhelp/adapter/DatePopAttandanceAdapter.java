@@ -54,6 +54,18 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
         }
 
         if (mData.get(position).isEnable()) {
+            int dateType=1;
+            dateType = mData.get(position).getDateType();
+            switch (dateType){
+                case 2:
+                    holder.imageState.setImageResource(R.drawable.circle_red);
+                    break;
+                case 3:
+                    holder.imageState.setImageResource(R.drawable.circle_blue);
+
+            }
+
+
             if (!mData.get(position).isSelect())
                 holder.item.setTextColor(0xFF4A4A4A);
         } else {
@@ -93,11 +105,12 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
     class ItemHolder extends RecyclerView.ViewHolder {
         TextView item;
         ImageView image;
-
+        ImageView imageState;
         ItemHolder(View itemView) {
             super(itemView);
             item = (TextView) itemView.findViewById(R.id.pop_item);
             image = (ImageView) itemView.findViewById(R.id.iv_icon);
+            imageState = (ImageView)itemView.findViewById(R.id.iv_state);
         }
     }
 

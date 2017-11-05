@@ -7,7 +7,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.MyAttendenceActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.MyAttendenceActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -55,6 +60,7 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     private Calendar cal;
     private int mCurrentYear;
     private int mCurrentMonth ;
+    String mPrivateCode = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +91,13 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
         iv_state3.setOnClickListener(this);
         iv_state4.setOnClickListener(this);
         ll_time.setOnClickListener(this);
-        mPresenter.sendData(this);
         cal = Calendar.getInstance();
         mCurrentMonth=cal.get(Calendar.MONTH)+1;
         mCurrentYear=cal.get(Calendar.YEAR);
         tv_time.setText(mCurrentYear+"年"+mCurrentMonth+"日");
+
+        mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+        mPresenter.sendData(mPrivateCode,mCurrentYear+"", mCurrentMonth+"",MyAttendenceActivity.this);
     }
 
 
@@ -115,6 +123,7 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
                         mCurrentYear=Integer.parseInt(year);
                         mCurrentMonth=Integer.parseInt(month);
                         tv_time.setText(year+"年"+month+"月");
+                        mPresenter.sendData(mPrivateCode,mCurrentYear+"", mCurrentMonth+"",MyAttendenceActivity.this);
                         monthSelectPopWindow.dismiss();
                     }
                 });
@@ -132,14 +141,23 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     }
 
     @Override
-    public void sendDataSuccess() {
-
+    public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
+        String cdCount = myAttandanceResponse.getCdCount();
+        tv_delay.setText(cdCount);
+        String ztCount = myAttandanceResponse.getZtCount();
+        tv_leave_early.setText(ztCount);
+        String ccCount = myAttandanceResponse.getCcCount();
+        tv_business_travel.setText(ccCount);
+        String kgCount = myAttandanceResponse.getKgCount();
+        tv_absenteeism.setText(kgCount);
+        tv_sign_card_num.setText(myAttandanceResponse.getBillCount());
     }
 
     @Override
-    public void sendDataFailed(int errCode, String msg) {
-
+    public void sendDataFailed(String errCode, String msg) {
+        Toast.makeText(MyAttendenceActivity.this,msg,Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void sendDataFinish() {

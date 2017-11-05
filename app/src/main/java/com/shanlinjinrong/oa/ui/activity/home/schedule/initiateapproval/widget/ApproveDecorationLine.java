@@ -16,7 +16,6 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Dia
 import java.util.List;
 
 public class ApproveDecorationLine extends RecyclerView.ItemDecoration {
-    private List<Dialog_Common_bean> mData;
 
     private Paint mPaint;
     private Rect mBounds;//用于存放测量文字Rect
@@ -28,9 +27,8 @@ public class ApproveDecorationLine extends RecyclerView.ItemDecoration {
     private Context mContext;
 
 
-    public ApproveDecorationLine(Context context, List<Dialog_Common_bean> mData) {
+    public ApproveDecorationLine(Context context) {
         mContext = context;
-        this.mData = mData;
         mPaint = new Paint();
         mBounds = new Rect();
         mTitleHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 44, context.getResources().getDisplayMetrics());

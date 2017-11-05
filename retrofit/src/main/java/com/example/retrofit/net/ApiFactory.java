@@ -19,14 +19,14 @@ public class ApiFactory {
         String javaHost = "";
         if (BuildConfig.DEBUG) {
             userHost = ApiConstant.USERINFO_DEV_HOST;
-            javaHost = "";
+            javaHost = ApiConstant.JAVA_TEST_HOST;
 
         } else {
             userHost = ApiConstant.USERINFO_DEV_HOST;
-            javaHost = "";
+            javaHost = ApiConstant.JAVA_TEST_HOST;
         }
         userApi = ClientBuilder.build(userHost, UserApi.class);
-        javaApi=ClientBuilder.build(userHost, JavaApi.class);
+        javaApi=ClientBuilder.build(javaHost, JavaApi.class);
     }
 
     public static UserApi getUserApi() {

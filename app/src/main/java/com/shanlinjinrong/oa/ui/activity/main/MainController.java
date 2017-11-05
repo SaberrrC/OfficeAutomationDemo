@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.retrofit.net.RetrofitConfig;
 import com.google.gson.Gson;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
@@ -449,6 +450,9 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
      * 初始化数据
      */
     private void initData() {
+        RetrofitConfig.getInstance().setAuthToken( AppConfig.getAppConfig(AppManager.mContext).getPrivateToken());
+        RetrofitConfig.getInstance().setUserId(AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
+        RetrofitConfig.getInstance().setUserCode(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
         //检测推送页面
         easeUI = EaseUI.getInstance();
         //极光推送设置别名和部门
