@@ -9,6 +9,7 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResult
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
@@ -129,8 +130,13 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                UpcomingSearchResultBean bean = new Gson().fromJson(t, UpcomingSearchResultBean.class);
-                mView.onSearchSuccess(bean);
+                try {
+                    LogUtils.d(t);
+                    UpcomingSearchResultBean bean = new Gson().fromJson(t, UpcomingSearchResultBean.class);
+                    mView.onSearchSuccess(bean);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.InitiateThingsTypeAdapter;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.BusinessTypeBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.CommonTypeBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Dialog_Common_bean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.QueryMonoBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
@@ -662,7 +662,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     @Override
-    public void queryEvectionTypeSuccess(BusinessTypeBean bean) {
+    public void queryEvectionTypeSuccess(CommonTypeBean bean) {
         if (bean != null) {
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {

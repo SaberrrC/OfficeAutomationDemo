@@ -2,7 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean;
 
 import java.util.List;
 
-public class BusinessTypeBean {
+public class CommonTypeBean {
     /**
      * code : 000000
      * message : success

@@ -39,6 +39,11 @@ public class PayQueryPresenter extends HttpPresenter<PayQueryContract.View> impl
                         case ApiJava.REQUEST_CODE_OK:
                             mView.payQueryInfoSuccess(payQueryDataBean.getData());
                             break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
+                            break;
                         default:
                             mView.payQueryInfoFailed(Integer.parseInt(payQueryDataBean.getCode()), payQueryDataBean.getMessage());
                             break;

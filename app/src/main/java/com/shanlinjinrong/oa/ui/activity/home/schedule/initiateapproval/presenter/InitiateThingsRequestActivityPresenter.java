@@ -1,10 +1,9 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter;
 
 import com.google.gson.Gson;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.BusinessTypeBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.CommonTypeBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.QueryMonoBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SingReasonBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract.InitiateThingsRequestActivityContract;
@@ -75,12 +74,12 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    BusinessTypeBean businessTypeBean = new Gson().fromJson(t, BusinessTypeBean.class);
-                    if (businessTypeBean != null) {
-                        if (businessTypeBean.getCode().equals(ApiJava.REQUEST_CODE_OK)) {
-                            mView.queryEvectionTypeSuccess(businessTypeBean);
+                    CommonTypeBean commonTypeBean = new Gson().fromJson(t, CommonTypeBean.class);
+                    if (commonTypeBean != null) {
+                        if (commonTypeBean.getCode().equals(ApiJava.REQUEST_CODE_OK)) {
+                            mView.queryEvectionTypeSuccess(commonTypeBean);
                         } else {
-                            mView.queryEvectionTypeFailure(Integer.parseInt(businessTypeBean.getCode()), businessTypeBean.getMessage());
+                            mView.queryEvectionTypeFailure(Integer.parseInt(commonTypeBean.getCode()), commonTypeBean.getMessage());
                         }
                     }
                 } catch (Throwable e) {

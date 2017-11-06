@@ -61,7 +61,6 @@ public class ApiJava {
     //发起周报
     public static final String LOOK_LAST_WEEK = "weekreport/lastWeek";
 
-
     //审核日报列表
     public static final String LEADER_READ_DAILY_REPORT = "dailyreport/leader";
 
@@ -80,7 +79,6 @@ public class ApiJava {
 
     // 更新周报
     public static final String UPDATE_WEEK_REPORT = "weekreport/upd";
-
 
     // 获取单据编号接口
     public static final String GET_MONOCODE = "nchrcommon/getBillCode";
