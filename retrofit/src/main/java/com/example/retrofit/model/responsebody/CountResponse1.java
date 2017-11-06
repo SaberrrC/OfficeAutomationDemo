@@ -21,6 +21,7 @@ public class CountResponse1 {
     private String deptname;
     private String code;
     private boolean ifSelf;
+    public boolean isSelected = false;
 
     public String getPsname() {
         return psname;
