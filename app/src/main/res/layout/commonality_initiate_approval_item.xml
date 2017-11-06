@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:focusableInTouchMode="true"
               android:descendantFocusability="beforeDescendants"
+              android:focusableInTouchMode="true"
               android:orientation="vertical">
 
     <RelativeLayout
@@ -25,9 +25,9 @@
             android:id="@+id/img_delete_detail"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:visibility="gone"
             android:layout_alignParentRight="true"
-            android:src="@drawable/icon_login_user"/>
+            android:src="@drawable/icon_query_details_delete"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -252,12 +252,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
                 android:layout_weight="1"
-                android:clickable="true"
                 android:background="@drawable/edittext_input_square_bg"
+                android:clickable="true"
                 android:gravity="center_vertical"
                 android:hint="请填写工作交接人"
-                android:textColorHint="@color/grey"
                 android:paddingLeft="12dp"
+                android:textColorHint="@color/grey"
                 android:textSize="14sp"/>
         </LinearLayout>
     </LinearLayout>

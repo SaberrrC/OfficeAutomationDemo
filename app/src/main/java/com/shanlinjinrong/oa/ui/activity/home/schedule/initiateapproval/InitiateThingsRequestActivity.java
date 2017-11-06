@@ -237,7 +237,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             }
             jsonObject.put("detailList", jsonArray);
             jsonObject.put("billCode", mTvCoderNumber.getText().toString());
-            jsonObject.put("type", 6403);
+            jsonObject.put("type", mSelectedTypeID);
             jsonObject.put("applyDate", mTvRequestDate.getText().toString());
             HttpParams httpParams = new HttpParams();
             httpParams.putJsonParams(jsonObject.toString());
