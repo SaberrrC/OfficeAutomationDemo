@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -9,7 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONReader;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
+import com.google.gson.Gson;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -19,6 +22,14 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
 import com.shanlinjinrong.views.common.CommonTopView;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.Calendar;
 
 import butterknife.Bind;
@@ -51,6 +62,7 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     private int mCurrentMonth;
     private String mPrivateCode = "";
     private MonthSelectPopWindow monthSelectPopWindow;
+    private MyAttandanceResponse mMyAttandanceResponse1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +107,9 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
             case R.id.tv_leave_early:
             case R.id.tv_absenteeism:
                 Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
+                intent.putExtra("date", tv_time.getText().toString());
                 startActivity(intent);
+                EventBus.getDefault().postSticky(mMyAttandanceResponse1);
                 break;
             case R.id.tv_time:
                 monthSelectPopWindow = new MonthSelectPopWindow(MyAttendenceActivity.this,
@@ -130,6 +144,7 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
         try {
             if (myAttandanceResponse != null) {
+                mMyAttandanceResponse1 = myAttandanceResponse;
                 //迟到
                 String cdCount = myAttandanceResponse.getCdCount();
                 tv_delay.setText(cdCount);
@@ -144,12 +159,18 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
                 int kg_count = Integer.parseInt(kgCount);
                 if (cd_count > 0) {
                     tv_delay.setTextColor(getResources().getColor(R.color.pie_ring_five_level));
+                } else {
+                    tv_delay.setTextColor(getResources().getColor(R.color.grey));
                 }
                 if (zt_count > 0) {
                     tv_leave_early.setTextColor(getResources().getColor(R.color.pie_ring_five_level));
+                } else {
+                    tv_leave_early.setTextColor(getResources().getColor(R.color.grey));
                 }
                 if (kg_count > 0) {
                     tv_absenteeism.setTextColor(getResources().getColor(R.color.pie_ring_five_level));
+                } else {
+                    tv_absenteeism.setTextColor(getResources().getColor(R.color.grey));
                 }
                 tv_sign_card_num.setText("已签卡  " + myAttandanceResponse.getBillCount() + "  次");
             }
@@ -162,7 +183,6 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     public void sendDataFailed(String errCode, String msg) {
         Toast.makeText(MyAttendenceActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public void sendDataFinish() {

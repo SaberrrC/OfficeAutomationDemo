@@ -167,7 +167,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     int tempMsgCount = 0;
     private QBadgeView qBadgeView;
     private AlertDialog dialog;
-    TabCommunicationFragment tabCommunicationFragment;
+    private TabCommunicationFragment tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
     private EaseUI easeUI;
 

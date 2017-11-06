@@ -39,11 +39,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by Administrator on 2017/10/25 0025.
- */
-
 public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPresenter> implements AttandanceMonthContract.View,View.OnClickListener {
+
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.toolbar)
@@ -62,7 +59,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     TextView tv_people;
     @Bind(R.id.layout_root)
     LinearLayout mRootView;
-
     @Bind(R.id.tv_date)
     TextView tv_date;
     @Bind(R.id.tv_name)
@@ -97,6 +93,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_month);
         ButterKnife.bind(this);
+
         initToolBar();
         initData();
         setTranslucentStatus(this);

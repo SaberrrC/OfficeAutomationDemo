@@ -32,6 +32,11 @@
         android:textSize="16sp"
         tools:text="  2017年11月"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/gray_d5d5d5"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view1"
         android:layout_width="match_parent"
