@@ -29,22 +29,14 @@ import butterknife.ButterKnife;
  */
 public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityPresenter> implements MyAttendenceActivityContract.View, View.OnClickListener {
 
-    @Bind(R.id.top_view)
-    CommonTopView mTopView;
-    @Bind(R.id.iv_state1)
-    ImageView iv_state1;
-    @Bind(R.id.iv_state2)
-    ImageView iv_state2;
-    @Bind(R.id.iv_state3)
-    ImageView iv_state3;
-    @Bind(R.id.iv_state4)
-    ImageView iv_state4;
     @Bind(R.id.tv_time)
     TextView tv_time;
-    @Bind(R.id.ll_rootView)
-    LinearLayout mRootView;
     @Bind(R.id.tv_delay)
     TextView tv_delay;
+    @Bind(R.id.top_view)
+    CommonTopView mTopView;
+    @Bind(R.id.ll_rootView)
+    LinearLayout mRootView;
     @Bind(R.id.tv_leave_early)
     TextView tv_leave_early;
     @Bind(R.id.tv_business_travel)
@@ -54,11 +46,11 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     @Bind(R.id.tv_sign_card_num)
     TextView tv_sign_card_num;
 
-    MonthSelectPopWindow monthSelectPopWindow;
     private Calendar cal;
     private int mCurrentYear;
     private int mCurrentMonth;
-    String mPrivateCode = "";
+    private String mPrivateCode = "";
+    private MonthSelectPopWindow monthSelectPopWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +59,6 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
         ButterKnife.bind(this);
         initData();
         initView();
-
     }
 
     @Override
@@ -81,33 +72,28 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
         rightView.setOnClickListener(view -> {
             Intent intent = new Intent(MyAttendenceActivity.this, AttandenceMonthActivity.class);
             startActivity(intent);
-
         });
     }
 
     private void initData() {
-        iv_state1.setOnClickListener(this);
-        iv_state2.setOnClickListener(this);
-        iv_state3.setOnClickListener(this);
-        iv_state4.setOnClickListener(this);
+        tv_delay.setOnClickListener(this);
+        tv_leave_early.setOnClickListener(this);
+        tv_absenteeism.setOnClickListener(this);
         tv_time.setOnClickListener(this);
         cal = Calendar.getInstance();
         mCurrentMonth = cal.get(Calendar.MONTH) + 1;
         mCurrentYear = cal.get(Calendar.YEAR);
         tv_time.setText(mCurrentYear + "年" + mCurrentMonth + "日");
-
         mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
         mPresenter.sendData(mPrivateCode, mCurrentYear + "", mCurrentMonth + "", MyAttendenceActivity.this);
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_state1:
-            case R.id.iv_state2:
-            case R.id.iv_state3:
-            case R.id.iv_state4:
+            case R.id.tv_delay:
+            case R.id.tv_leave_early:
+            case R.id.tv_absenteeism:
                 Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
                 startActivity(intent);
                 break;
@@ -142,15 +128,34 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
 
     @Override
     public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
-        String cdCount = myAttandanceResponse.getCdCount();
-        tv_delay.setText(cdCount);
-        String ztCount = myAttandanceResponse.getZtCount();
-        tv_leave_early.setText(ztCount);
-        String ccCount = myAttandanceResponse.getCcCount();
-        tv_business_travel.setText(ccCount);
-        String kgCount = myAttandanceResponse.getKgCount();
-        tv_absenteeism.setText(kgCount);
-        tv_sign_card_num.setText(myAttandanceResponse.getBillCount());
+        try {
+            if (myAttandanceResponse != null) {
+                //迟到
+                String cdCount = myAttandanceResponse.getCdCount();
+                tv_delay.setText(cdCount);
+                //早退
+                String ztCount = myAttandanceResponse.getZtCount();
+                tv_leave_early.setText(ztCount);
+                //旷工
+                String kgCount = myAttandanceResponse.getKgCount();
+                tv_absenteeism.setText(kgCount);
+                int cd_count = Integer.parseInt(cdCount);
+                int zt_count = Integer.parseInt(ztCount);
+                int kg_count = Integer.parseInt(kgCount);
+                if (cd_count > 0) {
+                    tv_delay.setTextColor(getResources().getColor(R.color.pie_ring_five_level));
+                }
+                if (zt_count > 0) {
+                    tv_leave_early.setTextColor(getResources().getColor(R.color.pie_ring_five_level));
+                }
+                if (kg_count > 0) {
+                    tv_absenteeism.setTextColor(getResources().getColor(R.color.pie_ring_five_level));
+                }
+                tv_sign_card_num.setText("已签卡  " + myAttandanceResponse.getBillCount() + "  次");
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
