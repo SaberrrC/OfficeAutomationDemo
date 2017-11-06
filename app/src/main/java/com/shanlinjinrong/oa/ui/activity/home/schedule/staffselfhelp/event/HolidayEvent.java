@@ -1,9 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.event;
 
-/**
- * Created by Administrator on 2017/11/5 0005.
- */
-
 public class HolidayEvent {
     private int position;
 

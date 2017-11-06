@@ -17,8 +17,9 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="14dp"
             android:gravity="center_vertical"
-            tools:text="姓名"
-            android:textSize="16sp"/>
+            android:textColor="@color/black_333333"
+            android:textSize="16sp"
+            tools:text="姓名"/>
 
         <TextView
             android:id="@+id/tv_value"
@@ -26,9 +27,9 @@
             android:layout_height="match_parent"
             android:layout_marginRight="14dp"
             android:gravity="center_vertical"
-            tools:text="朱宏展"
-            android:textColor="#FF898989"
-            android:textSize="16sp"/>
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            tools:text="朱宏展"/>
 
     </LinearLayout>
 

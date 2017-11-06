@@ -38,8 +38,8 @@ android {
         release {
             storeFile file("./shanlin.jks")
             storePassword "%\$l73lh9u62!"
-            keyAlias "shanlin"
-            keyPassword "kp!206mw@koo"
+            keyAlias "oa"
+            keyPassword "ilm5c5!wi^y#"
         }
     }
 
