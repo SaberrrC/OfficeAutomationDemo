@@ -511,6 +511,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             case R.id.tv_disagree:
                 break;
             case R.id.tv_tack_back:
+                showLoadingView();
                 String billCode = mBean.getBillCode();
                 String billType = mBean.getBillType();
                 mPresenter.postTackBack(billCode, billType);
@@ -602,11 +603,13 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onGetApproveInfoFailure(int errorNo, String strMsg) {
+        hideLoadingView();
         showToast(strMsg);
     }
 
     @Override
     public void onTackBackSuccess(TackBackResultBean bean) {
+        hideLoadingView();
         if (TextUtils.equals(bean.getData().get(0).getStatus(), "1")) {
             showToast("收回成功");
             setResult(101);

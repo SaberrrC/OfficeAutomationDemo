@@ -183,17 +183,25 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         //pageNum	当前第几页	string	必传，当前第几页
         //pageSize	每页要显示的条数	string	必传，每页要显示的条数
         //time	申请时间	string	非必传，申请时间0-全部，1-本月，2上月，3-近两月，4-近三个月，5-近六个月
-        if (TextUtils.equals(mWhichList, "1")) {
-            mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
-            return;
-        }
-        String privateCode = AppConfig.getAppConfig(this).getPrivateCode();
-        if (TextUtils.equals(mWhichList, "2")) {
-            mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-        }
-        if (TextUtils.equals(mWhichList, "3")) {
-            mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-        }
+        mSrRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                mSrRefresh.setRefreshing(true);
+                if (TextUtils.equals(mWhichList, "1")) {
+                    mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+                    return;
+                }
+                String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
+                if (TextUtils.equals(mWhichList, "2")) {
+                    mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
+                }
+                if (TextUtils.equals(mWhichList, "3")) {
+                    mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
+                }
+
+            }
+        });
+
     }
 
     private void initToolbar() {
@@ -606,7 +614,17 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
                 isLoadOver = false;
                 pageNum = 1;
-                mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+                if (TextUtils.equals(mWhichList, "1")) {
+                    mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+                    return;
+                }
+                String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
+                if (TextUtils.equals(mWhichList, "2")) {
+                    mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
+                }
+                if (TextUtils.equals(mWhichList, "3")) {
+                    mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
+                }
                 mChooseDialog.dismiss();
                 break;
         }
@@ -723,6 +741,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mSrRefresh.post(new Runnable() {
                 @Override
                 public void run() {
+                    mSrRefresh.setRefreshing(true);
                     mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
                     isLoadOver = false;
                     pageNum = 1;
@@ -737,7 +756,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     if (TextUtils.equals(mWhichList, "3")) {
                         mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
                     }
-                    mSrRefresh.setRefreshing(true);
                 }
             });
         }
