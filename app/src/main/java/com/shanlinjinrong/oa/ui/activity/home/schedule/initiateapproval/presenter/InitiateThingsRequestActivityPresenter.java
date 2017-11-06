@@ -6,6 +6,7 @@ import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.BusinessTypeBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.QueryMonoBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SingReasonBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract.InitiateThingsRequestActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
@@ -56,6 +57,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     mView.getQueryMonoCodeFailure(errorNo, strMsg);
+                    mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -91,6 +93,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     mView.queryEvectionTypeFailure(errorNo, strMsg);
+                    mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -134,6 +137,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     mView.queryEvectionTypeFailure(errorNo, strMsg);
+                    mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -181,6 +185,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     mView.submitEvectionApplyFailure(errorNo, strMsg);
+                    mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -230,6 +235,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     mView.addWorkApplyFailure(errorNo, strMsg);
+                    mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -279,6 +285,99 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     mView.submitFurloughFailure(errorNo, strMsg);
+                    mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.requestFinish();
+            }
+        });
+    }
+
+    @Override
+    public void findSignReason() {
+        mKjHttp.cleanCache();
+        HttpParams httpParams = new HttpParams();
+        mKjHttp.jsonGet(ApiJava.SIGNREASON, httpParams, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    SingReasonBean singReasonBean = new Gson().fromJson(t, SingReasonBean.class);
+                    switch (singReasonBean.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.findSignReasonSuccess(singReasonBean);
+                            break;
+                        default:
+                            mView.findSignReasonFailure(Integer.parseInt(singReasonBean.getCode()), singReasonBean.getMessage());
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    mView.findSignReasonFailure(errorNo, strMsg);
+                    mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mView.requestFinish();
+            }
+        });
+
+    }
+
+    @Override
+    public void submitRegistrationCard(HttpParams httpParams) {
+        mKjHttp.cleanCache();
+        mKjHttp.jsonPost(ApiJava.SAVESIGN, httpParams, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                mView.showLoading();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    QueryMonoBean queryMonoBean = new Gson().fromJson(t, QueryMonoBean.class);
+                    switch (queryMonoBean.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.registrationCardSuccess(queryMonoBean.getData());
+                            break;
+
+                        default:
+                            mView.registrationCardFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    mView.registrationCardFailure(errorNo, strMsg);
+                    mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

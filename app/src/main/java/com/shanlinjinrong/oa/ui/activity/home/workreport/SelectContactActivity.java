@@ -1,10 +1,11 @@
-
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iflytek.cloud.thirdparty.V;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
@@ -21,6 +23,7 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.model.selectContacts.Group;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ContactAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.RequestContactAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.SelectContactActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.SelectContactActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -28,6 +31,7 @@ import com.shanlinjinrong.oa.views.ClearEditText;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -42,7 +46,7 @@ import io.reactivex.schedulers.Schedulers;
  * 申请用品：选择审批人界面
  * 发起日报：选择接收人界面
  */
-public class SelectContactActivity extends HttpBaseActivity<SelectContactActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, SelectContactActivityContract.View {
+public class SelectContactActivity extends HttpBaseActivity<SelectContactActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, SelectContactActivityContract.View, OnSelectedContract {
 
     @Bind(R.id.layout_root)
     LinearLayout mRootView;
@@ -65,12 +69,15 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     @Bind(R.id.tv_content_empty)
     TextView mContentEmpty;
 
+    @Bind(R.id.contact_recycler_view)
+    RecyclerView mContactRecyclerView;
 
     ArrayList<Group> groups = new ArrayList<>();//联系人群组
 
     private Child mSelectChild;//已选择
 
     private ContactAdapter mAdapter;
+    private RequestContactAdapter mRequestAdapter;
     private String mSelectChildId;
 
 
@@ -92,15 +99,12 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     private void initView() {
         mTopView.setAppTitle("选择接收人");
         mTopView.setRightText("确定");
-        mTopView.setRightAction(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSelectChild == null) {
-                    Toast.makeText(SelectContactActivity.this, "未选择接收人", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                setFinishResult();
+        mTopView.setRightAction(v -> {
+            if (mSelectChild == null) {
+                Toast.makeText(SelectContactActivity.this, "未选择接收人", Toast.LENGTH_SHORT).show();
+                return;
             }
+            setFinishResult();
         });
 
 
@@ -169,10 +173,16 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     private void setFinishResult() {
         Intent intent = new Intent();
-        intent.putExtra("nextReceiver",getIntent().getIntExtra("nextReceiver",0));
-        intent.putExtra("uid", mSelectChild.getUid());
-        intent.putExtra("name", mSelectChild.getUsername());
-        intent.putExtra("post", mSelectChild.getPost());
+        if (getIntent().getBooleanExtra("", false)) {
+            intent.putExtra("nextReceiver", getIntent().getIntExtra("nextReceiver", 0));
+            intent.putExtra("uid", mSelectChild.getUid());
+            intent.putExtra("name", mSelectChild.getUsername());
+        } else {
+            intent.putExtra("nextReceiver", getIntent().getIntExtra("nextReceiver", 0));
+            intent.putExtra("uid", mSelectChild.getUid());
+            intent.putExtra("name", mSelectChild.getUsername());
+            intent.putExtra("post", mSelectChild.getPost());
+        }
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -228,6 +238,29 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     }
 
     @Override
+    public void loadRequestDataSuccess(List<Child> child, Child selectChild) {
+        hideEmptyView();
+        hideLoadingView();
+        mSwipeRefreshLayout.setRefreshing(false);
+        mContactList.setVisibility(View.VISIBLE);
+        mContentEmpty.setVisibility(View.GONE);
+        mContactRecyclerView.setVisibility(View.VISIBLE);
+        mContactList.setVisibility(View.GONE);
+        mSelectChild = selectChild;
+        mRequestAdapter = new RequestContactAdapter(child, this);
+        mContactRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mContactRecyclerView.setAdapter(mRequestAdapter);
+        mContactList.deferNotifyDataSetChanged();
+
+    }
+
+    @Override
+    public void loadRequestDataFailed(int errCode, String errMsg) {
+        hideLoadingView();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
     public void loadDataFinish() {
         hideLoadingView();
         if (mSwipeRefreshLayout != null)
@@ -250,6 +283,10 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
         mContentEmpty.setVisibility(View.GONE);
         String department_id = AppConfig.getAppConfig(AppManager.mContext)
                 .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
+        if (getIntent().getBooleanExtra("isRequest", false)) {
+            mPresenter.loadRequestData();
+            return;
+        }
         mPresenter.loadData(department_id, name, mSelectChildId);
     }
 
@@ -262,6 +299,18 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     @Override
     public void onRefresh() {
+        if (getIntent().getBooleanExtra("isRequest", false)) {
+            mPresenter.loadRequestData();
+            return;
+
+        }
         loadData(mSearchEdit.getText().toString().trim());
+    }
+
+    @Override
+    public void onClick(List<Child> mdata, int position) {
+        mSelectChild = mdata.get(position);
+        mRequestAdapter.setNewData(mdata);
+        mRequestAdapter.notifyDataSetChanged();
     }
 }

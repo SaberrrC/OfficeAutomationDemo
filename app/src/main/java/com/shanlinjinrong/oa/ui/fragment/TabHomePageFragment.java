@@ -20,6 +20,8 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.PayQueryActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
@@ -119,7 +121,7 @@ public class TabHomePageFragment extends BaseFragment {
             R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch,
             R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
             R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance,
-            R.id.rl_holiday_search
+            R.id.rl_holiday_search,R.id.rl_pay_search
     })
     public void onClick(View view) {
         Intent intent = null;
@@ -175,6 +177,10 @@ public class TabHomePageFragment extends BaseFragment {
             case R.id.rl_my_attandance:
                 //我的考勤
                 intent = new Intent(mContext, MyAttendenceActivity.class);
+                break;
+            case R.id.rl_pay_search:
+                //薪资查询
+                intent = new Intent(mContext, PayQueryActivity.class);
                 break;
             case R.id.rl_test:
                 if (BuildConfig.DEBUG) {

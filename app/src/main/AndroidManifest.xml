@@ -749,6 +749,14 @@
             android:name=".ui.activity.upcomingtasks.MyUpcomingTasksActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".ui.activity.upcomingtasks.DoneTasksInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".ui.activity.upcomingtasks.DoneTasksActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".ui.activity.upcomingtasks.UpcomingTasksInfoActivity"
@@ -769,6 +777,12 @@
         <!-- 考勤记录 -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.AttandenceRecorderActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.calendar.MouthCalenderActivity"/>
+
+        <!-- 薪资查询 -->
+        <activity
+            android:name=".ui.activity.home.schedule.staffselfhelp.PayQueryActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.calendar.MouthCalenderActivity">
         </activity>

@@ -15,6 +15,7 @@ import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -156,5 +157,60 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
 //                mView.loadDataFinish();
 //            }
 //        });
+    }
+
+    @Override
+    public void loadRequestData() {
+        mKjHttp.cleanCache();
+        HttpParams httpParams = new HttpParams();
+        mKjHttp.jsonGet(ApiJava.HANDOVERUSER, httpParams, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    switch (jo.getString("code")) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            Child selectChild = null;
+                            List<Child> data = new ArrayList<Child>();
+                            JSONArray jsonArray = Api.getDataToJSONArray(jo);
+                            for (int j = 0; j < jsonArray.length(); j++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(j);
+                                Child child = new Child(
+                                        jsonObject.getString("pk_psnjob"),
+                                        jsonObject.getString("name"),
+                                        false);
+                                data.add(child);
+                            }
+                            mView.loadRequestDataSuccess(data, selectChild);
+                            break;
+                        case ApiJava.REQUEST_NO_RESULT:
+                            mView.loadDataEmpty();
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
+                            break;
+                        default:
+                            mView.loadDataFailed(0, jo.getString("message"));
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
     }
 }

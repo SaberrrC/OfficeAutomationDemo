@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contrac
 
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.BusinessTypeBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.QueryMonoBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SingReasonBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
@@ -45,6 +46,15 @@ public interface InitiateThingsRequestActivityContract {
 
         void submitFurloughFailure(int errorCode, String str);
 
+        void findSignReasonSuccess(SingReasonBean bean);
+
+        void findSignReasonFailure(int errorCode, String str);
+
+
+        void registrationCardSuccess(String bean);
+
+        void registrationCardFailure(int errorCode, String str);
+
     }
 
     interface Presenter extends BasePresenter<InitiateThingsRequestActivityContract.View> {
@@ -66,5 +76,11 @@ public interface InitiateThingsRequestActivityContract {
 
         //休假申请
         void submitFurlough(HttpParams httpParams);
+
+        //签卡类别
+        void findSignReason();
+
+        //签卡原因
+        void submitRegistrationCard(HttpParams httpParams);
     }
 }
