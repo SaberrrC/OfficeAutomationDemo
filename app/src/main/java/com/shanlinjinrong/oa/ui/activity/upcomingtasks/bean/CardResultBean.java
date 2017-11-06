@@ -48,10 +48,9 @@ import java.util.List;
  */
 public class CardResultBean {
 
-
     /**
      * code : 000000
-     * data : {"applyDate":"2017-11-05","applyWorkFlows":[{"approveResult":"周威","approveResultCH":"周威","billCode":"QK20171105000064","checkNote":"周威","checkUserName":"王涛","dealDate":"周威","isCheck":"N","isCheckCH":"","sendDate":"2017-11-05 14:23:24","sendUserName":"周威"}],"billCode":"QK20171105000064","deptName":"善贷宝","jobName":"周威","nchrSignDetails":[{"signCause":"地铁故障","signCauseId":"1001A110000000014XEW","signRemark":"吧","signTime":"2017-11-05 14:21:00"},{"signCause":"考勤机故障","signCauseId":"1001A110000000014XEU","signRemark":"哦哦","signTime":"2017-11-05 14:21:00"}],"orgName":"善林（上海）金融信息服务有限公司","postName":"Java开发工程师","psnName":"周威","userName":"周威"}
+     * data : {"applyDate":"2017-06-15","applyWorkFlows":[{"approveResult":"善贷宝","approveResultCH":"善贷宝","billCode":"QK201706152134486942","checkNote":"善贷宝","checkUserName":"王涛","dealDate":"善贷宝","isCheck":"N","isCheckCH":"未审批","sendDate":"2017-06-15 21:35:16","sendUserName":"周威"}],"billCode":"QK201706152134486942","deptName":"善贷宝","jobName":"善贷宝","nchrSignDetails":[{"signCause":"忘记打卡","signCauseId":"1001A110000000014XET","signRemark":"忘打卡","signTime":"2017-06-14 09:00:00"}],"orgName":"善林（上海）金融信息服务有限公司","postName":"Java开发工程师","psnName":"周威","userName":"周威"}
      * message : success
      */
 
@@ -85,12 +84,12 @@ public class CardResultBean {
 
     public static class DataBean {
         /**
-         * applyDate : 2017-11-05
-         * applyWorkFlows : [{"approveResult":"周威","approveResultCH":"周威","billCode":"QK20171105000064","checkNote":"周威","checkUserName":"王涛","dealDate":"周威","isCheck":"N","isCheckCH":"","sendDate":"2017-11-05 14:23:24","sendUserName":"周威"}]
-         * billCode : QK20171105000064
+         * applyDate : 2017-06-15
+         * applyWorkFlows : [{"approveResult":"善贷宝","approveResultCH":"善贷宝","billCode":"QK201706152134486942","checkNote":"善贷宝","checkUserName":"王涛","dealDate":"善贷宝","isCheck":"N","isCheckCH":"未审批","sendDate":"2017-06-15 21:35:16","sendUserName":"周威"}]
+         * billCode : QK201706152134486942
          * deptName : 善贷宝
-         * jobName : 周威
-         * nchrSignDetails : [{"signCause":"地铁故障","signCauseId":"1001A110000000014XEW","signRemark":"吧","signTime":"2017-11-05 14:21:00"},{"signCause":"考勤机故障","signCauseId":"1001A110000000014XEU","signRemark":"哦哦","signTime":"2017-11-05 14:21:00"}]
+         * jobName : 善贷宝
+         * nchrSignDetails : [{"signCause":"忘记打卡","signCauseId":"1001A110000000014XET","signRemark":"忘打卡","signTime":"2017-06-14 09:00:00"}]
          * orgName : 善林（上海）金融信息服务有限公司
          * postName : Java开发工程师
          * psnName : 周威
@@ -190,15 +189,15 @@ public class CardResultBean {
 
         public static class ApplyWorkFlowsBean {
             /**
-             * approveResult : 周威
-             * approveResultCH : 周威
-             * billCode : QK20171105000064
-             * checkNote : 周威
+             * approveResult : 善贷宝
+             * approveResultCH : 善贷宝
+             * billCode : QK201706152134486942
+             * checkNote : 善贷宝
              * checkUserName : 王涛
-             * dealDate : 周威
+             * dealDate : 善贷宝
              * isCheck : N
-             * isCheckCH :
-             * sendDate : 2017-11-05 14:23:24
+             * isCheckCH : 未审批
+             * sendDate : 2017-06-15 21:35:16
              * sendUserName : 周威
              */
 
@@ -296,10 +295,10 @@ public class CardResultBean {
 
         public static class NchrSignDetailsBean {
             /**
-             * signCause : 地铁故障
-             * signCauseId : 1001A110000000014XEW
-             * signRemark : 吧
-             * signTime : 2017-11-05 14:21:00
+             * signCause : 忘记打卡
+             * signCauseId : 1001A110000000014XET
+             * signRemark : 忘打卡
+             * signTime : 2017-06-14 09:00:00
              */
 
             private String signCause;

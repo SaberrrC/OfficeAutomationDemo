@@ -82,12 +82,12 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private TextView                                    mEtCommonalityEndTime;
     private String                                      mWhichList;
     private UpcomingTaskItemBean.DataBean.DataListBean  mBean;
+    private UpcomingSearchResultBean.DataBeanX.DataBean mSearchBean;
     private TextView                                    mTvType;
     private CardResultBean                              mCardResultBean;
     private TraverResultBean                            mTraverResultBean;
     private RestResultBean                              mRestResultBean;
     private OverTimeResultBean                          mOverTimeResultBean;
-    private UpcomingSearchResultBean.DataBeanX.DataBean mSearchBean;
 
     @Override
     protected void initInject() {
@@ -278,7 +278,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             });
             if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean) {
                 CardResultBean.DataBean.NchrSignDetailsBean bean = (CardResultBean.DataBean.NchrSignDetailsBean) itemData;
-                mTvType.setText(TextUtils.isEmpty(bean.getSignRemark()) ? "" : bean.getSignRemark());
+                //                mTvType.setText(TextUtils.isEmpty(bean.getSignRemark()) ? "" : bean.getSignRemark());
                 tvCommonalityDetail.setText("签卡明细");
                 llCommonalityShow1.setVisibility(View.VISIBLE);
                 llCommonalityShow2.setVisibility(View.VISIBLE);
@@ -322,7 +322,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             }
             if (itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean) {
                 RestResultBean.DataBean.NchrfurloughApplyDetailBean bean = (RestResultBean.DataBean.NchrfurloughApplyDetailBean) itemData;
-//                mTvType.setText(TextUtils.isEmpty(bean.getsen()) ? "" : bean.getSignRemark());
+                //                mTvType.setText(TextUtils.isEmpty(bean.getsen()) ? "" : bean.getSignRemark());
                 tvCommonalityDetail.setText("休假明细");
                 llCommonalityBeginTime.setVisibility(View.VISIBLE);
                 llCommonalityEndTime.setVisibility(View.VISIBLE);
@@ -465,8 +465,15 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     if (mDatas.size() >= 0) {
                         mDatas.clear();
                     }
-                    mDatas.add(mBean);
-                    String billType = mBean.getBillType();
+                    String billType = "";
+                    if (TextUtils.equals(mWhichList, "1")) {
+                        mDatas.add(mBean);
+                        billType = mBean.getBillType();
+                    }
+                    if (TextUtils.equals(mWhichList, "2") || TextUtils.equals(mWhichList, "3")) {
+                        mDatas.add(mSearchBean);
+                        billType = mSearchBean.getPkBillType();
+                    }
                     if (TextUtils.equals(billType, "6402")) {//签卡申请
                         mDatas.addAll(mCardResultBean.getData().getApplyWorkFlows());
                     }
@@ -488,8 +495,15 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     if (mDatas.size() >= 0) {
                         mDatas.clear();
                     }
-                    mDatas.add(mBean);
-                    String billType = mBean.getBillType();
+                    String billType = "";
+                    if (TextUtils.equals(mWhichList, "1")) {
+                        mDatas.add(mBean);
+                        billType = mBean.getBillType();
+                    }
+                    if (TextUtils.equals(mWhichList, "2") || TextUtils.equals(mWhichList, "3")) {
+                        mDatas.add(mSearchBean);
+                        billType = mSearchBean.getPkBillType();
+                    }
                     if (TextUtils.equals(billType, "6402")) {//签卡申请
                         mDatas.addAll(mCardResultBean.getData().getNchrSignDetails());
                     }
@@ -512,8 +526,15 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 break;
             case R.id.tv_tack_back:
                 showLoadingView();
-                String billCode = mBean.getBillCode();
-                String billType = mBean.getBillType();
+                String billCode = "";
+                String billType = "";
+                if (TextUtils.equals("1", mWhichList)) {
+                    billCode = mBean.getBillCode();
+                    billType = mBean.getBillType();
+                } else {
+                    billCode = mSearchBean.getBillNo();
+                    billType = mSearchBean.getPkBillType();
+                }
                 mPresenter.postTackBack(billCode, billType);
                 break;
         }
@@ -557,17 +578,24 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onGetApproveInfoSuccess(String json) {
-        String billType = mBean.getBillType();
+        String billType = "";
         Gson gson = new Gson();
         if (mDatas.size() >= 0) {
             mDatas.clear();
         }
-        mDatas.add(mBean);
+        if (TextUtils.equals(mWhichList, "1")) {
+            billType = mBean.getBillType();
+            mDatas.add(mBean);
+        }
+        if (TextUtils.equals(mWhichList, "2") || TextUtils.equals(mWhichList, "3")) {
+            billType = mSearchBean.getPkBillType();
+            mDatas.add(mSearchBean);
+        }
         if (TextUtils.equals(billType, "6402")) {//签卡申请
             mCardResultBean = gson.fromJson(json, CardResultBean.class);
             mDatas.addAll(mCardResultBean.getData().getNchrSignDetails());
             for (CardResultBean.DataBean.ApplyWorkFlowsBean bean : mCardResultBean.getData().getApplyWorkFlows()) {
-                if (TextUtils.equals(bean.getIsCheck(), "N")) {
+                if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
                     mRlTackBack.setVisibility(View.VISIBLE);
                 }
             }
@@ -576,7 +604,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             mTraverResultBean = gson.fromJson(json, TraverResultBean.class);
             mDatas.addAll(mTraverResultBean.getData().getNchrevectionApplyDetail());
             for (TraverResultBean.DataBean.NchrapplyWorkFlowBean bean : mTraverResultBean.getData().getNchrapplyWorkFlow()) {
-                if (TextUtils.equals(bean.getIsCheck(), "N")) {
+                if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
                     mRlTackBack.setVisibility(View.VISIBLE);
                 }
             }
@@ -585,15 +613,16 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             mRestResultBean = gson.fromJson(json, RestResultBean.class);
             mDatas.addAll(mRestResultBean.getData().getNchrfurloughApplyDetail());
             for (RestResultBean.DataBean.NchrapplyWorkFlowBean bean : mRestResultBean.getData().getNchrapplyWorkFlow()) {
-                TextUtils.equals(bean.getIsCheck(), "N");
-                mRlTackBack.setVisibility(View.VISIBLE);
+                if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
+                    mRlTackBack.setVisibility(View.VISIBLE);
+                }
             }
         }
         if (TextUtils.equals(billType, "6405")) {//加班申请
             mOverTimeResultBean = gson.fromJson(json, OverTimeResultBean.class);
             mDatas.addAll(mOverTimeResultBean.getData().getNchroverTimeApplyDetail());
             for (OverTimeResultBean.DataBean.NchrapplyWorkFlowBean bean : mOverTimeResultBean.getData().getNchrapplyWorkFlow()) {
-                if (TextUtils.equals(bean.getIsCheck(), "N")) {
+                if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
                     mRlTackBack.setVisibility(View.VISIBLE);
                 }
             }
