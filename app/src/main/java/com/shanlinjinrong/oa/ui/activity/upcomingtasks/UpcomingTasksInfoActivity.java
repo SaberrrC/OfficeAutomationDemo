@@ -23,9 +23,12 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SelectedTypeBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalBaseAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.CardResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OverTimeResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.RestResultBean;
@@ -183,7 +186,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onBindViewHolder(FinalRecycleAdapter.ViewHolder holder, int position, Object itemData) {
-        if (itemData instanceof UpcomingTaskItemBean.DataBean.DataListBean || itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+        if (itemData instanceof UpcomingTaskItemBean.DataBean.DataListBean
+                || itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
             TextView tvIdTitle = (TextView) holder.getViewById(R.id.tv_id_title);
             ImageView ivArrow = (ImageView) holder.getViewById(R.id.iv_arrow);
             TextView tvId = (TextView) holder.getViewById(R.id.tv_id);
@@ -521,8 +525,26 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 }
                 break;
             case R.id.tv_agree:
+                List<ApporveBodyItemBean> list = new ArrayList<>();
+                ApporveBodyItemBean apporveBodyItemBean = null;
+                if (TextUtils.equals("1", mWhichList)) {
+                    apporveBodyItemBean = new ApporveBodyItemBean(mBean.getBillCode(), true, mBean.getBillType());
+                } else {
+                    apporveBodyItemBean = new ApporveBodyItemBean(mSearchBean.getBillNo(), true, mSearchBean.getPkBillType());
+                }
+                list.add(apporveBodyItemBean);
+                mPresenter.postApproval(list);
                 break;
             case R.id.tv_disagree:
+                List<ApporveBodyItemBean> list2 = new ArrayList<>();
+                ApporveBodyItemBean disApporveBodyItemBean = null;
+                if (TextUtils.equals("1", mWhichList)) {
+                    disApporveBodyItemBean = new ApporveBodyItemBean(mBean.getBillCode(), true, mBean.getBillType());
+                } else {
+                    disApporveBodyItemBean = new ApporveBodyItemBean(mSearchBean.getBillNo(), true, mSearchBean.getPkBillType());
+                }
+                list2.add(disApporveBodyItemBean);
+                mPresenter.postApproval(list2);
                 break;
             case R.id.tv_tack_back:
                 showLoadingView();
@@ -593,6 +615,10 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         if (TextUtils.equals(billType, "6402")) {//签卡申请
             mCardResultBean = gson.fromJson(json, CardResultBean.class);
+            if (!TextUtils.equals(mCardResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                onGetApproveInfoFailure(mCardResultBean.getCode(), mCardResultBean.getMessage());
+                return;
+            }
             mDatas.addAll(mCardResultBean.getData().getNchrSignDetails());
             for (CardResultBean.DataBean.ApplyWorkFlowsBean bean : mCardResultBean.getData().getApplyWorkFlows()) {
                 if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
@@ -602,6 +628,10 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         if (TextUtils.equals(billType, "6403")) {//出差申请
             mTraverResultBean = gson.fromJson(json, TraverResultBean.class);
+            if (!TextUtils.equals(mTraverResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                onGetApproveInfoFailure(mTraverResultBean.getCode(), mTraverResultBean.getMessage());
+                return;
+            }
             mDatas.addAll(mTraverResultBean.getData().getNchrevectionApplyDetail());
             for (TraverResultBean.DataBean.NchrapplyWorkFlowBean bean : mTraverResultBean.getData().getNchrapplyWorkFlow()) {
                 if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
@@ -611,6 +641,10 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         if (TextUtils.equals(billType, "6404")) {//休假申请
             mRestResultBean = gson.fromJson(json, RestResultBean.class);
+            if (!TextUtils.equals(mRestResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                onGetApproveInfoFailure(mRestResultBean.getCode(), mRestResultBean.getMessage());
+                return;
+            }
             mDatas.addAll(mRestResultBean.getData().getNchrfurloughApplyDetail());
             for (RestResultBean.DataBean.NchrapplyWorkFlowBean bean : mRestResultBean.getData().getNchrapplyWorkFlow()) {
                 if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
@@ -620,6 +654,10 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         if (TextUtils.equals(billType, "6405")) {//加班申请
             mOverTimeResultBean = gson.fromJson(json, OverTimeResultBean.class);
+            if (!TextUtils.equals(mOverTimeResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                onGetApproveInfoFailure(mOverTimeResultBean.getCode(), mOverTimeResultBean.getMessage());
+                return;
+            }
             mDatas.addAll(mOverTimeResultBean.getData().getNchroverTimeApplyDetail());
             for (OverTimeResultBean.DataBean.NchrapplyWorkFlowBean bean : mOverTimeResultBean.getData().getNchrapplyWorkFlow()) {
                 if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
@@ -631,7 +669,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     }
 
     @Override
-    public void onGetApproveInfoFailure(int errorNo, String strMsg) {
+    public void onGetApproveInfoFailure(String errorNo, String strMsg) {
         hideLoadingView();
         showToast(strMsg);
     }
@@ -646,5 +684,24 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         } else {
             showToast(bean.getData().get(0).getReason());
         }
+    }
+
+    @Override
+    public void onApproveSuccess(AgreeDisagreeResultBean resultBean) {
+        List<AgreeDisagreeResultBean.DataBean> beanList = resultBean.getData();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < beanList.size(); i++) {
+            if (!TextUtils.equals(beanList.get(i).getStatus(), "1")) {
+                stringBuilder.append(beanList.get(i).getReason() + "\n");
+            }
+        }
+        if (!TextUtils.isEmpty(stringBuilder.toString().trim())) {
+            showToast(stringBuilder.toString().trim());
+        }
+    }
+
+    @Override
+    public void onApproveFailure(int errorNo, String strMsg) {
+        showToast(strMsg);
     }
 }

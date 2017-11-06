@@ -5,14 +5,17 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
-import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,28 +32,6 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
 
     @Override
     public void getApproveData(String approveState, String billType, String pageNum, String pageSize, String time) {
-        //        Map<String, String> map = new HashMap<>();
-        //        map.put("approveState", String.valueOf(approveState));
-        //        map.put("billType", String.valueOf(billType));
-        //        map.put("pageNum", String.valueOf(pageNum));
-        //        map.put("pageSize", String.valueOf(pageSize));
-        //        map.put("time", String.valueOf(time));
-        //        HttpMethods.getInstance().getApproveData(map, new Subscriber<String>() {
-        //            @Override
-        //            public void onCompleted() {
-        //
-        //            }
-        //
-        //            @Override
-        //            public void onError(Throwable e) {
-        //
-        //            }
-        //
-        //            @Override
-        //            public void onNext(String s) {
-        //
-        //            }
-        //        });
         HttpParams httpParams = new HttpParams();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(ApiJava.MYAPPLY_QUERY_APPROVE);
@@ -79,7 +60,12 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 UpcomingTaskItemBean bean = new Gson().fromJson(t, UpcomingTaskItemBean.class);
-                mView.onGetApproveDataSuccess(bean);
+                if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                    mView.onGetApproveDataSuccess(bean);
+                    return;
+                }
+                mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+
             }
 
             @Override
@@ -130,13 +116,12 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                try {
-                    LogUtils.d(t);
-                    UpcomingSearchResultBean bean = new Gson().fromJson(t, UpcomingSearchResultBean.class);
+                UpcomingSearchResultBean bean = new Gson().fromJson(t, UpcomingSearchResultBean.class);
+                if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
                     mView.onSearchSuccess(bean);
-                } catch (Throwable e) {
-                    e.printStackTrace();
+                    return;
                 }
+                mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
             }
 
             @Override
@@ -148,10 +133,35 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.onGetApproveDataFailure(errorNo, strMsg);
+                    mView.onGetApproveDataFailure(errorNo,strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+
+    @Override
+    public void postAgreeDisagree(List<ApporveBodyItemBean> list) {
+        String json = new Gson().toJson(list);
+        HttpParams httpParams = new HttpParams();
+        httpParams.putJsonParams(json);
+        mKjHttp.jsonPost(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.onApproveFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
+                if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                    mView.onApproveSuccess(resultBean);
+                    return;
+                }
+                mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
             }
         });
     }

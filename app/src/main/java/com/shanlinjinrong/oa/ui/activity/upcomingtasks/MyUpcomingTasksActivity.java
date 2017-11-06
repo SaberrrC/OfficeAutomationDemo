@@ -1,19 +1,24 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +29,8 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApproveBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
@@ -39,10 +45,6 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-/**
- * Created by saberrrc on 2017/10/26.
- */
 
 public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
 
@@ -93,9 +95,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private LinearLayout mLlState;
     private boolean isShowCheck = false;
     private View mStork;
-    private String mTime         = "0";
-    private String mBillType     = "";
-    private String mApproveState = "";
+    private String  mTime         = "0";
+    private String  mBillType     = "";
+    private String  mApproveState = "";
+    private boolean isSearch      = false;
 
     @Override
     protected void initInject() {
@@ -111,7 +114,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myupcoming_tasks);
         ButterKnife.bind(this);
-        //        setTranslucentStatus(this);
         init();
     }
 
@@ -119,6 +121,26 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         initToolbar();
         initList();
         initPullToRefresh();
+        initEdittext();
+    }
+
+    private void initEdittext() {
+        mEtContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    showLoadingView();
+                    searchItem();
+                }
+                hideKeyBoard();
+                return true;
+            }
+        });
+    }
+
+    private void hideKeyBoard() {
+        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(mEtContent.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void initPullToRefresh() {
@@ -126,22 +148,30 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mSrRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
-                isLoadOver = false;
-                pageNum = 1;
-                if (TextUtils.equals(mWhichList, "1")) {
-                    mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
-                    return;
-                }
-                String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
-                if (TextUtils.equals(mWhichList, "2")) {
-                    mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-                }
-                if (TextUtils.equals(mWhichList, "3")) {
-                    mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-                }
+                initRefreshMode();
+                getListData();
             }
         });
+    }
+
+    private void getListData() {
+        if (TextUtils.equals(mWhichList, "1")) {
+            mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+            return;
+        }
+        String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
+        if (TextUtils.equals(mWhichList, "2")) {
+            mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+        }
+        if (TextUtils.equals(mWhichList, "3")) {
+            mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+        }
+    }
+
+    private void initRefreshMode() {
+        mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
+        isLoadOver = false;
+        pageNum = 1;
     }
 
     private void initList() {
@@ -158,14 +188,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 //RecyclerView没有拖动而且已经到达了最后一个item，执行自动加载
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mFinalRecycleAdapter.getItemCount() && mDatas.size() > 9) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mFinalRecycleAdapter.getItemCount() && !mSrRefresh.isRefreshing()) {
                     mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.LOAD;
                     if (isLoadOver) {
                         showToast("没有更多了");
                         return;
                     }
                     pageNum++;
-                    mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+                    getListData();
                 }
             }
 
@@ -178,30 +208,13 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void getData() {
-        //approveState	单据状态	string	非必传，单据状态 -1=自由，0=审批未通过，1=审批通过，2=审批进行中，3=提交
-        //billType	单据类型	string	非必传，单据类型 6402=签卡申请 6405=加班申请 6403=出差申请 6404休假申请
-        //pageNum	当前第几页	string	必传，当前第几页
-        //pageSize	每页要显示的条数	string	必传，每页要显示的条数
-        //time	申请时间	string	非必传，申请时间0-全部，1-本月，2上月，3-近两月，4-近三个月，5-近六个月
         mSrRefresh.post(new Runnable() {
             @Override
             public void run() {
                 mSrRefresh.setRefreshing(true);
-                if (TextUtils.equals(mWhichList, "1")) {
-                    mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
-                    return;
-                }
-                String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
-                if (TextUtils.equals(mWhichList, "2")) {
-                    mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-                }
-                if (TextUtils.equals(mWhichList, "3")) {
-                    mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-                }
-
+                getListData();
             }
         });
-
     }
 
     private void initToolbar() {
@@ -236,19 +249,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             public void onClick(View view) {
                 if (isShowCheck) {
                     isShowCheck = !isShowCheck;
-                    if (isShowCheck) {
-                        mLlSearch.setVisibility(View.GONE);
-                        mTvTitle.setText("选择单据");
-                        mRlCheck.setVisibility(View.VISIBLE);
-                        mTolbarTextBtn.setVisibility(View.GONE);
-                        mTvApproval.setVisibility(View.GONE);
-                    } else {
-                        mLlSearch.setVisibility(View.VISIBLE);
-                        mTvTitle.setText("待办事宜");
-                        mRlCheck.setVisibility(View.GONE);
-                        mTvApproval.setVisibility(View.VISIBLE);
-                        mTolbarTextBtn.setVisibility(View.VISIBLE);
-                    }
+                    setApproveTextWithState();
                     ThreadUtils.runSub(new Runnable() {
                         @Override
                         public void run() {
@@ -273,24 +274,31 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         });
     }
 
+    private void setApproveTextWithState() {
+        if (isShowCheck) {
+            mLlSearch.setVisibility(View.GONE);
+            mTvTitle.setText("选择单据");
+            mRlCheck.setVisibility(View.VISIBLE);
+            mTolbarTextBtn.setVisibility(View.GONE);
+            mTvApproval.setVisibility(View.GONE);
+        } else {
+            mLlSearch.setVisibility(View.VISIBLE);
+            mTvTitle.setText("待办事宜");
+            mRlCheck.setVisibility(View.GONE);
+            mTvApproval.setVisibility(View.VISIBLE);
+            mTolbarTextBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
     @OnClick({R.id.toolbar_image_btn, R.id.iv_search, R.id.tv_approval, R.id.iv_agree, R.id.tv_agree, R.id.iv_disagree, R.id.tv_disagree})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toolbar_image_btn:
+                hideKeyBoard();
                 showChooseDialog();
                 break;
             case R.id.iv_search:
-                if (TextUtils.equals(mWhichList, "1")) {
-                    mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
-                    return;
-                }
-                String privateCode = AppConfig.getAppConfig(this).getPrivateCode();
-                if (TextUtils.equals(mWhichList, "2")) {
-                    mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-                }
-                if (TextUtils.equals(mWhichList, "3")) {
-                    mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-                }
+                searchItem();
                 break;
             case R.id.tv_approval:
                 if (mDatas.size() == 0) {
@@ -301,46 +309,46 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 break;
             case R.id.iv_agree:
             case R.id.tv_agree:
-                List<ApproveBean> approveBeanList = new ArrayList<>();
-                for (int i = 0; i < mDatas.size(); i++) {
-                    if (mDatas.get(i) instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
-                        UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) mDatas.get(i);
-                        if (bean.getIsChecked()) {
-                            approveBeanList.add(new ApproveBean(bean.getBillNo(), "true", bean.getPkBillType()));
-                        }
-                    }
-                    if (mDatas.get(i) instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
-                        UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) mDatas.get(i);
-                        if (bean.getIsChecked()) {
-                            approveBeanList.add(new ApproveBean(bean.getBillCode(), "true", bean.getBillType()));
-                        }
-                    }
+                List<ApporveBodyItemBean> approveBeanList = getApporveBodyItemBeenList(true);
+                if (approveBeanList.size() == 0) {
+                    showToast("请选择单据");
+                    return;
                 }
-//                mPresenter.postAgree();
+                mPresenter.postAgreeDisagree(approveBeanList);
                 break;
             case R.id.iv_disagree:
             case R.id.tv_disagree:
-                List<ApproveBean> disApproveBeanList = new ArrayList<>();
-                for (int i = 0; i < mDatas.size(); i++) {
-                    if (mDatas.get(i) instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
-                        UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) mDatas.get(i);
-                        if (bean.getIsChecked()) {
-                            disApproveBeanList.add(new ApproveBean(bean.getBillNo(), "false", bean.getPkBillType()));
-                        }
-                    }
-                    if (mDatas.get(i) instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
-                        UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) mDatas.get(i);
-                        if (bean.getIsChecked()) {
-                            disApproveBeanList.add(new ApproveBean(bean.getBillCode(), "false", bean.getBillType()));
-                        }
-                    }
+                List<ApporveBodyItemBean> disApproveBeanList = getApporveBodyItemBeenList(false);
+                if (disApproveBeanList.size() == 0) {
+                    showToast("请选择单据");
+                    return;
                 }
-//                mPresenter.postDisagree();
+                mPresenter.postAgreeDisagree(disApproveBeanList);
                 break;
         }
     }
 
-    private void setApproval() {
+    @NonNull
+    private List<ApporveBodyItemBean> getApporveBodyItemBeenList(boolean approve) {
+        List<ApporveBodyItemBean> approveBeanList = new ArrayList<>();
+        for (int i = 0; i < mDatas.size(); i++) {
+            if (mDatas.get(i) instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) mDatas.get(i);
+                if (bean.getIsChecked()) {
+                    approveBeanList.add(new ApporveBodyItemBean(bean.getBillNo(), approve, bean.getPkBillType()));
+                }
+            }
+            if (mDatas.get(i) instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) mDatas.get(i);
+                if (bean.getIsChecked()) {
+                    approveBeanList.add(new ApporveBodyItemBean(bean.getBillCode(), approve, bean.getBillType()));
+                }
+            }
+        }
+        return approveBeanList;
+    }
+
+    private void backToList() {
         isShowCheck = !isShowCheck;
         if (isShowCheck) {
             mLlSearch.setVisibility(View.GONE);
@@ -355,6 +363,27 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvApproval.setVisibility(View.VISIBLE);
             mTolbarTextBtn.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void searchItem() {
+        String trim = mEtContent.getText().toString().trim();
+        if (TextUtils.isEmpty(trim)) {
+            showToast("请输入搜索内容");
+            isSearch = false;
+            return;
+        }
+        isSearch = true;
+        String privateCode = AppConfig.getAppConfig(this).getPrivateCode();
+        if (TextUtils.equals(mWhichList, "2")) {
+            mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+        }
+        if (TextUtils.equals(mWhichList, "3")) {
+            mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+        }
+    }
+
+    private void setApproval() {
+        backToList();
         ThreadUtils.runSub(new Runnable() {
             @Override
             public void run() {
@@ -430,15 +459,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             dialogWindow.setAttributes(lp);
         }
-        //        setTimeTextDefault();
-        //        setTypeTextDefault();
-        //        setStateTextDefault();
-        //        mTvAll.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
-        //        mTvAllType.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
-        //        mTvAllState.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_checked);
-        //        mTvAll.setTextColor(getResources().getColor(R.color.white));
-        //        mTvAllType.setTextColor(getResources().getColor(R.color.white));
-        //        mTvAllState.setTextColor(getResources().getColor(R.color.white));
         mChooseDialog.show();
     }
 
@@ -475,16 +495,13 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     @Override
                     public void onClick(View view) {
                         if (isShowCheck) {
-                            bean.setIsChecked(!bean.getIsChecked());
+                            bean.isChecked = !bean.isChecked;
                             cbCheck.setChecked(bean.getIsChecked());
                             return;
                         }
-                        Intent intent = new Intent(MyUpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
-                        intent.putExtra("WhichList", mWhichList);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("UPCOMING_INFO", bean);
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent, 100);
+                        startActivityToInfi(bundle);
                     }
                 });
             }
@@ -500,6 +517,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 if (isShowCheck) {
                     cbCheck.setVisibility(View.VISIBLE);
                     cbCheck.setChecked(bean.getIsChecked());
+
                 } else {
                     cbCheck.setVisibility(View.GONE);
                 }
@@ -507,20 +525,24 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     @Override
                     public void onClick(View view) {
                         if (isShowCheck) {
-                            bean.setIsChecked(!bean.getIsChecked());
+                            bean.isChecked = !bean.isChecked;
                             cbCheck.setChecked(bean.getIsChecked());
                             return;
                         }
-                        Intent intent = new Intent(MyUpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
-                        intent.putExtra("WhichList", mWhichList);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("UPCOMING_INFO", bean);
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent, 100);
+                        startActivityToInfi(bundle);
                     }
                 });
             }
         }
+    }
+
+    private void startActivityToInfi(Bundle bundle) {
+        Intent intent = new Intent(MyUpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
+        intent.putExtra("WhichList", mWhichList);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 100);
     }
 
     private void setItemIcon(ImageView ivIcon, String billType) {
@@ -544,7 +566,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             case R.id.tv_all:
                 setTimeTextDefault();
                 setTextChecked(mTvAll);
-                mTime = "0";
+                mTime = "";
                 break;
             case R.id.tv_today:
                 setTimeTextDefault();
@@ -611,19 +633,20 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mApproveState = "2";
                 break;
             case R.id.tv_ok:
-                mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
-                isLoadOver = false;
-                pageNum = 1;
+                initRefreshMode();
                 if (TextUtils.equals(mWhichList, "1")) {
                     mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+                    mChooseDialog.dismiss();
                     return;
                 }
+                mEtContent.setText("");
+                isSearch = false;
                 String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
                 if (TextUtils.equals(mWhichList, "2")) {
-                    mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
+                    mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
                 }
                 if (TextUtils.equals(mWhichList, "3")) {
-                    mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
+                    mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
                 }
                 mChooseDialog.dismiss();
                 break;
@@ -702,12 +725,22 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onGetApproveDataFailure(int errorNo, String strMsg) {
+        hideLoadingView();
         showToast(strMsg);
+        setNoItemList(errorNo);
         mSrRefresh.setRefreshing(false);
+    }
+
+    private void setNoItemList(int errorNo) {
+        if (errorNo == 20000) {
+            mDatas.clear();
+            mFinalRecycleAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onSearchSuccess(UpcomingSearchResultBean bean) {
+        hideLoadingView();
         mSrRefresh.setRefreshing(false);
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mDatas.size() > 0) {
@@ -735,6 +768,39 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     @Override
+    public void onApproveSuccess(AgreeDisagreeResultBean resultBean) {
+        List<AgreeDisagreeResultBean.DataBean> beanList = resultBean.getData();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < beanList.size(); i++) {
+            if (!TextUtils.equals(beanList.get(i).getStatus(), "1")) {
+                stringBuilder.append(beanList.get(i).getReason() + "\n");
+            }
+        }
+        if (!TextUtils.isEmpty(stringBuilder.toString().trim())) {
+            showToast(stringBuilder.toString().trim());
+        }
+        showToast(resultBean.getMessage());
+        initRefreshMode();
+        mSrRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                mSrRefresh.setRefreshing(true);
+                getListData();
+            }
+        });
+
+    }
+
+    @Override
+    public void onApproveFailure(int errorNo, String strMsg) {
+        showToast(strMsg);
+        if (errorNo == 20000) {
+            mDatas.clear();
+            mFinalRecycleAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 101) {
@@ -742,22 +808,40 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 @Override
                 public void run() {
                     mSrRefresh.setRefreshing(true);
-                    mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
-                    isLoadOver = false;
-                    pageNum = 1;
-                    if (TextUtils.equals(mWhichList, "1")) {
-                        mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
-                        return;
-                    }
-                    String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
-                    if (TextUtils.equals(mWhichList, "2")) {
-                        mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-                    }
-                    if (TextUtils.equals(mWhichList, "3")) {
-                        mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, mEtContent.getText().toString().trim());
-                    }
+                    initRefreshMode();
+                    getListData();
                 }
             });
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isShowCheck) {
+            isShowCheck = !isShowCheck;
+            setApproveTextWithState();
+            ThreadUtils.runSub(new Runnable() {
+                @Override
+                public void run() {
+                    for (Object data : mDatas) {
+                        if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                            UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
+                            bean.setIsChecked(false);
+                        }
+                        if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                            UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
+                            bean.setIsChecked(false);
+                        }
+                    } ThreadUtils.runMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            mFinalRecycleAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            });
+        } else {
+            super.onBackPressed();
         }
     }
 }

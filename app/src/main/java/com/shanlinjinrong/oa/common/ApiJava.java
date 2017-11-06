@@ -121,4 +121,7 @@ public class ApiJava {
 
     //待办事宜
     public static final String SEARCH_APPLICATION = "MyAplication/selectMyAplication";
+
+    //同意和驳回 Approve/allApprove
+    public static final String ARGEE_DISAGREE_APPROVE = "Approve/allApprove";
 }

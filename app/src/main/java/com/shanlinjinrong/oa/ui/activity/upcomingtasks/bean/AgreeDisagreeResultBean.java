@@ -7,16 +7,15 @@ import java.util.List;
  * @Auther: SaberrrC
  * @Email: saberrrc@163.com
  */
-public class TackBackResultBean {
-
+public class AgreeDisagreeResultBean {
 
     /**
      * code : 000000
      * message : success
-     * data : [{"reason":"ok","status":"1"}]
+     * data : [{"reason":"QK201706200021127507请先保存，在提交","status":"2"}]
      */
 
-    private String         code;
+    private String code;
     private String         message;
     private List<DataBean> data;
 
@@ -46,8 +45,8 @@ public class TackBackResultBean {
 
     public static class DataBean {
         /**
-         * reason : ok
-         * status : 1
+         * reason : QK201706200021127507请先保存，在提交
+         * status : 2
          */
 
         private String reason;

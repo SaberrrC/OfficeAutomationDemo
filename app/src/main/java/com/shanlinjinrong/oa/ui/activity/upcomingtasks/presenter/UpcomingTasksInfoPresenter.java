@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.TackBackResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksInfoContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -14,12 +16,10 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-/**
- * Created by 丁 on 2017/8/19.
- * 登录页面presenter
- */
 public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoContract.View> implements UpcomingTasksInfoContract.Presenter {
 
     @Inject
@@ -58,7 +58,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.onGetApproveInfoFailure(errorNo, strMsg);
+                mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
             }
         });
     }
@@ -76,18 +76,47 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 @Override
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);
-                    mView.onGetApproveInfoFailure(errorNo, strMsg);
+                    mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
                 }
 
                 @Override
                 public void onSuccess(String t) {
                     super.onSuccess(t);
                     TackBackResultBean tackBackResultBean = new Gson().fromJson(t, TackBackResultBean.class);
-                    mView.onTackBackSuccess(tackBackResultBean);
+                    if (TextUtils.equals(tackBackResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        mView.onTackBackSuccess(tackBackResultBean);
+                        return;
+                    }
+                    mView.onGetApproveInfoFailure(tackBackResultBean.getCode(), tackBackResultBean.getMessage());
                 }
             });
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void postApproval(List<ApporveBodyItemBean> list) {
+        String json = new Gson().toJson(list);
+        HttpParams httpParams = new HttpParams();
+        httpParams.putJsonParams(json);
+        mKjHttp.jsonPost(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                mView.onApproveFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
+                if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                    mView.onApproveSuccess(resultBean);
+                    return;
+                }
+                mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
+            }
+        });
     }
 }
