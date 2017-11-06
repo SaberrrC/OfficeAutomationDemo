@@ -16,6 +16,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingPre
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingReservationRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.AttandenceMonthActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.PayQueryActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
@@ -110,7 +111,6 @@ public interface ActivityComponent {
 
     void inject(MeetingPredetermineRecordActivity activity);
 
-
     void inject(UpcomingTasksInfoActivity upcomingTasksInfoActivity);
 
     void inject(InitiateThingsRequestActivity activity);
@@ -119,9 +119,9 @@ public interface ActivityComponent {
 
     void inject(AttandenceMonthActivity activity);
 
-
     void inject(MouthCalenderActivity mouthCalenderActivity);
 
     void inject(MyUpcomingTasksActivity myUpcomingTasksActivity);
 
+    void inject(PayQueryActivity doneTasksActivity);
 }

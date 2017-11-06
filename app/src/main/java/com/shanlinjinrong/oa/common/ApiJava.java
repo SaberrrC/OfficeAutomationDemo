@@ -96,11 +96,24 @@ public class ApiJava {
 
     //我的申请接口
     public static final String MYAPPLY_QUERY_APPROVE = "myApply/queryApproveByAll";
+
     //申请加班接口
     public static final String ADDWEORKAPPLY = "WorkApply/addWorkApply";
 
     //申请休假接口
     public static final String SUBMITFURLOUGH = "nchrFurlough/submitFurlough";
+
+    //获取签卡编码
+    public static final String SIGNREASON = "nchrSign/findSignReason";
+
+    //获取签卡编码
+    public static final String SAVESIGN = "nchrSign/saveSign";
+
+    //获取工作交接人
+    public static final String HANDOVERUSER = "HandoverUser/getHandoverUser";
+
+    //薪资查询
+    public static final String QUERYSALART = "nchrsalary/querySalary";
 
     //查看申请详情
     public static final String MYAPPLY_QUERY_APPROVE_INFO = "myApply/queryApproveDetailByBillCode";

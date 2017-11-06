@@ -6,6 +6,7 @@ import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 丁 on 2017/8/21.
@@ -17,6 +18,10 @@ public interface SelectContactActivityContract {
 
         void loadDataFailed(int errCode, String errMsg);
 
+        void loadRequestDataSuccess(List<Child> groups, Child selectChild);
+
+        void loadRequestDataFailed(int errCode, String errMsg);
+
         void loadDataFinish();
 
         void loadDataEmpty();
@@ -24,5 +29,7 @@ public interface SelectContactActivityContract {
 
     interface Presenter extends BasePresenter<View> {
         void loadData(String departmentId, String searchName, String selectChildId);
+
+        void loadRequestData();
     }
 }

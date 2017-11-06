@@ -141,7 +141,11 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.onGetApproveDataFailure(errorNo, strMsg);
+                try {
+                    mView.onGetApproveDataFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

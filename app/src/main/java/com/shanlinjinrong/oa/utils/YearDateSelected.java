@@ -37,7 +37,7 @@ public class YearDateSelected {
                     }
                 }).isDialog(true).build();
         beginTimeView.setTitle(mTitle);
-        beginTimeView.setPicker(mData);//添加数据
+        beginTimeView.setPicker(mData);
         beginTimeView.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {

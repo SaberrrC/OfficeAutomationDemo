@@ -39,6 +39,12 @@ public class Child implements Parcelable, MultiItemEntity {
         this.CODE = code;
     }
 
+    public Child(String uid, String username, boolean isChecked) {
+        this.uid = uid;
+        this.username = username;
+        this.isChecked = isChecked;
+    }
+
     @Override
     public String toString() {
         return "Child{" +
