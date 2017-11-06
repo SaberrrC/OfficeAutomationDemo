@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 /**
  * 我的考勤
  */
-public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityPresenter> implements MyAttendenceActivityContract.View ,View.OnClickListener{
+public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityPresenter> implements MyAttendenceActivityContract.View, View.OnClickListener {
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
@@ -39,8 +39,6 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     ImageView iv_state3;
     @Bind(R.id.iv_state4)
     ImageView iv_state4;
-    @Bind(R.id.ll_time)
-    LinearLayout ll_time;
     @Bind(R.id.tv_time)
     TextView tv_time;
     @Bind(R.id.ll_rootView)
@@ -59,7 +57,7 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     MonthSelectPopWindow monthSelectPopWindow;
     private Calendar cal;
     private int mCurrentYear;
-    private int mCurrentMonth ;
+    private int mCurrentMonth;
     String mPrivateCode = "";
 
     @Override
@@ -76,58 +74,61 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     protected void initInject() {
         getActivityComponent().inject(this);
     }
+
     private void initView() {
         mTopView.setRightDrawable(getResources().getDrawable(R.mipmap.month_right));
         View rightView = mTopView.getRightView();
         rightView.setOnClickListener(view -> {
-            Intent intent = new Intent(MyAttendenceActivity.this,AttandenceMonthActivity.class);
+            Intent intent = new Intent(MyAttendenceActivity.this, AttandenceMonthActivity.class);
             startActivity(intent);
 
         });
     }
+
     private void initData() {
         iv_state1.setOnClickListener(this);
         iv_state2.setOnClickListener(this);
         iv_state3.setOnClickListener(this);
         iv_state4.setOnClickListener(this);
-        ll_time.setOnClickListener(this);
+        tv_time.setOnClickListener(this);
         cal = Calendar.getInstance();
-        mCurrentMonth=cal.get(Calendar.MONTH)+1;
-        mCurrentYear=cal.get(Calendar.YEAR);
-        tv_time.setText(mCurrentYear+"年"+mCurrentMonth+"日");
+        mCurrentMonth = cal.get(Calendar.MONTH) + 1;
+        mCurrentYear = cal.get(Calendar.YEAR);
+        tv_time.setText(mCurrentYear + "年" + mCurrentMonth + "日");
 
         mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
-        mPresenter.sendData(mPrivateCode,mCurrentYear+"", mCurrentMonth+"",MyAttendenceActivity.this);
+        mPresenter.sendData(mPrivateCode, mCurrentYear + "", mCurrentMonth + "", MyAttendenceActivity.this);
     }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_state1:
             case R.id.iv_state2:
             case R.id.iv_state3:
             case R.id.iv_state4:
-                Intent intent = new Intent(MyAttendenceActivity.this,AttandenceRecorderActivity.class);
+                Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.ll_time:
-                 monthSelectPopWindow = new MonthSelectPopWindow(MyAttendenceActivity.this,
-                         new MonthSelectPopWindow.PopListener() {
-                    @Override
-                    public void cancle() {
-                        monthSelectPopWindow.dismiss();
-                    }
-                    @Override
-                    public void confirm(String year, String month) {
-                        mCurrentYear=Integer.parseInt(year);
-                        mCurrentMonth=Integer.parseInt(month);
-                        tv_time.setText(year+"年"+month+"月");
-                        mPresenter.sendData(mPrivateCode,mCurrentYear+"", mCurrentMonth+"",MyAttendenceActivity.this);
-                        monthSelectPopWindow.dismiss();
-                    }
-                });
-                monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM,0,0);
+            case R.id.tv_time:
+                monthSelectPopWindow = new MonthSelectPopWindow(MyAttendenceActivity.this,
+                        new MonthSelectPopWindow.PopListener() {
+                            @Override
+                            public void cancle() {
+                                monthSelectPopWindow.dismiss();
+                            }
+
+                            @Override
+                            public void confirm(String year, String month) {
+                                mCurrentYear = Integer.parseInt(year);
+                                mCurrentMonth = Integer.parseInt(month);
+                                tv_time.setText(year + "年" + month + "月");
+                                mPresenter.sendData(mPrivateCode, mCurrentYear + "", mCurrentMonth + "", MyAttendenceActivity.this);
+                                monthSelectPopWindow.dismiss();
+                            }
+                        });
+                monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
                 break;
             default:
                 break;
@@ -137,7 +138,6 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
 
     @Override
     public void uidNull(int code) {
-
     }
 
     @Override
@@ -155,15 +155,11 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
 
     @Override
     public void sendDataFailed(String errCode, String msg) {
-        Toast.makeText(MyAttendenceActivity.this,msg,Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyAttendenceActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
 
     @Override
     public void sendDataFinish() {
-
     }
-
-
-
 }

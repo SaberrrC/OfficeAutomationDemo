@@ -222,7 +222,7 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
     }
 
     @Override
-    public void onSelected(String date) {
+    public void onSelected(String date, int position) {
         searchYear = date;
         mTvSelectTime.setText(searchYear);
         doHolidaySearch(searchYear, searchType);

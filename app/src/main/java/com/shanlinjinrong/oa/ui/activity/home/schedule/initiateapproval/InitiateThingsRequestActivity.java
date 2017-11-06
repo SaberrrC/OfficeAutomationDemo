@@ -25,10 +25,13 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Sin
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract.InitiateThingsRequestActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter.InitiateThingsRequestActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.utils.TimeDialogFragment;
+import com.shanlinjinrong.oa.utils.YearDateSelected;
+import com.shanlinjinrong.oa.utils.YearTimeSelectedListener;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,6 +44,7 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +57,7 @@ import static com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunch
 /**
  * 发起申请
  */
-public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThingsRequestActivityPresenter> implements View.OnClickListener, InitiateThingsRequestActivityContract.View {
+public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThingsRequestActivityPresenter> implements View.OnClickListener, InitiateThingsRequestActivityContract.View, YearTimeSelectedListener {
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
@@ -67,14 +71,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     LinearLayout mLlCommonalityType;
     @Bind(R.id.tv_commonality_coder)
     TextView mTvCommonalityCoder;
-    @Bind(R.id.ll_commonality_date)
-    LinearLayout mLlCommonalityDate;
     @Bind(R.id.tv_commonality_over_time)
     TextView mTvCommonalityOverTime;
     @Bind(R.id.tv_commonality_type_dot)
     TextView mTvCommonalityTypeDot;
-    @Bind(R.id.ll_commonality_selected)
-    LinearLayout mLlCommonalitySelected;
     @Bind(R.id.tv_commonality_request_date)
     TextView mTvCommonalityRequestDate;
     @Bind(R.id.tv_commonality_type_selected)
@@ -92,15 +92,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     @Bind(R.id.tv_commonality_type_date)
     TextView mTvCommonalityTypeDate;
 
-    private int mIndex = 1;
     private ImageView mDelete;
-    private boolean isNextDate, isQueryDuration, isNextDuration, isSeletcedNextType;
     private View mContentView1;
     private CustomDialogUtils mDialog;
+    private int mIndex = 1, mYearPosition = 0;
+    private YearDateSelected mYearDateSelected;
     private InitiateThingsTypeAdapter mTypeAdapter;
+    private List<String> mDate = new ArrayList<>();
     private List<Dialog_Common_bean> data = new ArrayList<>(); //Dialog 数据源
     private String selectedRequestType, mSelectedTypeID, mSelectedNextID;
     private String mBeginDate, mEndDate, mNext_begin_date, mNext_end_date; //时间选取
+    private boolean isNextDate, isQueryDuration, isNextDuration, isSeletcedNextType;
     private int REQUESTCODE1 = 6402, REQUESTCODE2 = 6403, REQUESTCODE3 = 6404, REQUESTCODE4 = 6405; //6402签卡申请,6403出差申请,6404休假申请,6405加班申请
     private String mReceiverId, mReceiverName, mReceiverPost, mNextReceiverId, mNextReceiverName, mNextReceiverPost; //交接人
     private LinearLayout mLl_common_show1, mLl_common_next_show1, mLl_common_show3, mLl_common_next_show3, mLl_common_end_time, mLl_common_next_end_time,
@@ -129,6 +131,19 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     private void initData() {
         initMonoCode();//获取编码
+        //休假年度数据
+        if (getIntent().getIntExtra("type", -1) == 2) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            mTvCommonalityTypeDate.setText(simpleDateFormat.format(calendar.getTimeInMillis()));
+            mDate.add(simpleDateFormat.format(calendar.getTimeInMillis()));
+            calendar.add(Calendar.YEAR, -1);
+            String date = simpleDateFormat.format(calendar.getTimeInMillis());
+            mDate.add(0, date);
+            mYearPosition = mDate.size() - 1;
+            mYearDateSelected = new YearDateSelected(this, this, mDate, "选择休假年度");
+        }
     }
 
     //获取编码
@@ -551,14 +566,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         }
     }
 
-    @OnClick({R.id.btn_add_details, R.id.ll_commonality_selected})
+    @OnClick({R.id.btn_add_details, R.id.tv_commonality_type_selected, R.id.tv_commonality_type_date})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_add_details: //添加明细
                 addDetail();
                 break;
-            case R.id.ll_commonality_selected:
+            case R.id.tv_commonality_type_selected:
                 NonTokenDialog();
+                break;
+            case R.id.tv_commonality_type_date:
+                mYearDateSelected.showPositionDateView(mYearPosition);
                 break;
         }
     }
@@ -667,7 +685,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
                     mSelectedTypeID = bean.getData().get(i).getId();
-                    mTvCommonalityTypeSelected.setText(bean.getData().get(i).getName());
+                    mTvCommonalityTypeSelected.setText(bean.getData().get(i).getName() + " ");
                     data.add(new Dialog_Common_bean(bean.getData().get(i).getName(), true, bean.getData().get(i).getId()));
                 } else {
                     data.add(new Dialog_Common_bean(bean.getData().get(i).getName(), false, bean.getData().get(i).getId()));
@@ -802,7 +820,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                         mSelectedNextID = data.get(position).getSelectedID();
                     }
                 } else {
-                    mTvCommonalityTypeSelected.setText(bean.getSelectedType());
+                    mTvCommonalityTypeSelected.setText(bean.getSelectedType() + " ");
                     int position = bean.getPosition();
                     mSelectedTypeID = data.get(position).getSelectedID();
                 }
@@ -967,5 +985,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    @Override
+    public void onSelected(String date, int position) {
+        mTvCommonalityTypeDate.setText(date + " ");
+        mYearPosition = position;
     }
 }
