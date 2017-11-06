@@ -1,7 +1,9 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
@@ -26,18 +28,18 @@ import butterknife.OnClick;
 //薪资查询
 public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implements PayQueryContract.View, YearTimeSelectedListener {
 
-    @Bind(R.id.top_view)
-    CommonTopView mTopView;
-    @Bind(R.id.tv_date_selected)
-    TextView mTvDateSelected;
-    @Bind(R.id.ll_commonality_selected)
-    LinearLayout mLlCommonalitySelected;
     @Bind(R.id.tv_name)
     TextView mTvName;
+    @Bind(R.id.tv_remark)
+    TextView mTvRemark;
+    @Bind(R.id.top_view)
+    CommonTopView mTopView;
     @Bind(R.id.tv_job_number)
     TextView mTvJobNumber;
     @Bind(R.id.tv_id_number)
     TextView mTvIdNumber;
+    @Bind(R.id.tv_date_selected)
+    TextView mTvDateSelected;
     @Bind(R.id.tv_work_cycle)
     TextView mTvWorkCycle;
     @Bind(R.id.tv_basic_salary)
@@ -50,6 +52,14 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
     TextView mTvLogisticsStandard;
     @Bind(R.id.tv_logistics_num)
     TextView mTvLogisticsNum;
+    @Bind(R.id.tv_after_tax_minus)
+    TextView mTvAfterTaxMinus;
+    @Bind(R.id.tv_reality_salary)
+    TextView mTvRealitySalary;
+    @Bind(R.id.tv_card_name)
+    TextView mTvCardName;
+    @Bind(R.id.tv_card_number)
+    TextView mTvCardNumber;
     @Bind(R.id.tv_logistics_salary)
     TextView mTvLogisticsSalary;
     @Bind(R.id.tv_year_award)
@@ -76,22 +86,17 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
     TextView mTvPersonalTax;
     @Bind(R.id.tv_after_tax_add)
     TextView mTvAfterTaxAdd;
-    @Bind(R.id.tv_after_tax_minus)
-    TextView mTvAfterTaxMinus;
-    @Bind(R.id.tv_reality_salary)
-    TextView mTvRealitySalary;
-    @Bind(R.id.tv_card_name)
-    TextView mTvCardName;
-    @Bind(R.id.tv_card_number)
-    TextView mTvCardNumber;
-    @Bind(R.id.tv_remark)
-    TextView mTvRemark;
+    @Bind(R.id.ll_commonality_selected)
+    LinearLayout mLlCommonalitySelected;
     @Bind(R.id.tv_heating_allowance)
     TextView mTvHeatingAllowance;
+    @Bind(R.id.tv_not_network)
+    TextView mTvNotNetwork;
+    @Bind(R.id.sl_container_)
+    ScrollView mSlContainer;
 
     private List<String> mDate = new ArrayList<>();
 
-    private List<PayQueryDataBean.DataBean> mDataBean = new ArrayList<>();
     private YearDateSelected mYearDateSelected;
 
     @Override
@@ -136,6 +141,8 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
 
     @Override
     public void payQueryInfoSuccess(PayQueryDataBean.DataBean bean) {
+        mTvNotNetwork.setVisibility(View.GONE);
+        mSlContainer.setVisibility(View.VISIBLE);
         if (bean != null) {
             mTvRemark.setText(bean.getRemark());
             mTvName.setText(bean.getUserName());
@@ -170,7 +177,13 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
 
     @Override
     public void payQueryInfoFailed(int errCode, String msg) {
-
+        switch (errCode) {
+            case -1:
+                mTvNotNetwork.setVisibility(View.VISIBLE);
+                mTvNotNetwork.setText(R.string.net_no_connection);
+                mSlContainer.setVisibility(View.GONE);
+                break;
+        }
     }
 
     @Override
@@ -180,6 +193,7 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
 
     @Override
     public void onSelected(String date) {
+        mTvDateSelected.setText(date);
         String year = date.replace("年", "");
         String selectedDate = year.replace("月", "");
         mPresenter.payQueryInfo(selectedDate);

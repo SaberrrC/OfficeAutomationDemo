@@ -1,7 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract;
 
 
-import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.BusinessTypeBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.CommonTypeBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.QueryMonoBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.SingReasonBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
@@ -26,7 +26,7 @@ public interface InitiateThingsRequestActivityContract {
 
         void initiateThingsRequestFailure(int errorCode, String str);
 
-        void queryEvectionTypeSuccess(BusinessTypeBean bean);
+        void queryEvectionTypeSuccess(CommonTypeBean bean);
 
         void queryEvectionTypeFailure(int errorCode, String str);
 

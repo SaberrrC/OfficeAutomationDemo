@@ -1,13 +1,12 @@
 package com.shanlinjinrong.oa.utils;
 
 import android.content.Context;
-import android.view.View;
 
 import com.shanlinjinrong.pickerview.OptionsPickerView;
 
 import java.util.List;
 
-public class YearDateSelected {
+public class YearDateSelected<T> {
 
     private OptionsPickerView beginTimeView;
 
@@ -15,11 +14,11 @@ public class YearDateSelected {
 
     private Context mContext;
 
-    private List<String> mData;
+    private List<T> mData;
 
     private String mTitle;
 
-    public YearDateSelected(YearTimeSelectedListener listener, Context context, List<String> data, String title) {
+    public YearDateSelected(YearTimeSelectedListener listener, Context context, List<T> data, String title) {
         mListener = listener;
         mContext = context;
         mData = data;
@@ -31,22 +30,17 @@ public class YearDateSelected {
      */
     public void showBeginTimeView() {
         beginTimeView = new OptionsPickerView.Builder(mContext,
-                new OptionsPickerView.OnOptionsSelectListener() {
-                    @Override
-                    public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                    }
+                (options1, options2, options3, v) -> {
                 }).isDialog(true).build();
         beginTimeView.setTitle(mTitle);
         beginTimeView.setPicker(mData);
-        beginTimeView.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                //当前时间
-                String currentTime = mData.get(options1);
-                mListener.onSelected(currentTime);
-            }
+        beginTimeView.setSelectOptions(mData.size() - 1);
+        beginTimeView.setOnoptionsSelectListener((options1, option2, options3, v) -> {
+            //当前时间
+            String currentTime = (String) mData.get(options1);
+            mListener.onSelected(currentTime);
         });
-        beginTimeView.setSelectOptions(mData.size());
+        beginTimeView.setCancelable(true);
         beginTimeView.setCyclic(false);
         beginTimeView.show();
     }
