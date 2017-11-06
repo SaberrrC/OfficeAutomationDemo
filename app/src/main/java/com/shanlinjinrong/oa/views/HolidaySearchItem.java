@@ -9,10 +9,6 @@ import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 
-/**
- * Created by Administrator on 2017/11/5 0005.
- */
-
 public class HolidaySearchItem extends LinearLayout {
 
     Context context;

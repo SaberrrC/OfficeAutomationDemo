@@ -67,7 +67,11 @@ public class PayQueryPresenter extends HttpPresenter<PayQueryContract.View> impl
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.payQueryInfoFinish();
+                try {
+                    mView.payQueryInfoFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
         });
