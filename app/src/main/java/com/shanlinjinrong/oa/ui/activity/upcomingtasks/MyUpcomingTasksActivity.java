@@ -499,7 +499,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         }
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("UPCOMING_INFO", bean);
-                        startActivityToInfi(bundle);
+                        startActivityToInfo(bundle);
                     }
                 });
             }
@@ -528,14 +528,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         }
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("UPCOMING_INFO", bean);
-                        startActivityToInfi(bundle);
+                        startActivityToInfo(bundle);
                     }
                 });
             }
         }
     }
 
-    private void startActivityToInfi(Bundle bundle) {
+    private void startActivityToInfo(Bundle bundle) {
         Intent intent = new Intent(MyUpcomingTasksActivity.this, UpcomingTasksInfoActivity.class);
         intent.putExtra("WhichList", mWhichList);
         intent.putExtras(bundle);

@@ -186,8 +186,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onBindViewHolder(FinalRecycleAdapter.ViewHolder holder, int position, Object itemData) {
-        if (itemData instanceof UpcomingTaskItemBean.DataBean.DataListBean
-                || itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+        if (itemData instanceof UpcomingTaskItemBean.DataBean.DataListBean || itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
             TextView tvIdTitle = (TextView) holder.getViewById(R.id.tv_id_title);
             ImageView ivArrow = (ImageView) holder.getViewById(R.id.iv_arrow);
             TextView tvId = (TextView) holder.getViewById(R.id.tv_id);
@@ -697,7 +696,11 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         if (!TextUtils.isEmpty(stringBuilder.toString().trim())) {
             showToast(stringBuilder.toString().trim());
+            return;
         }
+        setResult(101);
+        finish();
+
     }
 
     @Override
