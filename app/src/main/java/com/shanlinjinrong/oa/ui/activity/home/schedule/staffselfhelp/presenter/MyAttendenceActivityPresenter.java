@@ -22,10 +22,8 @@ import javax.inject.Inject;
 
 import rx.Subscriber;
 
-/**
- * Created by Administrator on 2017/10/31 0031.
- */
 
+//我的考勤接口
 public class MyAttendenceActivityPresenter extends HttpPresenter<MyAttendenceActivityContract.View> implements MyAttendenceActivityContract.Presenter {
 
     @Inject

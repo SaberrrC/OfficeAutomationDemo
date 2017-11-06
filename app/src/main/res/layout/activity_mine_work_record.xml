@@ -79,19 +79,15 @@
                     android:layout_height="0dp"
                     android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/iv_state1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@mipmap/test_circle"/>
 
                     <TextView
                         android:id="@+id/tv_delay"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/bg_circle_attendence"
                         android:gravity="center"
-                        android:text="1"
-                        android:textColor="@color/holo_red_light"
+                        android:text="0"
+                        android:textColor="@color/gray_E5E5E5"
                         android:textSize="20sp"/>
                 </RelativeLayout>
 
@@ -117,16 +113,11 @@
                     android:layout_height="0dp"
                     android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/iv_state2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@mipmap/test_circle"/>
-
                     <TextView
                         android:id="@+id/tv_leave_early"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/bg_circle_attendence"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@color/gray_E5E5E5"
@@ -194,19 +185,14 @@
                     android:layout_height="0dp"
                     android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/iv_state4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@mipmap/test_circle"/>
-
                     <TextView
                         android:id="@+id/tv_absenteeism"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/bg_circle_attendence"
                         android:gravity="center"
-                        android:text="1"
-                        android:textColor="@color/holo_red_light"
+                        android:text="0"
+                        android:textColor="@color/gray_E5E5E5"
                         android:textSize="20sp"/>
                 </RelativeLayout>
 
@@ -234,7 +220,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="已签卡  1  次"
+                android:text="已签卡  0  次"
                 android:textColor="@color/black_333333"
                 android:textSize="16sp"/>
 
