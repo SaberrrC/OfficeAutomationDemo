@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
+import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 import com.example.retrofit.net.ApiException;
 import com.example.retrofit.net.HttpMethods;
 import com.shanlinjinrong.oa.common.Api;
@@ -25,9 +26,6 @@ import javax.inject.Inject;
 
 import rx.Subscriber;
 
-/**
- * Created by Administrator on 2017/10/31 0031.
- */
 
 public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContract.View> implements AttandanceMonthContract.Presenter {
 
@@ -37,32 +35,62 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
     }
 
     @Override
-    public void sendData(String userId,String year,String month , Context context) {
-        HashMap<String ,String> map = new HashMap<>();
-        map.put("userCode",userId);
-        map.put("date",year+"-"+month);
+    public void sendData(String userId, String year, String month, Context context) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("userCode", userId);
+        map.put("date", year + "-" + month);
         HttpMethods.getInstance().getMyAttantanceData(map, new Subscriber<MyAttandanceResponse>() {
             @Override
             public void onCompleted() {
 
             }
+
             @Override
             public void onError(Throwable e) {
 
-                if(e instanceof ApiException){
-                    ApiException baseException = (ApiException)e;
+                if (e instanceof ApiException) {
+                    ApiException baseException = (ApiException) e;
                     String code = baseException.getCode();
                     String message = baseException.getMessage();
-                    mView.sendDataFailed(code,message);
-                }else {
-                    mView.sendDataFailed("555","请检查网络！");
+                    mView.sendDataFailed(code, message);
+                } else {
+                    mView.sendDataFailed("555", "请检查网络！");
                 }
             }
 
             @Override
             public void onNext(MyAttandanceResponse myAttandanceResponse) {
                 mView.sendDataSuccess(myAttandanceResponse);
-                Log.i("hahaha",myAttandanceResponse.toString());
+                Log.i("hahaha", myAttandanceResponse.toString());
+            }
+        });
+    }
+
+    @Override
+    public void queryDayAttendance(String date) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("begindate", date);
+        HttpMethods.getInstance().getMyAttendanceDayData(map, new Subscriber<MyAttendanceResponse>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (e instanceof ApiException) {
+                    ApiException baseException = (ApiException) e;
+                    String code = baseException.getCode();
+                    String message = baseException.getMessage();
+                    mView.queryDayAttendanceFailed(code, message);
+                } else {
+                    mView.queryDayAttendanceFailed("555", "请检查网络！");
+                }
+            }
+
+            @Override
+            public void onNext(MyAttendanceResponse myAttendanceResponse) {
+                mView.queryDayAttendanceSuccess(myAttendanceResponse);
             }
         });
     }

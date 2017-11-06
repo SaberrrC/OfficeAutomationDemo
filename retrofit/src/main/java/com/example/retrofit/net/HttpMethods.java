@@ -5,6 +5,7 @@ import com.example.retrofit.model.requestbody.AliCheckRequestBean;
 import com.example.retrofit.model.responsebody.CountResponse1;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
+import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +34,12 @@ public class HttpMethods {
     //获取考勤数据-用于我的考勤-考勤月历-考勤异常三个界面
     public void getMyAttantanceData(Map<String ,String> map, Subscriber<MyAttandanceResponse> subscriber) {
         Observable<MyAttandanceResponse> map1 = ApiFactory.getJavaApi().getMyAddantanceData(map).map(new HttpResultFuncTypeJava<MyAttandanceResponse>());
+        toSubscribe(map1, subscriber);
+    }
+
+    //获取考勤日查询
+    public void getMyAttendanceDayData(Map<String ,String> map, Subscriber<MyAttendanceResponse> subscriber) {
+        Observable<MyAttendanceResponse> map1 = ApiFactory.getJavaApi().getMyAttendanceDay(map).map(new HttpResultFuncTypeJava<MyAttendanceResponse>());
         toSubscribe(map1, subscriber);
     }
 
