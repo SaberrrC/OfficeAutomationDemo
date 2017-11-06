@@ -842,9 +842,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                             case 2:
                                 mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE3, mTvCoderNumber.getText().toString());
                                 break;
-                            case 3:
-//                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE1, mTvCoderNumber.getText().toString());
-                                break;
                         }
                     }
                 } else {
@@ -866,9 +863,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                                 break;
                             case 2:
                                 mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE3, mTvCoderNumber.getText().toString());
-                                break;
-                            case 3:
-//                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE1, mTvCoderNumber.getText().toString());
                                 break;
                         }
                     }

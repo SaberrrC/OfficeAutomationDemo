@@ -149,20 +149,17 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_approval_me_launch:
                 //我的申请
-//                intent = new Intent(mContext, ApprovalListActivity.class);
                 intent = new Intent(mContext, MyUpcomingTasksActivity.class);
                 intent.putExtra("whichList", "1");
                 break;
             case R.id.rl_approval_wait_me_approval:
                 //待我审批
-//                intent = new Intent(mContext, ApprovalListActivity.class);
                 intent = new Intent(mContext, MyUpcomingTasksActivity.class);
                 intent.putExtra("whichList", "2");
                 clearDot(getContext(), DOT_APPORVAL);
                 break;
             case R.id.rl_approval_me_approvaled:
                 //我审批的
-//                intent = new Intent(mContext, ApprovalListActivity.class);
                 intent = new Intent(mContext, MyUpcomingTasksActivity.class);
                 intent.putExtra("whichList", "3");
                 break;

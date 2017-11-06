@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -225,6 +224,7 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
     @Override
     public void onSelected(String date) {
         searchYear = date;
+        mTvSelectTime.setText(searchYear);
         doHolidaySearch(searchYear, searchType);
     }
 
