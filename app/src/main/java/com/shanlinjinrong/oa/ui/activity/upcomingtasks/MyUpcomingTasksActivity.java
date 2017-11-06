@@ -250,23 +250,17 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 if (isShowCheck) {
                     isShowCheck = !isShowCheck;
                     setApproveTextWithState();
-                    ThreadUtils.runSub(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (Object data : mDatas) {
-                                if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
-                                    UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
-                                    bean.setIsChecked(false);
-                                }
-                            }
-                            ThreadUtils.runMain(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mFinalRecycleAdapter.notifyDataSetChanged();
-                                }
-                            });
+                    for (Object data : mDatas) {
+                        if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                            UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
+                            bean.setIsChecked(false);
                         }
-                    });
+                        if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                            UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
+                            bean.setIsChecked(false);
+                        }
+                    }
+                    mFinalRecycleAdapter.notifyDataSetChanged();
                 } else {
                     finish();
                 }
@@ -390,6 +384,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 for (Object data : mDatas) {
                     if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
                         UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
+                        bean.setIsChecked(false);
+                    }
+                    if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                        UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
                         bean.setIsChecked(false);
                     }
                 }
@@ -517,7 +515,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 if (isShowCheck) {
                     cbCheck.setVisibility(View.VISIBLE);
                     cbCheck.setChecked(bean.getIsChecked());
-
                 } else {
                     cbCheck.setVisibility(View.GONE);
                 }
@@ -525,7 +522,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     @Override
                     public void onClick(View view) {
                         if (isShowCheck) {
-                            bean.isChecked = !bean.isChecked;
+                            bean.setIsChecked(!bean.getIsChecked());
                             cbCheck.setChecked(bean.getIsChecked());
                             return;
                         }
@@ -759,6 +756,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         mDatas.addAll(dataList);
         mRvList.requestLayout();
+        if (!isSearch) {
+            mRlCheck.setVisibility(View.GONE);
+            setApproval();
+        }
         mFinalRecycleAdapter.notifyDataSetChanged();
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mFinalRecycleAdapter.getItemCount() - 1 >= 0) {
@@ -781,6 +782,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         showToast(resultBean.getMessage());
         initRefreshMode();
+        isSearch = false;
         mSrRefresh.post(new Runnable() {
             @Override
             public void run() {
@@ -820,26 +822,17 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         if (isShowCheck) {
             isShowCheck = !isShowCheck;
             setApproveTextWithState();
-            ThreadUtils.runSub(new Runnable() {
-                @Override
-                public void run() {
-                    for (Object data : mDatas) {
-                        if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
-                            UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
-                            bean.setIsChecked(false);
-                        }
-                        if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
-                            UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
-                            bean.setIsChecked(false);
-                        }
-                    } ThreadUtils.runMain(new Runnable() {
-                        @Override
-                        public void run() {
-                            mFinalRecycleAdapter.notifyDataSetChanged();
-                        }
-                    });
+            for (Object data : mDatas) {
+                if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                    UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
+                    bean.setIsChecked(false);
                 }
-            });
+                if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                    UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
+                    bean.setIsChecked(false);
+                }
+            }
+            mFinalRecycleAdapter.notifyDataSetChanged();
         } else {
             super.onBackPressed();
         }
