@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.net.HttpMethods;
@@ -38,11 +36,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Subscriber;
 
-/**
- * Created by Administrator on 2017/11/5 0005.
- */
-
-public class HolidaySearchActivity extends BaseActivity  implements YearTimeSelectedListener{
+//假期查询
+public class HolidaySearchActivity extends BaseActivity implements YearTimeSelectedListener {
 
     @Bind(R.id.top_view)
     CommonTopView mTopView;
@@ -50,9 +45,6 @@ public class HolidaySearchActivity extends BaseActivity  implements YearTimeSele
     TextView tv_center_title;
     @Bind(R.id.ll_content)
     LinearLayout ll_content;
-
-
-
     @Bind(R.id.psname)
     HolidaySearchItem psname;
     @Bind(R.id.deptname)
@@ -67,6 +59,8 @@ public class HolidaySearchActivity extends BaseActivity  implements YearTimeSele
     HolidaySearchItem curdayorhour;
     @Bind(R.id.realdayorhour)
     HolidaySearchItem realdayorhour;
+    @Bind(R.id.ll_select_time)
+    LinearLayout mLlSelectTime;
     @Bind(R.id.yidayorhour)
     HolidaySearchItem yidayorhour;
     @Bind(R.id.restdayorhour)
@@ -75,72 +69,27 @@ public class HolidaySearchActivity extends BaseActivity  implements YearTimeSele
     HolidaySearchItem freezedayorhour;
     @Bind(R.id.usefulrestdayorhour)
     HolidaySearchItem usefulrestdayorhour;
-
-
     @Bind(R.id.tv_select_time)
     TextView mTvSelectTime;
 
-
-
-
     private CustomDialogUtils mDialog;
     private HolidayAdapter mTypeAdapter;
-    private List<String> data = new ArrayList<>();
-    private int searchType = 0 ;
+    private String searchType;
     private String searchYear;
-    private  List<String> mDate = new ArrayList<>();
-    YearDateSelected mYearDateSelected;
-
-
+    private YearDateSelected mYearDateSelected;
+    private List<String> mDate = new ArrayList<>();
+    private List<String> data = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_holiday_search);
         ButterKnife.bind(this);
-        mTopView.setAppTitle("");
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        mTvSelectTime.setText(simpleDateFormat.format(calendar.getTimeInMillis()));
-        String year = simpleDateFormat.format(calendar.getTimeInMillis()).replace("年", "");
-        mDate.add(simpleDateFormat.format(calendar.getTimeInMillis()));
-        for (int i = 0; i < 23; i++) {
-            calendar.add(Calendar.MONTH, -1);
-            String date = simpleDateFormat.format(calendar.getTimeInMillis());
-            mDate.add(0, date);
-        }
-
-
-        searchYear = Calendar.getInstance().get(Calendar.YEAR)+"";
-        searchType=0;
-        data.add("年假查询");
-        data.add("带薪病假");
-        data.add("转调休");
         initData();
-
-        tv_center_title.setText(data.get(0));
-        tv_center_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NonTokenDialog();
-                Toast.makeText(HolidaySearchActivity.this,"adaf",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        mTvSelectTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mYearDateSelected = new YearDateSelected(HolidaySearchActivity.this, HolidaySearchActivity.this, mDate, "选择查询时间");
-            }
-        });
-
-        doHttp();
+        initView();
     }
 
     private void initData() {
@@ -155,12 +104,33 @@ public class HolidaySearchActivity extends BaseActivity  implements YearTimeSele
         restdayorhour.setTextViewKey("结余");
         freezedayorhour.setTextViewKey("冻结");
         usefulrestdayorhour.setTextViewKey("可用");
+        mTopView.setAppTitle("");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        mTvSelectTime.setText(simpleDateFormat.format(calendar.getTimeInMillis()));
+        mDate.add(simpleDateFormat.format(calendar.getTimeInMillis()));
+        for (int i = 0; i < 3; i++) {
+            calendar.add(Calendar.YEAR, -1);
+            String date = simpleDateFormat.format(calendar.getTimeInMillis());
+            mDate.add(0, date);
+        }
+        searchYear = Calendar.getInstance().get(Calendar.YEAR) + "";
+        searchType = "0";
+        data.add("年假查询");
+        data.add("带薪病假");
+        data.add("转调休");
+        mYearDateSelected = new YearDateSelected(HolidaySearchActivity.this, HolidaySearchActivity.this, mDate, "选择查询时间");
+        doHolidaySearch(searchYear, searchType);
+    }
 
-        mTvSelectTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
+    private void initView() {
+        tv_center_title.setText(data.get(0));
+        tv_center_title.setOnClickListener(view -> {
+            NonTokenDialog();
+        });
+        mLlSelectTime.setOnClickListener(view -> {
+            mYearDateSelected.showBeginTimeView();
         });
     }
 
@@ -172,10 +142,7 @@ public class HolidaySearchActivity extends BaseActivity  implements YearTimeSele
             int windowsHeight = metric.heightPixels;
             int windowsWight = metric.widthPixels;
             View view = initTypeData();
-
             CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(this);
-
-
             switch (getIntent().getIntExtra("type", -1)) {
                 case 2:
                     mDialog = builder.cancelTouchout(false)
@@ -194,7 +161,6 @@ public class HolidaySearchActivity extends BaseActivity  implements YearTimeSele
                             .build();
                     break;
             }
-
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
             }
@@ -219,25 +185,22 @@ public class HolidaySearchActivity extends BaseActivity  implements YearTimeSele
         return inflate;
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void removeDeatls(HolidayEvent holidayEvent ) {
-         searchType = holidayEvent.getPosition();
+    public void removeDeatls(HolidayEvent holidayEvent) {
+        searchType = holidayEvent.getPosition() + "";
         tv_center_title.setText(data.get(holidayEvent.getPosition()));
-        doHttp();
+        doHolidaySearch(searchYear, searchType);
         mDialog.dismiss();
     }
 
-    public void doHttp(){
-        HttpMethods.getInstance().getHolidaySearchData(searchYear +"",searchType+"",new Subscriber<ArrayList<HolidaySearchResponse>>() {
+    public void doHolidaySearch(String year, String type) {
+        HttpMethods.getInstance().getHolidaySearchData(searchYear, searchType, new Subscriber<ArrayList<HolidaySearchResponse>>() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
             public void onError(Throwable e) {
-
             }
 
             @Override
@@ -254,17 +217,22 @@ public class HolidaySearchActivity extends BaseActivity  implements YearTimeSele
                 restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour());
                 freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour());
                 usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour());
-                Log.i("hahaha",holidaySearchResponse.toString());
-
-
             }
         });
     }
 
+    @Override
+    public void onSelected(String date, int position) {
+        searchYear = date;
+        mTvSelectTime.setText(searchYear);
+        doHolidaySearch(searchYear, searchType);
+    }
 
     @Override
-    public void onSelected(String date) {
-        searchYear=date;
-        doHttp();
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

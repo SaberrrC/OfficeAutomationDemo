@@ -191,16 +191,16 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
         hideLoadingView();
     }
 
+    @OnClick(R.id.tv_date_selected)
+    public void onViewClicked() {
+        mYearDateSelected.showBeginTimeView();
+    }
+
     @Override
-    public void onSelected(String date) {
+    public void onSelected(String date, int position) {
         mTvDateSelected.setText(date);
         String year = date.replace("年", "");
         String selectedDate = year.replace("月", "");
         mPresenter.payQueryInfo(selectedDate);
-    }
-
-    @OnClick(R.id.tv_date_selected)
-    public void onViewClicked() {
-        mYearDateSelected.showBeginTimeView();
     }
 }

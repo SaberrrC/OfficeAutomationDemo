@@ -38,7 +38,24 @@ public class YearDateSelected<T> {
         beginTimeView.setOnoptionsSelectListener((options1, option2, options3, v) -> {
             //当前时间
             String currentTime = (String) mData.get(options1);
-            mListener.onSelected(currentTime);
+            mListener.onSelected(currentTime, options1);
+        });
+        beginTimeView.setCancelable(true);
+        beginTimeView.setCyclic(false);
+        beginTimeView.show();
+    }
+
+    public void showPositionDateView(int position) {
+        beginTimeView = new OptionsPickerView.Builder(mContext,
+                (options1, options2, options3, v) -> {
+                }).isDialog(true).build();
+        beginTimeView.setTitle(mTitle);
+        beginTimeView.setPicker(mData);
+        beginTimeView.setSelectOptions(position);
+        beginTimeView.setOnoptionsSelectListener((options1, option2, options3, v) -> {
+            //当前时间
+            String currentTime = (String) mData.get(options1);
+            mListener.onSelected(currentTime, options1);
         });
         beginTimeView.setCancelable(true);
         beginTimeView.setCyclic(false);

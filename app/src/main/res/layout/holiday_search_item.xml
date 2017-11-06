@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="46dp">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="46dp"
+              android:background="@color/white"
+              android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_key"
@@ -15,8 +17,9 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="14dp"
             android:gravity="center_vertical"
-            android:text="dfdfsdfsf"
-            android:textSize="16sp" />
+            android:textColor="@color/black_333333"
+            android:textSize="16sp"
+            tools:text="姓名"/>
 
         <TextView
             android:id="@+id/tv_value"
@@ -24,12 +27,11 @@
             android:layout_height="match_parent"
             android:layout_marginRight="14dp"
             android:gravity="center_vertical"
-            android:text="asasfsfaf"
-            android:textColor="#FF898989"
-            android:textSize="16sp" />
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            tools:text="朱宏展"/>
 
     </LinearLayout>
-
 
 
 </LinearLayout>

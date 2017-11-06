@@ -14,10 +14,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2017/11/5 0005.
- */
-
 public class HolidayAdapter  extends BaseQuickAdapter<String> {
     private Context mContext;
     private List<String> mData;

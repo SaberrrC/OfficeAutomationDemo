@@ -43,31 +43,20 @@
                 android:text="统计时间"
                 android:textSize="14sp"/>
 
-            <LinearLayout
-                android:id="@+id/ll_time"
-                android:gravity="center_vertical"
-                android:layout_width="120dp"
-                android:layout_height="28dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="12dp"
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/edittext_input_square_bg"
-                android:padding="6dp">
+                android:drawableRight="@drawable/arrow_down_select"
+                android:padding="10dp"
+                android:text="2017年9月"
+                android:textColor="@color/black_333333"
+                android:textSize="14sp"/>
 
-                <TextView
-                    android:id="@+id/tv_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/black_333333"
-                    android:textSize="14sp"
-                    android:text="2017年9月"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:src="@drawable/arrow_down_select"/>
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -101,9 +90,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:text="1"
                         android:textColor="@color/holo_red_light"
-                        android:textSize="20sp"
-                        android:text="1"/>
+                        android:textSize="20sp"/>
                 </RelativeLayout>
 
                 <TextView
@@ -139,9 +128,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:text="0"
                         android:textColor="@color/gray_E5E5E5"
-                        android:textSize="20sp"
-                        android:text="0"/>
+                        android:textSize="20sp"/>
                 </RelativeLayout>
 
                 <TextView
@@ -159,7 +148,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="37dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -178,9 +168,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:text="0"
                         android:textColor="@color/gray_E5E5E5"
-                        android:textSize="20sp"
-                        android:text="0"/>
+                        android:textSize="20sp"/>
                 </RelativeLayout>
 
                 <TextView
@@ -215,9 +205,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:text="1"
                         android:textColor="@color/holo_red_light"
-                        android:textSize="20sp"
-                        android:text="1"/>
+                        android:textSize="20sp"/>
                 </RelativeLayout>
 
                 <TextView
@@ -244,9 +234,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="已签卡  1  次"
                 android:textColor="@color/black_333333"
-                android:textSize="16sp"
-                android:text="已签卡  1  次"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -262,8 +252,8 @@
 
     <LinearLayout
         android:id="@+id/ll_rootView"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:orientation="vertical"/>
 </LinearLayout>

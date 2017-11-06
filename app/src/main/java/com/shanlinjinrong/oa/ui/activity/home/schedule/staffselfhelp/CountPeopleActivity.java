@@ -56,6 +56,7 @@ public class CountPeopleActivity  extends BaseActivity implements View.OnClickLi
         ButterKnife.bind(this);
         initView();
         initData();
+        doHttp();
     }
 
     private void initView() {
@@ -94,6 +95,7 @@ public class CountPeopleActivity  extends BaseActivity implements View.OnClickLi
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             PeopeNameEvent peopeNameEvent = new PeopeNameEvent();
             CountResponse1 countResponse1 = mData.get(i);
+            peopeNameEvent.setCountResponse1(countResponse1);
             EventBus.getDefault().post(countResponse1);
             finish();
         }

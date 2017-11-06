@@ -16,9 +16,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by gaobin on 2017/8/14.
- */
 public class HttpMethods {
 
     public void getQueryUserSetting(AliCheckRequestBean body, Subscriber<String> subscriber) {
@@ -46,7 +43,7 @@ public class HttpMethods {
     }
 
     //年假查询
-    public void getHolidaySearchData(String type,String year,Subscriber<ArrayList<HolidaySearchResponse>> subscriber) {
+    public void getHolidaySearchData(String year,String type,Subscriber<ArrayList<HolidaySearchResponse>> subscriber) {
         HashMap<String,String> map = new HashMap<>();
         map.put("type",type);
         map.put("year",year);
