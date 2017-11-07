@@ -38,8 +38,8 @@ public class HttpMethods {
     }
 
     //获取考勤日查询
-    public void getMyAttendanceDayData(Map<String ,String> map, Subscriber<MyAttendanceResponse> subscriber) {
-        Observable<MyAttendanceResponse> map1 = ApiFactory.getJavaApi().getMyAttendanceDay(map).map(new HttpResultFuncTypeJava<MyAttendanceResponse>());
+    public void getMyAttendanceDayData(Map<String ,String> map, Subscriber<ArrayList<MyAttendanceResponse>> subscriber) {
+        Observable<ArrayList<MyAttendanceResponse>> map1 = ApiFactory.getJavaApi().getMyAttendanceDay(map).map(new HttpResultFuncTypeJava<ArrayList<MyAttendanceResponse>>());
         toSubscribe(map1, subscriber);
     }
 

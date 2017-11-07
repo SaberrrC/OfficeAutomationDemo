@@ -29,7 +29,7 @@ public interface JavaApi {
 
     //我的考勤
     @GET("nchrCardRecord/getCardRecord")
-    Observable<HttpResult<MyAttendanceResponse>> getMyAttendanceDay(@QueryMap Map<String, String> map);
+    Observable<HttpResult<ArrayList<MyAttendanceResponse>>> getMyAttendanceDay(@QueryMap Map<String, String> map);
 
     //获取员工及其下属
     @GET("BranchStaff/getNCHRBranchStaff ")

@@ -6,7 +6,7 @@ public class MyAttendanceResponse {
     /**
      * psname : 荣令山
      * pkPsndoc : 0001A31000000010WWJZ
-     * calendar : 2017-11-03
+     * calendar : 2017-11-06
      * onebegintime : null
      * twoendtime : null
      * tbmstatus : [旷工]
@@ -15,8 +15,8 @@ public class MyAttendanceResponse {
     private String psname;
     private String pkPsndoc;
     private String calendar;
-    private String onebegintime;
-    private String twoendtime;
+    private Object onebegintime;
+    private Object twoendtime;
     private String tbmstatus;
 
     public String getPsname() {
@@ -43,19 +43,19 @@ public class MyAttendanceResponse {
         this.calendar = calendar;
     }
 
-    public String getOnebegintime() {
+    public Object getOnebegintime() {
         return onebegintime;
     }
 
-    public void setOnebegintime(String onebegintime) {
+    public void setOnebegintime(Object onebegintime) {
         this.onebegintime = onebegintime;
     }
 
-    public String getTwoendtime() {
+    public Object getTwoendtime() {
         return twoendtime;
     }
 
-    public void setTwoendtime(String twoendtime) {
+    public void setTwoendtime(Object twoendtime) {
         this.twoendtime = twoendtime;
     }
 

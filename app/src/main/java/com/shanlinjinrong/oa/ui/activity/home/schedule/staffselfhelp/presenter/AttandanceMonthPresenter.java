@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -70,7 +71,7 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
     public void queryDayAttendance(String date) {
         HashMap<String, String> map = new HashMap<>();
         map.put("begindate", date);
-        HttpMethods.getInstance().getMyAttendanceDayData(map, new Subscriber<MyAttendanceResponse>() {
+        HttpMethods.getInstance().getMyAttendanceDayData(map, new Subscriber<ArrayList<MyAttendanceResponse>>() {
             @Override
             public void onCompleted() {
 
@@ -89,8 +90,8 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
             }
 
             @Override
-            public void onNext(MyAttendanceResponse myAttendanceResponse) {
-                mView.queryDayAttendanceSuccess(myAttendanceResponse);
+            public void onNext(ArrayList<MyAttendanceResponse> myAttendanceResponses) {
+                mView.queryDayAttendanceSuccess(myAttendanceResponses);
             }
         });
     }

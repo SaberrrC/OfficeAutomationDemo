@@ -425,12 +425,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             bundle.putInt("isBegin", 1);
             timeDialogFragment.setArguments(bundle);
         });
-        mEt_common_show3.setOnClickListener(view -> { //交接人
-            Intent intent = new Intent(this, SelectContactActivity.class);
-            intent.putExtra("childId", mReceiverId);
-            intent.putExtra("isRequest", true);
-            startActivityForResult(intent, SELECT_OK);
-        });
+        if (getIntent().getIntExtra("type", -1) != 3)
+            mEt_common_show3.setOnClickListener(view -> { //交接人
+                Intent intent = new Intent(this, SelectContactActivity.class);
+                intent.putExtra("childId", mReceiverId);
+                intent.putExtra("isRequest", true);
+                startActivityForResult(intent, SELECT_OK);
+            });
         mLl_common_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = false;
             NonTokenDialog();
@@ -457,13 +458,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             bundle.putInt("isBegin", 1);
             timeDialogFragment.setArguments(bundle);
         });
-        mEt_common_next_show3.setOnClickListener(view -> { //交接人
-            Intent intent = new Intent(this, SelectContactActivity.class);
-            intent.putExtra("childId", mReceiverId);
-            intent.putExtra("isRequest", true);
-            intent.putExtra("nextReceiver", 1);
-            startActivityForResult(intent, SELECT_OK);
-        });
+        if (getIntent().getIntExtra("type", -1) != 3)
+            mEt_common_next_show3.setOnClickListener(view -> { //交接人
+                Intent intent = new Intent(this, SelectContactActivity.class);
+                intent.putExtra("childId", mReceiverId);
+                intent.putExtra("isRequest", true);
+                intent.putExtra("nextReceiver", 1);
+                startActivityForResult(intent, SELECT_OK);
+            });
         mLl_common_next_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = true;
             NonTokenDialog();
@@ -473,6 +475,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     //出差申请
     private void onBusinessRequest() {
         mTopView.setAppTitle("出差申请");
+        mEt_common_show3.setFocusable(false);
     }
 
     //加班申请
@@ -515,7 +518,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_begin_time.setText("签卡时间");
         mEt_common_show2.setHint("请选择签卡原因");
         mEt_common_show3.setHint("请填写签卡说明");
-        mEt_common_show3.setFocusable(false);
+        mEt_common_show3.setClickable(false);
+    }
+
+
+    //出差申请
+    private void onBusinessRequest1() {
+        mEt_common_next_show3.setFocusable(false);
     }
 
     //加班申请
@@ -551,7 +560,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_next_begin_time.setText("签卡时间");
         mTv_selected_next_show.setText("请选择签卡原因");
         mEt_common_next_show3.setHint("请填写签卡说明");
-        mEt_common_next_show3.setFocusable(false);
+        mEt_common_next_show3.setClickable(false);
         if (data.size() > 0)
             mTv_selected_next_show.setText(data.get(0).getContent());
     }
@@ -591,6 +600,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         initContentView1(mContentView1);
         switch (getIntent().getIntExtra("type", -1)) {
             case 0://出差申请
+                onBusinessRequest1();
                 break;
             case 1://加班申请
                 overTimeWorkRequest1();
