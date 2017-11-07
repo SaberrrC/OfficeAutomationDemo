@@ -20,7 +20,6 @@ import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.event.PeopeNameEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.DatePopAttandanceAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandanceMonthContract;
@@ -28,10 +27,6 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.A
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -105,9 +100,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
 
     private void initData() {
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
         cal = Calendar.getInstance();
         mCurrentDay = cal.get(Calendar.DAY_OF_MONTH);
         mCurrentMonth = cal.get(Calendar.MONTH) + 1;
@@ -316,23 +308,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     @Override
     public void sendDataFinish() {
 
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFinish(PeopeNameEvent peopeNameEvent) {
-        if (peopeNameEvent != null) {
-            tv_people.setText(peopeNameEvent.getCountResponse1().getPsname());
-            mPrivateCode = peopeNameEvent.getCountResponse1().getCode();
-            doHttp();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
     }
 
     public void doHttp() {
