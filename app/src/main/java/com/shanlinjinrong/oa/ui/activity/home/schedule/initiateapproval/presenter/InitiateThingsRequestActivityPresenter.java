@@ -41,10 +41,18 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onSuccess(t);
                 try {
                     QueryMonoBean queryMonoBean = new Gson().fromJson(t, QueryMonoBean.class);
-                    if (queryMonoBean.getCode().equals(ApiJava.REQUEST_CODE_OK)) {
-                        mView.getQueryMonoCodeSuccess(queryMonoBean);
-                    } else {
-                        mView.getQueryMonoCodeFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                    switch (queryMonoBean.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.getQueryMonoCodeSuccess(queryMonoBean);
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
+                            break;
+                        default:
+                            mView.getQueryMonoCodeFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                            break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -76,10 +84,18 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 try {
                     CommonTypeBean commonTypeBean = new Gson().fromJson(t, CommonTypeBean.class);
                     if (commonTypeBean != null) {
-                        if (commonTypeBean.getCode().equals(ApiJava.REQUEST_CODE_OK)) {
-                            mView.queryEvectionTypeSuccess(commonTypeBean);
-                        } else {
-                            mView.queryEvectionTypeFailure(Integer.parseInt(commonTypeBean.getCode()), commonTypeBean.getMessage());
+                        switch (commonTypeBean.getCode()) {
+                            case ApiJava.REQUEST_CODE_OK:
+                                mView.queryEvectionTypeSuccess(commonTypeBean);
+                                break;
+                            case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                            case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            case ApiJava.ERROR_TOKEN:
+                                mView.uidNull(0);
+                                break;
+                            default:
+                                mView.queryEvectionTypeFailure(Integer.parseInt(commonTypeBean.getCode()), commonTypeBean.getMessage());
+                                break;
                         }
                     }
                 } catch (Throwable e) {
@@ -121,6 +137,11 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                     switch (queryMonoBean.getCode()) {
                         case ApiJava.REQUEST_CODE_OK:
                             mView.queryDurationSuccess(queryMonoBean);
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
                             break;
                         default:
                             mView.queryEvectionTypeFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
@@ -169,6 +190,11 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                     switch (queryMonoBean.getCode()) {
                         case ApiJava.REQUEST_CODE_OK:
                             mView.submitEvectionApplySuccess(queryMonoBean.getData());
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
                             break;
                         default:
                             mView.submitEvectionApplyFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
@@ -219,7 +245,11 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_CODE_OK:
                             mView.addWorkApplySuccess(queryMonoBean.getData());
                             break;
-
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
+                            break;
                         default:
                             mView.addWorkApplyFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
                             break;
@@ -269,7 +299,11 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_CODE_OK:
                             mView.submitFurloughSuccess(queryMonoBean.getData());
                             break;
-
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
+                            break;
                         default:
                             mView.submitFurloughFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
                             break;
@@ -311,6 +345,11 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                     switch (singReasonBean.getCode()) {
                         case ApiJava.REQUEST_CODE_OK:
                             mView.findSignReasonSuccess(singReasonBean);
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
                             break;
                         default:
                             mView.findSignReasonFailure(Integer.parseInt(singReasonBean.getCode()), singReasonBean.getMessage());
@@ -361,7 +400,11 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_CODE_OK:
                             mView.registrationCardSuccess(queryMonoBean.getData());
                             break;
-
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
+                            break;
                         default:
                             mView.registrationCardFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
                             break;

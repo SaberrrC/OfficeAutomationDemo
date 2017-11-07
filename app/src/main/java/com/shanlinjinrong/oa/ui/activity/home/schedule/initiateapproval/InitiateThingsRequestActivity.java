@@ -881,13 +881,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                     mDialog.cancel();
                 }
                 break;
-//            case "showDialog":
-//                NonTokenDialog();
-//                break;
             case "selectedDate":
                 if (bean.getPosition() == 0) {
                     if (bean.getIsBegin() == 0) {
                         mBegin_time.setText(bean.getSelectedType());
+                        //TODO 时间优化处理
                     } else {
                         mEnd_time.setText(bean.getSelectedType());
                         if (!TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
