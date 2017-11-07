@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract;
 import android.content.Context;
 
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
+import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.CreateMeetingContract;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -25,6 +26,6 @@ public interface MyAttendenceActivityContract {
     interface Presenter extends BasePresenter<MyAttendenceActivityContract.View> {
 
 
-        void sendData(String userId,String year,String minth ,Context context);
+        void sendData(String userId, String year, String minth, Context context);
     }
 }

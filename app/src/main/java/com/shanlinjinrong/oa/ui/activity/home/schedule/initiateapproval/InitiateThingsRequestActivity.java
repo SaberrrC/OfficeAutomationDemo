@@ -515,6 +515,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_begin_time.setText("签卡时间");
         mEt_common_show2.setHint("请选择签卡原因");
         mEt_common_show3.setHint("请填写签卡说明");
+        mEt_common_show3.setFocusable(false);
     }
 
     //加班申请
@@ -550,6 +551,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_next_begin_time.setText("签卡时间");
         mTv_selected_next_show.setText("请选择签卡原因");
         mEt_common_next_show3.setHint("请填写签卡说明");
+        mEt_common_next_show3.setFocusable(false);
         if (data.size() > 0)
             mTv_selected_next_show.setText(data.get(0).getContent());
     }
