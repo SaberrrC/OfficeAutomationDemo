@@ -15,8 +15,8 @@ public class MyAttendanceResponse {
     private String psname;
     private String pkPsndoc;
     private String calendar;
-    private Object onebegintime;
-    private Object twoendtime;
+    private String onebegintime;
+    private String twoendtime;
     private String tbmstatus;
 
     public String getPsname() {
@@ -43,19 +43,19 @@ public class MyAttendanceResponse {
         this.calendar = calendar;
     }
 
-    public Object getOnebegintime() {
+    public String getOnebegintime() {
         return onebegintime;
     }
 
-    public void setOnebegintime(Object onebegintime) {
+    public void setOnebegintime(String onebegintime) {
         this.onebegintime = onebegintime;
     }
 
-    public Object getTwoendtime() {
+    public String getTwoendtime() {
         return twoendtime;
     }
 
-    public void setTwoendtime(Object twoendtime) {
+    public void setTwoendtime(String twoendtime) {
         this.twoendtime = twoendtime;
     }
 

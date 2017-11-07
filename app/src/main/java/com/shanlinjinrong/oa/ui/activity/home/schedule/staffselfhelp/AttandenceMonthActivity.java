@@ -28,10 +28,6 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -204,7 +200,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             //统计人员选择
             case R.id.ll_count_people:
                 Intent intent = new Intent(AttandenceMonthActivity.this, CountPeopleActivity.class);
-                startActivityForResult(intent,100);
+                startActivityForResult(intent, 100);
                 break;
         }
     }
@@ -260,6 +256,11 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 }
             }
         }
+
+        for (int i = 0; i < mData.size(); i++) {
+
+        }
+
         mAdapter.notifyDataSetChanged();
         tv_date.setText(mSelectedYear + "-" + mSelectedMonth + "-" + mSelectedDay);
         MyAttandanceResponse.AllWorkAttendanceListBean allWorkAttendanceListBean = mAllWorkAttendanceList.get(mSelectedDay);
@@ -288,13 +289,18 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     mTvEmptyLayout.setVisibility(View.GONE);
                 } else {
                     mTvEmptyLayout.setVisibility(View.VISIBLE);
+                    return;
                 }
-//                tv_date.setText(bean.getCalendar());
-//                tv_name.setText(bean.getPsname());
-//                mTvState.setText(bean.getTbmstatus());
-//                tv_gowork_time.setText(bean.getOnebegintime());
-//                tv_off_gowork_time.setText(bean.getTwoendtime());
+                for (int i = 0; i < bean.size(); i++) {
+                    tv_date.setText(bean.get(i).getCalendar());
+                    tv_name.setText(bean.get(i).getPsname());
+                    mTvState.setText(bean.get(i).getTbmstatus());
+                    tv_gowork_time.setText(bean.get(i).getOnebegintime());
+                    tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
+                }
             } else {
+                mTvEmptyLayout.setText("暂无考勤信息！");
+                mTvEmptyLayout.setVisibility(View.VISIBLE);
             }
         } catch (Throwable e) {
             e.printStackTrace();

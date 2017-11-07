@@ -95,6 +95,4 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
             }
         });
     }
-
-
 }
