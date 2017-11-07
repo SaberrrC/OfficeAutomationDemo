@@ -72,6 +72,7 @@ import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
+import com.superrtc.call.ThreadUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -748,7 +749,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         String newUserInfo_self = null;
         String newUserInfo = null;
         try {
-        if (!from.equals("sl_" + bean.CODE_self)) {
+            if (!from.equals("sl_" + bean.CODE_self)) {
                 newUserInfo_self = userInfo_self.replaceAll("_self", "");
                 newUserInfo = userInfo.replace("phone", "phone_self");
                 newUserInfo = newUserInfo.replace("CODE", "CODE_self");
@@ -764,14 +765,14 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 message.setAttribute("userInfo_self", sendUserInfo);
                 message.setAttribute("userInfo", sendUserInfo_self);
 
-        } else {
+            } else {
                 sendUserInfo_self = new JSONObject(userInfo_self);
                 sendUserInfo = new JSONObject(userInfo);
                 message.setAttribute("userInfo_self", sendUserInfo_self);
                 message.setAttribute("userInfo", sendUserInfo);
             }
         } catch (Throwable e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -789,7 +790,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 if (userInfo.equals("") && mEmMessage.getStringAttribute("userInfo", "") != null) {
                     userInfo = mEmMessage.getStringAttribute("userInfo", "");
                 }
-            }catch (Throwable e1){
+            } catch (Throwable e1) {
                 e1.printStackTrace();
             }
             String user_code = getArguments().getString("user_code", "-");
@@ -912,6 +913,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             message.setChatType(ChatType.ChatRoom);
         }
         //send message
+
         EMClient.getInstance().chatManager().sendMessage(message);
         //refresh ui
         if (isMessageListInited) {

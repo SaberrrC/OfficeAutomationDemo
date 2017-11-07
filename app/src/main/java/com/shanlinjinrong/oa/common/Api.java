@@ -13,10 +13,10 @@ public class Api {
     public static final String PHP_DEBUG_URL = "http://118.31.18.67:86";
 
     //TODO会议室管理、找回密码 测试环境
-    public static final String PHP_URL = "http://testoa.shanlinjinrong.com/webApi/";
+//    public static final String PHP_URL = "http://testoa.shanlinjinrong.com/webApi/";
 
     //TODO会议室管理、找回密码 生产环境
-//    public static final String PHP_URL = "http://oa.shanlinjinrong.com/webApi";
+    public static final String PHP_URL = "http://oa.shanlinjinrong.com/webApi";
 
 
     private static final String RESPONSES_KEY_CODE = "code";

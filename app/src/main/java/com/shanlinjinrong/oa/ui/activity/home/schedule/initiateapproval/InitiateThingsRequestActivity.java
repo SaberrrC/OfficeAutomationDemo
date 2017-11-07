@@ -111,6 +111,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             mTv_common_detail, mTv_common_next_detail, mTv_common_begin_time, mTv_common_next_begin_time, mTv_selected_show, mTv_selected_next_show,
             mBegin_time, mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number;
     private EditText mEt_common_show2, mEt_common_next_show2, mEt_common_show1, mEt_common_next_show1;
+    private CommonTypeBean mCommonTypeBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,10 +205,12 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 //                showToast("请重新获取申请时长!");
 //                return;
 //            }
-//            if (TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
-//                showToast("请重新获取" + mTvCommonalityCoder.getText().toString() + "!");
-//                return;
-//            }
+
+            if (TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
+                showToast("提交失败,请获取" + mTvCommonalityCoder.getText().toString() + "!");
+                return;
+            }
+
             switch (getIntent().getIntExtra("type", -1)) {
                 case 0://出差申请
                     submitEvectionApply();
@@ -434,6 +437,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             });
         mLl_common_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = false;
+            if (mCommonTypeBean == null) {
+                showToast("获取" + mTv_common_show2.getText().toString() + "失败,请检查网络！");
+                return;
+            } else if (mCommonTypeBean.getData().size() == 0) {
+                showToast("获取" + mTv_common_show2.getText().toString() + "失败,请检查网络！");
+                return;
+            }
             NonTokenDialog();
         });
 
@@ -468,6 +478,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             });
         mLl_common_next_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = true;
+            if (mCommonTypeBean == null) {
+                showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,请检查网络！");
+                return;
+            } else if (mCommonTypeBean.getData().size() == 0) {
+                showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,请检查网络！");
+                return;
+            }
             NonTokenDialog();
         });
     }
@@ -476,6 +493,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void onBusinessRequest() {
         mTopView.setAppTitle("出差申请");
         mEt_common_show3.setFocusable(false);
+        mTvCommonalityTypeSelected.setText("外出 ");
     }
 
     //加班申请
@@ -487,6 +505,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_detail.setText("加班明细");
         mTv_common_show2.setText("加班原因");
         mEt_common_show2.setHint("请填写加班原因");
+        mTvCommonalityTypeSelected.setText("转调休加班 ");
     }
 
     //休假申请
@@ -501,6 +520,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mEt_common_show2.setHint("请填写休假事由");
         mEt_common_show3.setHint("请填写工作交接人");
         mEt_common_show3.setFocusable(false);
+        mTvCommonalityTypeSelected.setText("转调休加班 ");
     }
 
     //签卡申请
@@ -584,6 +604,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 addDetail();
                 break;
             case R.id.tv_commonality_type_selected:
+                if (mCommonTypeBean == null) {
+                    showToast("获取" + mTvCommonalityType.getText().toString() + "失败,请检查网络！");
+                    return;
+                } else if
+                        (mCommonTypeBean.getData().size() == 0) {
+                    showToast("获取" + mTvCommonalityType.getText().toString() + "失败,请检查网络！");
+                    return;
+                }
                 NonTokenDialog();
                 break;
             case R.id.tv_commonality_type_date:
@@ -693,7 +721,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void queryEvectionTypeSuccess(CommonTypeBean bean) {
+
         if (bean != null) {
+            mCommonTypeBean = bean;
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
                     mSelectedTypeID = bean.getData().get(i).getId();
@@ -848,9 +878,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                     mDialog.cancel();
                 }
                 break;
-            case "showDialog":
-                NonTokenDialog();
-                break;
+//            case "showDialog":
+//                NonTokenDialog();
+//                break;
             case "selectedDate":
                 if (bean.getPosition() == 0) {
                     if (bean.getIsBegin() == 0) {
@@ -992,16 +1022,16 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     @Override
+    public void onSelected(String date, int position) {
+        mTvCommonalityTypeDate.setText(date + " ");
+        mYearPosition = position;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-    }
-
-    @Override
-    public void onSelected(String date, int position) {
-        mTvCommonalityTypeDate.setText(date + " ");
-        mYearPosition = position;
     }
 }

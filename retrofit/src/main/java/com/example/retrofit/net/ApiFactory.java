@@ -24,7 +24,6 @@ public class ApiFactory {
             javaHost = ApiConstant.JAVA_TEST_HOST;
         }
         userApi = ClientBuilder.build(userHost, UserApi.class);
-
         //TODO 开发要更换
         javaApi = ClientBuilder.build(javaHost, JavaApi.class);
     }
