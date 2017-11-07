@@ -26,6 +26,6 @@ public interface AttandanceMonthContract {
 
         void sendData(String userId, String year, String minth, Context context);
 
-        void queryDayAttendance(String date);
+        void queryDayAttendance(String userId, String date);
     }
 }

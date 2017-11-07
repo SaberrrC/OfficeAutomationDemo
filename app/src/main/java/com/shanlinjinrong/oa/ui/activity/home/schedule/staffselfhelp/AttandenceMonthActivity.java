@@ -126,7 +126,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         doHttp();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String format1 = format.format(new Date());
-        mPresenter.queryDayAttendance(format1);
+        mPresenter.queryDayAttendance(mPrivateCode, format1);
     }
 
     public void setData(final boolean isDay, int month, int selectPos) {
@@ -150,7 +150,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             }
             String date = mCurrentYear + "-" + mCurrentMonth + "-" + mDay;
             doHttp();
-            mPresenter.queryDayAttendance(date);
+            mPresenter.queryDayAttendance(mPrivateCode, date);
             setData(true, mSelectedMonth, mSelectedDay);
             mAdapter.notifyDataSetChanged();
         });
