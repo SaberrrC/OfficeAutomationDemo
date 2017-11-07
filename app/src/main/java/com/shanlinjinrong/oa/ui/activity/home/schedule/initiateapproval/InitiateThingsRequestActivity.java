@@ -742,7 +742,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast(getString(R.string.string_not_network));
                 return;
         }
-        Toast.makeText(this, "提交申请失败!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -758,7 +758,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast(getString(R.string.string_not_network));
                 return;
         }
-        Toast.makeText(this, "提交申请失败!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -774,7 +774,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast(getString(R.string.string_not_network));
                 return;
         }
-        Toast.makeText(this, "提交申请失败!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -810,7 +810,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast(getString(R.string.string_not_network));
                 return;
         }
-        Toast.makeText(this, "提交申请失败!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

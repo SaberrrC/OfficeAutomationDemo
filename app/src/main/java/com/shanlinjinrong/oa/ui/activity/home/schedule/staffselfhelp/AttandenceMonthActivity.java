@@ -70,6 +70,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     TextView mTvState;
     @Bind(R.id.tv_empty_layout)
     TextView mTvEmptyLayout;
+    @Bind(R.id.ll_currentday_state)
+    LinearLayout mLlCurrentdayState;
 
     private String mDay;
     private Calendar cal;
@@ -128,6 +130,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             mData.clear();
         }
         if (isDay) {
+            //TODO 1
             List<PopItem> date = DateUtils.getAttandenceDate(month, selectPos);
             mData.addAll(date);
         } else {
@@ -257,9 +260,12 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             }
         }
 
-        for (int i = 0; i < mData.size(); i++) {
-
-        }
+//        List<PopItem> date = DateUtils.getAttandenceDate(month, selectPos);
+//        mData.addAll(date);
+//
+//        for (int i = 0; i < mData.size(); i++) {
+//
+//        }
 
         mAdapter.notifyDataSetChanged();
         tv_date.setText(mSelectedYear + "-" + mSelectedMonth + "-" + mSelectedDay);
@@ -287,8 +293,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             if (bean != null) {
                 if (bean.size() > 0) {
                     mTvEmptyLayout.setVisibility(View.GONE);
+                    mLlCurrentdayState.setVisibility(View.VISIBLE);
                 } else {
                     mTvEmptyLayout.setVisibility(View.VISIBLE);
+                    mLlCurrentdayState.setVisibility(View.GONE);
                     return;
                 }
                 for (int i = 0; i < bean.size(); i++) {
@@ -301,6 +309,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             } else {
                 mTvEmptyLayout.setText("暂无考勤信息！");
                 mTvEmptyLayout.setVisibility(View.VISIBLE);
+                mLlCurrentdayState.setVisibility(View.GONE);
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -337,7 +346,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 return 2;
             } else if (str.equals("[早退]")) {
                 return 3;
-            } else if (str.equals("[矿工]")) {
+            } else if (str.equals("[旷工]")) {
                 return 4;
             } else if (str.equals("[其他]")) {
                 return 5;

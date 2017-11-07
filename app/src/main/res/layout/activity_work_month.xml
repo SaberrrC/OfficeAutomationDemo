@@ -120,15 +120,6 @@
         android:layout_height="1dp"
         android:background="@color/common_line_color"/>
 
-    <TextView
-        android:id="@+id/tv_empty_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-
-        android:text="暂无日常考勤！"
-        android:visibility="gone"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
