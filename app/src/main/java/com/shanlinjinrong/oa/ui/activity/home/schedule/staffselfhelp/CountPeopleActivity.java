@@ -1,12 +1,15 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,12 +19,9 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.retrofit.model.responsebody.CountResponse1;
 import com.example.retrofit.net.HttpMethods;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.event.PeopeNameEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.CountPeopleAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.views.common.CommonTopView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,33 +69,16 @@ public class CountPeopleActivity extends BaseActivity implements View.OnClickLis
         leftView.setOnClickListener(view -> {
             finish();
         });
-        mEtSearchContent.addTextChangedListener(new TextWatcher() {
+        mEtSearchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String name = editable.toString().trim();
-                if (!TextUtils.isEmpty(name)) {
-                    mData.clear();
-                    for (int i = 0; i < mCountResponse1s.size(); i++) {
-                        if (mCountResponse1s.get(i).getPsname().contains(name)) {
-                            mData.add(mCountResponse1s.get(i));
-                        }
-                    }
-                    mCountPeopleAdapter.notifyDataSetChanged();
-                } else {
-                    mData.clear();
-                    mData.addAll(mCountResponse1s);
-                    mCountPeopleAdapter.notifyDataSetChanged();
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    showLoadingView();
+                    searchPeople();
                 }
+                InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                im.hideSoftInputFromWindow(mEtSearchContent.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                return true;
             }
         });
     }
@@ -117,17 +100,39 @@ public class CountPeopleActivity extends BaseActivity implements View.OnClickLis
                 break;
             //确认并搜索
             case R.id.tv_confirm:
+                searchPeople();
                 break;
+        }
+    }
+
+    private void searchPeople() {
+        String name = mEtSearchContent.getText().toString().trim();
+        if (!TextUtils.isEmpty(name)) {
+            mData.clear();
+            for (int i = 0; i < mCountResponse1s.size(); i++) {
+                if (mCountResponse1s.get(i).getPsname().contains(name)) {
+                    mData.add(mCountResponse1s.get(i));
+                }
+            }
+            mCountPeopleAdapter.notifyDataSetChanged();
+        } else {
+            mData.clear();
+            mData.addAll(mCountResponse1s);
+            mCountPeopleAdapter.notifyDataSetChanged();
         }
     }
 
     class SearchResultItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-            PeopeNameEvent peopeNameEvent = new PeopeNameEvent();
+//            PeopeNameEvent peopeNameEvent = new PeopeNameEvent();
             CountResponse1 countResponse1 = mData.get(i);
-            peopeNameEvent.setCountResponse1(countResponse1);
-            EventBus.getDefault().post(countResponse1);
+//            peopeNameEvent.setCountResponse1(countResponse1);
+//            EventBus.getDefault().post(countResponse1);
+
+            Intent intent = new Intent();
+            intent.putExtra("people", countResponse1);
+            setResult(101,intent);
             finish();
         }
     }

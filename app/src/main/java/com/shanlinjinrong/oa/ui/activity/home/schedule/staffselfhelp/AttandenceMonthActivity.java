@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.retrofit.model.responsebody.CountResponse1;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 import com.shanlinjinrong.oa.R;
@@ -205,7 +206,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             //统计人员选择
             case R.id.ll_count_people:
                 Intent intent = new Intent(AttandenceMonthActivity.this, CountPeopleActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,100);
                 break;
         }
     }
@@ -355,5 +356,14 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         return 1;
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            CountResponse1 people = (CountResponse1) data.getSerializableExtra("people");
+            tv_people.setText(people.getPsname());
+            mPrivateCode = people.getCode();
+            doHttp();
+        }
+    }
 }

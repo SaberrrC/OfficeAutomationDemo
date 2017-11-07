@@ -1,10 +1,12 @@
 package com.example.retrofit.model.responsebody;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/11/5 0005.
  */
 
-public class CountResponse1 {
+public class CountResponse1 implements Serializable{
 
     /**
      * psname : 李煜
