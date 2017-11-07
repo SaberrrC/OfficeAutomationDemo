@@ -7,9 +7,7 @@ import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
-/**
- * Created by Administrator on 2017/10/31 0031.
- */
+import java.util.List;
 
 public interface AttandanceMonthContract {
     interface View extends BaseView {
@@ -17,7 +15,7 @@ public interface AttandanceMonthContract {
 
         void sendDataFailed(String errCode, String msg);
 
-        void queryDayAttendanceSuccess(MyAttendanceResponse myAttandanceResponse);
+        void queryDayAttendanceSuccess(List<MyAttendanceResponse> myAttandanceResponse);
 
         void queryDayAttendanceFailed(String errCode, String msg);
 

@@ -70,25 +70,26 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     TextView tv_off_gowork_time;
     @Bind(R.id.tv_state)
     TextView mTvState;
+    @Bind(R.id.tv_empty_layout)
+    TextView mTvEmptyLayout;
 
-
-    private List<PopItem> mData = new ArrayList<>();
-    ;
+    private String mDay;
+    private Calendar cal;
+    private View rootView;
     private int mSelectedDay;
     private int mCurrentDay;
     private int mCurrentYear;
     private int mCurrentMonth;
-    private int mSelectedMonth;
     private int mSelectedYear;
+    private int mSelectedMonth;
+    private String mPrivateCode = "";
     private RecyclerView mRecyclerView;
     private DatePopAttandanceAdapter mAdapter;
-    private View rootView;
+    private List<PopItem> mData = new ArrayList<>();
     private MonthSelectPopWindow monthSelectPopWindow;
-    private Calendar cal;
-    private String mPrivateCode = "";
-    private MyAttandanceResponse myAttandanceResponse = new MyAttandanceResponse();
     private List<String> mDateTypeList = new ArrayList<>();
     private HashMap<String, String> mDataTypeMap = new HashMap<>();
+    private MyAttandanceResponse myAttandanceResponse = new MyAttandanceResponse();
     private List<MyAttandanceResponse.AllWorkAttendanceListBean> mAllWorkAttendanceList = new ArrayList<>();
 
     @Override
@@ -96,7 +97,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_month);
         ButterKnife.bind(this);
-
         initToolBar();
         initData();
         setTranslucentStatus(this);
@@ -144,7 +144,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             String content = mData.get(position).getContent();
             int i1 = Integer.parseInt(content);
             mSelectedDay = i1;
-            String date = mCurrentYear + "-" + mCurrentMonth + "-" + mSelectedDay;
+            if (mSelectedDay < 10) {
+                mDay = "0" + mSelectedDay;
+            }
+            String date = mCurrentYear + "-" + mCurrentMonth + "-" + mDay;
             mPresenter.queryDayAttendance(date);
             setData(true, mSelectedMonth, mSelectedDay);
             mAdapter.notifyDataSetChanged();
@@ -279,14 +282,20 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     }
 
     @Override
-    public void queryDayAttendanceSuccess(MyAttendanceResponse bean) {
+    public void queryDayAttendanceSuccess(List<MyAttendanceResponse> bean) {
         try {
-            if (myAttandanceResponse != null) {
-                tv_date.setText(bean.getCalendar());
-                tv_name.setText(bean.getPsname());
-                mTvState.setText(bean.getTbmstatus());
-                tv_gowork_time.setText(bean.getOnebegintime());
-                tv_off_gowork_time.setText(bean.getTwoendtime());
+            if (bean != null) {
+                if (bean.size() > 0) {
+                    mTvEmptyLayout.setVisibility(View.GONE);
+                } else {
+                    mTvEmptyLayout.setVisibility(View.VISIBLE);
+                }
+//                tv_date.setText(bean.getCalendar());
+//                tv_name.setText(bean.getPsname());
+//                mTvState.setText(bean.getTbmstatus());
+//                tv_gowork_time.setText(bean.getOnebegintime());
+//                tv_off_gowork_time.setText(bean.getTwoendtime());
+            } else {
             }
         } catch (Throwable e) {
             e.printStackTrace();
