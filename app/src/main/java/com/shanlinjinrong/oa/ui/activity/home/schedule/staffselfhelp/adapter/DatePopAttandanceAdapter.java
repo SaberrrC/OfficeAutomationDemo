@@ -60,9 +60,8 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
                 case 2:
                     holder.imageState.setImageResource(R.drawable.circle_red);
                     break;
-                case 3:
+                case 4:
                     holder.imageState.setImageResource(R.drawable.circle_blue);
-
             }
 
 

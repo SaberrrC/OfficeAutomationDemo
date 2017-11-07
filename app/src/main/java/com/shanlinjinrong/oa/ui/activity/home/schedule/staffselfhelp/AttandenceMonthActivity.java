@@ -126,7 +126,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             mData.clear();
         }
         if (isDay) {
-            List<PopItem> date = DateUtils.getDate(month, selectPos);
+            List<PopItem> date = DateUtils.getAttandenceDate(month, selectPos);
             mData.addAll(date);
         } else {
             creatMonth(selectPos);
