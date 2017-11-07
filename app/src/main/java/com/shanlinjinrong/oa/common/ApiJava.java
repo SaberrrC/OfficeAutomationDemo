@@ -124,4 +124,7 @@ public class ApiJava {
 
     //同意和驳回 Approve/allApprove
     public static final String ARGEE_DISAGREE_APPROVE = "Approve/allApprove";
+
+    //同意和驳回 Approve/allApprove
+    public static final String DELETE_APPROVEL = "nchrSign/deleteBillByCode";
 }

@@ -7,6 +7,7 @@ import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.DeleteBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.TackBackResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksInfoContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -118,5 +119,37 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
             }
         });
+    }
+
+    @Override
+    public void getDelete(String billCode, String billType) {
+        HttpParams httpParams = new HttpParams();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("billCode", billCode);
+            jsonObject.put("billType", billType);
+            String bodyJson = jsonObject.toString();
+            httpParams.putJsonParams(bodyJson);
+            mKjHttp.jsonPost(ApiJava.DELETE_APPROVEL, httpParams, new HttpCallBack() {
+                @Override
+                public void onFailure(int errorNo, String strMsg) {
+                    super.onFailure(errorNo, strMsg);
+                    mView.ondELETEFailure(String.valueOf(errorNo), strMsg);
+                }
+
+                @Override
+                public void onSuccess(String t) {
+                    super.onSuccess(t);
+                    DeleteBean bean = new Gson().fromJson(t, DeleteBean.class);
+                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        mView.onDeleteSuccess(bean);
+                        return;
+                    }
+                    mView.ondELETEFailure(bean.getCode(), bean.getMessage());
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

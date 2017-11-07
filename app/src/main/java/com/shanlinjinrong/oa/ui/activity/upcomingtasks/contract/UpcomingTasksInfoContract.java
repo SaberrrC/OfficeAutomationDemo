@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract;
 
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.DeleteBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.TackBackResultBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -23,6 +24,10 @@ public interface UpcomingTasksInfoContract {
         void onApproveSuccess(AgreeDisagreeResultBean resultBean);
 
         void onApproveFailure(int errorNo, String strMsg);
+
+        void onDeleteSuccess(DeleteBean bean);
+
+        void ondELETEFailure(String s, String strMsg);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -31,5 +36,7 @@ public interface UpcomingTasksInfoContract {
         void postTackBack(String billCode, String billType);
 
         void postApproval(List<ApporveBodyItemBean> list);
+
+        void getDelete(String billCode, String billType);
     }
 }

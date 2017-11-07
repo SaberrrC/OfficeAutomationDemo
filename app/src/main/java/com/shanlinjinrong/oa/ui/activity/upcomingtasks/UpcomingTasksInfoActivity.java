@@ -30,6 +30,7 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapte
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.CardResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.DeleteBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OverTimeResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.RestResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.TackBackResultBean;
@@ -71,6 +72,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     RelativeLayout mRlCheck;
     @Bind(R.id.rl_tack_back)
     RelativeLayout mRlTackBack;
+    @Bind(R.id.tv_tack_back)
+    TextView       mTvTackBack;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter      mFinalRecycleAdapter;
     private LinearLayoutManager      mLinearLayoutManager;
@@ -155,6 +158,13 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             if (TextUtils.equals(mWhichList, "1")) {
                 mRlCheck.setVisibility(View.GONE);
                 mBean = (UpcomingTaskItemBean.DataBean.DataListBean) intent.getSerializableExtra("UPCOMING_INFO");
+                if (TextUtils.equals(mBean.getApproveState(), "-1")) {
+                    mTvTackBack.setText("删除");
+                    mTvTackBack.setBackgroundResource(R.drawable.shape_upcominginfo_disagree);
+                } else {
+                    mTvTackBack.setText("收回");
+                    mTvTackBack.setBackgroundResource(R.drawable.shape_upcoming_dialog_ok);
+                }
                 mTvTitle.setText(mBean.getUserName() + "的" + mBean.getBillTypeName());
             }
             if (TextUtils.equals(mWhichList, "2")) {
@@ -556,7 +566,12 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     billCode = mSearchBean.getBillNo();
                     billType = mSearchBean.getPkBillType();
                 }
-                mPresenter.postTackBack(billCode, billType);
+                if (TextUtils.equals(mTvTackBack.getText(), "收回")) {
+                    mPresenter.postTackBack(billCode, billType);
+                }
+                if (TextUtils.equals(mTvTackBack.getText(), "删除")) {
+                    mPresenter.getDelete(billCode, billType);
+                }
                 break;
         }
     }
@@ -706,5 +721,18 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     @Override
     public void onApproveFailure(int errorNo, String strMsg) {
         showToast(strMsg);
+    }
+
+    @Override
+    public void onDeleteSuccess(DeleteBean bean) {
+        hideLoadingView();
+        showToast("删除成功");
+        setResult(101);
+        finish();
+    }
+
+    @Override
+    public void ondELETEFailure(String s, String strMsg) {
+        onGetApproveInfoFailure(s, strMsg);
     }
 }
