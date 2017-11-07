@@ -375,10 +375,14 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            CountResponse1 people = (CountResponse1) data.getSerializableExtra("people");
-            tv_people.setText(people.getPsname());
-            mPrivateCode = people.getCode();
-            doHttp();
+            try {
+                CountResponse1 people = (CountResponse1) data.getSerializableExtra("people");
+                tv_people.setText(people.getPsname());
+                mPrivateCode = people.getCode();
+                doHttp();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
     }
 }

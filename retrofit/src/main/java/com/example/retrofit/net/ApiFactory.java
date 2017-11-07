@@ -1,14 +1,12 @@
 package com.example.retrofit.net;
 
 
-import com.example.retrofit.BuildConfig;
 import com.example.retrofit.net.api.JavaApi;
 import com.example.retrofit.net.api.UserApi;
 import com.example.retrofit.retrofit.ClientBuilder;
 
-/**
- * Created by gaobin on 2017/8/14.
- */
+import rx.android.BuildConfig;
+
 public class ApiFactory {
 
     private static UserApi userApi;
@@ -26,7 +24,9 @@ public class ApiFactory {
             javaHost = ApiConstant.JAVA_TEST_HOST;
         }
         userApi = ClientBuilder.build(userHost, UserApi.class);
-        javaApi=ClientBuilder.build(javaHost, JavaApi.class);
+
+        //TODO 开发要更换
+        javaApi = ClientBuilder.build(javaHost, JavaApi.class);
     }
 
     public static UserApi getUserApi() {
@@ -42,7 +42,6 @@ public class ApiFactory {
         }
         return javaApi;
     }
-
 
 
 }
