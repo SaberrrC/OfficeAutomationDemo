@@ -62,7 +62,6 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
             @Override
             public void onNext(MyAttandanceResponse myAttandanceResponse) {
                 mView.sendDataSuccess(myAttandanceResponse);
-                Log.i("hahaha", myAttandanceResponse.toString());
             }
         });
     }
