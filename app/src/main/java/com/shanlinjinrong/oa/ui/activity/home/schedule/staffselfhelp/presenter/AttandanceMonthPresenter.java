@@ -62,15 +62,15 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
             @Override
             public void onNext(MyAttandanceResponse myAttandanceResponse) {
                 mView.sendDataSuccess(myAttandanceResponse);
-                Log.i("hahaha", myAttandanceResponse.toString());
             }
         });
     }
 
     @Override
-    public void queryDayAttendance(String date) {
+    public void queryDayAttendance(String userId, String date) {
         HashMap<String, String> map = new HashMap<>();
         map.put("begindate", date);
+        map.put("userCode", userId);
         HttpMethods.getInstance().getMyAttendanceDayData(map, new Subscriber<ArrayList<MyAttendanceResponse>>() {
             @Override
             public void onCompleted() {

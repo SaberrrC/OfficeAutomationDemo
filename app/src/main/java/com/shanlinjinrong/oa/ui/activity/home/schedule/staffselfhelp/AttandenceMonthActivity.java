@@ -38,6 +38,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+//考勤月历界面
 public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPresenter> implements AttandanceMonthContract.View, View.OnClickListener {
 
     @Bind(R.id.tv_title)
@@ -123,6 +124,9 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         setData(true, mSelectedMonth, mSelectedDay);
         mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
         doHttp();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String format1 = format.format(new Date());
+        mPresenter.queryDayAttendance(mPrivateCode, format1);
     }
 
     public void setData(final boolean isDay, int month, int selectPos) {
@@ -130,7 +134,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             mData.clear();
         }
         if (isDay) {
-            //TODO 1
             List<PopItem> date = DateUtils.getAttandenceDate(month, selectPos);
             mData.addAll(date);
         } else {
@@ -146,7 +149,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 mDay = "0" + mSelectedDay;
             }
             String date = mCurrentYear + "-" + mCurrentMonth + "-" + mDay;
-            mPresenter.queryDayAttendance(date);
+            doHttp();
+            mPresenter.queryDayAttendance(mPrivateCode, date);
             setData(true, mSelectedMonth, mSelectedDay);
             mAdapter.notifyDataSetChanged();
         });
@@ -183,7 +187,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
                             @Override
                             public void confirm(String year, String month) {
-
                                 mSelectedYear = Integer.parseInt(year);
                                 mSelectedMonth = Integer.parseInt(month);
                                 Toast.makeText(AttandenceMonthActivity.this, "当前月份--" + mSelectedYear + "--" + mSelectedMonth, Toast.LENGTH_SHORT).show();
@@ -236,18 +239,39 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
         mAllWorkAttendanceList.clear();
         mAllWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
+        //出差
         List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();
         for (MyAttandanceResponse.CcWorkAttendanceListBean item : ccWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
         }
-        List<MyAttandanceResponse.ZtWorkAttendanceListBean> ztWorkAttendanceList = myAttandanceResponse.getZtWorkAttendanceList();
-        for (MyAttandanceResponse.ZtWorkAttendanceListBean item : ztWorkAttendanceList) {
+        //迟到
+        List<MyAttandanceResponse.CdWorkAttendanceListBean> cdWorkAttendanceList = myAttandanceResponse.getCdWorkAttendanceList();
+        for (MyAttandanceResponse.CdWorkAttendanceListBean item : cdWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
         }
+        //加班
+        List<MyAttandanceResponse.JbWorkAttendanceListBean> jbWorkAttendanceList = myAttandanceResponse.getJbWorkAttendanceList();
+        for (MyAttandanceResponse.JbWorkAttendanceListBean item : jbWorkAttendanceList) {
+            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+        }
+        //旷工
         List<MyAttandanceResponse.KgWorkAttendanceListBean> kgWorkAttendanceList = myAttandanceResponse.getKgWorkAttendanceList();
         for (MyAttandanceResponse.KgWorkAttendanceListBean item : kgWorkAttendanceList) {
+            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+        }
+        //休假
+        List<MyAttandanceResponse.XjWorkAttendanceListBean> xjWorkAttendanceList = myAttandanceResponse.getXjWorkAttendanceList();
+        for (MyAttandanceResponse.XjWorkAttendanceListBean item : xjWorkAttendanceList) {
+            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+        }
+        //早退
+        List<MyAttandanceResponse.ZtWorkAttendanceListBean> ztWorkAttendanceList = myAttandanceResponse.getZtWorkAttendanceList();
+        for (MyAttandanceResponse.ZtWorkAttendanceListBean item : ztWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
         }
@@ -259,13 +283,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 }
             }
         }
-
-//        List<PopItem> date = DateUtils.getAttandenceDate(month, selectPos);
-//        mData.addAll(date);
-//
-//        for (int i = 0; i < mData.size(); i++) {
-//
-//        }
 
         mAdapter.notifyDataSetChanged();
         tv_date.setText(mSelectedYear + "-" + mSelectedMonth + "-" + mSelectedDay);
@@ -333,23 +350,22 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
     public void doHttp() {
         mPresenter.sendData(mPrivateCode, mSelectedYear + "", mSelectedMonth + "", AttandenceMonthActivity.this);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String format1 = format.format(new Date());
-        mPresenter.queryDayAttendance(format1);
     }
 
     public int getType(String str) {
         if (!TextUtils.isEmpty(str)) {
-            if (str.equals("[正常]")) {
-                return 1;
-            } else if (str.equals("[迟到]")) {
-                return 2;
-            } else if (str.equals("[早退]")) {
-                return 3;
-            } else if (str.equals("[旷工]")) {
-                return 4;
-            } else if (str.equals("[其他]")) {
-                return 5;
+            switch (str) {
+                case "[休假]":
+                    return 1;
+                case "[加班转调休]":
+                    return 2;
+                case "[出差]":
+                    return 3;
+                case "[早退]":
+                case "[旷工]":
+                case "[迟到]":
+                case "[其他]":
+                    return 4;
             }
         }
         return 1;
@@ -359,10 +375,14 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            CountResponse1 people = (CountResponse1) data.getSerializableExtra("people");
-            tv_people.setText(people.getPsname());
-            mPrivateCode = people.getCode();
-            doHttp();
+            try {
+                CountResponse1 people = (CountResponse1) data.getSerializableExtra("people");
+                tv_people.setText(people.getPsname());
+                mPrivateCode = people.getCode();
+                doHttp();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
     }
 }

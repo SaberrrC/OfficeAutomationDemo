@@ -54,14 +54,21 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
         }
 
         if (mData.get(position).isEnable()) {
-            int dateType=1;
+            int dateType = 1;
             dateType = mData.get(position).getDateType();
-            switch (dateType){
-                case 2:
+            switch (dateType) {
+                case 4:
                     holder.imageState.setImageResource(R.drawable.circle_red);
                     break;
-                case 4:
+                case 3:
                     holder.imageState.setImageResource(R.drawable.circle_blue);
+                    break;
+                case 2:
+                    holder.imageState.setImageResource(R.drawable.circle_yellow);
+                    break;
+                case 1:
+                    holder.imageState.setImageResource(R.drawable.circle_green);
+                    break;
             }
 
 
@@ -78,7 +85,7 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
             public void onClick(View v) {
 //                setSelect(position);
                 if (mOnItemClick != null) {
-                    mOnItemClick.onItemClicked(v,position);
+                    mOnItemClick.onItemClicked(v, position);
                 }
             }
         });
@@ -105,11 +112,12 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
         TextView item;
         ImageView image;
         ImageView imageState;
+
         ItemHolder(View itemView) {
             super(itemView);
             item = (TextView) itemView.findViewById(R.id.pop_item);
             image = (ImageView) itemView.findViewById(R.id.iv_icon);
-            imageState = (ImageView)itemView.findViewById(R.id.iv_state);
+            imageState = (ImageView) itemView.findViewById(R.id.iv_state);
         }
     }
 
@@ -117,7 +125,7 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
      * PopWindow点击事件回调接口
      */
     public interface OnItemClick {
-        void onItemClicked(View v,int position);
+        void onItemClicked(View v, int position);
     }
 
     public DatePopAttandanceAdapter setOnItemClick(OnItemClick mOnItemClick) {

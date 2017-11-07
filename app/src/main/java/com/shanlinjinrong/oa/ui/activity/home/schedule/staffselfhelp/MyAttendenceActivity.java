@@ -31,25 +31,25 @@ import butterknife.ButterKnife;
 public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityPresenter> implements MyAttendenceActivityContract.View, View.OnClickListener {
 
     @Bind(R.id.tv_time)
-    TextView      tv_time;
+    TextView tv_time;
     @Bind(R.id.tv_delay)
-    TextView      tv_delay;
+    TextView tv_delay;
     @Bind(R.id.top_view)
     CommonTopView mTopView;
     @Bind(R.id.ll_rootView)
-    LinearLayout  mRootView;
+    LinearLayout mRootView;
     @Bind(R.id.tv_leave_early)
-    TextView      tv_leave_early;
+    TextView tv_leave_early;
     @Bind(R.id.tv_business_travel)
-    TextView      tv_business_travel;
+    TextView tv_business_travel;
     @Bind(R.id.tv_absenteeism)
-    TextView      tv_absenteeism;
+    TextView tv_absenteeism;
     @Bind(R.id.tv_sign_card_num)
-    TextView      tv_sign_card_num;
+    TextView tv_sign_card_num;
 
     private Calendar cal;
-    private int      mCurrentYear;
-    private int      mCurrentMonth;
+    private int mCurrentYear;
+    private int mCurrentMonth;
     private String mPrivateCode = "";
     private MonthSelectPopWindow monthSelectPopWindow;
     private MyAttandanceResponse mMyAttandanceResponse1;
@@ -103,8 +103,8 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
                 Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
                 intent.putExtra("date", tv_time.getText().toString());
                 startActivity(intent);
-
-                EventBus.getDefault().postSticky(mMyAttandanceResponse1);
+                if (mMyAttandanceResponse1 != null)
+                    EventBus.getDefault().postSticky(mMyAttandanceResponse1);
                 break;
             case R.id.tv_time:
                 monthSelectPopWindow = new MonthSelectPopWindow(MyAttendenceActivity.this, new MonthSelectPopWindow.PopListener() {
