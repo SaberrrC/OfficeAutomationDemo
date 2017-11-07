@@ -502,6 +502,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLl_common_show3.setVisibility(View.GONE);
         mTopView.setAppTitle("加班申请");
         mTvCommonalityType.setText("加班类别");
+        mTvCommonalityCoder.setText("加班编码");
         mTv_common_detail.setText("加班明细");
         mTv_common_show2.setText("加班原因");
         mEt_common_show2.setHint("请填写加班原因");
@@ -514,6 +515,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLlCommonalityAnnualLeave.setVisibility(View.VISIBLE);
         mTopView.setAppTitle("休假申请");
         mTvCommonalityType.setText("休假类别");
+        mTvCommonalityCoder.setText("休假编码");
         mTv_common_show3.setText("工作交接人");
         mTv_common_show2.setText("休假事由");
         mTv_common_duration.setText("休假时长");
@@ -533,6 +535,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLl_common_card_detail.setVisibility(View.VISIBLE);
         mTopView.setAppTitle("签卡申请");
         mTv_common_show2.setText("签卡原因");
+        mTvCommonalityCoder.setText("签卡编码");
         mTv_common_show3.setText("签卡说明");
         mTv_common_detail.setText("签卡明细");
         mTv_common_begin_time.setText("签卡时间");

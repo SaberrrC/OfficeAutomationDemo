@@ -107,22 +107,22 @@ def devJavaAddress() {
 }
 
 // 测试环境
-//def preJavaAddress() {
-//    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
-//}
-//
-//def prePHPAddress() {
-//    return "\"http://api.testoa.shanlinjinrong.com/\""
-//}
+def preJavaAddress() {
+    return "\"http://10.5.202.122:9105/\""
+}
+
+def prePHPAddress() {
+    return "\"http://10.5.202.122:800/\""
+}
 
 ////TODO 生产环境
-def preJavaAddress(){
-    return  "\"http://oa.shanlinjinrong.com/oa-api/\""
-}
-
-def prePHPAddress(){
-    return  "\"http://api.oa.shanlinjinrong.com/\""
-}
+//def preJavaAddress(){
+//    return  "\"http://oa.shanlinjinrong.com/oa-api/\""
+//}
+//
+//def prePHPAddress(){
+//    return  "\"http://api.oa.shanlinjinrong.com/\""
+//}
 
 def devAppName() {
     return '善林OA-Dev版'
