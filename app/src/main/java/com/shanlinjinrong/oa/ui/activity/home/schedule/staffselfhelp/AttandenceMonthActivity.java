@@ -43,23 +43,23 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/10/25 0025.
  */
 
-public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPresenter> implements AttandanceMonthContract.View,View.OnClickListener {
+public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPresenter> implements AttandanceMonthContract.View, View.OnClickListener {
     @Bind(R.id.tv_title)
-    TextView tvTitle;
+    TextView     tvTitle;
     @Bind(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar      toolbar;
     @Bind(R.id.ll_chose_time)
     LinearLayout mLlChoseTime;
     @Bind(R.id.ll_count_people)
     LinearLayout ll_count_people;
     @Bind(R.id.tv_time)
-    TextView tv_time;
+    TextView     tv_time;
     @Bind(R.id.ll_month)
     LinearLayout mDateLayout;
     @Bind(R.id.iv_divider)
-    ImageView iv_divider;
+    ImageView    iv_divider;
     @Bind(R.id.tv_people)
-    TextView tv_people;
+    TextView     tv_people;
     @Bind(R.id.layout_root)
     LinearLayout mRootView;
 
@@ -73,23 +73,23 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     TextView tv_off_gowork_time;
 
 
-
-    private List<PopItem> mData = new ArrayList<>();;
-    private int mSelectedDay ;
-    private int mCurrentDay ;
-    private int mCurrentYear;
-    private int mCurrentMonth ;
-    private int mSelectedMonth;
-    private int mSelectedYear ;
-    private RecyclerView mRecyclerView;
+    private List<PopItem> mData = new ArrayList<>();
+    ;
+    private int                      mSelectedDay;
+    private int                      mCurrentDay;
+    private int                      mCurrentYear;
+    private int                      mCurrentMonth;
+    private int                      mSelectedMonth;
+    private int                      mSelectedYear;
+    private RecyclerView             mRecyclerView;
     private DatePopAttandanceAdapter mAdapter;
-    private View rootView;
-    private MonthSelectPopWindow monthSelectPopWindow;
-    private Calendar cal;
-    private String mPrivateCode = "";
-    private MyAttandanceResponse myAttandanceResponse  = new MyAttandanceResponse();
-    private List<String> mDateTypeList = new ArrayList<>();
-    private HashMap<String,String> mDataTypeMap = new HashMap<>();
+    private View                     rootView;
+    private MonthSelectPopWindow     monthSelectPopWindow;
+    private Calendar                 cal;
+    private String                                               mPrivateCode           = "";
+    private MyAttandanceResponse                                 myAttandanceResponse   = new MyAttandanceResponse();
+    private List<String>                                         mDateTypeList          = new ArrayList<>();
+    private HashMap<String, String>                              mDataTypeMap           = new HashMap<>();
     private List<MyAttandanceResponse.AllWorkAttendanceListBean> mAllWorkAttendanceList = new ArrayList<>();
 
     @Override
@@ -108,28 +108,28 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             EventBus.getDefault().register(this);
         }
         cal = Calendar.getInstance();
-        mCurrentDay=cal.get(Calendar.DAY_OF_MONTH);
-        mCurrentMonth=cal.get(Calendar.MONTH)+1;
-        mCurrentYear=cal.get(Calendar.YEAR);
+        mCurrentDay = cal.get(Calendar.DAY_OF_MONTH);
+        mCurrentMonth = cal.get(Calendar.MONTH) + 1;
+        mCurrentYear = cal.get(Calendar.YEAR);
 
-        mSelectedYear=mCurrentYear;
-        mSelectedDay=mCurrentDay;
-        mSelectedMonth=mCurrentMonth;
+        mSelectedYear = mCurrentYear;
+        mSelectedDay = mCurrentDay;
+        mSelectedMonth = mCurrentMonth;
 
-        tv_time.setText(mCurrentYear+"年"+mCurrentMonth+"月");
+        tv_time.setText(mCurrentYear + "年" + mCurrentMonth + "月");
         iv_divider.setVisibility(View.GONE);
         mLlChoseTime.setOnClickListener(this);
         ll_count_people.setOnClickListener(this);
         rootView = View.inflate(AttandenceMonthActivity.this, R.layout.date_select_attandance, null);
         mDateLayout.addView(rootView);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.top_data_list);
-        setData(true,mSelectedMonth,mSelectedDay);
+        setData(true, mSelectedMonth, mSelectedDay);
         mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
         doHttp();
     }
 
     public void setData(final boolean isDay, int month, int selectPos) {
-        if(mData!=null){
+        if (mData != null) {
             mData.clear();
         }
         if (isDay) {
@@ -145,9 +145,9 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             public void onItemClicked(View v, int position) {
                 String content = mData.get(position).getContent();
                 int i1 = Integer.parseInt(content);
-                mSelectedDay=i1;
-                Toast.makeText(AttandenceMonthActivity.this,"当前时间--"+mSelectedDay ,Toast.LENGTH_SHORT).show();
-                setData(true, mSelectedMonth,mSelectedDay);
+                mSelectedDay = i1;
+                Toast.makeText(AttandenceMonthActivity.this, "当前时间--" + mSelectedDay, Toast.LENGTH_SHORT).show();
+                setData(true, mSelectedMonth, mSelectedDay);
                 mAdapter.notifyDataSetChanged();
             }
         });
@@ -172,37 +172,37 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
             //统计时间选择
             case R.id.ll_chose_time:
-                monthSelectPopWindow = new MonthSelectPopWindow(AttandenceMonthActivity.this,
-                        new MonthSelectPopWindow.PopListener() {
-                            @Override
-                            public void cancle() {
-                                monthSelectPopWindow.dismiss();
-                            }
-                            @Override
-                            public void confirm(String year, String month) {
+                monthSelectPopWindow = new MonthSelectPopWindow(AttandenceMonthActivity.this, new MonthSelectPopWindow.PopListener() {
+                    @Override
+                    public void cancle() {
+                        monthSelectPopWindow.dismiss();
+                    }
 
-                                mSelectedYear=Integer.parseInt(year);
-                                mSelectedMonth =Integer.parseInt(month);
-                                Toast.makeText(AttandenceMonthActivity.this,"当前月份--"+mSelectedYear+"--"+ mSelectedMonth,Toast.LENGTH_SHORT).show();
-                                tv_time.setText(year+"年"+month+"月");
-                                if(mSelectedMonth ==mCurrentMonth){
-                                    setData(true, mSelectedMonth,mCurrentDay);
-                                }else {
-                                    setData(true, mSelectedMonth,1);
-                                }
-                                mAdapter.notifyDataSetChanged();
-                                monthSelectPopWindow.dismiss();
-                                doHttp();
-                            }
-                        });
-                monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM,0,0);
+                    @Override
+                    public void confirm(String year, String month) {
+
+                        mSelectedYear = Integer.parseInt(year);
+                        mSelectedMonth = Integer.parseInt(month);
+                        Toast.makeText(AttandenceMonthActivity.this, "当前月份--" + mSelectedYear + "--" + mSelectedMonth, Toast.LENGTH_SHORT).show();
+                        tv_time.setText(year + "年" + month + "月");
+                        if (mSelectedMonth == mCurrentMonth) {
+                            setData(true, mSelectedMonth, mCurrentDay);
+                        } else {
+                            setData(true, mSelectedMonth, 1);
+                        }
+                        mAdapter.notifyDataSetChanged();
+                        monthSelectPopWindow.dismiss();
+                        doHttp();
+                    }
+                });
+                monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
                 break;
             //统计人员选择
             case R.id.ll_count_people:
-                Intent intent = new Intent(AttandenceMonthActivity.this,CountPeopleActivity.class);
+                Intent intent = new Intent(AttandenceMonthActivity.this, CountPeopleActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -217,8 +217,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         toolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(toolbar);
         tvTitle.setText("考勤月历");
-        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
-                Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         tvTitle.setLayoutParams(lp);
 
@@ -240,51 +239,48 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     @Override
     public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
         mAllWorkAttendanceList.clear();
-         mAllWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
+        mAllWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
         List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();
-        for (MyAttandanceResponse.CcWorkAttendanceListBean item:ccWorkAttendanceList){
-            String key = Integer.parseInt(item.getCalendar().split("-")[2])+"";
-            mDataTypeMap.put(key,getType(item.getTbmstatus())+"");
+        for (MyAttandanceResponse.CcWorkAttendanceListBean item : ccWorkAttendanceList) {
+            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
         }
         List<MyAttandanceResponse.ZtWorkAttendanceListBean> ztWorkAttendanceList = myAttandanceResponse.getZtWorkAttendanceList();
-        for (MyAttandanceResponse.ZtWorkAttendanceListBean item:ztWorkAttendanceList){
-            String key = Integer.parseInt(item.getCalendar().split("-")[2])+"";
-            mDataTypeMap.put(key,getType(item.getTbmstatus())+"");
+        for (MyAttandanceResponse.ZtWorkAttendanceListBean item : ztWorkAttendanceList) {
+            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
         }
         List<MyAttandanceResponse.KgWorkAttendanceListBean> kgWorkAttendanceList = myAttandanceResponse.getKgWorkAttendanceList();
-        for (MyAttandanceResponse.KgWorkAttendanceListBean item:kgWorkAttendanceList){
-            String key = Integer.parseInt(item.getCalendar().split("-")[2])+"";
-            mDataTypeMap.put(key,getType(item.getTbmstatus())+"");
+        for (MyAttandanceResponse.KgWorkAttendanceListBean item : kgWorkAttendanceList) {
+            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
         }
-        for(PopItem mDataItrm:mData){
+        for (PopItem mDataItrm : mData) {
             String content = mDataItrm.getContent();
-            if(mDataItrm.isEnable()){
-                if(mDataTypeMap.containsKey(content)){
+            if (mDataItrm.isEnable()) {
+                if (mDataTypeMap.containsKey(content)) {
                     mDataItrm.setDateType(Integer.parseInt(mDataTypeMap.get(content)));
                 }
             }
         }
         mAdapter.notifyDataSetChanged();
-        tv_date.setText(mSelectedYear+"-"+mSelectedMonth+"-"+mSelectedDay);
+        tv_date.setText(mSelectedYear + "-" + mSelectedMonth + "-" + mSelectedDay);
         MyAttandanceResponse.AllWorkAttendanceListBean allWorkAttendanceListBean = mAllWorkAttendanceList.get(mSelectedDay);
-        if(allWorkAttendanceListBean==null)
+        if (allWorkAttendanceListBean == null)
             return;
         String calendar = allWorkAttendanceListBean.getCalendar();
-        if(!TextUtils.isEmpty(calendar)){
+        if (!TextUtils.isEmpty(calendar)) {
             tv_date.setText(calendar);
         }
-        if(!TextUtils.isEmpty(allWorkAttendanceListBean.getPsname())){
+        if (!TextUtils.isEmpty(allWorkAttendanceListBean.getPsname())) {
             tv_name.setText(allWorkAttendanceListBean.getPsname());
         }
-        if(!TextUtils.isEmpty(allWorkAttendanceListBean.getOnebegintime())){
+        if (!TextUtils.isEmpty(allWorkAttendanceListBean.getOnebegintime())) {
             tv_gowork_time.setText(allWorkAttendanceListBean.getOnebegintime());
         }
-        if(!TextUtils.isEmpty(allWorkAttendanceListBean.getTwoendtime())){
+        if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTwoendtime())) {
             tv_off_gowork_time.setText(allWorkAttendanceListBean.getTwoendtime());
         }
-
-
-
 
 
     }
@@ -301,9 +297,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFinish(PeopeNameEvent peopeNameEvent) {
-        if(peopeNameEvent!=null){
+        if (peopeNameEvent != null) {
             tv_people.setText(peopeNameEvent.getCountResponse1().getPsname());
-            mPrivateCode=peopeNameEvent.getCountResponse1().getCode();
+            mPrivateCode = peopeNameEvent.getCountResponse1().getCode();
+            showToast(tv_people.getText().toString());
             doHttp();
         }
     }
@@ -316,28 +313,26 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         }
     }
 
-    public void doHttp(){
-        mPresenter.sendData(mPrivateCode,mSelectedYear+"", mSelectedMonth+"",AttandenceMonthActivity.this);
+    public void doHttp() {
+        mPresenter.sendData(mPrivateCode, mSelectedYear + "", mSelectedMonth + "", AttandenceMonthActivity.this);
     }
 
-    public int getType(String str){
-        if(!TextUtils.isEmpty(str)){
-            if(str.equals("[正常]")){
+    public int getType(String str) {
+        if (!TextUtils.isEmpty(str)) {
+            if (str.equals("[正常]")) {
                 return 1;
-            }else if(str.equals("[迟到]")){
+            } else if (str.equals("[迟到]")) {
                 return 2;
-            }else if(str.equals("[早退]")){
+            } else if (str.equals("[早退]")) {
                 return 3;
-            }else if(str.equals("[矿工]")){
+            } else if (str.equals("[矿工]")) {
                 return 4;
-            }else if(str.equals("[其他]")){
+            } else if (str.equals("[其他]")) {
                 return 5;
             }
         }
         return 1;
     }
-
-
 
 
 }

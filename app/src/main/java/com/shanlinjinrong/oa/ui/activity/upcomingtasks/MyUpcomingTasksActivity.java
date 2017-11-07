@@ -377,7 +377,19 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void setApproval() {
-        backToList();
+        if (isShowCheck) {
+            mLlSearch.setVisibility(View.GONE);
+            mRlCheck.setVisibility(View.VISIBLE);
+            mTvTitle.setText("选择单据");
+            mTolbarTextBtn.setVisibility(View.GONE);
+            mTvApproval.setVisibility(View.GONE);
+        } else {
+            mLlSearch.setVisibility(View.VISIBLE);
+            mRlCheck.setVisibility(View.GONE);
+            mTvTitle.setText("待办事宜");
+            mTvApproval.setVisibility(View.VISIBLE);
+            mTolbarTextBtn.setVisibility(View.VISIBLE);
+        }
         ThreadUtils.runSub(new Runnable() {
             @Override
             public void run() {
