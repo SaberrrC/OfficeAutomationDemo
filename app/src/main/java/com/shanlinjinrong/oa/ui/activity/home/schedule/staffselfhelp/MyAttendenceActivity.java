@@ -1,18 +1,14 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSONReader;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
-import com.google.gson.Gson;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -24,12 +20,6 @@ import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.Calendar;
 
 import butterknife.Bind;
@@ -41,25 +31,25 @@ import butterknife.ButterKnife;
 public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityPresenter> implements MyAttendenceActivityContract.View, View.OnClickListener {
 
     @Bind(R.id.tv_time)
-    TextView tv_time;
+    TextView      tv_time;
     @Bind(R.id.tv_delay)
-    TextView tv_delay;
+    TextView      tv_delay;
     @Bind(R.id.top_view)
     CommonTopView mTopView;
     @Bind(R.id.ll_rootView)
-    LinearLayout mRootView;
+    LinearLayout  mRootView;
     @Bind(R.id.tv_leave_early)
-    TextView tv_leave_early;
+    TextView      tv_leave_early;
     @Bind(R.id.tv_business_travel)
-    TextView tv_business_travel;
+    TextView      tv_business_travel;
     @Bind(R.id.tv_absenteeism)
-    TextView tv_absenteeism;
+    TextView      tv_absenteeism;
     @Bind(R.id.tv_sign_card_num)
-    TextView tv_sign_card_num;
+    TextView      tv_sign_card_num;
 
     private Calendar cal;
-    private int mCurrentYear;
-    private int mCurrentMonth;
+    private int      mCurrentYear;
+    private int      mCurrentMonth;
     private String mPrivateCode = "";
     private MonthSelectPopWindow monthSelectPopWindow;
     private MyAttandanceResponse mMyAttandanceResponse1;
@@ -106,28 +96,32 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
             case R.id.tv_delay:
             case R.id.tv_leave_early:
             case R.id.tv_absenteeism:
+                if (mMyAttandanceResponse1 == null) {
+                    showToast("请检查网络");
+                    return;
+                }
                 Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
                 intent.putExtra("date", tv_time.getText().toString());
                 startActivity(intent);
+
                 EventBus.getDefault().postSticky(mMyAttandanceResponse1);
                 break;
             case R.id.tv_time:
-                monthSelectPopWindow = new MonthSelectPopWindow(MyAttendenceActivity.this,
-                        new MonthSelectPopWindow.PopListener() {
-                            @Override
-                            public void cancle() {
-                                monthSelectPopWindow.dismiss();
-                            }
+                monthSelectPopWindow = new MonthSelectPopWindow(MyAttendenceActivity.this, new MonthSelectPopWindow.PopListener() {
+                    @Override
+                    public void cancle() {
+                        monthSelectPopWindow.dismiss();
+                    }
 
-                            @Override
-                            public void confirm(String year, String month) {
-                                mCurrentYear = Integer.parseInt(year);
-                                mCurrentMonth = Integer.parseInt(month);
-                                tv_time.setText(year + "年" + month + "月");
-                                mPresenter.sendData(mPrivateCode, mCurrentYear + "", mCurrentMonth + "", MyAttendenceActivity.this);
-                                monthSelectPopWindow.dismiss();
-                            }
-                        });
+                    @Override
+                    public void confirm(String year, String month) {
+                        mCurrentYear = Integer.parseInt(year);
+                        mCurrentMonth = Integer.parseInt(month);
+                        tv_time.setText(year + "年" + month + "月");
+                        mPresenter.sendData(mPrivateCode, mCurrentYear + "", mCurrentMonth + "", MyAttendenceActivity.this);
+                        monthSelectPopWindow.dismiss();
+                    }
+                });
                 monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
                 break;
             default:
