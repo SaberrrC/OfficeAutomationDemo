@@ -1,8 +1,6 @@
 package com.example.retrofit.net;
 
-/**
- * Created by gaobin on 2017/8/14.
- */
+
 public class ApiException extends Exception {
 
     public static final String USER_NOT_EXIST = "sd";
@@ -17,7 +15,6 @@ public class ApiException extends Exception {
     }
 
     public  ApiException(){
-
     }
 
 

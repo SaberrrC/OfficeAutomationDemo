@@ -124,13 +124,8 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
     @Override
     public void getDelete(String billCode, String billType) {
         HttpParams httpParams = new HttpParams();
-        JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("billCode", billCode);
-            jsonObject.put("billType", billType);
-            String bodyJson = jsonObject.toString();
-            httpParams.putJsonParams(bodyJson);
-            mKjHttp.jsonPost(ApiJava.DELETE_APPROVEL, httpParams, new HttpCallBack() {
+            mKjHttp.jsonGet(ApiJava.DELETE_APPROVEL +"?billCode="+billCode+"&billType="+billType, httpParams, new HttpCallBack() {
                 @Override
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);
@@ -148,7 +143,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                     mView.ondELETEFailure(bean.getCode(), bean.getMessage());
                 }
             });
-        } catch (JSONException e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }

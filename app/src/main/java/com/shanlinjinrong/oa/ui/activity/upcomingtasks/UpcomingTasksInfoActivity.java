@@ -61,39 +61,39 @@ import static com.shanlinjinrong.oa.R.id.tv_time;
 public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
 
     @BindView(R.id.tv_title)
-    TextView       mTvTitle;
+    TextView mTvTitle;
     @BindView(R.id.toolbar)
-    Toolbar        mToolbar;
+    Toolbar mToolbar;
     @BindView(R.id.rv_content)
-    RecyclerView   mRecyclerView;
+    RecyclerView mRecyclerView;
     @BindView(R.id.toolbar_text_btn)
-    TextView       mToolbarTextBtn;
+    TextView mToolbarTextBtn;
     @BindView(R.id.rl_check)
     RelativeLayout mRlCheck;
     @BindView(R.id.rl_tack_back)
     RelativeLayout mRlTackBack;
     @BindView(R.id.tv_tack_back)
-    TextView       mTvTackBack;
+    TextView mTvTackBack;
     private List<Object> mDatas = new ArrayList<>();
-    private FinalRecycleAdapter      mFinalRecycleAdapter;
-    private LinearLayoutManager      mLinearLayoutManager;
-    private int                      mIndex;
-    private boolean                  mMove;
-    private Dialog                   mChooseDialog;
-    private ListView                 mLvList;
+    private FinalRecycleAdapter mFinalRecycleAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
+    private int mIndex;
+    private boolean mMove;
+    private Dialog mChooseDialog;
+    private ListView mLvList;
     private FinalBaseAdapter<String> mFinalBaseAdapter;
-    private List<String> typeData          = new ArrayList<>();
-    private int          clickItemPosition = 0;
-    private TextView                                    mEtCommonalityBeginTime;
-    private TextView                                    mEtCommonalityEndTime;
-    private String                                      mWhichList;
-    private UpcomingTaskItemBean.DataBean.DataListBean  mBean;
+    private List<String> typeData = new ArrayList<>();
+    private int clickItemPosition = 0;
+    private TextView mEtCommonalityBeginTime;
+    private TextView mEtCommonalityEndTime;
+    private String mWhichList;
+    private UpcomingTaskItemBean.DataBean.DataListBean mBean;
     private UpcomingSearchResultBean.DataBeanX.DataBean mSearchBean;
-    private TextView                                    mTvType;
-    private CardResultBean                              mCardResultBean;
-    private TraverResultBean                            mTraverResultBean;
-    private RestResultBean                              mRestResultBean;
-    private OverTimeResultBean                          mOverTimeResultBean;
+    private TextView mTvType;
+    private CardResultBean mCardResultBean;
+    private TraverResultBean mTraverResultBean;
+    private RestResultBean mRestResultBean;
+    private OverTimeResultBean mOverTimeResultBean;
 
     @Override
     protected void initInject() {
@@ -158,11 +158,13 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             if (TextUtils.equals(mWhichList, "1")) {
                 mRlCheck.setVisibility(View.GONE);
                 mBean = (UpcomingTaskItemBean.DataBean.DataListBean) intent.getSerializableExtra("UPCOMING_INFO");
-                if (TextUtils.equals(mBean.getApproveState(), "-1")) {
+                if (TextUtils.equals(mBean.getApproveStateName(), "已收回")) {
                     mTvTackBack.setText("删除");
+                    mRlTackBack.setVisibility(View.VISIBLE);
                     mTvTackBack.setBackgroundResource(R.drawable.shape_upcominginfo_disagree);
                 } else {
                     mTvTackBack.setText("收回");
+                    mRlTackBack.setVisibility(View.VISIBLE);
                     mTvTackBack.setBackgroundResource(R.drawable.shape_upcoming_dialog_ok);
                 }
                 mTvTitle.setText(mBean.getUserName() + "的" + mBean.getBillTypeName());

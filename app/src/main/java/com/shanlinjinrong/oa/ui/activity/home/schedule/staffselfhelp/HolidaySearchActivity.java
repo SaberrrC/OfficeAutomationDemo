@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
+import com.example.retrofit.net.ApiException;
 import com.example.retrofit.net.HttpMethods;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
@@ -95,8 +96,11 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
 
     private void initData() {
         psname.setTextViewKey("姓名");
+        psname.setTextViewValue("");
         deptname.setTextViewKey("部门");
+        deptname.setTextViewValue("");
         jobname.setTextViewKey("职位名称");
+        jobname.setTextViewValue("");
         lastdayorhour.setTextViewKey("上期结余");
         changelength.setTextViewKey("调整时长");
         curdayorhour.setTextViewKey("享有");
@@ -203,6 +207,13 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
 
             @Override
             public void onError(Throwable e) {
+                if (e instanceof ApiException) {
+                    ApiException baseException = (ApiException) e;
+                    String code = baseException.getCode();
+                    String message = baseException.getMessage();
+                } else {
+                    //mView.sendDataFailed("555", "请检查网络！");
+                }
             }
 
             @Override
