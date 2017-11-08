@@ -176,7 +176,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="休假年度"
+                        android:text="假期年度"
                         android:textColor="@color/black_333333"
                         android:textSize="14sp"/>
 
