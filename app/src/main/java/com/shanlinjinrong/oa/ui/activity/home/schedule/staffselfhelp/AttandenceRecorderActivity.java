@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -37,6 +38,7 @@ public class AttandenceRecorderActivity extends BaseActivity {
 
     private AttandenceRecorderAdapter mAdapter;
     private List<MyAttandanceResponse.AllWorkAttendanceListBean> mAllWorkAttendanceList;
+    private List<MyAttandanceResponse.AllWorkAttendanceListBean> mData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +55,16 @@ public class AttandenceRecorderActivity extends BaseActivity {
         }
         MyAttandanceResponse attandance = (MyAttandanceResponse) getIntent().getSerializableExtra("attandance");
         mAllWorkAttendanceList = attandance.getAllWorkAttendanceList();
-        for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
-            if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]")) {
-                mAllWorkAttendanceList.remove(i);
+        if (mAllWorkAttendanceList != null) {
+            for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
+                if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]"))
+                    continue;
+                mData.add(mAllWorkAttendanceList.get(i));
             }
-        }
-        if (mAllWorkAttendanceList.size() > 0) {
-            mTvEmptyAttendence.setVisibility(View.GONE);
-            mRecyclerView.setVisibility(View.VISIBLE);
+            if (mAllWorkAttendanceList.size() > 0) {
+                mTvEmptyAttendence.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -71,10 +75,12 @@ public class AttandenceRecorderActivity extends BaseActivity {
         leftView.setOnClickListener(view -> {
             finish();
         });
-        mAdapter = new AttandenceRecorderAdapter(mAllWorkAttendanceList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+        if (mAllWorkAttendanceList != null) {
+            mAdapter = new AttandenceRecorderAdapter(mData);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mRecyclerView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private class AttandenceRecorderAdapter extends BaseQuickAdapter<MyAttandanceResponse.AllWorkAttendanceListBean> {
