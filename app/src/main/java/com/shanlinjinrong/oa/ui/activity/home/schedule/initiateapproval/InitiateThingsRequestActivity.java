@@ -25,10 +25,10 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Sin
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.contract.InitiateThingsRequestActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter.InitiateThingsRequestActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.SelectContactActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
+import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.TimeDialogFragment;
 import com.shanlinjinrong.oa.utils.YearDateSelected;
 import com.shanlinjinrong.oa.utils.YearTimeSelectedListener;
@@ -91,6 +91,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     TextView mTvNotNetwork;
     @BindView(R.id.tv_commonality_type_date)
     TextView mTvCommonalityTypeDate;
+    private CommonTypeBean mCommonTypeBean;
 
     private ImageView mDelete;
     private View mContentView1;
@@ -111,7 +112,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             mTv_common_detail, mTv_common_next_detail, mTv_common_begin_time, mTv_common_next_begin_time, mTv_selected_show, mTv_selected_next_show,
             mBegin_time, mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number;
     private EditText mEt_common_show2, mEt_common_next_show2, mEt_common_show1, mEt_common_next_show1;
-    private CommonTypeBean mCommonTypeBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -437,10 +437,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             });
         mLl_common_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = false;
-            if (mCommonTypeBean == null) {
+            if (data == null) {
                 showToast("获取" + mTv_common_show2.getText().toString() + "失败,请检查网络！");
                 return;
-            } else if (mCommonTypeBean.getData().size() == 0) {
+            } else if (data.size() == 0) {
                 showToast("获取" + mTv_common_show2.getText().toString() + "失败,请检查网络！");
                 return;
             }
@@ -724,7 +724,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void queryEvectionTypeSuccess(CommonTypeBean bean) {
-
         if (bean != null) {
             mCommonTypeBean = bean;
             for (int i = 0; i < bean.getData().size(); i++) {
@@ -881,53 +880,117 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                     mDialog.cancel();
                 }
                 break;
-            case "selectedDate":
+            case "selectedDate": //请求时长
                 if (bean.getPosition() == 0) {
-                    if (bean.getIsBegin() == 0) {
-                        mBegin_time.setText(bean.getSelectedType());
-                        //TODO 时间优化处理
-                    } else {
-                        mEnd_time.setText(bean.getSelectedType());
-                        if (!TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
-                            isNextDate = false;
-                            mBeginDate = mBegin_time.getText().toString().replace(" ", "%20");
-                            mEndDate = mEnd_time.getText().toString().replace(" ", "%20");
-                        }
-                        switch (getIntent().getIntExtra("type", -1)) {
-                            case 0:
-                                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE2, mTvCoderNumber.getText().toString());
-                                break;
-                            case 1:
-                                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE4, mTvCoderNumber.getText().toString());
-                                break;
-                            case 2:
-                                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE3, mTvCoderNumber.getText().toString());
-                                break;
-                        }
-                    }
+                    DateSelectedUtils(bean);
                 } else {
-                    if (bean.getIsBegin() == 0) {
-                        mNext_begin_time.setText(bean.getSelectedType());
-                    } else {
-                        mNext_end_time.setText(bean.getSelectedType());
-                        if (!TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
-                            isNextDate = true;
-                            mNext_begin_date = mNext_begin_time.getText().toString().replace(" ", "%20");
-                            mNext_end_date = mNext_end_time.getText().toString().replace(" ", "%20");
-                        }
-                        switch (getIntent().getIntExtra("type", -1)) {
-                            case 0:
-                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE2, mTvCoderNumber.getText().toString());
-                                break;
-                            case 1:
-                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE4, mTvCoderNumber.getText().toString());
-                                break;
-                            case 2:
-                                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE3, mTvCoderNumber.getText().toString());
-                                break;
-                        }
-                    }
+                    DateSelectedNextUtils(bean);
                 }
+                break;
+        }
+    }
+
+    //选择时间规则
+    private void DateSelectedUtils(SelectedTypeBean bean) {
+        if (bean.getIsBegin() == 0) { //TODO 时间优化处理 0点待处理
+            if (!TextUtils.isEmpty(mEnd_time.getText().toString().trim()) && !mEnd_time.getText().toString().equals("请选择结束时间")) {
+                long startTime = DateUtils.getTimestampFromString(bean.getSelectedType(), "yyyy-MM-dd HH:mm");
+                long endTime = DateUtils.getTimestampFromString(mEnd_time.getText().toString(), "yyyy-MM-dd HH:mm");
+                if (startTime > endTime) {
+                    showToast("开始时间大于结束时间,请重新选择！");
+                    return;
+                }
+                mBegin_time.setText(bean.getSelectedType());
+                queryDurationType();
+                return;
+            }
+            mBegin_time.setText(bean.getSelectedType());
+        } else {
+            if (!TextUtils.isEmpty(mBegin_time.getText().toString().trim()) && !mBegin_time.getText().toString().equals("请选择开始时间")) {
+                long startTime = DateUtils.getTimestampFromString(mBegin_time.getText().toString(), "yyyy-MM-dd HH:mm");
+                long endTime = DateUtils.getTimestampFromString(bean.getSelectedType(), "yyyy-MM-dd HH:mm");
+                if (startTime > endTime) {
+                    showToast("结束时间小于开始时间,请重新选择！");
+                    return;
+                }
+                mEnd_time.setText(bean.getSelectedType());
+                queryDurationType();
+                return;
+            }
+            mEnd_time.setText(bean.getSelectedType());
+        }
+    }
+
+    private void DateSelectedNextUtils(SelectedTypeBean bean) {
+        if (bean.getIsBegin() == 0) {
+            if (!TextUtils.isEmpty(mNext_end_time.getText().toString().trim()) && !mNext_end_time.getText().toString().equals("请选择结束时间")) {
+                long startTime = DateUtils.getTimestampFromString(bean.getSelectedType(), "yyyy-MM-dd HH:mm");
+                long endTime = DateUtils.getTimestampFromString(mNext_end_time.getText().toString(), "yyyy-MM-dd HH:mm");
+                if (startTime > endTime) {
+                    showToast("开始时间大于结束时间,请重新选择！");
+                    return;
+                }
+                mNext_begin_time.setText(bean.getSelectedType());
+                queryDurationNextType();
+                return;
+            }
+            mNext_begin_time.setText(bean.getSelectedType());
+        } else {
+            if (!TextUtils.isEmpty(mNext_begin_time.getText().toString().trim()) && !mNext_begin_time.getText().toString().equals("请选择开始时间")) {
+                long startTime = DateUtils.getTimestampFromString(mNext_begin_time.getText().toString(), "yyyy-MM-dd HH:mm");
+                long endTime = DateUtils.getTimestampFromString(bean.getSelectedType(), "yyyy-MM-dd HH:mm");
+                if (startTime > endTime) {
+                    showToast("结束时间小于开始时间,请重新选择！");
+                    return;
+                }
+                mNext_end_time.setText(bean.getSelectedType());
+                queryDurationNextType();
+                return;
+            }
+            mNext_end_time.setText(bean.getSelectedType());
+            queryDurationNextType();
+        }
+    }
+
+    //选择时间请求时长
+    private void queryDurationType() {
+        if (!TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
+            isNextDate = false;
+            mBeginDate = mBegin_time.getText().toString().replace(" ", "%20");
+            mEndDate = mEnd_time.getText().toString().replace(" ", "%20");
+        } else {
+            showToast("请获取" + mTvCommonalityCoder.getText().toString() + "!");
+        }
+        switch (getIntent().getIntExtra("type", -1)) {
+            case 0:
+                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE2, mTvCoderNumber.getText().toString());
+                break;
+            case 1:
+                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE4, mTvCoderNumber.getText().toString());
+                break;
+            case 2:
+                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE3, mTvCoderNumber.getText().toString());
+                break;
+        }
+    }
+
+    private void queryDurationNextType() {
+        if (!TextUtils.isEmpty(mTvCoderNumber.getText().toString().trim())) {
+            isNextDate = true;
+            mNext_begin_date = mNext_begin_time.getText().toString().replace(" ", "%20");
+            mNext_end_date = mNext_end_time.getText().toString().replace(" ", "%20");
+        } else {
+            showToast("请获取" + mTvCommonalityCoder.getText().toString() + "!");
+        }
+        switch (getIntent().getIntExtra("type", -1)) {
+            case 0:
+                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE2, mTvCoderNumber.getText().toString());
+                break;
+            case 1:
+                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE4, mTvCoderNumber.getText().toString());
+                break;
+            case 2:
+                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE3, mTvCoderNumber.getText().toString());
                 break;
         }
     }

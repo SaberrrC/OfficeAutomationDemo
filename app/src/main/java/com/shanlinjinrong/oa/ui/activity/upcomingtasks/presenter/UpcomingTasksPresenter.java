@@ -116,12 +116,16 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                UpcomingSearchResultBean bean = new Gson().fromJson(t, UpcomingSearchResultBean.class);
-                if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                    mView.onSearchSuccess(bean);
-                    return;
+                try {
+                    UpcomingSearchResultBean bean = new Gson().fromJson(t, UpcomingSearchResultBean.class);
+                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        mView.onSearchSuccess(bean);
+                        return;
+                    }
+                    mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
-                mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
             }
 
             @Override
@@ -133,7 +137,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.onGetApproveDataFailure(errorNo,strMsg);
+                    mView.onGetApproveDataFailure(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

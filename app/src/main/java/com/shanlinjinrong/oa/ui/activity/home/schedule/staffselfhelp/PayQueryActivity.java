@@ -121,7 +121,7 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
         String month = year.replace("月", "");
         mPresenter.payQueryInfo(month);
         mDate.add(simpleDateFormat.format(calendar.getTimeInMillis()));
-        for (int i = 0; i < 23; i++) {
+        for (int i = 0; i < 12; i++) {
             calendar.add(Calendar.MONTH, -1);
             String date = simpleDateFormat.format(calendar.getTimeInMillis());
             mDate.add(0, date);
