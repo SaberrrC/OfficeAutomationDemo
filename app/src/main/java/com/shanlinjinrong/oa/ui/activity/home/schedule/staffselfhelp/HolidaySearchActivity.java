@@ -79,6 +79,7 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
     private YearDateSelected mYearDateSelected;
     private List<String> mDate = new ArrayList<>();
     private List<String> data = new ArrayList<>();
+    private int mPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +189,7 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void removeDeatls(HolidayEvent holidayEvent) {
         searchType = holidayEvent.getPosition() + "";
+        mPosition = holidayEvent.getPosition();
         tv_center_title.setText(data.get(holidayEvent.getPosition()));
         doHolidaySearch(searchYear, searchType);
         mDialog.dismiss();
@@ -209,14 +211,25 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
                 psname.setTextViewValue(holidaySearchResponse.getPsname());
                 deptname.setTextViewValue(holidaySearchResponse.getDeptname());
                 jobname.setTextViewValue(holidaySearchResponse.getJobname());
-                lastdayorhour.setTextViewValue(holidaySearchResponse.getLastdayorhour());
-                changelength.setTextViewValue(holidaySearchResponse.getChangelength());
-                curdayorhour.setTextViewValue(holidaySearchResponse.getCurdayorhour());
-                realdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour());
-                yidayorhour.setTextViewValue(holidaySearchResponse.getYidayorhour());
-                restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour());
-                freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour());
-                usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour());
+                if (mPosition != 2) {
+                    lastdayorhour.setTextViewValue(holidaySearchResponse.getLastdayorhour() + "天");
+                    changelength.setTextViewValue(holidaySearchResponse.getChangelength() + "天");
+                    curdayorhour.setTextViewValue(holidaySearchResponse.getCurdayorhour() + "天");
+                    realdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "天");
+                    yidayorhour.setTextViewValue(holidaySearchResponse.getYidayorhour() + "天");
+                    restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "天");
+                    freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour() + "天");
+                    usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour() + "天");
+                } else {
+                    lastdayorhour.setTextViewValue(holidaySearchResponse.getLastdayorhour() + "小时");
+                    changelength.setTextViewValue(holidaySearchResponse.getChangelength() + "小时");
+                    curdayorhour.setTextViewValue(holidaySearchResponse.getCurdayorhour() + "小时");
+                    realdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "小时");
+                    yidayorhour.setTextViewValue(holidaySearchResponse.getYidayorhour() + "小时");
+                    restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "小时");
+                    freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour() + "小时");
+                    usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour() + "小时");
+                }
             }
         });
     }
