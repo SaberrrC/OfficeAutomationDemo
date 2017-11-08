@@ -53,7 +53,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
@@ -67,25 +67,25 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
 
     public static final int UPDATE_PHONE = 0x4;//修改电话
     public static final int UPDATE_PROTRAIT = 2;//修改头像
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.user_portrait)
+    @BindView(R.id.user_portrait)
     SimpleDraweeView userPortrait;
-    @Bind(R.id.user_sex)
+    @BindView(R.id.user_sex)
     TextView userSex;
-    @Bind(R.id.user_department)
+    @BindView(R.id.user_department)
     TextView userDepartment;
-    @Bind(R.id.user_post)
+    @BindView(R.id.user_post)
     TextView userPost;
-    @Bind(R.id.user_phone)
+    @BindView(R.id.user_phone)
     TextView userPhone;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     LinearLayout mRootView;
-    @Bind(R.id.user_mails)
+    @BindView(R.id.user_mails)
     TextView user_mails;
-    @Bind(R.id.user_jopnumber)
+    @BindView(R.id.user_jopnumber)
     TextView user_jopnumber;
 
     private BottomPushPopupWindow mPop;
@@ -497,6 +497,5 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 }

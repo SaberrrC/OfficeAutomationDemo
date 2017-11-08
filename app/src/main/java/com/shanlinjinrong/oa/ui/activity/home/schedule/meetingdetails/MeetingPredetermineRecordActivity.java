@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
@@ -31,11 +30,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static butterknife.ButterKnife.bind;
 import static com.shanlinjinrong.oa.utils.DateUtils.longToDateString;
 import static com.shanlinjinrong.oa.utils.DateUtils.stringToDate;
 
@@ -44,43 +42,43 @@ import static com.shanlinjinrong.oa.utils.DateUtils.stringToDate;
  */
 public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingPredeterminePresenter> implements MeetingPredetermineContract.View, CompoundButton.OnCheckedChangeListener {
 
-    @Bind(R.id.selected_meeting_date1)
+    @BindView(R.id.selected_meeting_date1)
     CheckBox mSelectedMeetingDate1;
-    @Bind(R.id.selected_meeting_date2)
+    @BindView(R.id.selected_meeting_date2)
     CheckBox mSelectedMeetingDate2;
-    @Bind(R.id.selected_meeting_date3)
+    @BindView(R.id.selected_meeting_date3)
     CheckBox mSelectedMeetingDate3;
-    @Bind(R.id.selected_meeting_date4)
+    @BindView(R.id.selected_meeting_date4)
     CheckBox mSelectedMeetingDate4;
-    @Bind(R.id.selected_meeting_date5)
+    @BindView(R.id.selected_meeting_date5)
     CheckBox mSelectedMeetingDate5;
-    @Bind(R.id.selected_meeting_date6)
+    @BindView(R.id.selected_meeting_date6)
     CheckBox mSelectedMeetingDate6;
-    @Bind(R.id.selected_meeting_date7)
+    @BindView(R.id.selected_meeting_date7)
     CheckBox mSelectedMeetingDate7;
-    @Bind(R.id.selected_meeting_date8)
+    @BindView(R.id.selected_meeting_date8)
     CheckBox mSelectedMeetingDate8;
-    @Bind(R.id.selected_meeting_date9)
+    @BindView(R.id.selected_meeting_date9)
     CheckBox mSelectedMeetingDate9;
-    @Bind(R.id.btn_meeting_info_complete)
+    @BindView(R.id.btn_meeting_info_complete)
     TextView mBtnMeetingInfoComplete;
-    @Bind(R.id.ll_day_selector)
+    @BindView(R.id.ll_day_selector)
     LinearLayout mLlDaySelector;
-    @Bind(R.id.ll_month_selector)
+    @BindView(R.id.ll_month_selector)
     LinearLayout mLlMonthSelector;
-    @Bind(R.id.ll_date_layout)
+    @BindView(R.id.ll_date_layout)
     LinearLayout mDateLayout;
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.tv_month)
+    @BindView(R.id.tv_month)
     TextView mTvMonth;
-    @Bind(R.id.tv_day)
+    @BindView(R.id.tv_day)
     TextView mTvDay;
-    @Bind(R.id.tv_week)
+    @BindView(R.id.tv_week)
     TextView mTvWeek;
-    @Bind(R.id.tv_not_network)
+    @BindView(R.id.tv_not_network)
     TextView mTvNotNetwork;
-    @Bind(R.id.ll_content_show)
+    @BindView(R.id.ll_content_show)
     LinearLayout mLlContentShow;
 
     private int DateIndex;
@@ -114,7 +112,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_predetermine_record);
         ButterKnife.bind(this);
-        bind(this);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }

@@ -60,7 +60,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
@@ -95,49 +95,49 @@ import q.rorbin.badgeview.QBadgeView;
  */
 public class MainController extends HttpBaseActivity<MainControllerPresenter> implements MainControllerContract.View {
 
-    @Bind(R.id.controller)
+    @BindView(R.id.controller)
     ViewPager mController;
-    @Bind(R.id.tab_message_icon)
+    @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
-    @Bind(R.id.tab_message_text)
+    @BindView(R.id.tab_message_text)
     TextView tabMessageText;
-    @Bind(R.id.tab_contacts_icon)
+    @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
-    @Bind(R.id.tab_contacts_text)
+    @BindView(R.id.tab_contacts_text)
     TextView tabContactsText;
-    @Bind(R.id.tab_group_icon)
+    @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
-    @Bind(R.id.tab_group_text)
+    @BindView(R.id.tab_group_text)
     TextView tabGroupText;
-    @Bind(R.id.tab_me_icon)
+    @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
-    @Bind(R.id.tab_me_text)
+    @BindView(R.id.tab_me_text)
     TextView tabMeText;
-    @Bind(R.id.tab_home_text)
+    @BindView(R.id.tab_home_text)
     TextView tabHomeText;
-    @Bind(R.id.tv_msg_unread)
+    @BindView(R.id.tv_msg_unread)
     TextView tvMsgUnRead;
 
 
-    @Bind(R.id.tab_message_icon_light)
+    @BindView(R.id.tab_message_icon_light)
     ImageView tabMessageIconLight;
 
-    @Bind(R.id.tab_home_icon)
+    @BindView(R.id.tab_home_icon)
     ImageView tabHomeIcon;
 
-    @Bind(R.id.tab_home_icon_light)
+    @BindView(R.id.tab_home_icon_light)
     ImageView tabHomeIconLight;
 
-    @Bind(R.id.tab_contacts_icon_light)
+    @BindView(R.id.tab_contacts_icon_light)
     ImageView tabContactsIconLight;
 
-    @Bind(R.id.tab_group_icon_light)
+    @BindView(R.id.tab_group_icon_light)
     ImageView tabGroupIconLight;
 
-    @Bind(R.id.tab_me_icon_light)
+    @BindView(R.id.tab_me_icon_light)
     ImageView tabMeIconLight;
 
-    @Bind(R.id.view_message_remind)
+    @BindView(R.id.view_message_remind)
     View communicationRedSupport;
 
 
@@ -623,7 +623,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
 
     @Override
     protected void onDestroy() {
-        ButterKnife.unbind(this);
         EMClient.getInstance().chatManager().removeMessageListener(messageListener);
         super.onDestroy();
     }

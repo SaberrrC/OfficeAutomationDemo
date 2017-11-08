@@ -43,7 +43,7 @@ import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.TimePicker;
@@ -55,30 +55,30 @@ import cn.qqtheme.framework.picker.TimePicker;
  * Description:加班申请
  */
 public class ApplyForOverTimeActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     LinearLayout mRootView;
 
-    @Bind(R.id.et_overTime_reason)
+    @BindView(R.id.et_overTime_reason)
     EditText mEtOverTimeReson;
-    @Bind(R.id.tv_overTime_start_time)
+    @BindView(R.id.tv_overTime_start_time)
     TextView tvOverTimeStartTime;
-    @Bind(R.id.tv_overTime_stage)
+    @BindView(R.id.tv_overTime_stage)
     TextView tvOverTimeStage;
-    @Bind(R.id.tv_overTime_end_time)
+    @BindView(R.id.tv_overTime_end_time)
     TextView tvOverTimeEndTime;
-    @Bind(R.id.tv_overTime_hours)
+    @BindView(R.id.tv_overTime_hours)
     EditText tvOverTimeDurations;
 
 
-    @Bind(R.id.user_portrait)
+    @BindView(R.id.user_portrait)
     SimpleDraweeView mUserPortrait;
-    @Bind(R.id.tv_leader_name)
+    @BindView(R.id.tv_leader_name)
     TextView mTvLeaderName;
-    @Bind(R.id.ll_approval_container)
+    @BindView(R.id.ll_approval_container)
     LinearLayout mLlContainer;
     private TimePicker picker;
     private PopupWindow popupWindowTYpe;
@@ -501,7 +501,6 @@ public class ApplyForOverTimeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 

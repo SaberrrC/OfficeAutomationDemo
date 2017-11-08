@@ -20,7 +20,7 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -30,17 +30,17 @@ import butterknife.ButterKnife;
  * Description:系统消息activity
  */
 public class SystemNoticesActivity extends HttpBaseActivity<SystemNoticesPresenter> implements SystemNoticesContract.View {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.notice_detail_recyclerView)
+    @BindView(R.id.notice_detail_recyclerView)
     RecyclerView mRecyclerView;
     private List<SystemNotice> list;
     private SystemNoticeDetailAdapter mAdapter;
-    @Bind(R.id.layout_content)
+    @BindView(R.id.layout_content)
     RelativeLayout mRootView;
 
     @Override

@@ -35,43 +35,43 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //考勤月历界面
 public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPresenter> implements AttandanceMonthContract.View, View.OnClickListener {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.ll_chose_time)
+    @BindView(R.id.ll_chose_time)
     LinearLayout mLlChoseTime;
-    @Bind(R.id.ll_count_people)
+    @BindView(R.id.ll_count_people)
     LinearLayout ll_count_people;
-    @Bind(R.id.tv_time)
+    @BindView(R.id.tv_time)
     TextView tv_time;
-    @Bind(R.id.ll_month)
+    @BindView(R.id.ll_month)
     LinearLayout mDateLayout;
-    @Bind(R.id.iv_divider)
+    @BindView(R.id.iv_divider)
     ImageView iv_divider;
-    @Bind(R.id.tv_people)
+    @BindView(R.id.tv_people)
     TextView tv_people;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     LinearLayout mRootView;
-    @Bind(R.id.tv_date)
+    @BindView(R.id.tv_date)
     TextView tv_date;
-    @Bind(R.id.tv_name)
+    @BindView(R.id.tv_name)
     TextView tv_name;
-    @Bind(R.id.tv_gowork_time)
+    @BindView(R.id.tv_gowork_time)
     TextView tv_gowork_time;
-    @Bind(R.id.tv_off_gowork_time)
+    @BindView(R.id.tv_off_gowork_time)
     TextView tv_off_gowork_time;
-    @Bind(R.id.tv_state)
+    @BindView(R.id.tv_state)
     TextView mTvState;
-    @Bind(R.id.tv_empty_layout)
+    @BindView(R.id.tv_empty_layout)
     TextView mTvEmptyLayout;
-    @Bind(R.id.ll_currentday_state)
+    @BindView(R.id.ll_currentday_state)
     LinearLayout mLlCurrentdayState;
 
     private String mDay;

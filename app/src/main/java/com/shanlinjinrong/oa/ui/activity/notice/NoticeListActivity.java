@@ -28,7 +28,7 @@ import com.shanlinjinrong.oa.utils.LogUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -39,19 +39,19 @@ import butterknife.ButterKnife;
  */
 public class NoticeListActivity extends HttpBaseActivity<NoticeListPresenter> implements SwipeRefreshLayout.OnRefreshListener, NoticeListContract.View {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.notice_detail_recyclerView)
+    @BindView(R.id.notice_detail_recyclerView)
     RecyclerView mRecyclerView;
     private ArrayList<Notice> list;
     private NoticeDetailAdapter mAdapter;
-    @Bind(R.id.layout_content)
+    @BindView(R.id.layout_content)
     RelativeLayout mRootView;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     private LinearLayoutManager linearLayoutManager;
     private int limit = 10;//当前条目数量
@@ -206,7 +206,6 @@ public class NoticeListActivity extends HttpBaseActivity<NoticeListPresenter> im
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         handler.removeCallbacksAndMessages(null);
     }
 

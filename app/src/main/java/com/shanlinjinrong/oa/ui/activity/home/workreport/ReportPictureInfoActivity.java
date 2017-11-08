@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -20,9 +20,9 @@ import butterknife.ButterKnife;
  * Description:工作汇报图片详情
  */
 public class ReportPictureInfoActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

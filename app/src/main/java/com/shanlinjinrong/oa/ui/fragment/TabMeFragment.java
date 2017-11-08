@@ -47,7 +47,7 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -58,11 +58,11 @@ import butterknife.OnClick;
  */
 public class TabMeFragment extends BaseFragment {
 
-    @Bind(R.id.user_portrait)
+    @BindView(R.id.user_portrait)
     SimpleDraweeView userPortrait;
-    @Bind(R.id.user_name)
+    @BindView(R.id.user_name)
     TextView userName;
-    @Bind(R.id.position)
+    @BindView(R.id.position)
     TextView position;
 
 
@@ -351,7 +351,6 @@ public class TabMeFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }

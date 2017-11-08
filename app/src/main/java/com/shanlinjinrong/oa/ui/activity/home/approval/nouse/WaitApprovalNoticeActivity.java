@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -39,33 +39,33 @@ import butterknife.OnClick;
  * Description:待我审批(公告申请)，现在我发起的还有我审批过的都用的这个界面
  */
 public class WaitApprovalNoticeActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @Bind(R.id.empty_view_container)
+    @BindView(R.id.empty_view_container)
     RelativeLayout mRootView;
-    @Bind(R.id.tv_event_type)
+    @BindView(R.id.tv_event_type)
     TextView tvEventType;
-    @Bind(R.id.tv_inform_department)
+    @BindView(R.id.tv_inform_department)
     TextView tvInformDepartMent;
-    @Bind(R.id.tv_inform_content)
+    @BindView(R.id.tv_inform_content)
     TextView tvInformContent;
 
 
-    @Bind(R.id.tv_launch_date)
+    @BindView(R.id.tv_launch_date)
     TextView tvLaunchDate;
-    @Bind(R.id.tv_launch_time)
+    @BindView(R.id.tv_launch_time)
     TextView tvLaunchTime;
-    @Bind(R.id.tv_name)
+    @BindView(R.id.tv_name)
     TextView tvName;
-    @Bind(R.id.tv_postil)
+    @BindView(R.id.tv_postil)
     TextView tvPostil;
-    @Bind(R.id.ll_approval_launcher_info_layout)
+    @BindView(R.id.ll_approval_launcher_info_layout)
     LinearLayout mLlApprovalLaunchInfoContainer;
 
-    @Bind(R.id.ll_not_approval_operate_layout)
+    @BindView(R.id.ll_not_approval_operate_layout)
     LinearLayout mLlNotApprovalLaunchInfoContainer;
 
     private String appr_id;
@@ -303,7 +303,6 @@ public class WaitApprovalNoticeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 

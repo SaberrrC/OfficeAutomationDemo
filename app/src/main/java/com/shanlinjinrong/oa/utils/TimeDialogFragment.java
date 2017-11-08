@@ -31,7 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -39,15 +39,15 @@ import butterknife.OnClick;
 public class TimeDialogFragment extends DialogFragment {
     Context context;
     List<String> mDayList, hoursList, minList, timeFrameList;
-    @Bind(R.id.wheelDayPickerYear)
+    @BindView(R.id.wheelDayPickerYear)
     WheelPicker mWheelDayPickerMonth;
-    @Bind(R.id.wheelMinPickerHour)
+    @BindView(R.id.wheelMinPickerHour)
     WheelPicker mWheelMinPickerHour;
-    @Bind(R.id.wheelHoursPickerMinutes)
+    @BindView(R.id.wheelHoursPickerMinutes)
     WheelPicker mWheelHoursPickerMinutes;
-    @Bind(R.id.wheelTimePicker)
+    @BindView(R.id.wheelTimePicker)
     WheelPicker mWheelTimePicker;
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
     private String mWeek;
     private String mSelectedDate;
@@ -167,7 +167,6 @@ public class TimeDialogFragment extends DialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     @OnClick({R.id.dimissButton, R.id.sureButton})

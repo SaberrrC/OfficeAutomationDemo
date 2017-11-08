@@ -39,7 +39,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.Calendar;
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -51,57 +51,57 @@ import butterknife.OnClick;
  */
 public class MeLaunchOverTimeActivity extends BaseActivity {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.tv_top_text_button)
+    @BindView(R.id.tv_top_text_button)
     TextView mTvTopButton;
-    @Bind(R.id.iv_top_status)
+    @BindView(R.id.iv_top_status)
     ImageView mIvTopStatus;
-    @Bind(R.id.iv_middle_status)
+    @BindView(R.id.iv_middle_status)
     ImageView mIvMiddleStatus;
-    @Bind(R.id.et_change_reason)
+    @BindView(R.id.et_change_reason)
     EditText mEtChangeReason;
-    @Bind(R.id.btn_voice_input)
+    @BindView(R.id.btn_voice_input)
     Button btnVoiceInput;
 
 
-    @Bind(R.id.tv_type)
+    @BindView(R.id.tv_type)
     TextView tvType;
-    @Bind(R.id.et_reality_over_time_duration)
+    @BindView(R.id.et_reality_over_time_duration)
     TextView etRealityOverTimeDuration;
-    @Bind(R.id.tv_start_time)
+    @BindView(R.id.tv_start_time)
     TextView tvStartTime;
-    @Bind(R.id.tv_end_time)
+    @BindView(R.id.tv_end_time)
     TextView tvEndTime;
-    @Bind(R.id.tv_over_time_stage)
+    @BindView(R.id.tv_over_time_stage)
     TextView tvOverTimeStage;
-    @Bind(R.id.tv_over_time_duration)
+    @BindView(R.id.tv_over_time_duration)
     TextView tvOverTimeDuration;
-    @Bind(R.id.tv_over_time_reason)
+    @BindView(R.id.tv_over_time_reason)
     TextView tvOverTimeReason;
-    @Bind(R.id.tv_reality_start_time)
+    @BindView(R.id.tv_reality_start_time)
     TextView tvRealityStartTime;
-    @Bind(R.id.tv_reality_end_time)
+    @BindView(R.id.tv_reality_end_time)
     TextView tvRealityEndTime;
-    @Bind(R.id.tv_change_reason)
+    @BindView(R.id.tv_change_reason)
     TextView tvChangeReason;
 
-    @Bind(R.id.rl_reality_time_container)
+    @BindView(R.id.rl_reality_time_container)
     RelativeLayout rlRealityTimeContainer;
-    @Bind(R.id.ll_change_reason)
+    @BindView(R.id.ll_change_reason)
     LinearLayout llChangeReason;
-    @Bind(R.id.ll_approval_launcher_info_layout)
+    @BindView(R.id.ll_approval_launcher_info_layout)
     LinearLayout mLlApprovalLaunchInfoContainer;
     //
-    @Bind(R.id.ll_approval_state_iv_container)
+    @BindView(R.id.ll_approval_state_iv_container)
     LinearLayout mLlApprovalStateIvContainer;
-    @Bind(R.id.ll_approval_info_container)
+    @BindView(R.id.ll_approval_info_container)
     LinearLayout mLlApprovalInfoContainer;
-    @Bind(R.id.ll_not_approval_operate_layout)
+    @BindView(R.id.ll_not_approval_operate_layout)
     LinearLayout mLlApprovalOperateContainer;
     //
 
-    @Bind(R.id.rl_root_view)
+    @BindView(R.id.rl_root_view)
     RelativeLayout mRootView;
 
     private String appr_id;
@@ -645,7 +645,6 @@ public class MeLaunchOverTimeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         if (popupWindow != null) {
             popupWindow.dismiss();
             popupWindow = null;

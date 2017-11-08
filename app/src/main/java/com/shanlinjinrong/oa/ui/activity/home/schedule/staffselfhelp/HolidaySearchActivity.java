@@ -32,44 +32,44 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Subscriber;
 
 //假期查询
 public class HolidaySearchActivity extends BaseActivity implements YearTimeSelectedListener {
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.tv_center_title)
+    @BindView(R.id.tv_center_title)
     TextView tv_center_title;
-    @Bind(R.id.ll_content)
+    @BindView(R.id.ll_content)
     LinearLayout ll_content;
-    @Bind(R.id.psname)
+    @BindView(R.id.psname)
     HolidaySearchItem psname;
-    @Bind(R.id.deptname)
+    @BindView(R.id.deptname)
     HolidaySearchItem deptname;
-    @Bind(R.id.jobname)
+    @BindView(R.id.jobname)
     HolidaySearchItem jobname;
-    @Bind(R.id.lastdayorhour)
+    @BindView(R.id.lastdayorhour)
     HolidaySearchItem lastdayorhour;
-    @Bind(R.id.changelength)
+    @BindView(R.id.changelength)
     HolidaySearchItem changelength;
-    @Bind(R.id.curdayorhour)
+    @BindView(R.id.curdayorhour)
     HolidaySearchItem curdayorhour;
-    @Bind(R.id.realdayorhour)
+    @BindView(R.id.realdayorhour)
     HolidaySearchItem realdayorhour;
-    @Bind(R.id.ll_select_time)
+    @BindView(R.id.ll_select_time)
     LinearLayout mLlSelectTime;
-    @Bind(R.id.yidayorhour)
+    @BindView(R.id.yidayorhour)
     HolidaySearchItem yidayorhour;
-    @Bind(R.id.restdayorhour)
+    @BindView(R.id.restdayorhour)
     HolidaySearchItem restdayorhour;
-    @Bind(R.id.freezedayorhour)
+    @BindView(R.id.freezedayorhour)
     HolidaySearchItem freezedayorhour;
-    @Bind(R.id.usefulrestdayorhour)
+    @BindView(R.id.usefulrestdayorhour)
     HolidaySearchItem usefulrestdayorhour;
-    @Bind(R.id.tv_select_time)
+    @BindView(R.id.tv_select_time)
     TextView mTvSelectTime;
 
     private CustomDialogUtils mDialog;

@@ -16,7 +16,7 @@ import com.shanlinjinrong.oa.ui.activity.my.presenter.ModifyPhoneActivityPresent
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -26,15 +26,15 @@ import butterknife.OnClick;
  */
 public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPresenter> implements ModifyPhoneActivityContract.View {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @Bind(R.id.tv_tips)
+    @BindView(R.id.tv_tips)
     TextView tvTips;
-    @Bind(R.id.user_phone)
+    @BindView(R.id.user_phone)
     EditText userPhone;
 
     @Override
@@ -108,7 +108,6 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @Override

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -41,9 +41,9 @@ import butterknife.OnClick;
  */
 public class WeeklyWorkContentActivity extends AppCompatActivity implements WeeklyWorkContentFragment.OnPageBthClickListener, ViewPager.OnPageChangeListener {
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.view_pager)
+    @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
     private int pageIndex;

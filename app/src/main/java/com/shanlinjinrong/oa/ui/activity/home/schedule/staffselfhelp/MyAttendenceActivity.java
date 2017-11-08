@@ -22,7 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -30,21 +30,21 @@ import butterknife.ButterKnife;
  */
 public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityPresenter> implements MyAttendenceActivityContract.View, View.OnClickListener {
 
-    @Bind(R.id.tv_time)
+    @BindView(R.id.tv_time)
     TextView tv_time;
-    @Bind(R.id.tv_delay)
+    @BindView(R.id.tv_delay)
     TextView tv_delay;
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.ll_rootView)
+    @BindView(R.id.ll_rootView)
     LinearLayout mRootView;
-    @Bind(R.id.tv_leave_early)
+    @BindView(R.id.tv_leave_early)
     TextView tv_leave_early;
-    @Bind(R.id.tv_business_travel)
+    @BindView(R.id.tv_business_travel)
     TextView tv_business_travel;
-    @Bind(R.id.tv_absenteeism)
+    @BindView(R.id.tv_absenteeism)
     TextView tv_absenteeism;
-    @Bind(R.id.tv_sign_card_num)
+    @BindView(R.id.tv_sign_card_num)
     TextView tv_sign_card_num;
 
     private Calendar cal;

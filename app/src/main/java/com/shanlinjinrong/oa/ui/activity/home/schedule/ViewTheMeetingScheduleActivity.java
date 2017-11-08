@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.DatePicker;
@@ -39,20 +39,20 @@ import cn.qqtheme.framework.picker.DatePicker;
  */
 
 public class ViewTheMeetingScheduleActivity extends BaseActivity {
-    @Bind(R.id.toobar_back)
+    @BindView(R.id.toobar_back)
     ImageView toobar_back;
-    @Bind(R.id.day_arrangement)
+    @BindView(R.id.day_arrangement)
     TextView dayArrangement;
-    @Bind(R.id.meet_create)
+    @BindView(R.id.meet_create)
     TextView meetCreate;
     private DatePicker picker;
     private String currentDate;
     private MeetRoom meetRoom;
     List<MeetDatils> listMeeting = null;
-    @Bind(R.id.recyclerView_time_result)
+    @BindView(R.id.recyclerView_time_result)
     RecyclerView mRecyclerViewList;
     private  ViewTheMeetingScheduleAdapter viewTheMeetingScheduleAdapter;
-    @Bind(R.id.no_meeting)
+    @BindView(R.id.no_meeting)
     TextView noMeeting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

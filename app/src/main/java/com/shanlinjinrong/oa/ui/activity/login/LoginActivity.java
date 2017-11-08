@@ -38,7 +38,7 @@ import com.shanlinjinrong.oa.views.KeyboardLayout;
 
 import org.json.JSONObject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -49,17 +49,17 @@ import static com.shanlinjinrong.oa.common.Api.RESPONSES_CODE_ACCOUNT_PASSWORD_E
  * <b>Notes:</b> Created by KevinMeng on 2016/8/30.<br />
  */
 public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View {
-    @Bind(R.id.user_email)
+    @BindView(R.id.user_email)
     EditText userEmail;
-    @Bind(R.id.user_pwd)
+    @BindView(R.id.user_pwd)
     EditText userPwd;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     KeyboardLayout mRootView;
-    @Bind(R.id.login_scroll_view)
+    @BindView(R.id.login_scroll_view)
     ScrollView mScrollView;
-    @Bind(R.id.cb_auto_login)
+    @BindView(R.id.cb_auto_login)
     CheckBox mCbAutoLogin;
-    @Bind(R.id.tv_find_pwd)
+    @BindView(R.id.tv_find_pwd)
     TextView mTvFindPwd;
     private DoubleClickExitHelper doubleClickExitHelper;
     private int UPDATE_RECYCLERVIEW_POSITION = 11;
@@ -212,7 +212,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @Override
     protected void onDestroy() {
-        ButterKnife.unbind(this);
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
     }

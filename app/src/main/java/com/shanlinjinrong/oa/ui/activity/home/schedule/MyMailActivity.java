@@ -18,7 +18,7 @@ import com.shanlinjinrong.oa.views.ProgressWebView;
 
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -27,11 +27,11 @@ import butterknife.ButterKnife;
  */
 public class MyMailActivity extends BaseActivity {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.web_view)
+    @BindView(R.id.web_view)
     ProgressWebView webView;
 
     @Override
@@ -98,6 +98,5 @@ public class MyMailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 }

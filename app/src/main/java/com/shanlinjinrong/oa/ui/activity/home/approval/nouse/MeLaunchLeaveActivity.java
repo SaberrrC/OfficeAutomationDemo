@@ -30,7 +30,7 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -41,34 +41,34 @@ import butterknife.OnClick;
  * Description:我发起的(请假)
  */
 public class MeLaunchLeaveActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.rl_rootView)
+    @BindView(R.id.rl_rootView)
     RelativeLayout mRootView;
-    @Bind(R.id.iv_top_status)
+    @BindView(R.id.iv_top_status)
     ImageView ivApprovalTopState;
-    @Bind(R.id.tv_event_type)
+    @BindView(R.id.tv_event_type)
     TextView tvEventType;
 
-    @Bind(R.id.tv_duration)
+    @BindView(R.id.tv_duration)
     TextView tvDuration;
-    @Bind(R.id.tv_reason)
+    @BindView(R.id.tv_reason)
     TextView tvReason;
-    @Bind(R.id.tv_time_start)
+    @BindView(R.id.tv_time_start)
     TextView tvTimeStart;
-    @Bind(R.id.tv_time_end)
+    @BindView(R.id.tv_time_end)
     TextView tvTimeEnd;
-    @Bind(R.id.ll_approval_state_iv_container)
+    @BindView(R.id.ll_approval_state_iv_container)
     LinearLayout mLlApprovalStateIvContainer;
-    @Bind(R.id.ll_approval_info_container)
+    @BindView(R.id.ll_approval_info_container)
     LinearLayout mLlApprovalInfoContainer;
-    @Bind(R.id.ll_approval_launcher_info_layout)
+    @BindView(R.id.ll_approval_launcher_info_layout)
     LinearLayout mLlApprovalLaunchInfoContainer;
-    @Bind(R.id.ll_approval_process_layout)
+    @BindView(R.id.ll_approval_process_layout)
     LinearLayout mLlApprovalProcessLayout;
-    @Bind(R.id.ll_not_approval_operate_layout)
+    @BindView(R.id.ll_not_approval_operate_layout)
     LinearLayout mLlApprovalOperateContainer;
     private String appr_id;
     private String oal_id;
@@ -417,7 +417,6 @@ public class MeLaunchLeaveActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         if (popupWindow != null) {
             popupWindow.dismiss();
             popupWindow = null;

@@ -51,7 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -60,19 +60,19 @@ import static com.shanlinjinrong.oa.R.id.tv_time;
 
 public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView       mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar        mToolbar;
-    @Bind(R.id.rv_content)
+    @BindView(R.id.rv_content)
     RecyclerView   mRecyclerView;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView       mToolbarTextBtn;
-    @Bind(R.id.rl_check)
+    @BindView(R.id.rl_check)
     RelativeLayout mRlCheck;
-    @Bind(R.id.rl_tack_back)
+    @BindView(R.id.rl_tack_back)
     RelativeLayout mRlTackBack;
-    @Bind(R.id.tv_tack_back)
+    @BindView(R.id.tv_tack_back)
     TextView       mTvTackBack;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter      mFinalRecycleAdapter;

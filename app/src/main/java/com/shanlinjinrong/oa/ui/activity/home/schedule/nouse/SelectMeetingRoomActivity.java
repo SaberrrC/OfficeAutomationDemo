@@ -37,7 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.qqtheme.framework.picker.DatePicker;
 
@@ -49,21 +49,21 @@ import cn.qqtheme.framework.picker.DatePicker;
  */
 public class SelectMeetingRoomActivity extends BaseActivity {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView mToolBarBtn;
-    @Bind(R.id.ll_meeting_room_container)
+    @BindView(R.id.ll_meeting_room_container)
     LinearLayout mMeetingRoomContainer;
-    @Bind(R.id.ll_meeting_Layout)
+    @BindView(R.id.ll_meeting_Layout)
     LinearLayout mMeetingLayout;
-    @Bind(R.id.cb_need_meeting_room)
+    @BindView(R.id.cb_need_meeting_room)
     CheckBox mCbNeedRoom;
-    @Bind(R.id.tv_select_meeting_room)
+    @BindView(R.id.tv_select_meeting_room)
     TextView mTvSelectMeetingRoom;
-    @Bind(R.id.tv_no_meeting_room_tips)
+    @BindView(R.id.tv_no_meeting_room_tips)
     TextView mTvNoMeetingRoom;
     private DatePicker picker;
     private String currentDate;
@@ -493,6 +493,5 @@ public class SelectMeetingRoomActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 }

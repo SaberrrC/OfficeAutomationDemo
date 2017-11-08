@@ -33,7 +33,7 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -44,33 +44,33 @@ import butterknife.OnClick;
  * Description:待我审批(差旅)
  */
 public class WaitApprovaltravalActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.empty_view_container)
+    @BindView(R.id.empty_view_container)
     RelativeLayout mRootView;
-    @Bind(R.id.tv_event_type)
+    @BindView(R.id.tv_event_type)
     TextView tvEventType;
-    @Bind(R.id.tv_approval_day)
+    @BindView(R.id.tv_approval_day)
     TextView tvDay;
-    @Bind(R.id.tv_launch_date)
+    @BindView(R.id.tv_launch_date)
     TextView tvLaunchDate;
-    @Bind(R.id.tv_launch_time)
+    @BindView(R.id.tv_launch_time)
     TextView tvLaunchTime;
-    @Bind(R.id.tv_name)
+    @BindView(R.id.tv_name)
     TextView tvName;
-    @Bind(R.id.tv_approval_reson_content)
+    @BindView(R.id.tv_approval_reson_content)
     TextView tvResonContent;
-    @Bind(R.id.ll_approval_travla_container)
+    @BindView(R.id.ll_approval_travla_container)
     LinearLayout mTvApprovalContainer;
-    @Bind(R.id.ll_approval_launcher_info_layout)
+    @BindView(R.id.ll_approval_launcher_info_layout)
     LinearLayout mLlApprovalLaunchInfoContainer;
-    @Bind(R.id.ll_approval_state_iv_container)
+    @BindView(R.id.ll_approval_state_iv_container)
     LinearLayout mLlApprovalStateIvContainer;
-    @Bind(R.id.ll_approval_info_container)
+    @BindView(R.id.ll_approval_info_container)
     LinearLayout mLlApprovalInfoContainer;
-    @Bind(R.id.ll_approval_process_layout)
+    @BindView(R.id.ll_approval_process_layout)
     LinearLayout mLlApprovalProcessLayout;
     private String appr_id;
     private String status;
@@ -405,7 +405,6 @@ public class WaitApprovaltravalActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 

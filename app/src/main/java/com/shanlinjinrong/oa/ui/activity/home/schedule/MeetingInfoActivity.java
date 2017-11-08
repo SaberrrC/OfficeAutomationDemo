@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -42,47 +42,47 @@ import butterknife.OnClick;
  * Description:会议详情
  */
 public class MeetingInfoActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @Bind(R.id.tv_meeting_time_tips)
+    @BindView(R.id.tv_meeting_time_tips)
     TextView tvMeetingTimeTips;
-    @Bind(R.id.tv_date)
+    @BindView(R.id.tv_date)
     TextView tvDate;
-    @Bind(R.id.tv_meeting_room_tips)
+    @BindView(R.id.tv_meeting_room_tips)
     TextView tvMeetingRoomTips;
-    @Bind(R.id.tv_selected_meeting_room)
+    @BindView(R.id.tv_selected_meeting_room)
     TextView tvSelectedMeetingRoom;
-    @Bind(R.id.tv_meeting_theme)
+    @BindView(R.id.tv_meeting_theme)
     TextView tvMeetingTheme;
-    @Bind(R.id.tv_meeting_type)
+    @BindView(R.id.tv_meeting_type)
     TextView tvMeetingType;
-    @Bind(R.id.ll_join_people_item)
+    @BindView(R.id.ll_join_people_item)
     LinearLayout llJoinPeopleItem;
-    @Bind(R.id.ll_confirm_layout)
+    @BindView(R.id.ll_confirm_layout)
     LinearLayout llConfirmLayout;
-    @Bind(R.id.bottom_layout)
+    @BindView(R.id.bottom_layout)
     RelativeLayout mBottomLayout;
 
 
-    @Bind(R.id.ll_join_meeting_people_container)
+    @BindView(R.id.ll_join_meeting_people_container)
     LinearLayout ll_join_meeting_people_container;
-    @Bind(R.id.btn_cancel_meeting)
+    @BindView(R.id.btn_cancel_meeting)
     Button btnCancelMeeting;
-    @Bind(R.id.btn_start_meeting)
+    @BindView(R.id.btn_start_meeting)
     Button btnStartMeeting;
-    @Bind(R.id.btn_meeting_past)
+    @BindView(R.id.btn_meeting_past)
     Button btnMeetingPast;
-    @Bind(R.id.btn_join_meeting)
+    @BindView(R.id.btn_join_meeting)
     Button btnJoinMeeting;
-    @Bind(R.id.btn_can_not_join_meeting)
+    @BindView(R.id.btn_can_not_join_meeting)
     Button btnCanNotJoinMeeting;
-    @Bind(R.id.btn_meeting_be_cancel)
+    @BindView(R.id.btn_meeting_be_cancel)
     Button btnMeetingBeCancel;
-    @Bind(R.id.rootView)
+    @BindView(R.id.rootView)
     RelativeLayout mRootView;
     private int cf_id;//会议室id
     private String meeting_mode;//会议模式
@@ -709,6 +709,5 @@ public class MeetingInfoActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 }

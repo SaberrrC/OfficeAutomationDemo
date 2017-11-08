@@ -48,7 +48,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -59,37 +59,37 @@ import static com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunch
  */
 public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThingsRequestActivityPresenter> implements View.OnClickListener, InitiateThingsRequestActivityContract.View, YearTimeSelectedListener {
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.btn_add_details)
+    @BindView(R.id.btn_add_details)
     TextView mBtnAddDetails;
-    @Bind(R.id.sv_container_show)
+    @BindView(R.id.sv_container_show)
     ScrollView mSvContainerShow;
-    @Bind(R.id.tv_commonality_type)
+    @BindView(R.id.tv_commonality_type)
     TextView mTvCommonalityType;
-    @Bind(R.id.ll_commonality_type)
+    @BindView(R.id.ll_commonality_type)
     LinearLayout mLlCommonalityType;
-    @Bind(R.id.tv_commonality_coder)
+    @BindView(R.id.tv_commonality_coder)
     TextView mTvCommonalityCoder;
-    @Bind(R.id.tv_commonality_over_time)
+    @BindView(R.id.tv_commonality_over_time)
     TextView mTvCommonalityOverTime;
-    @Bind(R.id.tv_commonality_type_dot)
+    @BindView(R.id.tv_commonality_type_dot)
     TextView mTvCommonalityTypeDot;
-    @Bind(R.id.tv_commonality_request_date)
+    @BindView(R.id.tv_commonality_request_date)
     TextView mTvCommonalityRequestDate;
-    @Bind(R.id.tv_commonality_type_selected)
+    @BindView(R.id.tv_commonality_type_selected)
     TextView mTvCommonalityTypeSelected;
-    @Bind(R.id.ll_commonality_annual_leave)
+    @BindView(R.id.ll_commonality_annual_leave)
     LinearLayout mLlCommonalityAnnualLeave;
-    @Bind(R.id.ll_container_view)
+    @BindView(R.id.ll_container_view)
     LinearLayout mLlContainerView;
-    @Bind(R.id.tv_coder_number)
+    @BindView(R.id.tv_coder_number)
     TextView mTvCoderNumber;
-    @Bind(R.id.tv_request_date)
+    @BindView(R.id.tv_request_date)
     TextView mTvRequestDate;
-    @Bind(R.id.tv_not_network)
+    @BindView(R.id.tv_not_network)
     TextView mTvNotNetwork;
-    @Bind(R.id.tv_commonality_type_date)
+    @BindView(R.id.tv_commonality_type_date)
     TextView mTvCommonalityTypeDate;
 
     private ImageView mDelete;

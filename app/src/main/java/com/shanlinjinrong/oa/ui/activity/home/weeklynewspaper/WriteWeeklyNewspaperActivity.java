@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.DatePicker;
@@ -68,44 +68,44 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     public static int FUNCTION_COMMIT = 0;
     public static int FUNCTION_EDIT = 1;
     public static int FUNCTION_EVALUATION = 2;
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.tv_date)
+    @BindView(R.id.tv_date)
     TextView mTvDate;
-    @Bind(R.id.rv_work_content)
+    @BindView(R.id.rv_work_content)
     AllRecyclerView mRvWorkContent;
-    @Bind(R.id.ll_next_work_content)
+    @BindView(R.id.ll_next_work_content)
     LinearLayout mLlNextWorkContent;
-    @Bind(R.id. rv_next_work_content)
+    @BindView(R.id. rv_next_work_content)
     AllRecyclerView mRvNextWorkContent;
-    @Bind(R.id.tv_receiver)
+    @BindView(R.id.tv_receiver)
     TextView mTvReceiver;
 
-    @Bind(R.id.btn_add_this_week_work)
+    @BindView(R.id.btn_add_this_week_work)
     TextView mAddThisWeekWorkBtn;
 
-    @Bind(R.id.btn_add_next_week_work)
+    @BindView(R.id.btn_add_next_week_work)
     TextView mAddNextWeekWorkBtn;
 
-    @Bind(R.id.ll_week_report_evaluation)
+    @BindView(R.id.ll_week_report_evaluation)
     LinearLayout mLlWeekEvaluation;//评价栏
 
-    @Bind(R.id.rl_report_date)
+    @BindView(R.id.rl_report_date)
     RelativeLayout mRlReportDateEva; //评价
 
-    @Bind(R.id.ll_select_date)
+    @BindView(R.id.ll_select_date)
     RelativeLayout mSelectDate; //提交
 
-    @Bind(R.id.tv_report_date)
+    @BindView(R.id.tv_report_date)
     TextView mTvDateEva;//评价
 
-    @Bind(R.id.et_work_report_evaluation)
+    @BindView(R.id.et_work_report_evaluation)
     EditText mEtWorkReportEvaluation;//评价
 
-    @Bind(R.id.ll_select_receiver)
+    @BindView(R.id.ll_select_receiver)
     RelativeLayout mSelectReceiver;
 
-    @Bind(R.id.report_scroll_view)
+    @BindView(R.id.report_scroll_view)
     ScrollView mScroll;
 
     private DatePicker picker;

@@ -39,7 +39,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.DatePicker;
@@ -51,27 +51,27 @@ import cn.qqtheme.framework.picker.DatePicker;
 
 public class CreateOridinryMeetingActivity extends BaseActivity {
     private static final int ADD_JOIN_PEOPLE = 1;
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @Bind(R.id.et_meeting_theme)
+    @BindView(R.id.et_meeting_theme)
     EditText mEtMeetingTheme;
 
-    @Bind(R.id.tv_ordiny_meet_date)
+    @BindView(R.id.tv_ordiny_meet_date)
     TextView tvOridinyMeetDate;
-    @Bind(R.id.tv_meet_time)
+    @BindView(R.id.tv_meet_time)
     TextView tvMeetTime;
 
 
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     RelativeLayout mRootView;
 
-    @Bind(R.id.tv_select_meeting_room)
+    @BindView(R.id.tv_select_meeting_room)
     TextView tvSelectMeetingRoom;
-    @Bind(R.id.ll_join_people_container)
+    @BindView(R.id.ll_join_people_container)
     LinearLayout mLlJoinPeopleContainer;
     private StringBuilder copy;//抄送人id
     private ArrayList<Child> contactsList; //抄送人数组
@@ -325,7 +325,6 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @OnClick({R.id.report_iv_add_person, R.id.btn_create_meeting,

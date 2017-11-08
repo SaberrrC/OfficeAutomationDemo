@@ -21,19 +21,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //考勤月历
 public class AttandenceRecorderActivity extends BaseActivity {
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.tv_calendar_year)
+    @BindView(R.id.tv_calendar_year)
     TextView mTvCalendarYear;
-    @Bind(R.id.recycler_view1)
+    @BindView(R.id.recycler_view1)
     RecyclerView mRecyclerView;
-    @Bind(R.id.tv_empty_attendence)
+    @BindView(R.id.tv_empty_attendence)
     TextView mTvEmptyAttendence;
 
     private AttandenceRecorderAdapter mAdapter;

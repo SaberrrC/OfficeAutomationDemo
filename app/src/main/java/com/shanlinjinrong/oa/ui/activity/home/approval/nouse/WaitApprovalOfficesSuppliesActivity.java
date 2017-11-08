@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -42,28 +42,28 @@ import butterknife.OnClick;
  * Description:待我审批(办公用品)
  */
 public class WaitApprovalOfficesSuppliesActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.empty_view_container)
+    @BindView(R.id.empty_view_container)
     RelativeLayout mRootView;
 
-    @Bind(R.id.tv_event_type)
+    @BindView(R.id.tv_event_type)
     TextView tvEventType;
-    @Bind(R.id.tv_application_date)
+    @BindView(R.id.tv_application_date)
     TextView tvApplicationDate;
-    @Bind(R.id.ll_approval_launcher_info_layout)
+    @BindView(R.id.ll_approval_launcher_info_layout)
     LinearLayout mLlApprovalLaunchInfoContainer;
-    @Bind(R.id.ll_approval_state_iv_container)
+    @BindView(R.id.ll_approval_state_iv_container)
     LinearLayout mLlApprovalStateIvContainer;
-    @Bind(R.id.ll_approval_info_container)
+    @BindView(R.id.ll_approval_info_container)
     LinearLayout mLlApprovalInfoContainer;
-    @Bind(R.id.ll_approval_process_layout)
+    @BindView(R.id.ll_approval_process_layout)
     LinearLayout mLlApprovalProcessLayout;
 
 
-    @Bind(R.id.tv_approval_content)
+    @BindView(R.id.tv_approval_content)
     TextView tvApprovalContent;
     private Dialog dialog;
     private String appr_id;
@@ -382,7 +382,6 @@ public class WaitApprovalOfficesSuppliesActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 

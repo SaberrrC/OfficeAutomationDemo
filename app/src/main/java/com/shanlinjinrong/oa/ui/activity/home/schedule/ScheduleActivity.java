@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -51,25 +51,25 @@ import butterknife.ButterKnife;
  * Description:日程安排
  */
 public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter> implements ScheduleActivityContract.View {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.circlecalendarview)
+    @BindView(R.id.circlecalendarview)
     CircleCalendarView mCalendar;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.rg_bottom_tips)
+    @BindView(R.id.rg_bottom_tips)
     RadioGroup mRadioGroup;
-    @Bind(R.id.rb_meeting_plan)
+    @BindView(R.id.rb_meeting_plan)
     RadioButton mMeetingPlan;
-    @Bind(R.id.rb_me_launch)
+    @BindView(R.id.rb_me_launch)
     RadioButton mMeLaunch;
-    @Bind(R.id.rb_note)
+    @BindView(R.id.rb_note)
     RadioButton mNote;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView mToolbarTextBtn;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     LinearLayout mRootView;
-    @Bind(R.id.rvCalendar)
+    @BindView(R.id.rvCalendar)
     RecyclerView mRecyclerView;
     private PopupWindow popupWindow;
     private String dataPrefix;//当前月的前缀2016-12
@@ -509,7 +509,6 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 

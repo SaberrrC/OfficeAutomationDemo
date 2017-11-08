@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -51,23 +51,23 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     public static final String PAGE_SIZE  = "20";
     public static final String IS_CHECKED = "Y";
     public static final String NO_CHECK   = "N";
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView           mTvTitle;
-    @Bind(R.id.toolbar_image_btn)
+    @BindView(R.id.toolbar_image_btn)
     ImageView          mTolbarTextBtn;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar            mToolbar;
-    @Bind(R.id.rv_list)
+    @BindView(R.id.rv_list)
     RecyclerView       mRvList;
-    @Bind(R.id.sr_refresh)
+    @BindView(R.id.sr_refresh)
     SwipeRefreshLayout mSrRefresh;
-    @Bind(R.id.ll_search)
+    @BindView(R.id.ll_search)
     LinearLayout       mLlSearch;
-    @Bind(R.id.tv_approval)
+    @BindView(R.id.tv_approval)
     TextView           mTvApproval;
-    @Bind(R.id.rl_check)
+    @BindView(R.id.rl_check)
     RelativeLayout     mRlCheck;
-    @Bind(R.id.et_content)
+    @BindView(R.id.et_content)
     EditText           mEtContent;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;

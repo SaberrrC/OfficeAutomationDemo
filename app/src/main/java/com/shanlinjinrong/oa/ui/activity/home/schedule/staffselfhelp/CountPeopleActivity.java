@@ -26,7 +26,7 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Subscriber;
 
@@ -35,15 +35,15 @@ import rx.Subscriber;
  */
 
 public class CountPeopleActivity extends BaseActivity implements View.OnClickListener {
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.iv_clear_hostory)
+    @BindView(R.id.iv_clear_hostory)
     ImageView     mIvClearHistory;
-    @Bind(R.id.et_content)
+    @BindView(R.id.et_content)
     EditText      mEtSearchContent;
-    @Bind(R.id.tv_confirm)
+    @BindView(R.id.tv_confirm)
     TextView      mTvConfirm;
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView  mRecyclerView;
 
     String               mSearchContent = "";

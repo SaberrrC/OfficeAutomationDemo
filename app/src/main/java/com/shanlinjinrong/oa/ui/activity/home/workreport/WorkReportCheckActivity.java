@@ -39,7 +39,7 @@ import com.shanlinjinrong.views.swipeRecycleview.widget.DefaultItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -53,22 +53,22 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     public static String HAS_EVALUATION = "has_evaluation";
 
 
-    @Bind(R.id.report_check_list)
+    @BindView(R.id.report_check_list)
     SwipeMenuRecyclerView mReportCheckList;
 
-    @Bind(R.id.report_no_check_list)
+    @BindView(R.id.report_no_check_list)
     SwipeMenuRecyclerView mReportNoCheckList;
 
-    @Bind(R.id.tv_check_pending)
+    @BindView(R.id.tv_check_pending)
     RadioButton mTvCheckPending;
 
-    @Bind(R.id.tv_checked)
+    @BindView(R.id.tv_checked)
     RadioButton mTvChecked;
 
-    @Bind(R.id.refresh_layout)
+    @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
 
     private static int DEFAULT_PAGE_SIZE = 20;

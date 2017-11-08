@@ -25,7 +25,7 @@ import com.shanlinjinrong.views.swipeRecycleview.widget.DefaultItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -34,13 +34,13 @@ import butterknife.ButterKnife;
  */
 public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkReportPresenter> implements MyLaunchWorkReportContract.View, SwipeRefreshLayout.OnRefreshListener {
 
-    @Bind(R.id.all_report_list)
+    @BindView(R.id.all_report_list)
     SwipeMenuRecyclerView mAllReportList;
 
-    @Bind(R.id.refresh_layout)
+    @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
 
 

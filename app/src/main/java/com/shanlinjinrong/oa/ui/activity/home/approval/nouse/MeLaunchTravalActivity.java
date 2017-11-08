@@ -33,7 +33,7 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -44,31 +44,31 @@ import butterknife.OnClick;
  * Description:我发起的(差旅)
  */
 public class MeLaunchTravalActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.empty_view_container)
+    @BindView(R.id.empty_view_container)
     RelativeLayout mRootView;
-    @Bind(R.id.iv_top_status)
+    @BindView(R.id.iv_top_status)
     ImageView ivApprovalTopState;
-    @Bind(R.id.tv_event_type)
+    @BindView(R.id.tv_event_type)
     TextView tvEventType;
-    @Bind(R.id.ll_approval_travla_container)
+    @BindView(R.id.ll_approval_travla_container)
     LinearLayout mTvApprovalContainer;
-    @Bind(R.id.tv_approval_reson_content)
+    @BindView(R.id.tv_approval_reson_content)
     TextView mTvResonContent;
-    @Bind(R.id.tv_approval_day)
+    @BindView(R.id.tv_approval_day)
     TextView mTvApprovalDay;
-    @Bind(R.id.ll_approval_state_iv_container)
+    @BindView(R.id.ll_approval_state_iv_container)
     LinearLayout mLlApprovalStateIvContainer;
-    @Bind(R.id.ll_approval_info_container)
+    @BindView(R.id.ll_approval_info_container)
     LinearLayout mLlApprovalInfoContainer;
-    @Bind(R.id.ll_approval_launcher_info_layout)
+    @BindView(R.id.ll_approval_launcher_info_layout)
     LinearLayout mLlApprovalLaunchInfoContainer;
-    @Bind(R.id.ll_approval_process_layout)
+    @BindView(R.id.ll_approval_process_layout)
     LinearLayout mLlApprovalProcessLayout;
-    @Bind(R.id.ll_not_approval_operate_layout)
+    @BindView(R.id.ll_not_approval_operate_layout)
     LinearLayout mLlApprovalOperateContainer;
     private String appr_id;
     private String oal_id;
@@ -427,7 +427,6 @@ public class MeLaunchTravalActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 

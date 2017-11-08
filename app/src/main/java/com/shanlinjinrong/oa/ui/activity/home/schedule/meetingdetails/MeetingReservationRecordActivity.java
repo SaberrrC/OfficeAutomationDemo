@@ -24,7 +24,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -32,15 +32,15 @@ import butterknife.ButterKnife;
  */
 public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingReservationRecordActivityPresenter> implements MeetingReservationRecordActivityContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.rv_meeting_Reservation_Record)
+    @BindView(R.id.rv_meeting_Reservation_Record)
     RecyclerView mRvMeetingReservationRecord;
-    @Bind(R.id.refresh)
+    @BindView(R.id.refresh)
     SwipeRefreshLayout mRefresh;
-    @Bind(R.id.tv_empty_view)
+    @BindView(R.id.tv_empty_view)
     TextView mTvEmptyView;
-    @Bind(R.id.tv_meeting_Reservation_Record)
+    @BindView(R.id.tv_meeting_Reservation_Record)
     TextView mTvMeetingReservationRecord;
     private int mPage;
     private int mNum = 15;

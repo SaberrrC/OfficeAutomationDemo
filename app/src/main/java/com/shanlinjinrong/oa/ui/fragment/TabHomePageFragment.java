@@ -29,7 +29,7 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivit
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -39,13 +39,13 @@ import butterknife.OnClick;
  */
 public class TabHomePageFragment extends BaseFragment {
 
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView mTvTitle;
 
-    @Bind(R.id.iv_send_to_me_dot)
+    @BindView(R.id.iv_send_to_me_dot)
     ImageView mSendToMeDot;
 
-    @Bind(R.id.iv_wait_me_approval_dot)
+    @BindView(R.id.iv_wait_me_approval_dot)
     ImageView mWaitMeApprovalDot;
 
     private RelativeLayout mRootView;
@@ -93,7 +93,6 @@ public class TabHomePageFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     private void refreshDot() {

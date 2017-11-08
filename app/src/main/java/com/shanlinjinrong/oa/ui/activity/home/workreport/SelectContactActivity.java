@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -48,28 +48,28 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class SelectContactActivity extends HttpBaseActivity<SelectContactActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, SelectContactActivityContract.View, OnSelectedContract {
 
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     LinearLayout mRootView;
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
 
-    @Bind(R.id.search_tool)
+    @BindView(R.id.search_tool)
     RelativeLayout mSearchTool;//搜索栏
 
-    @Bind(R.id.et_search)
+    @BindView(R.id.et_search)
     ClearEditText mSearchEdit;//搜索框
 
-    @Bind(R.id.contact_list)
+    @BindView(R.id.contact_list)
     ExpandableListView mContactList;
 
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.tv_content_empty)
+    @BindView(R.id.tv_content_empty)
     TextView mContentEmpty;
 
-    @Bind(R.id.contact_recycler_view)
+    @BindView(R.id.contact_recycler_view)
     RecyclerView mContactRecyclerView;
 
     ArrayList<Group> groups = new ArrayList<>();//联系人群组
@@ -294,7 +294,6 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.relex.photodraweeview.OnPhotoTapListener;
 import me.relex.photodraweeview.OnViewTapListener;
@@ -22,7 +22,7 @@ import me.relex.photodraweeview.PhotoDraweeView;
  * Description:单个图片
  */
 public class ShowPictureActivity extends BaseActivity {
-    @Bind(R.id.sd_single_picture)
+    @BindView(R.id.sd_single_picture)
     PhotoDraweeView sdSinglePicture;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

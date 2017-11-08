@@ -20,18 +20,18 @@ import com.shanlinjinrong.views.listview.decoration.GridItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //发起审批
 public class LaunchApprovalActivity extends BaseActivity implements LaunchApprovalListAdapter.OnItemClickListener {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @Bind(R.id.rv_launch_approval)
+    @BindView(R.id.rv_launch_approval)
     RecyclerView mLaunchApprovalList;//发起审批列表
 
     private List<LaunchApprovalItem> mListData;
@@ -83,7 +83,6 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @Override
