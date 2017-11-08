@@ -272,8 +272,8 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     public void loadDataEmpty() {
         mContactList.setVisibility(View.GONE);
         mContentEmpty.setVisibility(View.VISIBLE);
+        hideLoadingView();
         mContentEmpty.setText("没有搜索到该员工，请重新搜索");
-//        showEmptyView(mRootView, "数据暂无，请输入全名搜索", 0, false);
     }
 
     private void loadData(String name) {
