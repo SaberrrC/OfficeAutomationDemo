@@ -2,17 +2,59 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean;
 
 import java.util.List;
 
+/**
+ {
+ "code": "000000",
+ "message": "查询成功",
+ "data": {
+ "userName": "许贞",
+ "psnname": "许贞",
+ "billCode": "CC20171107005775",
+ "orgname": "善林（上海）金融信息服务有限公司",
+ "deptname": "公关部",
+ "jobname": "",
+ "postname": "媒介副经理",
+ "applyDate": "2017-11-07",
+ "type": "1001A1100000000154IR",
+ "typeName": "出差",
+ "nchrapplyWorkFlow": [
+ {
+ "sendUserName": "许贞",
+ "sendDate": "2017-11-07 14:44:01",
+ "checkUserName": "李煜",
+ "dealDate": "2017-11-07 16:24:04",
+ "approveResult": "Y",
+ "approveResultCH": "批准",
+ "isCheck": "Y",
+ "isCheckCH": "已审批",
+ "checkNote": ""
+ }
+ ],
+ "nchrevectionApplyDetail": [
+ {
+ "evectionAddress": "赋给",
+ "evectionRemark": "发生过",
+ "startTime": "2017-08-28 14:43:10",
+ "endTime": "2017-09-01 14:43:15",
+ "timeDifference": "4",
+ "handOverPepole": "0001A11000000014GFGB",
+ "psnname": "姚瑶"
+ }
+ ]
+ }
+ }
+ */
 public class TraverResultBean {
 
     /**
      * code : 000000
-     * data : {"applyDate":"2017-06-08","billCode":"CC201706081353205418","deptname":"融资租赁部","jobname":"Y","nchrapplyWorkFlow":[{"approveResult":"Y","approveResultCH":"批准","checkNote":"Y","checkUserName":"庄振康","dealDate":"2017-06-14 14:12:26","isCheck":"Y","isCheckCH":"已审批","sendDate":"2017-06-08 13:53:45","sendUserName":"储耀明"}],"nchrevectionApplyDetail":[{"endTime":"2017-06-08 17:30:00","evectionAddress":"上海","evectionRemark":"办公","handOverPepole":"Y","psnname":"Y","startTime":"2017-06-08 13:53:00","timeDifference":"4"}],"orgname":"善林（上海）金融信息服务有限公司","postname":"市场运营","psnname":"储耀明","type":"1001A1100000000154IU","typeName":"外出","userName":"储耀明"}
      * message : 查询成功
+     * data : {"userName":"许贞","psnname":"许贞","billCode":"CC20171107005775","orgname":"善林（上海）金融信息服务有限公司","deptname":"公关部","jobname":"","postname":"媒介副经理","applyDate":"2017-11-07","type":"1001A1100000000154IR","typeName":"出差","nchrapplyWorkFlow":[{"sendUserName":"许贞","sendDate":"2017-11-07 14:44:01","checkUserName":"李煜","dealDate":"2017-11-07 16:24:04","approveResult":"Y","approveResultCH":"批准","isCheck":"Y","isCheckCH":"已审批","checkNote":""}],"nchrevectionApplyDetail":[{"evectionAddress":"赋给","evectionRemark":"发生过","startTime":"2017-08-28 14:43:10","endTime":"2017-09-01 14:43:15","timeDifference":"4","handOverPepole":"0001A11000000014GFGB","psnname":"姚瑶"}]}
      */
 
     private String code;
-    private DataBean data;
     private String   message;
+    private DataBean data;
 
     public String getCode() {
         return code;
@@ -20,14 +62,6 @@ public class TraverResultBean {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
     }
 
     public String getMessage() {
@@ -38,41 +72,57 @@ public class TraverResultBean {
         this.message = message;
     }
 
+    public DataBean getData() {
+        return data;
+    }
+
+    public void setData(DataBean data) {
+        this.data = data;
+    }
+
     public static class DataBean {
         /**
-         * applyDate : 2017-06-08
-         * billCode : CC201706081353205418
-         * deptname : 融资租赁部
-         * jobname : Y
-         * nchrapplyWorkFlow : [{"approveResult":"Y","approveResultCH":"批准","checkNote":"Y","checkUserName":"庄振康","dealDate":"2017-06-14 14:12:26","isCheck":"Y","isCheckCH":"已审批","sendDate":"2017-06-08 13:53:45","sendUserName":"储耀明"}]
-         * nchrevectionApplyDetail : [{"endTime":"2017-06-08 17:30:00","evectionAddress":"上海","evectionRemark":"办公","handOverPepole":"Y","psnname":"Y","startTime":"2017-06-08 13:53:00","timeDifference":"4"}]
+         * userName : 许贞
+         * psnname : 许贞
+         * billCode : CC20171107005775
          * orgname : 善林（上海）金融信息服务有限公司
-         * postname : 市场运营
-         * psnname : 储耀明
-         * type : 1001A1100000000154IU
-         * typeName : 外出
-         * userName : 储耀明
+         * deptname : 公关部
+         * jobname :
+         * postname : 媒介副经理
+         * applyDate : 2017-11-07
+         * type : 1001A1100000000154IR
+         * typeName : 出差
+         * nchrapplyWorkFlow : [{"sendUserName":"许贞","sendDate":"2017-11-07 14:44:01","checkUserName":"李煜","dealDate":"2017-11-07 16:24:04","approveResult":"Y","approveResultCH":"批准","isCheck":"Y","isCheckCH":"已审批","checkNote":""}]
+         * nchrevectionApplyDetail : [{"evectionAddress":"赋给","evectionRemark":"发生过","startTime":"2017-08-28 14:43:10","endTime":"2017-09-01 14:43:15","timeDifference":"4","handOverPepole":"0001A11000000014GFGB","psnname":"姚瑶"}]
          */
 
-        private String applyDate;
+        private String userName;
+        private String                            psnname;
         private String                            billCode;
+        private String                            orgname;
         private String                            deptname;
         private String                            jobname;
-        private String                            orgname;
         private String                            postname;
-        private String                            psnname;
+        private String                            applyDate;
         private String                            type;
         private String                            typeName;
-        private String                            userName;
         private List<NchrapplyWorkFlowBean>       nchrapplyWorkFlow;
         private List<NchrevectionApplyDetailBean> nchrevectionApplyDetail;
 
-        public String getApplyDate() {
-            return applyDate;
+        public String getUserName() {
+            return userName;
         }
 
-        public void setApplyDate(String applyDate) {
-            this.applyDate = applyDate;
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getPsnname() {
+            return psnname;
+        }
+
+        public void setPsnname(String psnname) {
+            this.psnname = psnname;
         }
 
         public String getBillCode() {
@@ -81,6 +131,14 @@ public class TraverResultBean {
 
         public void setBillCode(String billCode) {
             this.billCode = billCode;
+        }
+
+        public String getOrgname() {
+            return orgname;
+        }
+
+        public void setOrgname(String orgname) {
+            this.orgname = orgname;
         }
 
         public String getDeptname() {
@@ -99,14 +157,6 @@ public class TraverResultBean {
             this.jobname = jobname;
         }
 
-        public String getOrgname() {
-            return orgname;
-        }
-
-        public void setOrgname(String orgname) {
-            this.orgname = orgname;
-        }
-
         public String getPostname() {
             return postname;
         }
@@ -115,12 +165,12 @@ public class TraverResultBean {
             this.postname = postname;
         }
 
-        public String getPsnname() {
-            return psnname;
+        public String getApplyDate() {
+            return applyDate;
         }
 
-        public void setPsnname(String psnname) {
-            this.psnname = psnname;
+        public void setApplyDate(String applyDate) {
+            this.applyDate = applyDate;
         }
 
         public String getType() {
@@ -137,14 +187,6 @@ public class TraverResultBean {
 
         public void setTypeName(String typeName) {
             this.typeName = typeName;
-        }
-
-        public String getUserName() {
-            return userName;
-        }
-
-        public void setUserName(String userName) {
-            this.userName = userName;
         }
 
         public List<NchrapplyWorkFlowBean> getNchrapplyWorkFlow() {
@@ -165,49 +207,41 @@ public class TraverResultBean {
 
         public static class NchrapplyWorkFlowBean {
             /**
+             * sendUserName : 许贞
+             * sendDate : 2017-11-07 14:44:01
+             * checkUserName : 李煜
+             * dealDate : 2017-11-07 16:24:04
              * approveResult : Y
              * approveResultCH : 批准
-             * checkNote : Y
-             * checkUserName : 庄振康
-             * dealDate : 2017-06-14 14:12:26
              * isCheck : Y
              * isCheckCH : 已审批
-             * sendDate : 2017-06-08 13:53:45
-             * sendUserName : 储耀明
+             * checkNote :
              */
 
-            private String approveResult;
-            private String approveResultCH;
-            private String checkNote;
+            private String sendUserName;
+            private String sendDate;
             private String checkUserName;
             private String dealDate;
+            private String approveResult;
+            private String approveResultCH;
             private String isCheck;
             private String isCheckCH;
-            private String sendDate;
-            private String sendUserName;
+            private String checkNote;
 
-            public String getApproveResult() {
-                return approveResult;
+            public String getSendUserName() {
+                return sendUserName;
             }
 
-            public void setApproveResult(String approveResult) {
-                this.approveResult = approveResult;
+            public void setSendUserName(String sendUserName) {
+                this.sendUserName = sendUserName;
             }
 
-            public String getApproveResultCH() {
-                return approveResultCH;
+            public String getSendDate() {
+                return sendDate;
             }
 
-            public void setApproveResultCH(String approveResultCH) {
-                this.approveResultCH = approveResultCH;
-            }
-
-            public String getCheckNote() {
-                return checkNote;
-            }
-
-            public void setCheckNote(String checkNote) {
-                this.checkNote = checkNote;
+            public void setSendDate(String sendDate) {
+                this.sendDate = sendDate;
             }
 
             public String getCheckUserName() {
@@ -226,6 +260,22 @@ public class TraverResultBean {
                 this.dealDate = dealDate;
             }
 
+            public String getApproveResult() {
+                return approveResult;
+            }
+
+            public void setApproveResult(String approveResult) {
+                this.approveResult = approveResult;
+            }
+
+            public String getApproveResultCH() {
+                return approveResultCH;
+            }
+
+            public void setApproveResultCH(String approveResultCH) {
+                this.approveResultCH = approveResultCH;
+            }
+
             public String getIsCheck() {
                 return isCheck;
             }
@@ -242,49 +292,33 @@ public class TraverResultBean {
                 this.isCheckCH = isCheckCH;
             }
 
-            public String getSendDate() {
-                return sendDate;
+            public String getCheckNote() {
+                return checkNote;
             }
 
-            public void setSendDate(String sendDate) {
-                this.sendDate = sendDate;
-            }
-
-            public String getSendUserName() {
-                return sendUserName;
-            }
-
-            public void setSendUserName(String sendUserName) {
-                this.sendUserName = sendUserName;
+            public void setCheckNote(String checkNote) {
+                this.checkNote = checkNote;
             }
         }
 
         public static class NchrevectionApplyDetailBean {
             /**
-             * endTime : 2017-06-08 17:30:00
-             * evectionAddress : 上海
-             * evectionRemark : 办公
-             * handOverPepole : Y
-             * psnname : Y
-             * startTime : 2017-06-08 13:53:00
+             * evectionAddress : 赋给
+             * evectionRemark : 发生过
+             * startTime : 2017-08-28 14:43:10
+             * endTime : 2017-09-01 14:43:15
              * timeDifference : 4
+             * handOverPepole : 0001A11000000014GFGB
+             * psnname : 姚瑶
              */
 
-            private String endTime;
             private String evectionAddress;
             private String evectionRemark;
+            private String startTime;
+            private String endTime;
+            private String timeDifference;
             private String handOverPepole;
             private String psnname;
-            private String startTime;
-            private String timeDifference;
-
-            public String getEndTime() {
-                return endTime;
-            }
-
-            public void setEndTime(String endTime) {
-                this.endTime = endTime;
-            }
 
             public String getEvectionAddress() {
                 return evectionAddress;
@@ -302,6 +336,30 @@ public class TraverResultBean {
                 this.evectionRemark = evectionRemark;
             }
 
+            public String getStartTime() {
+                return startTime;
+            }
+
+            public void setStartTime(String startTime) {
+                this.startTime = startTime;
+            }
+
+            public String getEndTime() {
+                return endTime;
+            }
+
+            public void setEndTime(String endTime) {
+                this.endTime = endTime;
+            }
+
+            public String getTimeDifference() {
+                return timeDifference;
+            }
+
+            public void setTimeDifference(String timeDifference) {
+                this.timeDifference = timeDifference;
+            }
+
             public String getHandOverPepole() {
                 return handOverPepole;
             }
@@ -316,22 +374,6 @@ public class TraverResultBean {
 
             public void setPsnname(String psnname) {
                 this.psnname = psnname;
-            }
-
-            public String getStartTime() {
-                return startTime;
-            }
-
-            public void setStartTime(String startTime) {
-                this.startTime = startTime;
-            }
-
-            public String getTimeDifference() {
-                return timeDifference;
-            }
-
-            public void setTimeDifference(String timeDifference) {
-                this.timeDifference = timeDifference;
             }
         }
     }

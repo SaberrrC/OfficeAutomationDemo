@@ -308,6 +308,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             }
             if (itemData instanceof TraverResultBean.DataBean.NchrevectionApplyDetailBean) {
                 TraverResultBean.DataBean.NchrevectionApplyDetailBean bean = (TraverResultBean.DataBean.NchrevectionApplyDetailBean) itemData;
+                mTvType.setText(mTraverResultBean.getData().getTypeName());
                 tvCommonalityDetail.setText("出差明细");
                 llCommonalityBeginTime.setVisibility(View.VISIBLE);
                 llCommonalityEndTime.setVisibility(View.VISIBLE);
@@ -327,13 +328,14 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvCommonalityShow3.setText("工作交接人");
                 etCommonalityShow1.setText(bean.getEvectionAddress());
                 etCommonalityShow2.setText(bean.getEvectionRemark());
-                etCommonalityShow3.setText(bean.getHandOverPepole());
+                etCommonalityShow3.setText(bean.getPsnname());
                 return;
 
             }
             if (itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean) {
                 RestResultBean.DataBean.NchrfurloughApplyDetailBean bean = (RestResultBean.DataBean.NchrfurloughApplyDetailBean) itemData;
                 //                mTvType.setText(TextUtils.isEmpty(bean.getsen()) ? "" : bean.getSignRemark());
+                mTvType.setText(mRestResultBean.getData().getTypeName());
                 tvCommonalityDetail.setText("休假明细");
                 llCommonalityBeginTime.setVisibility(View.VISIBLE);
                 llCommonalityEndTime.setVisibility(View.VISIBLE);
@@ -349,7 +351,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvCommonalityShow1.setText("休假事由");
                 tvCommonalityShow2.setText("工作交接人");
                 etCommonalityShow1.setText(bean.getFurloughRemark());
-                etCommonalityShow2.setText(bean.getHandOverPepole());
+                etCommonalityShow2.setText(bean.getPsnname());
                 return;
             }
             if (itemData instanceof OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) {
