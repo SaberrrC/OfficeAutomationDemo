@@ -96,15 +96,11 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
             case R.id.tv_delay:
             case R.id.tv_leave_early:
             case R.id.tv_absenteeism:
-                if (mMyAttandanceResponse1 == null) {
-                    showToast("请检查网络");
-                    return;
-                }
                 Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
                 intent.putExtra("date", tv_time.getText().toString());
-                startActivity(intent);
                 if (mMyAttandanceResponse1 != null)
-                    EventBus.getDefault().postSticky(mMyAttandanceResponse1);
+                    intent.putExtra("attandance", mMyAttandanceResponse1);
+                startActivity(intent);
                 break;
             case R.id.tv_time:
                 monthSelectPopWindow = new MonthSelectPopWindow(MyAttendenceActivity.this, new MonthSelectPopWindow.PopListener() {

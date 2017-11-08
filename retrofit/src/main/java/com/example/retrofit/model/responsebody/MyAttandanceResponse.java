@@ -3,7 +3,7 @@ package com.example.retrofit.model.responsebody;
 import java.io.Serializable;
 import java.util.List;
 
-public class MyAttandanceResponse implements Serializable{
+public class MyAttandanceResponse implements Serializable {
 
     /**
      * allWorkAttendanceList : [{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-06","onebegintime":"2017-09-06 10:00:00","twoendtime":"2017-09-06 17:00:00","tbmstatus":"[迟到]","importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-07","onebegintime":"2017-09-07 08:00:00","twoendtime":"2017-09-07 15:00:00","tbmstatus":"[早退]","importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-08","onebegintime":"2017-09-08 08:00:00","twoendtime":"2017-09-08 17:00:00","tbmstatus":"[出差]","importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-11","onebegintime":"2017-09-11 08:00:00","twoendtime":"2017-09-07 21:00:00","tbmstatus":"[转调休加班]","importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-12","onebegintime":"2017-09-12 08:00:00","twoendtime":"2017-09-12 17:00:00","tbmstatus":null,"importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-13","onebegintime":"2017-09-13 08:00:00","twoendtime":"2017-09-13 17:00:00","tbmstatus":null,"importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-14","onebegintime":"2017-09-14 08:00:00","twoendtime":"2017-09-14 17:00:00","tbmstatus":null,"importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-15","onebegintime":"2017-09-15 08:00:00","twoendtime":"2017-09-15 17:00:00","tbmstatus":null,"importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-18","onebegintime":"2017-09-18 08:00:00","twoendtime":"2017-09-18 17:00:00","tbmstatus":null,"importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-19","onebegintime":"2017-09-19 08:00:00","twoendtime":"2017-09-19 17:00:00","tbmstatus":null,"importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-20","onebegintime":"2017-09-20 08:00:00","twoendtime":"2017-09-20 17:00:00","tbmstatus":null,"importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-21","onebegintime":"2017-09-21 08:00:00","twoendtime":"2017-09-21 17:00:00","tbmstatus":"[加班转调休]","importsignflag":"9","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-22","onebegintime":null,"twoendtime":null,"tbmstatus":"[旷工]","importsignflag":"0","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-23","onebegintime":null,"twoendtime":null,"tbmstatus":null,"importsignflag":"0","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-24","onebegintime":null,"twoendtime":null,"tbmstatus":null,"importsignflag":"0","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-25","onebegintime":null,"twoendtime":null,"tbmstatus":"[旷工]","importsignflag":"0","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-26","onebegintime":null,"twoendtime":null,"tbmstatus":"[旷工]","importsignflag":"0","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-27","onebegintime":null,"twoendtime":null,"tbmstatus":"[旷工]","importsignflag":"0","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-28","onebegintime":null,"twoendtime":null,"tbmstatus":"[旷工]","importsignflag":"0","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-29","onebegintime":null,"twoendtime":null,"tbmstatus":"[旷工]","importsignflag":"0","flg":null,"signCause":null},{"psname":"荣令山","pk_psndoc":"0001A31000000010WWJZ","calendar":"2017-09-30","onebegintime":null,"twoendtime":null,"tbmstatus":null,"importsignflag":"0","flg":null,"signCause":null}]
@@ -159,7 +159,7 @@ public class MyAttandanceResponse implements Serializable{
         this.ycWorkAttendanceList = ycWorkAttendanceList;
     }
 
-    public static class CcWorkAttendanceListBean{
+    public static class CcWorkAttendanceListBean {
         /**
          * psname : 荣令山
          * pk_psndoc : 0001A31000000010WWJZ
@@ -255,7 +255,7 @@ public class MyAttandanceResponse implements Serializable{
         }
     }
 
-    public static class AllWorkAttendanceListBean {
+    public static class AllWorkAttendanceListBean implements Serializable {
         /**
          * psname : 荣令山
          * pk_psndoc : 0001A31000000010WWJZ
@@ -351,7 +351,7 @@ public class MyAttandanceResponse implements Serializable{
         }
     }
 
-    public static class CdWorkAttendanceListBean {
+    public static class CdWorkAttendanceListBean implements Serializable {
         /**
          * psname : 荣令山
          * pk_psndoc : 0001A31000000010WWJZ
@@ -447,7 +447,7 @@ public class MyAttandanceResponse implements Serializable{
         }
     }
 
-    public static class KgWorkAttendanceListBean {
+    public static class KgWorkAttendanceListBean implements Serializable {
         /**
          * psname : 荣令山
          * pk_psndoc : 0001A31000000010WWJZ
@@ -543,7 +543,7 @@ public class MyAttandanceResponse implements Serializable{
         }
     }
 
-    public static class ZtWorkAttendanceListBean {
+    public static class ZtWorkAttendanceListBean implements Serializable {
         /**
          * psname : 荣令山
          * pk_psndoc : 0001A31000000010WWJZ
@@ -639,7 +639,7 @@ public class MyAttandanceResponse implements Serializable{
         }
     }
 
-    public static class JbWorkAttendanceListBean {
+    public static class JbWorkAttendanceListBean implements Serializable  {
         /**
          * psname : 荣令山
          * pk_psndoc : 0001A31000000010WWJZ
@@ -735,7 +735,7 @@ public class MyAttandanceResponse implements Serializable{
         }
     }
 
-    public static class XjWorkAttendanceListBean {
+    public static class XjWorkAttendanceListBean implements Serializable {
         /**
          * psname : 荣令山
          * pk_psndoc : 0001A31000000010WWJZ
@@ -831,7 +831,7 @@ public class MyAttandanceResponse implements Serializable{
         }
     }
 
-    public static class YcWorkAttendanceListBean {
+    public static class YcWorkAttendanceListBean implements Serializable {
         /**
          * psname : 荣令山
          * pk_psndoc : 0001A31000000010WWJZ

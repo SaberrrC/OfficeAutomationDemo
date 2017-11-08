@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.baidu.platform.comapi.map.E;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
@@ -19,9 +18,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -36,19 +32,36 @@ public class AttandenceRecorderActivity extends BaseActivity {
     TextView mTvCalendarYear;
     @Bind(R.id.recycler_view1)
     RecyclerView mRecyclerView;
+    @Bind(R.id.tv_empty_attendence)
+    TextView mTvEmptyAttendence;
 
     private AttandenceRecorderAdapter mAdapter;
-    private List<MyAttandanceResponse.AllWorkAttendanceListBean> mList = new ArrayList<>();
+    private List<MyAttandanceResponse.AllWorkAttendanceListBean> mAllWorkAttendanceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attandance_recorder_list);
         ButterKnife.bind(this);
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
+        initData();
         initView();
+    }
+
+    private void initData() {
+        if (mAllWorkAttendanceList != null) {
+            mAllWorkAttendanceList.clear();
+        }
+        MyAttandanceResponse attandance = (MyAttandanceResponse) getIntent().getSerializableExtra("attandance");
+        mAllWorkAttendanceList = attandance.getAllWorkAttendanceList();
+        for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
+            if (mAllWorkAttendanceList.equals("[出差]")) {
+                mAllWorkAttendanceList.remove(i);
+            }
+        }
+        if (mAllWorkAttendanceList.size() > 0) {
+            mTvEmptyAttendence.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -58,6 +71,10 @@ public class AttandenceRecorderActivity extends BaseActivity {
         leftView.setOnClickListener(view -> {
             finish();
         });
+        mAdapter = new AttandenceRecorderAdapter(mAllWorkAttendanceList);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 
     private class AttandenceRecorderAdapter extends BaseQuickAdapter<MyAttandanceResponse.AllWorkAttendanceListBean> {
@@ -75,26 +92,8 @@ public class AttandenceRecorderActivity extends BaseActivity {
             baseViewHolder.setText(R.id.tv_state, bean.getTbmstatus());
         }
     }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void AttandenceQueryData(MyAttandanceResponse bean) {
-        List<MyAttandanceResponse.AllWorkAttendanceListBean> allWorkAttendanceList = bean.getAllWorkAttendanceList();
-        for (int i = 0; i < allWorkAttendanceList.size(); i++) {
-            if (allWorkAttendanceList.equals("[旷工]")) {
-                allWorkAttendanceList.remove(i);
-            }
-        }
-        mAdapter = new AttandenceRecorderAdapter(allWorkAttendanceList);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter.notifyDataSetChanged();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
     }
 }

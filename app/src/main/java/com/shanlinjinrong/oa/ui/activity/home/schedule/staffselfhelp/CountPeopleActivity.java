@@ -125,10 +125,7 @@ public class CountPeopleActivity extends BaseActivity implements View.OnClickLis
     class SearchResultItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-//            PeopeNameEvent peopeNameEvent = new PeopeNameEvent();
             CountResponse1 countResponse1 = mData.get(i);
-//            peopeNameEvent.setCountResponse1(countResponse1);
-//            EventBus.getDefault().post(countResponse1);
 
             Intent intent = new Intent();
             intent.putExtra("people", countResponse1);

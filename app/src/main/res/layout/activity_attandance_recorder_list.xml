@@ -37,8 +37,16 @@
         android:layout_height="0.1dp"
         android:background="@color/gray_d5d5d5"/>
 
+    <TextView
+        android:id="@+id/tv_empty_attendence"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="当月暂无考勤记录"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view1"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

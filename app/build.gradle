@@ -16,7 +16,7 @@ android {
 
         //pwd:13579
         versionCode 21
-        versionName "v1.3.2.1"
+        versionName "v1.4.0.1"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
