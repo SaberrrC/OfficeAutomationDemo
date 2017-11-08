@@ -7,31 +7,33 @@ import java.util.List;
  "code": "000000",
  "message": "查询成功",
  "data": {
- "billCode": "JB201705062145126832",
- "userName": "赵赟",
- "psnName": "赵贇",
+ "billCode": "OM20171107000272",
+ "userName": "许贞",
+ "psnName": "许贞",
  "orgName": "善林（上海）金融信息服务有限公司",
- "deptName": "善贷宝",
+ "deptName": "公关部",
  "jobName": null,
- "postName": "Android开发",
- "applyDate": "2017-05-06",
+ "postName": "媒介副经理",
+ "applyDate": "2017-11-07",
+ "type": "1001A1100000000154NB",
+ "typeName": "转调休加班",
  "nchroverTimeApplyDetail": [
  {
- "billCode": "JB201705062145126832",
- "overTimeBeginTime": "2017-05-06 09:40:00",
- "overTimeEndTime": "2017-05-06 18:00:00",
- "overTimeHour": "8",
- "actHour": "8",
- "overTimeRemark": "房贷二抵项目"
+ "billCode": "OM20171107000272",
+ "overTimeBeginTime": "2017-10-30 17:59:22",
+ "overTimeEndTime": "2017-11-01 17:59:26",
+ "overTimeHour": "2",
+ "actHour": "2",
+ "overTimeRemark": "多个"
  }
  ],
  "nchrapplyWorkFlow": [
  {
- "billCode": "JB201705062145126832",
- "sendUserName": "赵赟",
- "sendDate": "2017-05-06 21:46:08",
- "checkUserName": "王涛",
- "dealDate": "2017-05-08 11:17:59",
+ "billCode": "OM20171107000272",
+ "sendUserName": "许贞",
+ "sendDate": "2017-11-07 17:59:36",
+ "checkUserName": "李煜",
+ "dealDate": "2017-11-08 13:16:17",
  "approveResult": "Y",
  "approveResultCH": "批准",
  "isCheck": "Y",
@@ -44,10 +46,9 @@ import java.util.List;
  */
 public class OverTimeResultBean {
 
-
     /**
      * code : 000000
-     * data : {"applyDate":"2017-06-04","billCode":"JB201706041837434058","deptName":"善贷宝","jobName":"7.5","nchrapplyWorkFlow":[{"approveResult":"Y","approveResultCH":"批准","billCode":"JB201706041837434058","checkNote":"同意","checkUserName":"王涛","dealDate":"2017-06-06 18:29:19","isCheck":"Y","isCheckCH":"已审批","sendDate":"2017-06-04 18:38:19","sendUserName":"周威"}],"nchroverTimeApplyDetail":[{"actHour":"7.5","billCode":"JB201706041837434058","overTimeBeginTime":"2017-06-04 11:00:00","overTimeEndTime":"2017-06-04 18:30:00","overTimeHour":"7.5","overTimeRemark":"房二贷项目"}],"orgName":"善林（上海）金融信息服务有限公司","postName":"Java开发工程师","psnName":"周威","userName":"周威"}
+     * data : {"applyDate":"2017-11-07","billCode":"OM20171107000272","deptName":"公关部","jobName":"","nchrapplyWorkFlow":[{"approveResult":"Y","approveResultCH":"批准","billCode":"OM20171107000272","checkNote":"同意","checkUserName":"李煜","dealDate":"2017-11-08 13:16:17","isCheck":"Y","isCheckCH":"已审批","sendDate":"2017-11-07 17:59:36","sendUserName":"许贞"}],"nchroverTimeApplyDetail":[{"actHour":"2","billCode":"OM20171107000272","overTimeBeginTime":"2017-10-30 17:59:22","overTimeEndTime":"2017-11-01 17:59:26","overTimeHour":"2","overTimeRemark":"多个"}],"orgName":"善林（上海）金融信息服务有限公司","postName":"媒介副经理","psnName":"许贞","type":"1001A1100000000154NB","typeName":"转调休加班","userName":"许贞"}
      * message : 查询成功
      */
 
@@ -81,16 +82,18 @@ public class OverTimeResultBean {
 
     public static class DataBean {
         /**
-         * applyDate : 2017-06-04
-         * billCode : JB201706041837434058
-         * deptName : 善贷宝
-         * jobName : 7.5
-         * nchrapplyWorkFlow : [{"approveResult":"Y","approveResultCH":"批准","billCode":"JB201706041837434058","checkNote":"同意","checkUserName":"王涛","dealDate":"2017-06-06 18:29:19","isCheck":"Y","isCheckCH":"已审批","sendDate":"2017-06-04 18:38:19","sendUserName":"周威"}]
-         * nchroverTimeApplyDetail : [{"actHour":"7.5","billCode":"JB201706041837434058","overTimeBeginTime":"2017-06-04 11:00:00","overTimeEndTime":"2017-06-04 18:30:00","overTimeHour":"7.5","overTimeRemark":"房二贷项目"}]
+         * applyDate : 2017-11-07
+         * billCode : OM20171107000272
+         * deptName : 公关部
+         * jobName :
+         * nchrapplyWorkFlow : [{"approveResult":"Y","approveResultCH":"批准","billCode":"OM20171107000272","checkNote":"同意","checkUserName":"李煜","dealDate":"2017-11-08 13:16:17","isCheck":"Y","isCheckCH":"已审批","sendDate":"2017-11-07 17:59:36","sendUserName":"许贞"}]
+         * nchroverTimeApplyDetail : [{"actHour":"2","billCode":"OM20171107000272","overTimeBeginTime":"2017-10-30 17:59:22","overTimeEndTime":"2017-11-01 17:59:26","overTimeHour":"2","overTimeRemark":"多个"}]
          * orgName : 善林（上海）金融信息服务有限公司
-         * postName : Java开发工程师
-         * psnName : 周威
-         * userName : 周威
+         * postName : 媒介副经理
+         * psnName : 许贞
+         * type : 1001A1100000000154NB
+         * typeName : 转调休加班
+         * userName : 许贞
          */
 
         private String applyDate;
@@ -100,6 +103,8 @@ public class OverTimeResultBean {
         private String                            orgName;
         private String                            postName;
         private String                            psnName;
+        private String                            type;
+        private String                            typeName;
         private String                            userName;
         private List<NchrapplyWorkFlowBean>       nchrapplyWorkFlow;
         private List<NchroverTimeApplyDetailBean> nchroverTimeApplyDetail;
@@ -160,6 +165,22 @@ public class OverTimeResultBean {
             this.psnName = psnName;
         }
 
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getTypeName() {
+            return typeName;
+        }
+
+        public void setTypeName(String typeName) {
+            this.typeName = typeName;
+        }
+
         public String getUserName() {
             return userName;
         }
@@ -188,14 +209,14 @@ public class OverTimeResultBean {
             /**
              * approveResult : Y
              * approveResultCH : 批准
-             * billCode : JB201706041837434058
+             * billCode : OM20171107000272
              * checkNote : 同意
-             * checkUserName : 王涛
-             * dealDate : 2017-06-06 18:29:19
+             * checkUserName : 李煜
+             * dealDate : 2017-11-08 13:16:17
              * isCheck : Y
              * isCheckCH : 已审批
-             * sendDate : 2017-06-04 18:38:19
-             * sendUserName : 周威
+             * sendDate : 2017-11-07 17:59:36
+             * sendUserName : 许贞
              */
 
             private String approveResult;
@@ -292,12 +313,12 @@ public class OverTimeResultBean {
 
         public static class NchroverTimeApplyDetailBean {
             /**
-             * actHour : 7.5
-             * billCode : JB201706041837434058
-             * overTimeBeginTime : 2017-06-04 11:00:00
-             * overTimeEndTime : 2017-06-04 18:30:00
-             * overTimeHour : 7.5
-             * overTimeRemark : 房二贷项目
+             * actHour : 2
+             * billCode : OM20171107000272
+             * overTimeBeginTime : 2017-10-30 17:59:22
+             * overTimeEndTime : 2017-11-01 17:59:26
+             * overTimeHour : 2
+             * overTimeRemark : 多个
              */
 
             private String actHour;

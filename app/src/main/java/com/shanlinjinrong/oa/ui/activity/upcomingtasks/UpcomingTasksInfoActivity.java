@@ -291,7 +291,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             });
             if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean) {
                 CardResultBean.DataBean.NchrSignDetailsBean bean = (CardResultBean.DataBean.NchrSignDetailsBean) itemData;
-                //                mTvType.setText(TextUtils.isEmpty(bean.getSignRemark()) ? "" : bean.getSignRemark());
                 tvCommonalityDetail.setText("签卡明细");
                 llCommonalityShow1.setVisibility(View.VISIBLE);
                 llCommonalityShow2.setVisibility(View.VISIBLE);
@@ -309,7 +308,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             }
             if (itemData instanceof TraverResultBean.DataBean.NchrevectionApplyDetailBean) {
                 TraverResultBean.DataBean.NchrevectionApplyDetailBean bean = (TraverResultBean.DataBean.NchrevectionApplyDetailBean) itemData;
-                mTvType.setText(TextUtils.isEmpty(bean.getEvectionRemark()) ? "" : bean.getEvectionRemark());
                 tvCommonalityDetail.setText("出差明细");
                 llCommonalityBeginTime.setVisibility(View.VISIBLE);
                 llCommonalityEndTime.setVisibility(View.VISIBLE);
@@ -356,7 +354,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             }
             if (itemData instanceof OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) {
                 OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean bean = (OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) itemData;
-                mTvType.setText(TextUtils.isEmpty(bean.getOverTimeRemark()) ? "" : bean.getOverTimeRemark());
+                mTvType.setText(mOverTimeResultBean.getData().getTypeName());
                 tvCommonalityDetail.setText("加班明细");
                 llCommonalityBeginTime.setVisibility(View.VISIBLE);
                 llCommonalityEndTime.setVisibility(View.VISIBLE);
@@ -404,13 +402,14 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             if (itemData instanceof OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) {
                 OverTimeResultBean.DataBean.NchrapplyWorkFlowBean bean = (OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) itemData;
                 tvApprover.setText(bean.getCheckUserName());
-                tvTime.setText(bean.getDealDate());
+                tvTime.setText(TextUtils.isEmpty(bean.getDealDate()) ? "" : bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(bean.getApproveResultCH());
+                tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
             }
             return;
         }
     }
+
 
     private void setTopTextView(TextView tvIdTitle, TextView tvTypeTitle, LinearLayout llTypeAll, String billType) {
         if (TextUtils.equals(billType, "6402")) {//签卡申请
