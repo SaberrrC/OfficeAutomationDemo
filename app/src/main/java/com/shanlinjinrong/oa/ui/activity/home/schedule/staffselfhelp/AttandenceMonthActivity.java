@@ -189,7 +189,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                             public void confirm(String year, String month) {
                                 mSelectedYear = Integer.parseInt(year);
                                 mSelectedMonth = Integer.parseInt(month);
-                                Toast.makeText(AttandenceMonthActivity.this, "当前月份--" + mSelectedYear + "--" + mSelectedMonth, Toast.LENGTH_SHORT).show();
                                 tv_time.setText(year + "年" + month + "月");
                                 if (mSelectedMonth == mCurrentMonth) {
                                     setData(true, mSelectedMonth, mCurrentDay);
@@ -380,6 +379,11 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 tv_people.setText(people.getPsname());
                 mPrivateCode = people.getCode();
                 doHttp();
+                if (mSelectedDay < 10) {
+                    String date = "0" + mSelectedDay;
+                    //TODO 考勤返回存在问题
+                    mPresenter.queryDayAttendance(mPrivateCode, mSelectedYear+"");
+                }
             } catch (Throwable e) {
                 e.printStackTrace();
             }

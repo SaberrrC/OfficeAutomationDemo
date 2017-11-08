@@ -49,8 +49,8 @@ public class AttandenceRecorderActivity extends BaseActivity {
             mAllWorkAttendanceList.clear();
         }
         MyAttandanceResponse attandance = (MyAttandanceResponse) getIntent().getSerializableExtra("attandance");
-        mAllWorkAttendanceList = attandance.getAllWorkAttendanceList();
-        if (mAllWorkAttendanceList != null) {
+        if (attandance != null) {
+            mAllWorkAttendanceList = attandance.getAllWorkAttendanceList();
             for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
                 try {
                     if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]"))

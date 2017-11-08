@@ -72,7 +72,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:text="2017年10月"
+                android:text="20天17年10月"
                 android:textColor="@color/black_333333"
                 android:textSize="14sp"/>
 
@@ -86,14 +86,14 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0."/>
+                android:layout_weight="0.1"/>
 
         </LinearLayout>
 
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.3"/>
+            android:layout_weight="0.1"/>
 
     </LinearLayout>
 
@@ -167,7 +167,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="010124228"/>
+                    tools:text="0天10天124228"/>
             </LinearLayout>
 
             <LinearLayout
@@ -194,7 +194,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="330282199311116151"/>
+                    tools:text="330天282199311116151"/>
 
             </LinearLayout>
 
@@ -222,7 +222,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="2017-10"/>
+                    tools:text="20天17-10天"/>
             </LinearLayout>
 
             <LinearLayout
@@ -249,7 +249,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -277,7 +277,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
             </LinearLayout>
 
             <LinearLayout
@@ -304,7 +304,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -332,7 +332,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -360,7 +360,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -388,7 +388,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -416,7 +416,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -444,7 +444,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    tools:text="0天"/>
 
             </LinearLayout>
 
@@ -472,7 +472,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    tools:text="0天"/>
 
             </LinearLayout>
 
@@ -500,7 +500,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -528,7 +528,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -556,7 +556,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -584,7 +584,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -612,7 +612,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -640,7 +640,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -668,7 +668,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -696,7 +696,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -724,7 +724,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -752,7 +752,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -780,7 +780,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -808,7 +808,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -836,7 +836,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -864,7 +864,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
@@ -892,7 +892,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0"/>
+                    android:text="0天"/>
 
             </LinearLayout>
 
