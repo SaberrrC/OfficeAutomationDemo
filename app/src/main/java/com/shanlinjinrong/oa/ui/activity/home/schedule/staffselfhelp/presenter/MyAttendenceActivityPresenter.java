@@ -55,7 +55,7 @@ public class MyAttendenceActivityPresenter extends HttpPresenter<MyAttendenceAct
                     String message = baseException.getMessage();
                     mView.sendDataFailed(code, message);
                 } else {
-                    mView.sendDataFailed("555", "请检查网络！");
+                    //mView.sendDataFailed("555", "请检查网络！");
                 }
             }
 
@@ -65,6 +65,4 @@ public class MyAttendenceActivityPresenter extends HttpPresenter<MyAttendenceAct
             }
         });
     }
-
-
 }

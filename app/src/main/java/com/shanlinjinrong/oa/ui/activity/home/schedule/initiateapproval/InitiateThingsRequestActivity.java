@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -381,6 +382,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_begin_time = (TextView) contentView.findViewById(R.id.tv_commonality_begin_time);
         mLl_common_card_detail = (LinearLayout) contentView.findViewById(R.id.ll_registration_card_detail);
         mTv_duration_number = (TextView) contentView.findViewById(R.id.tv_commonality_duration_number);
+
+        mEt_common_show2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
+        mEt_common_show1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         selectedDate();
     }
 
@@ -406,6 +410,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_next_begin_time = (TextView) contentView.findViewById(R.id.tv_commonality_begin_time);
         mLl_common_next_card_detail = (LinearLayout) contentView.findViewById(R.id.ll_registration_card_detail);
         mTv_duration_next_number = (TextView) contentView.findViewById(R.id.tv_commonality_duration_number);
+
+        mEt_common_next_show2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
+        mEt_common_next_show1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
+
         selectedNextDate();
     }
 

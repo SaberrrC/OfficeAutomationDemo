@@ -173,7 +173,9 @@
                 android:background="@drawable/edittext_input_square_bg"
                 android:gravity="center_vertical"
                 android:hint="请填写出差地点"
+                android:maxLines="1"
                 android:paddingLeft="12dp"
+                android:singleLine="true"
                 android:textSize="14sp"/>
         </LinearLayout>
 
@@ -228,7 +230,9 @@
                 android:background="@drawable/edittext_input_square_bg"
                 android:gravity="center_vertical"
                 android:hint="请填写出差原因"
+                android:maxLines="1"
                 android:paddingLeft="12dp"
+                android:singleLine="true"
                 android:textSize="14sp"/>
         </LinearLayout>
 
@@ -256,7 +260,9 @@
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:hint="请填写工作交接人"
+                android:maxLines="1"
                 android:paddingLeft="12dp"
+                android:singleLine="true"
                 android:textColorHint="@color/grey"
                 android:textSize="14sp"/>
         </LinearLayout>
