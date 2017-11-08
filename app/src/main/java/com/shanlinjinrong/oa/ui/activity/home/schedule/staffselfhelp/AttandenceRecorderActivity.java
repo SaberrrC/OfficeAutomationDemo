@@ -13,11 +13,6 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.views.common.CommonTopView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +52,14 @@ public class AttandenceRecorderActivity extends BaseActivity {
         mAllWorkAttendanceList = attandance.getAllWorkAttendanceList();
         if (mAllWorkAttendanceList != null) {
             for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
-                if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]"))
-                    continue;
-                mData.add(mAllWorkAttendanceList.get(i));
+                try {
+                    if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]"))
+                        continue;
+                    mData.add(mAllWorkAttendanceList.get(i));
+                }catch (Throwable e){
+                    e.printStackTrace();
+                    mData.add(mAllWorkAttendanceList.get(i));
+                }
             }
             if (mAllWorkAttendanceList.size() > 0) {
                 mTvEmptyAttendence.setVisibility(View.GONE);
