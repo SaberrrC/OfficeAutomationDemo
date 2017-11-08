@@ -110,7 +110,7 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
         calendar.setTime(new Date());
         mTvSelectTime.setText(simpleDateFormat.format(calendar.getTimeInMillis()));
         mDate.add(simpleDateFormat.format(calendar.getTimeInMillis()));
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 1; i++) {
             calendar.add(Calendar.YEAR, -1);
             String date = simpleDateFormat.format(calendar.getTimeInMillis());
             mDate.add(0, date);

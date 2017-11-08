@@ -54,7 +54,7 @@ public class AttandenceRecorderActivity extends BaseActivity {
         MyAttandanceResponse attandance = (MyAttandanceResponse) getIntent().getSerializableExtra("attandance");
         mAllWorkAttendanceList = attandance.getAllWorkAttendanceList();
         for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
-            if (mAllWorkAttendanceList.equals("[出差]")) {
+            if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]")) {
                 mAllWorkAttendanceList.remove(i);
             }
         }
@@ -92,6 +92,7 @@ public class AttandenceRecorderActivity extends BaseActivity {
             baseViewHolder.setText(R.id.tv_state, bean.getTbmstatus());
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
