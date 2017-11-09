@@ -118,6 +118,7 @@ def devJavaAddress() {
 //def prePHPAddress() {
 //    return "\"http://api.testoa.shanlinjinrong.com/\""
 //}
+
 def preJavaAddress() {
     return "\"http://10.5.202.122:9105/\""
 }
