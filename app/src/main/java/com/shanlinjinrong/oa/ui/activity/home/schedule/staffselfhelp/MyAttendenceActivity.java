@@ -96,11 +96,15 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
             case R.id.tv_delay:
             case R.id.tv_leave_early:
             case R.id.tv_absenteeism:
-                Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
-                intent.putExtra("date", tv_time.getText().toString());
-                if (mMyAttandanceResponse1 != null)
-                    intent.putExtra("attandance", mMyAttandanceResponse1);
-                startActivity(intent);
+                try {
+                    Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
+                    intent.putExtra("date", tv_time.getText().toString());
+                    if (mMyAttandanceResponse1 != null)
+                        intent.putExtra("attandance", mMyAttandanceResponse1);
+                    startActivity(intent);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.tv_time:
                 monthSelectPopWindow = new MonthSelectPopWindow(MyAttendenceActivity.this, new MonthSelectPopWindow.PopListener() {
