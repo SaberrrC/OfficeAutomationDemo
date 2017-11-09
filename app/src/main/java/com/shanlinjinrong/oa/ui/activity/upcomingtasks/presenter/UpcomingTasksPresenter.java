@@ -59,12 +59,16 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                UpcomingTaskItemBean bean = new Gson().fromJson(t, UpcomingTaskItemBean.class);
-                if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                    mView.onGetApproveDataSuccess(bean);
-                    return;
+                try {
+                    UpcomingTaskItemBean bean = new Gson().fromJson(t, UpcomingTaskItemBean.class);
+                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        mView.onGetApproveDataSuccess(bean);
+                        return;
+                    }
+                    mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
-                mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
 
             }
 
@@ -76,7 +80,11 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.onGetApproveDataFailure(errorNo, strMsg);
+                try {
+                    mView.onGetApproveDataFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -154,7 +162,11 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.onApproveFailure(errorNo, strMsg);
+                try {
+                    mView.onApproveFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
