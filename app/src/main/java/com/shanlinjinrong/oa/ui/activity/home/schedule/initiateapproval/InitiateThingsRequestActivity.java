@@ -507,7 +507,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void onBusinessRequest() {
         mTopView.setAppTitle("出差申请");
         mEt_common_show3.setFocusable(false);
-        mTvCommonalityTypeSelected.setText("外出 ");
+        mTvCommonalityTypeSelected.setText("出差 ");
     }
 
     //加班申请
@@ -710,8 +710,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     public void getQueryMonoCodeFailure(int errorCode, String str) {
         switch (errorCode) {
             case -1:
-                showToast(getString(R.string.net_no_connection));
-                mTvNotNetwork.setText(R.string.string_not_network);
+                mTvNotNetwork.setText(R.string.net_no_connection);
                 mTvNotNetwork.setVisibility(View.VISIBLE);
                 hideLoadingView();
                 break;
@@ -729,8 +728,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     public void initiateThingsRequestFailure(int errorCode, String str) {
         switch (errorCode) {
             case -1:
-                showToast(getString(R.string.net_no_connection));
-                mTvNotNetwork.setText(R.string.string_not_network);
+                mTvNotNetwork.setText(R.string.net_no_connection);
                 mTvNotNetwork.setVisibility(View.VISIBLE);
                 break;
         }

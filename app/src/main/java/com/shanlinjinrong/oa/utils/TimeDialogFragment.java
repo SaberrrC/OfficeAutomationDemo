@@ -193,6 +193,7 @@ public class TimeDialogFragment extends DialogFragment {
                 if (mSelectTime < 10) {
                     mHour = "0" + mSelectTime;
                 } else if (mSelectTime == 24) {
+                    currentItemPosition0 = currentItemPosition0 + 1;
                     mHour = "00";
                 } else {
                     mHour = "" + mSelectTime;
@@ -206,22 +207,14 @@ public class TimeDialogFragment extends DialogFragment {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
-                    if (mSelectTime == 24) {
-                        calendar.add(Calendar.DAY_OF_MONTH, -(30 - currentItemPosition0 - 1));
-                    } else {
-                        calendar.add(Calendar.DAY_OF_MONTH, -(30 - currentItemPosition0));
-                    }
+                    calendar.add(Calendar.DAY_OF_MONTH, -(30 - currentItemPosition0));
                     String format = simpleDateFormat.format(calendar.getTimeInMillis());
                     mSelectedDate = format + " " + mHour + ":" + min;
                 } else if (currentItemPosition0 > 30) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
-                    if (mSelectTime == 24) {
-                        calendar.add(Calendar.DAY_OF_MONTH, 30 - (60 - currentItemPosition0) + 1);
-                    } else {
-                        calendar.add(Calendar.DAY_OF_MONTH, 30 - (60 - currentItemPosition0));
-                    }
+                    calendar.add(Calendar.DAY_OF_MONTH, 30 - (60 - currentItemPosition0));
                     String format = simpleDateFormat.format(calendar.getTimeInMillis());
                     mSelectedDate = format + " " + mHour + ":" + min;
                 }
