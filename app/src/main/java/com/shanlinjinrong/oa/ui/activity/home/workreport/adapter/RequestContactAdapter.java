@@ -23,17 +23,25 @@ public class RequestContactAdapter extends BaseQuickAdapter<Child> {
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, Child child) {
+
         baseViewHolder.setText(R.id.tvName, child.getUsername());
         baseViewHolder.setChecked(R.id.child_check, child.getChecked());
         baseViewHolder.setOnClickListener(R.id.ll_contract_selected, view -> {
             for (int i = 0; i < mData.size(); i++) {
-                if (mData.get(i).getUsername().equals(child.getUsername())) {
-                    mData.get(i).setChecked(true);
+                mData.get(i).setChecked(false);
+                if (mData.get(i).getUsername().equals(child.getUsername()) && baseViewHolder.getPosition() == baseViewHolder.getAdapterPosition()) {
+                    mData.get(baseViewHolder.getPosition()).setChecked(true);
                 } else {
                     mData.get(i).setChecked(false);
                 }
             }
-            mOnSelected.onClick(mData,baseViewHolder.getPosition());
+            mOnSelected.onClick(mData, baseViewHolder.getPosition());
         });
+    }
+
+    @Override
+    public void setNewData(List<Child> data) {
+        super.setNewData(data);
+        mData = data;
     }
 }

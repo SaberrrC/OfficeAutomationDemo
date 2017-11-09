@@ -134,7 +134,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="32dp"
                 android:gravity="center_vertical"
-                android:text="0"
+                android:text="0天"
                 android:textColor="@color/black_333333"
                 android:textSize="14sp"/>
 

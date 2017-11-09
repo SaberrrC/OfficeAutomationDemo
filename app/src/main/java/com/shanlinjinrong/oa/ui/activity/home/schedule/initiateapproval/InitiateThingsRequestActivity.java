@@ -393,6 +393,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_duration_number = (TextView) contentView.findViewById(R.id.tv_commonality_duration_number);
 
         mEt_common_show2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
+        mEt_common_show3.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         mEt_common_show1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         selectedDate();
     }
@@ -421,6 +422,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_duration_next_number = (TextView) contentView.findViewById(R.id.tv_commonality_duration_number);
 
         mEt_common_next_show2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
+        mEt_common_next_show3.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         mEt_common_next_show1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
 
         selectedNextDate();
@@ -520,6 +522,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTopView.setAppTitle("加班申请");
         mTvCommonalityType.setText("加班类别");
         mTvCommonalityCoder.setText("加班编码");
+        mTv_duration_number.setText("0小时");
         mTv_common_detail.setText("加班明细");
         mTv_common_show2.setText("加班原因");
         mEt_common_show2.setHint("请填写加班原因");
@@ -572,6 +575,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLl_common_next_show1.setVisibility(View.GONE);
         mLl_common_next_show3.setVisibility(View.GONE);
         mTv_common_next_detail.setText("加班明细");
+        mTv_duration_next_number.setText("0小时");
         mTv_common_next_show2.setText("加班原因");
         mEt_common_next_show2.setHint("请填写加班原因");
     }
@@ -764,10 +768,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             if (bean != null) {
                 if (isNextDate) {
                     mNextDuration = bean.getData();
-                    mTv_duration_next_number.setText(bean.getData());
+                    if (getIntent().getIntExtra("type", -1) == 2) {
+                        mTv_duration_next_number.setText(bean.getData() + "小时");
+                    } else {
+                        mTv_duration_next_number.setText(bean.getData() + "天");
+                    }
                 } else {
-                    mTv_duration_number.setText(bean.getData());
                     mQueryDuration = bean.getData();
+                    if (getIntent().getIntExtra("type", -1) == 2) {
+                        mTv_duration_number.setText(bean.getData() + "小时");
+                    } else {
+                        mTv_duration_number.setText(bean.getData() + "天");
+                    }
                 }
             }
         } catch (Throwable e) {

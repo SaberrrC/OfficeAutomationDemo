@@ -12,6 +12,8 @@ import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.net.SocketTimeoutException;
+
 import javax.inject.Inject;
 
 /**
@@ -66,7 +68,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                     mView.getQueryMonoCodeFailure(errorNo, strMsg);
                     mView.requestFinish();
                 } catch (Throwable e) {
-                    e.printStackTrace();
+                   e.printStackTrace();
                 }
             }
         });

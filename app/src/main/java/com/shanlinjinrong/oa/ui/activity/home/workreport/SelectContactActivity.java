@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iflytek.cloud.thirdparty.V;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
@@ -72,13 +71,15 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     @BindView(R.id.contact_recycler_view)
     RecyclerView mContactRecyclerView;
 
-    ArrayList<Group> groups = new ArrayList<>();//联系人群组
+    private ArrayList<Group> groups = new ArrayList<>();//联系人群组
+    private List<Child> mChilds;
 
     private Child mSelectChild;//已选择
 
     private ContactAdapter mAdapter;
     private RequestContactAdapter mRequestAdapter;
     private String mSelectChildId;
+    private List<Child> mChildren;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,18 +240,24 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     @Override
     public void loadRequestDataSuccess(List<Child> child, Child selectChild) {
-        hideEmptyView();
-        hideLoadingView();
-        mSwipeRefreshLayout.setRefreshing(false);
-        mContactList.setVisibility(View.VISIBLE);
-        mContentEmpty.setVisibility(View.GONE);
-        mContactRecyclerView.setVisibility(View.VISIBLE);
-        mContactList.setVisibility(View.GONE);
-        mSelectChild = selectChild;
-        mRequestAdapter = new RequestContactAdapter(child, this);
-        mContactRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mContactRecyclerView.setAdapter(mRequestAdapter);
-        mContactList.deferNotifyDataSetChanged();
+        try {
+            if (child != null)
+                mChilds = child;
+            hideEmptyView();
+            hideLoadingView();
+            mSwipeRefreshLayout.setRefreshing(false);
+            mContactList.setVisibility(View.VISIBLE);
+            mContentEmpty.setVisibility(View.GONE);
+            mContactRecyclerView.setVisibility(View.VISIBLE);
+            mContactList.setVisibility(View.GONE);
+            mSelectChild = selectChild;
+            mRequestAdapter = new RequestContactAdapter(child, this);
+            mContactRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            mContactRecyclerView.setAdapter(mRequestAdapter);
+            mContactList.deferNotifyDataSetChanged();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -284,6 +291,18 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
         String department_id = AppConfig.getAppConfig(AppManager.mContext)
                 .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
         if (getIntent().getBooleanExtra("isRequest", false)) {
+            if (mChilds != null && !name.trim().equals("")) {
+                mChildren = new ArrayList<>();
+                for (int i = 0; i < mChilds.size(); i++) {
+                    if (mChilds.get(i).getUsername().contains(name)) {
+                        mChildren.add(mChilds.get(i));
+                    }
+                }
+                hideLoadingView();
+                mRequestAdapter.setNewData(mChildren);
+                mRequestAdapter.notifyDataSetChanged();
+                return;
+            }
             mPresenter.loadRequestData();
             return;
         }
@@ -308,8 +327,18 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     @Override
     public void onClick(List<Child> mdata, int position) {
-        mSelectChild = mdata.get(position);
-        mRequestAdapter.setNewData(mdata);
-        mRequestAdapter.notifyDataSetChanged();
+        try {
+            if (!mSearchEdit.getText().toString().trim().equals("") && mChildren != null) {
+                mSelectChild = mChildren.get(position);
+                mRequestAdapter.setNewData(mChildren);
+                mRequestAdapter.notifyDataSetChanged();
+                return;
+            }
+            mSelectChild = mdata.get(position);
+            mRequestAdapter.setNewData(mdata);
+            mRequestAdapter.notifyDataSetChanged();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }

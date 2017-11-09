@@ -48,23 +48,27 @@ public class AttandenceRecorderActivity extends BaseActivity {
         if (mAllWorkAttendanceList != null) {
             mAllWorkAttendanceList.clear();
         }
-        MyAttandanceResponse attandance = (MyAttandanceResponse) getIntent().getSerializableExtra("attandance");
-        if (attandance != null) {
-            mAllWorkAttendanceList = attandance.getAllWorkAttendanceList();
-            for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
-                try {
-                    if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]"))
-                        continue;
-                    mData.add(mAllWorkAttendanceList.get(i));
-                }catch (Throwable e){
-                    e.printStackTrace();
-                    mData.add(mAllWorkAttendanceList.get(i));
+        try {
+            MyAttandanceResponse attandance = (MyAttandanceResponse) getIntent().getSerializableExtra("attandance");
+            if (attandance != null) {
+                mAllWorkAttendanceList = attandance.getAllWorkAttendanceList();
+                for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
+                    try {
+                        if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]"))
+                            continue;
+                        mData.add(mAllWorkAttendanceList.get(i));
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        mData.add(mAllWorkAttendanceList.get(i));
+                    }
+                }
+                if (mAllWorkAttendanceList.size() > 0) {
+                    mTvEmptyAttendence.setVisibility(View.GONE);
+                    mRecyclerView.setVisibility(View.VISIBLE);
                 }
             }
-            if (mAllWorkAttendanceList.size() > 0) {
-                mTvEmptyAttendence.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
