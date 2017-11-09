@@ -23,7 +23,7 @@ public interface UpcomingTasksContract {
 
         void onApproveFailure(int errorNo, String strMsg);
 
-        void onApproveSuccess(AgreeDisagreeResultBean resultBean);
+        void onApproveSuccess(AgreeDisagreeResultBean resultBean, List<ApporveBodyItemBean> list);
     }
 
     interface Presenter extends BasePresenter<View> {

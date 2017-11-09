@@ -173,7 +173,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 super.onSuccess(t);
                 AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
                 if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                    mView.onApproveSuccess(resultBean);
+                    mView.onApproveSuccess(resultBean,list);
                     return;
                 }
                 mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());

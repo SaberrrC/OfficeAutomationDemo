@@ -308,6 +308,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     showToast("请选择单据");
                     return;
                 }
+                showLoadingView();
                 mPresenter.postAgreeDisagree(approveBeanList);
                 break;
             case R.id.iv_disagree:
@@ -342,23 +343,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         return approveBeanList;
     }
 
-    private void backToList() {
-        isShowCheck = !isShowCheck;
-        if (isShowCheck) {
-            mLlSearch.setVisibility(View.GONE);
-            mRlCheck.setVisibility(View.VISIBLE);
-            mTvTitle.setText("选择单据");
-            mTolbarTextBtn.setVisibility(View.GONE);
-            mTvApproval.setVisibility(View.GONE);
-        } else {
-            mLlSearch.setVisibility(View.VISIBLE);
-            mRlCheck.setVisibility(View.GONE);
-            mTvTitle.setText("待办事宜");
-            mTvApproval.setVisibility(View.VISIBLE);
-            mTolbarTextBtn.setVisibility(View.VISIBLE);
-        }
-    }
-
     private void searchItem() {
         String trim = mEtContent.getText().toString().trim();
         if (TextUtils.isEmpty(trim)) {
@@ -377,6 +361,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void setApproval() {
+        isShowCheck = !isShowCheck;
         if (isShowCheck) {
             mLlSearch.setVisibility(View.GONE);
             mRlCheck.setVisibility(View.VISIBLE);
@@ -762,10 +747,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             }
         }
         if (bean.getData() == null) {
+            mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         List<UpcomingSearchResultBean.DataBeanX.DataBean> dataList = bean.getData().getData();
         if (dataList == null) {
+            mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         if (dataList.size() < Integer.parseInt(PAGE_SIZE)) {
@@ -773,10 +760,45 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         mDatas.addAll(dataList);
         mRvList.requestLayout();
-        if (!isSearch) {
+        if (isShowCheck) {
+            mRlCheck.setVisibility(View.VISIBLE);
+            mLlSearch.setVisibility(View.GONE);
+            mTvTitle.setText("选择单据");
+            mTolbarTextBtn.setVisibility(View.GONE);
+            mTvApproval.setVisibility(View.GONE);
+        } else {
+            mLlSearch.setVisibility(View.VISIBLE);
             mRlCheck.setVisibility(View.GONE);
-            setApproval();
+            if (TextUtils.equals(mWhichList, "2")) {
+                mTvTitle.setText("待办事宜");
+            }
+            if (TextUtils.equals(mWhichList, "3")) {
+                mTvTitle.setText("已办事宜");
+            }
+            mTvApproval.setVisibility(View.VISIBLE);
+            mTolbarTextBtn.setVisibility(View.VISIBLE);
         }
+        ThreadUtils.runSub(new Runnable() {
+            @Override
+            public void run() {
+                for (Object data : mDatas) {
+                    if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                        UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
+                        bean.setIsChecked(false);
+                    }
+                    if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                        UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
+                        bean.setIsChecked(false);
+                    }
+                }
+                ThreadUtils.runMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFinalRecycleAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
         mFinalRecycleAdapter.notifyDataSetChanged();
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mFinalRecycleAdapter.getItemCount() - 1 >= 0) {
@@ -786,25 +808,38 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     @Override
-    public void onApproveSuccess(AgreeDisagreeResultBean resultBean) {
+    public void onApproveSuccess(AgreeDisagreeResultBean resultBean, List<ApporveBodyItemBean> list) {
+        hideLoadingView();
         List<AgreeDisagreeResultBean.DataBean> beanList = resultBean.getData();
         StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder faileSb = new StringBuilder();
+        int count = 0;
         for (int i = 0; i < beanList.size(); i++) {
-            if (!TextUtils.equals(beanList.get(i).getStatus(), "1")) {
+            if (TextUtils.equals(beanList.get(i).getStatus(), "1")) {
                 stringBuilder.append(beanList.get(i).getReason() + "\n");
+                count++;
+            } else {
+                faileSb.append(beanList.get(i).getReason() + "\n");
             }
+        }
+        if (count == 0) {
+            showToast(faileSb.toString().trim());
+            return;
         }
         if (!TextUtils.isEmpty(stringBuilder.toString().trim())) {
             showToast(stringBuilder.toString().trim());
         }
-        showToast(resultBean.getMessage());
         initRefreshMode();
-        isSearch = false;
         mSrRefresh.post(new Runnable() {
             @Override
             public void run() {
-                mSrRefresh.setRefreshing(true);
-                getListData();
+                ThreadUtils.runMainDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSrRefresh.setRefreshing(true);
+                        getListData();
+                    }
+                }, 500);
             }
         });
 
@@ -812,6 +847,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onApproveFailure(int errorNo, String strMsg) {
+        hideLoadingView();
         showToast(strMsg);
         if (errorNo == 20000) {
             mDatas.clear();
