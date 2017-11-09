@@ -35,6 +35,7 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OverTimeResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.RestResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.TackBackResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.TraverResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingInfoBottomBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksInfoContract;
@@ -94,6 +95,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     private TraverResultBean                            mTraverResultBean;
     private RestResultBean                              mRestResultBean;
     private OverTimeResultBean                          mOverTimeResultBean;
+    private EditText                                    mEtOption;
 
     @Override
     protected void initInject() {
@@ -132,6 +134,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         map.put(TraverResultBean.DataBean.NchrapplyWorkFlowBean.class, R.layout.layout_item_upcominginfo_detail_body);
         map.put(RestResultBean.DataBean.NchrapplyWorkFlowBean.class, R.layout.layout_item_upcominginfo_detail_body);
         map.put(OverTimeResultBean.DataBean.NchrapplyWorkFlowBean.class, R.layout.layout_item_upcominginfo_detail_body);
+        map.put(UpcomingInfoBottomBean.class, R.layout.layout_item_upcominginfoo_bottom);
         mFinalRecycleAdapter = new FinalRecycleAdapter(mDatas, map, this);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -414,6 +417,10 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvState.setText(bean.getIsCheckCH());
                 tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
             }
+            return;
+        }
+        if (itemData instanceof UpcomingInfoBottomBean) {
+            mEtOption = (EditText) holder.getViewById(R.id.et_opinion);
         }
     }
 
@@ -547,6 +554,12 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 } else {
                     apporveBodyItemBean = new ApporveBodyItemBean(mSearchBean.getBillNo(), true, mSearchBean.getPkBillType());
                 }
+                if (mEtOption != null) {
+                    String option = mEtOption.getText().toString().trim();
+                    if (!TextUtils.isEmpty(option)) {
+                        apporveBodyItemBean.message = option;
+                    }
+                }
                 list.add(apporveBodyItemBean);
                 mPresenter.postApproval(list);
                 break;
@@ -557,6 +570,12 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     disApporveBodyItemBean = new ApporveBodyItemBean(mBean.getBillCode(), true, mBean.getBillType());
                 } else {
                     disApporveBodyItemBean = new ApporveBodyItemBean(mSearchBean.getBillNo(), true, mSearchBean.getPkBillType());
+                }
+                if (mEtOption != null) {
+                    String option = mEtOption.getText().toString().trim();
+                    if (!TextUtils.isEmpty(option)) {
+                        disApporveBodyItemBean.message = option;
+                    }
                 }
                 list2.add(disApporveBodyItemBean);
                 mPresenter.postApproval(list2);
@@ -684,6 +703,9 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     mRlTackBack.setVisibility(View.VISIBLE);
                 }
             }
+        }
+        if (TextUtils.equals(mWhichList, "2")) {
+            mDatas.add(new UpcomingInfoBottomBean());
         }
         mFinalRecycleAdapter.notifyDataSetChanged();
     }
