@@ -27,6 +27,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="24dp"
             android:button="@drawable/select_upcoming_dialog_checkbox_bg"
+            android:clickable="false"
+            android:enabled="false"
             android:visibility="gone"/>
 
         <RelativeLayout

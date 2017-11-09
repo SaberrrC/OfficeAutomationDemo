@@ -2,11 +2,13 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -99,6 +101,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private String  mBillType     = "";
     private String  mApproveState = "";
     private boolean isSearch      = false;
+    private AlertDialog mAlertDialog;
 
     @Override
     protected void initInject() {
@@ -823,7 +826,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             }
         }
         if (count == 0) {
-            showToast(faileSb.toString().trim());
+            showDetailDialog(beanList);
             return;
         }
         if (!TextUtils.isEmpty(stringBuilder.toString().trim())) {
@@ -843,6 +846,32 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             }
         });
 
+    }
+
+    private void showDetailDialog(List<AgreeDisagreeResultBean.DataBean> beanList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("系统提示，您刚刚批量审批的单据中，编号为");
+        for (int i = 0; i < beanList.size(); i++) {
+            if (!TextUtils.equals(beanList.get(i).getStatus(), "1")) {
+                stringBuilder.append(beanList.get(i).getReason() + ",");
+            }
+        }
+        String text = stringBuilder.toString().trim();
+        String substring = text.substring(0, text.length() - 2);
+        if (mAlertDialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(substring + "的单据审批失败，请重新审批。");
+            builder.setCancelable(true);
+            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mAlertDialog.dismiss();
+                }
+            });
+            mAlertDialog = builder.create();
+        }
+        mAlertDialog.setMessage(substring + "的单据审批失败，请重新审批。");
+        mAlertDialog.show();
     }
 
     @Override
