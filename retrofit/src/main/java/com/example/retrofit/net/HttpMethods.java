@@ -65,7 +65,8 @@ public class HttpMethods {
         Observable map1 = ApiFactory.getJavaApi().getQueryMonoCode(map).map(new HttpResultFuncTypeJava());
         toSubscribe(map1, subscriber);
     }
-    //审批编码查询
+
+    //申请出差
     public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {
         Observable map1 = ApiFactory.getJavaApi().submitEvectionApply(body).map(new HttpResultFuncTypeJava());
         toSubscribe(map1, subscriber);
@@ -116,23 +117,6 @@ public class HttpMethods {
                 }
             }
             return httpResult.getData();
-        }
-    }
-
-    private class HttpOnError implements Action1<Throwable> {
-        @Override
-        public void call(Throwable throwable) {
-            if (throwable instanceof SocketTimeoutException) {
-                throwable.printStackTrace();
-            } else if (throwable instanceof ConnectException) {
-                throwable.printStackTrace();
-            } else if (throwable instanceof NullPointerException) {
-                throwable.printStackTrace();
-            } else if (throwable instanceof HttpException) {
-                int code = ((HttpException) throwable).code();
-                int code1 = ((HttpException) throwable).code();
-                int code2 = ((HttpException) throwable).code();
-            }
         }
     }
 
