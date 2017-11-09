@@ -16,6 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.InitiateThingsTypeAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.CommonTypeBean;
@@ -111,7 +112,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             mLl_common_duration, mLl_common_next_duration, mLl_common_card_detail, mLl_common_next_card_detail;
     private TextView mTv_common_show2, mTv_common_next_show2, mTv_common_next_show3, mTv_common_show3, mTv_common_duration, mTv_common_next_duration,
             mTv_common_detail, mTv_common_next_detail, mTv_common_begin_time, mTv_common_next_begin_time, mTv_selected_show, mTv_selected_next_show,
-            mBegin_time, mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number;
+            mBegin_time, mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number,
+            mTv_common_next_show2_dot, mTv_common_show2_dot,mTv_common_show3_dot,mTv_common_next_show3_dot;
     private EditText mEt_common_show2, mEt_common_next_show2, mEt_common_show1, mEt_common_next_show1;
 
     @Override
@@ -447,10 +449,12 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void initContentView0(View contentView) {
         mEnd_time = (TextView) contentView.findViewById(R.id.et_commonality_end_time);
         mTv_common_show2 = (TextView) contentView.findViewById(R.id.tv_commonality_show2);
+        mTv_common_show2_dot = (TextView) contentView.findViewById(R.id.tv_commonality_show2_dot);
         mEt_common_show2 = (EditText) contentView.findViewById(R.id.et_commonality_show2);
         mTv_selected_show = (TextView) contentView.findViewById(R.id.tv_selected_show);
         mEt_common_show1 = (EditText) contentView.findViewById(R.id.et_commonality_show1);
         mTv_common_show3 = (TextView) contentView.findViewById(R.id.tv_commonality_show3);
+        mTv_common_show3_dot = (TextView) contentView.findViewById(R.id.tv_commonality_show3_dot);
         mEt_common_show3 = (TextView) contentView.findViewById(R.id.et_commonality_show3);
         mBegin_time = (TextView) contentView.findViewById(R.id.et_commonality_begin_time);
         mTv_common_detail = (TextView) contentView.findViewById(R.id.tv_commonality_detail);
@@ -476,9 +480,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void initContentView1(View contentView) {
         mNext_end_time = (TextView) contentView.findViewById(R.id.et_commonality_end_time);
         mTv_common_next_show2 = (TextView) contentView.findViewById(R.id.tv_commonality_show2);
+        mTv_common_next_show2_dot = (TextView) contentView.findViewById(R.id.tv_commonality_show2_dot);
         mEt_common_next_show2 = (EditText) contentView.findViewById(R.id.et_commonality_show2);
         mEt_common_next_show1 = (EditText) contentView.findViewById(R.id.et_commonality_show1);
         mTv_common_next_show3 = (TextView) contentView.findViewById(R.id.tv_commonality_show3);
+        mTv_common_next_show3_dot = (TextView) contentView.findViewById(R.id.tv_commonality_show3_dot);
         mTv_selected_next_show = (TextView) contentView.findViewById(R.id.tv_selected_show);
         mEt_common_next_show3 = (TextView) contentView.findViewById(R.id.et_commonality_show3);
         mNext_begin_time = (TextView) contentView.findViewById(R.id.et_commonality_begin_time);
@@ -593,6 +599,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void overTimeWorkRequest() {
         mLl_common_show1.setVisibility(View.GONE);
         mLl_common_show3.setVisibility(View.GONE);
+        mTv_common_show2_dot.setVisibility(View.VISIBLE);
         mTopView.setAppTitle("加班申请");
         mTvCommonalityType.setText("加班类别");
         mTvCommonalityCoder.setText("加班编码");
@@ -627,6 +634,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLl_common_duration.setVisibility(View.GONE);
         mLlCommonalityType.setVisibility(View.GONE);
         mLl_common_card_detail.setVisibility(View.VISIBLE);
+        mTv_common_show3_dot.setVisibility(View.VISIBLE);
+        mTv_common_show2_dot.setVisibility(View.VISIBLE);
+        mTv_common_show2.setVisibility(View.VISIBLE);
         mTopView.setAppTitle("签卡申请");
         mTv_common_show2.setText("签卡原因");
         mTvCommonalityCoder.setText("签卡编码");
@@ -648,6 +658,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void overTimeWorkRequest1() {
         mLl_common_next_show1.setVisibility(View.GONE);
         mLl_common_next_show3.setVisibility(View.GONE);
+        mTv_common_next_show2_dot.setVisibility(View.VISIBLE);
         mTv_common_next_detail.setText("加班明细");
         mTv_duration_next_number.setText("0小时");
         mTv_common_next_show2.setText("加班原因");
@@ -672,6 +683,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLl_common_next_end_time.setVisibility(View.GONE);
         mLl_common_next_duration.setVisibility(View.GONE);
         mLl_common_next_card_detail.setVisibility(View.VISIBLE);
+        mTv_common_next_show3_dot.setVisibility(View.VISIBLE);
+        mTv_common_next_show2_dot.setVisibility(View.VISIBLE);
+        mTv_common_next_show2.setVisibility(View.VISIBLE);
         mTv_common_next_show2.setText("签卡原因");
         mTv_common_next_show3.setText("签卡说明");
         mTv_common_next_detail.setText("签卡明细");
