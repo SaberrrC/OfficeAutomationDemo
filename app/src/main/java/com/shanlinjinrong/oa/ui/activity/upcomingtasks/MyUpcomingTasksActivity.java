@@ -846,17 +846,15 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     private void showDetailDialog(List<AgreeDisagreeResultBean.DataBean> beanList) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("系统提示，您刚刚批量审批的单据中，编号为");
+        stringBuilder.append("系统提示，您刚刚批量审批的单据中，");
         for (int i = 0; i < beanList.size(); i++) {
             if (!TextUtils.equals(beanList.get(i).getStatus(), "1")) {
                 stringBuilder.append(beanList.get(i).getReason() + ",");
             }
         }
-        String text = stringBuilder.toString().trim();
-        String substring = text.substring(0, text.length() - 2);
         if (mAlertDialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(substring + "的单据审批失败，请重新审批。");
+            builder.setMessage(stringBuilder.toString().trim() + "请重新审批。");
             builder.setCancelable(true);
             builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                 @Override
@@ -866,7 +864,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             });
             mAlertDialog = builder.create();
         }
-        mAlertDialog.setMessage(substring + "的单据审批失败，请重新审批。");
+        mAlertDialog.setMessage(stringBuilder.toString().trim() + "的单据审批失败，请重新审批。");
         mAlertDialog.show();
     }
 

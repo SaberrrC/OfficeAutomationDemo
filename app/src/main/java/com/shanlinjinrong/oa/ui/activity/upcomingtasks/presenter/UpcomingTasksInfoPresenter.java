@@ -49,7 +49,11 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
             @Override
             public void onSuccess(String json) {
                 super.onSuccess(json);
-                mView.onGetApproveInfoSuccess(json);
+                try {
+                    mView.onGetApproveInfoSuccess(json);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -60,7 +64,11 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
+                try {
+                    mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -78,18 +86,26 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 @Override
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);
-                    mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
+                    try {
+                        mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
                 public void onSuccess(String t) {
                     super.onSuccess(t);
-                    TackBackResultBean tackBackResultBean = new Gson().fromJson(t, TackBackResultBean.class);
-                    if (TextUtils.equals(tackBackResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                        mView.onTackBackSuccess(tackBackResultBean);
-                        return;
+                    try {
+                        TackBackResultBean tackBackResultBean = new Gson().fromJson(t, TackBackResultBean.class);
+                        if (TextUtils.equals(tackBackResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                            mView.onTackBackSuccess(tackBackResultBean);
+                            return;
+                        }
+                        mView.onGetApproveInfoFailure(tackBackResultBean.getCode(), tackBackResultBean.getMessage());
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
                     }
-                    mView.onGetApproveInfoFailure(tackBackResultBean.getCode(), tackBackResultBean.getMessage());
                 }
             });
         } catch (JSONException e) {
@@ -106,18 +122,28 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.onApproveFailure(errorNo, strMsg);
+                try {
+                    mView.onApproveFailure(errorNo, strMsg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
-                if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                    mView.onApproveSuccess(resultBean);
-                    return;
+                try {
+                    AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
+                    if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        mView.onApproveSuccess(resultBean);
+                        return;
+                    }
+                    mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
-                mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
             }
         });
     }
@@ -130,7 +156,11 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 @Override
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);
-                    mView.onDeleteFailure(String.valueOf(errorNo), strMsg);
+                    try {
+                        mView.onDeleteFailure(String.valueOf(errorNo), strMsg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -146,7 +176,11 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                     } catch (JsonSyntaxException e) {
                         e.printStackTrace();
                         if (t.contains("\"code\":\"000000\"")) {
-                            mView.onDeleteFailure("500", "ok");
+                            try {
+                                mView.onDeleteFailure("500", "ok");
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
                         }
                     }
                 }

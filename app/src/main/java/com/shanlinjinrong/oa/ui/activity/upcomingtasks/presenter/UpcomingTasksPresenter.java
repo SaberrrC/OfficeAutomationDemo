@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
@@ -81,7 +82,11 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.onGetApproveDataFailure(errorNo, strMsg);
+                try {
+                    mView.onGetApproveDataFailure(errorNo, strMsg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -165,18 +170,28 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.onApproveFailure(errorNo, strMsg);
+                try {
+                    mView.onApproveFailure(errorNo, strMsg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
-                if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                    mView.onApproveSuccess(resultBean,list);
-                    return;
+                try {
+                    AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
+                    if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        mView.onApproveSuccess(resultBean,list);
+                        return;
+                    }
+                    mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
-                mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
             }
         });
     }
