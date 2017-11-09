@@ -27,7 +27,7 @@ public interface UpcomingTasksInfoContract {
 
         void onDeleteSuccess(DeleteBean bean);
 
-        void ondELETEFailure(String s, String strMsg);
+        void onDeleteFailure(String s, String strMsg);
     }
 
     interface Presenter extends BasePresenter<View> {

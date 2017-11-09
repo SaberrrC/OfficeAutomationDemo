@@ -1,11 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean;
 
-import java.util.List;
-
 /**
  * @Description:
  * @Auther: SaberrrC
  * @Email: saberrrc@163.com
+{"code":"000000","message":"success","data":{"reason":"ok","status":"1"}}
  */
 public class TackBackResultBean {
 
@@ -13,12 +12,12 @@ public class TackBackResultBean {
     /**
      * code : 000000
      * message : success
-     * data : [{"reason":"ok","status":"1"}]
+     * data : {"reason":"ok","status":"1"}
      */
 
-    private String         code;
-    private String         message;
-    private List<DataBean> data;
+    private String code;
+    private String   message;
+    private DataBean data;
 
     public String getCode() {
         return code;
@@ -36,11 +35,11 @@ public class TackBackResultBean {
         this.message = message;
     }
 
-    public List<DataBean> getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 

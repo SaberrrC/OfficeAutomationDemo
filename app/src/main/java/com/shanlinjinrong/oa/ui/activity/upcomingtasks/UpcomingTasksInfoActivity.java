@@ -324,7 +324,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mEtCommonalityBeginTime.setText(bean.getStartTime());
                 mEtCommonalityEndTime.setText(bean.getEndTime());
                 tvCommonalityDuration.setText("申请时长");
-                tvCommonality.setText(bean.getTimeDifference() + "小时");
+                tvCommonality.setText(bean.getTimeDifference() + "天");
                 tvCommonalityShow1.setText("出差地点");
                 tvCommonalityShow2.setText("出差原因");
                 tvCommonalityShow3.setText("工作交接人");
@@ -349,7 +349,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mEtCommonalityBeginTime.setText(bean.getStartTime());
                 mEtCommonalityEndTime.setText(bean.getEndTime());
                 tvCommonalityDuration.setText("休假时长");
-                tvCommonality.setText(bean.getTimeDifference() + "小时");
+                tvCommonality.setText(bean.getTimeDifference() + "天");
                 tvCommonalityShow1.setText("休假事由");
                 tvCommonalityShow2.setText("工作交接人");
                 etCommonalityShow1.setText(TextUtils.isEmpty(bean.getFurloughRemark()) ? "" : bean.getFurloughRemark());
@@ -697,12 +697,12 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     @Override
     public void onTackBackSuccess(TackBackResultBean bean) {
         hideLoadingView();
-        if (TextUtils.equals(bean.getData().get(0).getStatus(), "1")) {
+        if (TextUtils.equals(bean.getData().getStatus(), "1")) {
             showToast("收回成功");
             setResult(101);
             finish();
         } else {
-            showToast(bean.getData().get(0).getReason());
+            showToast(bean.getData().getReason());
         }
     }
 
@@ -731,17 +731,13 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     @Override
     public void onDeleteSuccess(DeleteBean bean) {
         hideLoadingView();
-        if (TextUtils.equals(bean.getData().getStatus(), "1")) {
-            showToast(bean.getData().getReason());
-            setResult(101);
-            finish();
-            return;
-        }
-        showToast(bean.getData().getReason());
+        showToast("删除成功");
+        setResult(101);
+        finish();
     }
 
     @Override
-    public void ondELETEFailure(String s, String strMsg) {
+    public void onDeleteFailure(String s, String strMsg) {
         onGetApproveInfoFailure(s, strMsg);
     }
 }

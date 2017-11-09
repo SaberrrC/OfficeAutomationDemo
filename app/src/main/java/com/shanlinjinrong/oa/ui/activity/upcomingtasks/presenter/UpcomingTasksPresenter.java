@@ -59,12 +59,17 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                UpcomingTaskItemBean bean = new Gson().fromJson(t, UpcomingTaskItemBean.class);
-                if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                    mView.onGetApproveDataSuccess(bean);
-                    return;
+                try {
+                    UpcomingTaskItemBean bean = new Gson().fromJson(t, UpcomingTaskItemBean.class);
+                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        mView.onGetApproveDataSuccess(bean);
+                        return;
+                    }
+                    mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mView.onGetApproveDataFailure(500, "网络异常");
                 }
-                mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
 
             }
 
@@ -125,6 +130,11 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
                 } catch (Throwable e) {
                     e.printStackTrace();
+                    if (t.contains("\"code\":\"020000\"")) {
+                        mView.onGetApproveDataFailure(500, "查询无结果");
+                        return;
+                    }
+                    mView.onGetApproveDataFailure(500, "网络异常");
                 }
             }
 
@@ -140,6 +150,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     mView.onGetApproveDataFailure(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
+                    mView.onGetApproveDataFailure(500, "网络异常");
                 }
             }
         });

@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
@@ -129,18 +130,25 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 @Override
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);
-                    mView.ondELETEFailure(String.valueOf(errorNo), strMsg);
+                    mView.onDeleteFailure(String.valueOf(errorNo), strMsg);
                 }
 
                 @Override
                 public void onSuccess(String t) {
                     super.onSuccess(t);
-                    DeleteBean bean = new Gson().fromJson(t, DeleteBean.class);
-                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                        mView.onDeleteSuccess(bean);
-                        return;
+                    try {
+                        DeleteBean bean = new Gson().fromJson(t, DeleteBean.class);
+                        if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                            mView.onDeleteSuccess(bean);
+                            return;
+                        }
+                        mView.onDeleteFailure(bean.getCode(), bean.getMessage());
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                        if (t.contains("\"code\":\"000000\"")) {
+                            mView.onDeleteFailure("500", "ok");
+                        }
                     }
-                    mView.ondELETEFailure(bean.getCode(), bean.getMessage());
                 }
             });
         } catch (Throwable e) {

@@ -386,7 +386,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         } else {
             mLlSearch.setVisibility(View.VISIBLE);
             mRlCheck.setVisibility(View.GONE);
-            mTvTitle.setText("待办事宜");
+            if (TextUtils.equals(mWhichList, "2")) {
+                mTvTitle.setText("待办事宜");
+            }
+            if (TextUtils.equals(mWhichList, "3")) {
+                mTvTitle.setText("已办事宜");
+            }
             mTvApproval.setVisibility(View.VISIBLE);
             mTolbarTextBtn.setVisibility(View.VISIBLE);
         }
@@ -821,9 +826,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mSrRefresh.post(new Runnable() {
                 @Override
                 public void run() {
-                    mSrRefresh.setRefreshing(true);
-                    initRefreshMode();
-                    getListData();
+                    ThreadUtils.runMainDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSrRefresh.setRefreshing(true);
+                            initRefreshMode();
+                            getListData();
+                        }
+                    }, 500);
                 }
             });
         }

@@ -7,18 +7,250 @@ import java.util.List;
  * @Description:
  * @Auther: SaberrrC
  * @Email: saberrrc@163.com
+ * {
+ * "code": "000000",
+ * "message": "success",
+ * "data": {
+ * "total": 198,
+ * "data": [
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201704221354313740",
+ * "sendDate": "04-22 13:55:54",
+ * "dealDate": "04-24 08:14:31",
+ * "isCheck": "已审批",
+ * "userName": "王越",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201704200931423298",
+ * "sendDate": "04-20 09:32:51",
+ * "dealDate": "04-21 20:28:39",
+ * "isCheck": "已审批",
+ * "userName": "杨文婷",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201704181803492960",
+ * "sendDate": "04-18 18:04:17",
+ * "dealDate": "04-18 18:04:56",
+ * "isCheck": "已审批",
+ * "userName": "陈飞",
+ * "deptName": "财务部",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201704181046432864",
+ * "sendDate": "04-18 10:47:29",
+ * "dealDate": "04-18 18:04:58",
+ * "isCheck": "已审批",
+ * "userName": "吴佳稚",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201704180957122850",
+ * "sendDate": "04-18 09:57:42",
+ * "dealDate": "04-18 18:04:55",
+ * "isCheck": "已审批",
+ * "userName": "余洋",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201704180954492849",
+ * "sendDate": "04-18 09:56:08",
+ * "dealDate": "04-18 18:04:55",
+ * "isCheck": "已审批",
+ * "userName": "罗永红",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201704171913562735",
+ * "sendDate": "04-17 19:14:17",
+ * "dealDate": "04-17 19:14:35",
+ * "isCheck": "已审批",
+ * "userName": "陈飞",
+ * "deptName": "财务部",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201704111727191748",
+ * "sendDate": "04-11 17:28:07",
+ * "dealDate": "04-11 21:16:10",
+ * "isCheck": "已审批",
+ * "userName": "雷琴",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201704050802430577",
+ * "sendDate": "04-05 08:03:57",
+ * "dealDate": "04-05 09:42:03",
+ * "isCheck": "已审批",
+ * "userName": "李佳铃",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703292153490542",
+ * "sendDate": "03-29 21:54:17",
+ * "dealDate": "03-31 08:44:50",
+ * "isCheck": "已审批",
+ * "userName": "季双双",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703272116140051",
+ * "sendDate": "03-27 21:16:39",
+ * "dealDate": "03-31 08:44:52",
+ * "isCheck": "已审批",
+ * "userName": "季双双",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703270915491444",
+ * "sendDate": "03-27 09:16:28",
+ * "dealDate": "03-31 08:44:50",
+ * "isCheck": "已审批",
+ * "userName": "吴佳稚",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703221932340971",
+ * "sendDate": "03-22 19:33:03",
+ * "dealDate": "03-31 08:44:49",
+ * "isCheck": "已审批",
+ * "userName": "余洋",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703220958430850",
+ * "sendDate": "03-22 09:59:13",
+ * "dealDate": "03-22 12:54:56",
+ * "isCheck": "已审批",
+ * "userName": "卫丽娜",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703220930380831",
+ * "sendDate": "03-22 09:31:11",
+ * "dealDate": "03-22 12:55:01",
+ * "isCheck": "已审批",
+ * "userName": "陈飞",
+ * "deptName": "财务部",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703210914280697",
+ * "sendDate": "03-21 09:14:55",
+ * "dealDate": "03-21 09:15:12",
+ * "isCheck": "已审批",
+ * "userName": "陈飞",
+ * "deptName": "财务部",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703170859200322",
+ * "sendDate": "03-17 09:00:04",
+ * "dealDate": "03-17 09:12:42",
+ * "isCheck": "已审批",
+ * "userName": "郁煜",
+ * "deptName": "预算管理部",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703031336112340",
+ * "sendDate": "03-03 13:36:42",
+ * "dealDate": "03-03 13:38:33",
+ * "isCheck": "已审批",
+ * "userName": "陈飞",
+ * "deptName": "财务部",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201703021522142225",
+ * "sendDate": "03-02 15:22:34",
+ * "dealDate": "03-03 13:38:11",
+ * "isCheck": "已审批",
+ * "userName": "余洋",
+ * "deptName": "核算组",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * },
+ * {
+ * "pkBillType": "6402",
+ * "billTypeName": "签卡申请",
+ * "billNo": "QK201702242215371347",
+ * "sendDate": "02-24 22:16:03",
+ * "dealDate": "02-27 09:27:07",
+ * "isCheck": "已审批",
+ * "userName": "杨祺",
+ * "deptName": "财务部",
+ * "orgName": "善林（上海）金融信息服务有限公司"
+ * }
+ * ],
+ * "pageSize": 20,
+ * "pageNum": 1
+ * }
+ * }
  */
-public class UpcomingSearchResultBean {
+public class UpcomingSearchResultBean implements Serializable {
+
 
     /**
      * code : 000000
-     * data : {"data":[{"billNo":"QK201706171004117167","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-17 10:04:32","userName":"邢朝华"},{"billNo":"QK201706200902047543","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-20 09:02:25","userName":"王曦"},{"billNo":"QK201706202151247764","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-20 21:53:15","userName":"刘文秀"},{"billNo":"QK201706221308228113","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-22 13:08:43","userName":"王宇"},{"billNo":"QK201706230931588298","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 09:32:29","userName":"唐露"},{"billNo":"QK201706231024458337","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 10:25:13","userName":"姜晔"},{"billNo":"QK201706231053518345","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 10:54:54","userName":"赵建浩"},{"billNo":"QK201706231713588439","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 17:14:29","userName":"王成"},{"billNo":"QK201706231730128446","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 17:31:08","userName":"周雅雯"},{"billNo":"QK201706241148008526","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-24 11:48:34","userName":"邢朝华"},{"billNo":"QK201706270936348977","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-27 09:37:29","userName":"徐小璐"},{"billNo":"QK201706270937328980","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-27 09:37:56","userName":"徐小璐"},{"billNo":"QK201706271336489069","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-27 13:37:21","userName":"郭晓伟"},{"billNo":"QK201706271609409161","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-27 16:10:05","userName":"陆卫佳"},{"billNo":"QK201706281649459468","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:50:26","userName":"张益"},{"billNo":"QK201706281653319474","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:54:32","userName":"刘玉乐"},{"billNo":"QK201706281655319479","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:55:51","userName":"周丁"},{"billNo":"QK201706281656139486","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:56:46","userName":"刘虎"},{"billNo":"QK201706281657109487","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:58:23","userName":"王娟"},{"billNo":"QK201706281700129495","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 17:00:37","userName":"熊亮"}],"pageNum":1,"pageSize":20,"total":199}
      * message : success
+     * data : {"total":198,"data":[{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704221354313740","sendDate":"04-22 13:55:54","dealDate":"04-24 08:14:31","isCheck":"已审批","userName":"王越","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704200931423298","sendDate":"04-20 09:32:51","dealDate":"04-21 20:28:39","isCheck":"已审批","userName":"杨文婷","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704181803492960","sendDate":"04-18 18:04:17","dealDate":"04-18 18:04:56","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704181046432864","sendDate":"04-18 10:47:29","dealDate":"04-18 18:04:58","isCheck":"已审批","userName":"吴佳稚","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704180957122850","sendDate":"04-18 09:57:42","dealDate":"04-18 18:04:55","isCheck":"已审批","userName":"余洋","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704180954492849","sendDate":"04-18 09:56:08","dealDate":"04-18 18:04:55","isCheck":"已审批","userName":"罗永红","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704171913562735","sendDate":"04-17 19:14:17","dealDate":"04-17 19:14:35","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704111727191748","sendDate":"04-11 17:28:07","dealDate":"04-11 21:16:10","isCheck":"已审批","userName":"雷琴","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704050802430577","sendDate":"04-05 08:03:57","dealDate":"04-05 09:42:03","isCheck":"已审批","userName":"李佳铃","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703292153490542","sendDate":"03-29 21:54:17","dealDate":"03-31 08:44:50","isCheck":"已审批","userName":"季双双","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703272116140051","sendDate":"03-27 21:16:39","dealDate":"03-31 08:44:52","isCheck":"已审批","userName":"季双双","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703270915491444","sendDate":"03-27 09:16:28","dealDate":"03-31 08:44:50","isCheck":"已审批","userName":"吴佳稚","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703221932340971","sendDate":"03-22 19:33:03","dealDate":"03-31 08:44:49","isCheck":"已审批","userName":"余洋","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703220958430850","sendDate":"03-22 09:59:13","dealDate":"03-22 12:54:56","isCheck":"已审批","userName":"卫丽娜","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703220930380831","sendDate":"03-22 09:31:11","dealDate":"03-22 12:55:01","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703210914280697","sendDate":"03-21 09:14:55","dealDate":"03-21 09:15:12","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703170859200322","sendDate":"03-17 09:00:04","dealDate":"03-17 09:12:42","isCheck":"已审批","userName":"郁煜","deptName":"预算管理部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703031336112340","sendDate":"03-03 13:36:42","dealDate":"03-03 13:38:33","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703021522142225","sendDate":"03-02 15:22:34","dealDate":"03-03 13:38:11","isCheck":"已审批","userName":"余洋","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201702242215371347","sendDate":"02-24 22:16:03","dealDate":"02-27 09:27:07","isCheck":"已审批","userName":"杨祺","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"}],"pageSize":20,"pageNum":1}
      */
 
     private String    code;
-    private DataBeanX data;
     private String    message;
+    private DataBeanX data;
 
     public String getCode() {
         return code;
@@ -26,14 +258,6 @@ public class UpcomingSearchResultBean {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public DataBeanX getData() {
-        return data;
-    }
-
-    public void setData(DataBeanX data) {
-        this.data = data;
     }
 
     public String getMessage() {
@@ -44,25 +268,33 @@ public class UpcomingSearchResultBean {
         this.message = message;
     }
 
+    public DataBeanX getData() {
+        return data;
+    }
+
+    public void setData(DataBeanX data) {
+        this.data = data;
+    }
+
     public static class DataBeanX implements Serializable {
         /**
-         * data : [{"billNo":"QK201706171004117167","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-17 10:04:32","userName":"邢朝华"},{"billNo":"QK201706200902047543","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-20 09:02:25","userName":"王曦"},{"billNo":"QK201706202151247764","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-20 21:53:15","userName":"刘文秀"},{"billNo":"QK201706221308228113","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-22 13:08:43","userName":"王宇"},{"billNo":"QK201706230931588298","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 09:32:29","userName":"唐露"},{"billNo":"QK201706231024458337","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 10:25:13","userName":"姜晔"},{"billNo":"QK201706231053518345","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 10:54:54","userName":"赵建浩"},{"billNo":"QK201706231713588439","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 17:14:29","userName":"王成"},{"billNo":"QK201706231730128446","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-23 17:31:08","userName":"周雅雯"},{"billNo":"QK201706241148008526","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-24 11:48:34","userName":"邢朝华"},{"billNo":"QK201706270936348977","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-27 09:37:29","userName":"徐小璐"},{"billNo":"QK201706270937328980","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-27 09:37:56","userName":"徐小璐"},{"billNo":"QK201706271336489069","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-27 13:37:21","userName":"郭晓伟"},{"billNo":"QK201706271609409161","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-27 16:10:05","userName":"陆卫佳"},{"billNo":"QK201706281649459468","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:50:26","userName":"张益"},{"billNo":"QK201706281653319474","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:54:32","userName":"刘玉乐"},{"billNo":"QK201706281655319479","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:55:51","userName":"周丁"},{"billNo":"QK201706281656139486","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:56:46","userName":"刘虎"},{"billNo":"QK201706281657109487","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 16:58:23","userName":"王娟"},{"billNo":"QK201706281700129495","billTypeName":"签卡申请","deptName":"善林财富","isCheck":"未审批","orgName":"善林（上海）金融信息服务有限公司","pkBillType":"6402","sendDate":"06-28 17:00:37","userName":"熊亮"}]
-         * pageNum : 1
+         * total : 198
+         * data : [{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704221354313740","sendDate":"04-22 13:55:54","dealDate":"04-24 08:14:31","isCheck":"已审批","userName":"王越","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704200931423298","sendDate":"04-20 09:32:51","dealDate":"04-21 20:28:39","isCheck":"已审批","userName":"杨文婷","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704181803492960","sendDate":"04-18 18:04:17","dealDate":"04-18 18:04:56","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704181046432864","sendDate":"04-18 10:47:29","dealDate":"04-18 18:04:58","isCheck":"已审批","userName":"吴佳稚","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704180957122850","sendDate":"04-18 09:57:42","dealDate":"04-18 18:04:55","isCheck":"已审批","userName":"余洋","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704180954492849","sendDate":"04-18 09:56:08","dealDate":"04-18 18:04:55","isCheck":"已审批","userName":"罗永红","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704171913562735","sendDate":"04-17 19:14:17","dealDate":"04-17 19:14:35","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704111727191748","sendDate":"04-11 17:28:07","dealDate":"04-11 21:16:10","isCheck":"已审批","userName":"雷琴","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201704050802430577","sendDate":"04-05 08:03:57","dealDate":"04-05 09:42:03","isCheck":"已审批","userName":"李佳铃","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703292153490542","sendDate":"03-29 21:54:17","dealDate":"03-31 08:44:50","isCheck":"已审批","userName":"季双双","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703272116140051","sendDate":"03-27 21:16:39","dealDate":"03-31 08:44:52","isCheck":"已审批","userName":"季双双","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703270915491444","sendDate":"03-27 09:16:28","dealDate":"03-31 08:44:50","isCheck":"已审批","userName":"吴佳稚","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703221932340971","sendDate":"03-22 19:33:03","dealDate":"03-31 08:44:49","isCheck":"已审批","userName":"余洋","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703220958430850","sendDate":"03-22 09:59:13","dealDate":"03-22 12:54:56","isCheck":"已审批","userName":"卫丽娜","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703220930380831","sendDate":"03-22 09:31:11","dealDate":"03-22 12:55:01","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703210914280697","sendDate":"03-21 09:14:55","dealDate":"03-21 09:15:12","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703170859200322","sendDate":"03-17 09:00:04","dealDate":"03-17 09:12:42","isCheck":"已审批","userName":"郁煜","deptName":"预算管理部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703031336112340","sendDate":"03-03 13:36:42","dealDate":"03-03 13:38:33","isCheck":"已审批","userName":"陈飞","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201703021522142225","sendDate":"03-02 15:22:34","dealDate":"03-03 13:38:11","isCheck":"已审批","userName":"余洋","deptName":"核算组","orgName":"善林（上海）金融信息服务有限公司"},{"pkBillType":"6402","billTypeName":"签卡申请","billNo":"QK201702242215371347","sendDate":"02-24 22:16:03","dealDate":"02-27 09:27:07","isCheck":"已审批","userName":"杨祺","deptName":"财务部","orgName":"善林（上海）金融信息服务有限公司"}]
          * pageSize : 20
-         * total : 199
+         * pageNum : 1
          */
 
-        private int            pageNum;
-        private int            pageSize;
         private int            total;
+        private int            pageSize;
+        private int            pageNum;
         private List<DataBean> data;
 
-        public int getPageNum() {
-            return pageNum;
+        public int getTotal() {
+            return total;
         }
 
-        public void setPageNum(int pageNum) {
-            this.pageNum = pageNum;
+        public void setTotal(int total) {
+            this.total = total;
         }
 
         public int getPageSize() {
@@ -73,12 +305,12 @@ public class UpcomingSearchResultBean {
             this.pageSize = pageSize;
         }
 
-        public int getTotal() {
-            return total;
+        public int getPageNum() {
+            return pageNum;
         }
 
-        public void setTotal(int total) {
-            this.total = total;
+        public void setPageNum(int pageNum) {
+            this.pageNum = pageNum;
         }
 
         public List<DataBean> getData() {
@@ -91,72 +323,34 @@ public class UpcomingSearchResultBean {
 
         public static class DataBean implements Serializable {
             /**
-             * billNo : QK201706171004117167
-             * billTypeName : 签卡申请
-             * deptName : 善林财富
-             * isCheck : 未审批
-             * orgName : 善林（上海）金融信息服务有限公司
              * pkBillType : 6402
-             * sendDate : 06-17 10:04:32
-             * userName : 邢朝华
+             * billTypeName : 签卡申请
+             * billNo : QK201704221354313740
+             * sendDate : 04-22 13:55:54
+             * dealDate : 04-24 08:14:31
+             * isCheck : 已审批
+             * userName : 王越
+             * deptName : 核算组
+             * orgName : 善林（上海）金融信息服务有限公司
              */
 
-            private String billNo;
-            private String billTypeName;
-            private String deptName;
-            private String isCheck;
-            private String orgName;
             private String pkBillType;
+            private String billTypeName;
+            private String billNo;
             private String sendDate;
+            private String dealDate;
+            private String isCheck;
             private String userName;
-            public boolean isChecked = false;
+            private String deptName;
+            private String orgName;
+            private boolean isChecked = false;
+
+            public void setIsChecked(boolean isCheked) {
+                this.isChecked = isCheked;
+            }
 
             public boolean getIsChecked() {
                 return isChecked;
-            }
-
-            public void setIsChecked(boolean checked) {
-                isChecked = checked;
-            }
-
-            public String getBillNo() {
-                return billNo;
-            }
-
-            public void setBillNo(String billNo) {
-                this.billNo = billNo;
-            }
-
-            public String getBillTypeName() {
-                return billTypeName;
-            }
-
-            public void setBillTypeName(String billTypeName) {
-                this.billTypeName = billTypeName;
-            }
-
-            public String getDeptName() {
-                return deptName;
-            }
-
-            public void setDeptName(String deptName) {
-                this.deptName = deptName;
-            }
-
-            public String getIsCheck() {
-                return isCheck;
-            }
-
-            public void setIsCheck(String isCheck) {
-                this.isCheck = isCheck;
-            }
-
-            public String getOrgName() {
-                return orgName;
-            }
-
-            public void setOrgName(String orgName) {
-                this.orgName = orgName;
             }
 
             public String getPkBillType() {
@@ -167,6 +361,22 @@ public class UpcomingSearchResultBean {
                 this.pkBillType = pkBillType;
             }
 
+            public String getBillTypeName() {
+                return billTypeName;
+            }
+
+            public void setBillTypeName(String billTypeName) {
+                this.billTypeName = billTypeName;
+            }
+
+            public String getBillNo() {
+                return billNo;
+            }
+
+            public void setBillNo(String billNo) {
+                this.billNo = billNo;
+            }
+
             public String getSendDate() {
                 return sendDate;
             }
@@ -175,12 +385,44 @@ public class UpcomingSearchResultBean {
                 this.sendDate = sendDate;
             }
 
+            public String getDealDate() {
+                return dealDate;
+            }
+
+            public void setDealDate(String dealDate) {
+                this.dealDate = dealDate;
+            }
+
+            public String getIsCheck() {
+                return isCheck;
+            }
+
+            public void setIsCheck(String isCheck) {
+                this.isCheck = isCheck;
+            }
+
             public String getUserName() {
                 return userName;
             }
 
             public void setUserName(String userName) {
                 this.userName = userName;
+            }
+
+            public String getDeptName() {
+                return deptName;
+            }
+
+            public void setDeptName(String deptName) {
+                this.deptName = deptName;
+            }
+
+            public String getOrgName() {
+                return orgName;
+            }
+
+            public void setOrgName(String orgName) {
+                this.orgName = orgName;
             }
         }
     }
