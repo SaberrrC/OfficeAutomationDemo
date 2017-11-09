@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.manager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -25,6 +24,7 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.pgyersdk.crash.PgyCrashManager;
+import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
@@ -136,7 +136,11 @@ public class AppManager extends MultiDexApplication {
         // 设置是否为上报进程
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(AppManager.mContext);
         strategy.setUploadProcess(processName == null || processName.equals(packageName));
-        CrashReport.initCrashReport(AppManager.mContext, "071245370e", false, strategy);
+        if (BuildConfig.DEBUG) {
+            CrashReport.initCrashReport(AppManager.mContext, "72d31f8f77", true, strategy);
+        } else {
+            CrashReport.initCrashReport(AppManager.mContext, "72d31f8f77", false, strategy);
+        }
 
         //解决7.0拍照文件uri闪退问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

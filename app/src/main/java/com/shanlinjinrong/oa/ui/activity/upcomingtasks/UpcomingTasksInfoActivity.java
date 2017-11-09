@@ -721,7 +721,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         setResult(101);
         finish();
-
     }
 
     @Override
@@ -732,9 +731,13 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     @Override
     public void onDeleteSuccess(DeleteBean bean) {
         hideLoadingView();
-        showToast("删除成功");
-        setResult(101);
-        finish();
+        if (TextUtils.equals(bean.getData().getStatus(), "1")) {
+            showToast(bean.getData().getReason());
+            setResult(101);
+            finish();
+            return;
+        }
+        showToast(bean.getData().getReason());
     }
 
     @Override
