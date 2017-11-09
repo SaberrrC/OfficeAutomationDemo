@@ -113,7 +113,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private TextView mTv_common_show2, mTv_common_next_show2, mTv_common_next_show3, mTv_common_show3, mTv_common_duration, mTv_common_next_duration,
             mTv_common_detail, mTv_common_next_detail, mTv_common_begin_time, mTv_common_next_begin_time, mTv_selected_show, mTv_selected_next_show,
             mBegin_time, mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number,
-            mTv_common_next_show2_dot, mTv_common_show2_dot,mTv_common_show3_dot,mTv_common_next_show3_dot;
+            mTv_common_next_show2_dot, mTv_common_show2_dot, mTv_common_show3_dot, mTv_common_next_show3_dot;
     private EditText mEt_common_show2, mEt_common_next_show2, mEt_common_show1, mEt_common_next_show1;
 
     @Override
@@ -776,14 +776,12 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     @Override
-    public void requestNetworkError() {
+    public void getQueryMonoCodeSuccess(String code) {
 
-    }
-
-    @Override
-    public void getQueryMonoCodeSuccess(QueryMonoBean bean) {
-        if (bean != null) {
-            mTvCoderNumber.setText(bean.getData());
+        if (!TextUtils.isEmpty(code)) {
+            mTvCoderNumber.setText(code);
+            mTvNotNetwork.setVisibility(View.GONE);
+            mSvContainerShow.setVisibility(View.VISIBLE);
         }
         switch (getIntent().getIntExtra("type", -1)) {
             case 0://出差类别
@@ -803,11 +801,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void getQueryMonoCodeFailure(int errorCode, String str) {
+        hideLoadingView();
         switch (errorCode) {
             case -1:
-                mTvNotNetwork.setText(R.string.net_no_connection);
+                showToast(str);
+                mTvNotNetwork.setText(str);
                 mTvNotNetwork.setVisibility(View.VISIBLE);
-                hideLoadingView();
+                mSvContainerShow.setVisibility(View.GONE);
                 break;
         }
 

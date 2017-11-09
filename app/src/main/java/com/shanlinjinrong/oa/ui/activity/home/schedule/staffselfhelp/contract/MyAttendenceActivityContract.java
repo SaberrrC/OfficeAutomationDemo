@@ -10,12 +10,11 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 
 import java.util.HashMap;
 
-/**
- * Created by Administrator on 2017/10/31 0031.
- */
-
 public interface MyAttendenceActivityContract {
     interface View extends BaseView {
+
+        void showLoading();
+
         void sendDataSuccess(MyAttandanceResponse myAttandanceResponse);
 
         void sendDataFailed(String errCode, String msg);

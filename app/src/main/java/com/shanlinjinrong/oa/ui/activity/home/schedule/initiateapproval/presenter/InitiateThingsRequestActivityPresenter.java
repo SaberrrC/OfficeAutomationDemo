@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter;
 
+import com.example.retrofit.net.HttpMethods;
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
@@ -12,9 +13,13 @@ import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 import javax.inject.Inject;
+
+import retrofit2.adapter.rxjava.HttpException;
+import rx.Subscriber;
 
 /**
  * 出差想申请
@@ -29,46 +34,52 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
     //申请编码
     @Override
     public void getQueryMonoCode(int type) {
-        mKjHttp.cleanCache();
-        HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(ApiJava.GET_MONOCODE + "?billType=" + type, httpParams, new HttpCallBack() {
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-                mView.showLoading();
-            }
+
+        HttpMethods.getInstance().getQueryMonoCode(type, new Subscriber<String>() {
 
             @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
+            public void onStart() {
+                super.onStart();
                 try {
-                    QueryMonoBean queryMonoBean = new Gson().fromJson(t, QueryMonoBean.class);
-                    switch (queryMonoBean.getCode()) {
-                        case ApiJava.REQUEST_CODE_OK:
-                            mView.getQueryMonoCodeSuccess(queryMonoBean);
-                            break;
-                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
-                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
-                        case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
-                            break;
-                        default:
-                            mView.getQueryMonoCodeFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
-                            break;
-                    }
+                    mView.showLoading();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
+            public void onCompleted() {
                 try {
-                    mView.getQueryMonoCodeFailure(errorNo, strMsg);
                     mView.requestFinish();
                 } catch (Throwable e) {
-                   e.printStackTrace();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                try {
+                    mView.requestFinish();
+                    if (e instanceof HttpException) {
+                        mView.uidNull(((HttpException) e).code());
+                    } else if (e instanceof SocketTimeoutException) {
+                        mView.getQueryMonoCodeFailure(-1, "网络不通，请检查网络连接！");
+                    } else if (e instanceof NullPointerException) {
+                        mView.getQueryMonoCodeFailure(-1, "网络不通，请检查网络连接！");
+                    } else if (e instanceof ConnectException) {
+                        mView.getQueryMonoCodeFailure(-1, "网络不通，请检查网络连接！");
+                    }
+                } catch (Throwable e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNext(String s) {
+                try {
+                    mView.getQueryMonoCodeSuccess(s);
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -175,6 +186,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
     //申请出差
     @Override
     public void submitEvectionApply(HttpParams httpParams) {
+
         mKjHttp.cleanCache();
         mKjHttp.jsonPost(ApiJava.EVECTIONAPPLY, httpParams, new HttpCallBack() {
 

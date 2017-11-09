@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context="com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity">
 
@@ -14,20 +15,29 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:topTitle="@string/str_mine_work_record"
-        />
+        app:topTitle="@string/str_mine_work_record"/>
 
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.1dp"/>
+        android:layout_height="0.1dp"
+        android:background="@color/gray_d5d5d5"/>
+
+
+    <TextView
+        android:id="@+id/tv_no_network"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"/>
 
     <LinearLayout
+        android:id="@+id/ll_container_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -236,10 +246,11 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <View
         android:id="@+id/ll_rootView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:visibility="gone"/>
 </LinearLayout>

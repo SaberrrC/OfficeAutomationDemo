@@ -20,9 +20,6 @@ import rx.Observable;
  */
 public interface JavaApi {
 
-    @GET("myApply/queryApproveByAll")
-    Observable<String> getUpcomingData(@QueryMap Map<String, String> map);
-
     //我的考勤
     @GET("WorkAttendance/getWorkAttendance ")
     Observable<HttpResult<MyAttandanceResponse>> getMyAddantanceData(@QueryMap Map<String, String> map);
@@ -38,5 +35,18 @@ public interface JavaApi {
     //年假查询
     @GET("nchrHoliday/getHoliday")
     Observable<HttpResult<ArrayList<HolidaySearchResponse>>> getHolidaySearchData(@QueryMap Map<String, String> map);
+
+
+    //----------------------发起审批-----------------------
+    //获取单据编号接口
+    @GET("nchrcommon/getBillCode")
+    Observable<HttpResult> getQueryMonoCode(@QueryMap Map<String, String> map);
+
+    //提交出差申请
+    @GET("nchrEvection/submitEvectionApply")
+    Observable<HttpResult> submitEvectionApply(@QueryMap Map<String, String> map);
+
+
+
 
 }

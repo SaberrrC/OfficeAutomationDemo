@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/page_bg"
+    android:backgroundTint="@color/white"
     android:orientation="vertical"
     tools:context="com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity">
 
@@ -26,9 +27,7 @@
         android:id="@+id/tv_not_network"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/net_no_connection"
-        android:visibility="gone"/>
+        android:gravity="center"/>
 
     <ScrollView
         android:id="@+id/sv_container_show"
@@ -36,7 +35,8 @@
         android:layout_height="match_parent"
         android:background="@color/page_bg"
         android:overScrollMode="never"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"

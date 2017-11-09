@@ -35,7 +35,7 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.ll_rootView)
-    LinearLayout mRootView;
+    View mRootView;
     @BindView(R.id.tv_leave_early)
     TextView tv_leave_early;
     @BindView(R.id.tv_business_travel)
@@ -44,6 +44,10 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     TextView tv_absenteeism;
     @BindView(R.id.tv_sign_card_num)
     TextView tv_sign_card_num;
+    @BindView(R.id.tv_no_network)
+    TextView mTvNoNetwork;
+    @BindView(R.id.ll_container_layout)
+    LinearLayout mLlContainerLayout;
 
     private Calendar cal;
     private int mCurrentYear;
@@ -137,6 +141,9 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
         try {
             if (myAttandanceResponse != null) {
+                mTvNoNetwork.setVisibility(View.GONE);
+                mLlContainerLayout.setVisibility(View.VISIBLE);
+                mRootView.setVisibility(View.VISIBLE);
                 mMyAttandanceResponse1 = myAttandanceResponse;
                 //迟到
                 String cdCount = myAttandanceResponse.getCdCount();
@@ -174,10 +181,26 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
 
     @Override
     public void sendDataFailed(String errCode, String msg) {
-        Toast.makeText(MyAttendenceActivity.this, msg, Toast.LENGTH_SHORT).show();
+        showToast(msg);
+        switch (errCode) {
+            case "-1":
+                mTvNoNetwork.setVisibility(View.VISIBLE);
+                mTvNoNetwork.setText(msg);
+                mLlContainerLayout.setVisibility(View.GONE);
+                mRootView.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void showLoading() {
+        showLoadingView();
     }
 
     @Override
     public void sendDataFinish() {
+        hideLoadingView();
     }
 }

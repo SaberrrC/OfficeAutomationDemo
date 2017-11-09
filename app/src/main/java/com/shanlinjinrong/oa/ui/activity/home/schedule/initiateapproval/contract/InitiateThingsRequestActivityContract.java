@@ -16,9 +16,7 @@ public interface InitiateThingsRequestActivityContract {
 
         void requestFinish();
 
-        void requestNetworkError();
-
-        void getQueryMonoCodeSuccess(QueryMonoBean bean);
+        void getQueryMonoCodeSuccess(String code);
 
         void getQueryMonoCodeFailure(int errorCode, String str);
 
@@ -49,7 +47,6 @@ public interface InitiateThingsRequestActivityContract {
         void findSignReasonSuccess(SingReasonBean bean);
 
         void findSignReasonFailure(int errorCode, String str);
-
 
         void registrationCardSuccess(String bean);
 
