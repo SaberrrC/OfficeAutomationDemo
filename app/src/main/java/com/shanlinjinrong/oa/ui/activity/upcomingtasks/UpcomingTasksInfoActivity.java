@@ -61,39 +61,39 @@ import static com.shanlinjinrong.oa.R.id.tv_time;
 public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
 
     @BindView(R.id.tv_title)
-    TextView mTvTitle;
+    TextView       mTvTitle;
     @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    Toolbar        mToolbar;
     @BindView(R.id.rv_content)
-    RecyclerView mRecyclerView;
+    RecyclerView   mRecyclerView;
     @BindView(R.id.toolbar_text_btn)
-    TextView mToolbarTextBtn;
+    TextView       mToolbarTextBtn;
     @BindView(R.id.rl_check)
     RelativeLayout mRlCheck;
     @BindView(R.id.rl_tack_back)
     RelativeLayout mRlTackBack;
     @BindView(R.id.tv_tack_back)
-    TextView mTvTackBack;
+    TextView       mTvTackBack;
     private List<Object> mDatas = new ArrayList<>();
-    private FinalRecycleAdapter mFinalRecycleAdapter;
-    private LinearLayoutManager mLinearLayoutManager;
-    private int mIndex;
-    private boolean mMove;
-    private Dialog mChooseDialog;
-    private ListView mLvList;
+    private FinalRecycleAdapter      mFinalRecycleAdapter;
+    private LinearLayoutManager      mLinearLayoutManager;
+    private int                      mIndex;
+    private boolean                  mMove;
+    private Dialog                   mChooseDialog;
+    private ListView                 mLvList;
     private FinalBaseAdapter<String> mFinalBaseAdapter;
-    private List<String> typeData = new ArrayList<>();
-    private int clickItemPosition = 0;
-    private TextView mEtCommonalityBeginTime;
-    private TextView mEtCommonalityEndTime;
-    private String mWhichList;
-    private UpcomingTaskItemBean.DataBean.DataListBean mBean;
+    private List<String> typeData          = new ArrayList<>();
+    private int          clickItemPosition = 0;
+    private TextView                                    mEtCommonalityBeginTime;
+    private TextView                                    mEtCommonalityEndTime;
+    private String                                      mWhichList;
+    private UpcomingTaskItemBean.DataBean.DataListBean  mBean;
     private UpcomingSearchResultBean.DataBeanX.DataBean mSearchBean;
-    private TextView mTvType;
-    private CardResultBean mCardResultBean;
-    private TraverResultBean mTraverResultBean;
-    private RestResultBean mRestResultBean;
-    private OverTimeResultBean mOverTimeResultBean;
+    private TextView                                    mTvType;
+    private CardResultBean                              mCardResultBean;
+    private TraverResultBean                            mTraverResultBean;
+    private RestResultBean                              mRestResultBean;
+    private OverTimeResultBean                          mOverTimeResultBean;
 
     @Override
     protected void initInject() {
@@ -158,13 +158,13 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             if (TextUtils.equals(mWhichList, "1")) {
                 mRlCheck.setVisibility(View.GONE);
                 mBean = (UpcomingTaskItemBean.DataBean.DataListBean) intent.getSerializableExtra("UPCOMING_INFO");
-                if (TextUtils.equals(mBean.getApproveStateName(), "已收回")) {
+                if (TextUtils.equals(mBean.getApproveState(), "-1")) {
                     mTvTackBack.setText("删除");
                     mRlTackBack.setVisibility(View.VISIBLE);
                     mTvTackBack.setBackgroundResource(R.drawable.shape_upcominginfo_disagree);
                 } else {
                     mTvTackBack.setText("收回");
-                    mRlTackBack.setVisibility(View.VISIBLE);
+                    mRlTackBack.setVisibility(View.GONE);
                     mTvTackBack.setBackgroundResource(R.drawable.shape_upcoming_dialog_ok);
                 }
                 mTvTitle.setText(mBean.getUserName() + "的" + mBean.getBillTypeName());
@@ -304,8 +304,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvCommonalityShow2.setText("签卡原因");
                 tvCommonalityShow3.setText("签卡说明");
                 etCommonalityShow1.setText(bean.getSignTime());
-                etCommonalityShow2.setText(bean.getSignCause());
-                etCommonalityShow3.setText(bean.getSignRemark());
+                etCommonalityShow2.setText(TextUtils.isEmpty(bean.getSignCause()) ? "" : bean.getSignCause());
+                etCommonalityShow3.setText(TextUtils.isEmpty(bean.getSignRemark()) ? "" : bean.getSignRemark());
                 return;
             }
             if (itemData instanceof TraverResultBean.DataBean.NchrevectionApplyDetailBean) {
@@ -328,8 +328,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvCommonalityShow1.setText("出差地点");
                 tvCommonalityShow2.setText("出差原因");
                 tvCommonalityShow3.setText("工作交接人");
-                etCommonalityShow1.setText(bean.getEvectionAddress());
-                etCommonalityShow2.setText(bean.getEvectionRemark());
+                etCommonalityShow1.setText(TextUtils.isEmpty(bean.getEvectionAddress()) ? "" : bean.getEvectionAddress());
+                etCommonalityShow2.setText(TextUtils.isEmpty(bean.getEvectionRemark()) ? "" : bean.getEvectionRemark());
                 etCommonalityShow3.setText(bean.getPsnname());
                 return;
 
@@ -352,7 +352,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvCommonality.setText(bean.getTimeDifference() + "小时");
                 tvCommonalityShow1.setText("休假事由");
                 tvCommonalityShow2.setText("工作交接人");
-                etCommonalityShow1.setText(bean.getFurloughRemark());
+                etCommonalityShow1.setText(TextUtils.isEmpty(bean.getFurloughRemark()) ? "" : bean.getFurloughRemark());
                 etCommonalityShow2.setText(bean.getPsnname());
                 return;
             }
@@ -370,7 +370,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvCommonalityDuration.setText("申请时长");
                 tvCommonality.setText(bean.getOverTimeHour() + "小时");
                 tvCommonalityShow1.setText("休假事由");
-                etCommonalityShow1.setText(bean.getOverTimeRemark());
+                etCommonalityShow1.setText(TextUtils.isEmpty(bean.getOverTimeRemark()) ? "" : bean.getOverTimeRemark());
             }
             return;
         }
@@ -387,21 +387,25 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(bean.getApproveResultCH());
+                tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
+                return;
             }
             if (itemData instanceof TraverResultBean.DataBean.NchrapplyWorkFlowBean) {
                 TraverResultBean.DataBean.NchrapplyWorkFlowBean bean = (TraverResultBean.DataBean.NchrapplyWorkFlowBean) itemData;
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
+                tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
                 tvOption.setText(bean.getApproveResultCH());
+                return;
             }
             if (itemData instanceof RestResultBean.DataBean.NchrapplyWorkFlowBean) {
                 RestResultBean.DataBean.NchrapplyWorkFlowBean bean = (RestResultBean.DataBean.NchrapplyWorkFlowBean) itemData;
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(bean.getApproveResultCH());
+                tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
+                return;
             }
             if (itemData instanceof OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) {
                 OverTimeResultBean.DataBean.NchrapplyWorkFlowBean bean = (OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) itemData;
@@ -410,7 +414,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvState.setText(bean.getIsCheckCH());
                 tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
             }
-            return;
         }
     }
 
