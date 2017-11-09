@@ -209,13 +209,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             }
 
             if (getIntent().getIntExtra("type", -1) != 3) {
-                if (mQueryDuration.equals("0") || mNextDuration.equals("0") || mTv_duration_number.getText().toString().equals("0")) {
-                    if (mTv_duration_next_number != null) {
-                        if (mTv_duration_next_number.getText().toString().equals("0")) {
-                            showToast(mTopView.getTitleView().getText().toString() + "时长为0,请重新获取!");
-                            return;
-                        }
-                    }
+                if (mQueryDuration.equals("0") || mNextDuration.equals("0")) {
                     showToast(mTopView.getTitleView().getText().toString() + "时长为0,请重新获取!");
                     return;
                 }
@@ -251,7 +245,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("endTime", mEnd_time.getText().toString() + ":00");
             jsonObject1.put("startTime", mBegin_time.getText().toString() + ":00");
             jsonObject1.put("handOverPepole", mReceiverId);
-            jsonObject1.put("timeDifference", mTv_duration_number.getText().toString());
+            jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
                 JSONObject jsonObject2 = new JSONObject();
@@ -260,7 +254,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 jsonObject2.put("endTime", mNext_end_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
                 jsonObject2.put("handOverPepole", mNextReceiverId);
-                jsonObject2.put("timeDifference", mTv_duration_next_number.getText().toString());
+                jsonObject2.put("timeDifference",mNextDuration);
                 jsonArray.put(jsonObject2);
             }
             jsonObject.put("nchrevectionApplyDetail", jsonArray);
@@ -284,14 +278,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("cause", mEt_common_show2.getText().toString());
             jsonObject1.put("endTime", mEnd_time.getText().toString() + ":00");
             jsonObject1.put("startTime", mBegin_time.getText().toString() + ":00");
-            jsonObject1.put("timeDifference", mTv_duration_number.getText().toString());
+            jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
                 JSONObject jsonObject2 = new JSONObject();
                 jsonObject2.put("cause", mEt_common_next_show2.getText().toString());
                 jsonObject2.put("endTime", mEnd_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
-                jsonObject2.put("timeDifference", mTv_duration_next_number.getText().toString());
+                jsonObject2.put("timeDifference", mNextDuration);
                 jsonArray.put(jsonObject2);
             }
             jsonObject.put("detailList", jsonArray);
@@ -315,7 +309,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("startTime", mBegin_time.getText().toString() + ":00");
             jsonObject1.put("handOverPepole", mReceiverId);
             jsonObject1.put("FurloughRemark", mEt_common_show2.getText().toString());
-            jsonObject1.put("timeDifference", mTv_duration_number.getText().toString());
+            jsonObject1.put("timeDifference",mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
                 JSONObject jsonObject2 = new JSONObject();
@@ -323,7 +317,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
                 jsonObject2.put("handOverPepole", mNextReceiverId);
                 jsonObject2.put("FurloughRemark", mEt_common_next_show2.getText().toString());
-                jsonObject2.put("timeDifference", mTv_duration_next_number.getText().toString());
+                jsonObject2.put("timeDifference", mNextDuration);
                 jsonArray.put(jsonObject2);
             }
             jsonObject.put("nchrfurloughApplyDetail", jsonArray);
@@ -768,14 +762,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             if (bean != null) {
                 if (isNextDate) {
                     mNextDuration = bean.getData();
-                    if (getIntent().getIntExtra("type", -1) == 2) {
+                    if (getIntent().getIntExtra("type", -1) == 1) {
                         mTv_duration_next_number.setText(bean.getData() + "小时");
                     } else {
                         mTv_duration_next_number.setText(bean.getData() + "天");
                     }
                 } else {
                     mQueryDuration = bean.getData();
-                    if (getIntent().getIntExtra("type", -1) == 2) {
+                    if (getIntent().getIntExtra("type", -1) == 1) {
                         mTv_duration_number.setText(bean.getData() + "小时");
                     } else {
                         mTv_duration_number.setText(bean.getData() + "天");
