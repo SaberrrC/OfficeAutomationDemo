@@ -26,7 +26,6 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
     }
 
 
-
     @Override
     public void launchWorkReport(HttpParams params) {
         mKjHttp.cleanCache();//清除缓存，否则换个日期请求的话，response来自缓存，会一直提示该天已填写日报
@@ -59,13 +58,21 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.reportFailed("" + errorNo, strMsg);
+                try {
+                    mView.reportFailed("" + errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -99,13 +106,21 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getDefaultReceiverFailed(strMsg);
+                try {
+                    mView.getDefaultReceiverFailed(strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

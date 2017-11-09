@@ -16,6 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.InitiateThingsTypeAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.CommonTypeBean;
@@ -111,7 +112,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             mLl_common_duration, mLl_common_next_duration, mLl_common_card_detail, mLl_common_next_card_detail;
     private TextView mTv_common_show2, mTv_common_next_show2, mTv_common_next_show3, mTv_common_show3, mTv_common_duration, mTv_common_next_duration,
             mTv_common_detail, mTv_common_next_detail, mTv_common_begin_time, mTv_common_next_begin_time, mTv_selected_show, mTv_selected_next_show,
-            mBegin_time, mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number;
+            mBegin_time, mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number,
+            mTv_common_next_show2_dot, mTv_common_show2_dot,mTv_common_show3_dot,mTv_common_next_show3_dot;
     private EditText mEt_common_show2, mEt_common_next_show2, mEt_common_show1, mEt_common_next_show1;
 
     @Override
@@ -236,6 +238,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     //*********************************出差提交*******************************
     private void submitEvectionApply() {
+        if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
+            showToast(mBegin_time.getText().toString() + "！");
+            return;
+        }
+        if (mEnd_time.getText().toString().trim().equals("请选择结束时间")) {
+            showToast(mEnd_time.getText().toString() + "！");
+            return;
+        }
+        if (mEt_common_show1.getText().toString().trim().equals("") && !mEt_common_show1.getHint().toString().trim().equals("")) {
+            showToast("请填写出差地点！");
+            return;
+        }
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
@@ -248,13 +262,25 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
+                if (mNext_begin_time.getText().toString().trim().equals("请选择开始时间")) {
+                    showToast(mNext_begin_time.getText().toString() + "！");
+                    return;
+                }
+                if (mNext_end_time.getText().toString().trim().equals("请选择结束时间")) {
+                    showToast(mNext_end_time.getText().toString() + "！");
+                    return;
+                }
+                if (mEt_common_next_show1.getText().toString().trim().equals("") && !mEt_common_next_show1.getHint().toString().trim().equals("")) {
+                    showToast("请填写出差地点！");
+                    return;
+                }
                 JSONObject jsonObject2 = new JSONObject();
                 jsonObject2.put("evectionAddress", mEt_common_next_show1.getText().toString());
                 jsonObject2.put("evectionRemark", mEt_common_next_show2.getText().toString());
                 jsonObject2.put("endTime", mNext_end_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
                 jsonObject2.put("handOverPepole", mNextReceiverId);
-                jsonObject2.put("timeDifference",mNextDuration);
+                jsonObject2.put("timeDifference", mNextDuration);
                 jsonArray.put(jsonObject2);
             }
             jsonObject.put("nchrevectionApplyDetail", jsonArray);
@@ -272,6 +298,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     //*********************************加班提交*********************************
     private void submitAddWorkApply() {
         try {
+            if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
+                showToast(mBegin_time.getText().toString() + "！");
+                return;
+            }
+            if (mEnd_time.getText().toString().trim().equals("请选择结束时间")) {
+                showToast(mEnd_time.getText().toString() + "！");
+                return;
+            }
+            if (mEt_common_show2.getText().toString().trim().equals("") && !mEt_common_show2.getHint().toString().trim().equals("")) {
+                showToast("请填写加班原因！");
+                return;
+            }
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject1 = new JSONObject();
@@ -281,9 +319,21 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
+                if (mNext_begin_time.getText().toString().trim().equals("请选择开始时间")) {
+                    showToast(mNext_begin_time.getText().toString() + "！");
+                    return;
+                }
+                if (mNext_end_time.getText().toString().trim().equals("请选择结束时间")) {
+                    showToast(mNext_end_time.getText().toString() + "！");
+                    return;
+                }
+                if (mEt_common_next_show2.getText().toString().trim().equals("") && !mEt_common_next_show2.getHint().toString().trim().equals("")) {
+                    showToast("请填写加班原因！");
+                    return;
+                }
                 JSONObject jsonObject2 = new JSONObject();
                 jsonObject2.put("cause", mEt_common_next_show2.getText().toString());
-                jsonObject2.put("endTime", mEnd_time.getText().toString() + ":00");
+                jsonObject2.put("endTime", mNext_end_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
                 jsonObject2.put("timeDifference", mNextDuration);
                 jsonArray.put(jsonObject2);
@@ -302,6 +352,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     //*********************************休假提交*********************************
     private void submitFurloughApply() {
         try {//休假申请
+            if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
+                showToast(mBegin_time.getText().toString() + "！");
+                return;
+            }
+            if (mEnd_time.getText().toString().trim().equals("请选择结束时间")) {
+                showToast(mEnd_time.getText().toString() + "！");
+                return;
+            }
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject1 = new JSONObject();
@@ -309,9 +367,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("startTime", mBegin_time.getText().toString() + ":00");
             jsonObject1.put("handOverPepole", mReceiverId);
             jsonObject1.put("FurloughRemark", mEt_common_show2.getText().toString());
-            jsonObject1.put("timeDifference",mQueryDuration);
+            jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
+                if (mNext_begin_time.getText().toString().trim().equals("请选择开始时间")) {
+                    showToast(mNext_begin_time.getText().toString() + "！");
+                    return;
+                }
+                if (mNext_end_time.getText().toString().trim().equals("请选择结束时间")) {
+                    showToast(mNext_end_time.getText().toString() + "！");
+                    return;
+                }
                 JSONObject jsonObject2 = new JSONObject();
                 jsonObject2.put("endTime", mNext_end_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
@@ -336,6 +402,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     //*********************************签卡提交*********************************
     private void submitRegistrationCard() {
         try {
+            if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
+                showToast("请选择签卡时间！");
+                return;
+            }
+            if (mEt_common_show3.getText().toString().trim().equals("") && !mEt_common_show3.getHint().toString().equals("")) {
+                showToast("请填写签卡说明！");
+                return;
+            }
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject1 = new JSONObject();
@@ -346,6 +420,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
                 JSONObject jsonObject2 = new JSONObject();
+                if (mNext_begin_time.getText().toString().trim().equals("请选择开始时间")) {
+                    showToast("请选择签卡时间！");
+                    return;
+                }
+                if (mEt_common_next_show3.getText().toString().trim().equals("") && !mEt_common_next_show3.getHint().toString().equals("")) {
+                    showToast("请填写签卡说明！");
+                    return;
+                }
                 jsonObject2.put("signCause", mTv_selected_next_show.getText().toString().trim());
                 jsonObject2.put("signCauseId", mSelectedNextID);
                 jsonObject2.put("signRemark", mEt_common_next_show3.getText().toString().trim());
@@ -367,10 +449,12 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void initContentView0(View contentView) {
         mEnd_time = (TextView) contentView.findViewById(R.id.et_commonality_end_time);
         mTv_common_show2 = (TextView) contentView.findViewById(R.id.tv_commonality_show2);
+        mTv_common_show2_dot = (TextView) contentView.findViewById(R.id.tv_commonality_show2_dot);
         mEt_common_show2 = (EditText) contentView.findViewById(R.id.et_commonality_show2);
         mTv_selected_show = (TextView) contentView.findViewById(R.id.tv_selected_show);
         mEt_common_show1 = (EditText) contentView.findViewById(R.id.et_commonality_show1);
         mTv_common_show3 = (TextView) contentView.findViewById(R.id.tv_commonality_show3);
+        mTv_common_show3_dot = (TextView) contentView.findViewById(R.id.tv_commonality_show3_dot);
         mEt_common_show3 = (TextView) contentView.findViewById(R.id.et_commonality_show3);
         mBegin_time = (TextView) contentView.findViewById(R.id.et_commonality_begin_time);
         mTv_common_detail = (TextView) contentView.findViewById(R.id.tv_commonality_detail);
@@ -396,9 +480,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void initContentView1(View contentView) {
         mNext_end_time = (TextView) contentView.findViewById(R.id.et_commonality_end_time);
         mTv_common_next_show2 = (TextView) contentView.findViewById(R.id.tv_commonality_show2);
+        mTv_common_next_show2_dot = (TextView) contentView.findViewById(R.id.tv_commonality_show2_dot);
         mEt_common_next_show2 = (EditText) contentView.findViewById(R.id.et_commonality_show2);
         mEt_common_next_show1 = (EditText) contentView.findViewById(R.id.et_commonality_show1);
         mTv_common_next_show3 = (TextView) contentView.findViewById(R.id.tv_commonality_show3);
+        mTv_common_next_show3_dot = (TextView) contentView.findViewById(R.id.tv_commonality_show3_dot);
         mTv_selected_next_show = (TextView) contentView.findViewById(R.id.tv_selected_show);
         mEt_common_next_show3 = (TextView) contentView.findViewById(R.id.et_commonality_show3);
         mNext_begin_time = (TextView) contentView.findViewById(R.id.et_commonality_begin_time);
@@ -513,6 +599,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void overTimeWorkRequest() {
         mLl_common_show1.setVisibility(View.GONE);
         mLl_common_show3.setVisibility(View.GONE);
+        mTv_common_show2_dot.setVisibility(View.VISIBLE);
         mTopView.setAppTitle("加班申请");
         mTvCommonalityType.setText("加班类别");
         mTvCommonalityCoder.setText("加班编码");
@@ -547,6 +634,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLl_common_duration.setVisibility(View.GONE);
         mLlCommonalityType.setVisibility(View.GONE);
         mLl_common_card_detail.setVisibility(View.VISIBLE);
+        mTv_common_show3_dot.setVisibility(View.VISIBLE);
+        mTv_common_show2_dot.setVisibility(View.VISIBLE);
+        mTv_common_show2.setVisibility(View.VISIBLE);
         mTopView.setAppTitle("签卡申请");
         mTv_common_show2.setText("签卡原因");
         mTvCommonalityCoder.setText("签卡编码");
@@ -568,6 +658,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     private void overTimeWorkRequest1() {
         mLl_common_next_show1.setVisibility(View.GONE);
         mLl_common_next_show3.setVisibility(View.GONE);
+        mTv_common_next_show2_dot.setVisibility(View.VISIBLE);
         mTv_common_next_detail.setText("加班明细");
         mTv_duration_next_number.setText("0小时");
         mTv_common_next_show2.setText("加班原因");
@@ -592,6 +683,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLl_common_next_end_time.setVisibility(View.GONE);
         mLl_common_next_duration.setVisibility(View.GONE);
         mLl_common_next_card_detail.setVisibility(View.VISIBLE);
+        mTv_common_next_show3_dot.setVisibility(View.VISIBLE);
+        mTv_common_next_show2_dot.setVisibility(View.VISIBLE);
+        mTv_common_next_show2.setVisibility(View.VISIBLE);
         mTv_common_next_show2.setText("签卡原因");
         mTv_common_next_show3.setText("签卡说明");
         mTv_common_next_detail.setText("签卡明细");
