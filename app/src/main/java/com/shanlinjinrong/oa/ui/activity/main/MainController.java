@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -648,36 +647,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                     }
                 }
             });
-        }
-    }
-
-    private CustomDialogUtils mDialog;
-
-    //环线 多地登陆退出
-    private void NonTokenDialog() {
-        try {
-            //获取屏幕高宽
-            DisplayMetrics metric = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(metric);
-            int windowsHeight = metric.heightPixels;
-            int windowsWight = metric.widthPixels;
-            CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(this);
-            mDialog = builder.cancelTouchout(false)
-                    .view(R.layout.common_custom_dialog)
-                    .heightpx((int) (windowsHeight / 4.5))
-                    .widthpx((int) (windowsWight / 1.4))
-                    .style(R.style.dialog)
-                    .addViewOnclick(R.id.tv_non_token_confirm, view -> {
-                        catchWarningByCode(Api.RESPONSES_CODE_TOKEN_NO_MATCH);
-                    })
-                    .build();
-            if (mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
-            mDialog.setCancelable(false);
-            mDialog.show();
-        } catch (Throwable e) {
-            e.printStackTrace();
         }
     }
 }

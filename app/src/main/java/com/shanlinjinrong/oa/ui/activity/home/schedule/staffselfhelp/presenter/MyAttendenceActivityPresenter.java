@@ -1,29 +1,19 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.util.Log;
 
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.net.ApiException;
 import com.example.retrofit.net.HttpMethods;
-import com.google.gson.Gson;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.MyAttendenceActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
-import org.kymjs.kjframe.http.Request;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 
 
@@ -48,14 +38,8 @@ public class MyAttendenceActivityPresenter extends HttpPresenter<MyAttendenceAct
 
             @Override
             public void onError(Throwable e) {
-
-                if (e instanceof ApiException) {
-                    ApiException baseException = (ApiException) e;
-                    String code = baseException.getCode();
-                    String message = baseException.getMessage();
-                    mView.sendDataFailed(code, message);
-                } else {
-                    //mView.sendDataFailed("555", "请检查网络！");
+                if (e instanceof HttpException) {
+                    mView.uidNull(((HttpException) e).code());
                 }
             }
 

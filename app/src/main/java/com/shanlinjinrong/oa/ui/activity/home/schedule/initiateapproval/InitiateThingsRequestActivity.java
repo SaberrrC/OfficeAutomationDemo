@@ -543,7 +543,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast("获取" + mTv_common_show2.getText().toString() + "失败,请检查网络！");
                 return;
             }
-            NonTokenDialog();
+            selectedDialog();
         });
 
     }
@@ -724,7 +724,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                     showToast("获取" + mTvCommonalityType.getText().toString() + "失败,请检查网络！");
                     return;
                 }
-                NonTokenDialog();
+                selectedDialog();
                 break;
             case R.id.tv_commonality_type_date:
                 mYearDateSelected.showPositionDateView(mYearPosition);
@@ -1114,7 +1114,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         }
     }
 
-    private void NonTokenDialog() {
+    private void selectedDialog() {
         try {
             //获取屏幕高宽
             DisplayMetrics metric = new DisplayMetrics();

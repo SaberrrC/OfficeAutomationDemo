@@ -1,8 +1,10 @@
 package com.example.retrofit.retrofit;
+
 import com.example.retrofit.net.RetrofitConfig;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -36,10 +38,9 @@ public class HeaderInterceptor implements Interceptor {
     private Request addHeaders(Request request) {
         return request.newBuilder()
                 .addHeader("token", RetrofitConfig.getInstance().getAuthToken())
-                .addHeader("uid",RetrofitConfig.getInstance().getUserId())
+                .addHeader("uid", RetrofitConfig.getInstance().getUserId())
                 .build();
     }
-
 
 
 }
