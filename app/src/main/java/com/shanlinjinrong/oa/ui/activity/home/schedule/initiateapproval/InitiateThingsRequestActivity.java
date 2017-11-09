@@ -207,15 +207,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast("提交失败,请获取" + mTvCommonalityCoder.getText().toString() + "!");
                 return;
             }
-            if (mQueryDuration.equals("0") || mNextDuration.equals("0") || mTv_duration_number.getText().toString().equals("0")) {
-                if (mTv_duration_next_number != null) {
-                    if (mTv_duration_next_number.getText().toString().equals("0")) {
-                        showToast(mTopView.getTitleView().getText().toString() + "时长为0,请重新获取!");
-                        return;
+
+            if (getIntent().getIntExtra("type", -1) != 3) {
+                if (mQueryDuration.equals("0") || mNextDuration.equals("0") || mTv_duration_number.getText().toString().equals("0")) {
+                    if (mTv_duration_next_number != null) {
+                        if (mTv_duration_next_number.getText().toString().equals("0")) {
+                            showToast(mTopView.getTitleView().getText().toString() + "时长为0,请重新获取!");
+                            return;
+                        }
                     }
+                    showToast(mTopView.getTitleView().getText().toString() + "时长为0,请重新获取!");
+                    return;
                 }
-                showToast(mTopView.getTitleView().getText().toString() + "时长为0,请重新获取!");
-                return;
             }
 
             switch (getIntent().getIntExtra("type", -1)) {

@@ -1,6 +1,7 @@
 package com.example.retrofit.retrofit;
 import com.example.retrofit.net.RetrofitConfig;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -20,7 +21,7 @@ public class HeaderInterceptor implements Interceptor {
     }
 
     @Override
-    public Response intercept(Chain chain) {
+    public Response intercept(Chain chain) throws IOException {
         Request request = addHeaders(chain.request());
         try {
             Response response = chain.proceed(request);
