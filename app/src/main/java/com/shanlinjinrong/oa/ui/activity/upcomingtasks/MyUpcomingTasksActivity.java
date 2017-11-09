@@ -815,14 +815,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         hideLoadingView();
         List<AgreeDisagreeResultBean.DataBean> beanList = resultBean.getData();
         StringBuilder stringBuilder = new StringBuilder();
-        StringBuilder faileSb = new StringBuilder();
         int count = 0;
         for (int i = 0; i < beanList.size(); i++) {
             if (TextUtils.equals(beanList.get(i).getStatus(), "1")) {
                 stringBuilder.append(beanList.get(i).getReason() + "\n");
                 count++;
-            } else {
-                faileSb.append(beanList.get(i).getReason() + "\n");
             }
         }
         if (count == 0) {
@@ -845,7 +842,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 }, 500);
             }
         });
-
     }
 
     private void showDetailDialog(List<AgreeDisagreeResultBean.DataBean> beanList) {
