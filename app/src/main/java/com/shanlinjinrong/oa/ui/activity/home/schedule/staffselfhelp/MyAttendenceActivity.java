@@ -18,8 +18,6 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
 import com.shanlinjinrong.views.common.CommonTopView;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -132,6 +130,7 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
 
     @Override
     public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 
     @Override

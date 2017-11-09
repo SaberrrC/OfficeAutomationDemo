@@ -132,14 +132,14 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
     private void initView() {
         tv_center_title.setText(data.get(0));
         tv_center_title.setOnClickListener(view -> {
-            NonTokenDialog();
+            selectedDialog();
         });
         mLlSelectTime.setOnClickListener(view -> {
             mYearDateSelected.showBeginTimeView();
         });
     }
 
-    private void NonTokenDialog() {
+    private void selectedDialog() {
         try {
             //获取屏幕高宽
             DisplayMetrics metric = new DisplayMetrics();
@@ -211,9 +211,12 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
                     ApiException baseException = (ApiException) e;
                     String code = baseException.getCode();
                     String message = baseException.getMessage();
-                } else {
-                    //mView.sendDataFailed("555", "请检查网络！");
+                } else if (e instanceof retrofit2.adapter.rxjava.HttpException){
+                    if (401 == ((retrofit2.adapter.rxjava.HttpException) e).code()){
+
+                    }
                 }
+
             }
 
             @Override
