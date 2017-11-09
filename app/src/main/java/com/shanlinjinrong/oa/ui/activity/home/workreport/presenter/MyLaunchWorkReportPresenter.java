@@ -86,13 +86,21 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.loadDataFailed("" + errorNo, strMsg);
+                try {
+                    mView.loadDataFailed("" + errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.loadDataFinish();
+                try {
+                    mView.loadDataFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -158,13 +166,21 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.loadDataFailed("" + errorNo, strMsg);
+                try {
+                    mView.loadDataFailed("" + errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.loadDataFinish();
+                try {
+                    mView.loadDataFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

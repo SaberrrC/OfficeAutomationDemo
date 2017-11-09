@@ -62,13 +62,21 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getReportFailed("", "");
+                try {
+                    mView.getReportFailed("", "");
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -104,14 +112,22 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.updateReportFailed(strMsg);
+                try {
+                    mView.updateReportFailed(strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
 
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
