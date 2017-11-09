@@ -236,6 +236,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     //*********************************出差提交*******************************
     private void submitEvectionApply() {
+        if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
+            showToast(mBegin_time.getText().toString() + "！");
+            return;
+        }
+        if (mEnd_time.getText().toString().trim().equals("请选择结束时间")) {
+            showToast(mEnd_time.getText().toString() + "！");
+            return;
+        }
+        if (mEt_common_show1.getText().toString().trim().equals("") && !mEt_common_show1.getHint().toString().trim().equals("")) {
+            showToast("请填写出差地点！");
+            return;
+        }
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
@@ -248,13 +260,25 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
+                if (mNext_begin_time.getText().toString().trim().equals("请选择开始时间")) {
+                    showToast(mNext_begin_time.getText().toString() + "！");
+                    return;
+                }
+                if (mNext_end_time.getText().toString().trim().equals("请选择结束时间")) {
+                    showToast(mNext_end_time.getText().toString() + "！");
+                    return;
+                }
+                if (mEt_common_next_show1.getText().toString().trim().equals("") && !mEt_common_next_show1.getHint().toString().trim().equals("")) {
+                    showToast("请填写出差地点！");
+                    return;
+                }
                 JSONObject jsonObject2 = new JSONObject();
                 jsonObject2.put("evectionAddress", mEt_common_next_show1.getText().toString());
                 jsonObject2.put("evectionRemark", mEt_common_next_show2.getText().toString());
                 jsonObject2.put("endTime", mNext_end_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
                 jsonObject2.put("handOverPepole", mNextReceiverId);
-                jsonObject2.put("timeDifference",mNextDuration);
+                jsonObject2.put("timeDifference", mNextDuration);
                 jsonArray.put(jsonObject2);
             }
             jsonObject.put("nchrevectionApplyDetail", jsonArray);
@@ -272,6 +296,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     //*********************************加班提交*********************************
     private void submitAddWorkApply() {
         try {
+            if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
+                showToast(mBegin_time.getText().toString() + "！");
+                return;
+            }
+            if (mEnd_time.getText().toString().trim().equals("请选择结束时间")) {
+                showToast(mEnd_time.getText().toString() + "！");
+                return;
+            }
+            if (mEt_common_show2.getText().toString().trim().equals("") && !mEt_common_show2.getHint().toString().trim().equals("")) {
+                showToast("请填写加班原因！");
+                return;
+            }
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject1 = new JSONObject();
@@ -281,9 +317,21 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
+                if (mNext_begin_time.getText().toString().trim().equals("请选择开始时间")) {
+                    showToast(mNext_begin_time.getText().toString() + "！");
+                    return;
+                }
+                if (mNext_end_time.getText().toString().trim().equals("请选择结束时间")) {
+                    showToast(mNext_end_time.getText().toString() + "！");
+                    return;
+                }
+                if (mEt_common_next_show2.getText().toString().trim().equals("") && !mEt_common_next_show2.getHint().toString().trim().equals("")) {
+                    showToast("请填写加班原因！");
+                    return;
+                }
                 JSONObject jsonObject2 = new JSONObject();
                 jsonObject2.put("cause", mEt_common_next_show2.getText().toString());
-                jsonObject2.put("endTime", mEnd_time.getText().toString() + ":00");
+                jsonObject2.put("endTime", mNext_end_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
                 jsonObject2.put("timeDifference", mNextDuration);
                 jsonArray.put(jsonObject2);
@@ -302,6 +350,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     //*********************************休假提交*********************************
     private void submitFurloughApply() {
         try {//休假申请
+            if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
+                showToast(mBegin_time.getText().toString() + "！");
+                return;
+            }
+            if (mEnd_time.getText().toString().trim().equals("请选择结束时间")) {
+                showToast(mEnd_time.getText().toString() + "！");
+                return;
+            }
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject1 = new JSONObject();
@@ -309,9 +365,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("startTime", mBegin_time.getText().toString() + ":00");
             jsonObject1.put("handOverPepole", mReceiverId);
             jsonObject1.put("FurloughRemark", mEt_common_show2.getText().toString());
-            jsonObject1.put("timeDifference",mQueryDuration);
+            jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
+                if (mNext_begin_time.getText().toString().trim().equals("请选择开始时间")) {
+                    showToast(mNext_begin_time.getText().toString() + "！");
+                    return;
+                }
+                if (mNext_end_time.getText().toString().trim().equals("请选择结束时间")) {
+                    showToast(mNext_end_time.getText().toString() + "！");
+                    return;
+                }
                 JSONObject jsonObject2 = new JSONObject();
                 jsonObject2.put("endTime", mNext_end_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
@@ -336,6 +400,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     //*********************************签卡提交*********************************
     private void submitRegistrationCard() {
         try {
+            if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
+                showToast("请选择签卡时间！");
+                return;
+            }
+            if (mEt_common_show3.getText().toString().trim().equals("") && !mEt_common_show3.getHint().toString().equals("")) {
+                showToast("请填写签卡说明！");
+                return;
+            }
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject1 = new JSONObject();
@@ -346,6 +418,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
                 JSONObject jsonObject2 = new JSONObject();
+                if (mNext_begin_time.getText().toString().trim().equals("请选择开始时间")) {
+                    showToast("请选择签卡时间！");
+                    return;
+                }
+                if (mEt_common_next_show3.getText().toString().trim().equals("") && !mEt_common_next_show3.getHint().toString().equals("")) {
+                    showToast("请填写签卡说明！");
+                    return;
+                }
                 jsonObject2.put("signCause", mTv_selected_next_show.getText().toString().trim());
                 jsonObject2.put("signCauseId", mSelectedNextID);
                 jsonObject2.put("signRemark", mEt_common_next_show3.getText().toString().trim());
