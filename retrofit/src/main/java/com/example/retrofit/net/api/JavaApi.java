@@ -1,6 +1,7 @@
 package com.example.retrofit.net.api;
 
 import com.example.retrofit.model.HttpResult;
+import com.example.retrofit.model.requestbody.EvectionBody;
 import com.example.retrofit.model.responsebody.CountResponse1;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
@@ -9,7 +10,9 @@ import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 import java.util.ArrayList;
 import java.util.Map;
 
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 
@@ -43,8 +46,8 @@ public interface JavaApi {
     Observable<HttpResult> getQueryMonoCode(@QueryMap Map<String, String> map);
 
     //提交出差申请
-    @GET("nchrEvection/submitEvectionApply")
-    Observable<HttpResult> submitEvectionApply(@QueryMap Map<String, String> map);
+    @POST("nchrEvection/submitEvectionApply")
+    Observable<HttpResult> submitEvectionApply(@Body EvectionBody data);
 
 
 
