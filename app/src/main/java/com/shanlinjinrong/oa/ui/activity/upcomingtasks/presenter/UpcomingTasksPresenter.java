@@ -69,7 +69,6 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    mView.onGetApproveDataFailure(500, "网络异常");
                 }
 
             }
@@ -135,11 +134,6 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    if (t.contains("\"code\":\"020000\"")) {
-                        mView.onGetApproveDataFailure(500, "查询无结果");
-                        return;
-                    }
-                    mView.onGetApproveDataFailure(500, "网络异常");
                 }
             }
 
@@ -155,7 +149,6 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     mView.onGetApproveDataFailure(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    mView.onGetApproveDataFailure(500, "网络异常");
                 }
             }
         });
