@@ -312,6 +312,9 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         try {
             mTvNotNetwork.setVisibility(View.GONE);
             mLlContentShow.setVisibility(View.VISIBLE);
+            if (dataBeen == null) {
+                dataBeen = new ArrayList<>();
+            }
             mSelectTime.addAll(dataBeen);
             isNetwork = true;
             refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
