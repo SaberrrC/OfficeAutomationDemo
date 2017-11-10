@@ -1,7 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.main;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -33,6 +36,7 @@ import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.util.NetUtils;
+import com.iflytek.cloud.thirdparty.B;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -48,6 +52,7 @@ import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
+import com.shanlinjinrong.oa.utils.BadgeUtil;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
@@ -180,6 +185,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
+//        sendToSamSungAllContentResolver();
     }
 
     @Override
@@ -446,7 +452,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
      * 初始化数据
      */
     private void initData() {
-        RetrofitConfig.getInstance().setAuthToken( AppConfig.getAppConfig(AppManager.mContext).getPrivateToken());
+        RetrofitConfig.getInstance().setAuthToken(AppConfig.getAppConfig(AppManager.mContext).getPrivateToken());
         RetrofitConfig.getInstance().setUserId(AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
         RetrofitConfig.getInstance().setUserCode(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
         //检测推送页面
@@ -512,16 +518,22 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
 
     @Override
     protected void onStop() {
-        if (!Utils.isRunningForeground(this)) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (tempMsgCount != 0) {
-                    }
-                }
-            }).start();
-        }
+//        if (!Utils.isRunningForeground(this)) {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
+//                    if (tempMsgCount != 0) {
+//                    }
+//                }
+//            }).start();
+//        }
         super.onStop();
+        try {
+            BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
