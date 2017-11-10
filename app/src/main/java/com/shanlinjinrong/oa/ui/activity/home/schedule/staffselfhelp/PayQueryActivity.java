@@ -5,9 +5,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.retrofit.model.responsebody.QueryPayResponse;
+import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.bean.PayQueryDataBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.PayQueryPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -92,8 +94,10 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
     TextView mTvHeatingAllowance;
     @BindView(R.id.tv_not_network)
     TextView mTvNotNetwork;
-    @BindView(R.id.sl_container_)
+    @BindView(R.id.sl_container_layout)
     ScrollView mSlContainer;
+    @BindView(R.id.ll_container_layout)
+    LinearLayout mLlContainerLayout;
 
     private List<String> mDate = new ArrayList<>();
 
@@ -140,9 +144,10 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
     }
 
     @Override
-    public void payQueryInfoSuccess(PayQueryDataBean.DataBean bean) {
+    public void payQueryInfoSuccess(QueryPayResponse bean) {
         mTvNotNetwork.setVisibility(View.GONE);
         mSlContainer.setVisibility(View.VISIBLE);
+        mLlContainerLayout.setVisibility(View.VISIBLE);
         if (bean != null) {
             mTvRemark.setText(bean.getRemark());
             mTvName.setText(bean.getUserName());
@@ -177,13 +182,11 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
 
     @Override
     public void payQueryInfoFailed(int errCode, String msg) {
-        switch (errCode) {
-            case -1:
-                mTvNotNetwork.setVisibility(View.VISIBLE);
-                mTvNotNetwork.setText(R.string.net_no_connection);
-                mSlContainer.setVisibility(View.GONE);
-                break;
-        }
+        mTvNotNetwork.setText(msg);
+        mSlContainer.setVisibility(View.GONE);
+        mTvNotNetwork.setVisibility(View.VISIBLE);
+        mLlContainerLayout.setVisibility(View.GONE);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

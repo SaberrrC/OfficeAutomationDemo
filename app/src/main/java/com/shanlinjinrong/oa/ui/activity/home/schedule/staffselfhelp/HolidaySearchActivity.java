@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
+import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.HolidayAdapter;
@@ -269,7 +270,9 @@ public class HolidaySearchActivity extends HttpBaseActivity<HolidaySearchPresent
 
     @Override
     public void getDataFailed(int errCode, String msg) {
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        mTvNoNetwork.setVisibility(View.VISIBLE);
+        mSvContainerLayout.setVisibility(View.GONE);
         mTvNoNetwork.setText(msg);
     }
 

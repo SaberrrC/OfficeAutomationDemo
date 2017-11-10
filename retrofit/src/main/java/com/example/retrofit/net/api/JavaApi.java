@@ -3,6 +3,7 @@ package com.example.retrofit.net.api;
 import com.example.retrofit.model.HttpResult;
 import com.example.retrofit.model.requestbody.AddWorkBody;
 import com.example.retrofit.model.requestbody.EvectionBody;
+import com.example.retrofit.model.responsebody.QueryPayResponse;
 import com.example.retrofit.model.responsebody.CountResponse1;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
@@ -39,6 +40,10 @@ public interface JavaApi {
     //年假查询
     @GET("nchrHoliday/getHoliday")
     Observable<HttpResult<ArrayList<HolidaySearchResponse>>> getHolidaySearchData(@QueryMap Map<String, String> map);
+
+    //薪资查询
+    @GET("nchrsalary/querySalary")
+    Observable<HttpResult<QueryPayResponse>> getPayInfoData(@QueryMap Map<String, String> map);
 
 
     //----------------------发起审批-----------------------

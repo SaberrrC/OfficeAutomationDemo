@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract;
 
 import android.content.Context;
 
+import com.example.retrofit.model.responsebody.QueryPayResponse;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.bean.PayQueryDataBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -15,7 +16,7 @@ public interface PayQueryContract {
 
         void showLoading();
 
-        void payQueryInfoSuccess(PayQueryDataBean.DataBean bean);
+        void payQueryInfoSuccess(QueryPayResponse bean);
 
         void payQueryInfoFailed(int errCode, String msg);
 

@@ -1,28 +1,19 @@
 package com.example.retrofit.net;
 
-import android.widget.Toast;
-
 import com.example.retrofit.model.HttpResult;
-import com.example.retrofit.model.requestbody.AddWorkBody;
-import com.example.retrofit.model.requestbody.AliCheckRequestBean;
-import com.example.retrofit.model.requestbody.EvectionBody;
+import com.example.retrofit.model.responsebody.QueryPayResponse;
 import com.example.retrofit.model.responsebody.CountResponse1;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit2.HttpException;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -57,6 +48,14 @@ public class HttpMethods {
         toSubscribe(map1, subscriber);
     }
 
+    //薪资查询
+    public void getPayInfoData(String date, Subscriber<QueryPayResponse> subscriber) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("date", date);
+        Observable<QueryPayResponse> map1 = ApiFactory.getJavaApi().getPayInfoData(map).map(new HttpResultFuncTypeJava<QueryPayResponse>());
+        toSubscribe(map1, subscriber);
+    }
+
     //----------------------发起审批-----------------------
 
     //审批编码查询
@@ -67,11 +66,11 @@ public class HttpMethods {
         toSubscribe(map1, subscriber);
     }
 
-    //出差申请
-    public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {
-        Observable map1 = ApiFactory.getJavaApi().submitEvectionApply(body).map(new HttpResultFuncTypeJava());
-        toSubscribe(map1, subscriber);
-    }
+//    //出差申请
+//    public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {
+//        Observable map1 = ApiFactory.getJavaApi().submitEvectionApply(body).map(new HttpResultFuncTypeJava());
+//        toSubscribe(map1, subscriber);
+//    }
 
 
 //    //加班申请
