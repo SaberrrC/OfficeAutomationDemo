@@ -99,7 +99,9 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     private void initView() {
         mTopView.setAppTitle("选择接收人");
-        mTopView.setRightText("确定");
+        if (!getIntent().getBooleanExtra("isRequest", false)) {
+            mTopView.setRightText("确定");
+        }
         mTopView.setRightAction(v -> {
             if (mSelectChild == null) {
                 Toast.makeText(SelectContactActivity.this, "未选择接收人", Toast.LENGTH_SHORT).show();
@@ -337,11 +339,13 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
                 mSelectChild = mChildren.get(position);
                 mRequestAdapter.setNewData(mChildren);
                 mRequestAdapter.notifyDataSetChanged();
+                setFinishResult();
                 return;
             }
             mSelectChild = mdata.get(position);
             mRequestAdapter.setNewData(mdata);
             mRequestAdapter.notifyDataSetChanged();
+            setFinishResult();
         } catch (Throwable e) {
             e.printStackTrace();
         }
