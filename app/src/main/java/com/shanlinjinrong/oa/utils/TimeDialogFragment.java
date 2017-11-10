@@ -137,13 +137,13 @@ public class TimeDialogFragment extends DialogFragment {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         if (!isNextMonth) {
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 180; i++) {
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 String month_day = simpleDateFormat.format(calendar.getTime()).substring(simpleDateFormat.format(calendar.getTime()).indexOf("年") + 1, simpleDateFormat.format(calendar.getTime()).length());
                 mDayList.add(0, month_day + "  " + getWeek(simpleDateFormat.format(calendar.getTime())));
             }
         } else {
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 180; i++) {
                 calendar.add(Calendar.DAY_OF_MONTH, +1);
                 String month_day = simpleDateFormat.format(calendar.getTime()).substring(simpleDateFormat.format(calendar.getTime()).indexOf("年") + 1, simpleDateFormat.format(calendar.getTime()).length());
                 mDayList.add(month_day + "  " + getWeek(simpleDateFormat.format(calendar.getTime())));
@@ -198,23 +198,23 @@ public class TimeDialogFragment extends DialogFragment {
                 } else {
                     mHour = "" + mSelectTime;
                 }
-                if (currentItemPosition0 == 30) {
+                if (currentItemPosition0 == 180) {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     Date currentDate = new Date(System.currentTimeMillis());
                     String format = formatter.format(currentDate);
                     mSelectedDate = format + " " + mHour + ":" + min;
-                } else if (currentItemPosition0 < 30) {
+                } else if (currentItemPosition0 < 180) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
-                    calendar.add(Calendar.DAY_OF_MONTH, -(30 - currentItemPosition0));
+                    calendar.add(Calendar.DAY_OF_MONTH, -(180 - currentItemPosition0));
                     String format = simpleDateFormat.format(calendar.getTimeInMillis());
                     mSelectedDate = format + " " + mHour + ":" + min;
-                } else if (currentItemPosition0 > 30) {
+                } else if (currentItemPosition0 > 180) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
-                    calendar.add(Calendar.DAY_OF_MONTH, 30 - (60 - currentItemPosition0));
+                    calendar.add(Calendar.DAY_OF_MONTH, 180 - (360 - currentItemPosition0));
                     String format = simpleDateFormat.format(calendar.getTimeInMillis());
                     mSelectedDate = format + " " + mHour + ":" + min;
                 }
