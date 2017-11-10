@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -95,8 +96,13 @@ public class AttandenceRecorderActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, MyAttandanceResponse.AllWorkAttendanceListBean bean) {
-            baseViewHolder.setVisible(R.id.ll_currentday_state,true);
-            baseViewHolder.setVisible(R.id.tv_empty_layout,false);
+            baseViewHolder.setVisible(R.id.ll_currentday_state, true);
+            baseViewHolder.setVisible(R.id.tv_empty_layout, false);
+            if (bean.getSignCause() != null) {
+                if (!TextUtils.isEmpty(bean.getSignCause().toString())) {
+                    baseViewHolder.setVisible(R.id.tv_sign_in, false);
+                }
+            }
             baseViewHolder.setText(R.id.tv_name, bean.getPsname());
             baseViewHolder.setText(R.id.tv_date, bean.getCalendar());
             baseViewHolder.setText(R.id.tv_gowork_time, bean.getOnebegintime());

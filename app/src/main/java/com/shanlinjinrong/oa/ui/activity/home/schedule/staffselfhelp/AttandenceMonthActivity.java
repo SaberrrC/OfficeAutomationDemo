@@ -193,37 +193,37 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();
         for (MyAttandanceResponse.CcWorkAttendanceListBean item : ccWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+            mDataTypeMap.put(key, getType("[出差]") + "");
         }
         //迟到
         List<MyAttandanceResponse.CdWorkAttendanceListBean> cdWorkAttendanceList = myAttandanceResponse.getCdWorkAttendanceList();
         for (MyAttandanceResponse.CdWorkAttendanceListBean item : cdWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+            mDataTypeMap.put(key, getType("[迟到]") + "");
         }
         //加班
         List<MyAttandanceResponse.JbWorkAttendanceListBean> jbWorkAttendanceList = myAttandanceResponse.getJbWorkAttendanceList();
         for (MyAttandanceResponse.JbWorkAttendanceListBean item : jbWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+            mDataTypeMap.put(key, getType("[加班转调休]") + "");
         }
         //旷工
         List<MyAttandanceResponse.KgWorkAttendanceListBean> kgWorkAttendanceList = myAttandanceResponse.getKgWorkAttendanceList();
         for (MyAttandanceResponse.KgWorkAttendanceListBean item : kgWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+            mDataTypeMap.put(key, getType("[旷工]") + "");
         }
         //休假
         List<MyAttandanceResponse.XjWorkAttendanceListBean> xjWorkAttendanceList = myAttandanceResponse.getXjWorkAttendanceList();
         for (MyAttandanceResponse.XjWorkAttendanceListBean item : xjWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+            mDataTypeMap.put(key, getType("[休假]") + "");
         }
         //早退
         List<MyAttandanceResponse.ZtWorkAttendanceListBean> ztWorkAttendanceList = myAttandanceResponse.getZtWorkAttendanceList();
         for (MyAttandanceResponse.ZtWorkAttendanceListBean item : ztWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+            mDataTypeMap.put(key, getType("[早退]") + "");
         }
 
         for (PopItem mDataItrm : mData) {
