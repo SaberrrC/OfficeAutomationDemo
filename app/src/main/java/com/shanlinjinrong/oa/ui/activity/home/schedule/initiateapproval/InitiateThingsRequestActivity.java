@@ -599,14 +599,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             });
         mLl_common_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = false;
-            if (data == null) {
-                showToast("获取" + mTv_common_show2.getText().toString() + "失败,请检查网络！");
-                return;
-            } else if (data.size() == 0) {
-                showToast("获取" + mTv_common_show2.getText().toString() + "失败,请检查网络！");
+            if (data != null) {
+                if (data.size() == 0) {
+                    showToast("获取" + mTv_common_show2.getText().toString() + "失败,正在为您重试！");
+                    querySelectedTypeData();
+                    return;
+                }
+                selectedDialog();
                 return;
             }
-            selectedDialog();
+            showToast("获取" + mTv_common_show2.getText().toString() + "失败,正在为您重试！");
+            querySelectedTypeData();
         });
 
     }
@@ -640,14 +643,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             });
         mLl_common_next_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = true;
-            if (mCommonTypeBean == null) {
-                showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,请检查网络！");
-                return;
-            } else if (mCommonTypeBean.getData().size() == 0) {
-                showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,请检查网络！");
+            if (mCommonTypeBean != null) {
+                if (mCommonTypeBean.getData().size() == 0) {
+                    showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,正在为您重试！");
+                    querySelectedTypeData();
+                    return;
+                }
+                NonTokenDialog();
                 return;
             }
-            NonTokenDialog();
+            showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,正在为您重试！");
+            querySelectedTypeData();
         });
     }
 
@@ -779,15 +785,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 addDetail();
                 break;
             case R.id.tv_commonality_type_selected:
-                if (mCommonTypeBean == null) {
-                    showToast("获取" + mTvCommonalityType.getText().toString() + "失败,请检查网络！");
-                    return;
-                } else if
-                        (mCommonTypeBean.getData().size() == 0) {
-                    showToast("获取" + mTvCommonalityType.getText().toString() + "失败,请检查网络！");
+                if (mCommonTypeBean != null) {
+                    if (mCommonTypeBean.getData().size() == 0) {
+                        showToast("获取" + mTvCommonalityType.getText().toString() + "失败,正在为您重试！");
+                        querySelectedTypeData();
+                        return;
+                    }
+                    selectedDialog();
                     return;
                 }
-                selectedDialog();
+                showToast("获取" + mTvCommonalityType.getText().toString() + "失败,正在为您重试！");
+                querySelectedTypeData();
                 break;
             case R.id.tv_commonality_type_date:
                 mYearDateSelected.showPositionDateView(mYearPosition);
@@ -847,6 +855,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         } else {
             mTvNotNetwork.setText("获取的" + mTvCommonalityCoder.getText().toString() + "为空");
         }
+        querySelectedTypeData();
+    }
+
+    private void querySelectedTypeData() {
         switch (getIntent().getIntExtra("type", -1)) {
             case 0://出差类别
                 mPresenter.queryEvectionType(2);
@@ -865,7 +877,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void submitFailureTips(String msg) {
-        showToast(msg.trim());
+        Toast.makeText(this, msg.trim(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -876,7 +888,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void initiateThingsRequestSuccess() {
-
 
     }
 
