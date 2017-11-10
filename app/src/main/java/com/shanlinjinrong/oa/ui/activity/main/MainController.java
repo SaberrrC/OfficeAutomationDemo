@@ -37,7 +37,6 @@ import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
@@ -49,8 +48,6 @@ import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
-import com.shanlinjinrong.oa.utils.BadgeUtil;
-import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
@@ -520,7 +517,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 @Override
                 public void run() {
                     if (tempMsgCount != 0) {
-                        BadgeUtil.setBadgeCount(MainController.this, tempMsgCount, R.drawable.ring_red);
                     }
                 }
             }).start();
