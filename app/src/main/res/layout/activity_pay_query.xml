@@ -26,15 +26,15 @@
         android:id="@+id/tv_not_network"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone"/>
+        android:gravity="center"/>
 
 
     <LinearLayout
-        android:id="@+id/sl_container_layout"
+        android:id="@+id/ll_container_layout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/white"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -73,7 +73,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:text="20天17年10月"
+                android:text="2017年10月"
                 android:textColor="@color/black_333333"
                 android:textSize="14sp"/>
 
@@ -99,9 +99,10 @@
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/sl_container_"
+        android:id="@+id/sl_container_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -168,7 +169,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="0天10天124228"/>
+                    tools:text="010124228"/>
             </LinearLayout>
 
             <LinearLayout
@@ -195,7 +196,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="330天282199311116151"/>
+                    tools:text="330282199311116151"/>
 
             </LinearLayout>
 
@@ -223,7 +224,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
-                    tools:text="20天17-10天"/>
+                    tools:text="2017-10"/>
             </LinearLayout>
 
             <LinearLayout
