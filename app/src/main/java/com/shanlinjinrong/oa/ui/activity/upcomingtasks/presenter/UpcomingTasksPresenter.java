@@ -33,6 +33,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
 
     @Override
     public void getApproveData(String approveState, String billType, String pageNum, String pageSize, String time) {
+        mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(ApiJava.MYAPPLY_QUERY_APPROVE);
@@ -93,6 +94,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
 
     @Override
     public void getSelectData(String privateCode, String noCheck, String pageNum, String pageSize, String time, String billType, String userName) {
+        mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(ApiJava.SEARCH_APPLICATION);
@@ -136,7 +138,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 } catch (Throwable e) {
                     e.printStackTrace();
                     if (t.contains("\"code\":\"020000\"")) {
-                        mView.onGetApproveDataFailure(500, "查询无结果");
+                        mView.onGetApproveDataFailure(020000, "查询无结果");
                         return;
                     }
                     mView.onGetApproveDataFailure(500, "网络异常");
@@ -163,6 +165,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
 
     @Override
     public void postAgreeDisagree(List<ApporveBodyItemBean> list) {
+        mKjHttp.cleanCache();
         String json = new Gson().toJson(list);
         HttpParams httpParams = new HttpParams();
         httpParams.putJsonParams(json);

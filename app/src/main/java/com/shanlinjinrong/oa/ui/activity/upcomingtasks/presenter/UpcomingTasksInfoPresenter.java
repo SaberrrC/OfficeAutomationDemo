@@ -31,6 +31,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
 
     @Override
     public void getInfoData(String billType, String billCode) {
+        mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(ApiJava.MYAPPLY_QUERY_APPROVE_INFO);
@@ -75,6 +76,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
 
     @Override
     public void postTackBack(String billCode, String billType) {
+        mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -115,6 +117,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
 
     @Override
     public void postApproval(List<ApporveBodyItemBean> list) {
+        mKjHttp.cleanCache();
         String json = new Gson().toJson(list);
         HttpParams httpParams = new HttpParams();
         httpParams.putJsonParams(json);
@@ -150,6 +153,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
 
     @Override
     public void getDelete(String billCode, String billType) {
+        mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         try {
             mKjHttp.jsonGet(ApiJava.DELETE_APPROVEL +"?billCode="+billCode+"&billType="+billType, httpParams, new HttpCallBack() {

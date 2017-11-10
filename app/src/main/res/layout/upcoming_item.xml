@@ -69,7 +69,6 @@
                 android:background="@drawable/edittext_input_square_bg"
                 android:gravity="center_vertical"
                 android:paddingLeft="12dp"
-                android:text="请选择开始时间"
                 android:textColor="@color/grey"
                 android:textSize="14sp"/>
         </LinearLayout>
@@ -107,7 +106,6 @@
                 android:background="@drawable/edittext_input_square_bg"
                 android:gravity="center_vertical"
                 android:paddingLeft="12dp"
-                android:text="请选择结束时间"
                 android:textColor="@color/grey"
                 android:textSize="14sp"/>
         </LinearLayout>
@@ -165,7 +163,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:gravity="center_vertical"
-                android:text="title1"
                 android:textColor="#151515"
                 android:textSize="16sp"/>
 
@@ -177,7 +174,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittext_input_square_bg"
                 android:gravity="center_vertical"
-                android:hint="请填写出差地点"
                 android:paddingLeft="12dp"
                 android:textColor="#898989"
                 android:textSize="14sp"/>
@@ -204,7 +200,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:gravity="center_vertical"
-                android:text="title1"
                 android:textColor="#151515"
                 android:textSize="16sp"/>
 
@@ -243,7 +238,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittext_input_square_bg"
                 android:gravity="center_vertical"
-                android:hint="请填写出差原因"
                 android:paddingLeft="12dp"
                 android:textColor="#898989"
                 android:textSize="14sp"
@@ -272,7 +266,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:gravity="center_vertical"
-                android:text="title3"
                 android:textColor="#151515"
                 android:textSize="16sp"/>
 
@@ -295,7 +288,6 @@
                     android:layout_marginRight="12dp"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:hint="请填写工作交接人"
                     android:textColor="#898989"
                     android:textSize="14sp"/>
             </FrameLayout>

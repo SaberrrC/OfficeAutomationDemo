@@ -161,14 +161,21 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             if (TextUtils.equals(mWhichList, "1")) {
                 mRlCheck.setVisibility(View.GONE);
                 mBean = (UpcomingTaskItemBean.DataBean.DataListBean) intent.getSerializableExtra("UPCOMING_INFO");
+                // TODO: 2017-11-10 判断收回状态
                 if (TextUtils.equals(mBean.getApproveState(), "-1")) {
                     mTvTackBack.setText("删除");
                     mRlTackBack.setVisibility(View.VISIBLE);
                     mTvTackBack.setBackgroundResource(R.drawable.shape_upcominginfo_disagree);
-                } else {
+                }
+                if (TextUtils.equals(mBean.getApproveState(), "3")) {
                     mTvTackBack.setText("收回");
-                    mRlTackBack.setVisibility(View.GONE);
+                    mRlTackBack.setVisibility(View.VISIBLE);
                     mTvTackBack.setBackgroundResource(R.drawable.shape_upcoming_dialog_ok);
+                }
+                if (TextUtils.equals(mBean.getApproveState(), "0") ||
+                        TextUtils.equals(mBean.getApproveState(), "1") ||
+                        TextUtils.equals(mBean.getApproveState(), "2")) {
+                    mRlTackBack.setVisibility(View.GONE);
                 }
                 mTvTitle.setText(mBean.getUserName() + "的" + mBean.getBillTypeName());
             }
@@ -390,7 +397,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
+                tvOption.setText(TextUtils.isEmpty(bean.getCheckNote()) ? "" : bean.getCheckNote());
                 return;
             }
             if (itemData instanceof TraverResultBean.DataBean.NchrapplyWorkFlowBean) {
@@ -398,8 +405,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
-                tvOption.setText(bean.getApproveResultCH());
+                tvOption.setText(TextUtils.isEmpty(bean.getCheckNote()) ? "" : bean.getCheckNote());
                 return;
             }
             if (itemData instanceof RestResultBean.DataBean.NchrapplyWorkFlowBean) {
@@ -407,7 +413,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
+                tvOption.setText(TextUtils.isEmpty(bean.getCheckNote()) ? "" : bean.getCheckNote());
                 return;
             }
             if (itemData instanceof OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) {
@@ -415,7 +421,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(TextUtils.isEmpty(bean.getDealDate()) ? "" : bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(TextUtils.isEmpty(bean.getApproveResultCH()) ? "" : bean.getApproveResultCH());
+                tvOption.setText(TextUtils.isEmpty(bean.getCheckNote()) ? "" : bean.getCheckNote());
             }
             return;
         }
@@ -659,11 +665,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 return;
             }
             mDatas.addAll(mCardResultBean.getData().getNchrSignDetails());
-            for (CardResultBean.DataBean.ApplyWorkFlowsBean bean : mCardResultBean.getData().getApplyWorkFlows()) {
-                if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
-                    mRlTackBack.setVisibility(View.VISIBLE);
-                }
-            }
         }
         if (TextUtils.equals(billType, "6403")) {//出差申请
             mTraverResultBean = gson.fromJson(json, TraverResultBean.class);
@@ -672,11 +673,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 return;
             }
             mDatas.addAll(mTraverResultBean.getData().getNchrevectionApplyDetail());
-            for (TraverResultBean.DataBean.NchrapplyWorkFlowBean bean : mTraverResultBean.getData().getNchrapplyWorkFlow()) {
-                if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
-                    mRlTackBack.setVisibility(View.VISIBLE);
-                }
-            }
         }
         if (TextUtils.equals(billType, "6404")) {//休假申请
             mRestResultBean = gson.fromJson(json, RestResultBean.class);
@@ -685,11 +681,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 return;
             }
             mDatas.addAll(mRestResultBean.getData().getNchrfurloughApplyDetail());
-            for (RestResultBean.DataBean.NchrapplyWorkFlowBean bean : mRestResultBean.getData().getNchrapplyWorkFlow()) {
-                if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
-                    mRlTackBack.setVisibility(View.VISIBLE);
-                }
-            }
         }
         if (TextUtils.equals(billType, "6405")) {//加班申请
             mOverTimeResultBean = gson.fromJson(json, OverTimeResultBean.class);
@@ -698,11 +689,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 return;
             }
             mDatas.addAll(mOverTimeResultBean.getData().getNchroverTimeApplyDetail());
-            for (OverTimeResultBean.DataBean.NchrapplyWorkFlowBean bean : mOverTimeResultBean.getData().getNchrapplyWorkFlow()) {
-                if (TextUtils.equals(bean.getIsCheck(), "N") && TextUtils.equals("1", mWhichList)) {
-                    mRlTackBack.setVisibility(View.VISIBLE);
-                }
-            }
         }
         if (TextUtils.equals(mWhichList, "2")) {
             mDatas.add(new UpcomingInfoBottomBean());

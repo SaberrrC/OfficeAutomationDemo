@@ -516,7 +516,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 tvReason.setText(bean.getBillTypeName());
                 tvTime.setText(bean.getSendDate());
                 tvState.setText(bean.getIsCheck());
-                tvState.setTextColor(getResources().getColor(R.color.black));
+                if (TextUtils.equals(mWhichList, "2")) {
+                    tvState.setTextColor(getResources().getColor(R.color.black));
+                }
+                if (TextUtils.equals(mWhichList, "3")) {
+                    tvState.setTextColor(Color.parseColor("#57C887"));
+                }
                 if (isShowCheck) {
                     cbCheck.setVisibility(View.VISIBLE);
                     cbCheck.setChecked(bean.getIsChecked());
@@ -706,10 +711,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             }
         }
         if (bean.getData() == null) {
+            mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         List<UpcomingTaskItemBean.DataBean.DataListBean> dataList = bean.getData().getDataList();
         if (dataList == null) {
+            mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         if (dataList.size() < Integer.parseInt(PAGE_SIZE)) {
@@ -734,10 +741,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void setNoItemList(int errorNo) {
-        if (errorNo == 20000) {
-            mDatas.clear();
-            mFinalRecycleAdapter.notifyDataSetChanged();
-        }
+        mDatas.clear();
+        mFinalRecycleAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -830,16 +835,16 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             showToast(stringBuilder.toString().trim());
         }
         initRefreshMode();
+        mSrRefresh.setRefreshing(true);
         mSrRefresh.post(new Runnable() {
             @Override
             public void run() {
                 ThreadUtils.runMainDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mSrRefresh.setRefreshing(true);
                         getListData();
                     }
-                }, 500);
+                }, 0);
             }
         });
     }
@@ -882,17 +887,17 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 101) {
+            mSrRefresh.setRefreshing(true);
             mSrRefresh.post(new Runnable() {
                 @Override
                 public void run() {
                     ThreadUtils.runMainDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mSrRefresh.setRefreshing(true);
                             initRefreshMode();
                             getListData();
                         }
-                    }, 500);
+                    }, 0);
                 }
             });
         }
