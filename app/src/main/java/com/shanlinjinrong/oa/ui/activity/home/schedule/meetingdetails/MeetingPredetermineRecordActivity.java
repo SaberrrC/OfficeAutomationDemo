@@ -309,12 +309,14 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     @Override
     public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
-        mTvNotNetwork.setVisibility(View.GONE);
-        mLlContentShow.setVisibility(View.VISIBLE);
-        if (dataBeen != null) {
+        try {
+            mTvNotNetwork.setVisibility(View.GONE);
+            mLlContentShow.setVisibility(View.VISIBLE);
             mSelectTime = dataBeen;
             isNetwork = true;
             refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 

@@ -126,9 +126,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
         doHttp();
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String format1 = format.format(new Date());
-        mPresenter.queryDayAttendance(mPrivateCode, format1);
     }
 
     public void creatMonth(int selectPos) {
@@ -238,6 +235,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             }
         }
         mAdapter.notifyDataSetChanged();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String format1 = format.format(new Date());
+        mPresenter.queryDayAttendance(mPrivateCode, format1);
     }
 
     @Override
