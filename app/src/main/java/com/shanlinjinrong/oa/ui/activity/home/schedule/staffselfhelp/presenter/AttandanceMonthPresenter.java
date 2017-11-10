@@ -66,33 +66,33 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
         });
     }
 
-    @Override
-    public void queryDayAttendance(String userId, String date) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("begindate", date);
-        map.put("userCode", userId);
-        HttpMethods.getInstance().getMyAttendanceDayData(map, new Subscriber<ArrayList<MyAttendanceResponse>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (e instanceof ApiException) {
-                    ApiException baseException = (ApiException) e;
-                    String code = baseException.getCode();
-                    String message = baseException.getMessage();
-                    mView.queryDayAttendanceFailed(code, message);
-                } else {
-                    mView.queryDayAttendanceFailed("555", "请检查网络！");
-                }
-            }
-
-            @Override
-            public void onNext(ArrayList<MyAttendanceResponse> myAttendanceResponses) {
-                mView.queryDayAttendanceSuccess(myAttendanceResponses);
-            }
-        });
-    }
+//    @Override
+//    public void queryDayAttendance(String userId, String date) {
+//        HashMap<String, String> map = new HashMap<>();
+//        map.put("begindate", date);
+//        map.put("userCode", userId);
+//        HttpMethods.getInstance().getMyAttendanceDayData(map, new Subscriber<ArrayList<MyAttendanceResponse>>() {
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                if (e instanceof ApiException) {
+//                    ApiException baseException = (ApiException) e;
+//                    String code = baseException.getCode();
+//                    String message = baseException.getMessage();
+//                    mView.queryDayAttendanceFailed(code, message);
+//                } else {
+//                    mView.queryDayAttendanceFailed("555", "请检查网络！");
+//                }
+//            }
+//
+//            @Override
+//            public void onNext(ArrayList<MyAttendanceResponse> myAttendanceResponses) {
+//                mView.queryDayAttendanceSuccess(myAttendanceResponses);
+//            }
+//        });
+//    }
 }
