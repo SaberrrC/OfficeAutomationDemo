@@ -31,6 +31,7 @@
 
 
     <LinearLayout
+        android:id="@+id/sl_container_layout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/white"
