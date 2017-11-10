@@ -280,7 +280,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         if (isShowCheck) {
             mLlSearch.setVisibility(View.GONE);
             mTvTitle.setText("选择单据");
-            mRlCheck.setVisibility(View.VISIBLE);`
+            mRlCheck.setVisibility(View.VISIBLE);
             mTolbarTextBtn.setVisibility(View.GONE);
             mTvApproval.setVisibility(View.GONE);
         } else {
