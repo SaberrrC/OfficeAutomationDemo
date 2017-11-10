@@ -17,7 +17,7 @@ public interface MyAttendenceActivityContract {
 
         void sendDataSuccess(MyAttandanceResponse myAttandanceResponse);
 
-        void sendDataFailed(String errCode, String msg);
+        void sendDataFailed(int errCode, String msg);
 
         void sendDataFinish();
     }

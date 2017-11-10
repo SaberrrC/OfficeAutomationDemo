@@ -180,18 +180,9 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     }
 
     @Override
-    public void sendDataFailed(String errCode, String msg) {
-        showToast(msg);
-        switch (errCode) {
-            case "-1":
-                mTvNoNetwork.setVisibility(View.VISIBLE);
-                mTvNoNetwork.setText(msg);
-                mLlContainerLayout.setVisibility(View.GONE);
-                mRootView.setVisibility(View.GONE);
-                break;
-            default:
-                break;
-        }
+    public void sendDataFailed(int errCode, String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        mTvNoNetwork.setText(msg);
     }
 
     @Override

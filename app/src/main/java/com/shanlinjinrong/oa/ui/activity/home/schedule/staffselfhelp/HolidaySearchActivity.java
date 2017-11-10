@@ -7,16 +7,18 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
-import com.example.retrofit.net.ApiException;
-import com.example.retrofit.net.HttpMethods;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.HolidayAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.HolidaySearchContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.event.HolidayEvent;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.HolidaySearchPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.utils.YearDateSelected;
 import com.shanlinjinrong.oa.utils.YearTimeSelectedListener;
@@ -35,10 +37,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
 
 //假期查询
-public class HolidaySearchActivity extends BaseActivity implements YearTimeSelectedListener {
+public class HolidaySearchActivity extends HttpBaseActivity<HolidaySearchPresenter> implements HolidaySearchContract.View, YearTimeSelectedListener {
 
     @BindView(R.id.top_view)
     CommonTopView mTopView;
@@ -72,6 +73,10 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
     HolidaySearchItem usefulrestdayorhour;
     @BindView(R.id.tv_select_time)
     TextView mTvSelectTime;
+    @BindView(R.id.tv_no_network)
+    TextView mTvNoNetwork;
+    @BindView(R.id.sv_container_layout)
+    ScrollView mSvContainerLayout;
 
     private CustomDialogUtils mDialog;
     private HolidayAdapter mTypeAdapter;
@@ -92,6 +97,11 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
         }
         initData();
         initView();
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initData() {
@@ -126,7 +136,7 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
         data.add("带薪病假");
         data.add("转调休");
         mYearDateSelected = new YearDateSelected(HolidaySearchActivity.this, HolidaySearchActivity.this, mDate, "选择查询时间");
-        doHolidaySearch(searchYear, searchType);
+        mPresenter.getData(searchYear, searchType);
     }
 
     private void initView() {
@@ -195,64 +205,15 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
         searchType = holidayEvent.getPosition() + "";
         mPosition = holidayEvent.getPosition();
         tv_center_title.setText(data.get(holidayEvent.getPosition()));
-        doHolidaySearch(searchYear, searchType);
+        mPresenter.getData(searchYear, searchType);
         mDialog.dismiss();
-    }
-
-    public void doHolidaySearch(String year, String type) {
-        HttpMethods.getInstance().getHolidaySearchData(searchYear, searchType, new Subscriber<ArrayList<HolidaySearchResponse>>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (e instanceof ApiException) {
-                    ApiException baseException = (ApiException) e;
-                    String code = baseException.getCode();
-                    String message = baseException.getMessage();
-                } else if (e instanceof retrofit2.adapter.rxjava.HttpException){
-                    if (401 == ((retrofit2.adapter.rxjava.HttpException) e).code()){
-
-                    }
-                }
-
-            }
-
-            @Override
-            public void onNext(ArrayList<HolidaySearchResponse> holidaySearchResponses) {
-                HolidaySearchResponse holidaySearchResponse = holidaySearchResponses.get(0);
-                psname.setTextViewValue(holidaySearchResponse.getPsname());
-                deptname.setTextViewValue(holidaySearchResponse.getDeptname());
-                jobname.setTextViewValue(holidaySearchResponse.getJobname());
-                if (mPosition != 2) {
-                    lastdayorhour.setTextViewValue(holidaySearchResponse.getLastdayorhour() + "天");
-                    changelength.setTextViewValue(holidaySearchResponse.getChangelength() + "天");
-                    curdayorhour.setTextViewValue(holidaySearchResponse.getCurdayorhour() + "天");
-                    realdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "天");
-                    yidayorhour.setTextViewValue(holidaySearchResponse.getYidayorhour() + "天");
-                    restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "天");
-                    freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour() + "天");
-                    usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour() + "天");
-                } else {
-                    lastdayorhour.setTextViewValue(holidaySearchResponse.getLastdayorhour() + "小时");
-                    changelength.setTextViewValue(holidaySearchResponse.getChangelength() + "小时");
-                    curdayorhour.setTextViewValue(holidaySearchResponse.getCurdayorhour() + "小时");
-                    realdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "小时");
-                    yidayorhour.setTextViewValue(holidaySearchResponse.getYidayorhour() + "小时");
-                    restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "小时");
-                    freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour() + "小时");
-                    usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour() + "小时");
-                }
-            }
-        });
     }
 
     @Override
     public void onSelected(String date, int position) {
         searchYear = date;
         mTvSelectTime.setText(searchYear);
-        doHolidaySearch(searchYear, searchType);
+        mPresenter.getData(searchYear, searchType);
     }
 
     @Override
@@ -261,5 +222,59 @@ public class HolidaySearchActivity extends BaseActivity implements YearTimeSelec
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void showLoading() {
+        showLoadingView();
+    }
+
+    @Override
+    public void getDataSuccess(List<HolidaySearchResponse> myAttandanceResponse) {
+        if (myAttandanceResponse.size() > 0) {
+            mTvNoNetwork.setVisibility(View.GONE);
+            mSvContainerLayout.setVisibility(View.VISIBLE);
+            HolidaySearchResponse holidaySearchResponse = myAttandanceResponse.get(0);
+            psname.setTextViewValue(holidaySearchResponse.getPsname());
+            deptname.setTextViewValue(holidaySearchResponse.getDeptname());
+            jobname.setTextViewValue(holidaySearchResponse.getJobname());
+            if (mPosition != 2) {
+                lastdayorhour.setTextViewValue(holidaySearchResponse.getLastdayorhour() + "天");
+                changelength.setTextViewValue(holidaySearchResponse.getChangelength() + "天");
+                curdayorhour.setTextViewValue(holidaySearchResponse.getCurdayorhour() + "天");
+                realdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "天");
+                yidayorhour.setTextViewValue(holidaySearchResponse.getYidayorhour() + "天");
+                restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "天");
+                freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour() + "天");
+                usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour() + "天");
+            } else {
+                lastdayorhour.setTextViewValue(holidaySearchResponse.getLastdayorhour() + "小时");
+                changelength.setTextViewValue(holidaySearchResponse.getChangelength() + "小时");
+                curdayorhour.setTextViewValue(holidaySearchResponse.getCurdayorhour() + "小时");
+                realdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "小时");
+                yidayorhour.setTextViewValue(holidaySearchResponse.getYidayorhour() + "小时");
+                restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "小时");
+                freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour() + "小时");
+                usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour() + "小时");
+            }
+        } else {
+            mTvNoNetwork.setText("暂无假期数据！");
+        }
+    }
+
+    @Override
+    public void getDataFailed(int errCode, String msg) {
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+        mTvNoNetwork.setText(msg);
+    }
+
+    @Override
+    public void getDataFinish() {
+        hideLoadingView();
     }
 }

@@ -17,18 +17,16 @@
         android:id="@+id/tv_empty_layout"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:gravity="center"
-        android:text="暂无日常考勤！"
-        android:visibility="gone"/>
+        android:gravity="center"/>
 
     <LinearLayout
         android:id="@+id/ll_currentday_state"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -24,6 +24,8 @@ public class PopItem {
         this.isSelect = isSelect;
     }
 
+
+
     public String getContent() {
         return content;
     }

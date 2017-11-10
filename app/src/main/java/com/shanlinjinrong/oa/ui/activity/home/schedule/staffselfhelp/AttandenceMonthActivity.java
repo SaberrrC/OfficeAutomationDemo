@@ -41,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //考勤月历界面
-public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPresenter> implements AttandanceMonthContract.View, View.OnClickListener {
+public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPresenter> implements AttandanceMonthContract.View, View.OnClickListener, DatePopAttandanceAdapter.OnItemClick {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -105,7 +105,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         setTranslucentStatus(this);
     }
 
-
     private void initData() {
         cal = Calendar.getInstance();
         mCurrentDay = cal.get(Calendar.DAY_OF_MONTH);
@@ -126,56 +125,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         setData(true, mSelectedMonth, mSelectedDay);
         mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
         doHttp();
-    }
 
-    public void setData(final boolean isDay, int month, int selectPos) {
-        if (mData != null) {
-            mData.clear();
-        }
-        if (isDay) {
-            List<PopItem> date = DateUtils.getAttandenceDate(month, selectPos);
-            mData.addAll(date);
-        } else {
-            creatMonth(selectPos);
-        }
-//        mRecyclerView.setLayoutManager(new GridLayoutManager(AttandenceMonthActivity.this, isDay ? 7 : 6));
-//        mAdapter = new DatePopAttandanceAdapter(mData);
-        mAdapter.setOnItemClick((v, position) -> {
-            String content = mData.get(position).getContent();
-            int i1 = Integer.parseInt(content);
-            mSelectedDay = i1;
-            if (mSelectedDay < 10) {
-                mDay = "0" + mSelectedDay;
-            }
-            String date = mCurrentYear + "-" + mCurrentMonth + "-" + mDay;
-
-//            doHttp();
-//            mPresenter.queryDayAttendance(mPrivateCode, date);
-            try {
-                MyAttandanceResponse.AllWorkAttendanceListBean allWorkAttendanceListBean = mAllWorkAttendanceList.get(position-2);
-
-                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getCalendar())) {
-                    tv_date.setText(allWorkAttendanceListBean.getCalendar());
-                }
-                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getPsname())) {
-                    tv_name.setText(allWorkAttendanceListBean.getPsname());
-                }
-                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getOnebegintime())) {
-                    tv_gowork_time.setText(allWorkAttendanceListBean.getOnebegintime());
-                }
-                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTbmstatus())) {
-                    mTvState.setText(allWorkAttendanceListBean.getTbmstatus());
-                }
-                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTwoendtime())) {
-                    tv_off_gowork_time.setText(allWorkAttendanceListBean.getTwoendtime());
-                }
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-            setData(true, mSelectedMonth, mSelectedDay);
-//            mAdapter.notifyDataSetChanged();
-        });
-        mRecyclerView.setAdapter(mAdapter);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String format1 = format.format(new Date());
+        mPresenter.queryDayAttendance(mPrivateCode, format1);
     }
 
     public void creatMonth(int selectPos) {
@@ -188,49 +141,26 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         }
     }
 
+    public void setData(final boolean isDay, int month, int selectPos) {
+        if (mData != null) {
+            mData.clear();
+        }
+        if (isDay) {
+            List<PopItem> date = DateUtils.getAttandenceDate(month, selectPos);
+            mData.addAll(date);
+        } else {
+            creatMonth(selectPos);
+        }
+        mRecyclerView.setLayoutManager(new GridLayoutManager(AttandenceMonthActivity.this, isDay ? 7 : 6));
+        mAdapter = new DatePopAttandanceAdapter(mData);
+        mAdapter.setOnItemClick(this);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
     }
-
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            //统计时间选择
-            case R.id.ll_chose_time:
-                monthSelectPopWindow = new MonthSelectPopWindow(AttandenceMonthActivity.this,
-                        new MonthSelectPopWindow.PopListener() {
-                            @Override
-                            public void cancle() {
-                                monthSelectPopWindow.dismiss();
-                            }
-
-                            @Override
-                            public void confirm(String year, String month) {
-                                mSelectedYear = Integer.parseInt(year);
-                                mSelectedMonth = Integer.parseInt(month);
-                                tv_time.setText(year + "年" + month + "月");
-                                if (mSelectedMonth == mCurrentMonth) {
-                                    setData(true, mSelectedMonth, mCurrentDay);
-                                } else {
-                                    setData(true, mSelectedMonth, 1);
-                                }
-                                mAdapter.notifyDataSetChanged();
-                                monthSelectPopWindow.dismiss();
-                                doHttp();
-                            }
-                        });
-                monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
-                break;
-            //统计人员选择
-            case R.id.ll_count_people:
-                Intent intent = new Intent(AttandenceMonthActivity.this, CountPeopleActivity.class);
-                startActivityForResult(intent, 100);
-                break;
-        }
-    }
-
 
     private void initToolBar() {
         if (toolbar == null) {
@@ -251,9 +181,12 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
     @Override
     public void uidNull(int code) {
-
+        catchWarningByCode(code);
     }
 
+    public void doHttp() {
+        mPresenter.sendData(mPrivateCode, mSelectedYear + "", mSelectedMonth + "", AttandenceMonthActivity.this);
+    }
 
     @Override
     public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
@@ -295,6 +228,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
         }
+
         for (PopItem mDataItrm : mData) {
             String content = mDataItrm.getContent();
             if (mDataItrm.isEnable()) {
@@ -303,80 +237,45 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 }
             }
         }
-
         mAdapter.notifyDataSetChanged();
-        if (mAllWorkAttendanceList == null)
-            return;
-        if (mAllWorkAttendanceList.size() > 0) {
-            mTvEmptyLayout.setVisibility(View.GONE);
-            mLlCurrentdayState.setVisibility(View.VISIBLE);
-            MyAttandanceResponse.AllWorkAttendanceListBean allWorkAttendanceListBean = mAllWorkAttendanceList.get(mSelectedDay);
+    }
 
-            tv_date.setText(mSelectedYear + "-" + mSelectedMonth + "-" + mSelectedDay);
-
-            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getCalendar())) {
-                tv_date.setText(allWorkAttendanceListBean.getCalendar());
+    @Override
+    public void queryDayAttendanceSuccess(List<MyAttendanceResponse> bean) {
+        try {
+            if (bean != null) {
+                if (bean.size() > 0) {
+                    mTvEmptyLayout.setVisibility(View.GONE);
+                    mLlCurrentdayState.setVisibility(View.VISIBLE);
+                } else {
+                    mTvEmptyLayout.setVisibility(View.VISIBLE);
+                    mLlCurrentdayState.setVisibility(View.GONE);
+                    mTvEmptyLayout.setText("无法获取日考勤记录！");
+                    return;
+                }
+                for (int i = 0; i < bean.size(); i++) {
+                    tv_date.setText(bean.get(i).getCalendar());
+                    tv_name.setText(bean.get(i).getPsname());
+                    mTvState.setText(bean.get(i).getTbmstatus());
+                    tv_gowork_time.setText(bean.get(i).getOnebegintime());
+                    tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
+                }
+            } else {
+                mTvEmptyLayout.setText("暂无日考勤信息！");
+                mTvEmptyLayout.setVisibility(View.VISIBLE);
+                mLlCurrentdayState.setVisibility(View.GONE);
             }
-            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getPsname())) {
-                tv_name.setText(allWorkAttendanceListBean.getPsname());
-            }
-            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getOnebegintime())) {
-                tv_gowork_time.setText(allWorkAttendanceListBean.getOnebegintime());
-            }
-            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTbmstatus())) {
-                mTvState.setText(allWorkAttendanceListBean.getTbmstatus());
-            }
-            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTwoendtime())) {
-                tv_off_gowork_time.setText(allWorkAttendanceListBean.getTwoendtime());
-            }
-        } else {
-            mTvEmptyLayout.setText("暂无考勤信息！");
-            mTvEmptyLayout.setVisibility(View.VISIBLE);
-            mLlCurrentdayState.setVisibility(View.GONE);
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
-//    @Override
-//    public void queryDayAttendanceSuccess(List<MyAttendanceResponse> bean) {
-//        try {
-//            if (bean != null) {
-//                if (bean.size() > 0) {
-//                    mTvEmptyLayout.setVisibility(View.GONE);
-//                    mLlCurrentdayState.setVisibility(View.VISIBLE);
-//                } else {
-//                    mTvEmptyLayout.setVisibility(View.VISIBLE);
-//                    mLlCurrentdayState.setVisibility(View.GONE);
-//                    return;
-//                }
-//                for (int i = 0; i < bean.size(); i++) {
-//                    tv_date.setText(bean.get(i).getCalendar());
-//                    tv_name.setText(bean.get(i).getPsname());
-//                    mTvState.setText(bean.get(i).getTbmstatus());
-//                    tv_gowork_time.setText(bean.get(i).getOnebegintime());
-//                    tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
-//                }
-//            } else {
-//                mTvEmptyLayout.setText("暂无考勤信息！");
-//                mTvEmptyLayout.setVisibility(View.VISIBLE);
-//                mLlCurrentdayState.setVisibility(View.GONE);
-//            }
-//        } catch (Throwable e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     @Override
-    public void sendDataFailed(String errCode, String msg) {
-
-    }
-
-    @Override
-    public void sendDataFinish() {
-
-    }
-
-    public void doHttp() {
-        mPresenter.sendData(mPrivateCode, mSelectedYear + "", mSelectedMonth + "", AttandenceMonthActivity.this);
+    public void sendDataFailed(int errCode, String msg) {
+        mTvEmptyLayout.setVisibility(View.VISIBLE);
+        mLlCurrentdayState.setVisibility(View.GONE);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        mTvEmptyLayout.setText(msg);
     }
 
     public int getType(String str) {
@@ -395,7 +294,64 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     return 4;
             }
         }
-        return 1;
+        return 0;
+    }
+
+    @Override
+    public void onItemClicked(View v, int position) {
+        String content = mData.get(position).getContent();
+        mSelectedDay = Integer.parseInt(content);
+        if (mSelectedDay < 10) {
+            mDay = "0" + mSelectedDay;
+        }
+        String date = mCurrentYear + "-" + mCurrentMonth + "-" + mDay;
+        mPresenter.queryDayAttendance(mPrivateCode, date);
+        for (int i = 0; i < mData.size(); i++) {
+            if (i == position) {
+                mData.get(position).setSelect(true);
+            } else {
+                mData.get(i).setSelect(false);
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            //统计时间选择
+            case R.id.ll_chose_time:
+                monthSelectPopWindow = new MonthSelectPopWindow(AttandenceMonthActivity.this,
+                        new MonthSelectPopWindow.PopListener() {
+                            @Override
+                            public void cancle() {
+                                monthSelectPopWindow.dismiss();
+                            }
+
+                            @Override
+                            public void confirm(String year, String month) {
+                                mSelectedYear = Integer.parseInt(year);
+                                mSelectedMonth = Integer.parseInt(month);
+                                tv_time.setText(year + "年" + month + "月");
+                                if (mSelectedMonth == mCurrentMonth) {
+                                    setData(true, mSelectedMonth, mCurrentDay);
+                                } else {
+                                    setData(true, mSelectedMonth, 1);
+                                }
+                                mAdapter.notifyDataSetChanged();
+                                monthSelectPopWindow.dismiss();
+                                doHttp();
+                            }
+                        });
+                monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
+                break;
+            //统计人员选择
+            case R.id.ll_count_people:
+                Intent intent = new Intent(AttandenceMonthActivity.this, CountPeopleActivity.class);
+                startActivityForResult(intent, 100);
+                break;
+        }
     }
 
     @Override

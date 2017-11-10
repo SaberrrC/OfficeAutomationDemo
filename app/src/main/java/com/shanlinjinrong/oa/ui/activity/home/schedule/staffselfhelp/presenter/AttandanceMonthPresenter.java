@@ -47,67 +47,83 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
         HttpMethods.getInstance().getMyAttantanceData(map, new Subscriber<MyAttandanceResponse>() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
             public void onError(Throwable e) {
                 try {
-                    mView.sendDataFinish();
-                    if (e instanceof ApiException) {
-                        ApiException baseException = (ApiException) e;
-                        String code = baseException.getCode();
-                        String message = baseException.getMessage();
-                        mView.sendDataFailed(code, message);
-                    } else if (e instanceof HttpException) {
+                    if (e instanceof HttpException) {
+                        if (((HttpException) e).code() > 500) {
+                            mView.sendDataFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
+                        }
                         mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
-                        mView.sendDataFailed("-1", "网络不通，请检查网络连接！");
+                        mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
                     } else if (e instanceof NullPointerException) {
-                        mView.sendDataFailed("-1", "网络不通，请检查网络连接！");
+                        mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
                     } else if (e instanceof ConnectException || e instanceof SocketException) {
-                        mView.sendDataFailed("-1", "网络不通，请检查网络连接！");
+                        mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
                     }
                 } catch (Throwable e1) {
                     e1.printStackTrace();
                 }
-
             }
 
             @Override
             public void onNext(MyAttandanceResponse myAttandanceResponse) {
-                mView.sendDataSuccess(myAttandanceResponse);
+                try {
+                    mView.sendDataSuccess(myAttandanceResponse);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-//    @Override
-//    public void queryDayAttendance(String userId, String date) {
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("begindate", date);
-//        map.put("userCode", userId);
-//        HttpMethods.getInstance().getMyAttendanceDayData(map, new Subscriber<ArrayList<MyAttendanceResponse>>() {
-//            @Override
-//            public void onCompleted() {
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                if (e instanceof ApiException) {
-//                    ApiException baseException = (ApiException) e;
-//                    String code = baseException.getCode();
-//                    String message = baseException.getMessage();
-//                    mView.queryDayAttendanceFailed(code, message);
-//                } else {
-//                    mView.queryDayAttendanceFailed("555", "请检查网络！");
-//                }
-//            }
-//
-//            @Override
-//            public void onNext(ArrayList<MyAttendanceResponse> myAttendanceResponses) {
-//                mView.queryDayAttendanceSuccess(myAttendanceResponses);
-//            }
-//        });
-//    }
+    @Override
+    public void queryDayAttendance(String userId, String date) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("begindate", date);
+        map.put("userCode", userId);
+        HttpMethods.getInstance().getMyAttendanceDayData(map, new Subscriber<ArrayList<MyAttendanceResponse>>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                try {
+                    if (e instanceof HttpException) {
+                        if (((HttpException) e).code() > 500) {
+                            mView.sendDataFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
+                        }
+                        mView.uidNull(((HttpException) e).code());
+//                        ApiException baseException = (ApiException) e;
+//                        String code = baseException.getCode();
+//                        String message = baseException.getMessage();
+//                        mView.sendDataFailed(code, message);
+                    } else if (e instanceof SocketTimeoutException) {
+                        mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
+                    } else if (e instanceof NullPointerException) {
+                        mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
+                    } else if (e instanceof ConnectException || e instanceof SocketException) {
+                        mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
+                    }
+                } catch (Throwable e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNext(ArrayList<MyAttendanceResponse> myAttendanceResponses) {
+                try {
+                    if (myAttendanceResponses != null) {
+                        mView.queryDayAttendanceSuccess(myAttendanceResponses);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

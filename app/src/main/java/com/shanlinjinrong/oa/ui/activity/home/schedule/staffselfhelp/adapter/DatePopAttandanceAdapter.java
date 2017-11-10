@@ -50,7 +50,6 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
             }
         } else {
             holder.image.setVisibility(View.GONE);
-//            holder.item.setTextColor(ResourcesCompat.getColor(mContext.getResources(), R.color.date_pop_text_selector, null));
         }
 
         if (mData.get(position).isEnable()) {
@@ -80,13 +79,10 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
 
 
         holder.item.setEnabled(mData.get(position).isEnable());
-        holder.item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.item.setOnClickListener(v -> {
 //                setSelect(position);
-                if (mOnItemClick != null) {
-                    mOnItemClick.onItemClicked(v, position);
-                }
+            if (mOnItemClick != null) {
+                mOnItemClick.onItemClicked(v, position);
             }
         });
 
