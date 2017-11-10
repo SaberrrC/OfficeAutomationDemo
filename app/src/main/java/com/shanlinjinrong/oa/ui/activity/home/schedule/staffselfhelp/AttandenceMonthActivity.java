@@ -205,7 +205,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         List<MyAttandanceResponse.JbWorkAttendanceListBean> jbWorkAttendanceList = myAttandanceResponse.getJbWorkAttendanceList();
         for (MyAttandanceResponse.JbWorkAttendanceListBean item : jbWorkAttendanceList) {
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType("[加班转调休]") + "");
+            mDataTypeMap.put(key, getType("[加班]") + "");
         }
         //旷工
         List<MyAttandanceResponse.KgWorkAttendanceListBean> kgWorkAttendanceList = myAttandanceResponse.getKgWorkAttendanceList();
@@ -251,7 +251,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 } else {
                     mTvEmptyLayout.setVisibility(View.VISIBLE);
                     mLlCurrentdayState.setVisibility(View.GONE);
-                    mTvEmptyLayout.setText("无法获取日考勤记录！");
+                    mTvEmptyLayout.setText("暂无日考勤记录！");
                     return;
                 }
                 for (int i = 0; i < bean.size(); i++) {
@@ -302,9 +302,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     public void onItemClicked(View v, int position) {
         String content = mData.get(position).getContent();
         mSelectedDay = Integer.parseInt(content);
-        if (mSelectedDay < 10) {
-            mDay = "0" + mSelectedDay;
-        }
+        String mDay = (mSelectedDay < 10) ?  "0" + mSelectedDay : mSelectedDay + "";
         String date = mCurrentYear + "-" + mCurrentMonth + "-" + mDay;
         mPresenter.queryDayAttendance(mPrivateCode, date);
         for (int i = 0; i < mData.size(); i++) {
