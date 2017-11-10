@@ -287,7 +287,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mLlSearch.setVisibility(View.VISIBLE);
             mTvTitle.setText("待办事宜");
             mRlCheck.setVisibility(View.GONE);
-            if (TextUtils.equals(mWhichList, "3")) {
+            if (TextUtils.equals(mWhichList, "2")) {
                 mTvApproval.setVisibility(View.VISIBLE);
             }
             if (TextUtils.equals(mWhichList, "3")) {
