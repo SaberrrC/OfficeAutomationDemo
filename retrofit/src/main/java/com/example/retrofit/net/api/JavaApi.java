@@ -1,7 +1,7 @@
 package com.example.retrofit.net.api;
 
 import com.example.retrofit.model.HttpResult;
-import com.example.retrofit.model.requestbody.AddWorkBody;
+//import com.example.retrofit.model.requestbody.AddWorkBody;
 import com.example.retrofit.model.requestbody.EvectionBody;
 import com.example.retrofit.model.responsebody.QueryPayResponse;
 import com.example.retrofit.model.responsebody.CountResponse1;
@@ -56,6 +56,6 @@ public interface JavaApi {
     Observable<HttpResult> submitEvectionApply(@Body EvectionBody data);
 
     //提交加班申请
-    @POST("nchrEvection/submitEvectionApply")
-    Observable<HttpResult> addWorkApply(@Body AddWorkBody data);
+//    @POST("nchrEvection/submitEvectionApply")
+//    Observable<HttpResult> addWorkApply(@Body AddWorkBody data);
 }

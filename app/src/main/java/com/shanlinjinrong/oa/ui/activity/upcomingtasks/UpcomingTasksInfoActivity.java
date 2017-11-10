@@ -573,9 +573,9 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 List<ApporveBodyItemBean> list2 = new ArrayList<>();
                 ApporveBodyItemBean disApporveBodyItemBean = null;
                 if (TextUtils.equals("1", mWhichList)) {
-                    disApporveBodyItemBean = new ApporveBodyItemBean(mBean.getBillCode(), true, mBean.getBillType());
+                    disApporveBodyItemBean = new ApporveBodyItemBean(mBean.getBillCode(), false, mBean.getBillType());
                 } else {
-                    disApporveBodyItemBean = new ApporveBodyItemBean(mSearchBean.getBillNo(), true, mSearchBean.getPkBillType());
+                    disApporveBodyItemBean = new ApporveBodyItemBean(mSearchBean.getBillNo(), false, mSearchBean.getPkBillType());
                 }
                 if (mEtOption != null) {
                     String option = mEtOption.getText().toString().trim();
