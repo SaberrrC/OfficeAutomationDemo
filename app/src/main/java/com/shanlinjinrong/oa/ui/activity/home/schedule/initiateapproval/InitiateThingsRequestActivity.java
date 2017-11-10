@@ -904,6 +904,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     @Override
     public void queryEvectionTypeSuccess(CommonTypeBean bean) {
         if (bean != null) {
+            data.clear();
             mCommonTypeBean = bean;
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
@@ -998,6 +999,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     @Override
     public void findSignReasonSuccess(SingReasonBean bean) {
         if (bean != null) {
+            data.clear();
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
                     mSelectedTypeID = bean.getData().get(i).getSIGNCAUSEID();
