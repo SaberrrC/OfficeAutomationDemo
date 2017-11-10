@@ -28,6 +28,8 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -124,9 +126,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         setData(true, mSelectedMonth, mSelectedDay);
         mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
         doHttp();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String format1 = format.format(new Date());
-        mPresenter.queryDayAttendance(mPrivateCode, format1);
     }
 
     public void setData(final boolean isDay, int month, int selectPos) {
@@ -139,8 +138,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         } else {
             creatMonth(selectPos);
         }
-        mRecyclerView.setLayoutManager(new GridLayoutManager(AttandenceMonthActivity.this, isDay ? 7 : 6));
-        mAdapter = new DatePopAttandanceAdapter(mData);
+//        mRecyclerView.setLayoutManager(new GridLayoutManager(AttandenceMonthActivity.this, isDay ? 7 : 6));
+//        mAdapter = new DatePopAttandanceAdapter(mData);
         mAdapter.setOnItemClick((v, position) -> {
             String content = mData.get(position).getContent();
             int i1 = Integer.parseInt(content);
@@ -149,10 +148,32 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 mDay = "0" + mSelectedDay;
             }
             String date = mCurrentYear + "-" + mCurrentMonth + "-" + mDay;
-            doHttp();
-            mPresenter.queryDayAttendance(mPrivateCode, date);
+
+//            doHttp();
+//            mPresenter.queryDayAttendance(mPrivateCode, date);
+            try {
+                MyAttandanceResponse.AllWorkAttendanceListBean allWorkAttendanceListBean = mAllWorkAttendanceList.get(position-2);
+
+                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getCalendar())) {
+                    tv_date.setText(allWorkAttendanceListBean.getCalendar());
+                }
+                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getPsname())) {
+                    tv_name.setText(allWorkAttendanceListBean.getPsname());
+                }
+                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getOnebegintime())) {
+                    tv_gowork_time.setText(allWorkAttendanceListBean.getOnebegintime());
+                }
+                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTbmstatus())) {
+                    mTvState.setText(allWorkAttendanceListBean.getTbmstatus());
+                }
+                if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTwoendtime())) {
+                    tv_off_gowork_time.setText(allWorkAttendanceListBean.getTwoendtime());
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
             setData(true, mSelectedMonth, mSelectedDay);
-            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyDataSetChanged();
         });
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -284,58 +305,65 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         }
 
         mAdapter.notifyDataSetChanged();
-        tv_date.setText(mSelectedYear + "-" + mSelectedMonth + "-" + mSelectedDay);
-        MyAttandanceResponse.AllWorkAttendanceListBean allWorkAttendanceListBean = mAllWorkAttendanceList.get(mSelectedDay);
-        if (allWorkAttendanceListBean == null)
+        if (mAllWorkAttendanceList == null)
             return;
-        String calendar = allWorkAttendanceListBean.getCalendar();
-        if (!TextUtils.isEmpty(calendar)) {
-            tv_date.setText(calendar);
-        }
-        if (!TextUtils.isEmpty(allWorkAttendanceListBean.getPsname())) {
-            tv_name.setText(allWorkAttendanceListBean.getPsname());
-        }
-        if (!TextUtils.isEmpty(allWorkAttendanceListBean.getOnebegintime())) {
-            tv_gowork_time.setText(allWorkAttendanceListBean.getOnebegintime());
-        }
-        if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTwoendtime())) {
-            tv_off_gowork_time.setText(allWorkAttendanceListBean.getTwoendtime());
-        }
-    }
+        if (mAllWorkAttendanceList.size() > 0) {
+            mTvEmptyLayout.setVisibility(View.GONE);
+            mLlCurrentdayState.setVisibility(View.VISIBLE);
+            MyAttandanceResponse.AllWorkAttendanceListBean allWorkAttendanceListBean = mAllWorkAttendanceList.get(mSelectedDay);
 
-    @Override
-    public void queryDayAttendanceSuccess(List<MyAttendanceResponse> bean) {
-        try {
-            if (bean != null) {
-                if (bean.size() > 0) {
-                    mTvEmptyLayout.setVisibility(View.GONE);
-                    mLlCurrentdayState.setVisibility(View.VISIBLE);
-                } else {
-                    mTvEmptyLayout.setVisibility(View.VISIBLE);
-                    mLlCurrentdayState.setVisibility(View.GONE);
-                    return;
-                }
-                for (int i = 0; i < bean.size(); i++) {
-                    tv_date.setText(bean.get(i).getCalendar());
-                    tv_name.setText(bean.get(i).getPsname());
-                    mTvState.setText(bean.get(i).getTbmstatus());
-                    tv_gowork_time.setText(bean.get(i).getOnebegintime());
-                    tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
-                }
-            } else {
-                mTvEmptyLayout.setText("暂无考勤信息！");
-                mTvEmptyLayout.setVisibility(View.VISIBLE);
-                mLlCurrentdayState.setVisibility(View.GONE);
+            tv_date.setText(mSelectedYear + "-" + mSelectedMonth + "-" + mSelectedDay);
+
+            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getCalendar())) {
+                tv_date.setText(allWorkAttendanceListBean.getCalendar());
             }
-        } catch (Throwable e) {
-            e.printStackTrace();
+            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getPsname())) {
+                tv_name.setText(allWorkAttendanceListBean.getPsname());
+            }
+            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getOnebegintime())) {
+                tv_gowork_time.setText(allWorkAttendanceListBean.getOnebegintime());
+            }
+            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTbmstatus())) {
+                mTvState.setText(allWorkAttendanceListBean.getTbmstatus());
+            }
+            if (!TextUtils.isEmpty(allWorkAttendanceListBean.getTwoendtime())) {
+                tv_off_gowork_time.setText(allWorkAttendanceListBean.getTwoendtime());
+            }
+        } else {
+            mTvEmptyLayout.setText("暂无考勤信息！");
+            mTvEmptyLayout.setVisibility(View.VISIBLE);
+            mLlCurrentdayState.setVisibility(View.GONE);
         }
     }
 
-    @Override
-    public void queryDayAttendanceFailed(String errCode, String msg) {
-
-    }
+//    @Override
+//    public void queryDayAttendanceSuccess(List<MyAttendanceResponse> bean) {
+//        try {
+//            if (bean != null) {
+//                if (bean.size() > 0) {
+//                    mTvEmptyLayout.setVisibility(View.GONE);
+//                    mLlCurrentdayState.setVisibility(View.VISIBLE);
+//                } else {
+//                    mTvEmptyLayout.setVisibility(View.VISIBLE);
+//                    mLlCurrentdayState.setVisibility(View.GONE);
+//                    return;
+//                }
+//                for (int i = 0; i < bean.size(); i++) {
+//                    tv_date.setText(bean.get(i).getCalendar());
+//                    tv_name.setText(bean.get(i).getPsname());
+//                    mTvState.setText(bean.get(i).getTbmstatus());
+//                    tv_gowork_time.setText(bean.get(i).getOnebegintime());
+//                    tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
+//                }
+//            } else {
+//                mTvEmptyLayout.setText("暂无考勤信息！");
+//                mTvEmptyLayout.setVisibility(View.VISIBLE);
+//                mLlCurrentdayState.setVisibility(View.GONE);
+//            }
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public void sendDataFailed(String errCode, String msg) {
@@ -379,11 +407,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 tv_people.setText(people.getPsname());
                 mPrivateCode = people.getCode();
                 doHttp();
-                if (mSelectedDay < 10) {
-                    String date = "0" + mSelectedDay;
-                    //TODO 考勤返回存在问题
-                    mPresenter.queryDayAttendance(mPrivateCode, mSelectedYear+"");
-                }
             } catch (Throwable e) {
                 e.printStackTrace();
             }

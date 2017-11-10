@@ -20,11 +20,15 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.net.ConnectException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 
 
@@ -48,15 +52,26 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
 
             @Override
             public void onError(Throwable e) {
-
-                if (e instanceof ApiException) {
-                    ApiException baseException = (ApiException) e;
-                    String code = baseException.getCode();
-                    String message = baseException.getMessage();
-                    mView.sendDataFailed(code, message);
-                } else {
-                    mView.sendDataFailed("555", "请检查网络！");
+                try {
+                    mView.sendDataFinish();
+                    if (e instanceof ApiException) {
+                        ApiException baseException = (ApiException) e;
+                        String code = baseException.getCode();
+                        String message = baseException.getMessage();
+                        mView.sendDataFailed(code, message);
+                    } else if (e instanceof HttpException) {
+                        mView.uidNull(((HttpException) e).code());
+                    } else if (e instanceof SocketTimeoutException) {
+                        mView.sendDataFailed("-1", "网络不通，请检查网络连接！");
+                    } else if (e instanceof NullPointerException) {
+                        mView.sendDataFailed("-1", "网络不通，请检查网络连接！");
+                    } else if (e instanceof ConnectException || e instanceof SocketException) {
+                        mView.sendDataFailed("-1", "网络不通，请检查网络连接！");
+                    }
+                } catch (Throwable e1) {
+                    e1.printStackTrace();
                 }
+
             }
 
             @Override

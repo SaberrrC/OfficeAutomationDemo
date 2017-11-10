@@ -15,10 +15,6 @@ public interface AttandanceMonthContract {
 
         void sendDataFailed(String errCode, String msg);
 
-        void queryDayAttendanceSuccess(List<MyAttendanceResponse> myAttandanceResponse);
-
-        void queryDayAttendanceFailed(String errCode, String msg);
-
         void sendDataFinish();
     }
 
@@ -26,6 +22,5 @@ public interface AttandanceMonthContract {
 
         void sendData(String userId, String year, String minth, Context context);
 
-        void queryDayAttendance(String userId, String date);
     }
 }
