@@ -654,23 +654,22 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             case R.id.tv_state_unchecked:
                 setStateTextDefault();
                 setTextChecked(mTvStateUnchecked);
-                mApproveState = "2";
+                mApproveState = "3";
                 break;
             case R.id.tv_state_approving:
                  setStateTextDefault();
                 setTextChecked(mTvStateApproving);
-                // TODO: 2017-11-10
-                mApproveState = "";
+                mApproveState = "2";
                 break;
             case R.id.tv_state_tackback:
                  setStateTextDefault();
                 setTextChecked(mTvStateTackback);
-                mApproveState = "";
+                mApproveState = "-1";
                 break;
             case R.id.tv_state_disagree:
                  setStateTextDefault();
                 setTextChecked(mTvStateDisagree);
-                mApproveState = "";
+                mApproveState = "0";
                 break;
             case R.id.tv_ok:
                 initRefreshMode();
