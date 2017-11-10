@@ -280,14 +280,19 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         if (isShowCheck) {
             mLlSearch.setVisibility(View.GONE);
             mTvTitle.setText("选择单据");
-            mRlCheck.setVisibility(View.VISIBLE);
+            mRlCheck.setVisibility(View.VISIBLE);`
             mTolbarTextBtn.setVisibility(View.GONE);
             mTvApproval.setVisibility(View.GONE);
         } else {
             mLlSearch.setVisibility(View.VISIBLE);
             mTvTitle.setText("待办事宜");
             mRlCheck.setVisibility(View.GONE);
-            mTvApproval.setVisibility(View.VISIBLE);
+            if (TextUtils.equals(mWhichList, "3")) {
+                mTvApproval.setVisibility(View.VISIBLE);
+            }
+            if (TextUtils.equals(mWhichList, "3")) {
+                mTvApproval.setVisibility(View.GONE);
+            }
             mTolbarTextBtn.setVisibility(View.VISIBLE);
         }
     }
@@ -379,13 +384,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         } else {
             mLlSearch.setVisibility(View.VISIBLE);
             mRlCheck.setVisibility(View.GONE);
+            mTvApproval.setVisibility(View.VISIBLE);
             if (TextUtils.equals(mWhichList, "2")) {
                 mTvTitle.setText("待办事宜");
             }
             if (TextUtils.equals(mWhichList, "3")) {
                 mTvTitle.setText("已办事宜");
+                mTvApproval.setVisibility(View.GONE);
             }
-            mTvApproval.setVisibility(View.VISIBLE);
             mTolbarTextBtn.setVisibility(View.VISIBLE);
         }
         ThreadUtils.runSub(new Runnable() {
@@ -654,17 +660,17 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                  setStateTextDefault();
                 setTextChecked(mTvStateApproving);
                 // TODO: 2017-11-10
-                mApproveState = "2";
+                mApproveState = "";
                 break;
             case R.id.tv_state_tackback:
                  setStateTextDefault();
                 setTextChecked(mTvStateTackback);
-                mApproveState = "2";
+                mApproveState = "";
                 break;
             case R.id.tv_state_disagree:
                  setStateTextDefault();
                 setTextChecked(mTvStateDisagree);
-                mApproveState = "2";
+                mApproveState = "";
                 break;
             case R.id.tv_ok:
                 initRefreshMode();
@@ -810,13 +816,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         } else {
             mLlSearch.setVisibility(View.VISIBLE);
             mRlCheck.setVisibility(View.GONE);
+            mTvApproval.setVisibility(View.VISIBLE);
             if (TextUtils.equals(mWhichList, "2")) {
                 mTvTitle.setText("待办事宜");
             }
             if (TextUtils.equals(mWhichList, "3")) {
                 mTvTitle.setText("已办事宜");
+                mTvApproval.setVisibility(View.GONE);
             }
-            mTvApproval.setVisibility(View.VISIBLE);
             mTolbarTextBtn.setVisibility(View.VISIBLE);
         }
         ThreadUtils.runSub(new Runnable() {
