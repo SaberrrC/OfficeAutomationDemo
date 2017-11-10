@@ -48,6 +48,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.shanlinjinrong.oa.R.id.tv_state_checked;
+
 public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
 
     public static final String PAGE_SIZE  = "20";
@@ -102,6 +104,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private String  mApproveState = "";
     private boolean isSearch      = false;
     private AlertDialog mAlertDialog;
+    private TextView    mTvStateApproving;
+    private TextView    mTvStateTackback;
+    private TextView    mTvStateDisagree;
 
     @Override
     protected void initInject() {
@@ -426,8 +431,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvSign = (TextView) dialogView.findViewById(R.id.tv_sign);
             mTvOk = (TextView) dialogView.findViewById(R.id.tv_ok);
             mTvAllState = (TextView) dialogView.findViewById(R.id.tv_all_state);
-            mTvStateChecked = (TextView) dialogView.findViewById(R.id.tv_state_checked);
+            mTvStateChecked = (TextView) dialogView.findViewById(tv_state_checked);
             mTvStateUnchecked = (TextView) dialogView.findViewById(R.id.tv_state_unchecked);
+            mTvStateApproving = (TextView) dialogView.findViewById(R.id.tv_state_approving);
+            mTvStateTackback = (TextView) dialogView.findViewById(R.id.tv_state_tackback);
+            mTvStateDisagree = (TextView) dialogView.findViewById(R.id.tv_state_disagree);
             mLlState = (LinearLayout) dialogView.findViewById(R.id.ll_state);
             mStork = dialogView.findViewById(R.id.stork);
             if (TextUtils.equals(mWhichList, "1")) {
@@ -455,6 +463,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvAllState.setOnClickListener(this);
             mTvStateChecked.setOnClickListener(this);
             mTvStateUnchecked.setOnClickListener(this);
+            mTvStateApproving.setOnClickListener(this);
+            mTvStateTackback.setOnClickListener(this);
+            mTvStateDisagree.setOnClickListener(this);
             mChooseDialog.setContentView(dialogView);
             Window dialogWindow = mChooseDialog.getWindow();
             dialogWindow.setGravity(Gravity.CENTER);
@@ -629,7 +640,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 setTextChecked(mTvAllState);
                 mApproveState = "";
                 break;
-            case R.id.tv_state_checked:
+            case tv_state_checked:
                 setStateTextDefault();
                 setTextChecked(mTvStateChecked);
                 mApproveState = "1";
@@ -637,6 +648,22 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             case R.id.tv_state_unchecked:
                 setStateTextDefault();
                 setTextChecked(mTvStateUnchecked);
+                mApproveState = "2";
+                break;
+            case R.id.tv_state_approving:
+                 setStateTextDefault();
+                setTextChecked(mTvStateApproving);
+                // TODO: 2017-11-10
+                mApproveState = "2";
+                break;
+            case R.id.tv_state_tackback:
+                 setStateTextDefault();
+                setTextChecked(mTvStateTackback);
+                mApproveState = "2";
+                break;
+            case R.id.tv_state_disagree:
+                 setStateTextDefault();
+                setTextChecked(mTvStateDisagree);
                 mApproveState = "2";
                 break;
             case R.id.tv_ok:
@@ -697,9 +724,15 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mTvAllState.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvStateChecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvStateUnchecked.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        mTvStateApproving.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        mTvStateTackback.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        mTvStateDisagree.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvAllState.setTextColor(getResources().getColor(R.color.black_333333));
         mTvStateChecked.setTextColor(getResources().getColor(R.color.black_333333));
         mTvStateUnchecked.setTextColor(getResources().getColor(R.color.black_333333));
+        mTvStateApproving.setTextColor(getResources().getColor(R.color.black_333333));
+        mTvStateTackback.setTextColor(getResources().getColor(R.color.black_333333));
+        mTvStateDisagree.setTextColor(getResources().getColor(R.color.black_333333));
     }
 
     @Override

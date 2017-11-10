@@ -122,14 +122,37 @@
                     android:textColor="@color/color_white"/>
 
                 <TextView
-                    android:id="@+id/tv_state_checked"
-                    style="@style/textview_upcoming_dialog"
-                    android:text="已审批"/>
-
-                <TextView
                     android:id="@+id/tv_state_unchecked"
                     style="@style/textview_upcoming_dialog"
-                    android:text="待审批"/>
+                    android:text="未审批"/>
+
+
+                <TextView
+                    android:id="@+id/tv_state_tackback"
+                    style="@style/textview_upcoming_dialog"
+                    android:text="已收回"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_state_approving"
+                    style="@style/textview_upcoming_dialog"
+                    android:text="审批中"/>
+
+                <TextView
+                    android:id="@+id/tv_state_checked"
+                    style="@style/textview_upcoming_dialog"
+                    android:text="已通过"/>
+
+                <TextView
+                    android:id="@+id/tv_state_disagree"
+                    style="@style/textview_upcoming_dialog"
+                    android:text="已驳回"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -172,9 +195,10 @@
                 android:text="出差申请"/>
 
             <TextView
-                android:id="@+id/tv_overtime"
+                android:id="@+id/tv_sign"
                 style="@style/textview_upcoming_dialog"
-                android:text="加班申请"/>
+                android:text="签卡申请"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -185,14 +209,14 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_overtime"
+                style="@style/textview_upcoming_dialog"
+                android:text="加班申请"/>
+
+            <TextView
                 android:id="@+id/tv_rest"
                 style="@style/textview_upcoming_dialog"
                 android:text="休假申请"/>
-
-            <TextView
-                android:id="@+id/tv_sign"
-                style="@style/textview_upcoming_dialog"
-                android:text="签卡申请"/>
 
             <TextView
                 android:id="@+id/tv_office_supplies"
