@@ -3,6 +3,7 @@ package com.example.retrofit.net;
 import android.widget.Toast;
 
 import com.example.retrofit.model.HttpResult;
+import com.example.retrofit.model.requestbody.AddWorkBody;
 import com.example.retrofit.model.requestbody.AliCheckRequestBean;
 import com.example.retrofit.model.requestbody.EvectionBody;
 import com.example.retrofit.model.responsebody.CountResponse1;
@@ -66,13 +67,18 @@ public class HttpMethods {
         toSubscribe(map1, subscriber);
     }
 
-    //申请出差
+    //出差申请
     public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {
         Observable map1 = ApiFactory.getJavaApi().submitEvectionApply(body).map(new HttpResultFuncTypeJava());
         toSubscribe(map1, subscriber);
     }
 
 
+//    //加班申请
+//    public void addWorkApply(AddWorkBody body, Subscriber<String> subscriber) {
+//        Observable map1 = ApiFactory.getJavaApi().addWorkApply(body).();
+//        toSubscribe(map1, subscriber);
+//    }
 
 
     //----------------------华丽的分界线-----------------------
@@ -94,9 +100,8 @@ public class HttpMethods {
         @Override
         public T call(HttpResult<T> httpResult) {
             HttpResult<T> httpResult1 = httpResult;
-            if (!httpResult.getCode().equals("000000")) {
+            if (httpResult.getCode().equals("000000")) {
                 try {
-
                     throw new ApiException(httpResult.getCode(), 1, httpResult.getMessage());
                 } catch (ApiException e) {
                     e.printStackTrace();

@@ -1,5 +1,8 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter;
 
+import com.example.retrofit.model.requestbody.AddWorkBody;
+import com.example.retrofit.model.requestbody.EvectionBody;
+import com.example.retrofit.net.ApiException;
 import com.example.retrofit.net.HttpMethods;
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.ApiJava;
@@ -61,6 +64,10 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 try {
                     mView.requestFinish();
                     if (e instanceof HttpException) {
+                        if (((HttpException) e).code() > 500) {
+                            mView.getQueryMonoCodeFailure(((HttpException) e).code(), "服务器异常，请稍后重试！");
+                        }
+                        mView.uidNull(((HttpException) e).code());
                         mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
                         mView.getQueryMonoCodeFailure(-1, "网络不通，请检查网络连接！");
@@ -130,7 +137,11 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -186,7 +197,6 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
     //申请出差
     @Override
     public void submitEvectionApply(HttpParams httpParams) {
-
         mKjHttp.cleanCache();
         mKjHttp.jsonPost(ApiJava.EVECTIONAPPLY, httpParams, new HttpCallBack() {
 
@@ -211,7 +221,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             mView.uidNull(0);
                             break;
                         default:
-                            mView.submitEvectionApplyFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                            mView.submitFailureTips(queryMonoBean.getMessage() + queryMonoBean.getData());
                             break;
                     }
                 } catch (Throwable e) {
@@ -236,6 +246,58 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 mView.requestFinish();
             }
         });
+
+        //        HttpMethods.getInstance().submitEvectionApply(body, new Subscriber<String>() {
+//            @Override
+//            public void onStart() {
+//                super.onStart();
+//                try {
+//                    mView.showLoading();
+//                } catch (Throwable e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onCompleted() {
+//                try {
+//                    mView.requestFinish();
+//                } catch (Throwable e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                try {
+//                    mView.requestFinish();
+//                    if (e instanceof ApiException) {
+//                        ApiException baseException = (ApiException) e;
+//                        String code = baseException.getCode();
+//                        String message = baseException.getMessage();
+//                    } else if (e instanceof HttpException) {
+//                        mView.uidNull(((HttpException) e).code());
+//                    } else if (e instanceof SocketTimeoutException) {
+//                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
+//                    } else if (e instanceof NullPointerException) {
+//                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
+//                    } else if (e instanceof ConnectException) {
+//                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
+//                    }
+//                } catch (Throwable e1) {
+//                    e1.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onNext(String s) {
+//                try {
+//                    mView.submitEvectionApplySuccess(s);
+//                } catch (Throwable e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     //申请加班
@@ -265,7 +327,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             mView.uidNull(0);
                             break;
                         default:
-                            mView.addWorkApplyFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                            mView.submitFailureTips(queryMonoBean.getMessage() + queryMonoBean.getData());
                             break;
                     }
                 } catch (Throwable e) {
@@ -290,6 +352,55 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 mView.requestFinish();
             }
         });
+
+//                HttpMethods.getInstance().addWorkApply(body, new Subscriber<String>() {
+//
+//            @Override
+//            public void onStart() {
+//                super.onStart();
+//                try {
+//                    mView.showLoading();
+//                } catch (Throwable e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onCompleted() {
+//                try {
+//                    mView.requestFinish();
+//                } catch (Throwable e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                try {
+//                    mView.requestFinish();
+//                    if (e instanceof ApiException) {
+//                        ApiException baseException = (ApiException) e;
+//                        String code = baseException.getCode();
+//                        String message = baseException.getMessage();
+//                    } else if (e instanceof HttpException) {
+//                        mView.uidNull(((HttpException) e).code());
+//                    } else if (e instanceof SocketTimeoutException) {
+//                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
+//                    } else if (e instanceof NullPointerException) {
+//                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
+//                    } else if (e instanceof ConnectException) {
+//                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
+//                    }
+//                } catch (Throwable e1) {
+//                    e1.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onNext(String s) {
+//                mView.submitEvectionApplySuccess(s);
+//            }
+//        });
     }
 
     //申请休假
@@ -319,7 +430,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             mView.uidNull(0);
                             break;
                         default:
-                            mView.submitFurloughFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                            mView.submitFailureTips(queryMonoBean.getMessage() + queryMonoBean.getData());
                             break;
                     }
                 } catch (Throwable e) {
@@ -420,7 +531,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             mView.uidNull(0);
                             break;
                         default:
-                            mView.registrationCardFailure(Integer.parseInt(queryMonoBean.getCode()), queryMonoBean.getMessage());
+                            mView.submitFailureTips(queryMonoBean.getMessage() + queryMonoBean.getData());
                             break;
                     }
                 } catch (Throwable e) {

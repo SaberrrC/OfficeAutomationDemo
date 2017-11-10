@@ -98,10 +98,6 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
                             mView.sendDataFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
                         mView.uidNull(((HttpException) e).code());
-//                        ApiException baseException = (ApiException) e;
-//                        String code = baseException.getCode();
-//                        String message = baseException.getMessage();
-//                        mView.sendDataFailed(code, message);
                     } else if (e instanceof SocketTimeoutException) {
                         mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
                     } else if (e instanceof NullPointerException) {

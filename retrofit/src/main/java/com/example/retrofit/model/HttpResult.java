@@ -1,8 +1,5 @@
 package com.example.retrofit.model;
 
-/**
- * Created by gaobin on 2017/8/14.
- */
 public class HttpResult<T>  extends BaseResult<T>  {
 
     private String code;
