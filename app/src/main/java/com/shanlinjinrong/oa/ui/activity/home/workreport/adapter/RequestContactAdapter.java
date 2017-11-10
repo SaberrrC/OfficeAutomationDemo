@@ -26,6 +26,7 @@ public class RequestContactAdapter extends BaseQuickAdapter<Child> {
 
         baseViewHolder.setText(R.id.tvName, child.getUsername());
         baseViewHolder.setChecked(R.id.child_check, child.getChecked());
+        baseViewHolder.setVisible(R.id.child_check, false);
         baseViewHolder.setOnClickListener(R.id.ll_contract_selected, view -> {
             for (int i = 0; i < mData.size(); i++) {
                 mData.get(i).setChecked(false);
