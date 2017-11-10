@@ -18,6 +18,8 @@ public interface InitiateThingsRequestActivityContract {
 
         void getQueryMonoCodeSuccess(String code);
 
+        void submitFailureTips(String msg);
+
         void getQueryMonoCodeFailure(int errorCode, String str);
 
         void initiateThingsRequestSuccess();

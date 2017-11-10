@@ -1,7 +1,9 @@
 package com.example.retrofit.net.api;
 
 import com.example.retrofit.model.HttpResult;
+import com.example.retrofit.model.requestbody.AddWorkBody;
 import com.example.retrofit.model.requestbody.EvectionBody;
+import com.example.retrofit.model.responsebody.QueryPayResponse;
 import com.example.retrofit.model.responsebody.CountResponse1;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
@@ -39,6 +41,10 @@ public interface JavaApi {
     @GET("nchrHoliday/getHoliday")
     Observable<HttpResult<ArrayList<HolidaySearchResponse>>> getHolidaySearchData(@QueryMap Map<String, String> map);
 
+    //薪资查询
+    @GET("nchrsalary/querySalary")
+    Observable<HttpResult<QueryPayResponse>> getPayInfoData(@QueryMap Map<String, String> map);
+
 
     //----------------------发起审批-----------------------
     //获取单据编号接口
@@ -49,7 +55,7 @@ public interface JavaApi {
     @POST("nchrEvection/submitEvectionApply")
     Observable<HttpResult> submitEvectionApply(@Body EvectionBody data);
 
-
-
-
+    //提交加班申请
+    @POST("nchrEvection/submitEvectionApply")
+    Observable<HttpResult> addWorkApply(@Body AddWorkBody data);
 }

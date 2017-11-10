@@ -16,6 +16,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.retrofit.model.requestbody.AddWorkBody;
+import com.example.retrofit.model.requestbody.EvectionBody;
 import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.InitiateThingsTypeAdapter;
@@ -236,7 +238,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         });
     }
 
-    //*********************************出差提交*******************************
+    //------------------------------------出差提交------------------------------------
+
     private void submitEvectionApply() {
         if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
             showToast(mBegin_time.getText().toString() + "！");
@@ -289,8 +292,33 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject.put("applyDate", mTvRequestDate.getText().toString());
             HttpParams httpParams = new HttpParams();
             httpParams.putJsonParams(jsonObject.toString());
+
+//            EvectionBody body = new EvectionBody();
+//            body.setType(mSelectedTypeID);
+//            body.setBillCode(mTvCoderNumber.getText().toString());
+//            body.setApplyDate(mTvRequestDate.getText().toString());
+//            List<EvectionBody.NchrevectionApplyDetailBean> bean = new ArrayList<>();
+//            EvectionBody.NchrevectionApplyDetailBean bean1 = new EvectionBody.NchrevectionApplyDetailBean();
+//            bean1.setHandOverPepole(mReceiverId);
+//            bean1.setTimeDifference(mQueryDuration);
+//            bean1.setEndTime(mEnd_time.getText().toString() + ":00");
+//            bean1.setStartTime(mBegin_time.getText().toString() + ":00");
+//            bean1.setEvectionRemark(mEt_common_show2.getText().toString());
+//            bean1.setEvectionAddress(mEt_common_show1.getText().toString());
+//            bean.add(bean1);
+//            if (mIndex > 1) {
+//                EvectionBody.NchrevectionApplyDetailBean bean2 = new EvectionBody.NchrevectionApplyDetailBean();
+//                bean2.setTimeDifference(mNextDuration);
+//                bean2.setHandOverPepole(mNextReceiverId);
+//                bean2.setEndTime(mNext_end_time.getText().toString() + ":00");
+//                bean2.setStartTime(mNext_begin_time.getText().toString() + ":00");
+//                bean2.setEvectionRemark(mEt_common_next_show2.getText().toString());
+//                bean2.setEvectionAddress(mEt_common_next_show1.getText().toString());
+//                bean.add(bean2);
+//            }
+//            body.setNchrevectionApplyDetail(bean);
             mPresenter.submitEvectionApply(httpParams);
-        } catch (JSONException e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }
@@ -298,18 +326,53 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     //*********************************加班提交*********************************
     private void submitAddWorkApply() {
         try {
-            if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
-                showToast(mBegin_time.getText().toString() + "！");
-                return;
-            }
-            if (mEnd_time.getText().toString().trim().equals("请选择结束时间")) {
-                showToast(mEnd_time.getText().toString() + "！");
-                return;
-            }
-            if (mEt_common_show2.getText().toString().trim().equals("") && !mEt_common_show2.getHint().toString().trim().equals("")) {
-                showToast("请填写加班原因！");
-                return;
-            }
+//            if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
+//                showToast(mBegin_time.getText().toString() + "！");
+//                return;
+//            }
+//            if (mEnd_time.getText().toString().trim().equals("请选择结束时间")) {
+//                showToast(mEnd_time.getText().toString() + "！");
+//                return;
+//            }
+//            if (mEt_common_show2.getText().toString().trim().equals("") && !mEt_common_show2.getHint().toString().trim().equals("")) {
+//                showToast("请填写加班原因！");
+//                return;
+//            }
+//
+//            AddWorkBody body = new AddWorkBody();
+//            List<AddWorkBody.DetailListBean> bean = new ArrayList<>();
+//            AddWorkBody.DetailListBean bean1 = new AddWorkBody.DetailListBean();
+//
+//            bean1.setCause(mEt_common_show2.getText().toString());
+//            bean1.setEndTime(mEnd_time.getText().toString() + ":00");
+//            bean1.setStartTime(mBegin_time.getText().toString() + ":00");
+//            bean1.setTimeDifference(mQueryDuration);
+//            if (mIndex > 1) {
+//                if (mNext_begin_time.getText().toString().trim().equals("请选择开始时间")) {
+//                    showToast(mNext_begin_time.getText().toString() + "！");
+//                    return;
+//                }
+//                if (mNext_end_time.getText().toString().trim().equals("请选择结束时间")) {
+//                    showToast(mNext_end_time.getText().toString() + "！");
+//                    return;
+//                }
+//                if (mEt_common_next_show2.getText().toString().trim().equals("") && !mEt_common_next_show2.getHint().toString().trim().equals("")) {
+//                    showToast("请填写加班原因！");
+//                    return;
+//                }
+//                AddWorkBody.DetailListBean bean2 = new AddWorkBody.DetailListBean();
+//                bean1.setCause(mEt_common_next_show2.getText().toString());
+//                bean1.setEndTime(mNext_end_time.getText().toString() + ":00");
+//                bean1.setStartTime(mNext_begin_time.getText().toString() + ":00");
+//                bean1.setTimeDifference(mNextDuration);
+//                bean.add(bean2);
+//            }
+//            bean.add(bean1);
+//            body.setDetailList(bean);
+//            body.setType(mSelectedTypeID);
+//            body.setMonocode(mTvCoderNumber.getText().toString());
+//            mPresenter.addWorkApply(body);
+
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject1 = new JSONObject();
@@ -344,7 +407,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             HttpParams httpParams = new HttpParams();
             httpParams.putJsonParams(jsonObject.toString());
             mPresenter.addWorkApply(httpParams);
-        } catch (JSONException e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }
@@ -536,14 +599,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             });
         mLl_common_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = false;
-            if (data == null) {
-                showToast("获取" + mTv_common_show2.getText().toString() + "失败,请检查网络！");
-                return;
-            } else if (data.size() == 0) {
-                showToast("获取" + mTv_common_show2.getText().toString() + "失败,请检查网络！");
+            if (data != null) {
+                if (data.size() == 0) {
+                    showToast("获取" + mTv_common_show2.getText().toString() + "失败,正在为您重试！");
+                    querySelectedTypeData();
+                    return;
+                }
+                selectedDialog();
                 return;
             }
-            selectedDialog();
+            showToast("获取" + mTv_common_show2.getText().toString() + "失败,正在为您重试！");
+            querySelectedTypeData();
         });
 
     }
@@ -577,14 +643,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             });
         mLl_common_next_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = true;
-            if (mCommonTypeBean == null) {
-                showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,请检查网络！");
-                return;
-            } else if (mCommonTypeBean.getData().size() == 0) {
-                showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,请检查网络！");
+            if (mCommonTypeBean != null) {
+                if (mCommonTypeBean.getData().size() == 0) {
+                    showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,正在为您重试！");
+                    querySelectedTypeData();
+                    return;
+                }
+                NonTokenDialog();
                 return;
             }
-            NonTokenDialog();
+            showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,正在为您重试！");
+            querySelectedTypeData();
         });
     }
 
@@ -716,15 +785,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 addDetail();
                 break;
             case R.id.tv_commonality_type_selected:
-                if (mCommonTypeBean == null) {
-                    showToast("获取" + mTvCommonalityType.getText().toString() + "失败,请检查网络！");
-                    return;
-                } else if
-                        (mCommonTypeBean.getData().size() == 0) {
-                    showToast("获取" + mTvCommonalityType.getText().toString() + "失败,请检查网络！");
+                if (mCommonTypeBean != null) {
+                    if (mCommonTypeBean.getData().size() == 0) {
+                        showToast("获取" + mTvCommonalityType.getText().toString() + "失败,正在为您重试！");
+                        querySelectedTypeData();
+                        return;
+                    }
+                    selectedDialog();
                     return;
                 }
-                selectedDialog();
+                showToast("获取" + mTvCommonalityType.getText().toString() + "失败,正在为您重试！");
+                querySelectedTypeData();
                 break;
             case R.id.tv_commonality_type_date:
                 mYearDateSelected.showPositionDateView(mYearPosition);
@@ -777,12 +848,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void getQueryMonoCodeSuccess(String code) {
-
         if (!TextUtils.isEmpty(code)) {
-            mTvCoderNumber.setText(code);
             mTvNotNetwork.setVisibility(View.GONE);
             mSvContainerShow.setVisibility(View.VISIBLE);
+            mTvCoderNumber.setText(code);
+        } else {
+            mTvNotNetwork.setText("获取的" + mTvCommonalityCoder.getText().toString() + "为空");
         }
+        querySelectedTypeData();
+    }
+
+    private void querySelectedTypeData() {
         switch (getIntent().getIntExtra("type", -1)) {
             case 0://出差类别
                 mPresenter.queryEvectionType(2);
@@ -800,22 +876,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     @Override
-    public void getQueryMonoCodeFailure(int errorCode, String str) {
-        hideLoadingView();
-        switch (errorCode) {
-            case -1:
-                showToast(str);
-                mTvNotNetwork.setText(str);
-                mTvNotNetwork.setVisibility(View.VISIBLE);
-                mSvContainerShow.setVisibility(View.GONE);
-                break;
-        }
+    public void submitFailureTips(String msg) {
+        Toast.makeText(this, msg.trim(), Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    public void getQueryMonoCodeFailure(int errorCode, String str) {
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        mTvNotNetwork.setText(str);
     }
 
     @Override
     public void initiateThingsRequestSuccess() {
-
 
     }
 
@@ -832,6 +904,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     @Override
     public void queryEvectionTypeSuccess(CommonTypeBean bean) {
         if (bean != null) {
+            data.clear();
             mCommonTypeBean = bean;
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
@@ -888,12 +961,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void submitEvectionApplyFailure(int errorCode, String str) {
-        switch (errorCode) {
-            case -1:
-                showToast(getString(R.string.string_not_network));
-                return;
-        }
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        showToast(str);
     }
 
     @Override
@@ -931,6 +999,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     @Override
     public void findSignReasonSuccess(SingReasonBean bean) {
         if (bean != null) {
+            data.clear();
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
                     mSelectedTypeID = bean.getData().get(i).getSIGNCAUSEID();
