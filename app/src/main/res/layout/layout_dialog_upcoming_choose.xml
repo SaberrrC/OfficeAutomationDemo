@@ -106,6 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:textColor="#898989"
                 android:layout_marginTop="12dp"
                 android:text="状态"/>
 
