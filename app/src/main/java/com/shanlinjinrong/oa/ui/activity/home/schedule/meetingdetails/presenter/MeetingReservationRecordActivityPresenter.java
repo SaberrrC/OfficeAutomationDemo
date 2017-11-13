@@ -80,22 +80,30 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(jsonObject.getInt("code"));
+                            if (mView != null)
+                                mView.uidNull(jsonObject.getInt("code"));
                             break;
                         default:
-                            mView.getMeetingRecordFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
+                            if (mView != null)
+                                mView.getMeetingRecordFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
                             break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    mView.getMeetingRecordFailed(-2,e.getMessage());
+                    if (mView != null)
+                        mView.getMeetingRecordFailed(-2, e.getMessage());
                 }
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getMeetingRecordFailed(errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.getMeetingRecordFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
         });
