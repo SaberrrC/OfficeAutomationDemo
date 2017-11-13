@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.ApiJava;
@@ -28,7 +29,6 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.bean.Sel
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalBaseAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.CardResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.DeleteBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OverTimeResultBean;
@@ -74,6 +74,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     RelativeLayout mRlTackBack;
     @BindView(R.id.tv_tack_back)
     TextView       mTvTackBack;
+    @BindView(R.id.tv_error_show)
+    TextView       mTvErrorShow;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter      mFinalRecycleAdapter;
     private LinearLayoutManager      mLinearLayoutManager;
@@ -516,16 +518,32 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                         billType = mSearchBean.getPkBillType();
                     }
                     if (TextUtils.equals(billType, "6402")) {//签卡申请
-                        mDatas.addAll(mCardResultBean.getData().getApplyWorkFlows());
+                        if (mCardResultBean.getData() != null) {
+                            if (mCardResultBean.getData().getApplyWorkFlows() != null) {
+                                mDatas.addAll(mCardResultBean.getData().getApplyWorkFlows());
+                            }
+                        }
                     }
                     if (TextUtils.equals(billType, "6403")) {//出差申请
-                        mDatas.addAll(mTraverResultBean.getData().getNchrapplyWorkFlow());
+                        if (mTraverResultBean.getData() != null) {
+                            if (mTraverResultBean.getData().getNchrapplyWorkFlow() != null) {
+                                mDatas.addAll(mTraverResultBean.getData().getNchrapplyWorkFlow());
+                            }
+                        }
                     }
                     if (TextUtils.equals(billType, "6404")) {//休假申请
-                        mDatas.addAll(mRestResultBean.getData().getNchrapplyWorkFlow());
+                        if (mRestResultBean.getData() != null) {
+                            if (mRestResultBean.getData().getNchrapplyWorkFlow() != null) {
+                                mDatas.addAll(mRestResultBean.getData().getNchrapplyWorkFlow());
+                            }
+                        }
                     }
                     if (TextUtils.equals(billType, "6405")) {//加班申请
-                        mDatas.addAll(mOverTimeResultBean.getData().getNchrapplyWorkFlow());
+                        if (mOverTimeResultBean.getData() != null) {
+                            if (mOverTimeResultBean.getData().getNchrapplyWorkFlow() != null) {
+                                mDatas.addAll(mOverTimeResultBean.getData().getNchrapplyWorkFlow());
+                            }
+                        }
                     }
                     mFinalRecycleAdapter.notifyDataSetChanged();
                     mRecyclerView.scrollToPosition(0);
@@ -654,6 +672,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onGetApproveInfoSuccess(String json) {
+        mRecyclerView.setVisibility(View.VISIBLE);
         String billType = "";
         Gson gson = new Gson();
         if (mDatas.size() >= 0) {
@@ -708,11 +727,30 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     @Override
     public void onGetApproveInfoFailure(String errorNo, String strMsg) {
         hideLoadingView();
-        showToast(strMsg);
+        if (strMsg.contains("HttpException")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("服务器异常，请稍后重试！");
+        }
+        if (strMsg.contains("SocketTimeoutException")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        }
+        if (strMsg.contains("NullPointerException")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        }
+        if (strMsg.contains("ConnectException")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            showToast(strMsg);
+        }
     }
 
     @Override
     public void onTackBackSuccess(TackBackResultBean bean) {
+        mRecyclerView.setVisibility(View.VISIBLE);
         hideLoadingView();
         if (TextUtils.equals(bean.getData().getStatus(), "1")) {
             showToast("收回成功");
@@ -725,6 +763,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onApproveSuccess(AgreeDisagreeResultBean resultBean) {
+        mRecyclerView.setVisibility(View.VISIBLE);
         List<AgreeDisagreeResultBean.DataBean> beanList = resultBean.getData();
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < beanList.size(); i++) {
@@ -742,11 +781,30 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onApproveFailure(int errorNo, String strMsg) {
-        showToast(strMsg);
+        if (strMsg.contains("HttpException")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("服务器异常，请稍后重试！");
+        }
+        if (strMsg.contains("SocketTimeoutException")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        }
+        if (strMsg.contains("NullPointerException")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        }
+        if (strMsg.contains("ConnectException")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            showToast(strMsg);
+        }
     }
 
     @Override
     public void onDeleteSuccess(DeleteBean bean) {
+        mRecyclerView.setVisibility(View.VISIBLE);
         hideLoadingView();
         showToast("删除成功");
         setResult(101);

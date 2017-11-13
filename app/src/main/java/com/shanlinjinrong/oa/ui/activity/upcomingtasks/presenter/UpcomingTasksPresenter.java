@@ -2,12 +2,12 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter;
 
 import android.text.TextUtils;
 
+import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
@@ -74,9 +74,6 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    if (mView != null) {
-                        mView.onGetApproveDataFailure(500, "网络异常");
-                    }
                 }
 
             }
@@ -155,9 +152,6 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                         }
                         return;
                     }
-                    if (mView != null) {
-                        mView.onGetApproveDataFailure(500, "网络异常");
-                    }
                 }
             }
 
@@ -175,9 +169,6 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    if (mView != null) {
-                        mView.onGetApproveDataFailure(500, "网络异常");
-                    }
                 }
             }
         });

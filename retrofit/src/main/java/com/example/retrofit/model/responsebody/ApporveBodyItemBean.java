@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean;
+package com.example.retrofit.model.responsebody;
 
 /**
  * @Description:

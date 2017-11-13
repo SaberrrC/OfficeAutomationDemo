@@ -43,8 +43,7 @@ public class HttpMethods {
         HashMap<String, String> map = new HashMap<>();
         map.put("type", type);
         map.put("year", year);
-        Observable<ArrayList<HolidaySearchResponse>> map1 = ApiFactory.getJavaApi().getHolidaySearchData(map).map(new HttpResultFuncTypeJava<ArrayList<HolidaySearchResponse
-                >>());
+        Observable<ArrayList<HolidaySearchResponse>> map1 = ApiFactory.getJavaApi().getHolidaySearchData(map).map(new HttpResultFuncTypeJava<ArrayList<HolidaySearchResponse>>());
         toSubscribe(map1, subscriber);
     }
 
@@ -66,27 +65,39 @@ public class HttpMethods {
         toSubscribe(map1, subscriber);
     }
 
-//    //出差申请
-//    public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {
-//        Observable map1 = ApiFactory.getJavaApi().submitEvectionApply(body).map(new HttpResultFuncTypeJava());
-//        toSubscribe(map1, subscriber);
-//    }
+    public void getApproveData(HashMap<String, String> map, Subscriber<String> subscriber) {
+        Observable map1 = ApiFactory.getJavaApi().getApproveData(map).map(new HttpResultFuncTypeJava());
+        toSubscribe(map1, subscriber);
+    }
+
+    public void getSelectData(HashMap<String, String> map, Subscriber<String> subscriber) {
+        Observable map1 = ApiFactory.getJavaApi().getApproveData(map).map(new HttpResultFuncTypeJava());
+        toSubscribe(map1, subscriber);
+    }
+
+    public void postAgreeDisagree(HashMap<String, String> map, Subscriber<String> subscriber) {
+        Observable map1 = ApiFactory.getJavaApi().getApproveData(map).map(new HttpResultFuncTypeJava());
+        toSubscribe(map1, subscriber);
+    }
+
+    //    //出差申请
+    //    public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {
+    //        Observable map1 = ApiFactory.getJavaApi().submitEvectionApply(body).map(new HttpResultFuncTypeJava());
+    //        toSubscribe(map1, subscriber);
+    //    }
 
 
-//    //加班申请
-//    public void addWorkApply(AddWorkBody body, Subscriber<String> subscriber) {
-//        Observable map1 = ApiFactory.getJavaApi().addWorkApply(body).();
-//        toSubscribe(map1, subscriber);
-//    }
+    //    //加班申请
+    //    public void addWorkApply(AddWorkBody body, Subscriber<String> subscriber) {
+    //        Observable map1 = ApiFactory.getJavaApi().addWorkApply(body).();
+    //        toSubscribe(map1, subscriber);
+    //    }
 
 
     //----------------------华丽的分界线-----------------------
 
     private <T> void toSubscribe(Observable<T> o, Subscriber<T> s) {
-        o.subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(s);
+        o.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s);
     }
 
     /**

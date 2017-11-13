@@ -1,22 +1,24 @@
 package com.example.retrofit.net.api;
 
 import com.example.retrofit.model.HttpResult;
-//import com.example.retrofit.model.requestbody.AddWorkBody;
-import com.example.retrofit.model.requestbody.EvectionBody;
-import com.example.retrofit.model.responsebody.QueryPayResponse;
+import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.example.retrofit.model.responsebody.CountResponse1;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
+import com.example.retrofit.model.responsebody.QueryPayResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 import rx.Observable;
+
+//import com.example.retrofit.model.requestbody.AddWorkBody;
 
 /**
  * @Description:
@@ -51,11 +53,21 @@ public interface JavaApi {
     @GET("nchrcommon/getBillCode")
     Observable<HttpResult> getQueryMonoCode(@QueryMap Map<String, String> map);
 
+    @GET("myApply/queryApproveByAll;")
+    Observable<HttpResult> getApproveData(@QueryMap Map<String, String> map);
+
+    @GET("MyAplication/selectMyAplication")
+    Observable<HttpResult> getSelectData(@QueryMap Map<String, String> map);
+
+    @POST("Approve/allApprove")
+    Observable<HttpResult> postAgreeDisagree(@Field("approveList[]") List<ApporveBodyItemBean> approveList);
+
     //提交出差申请
-    @POST("nchrEvection/submitEvectionApply")
-    Observable<HttpResult> submitEvectionApply(@Body EvectionBody data);
+    //    @POST("nchrEvection/submitEvectionApply")
+    //    Observable<HttpResult> submitEvectionApply(@Body EvectionBody data);
+
 
     //提交加班申请
-//    @POST("nchrEvection/submitEvectionApply")
-//    Observable<HttpResult> addWorkApply(@Body AddWorkBody data);
+    //    @POST("nchrEvection/submitEvectionApply")
+    //    Observable<HttpResult> addWorkApply(@Body AddWorkBody data);
 }

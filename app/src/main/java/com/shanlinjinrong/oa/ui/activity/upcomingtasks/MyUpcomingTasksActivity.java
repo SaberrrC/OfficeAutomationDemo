@@ -28,11 +28,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
@@ -73,6 +73,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     RelativeLayout     mRlCheck;
     @BindView(R.id.et_content)
     EditText           mEtContent;
+    @BindView(R.id.tv_error_show)
+    TextView           mTvErrorShow;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
     private int lastVisibleItem = 0;
@@ -220,6 +222,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             @Override
             public void run() {
                 mSrRefresh.setRefreshing(true);
+
                 getListData();
             }
         });
@@ -331,6 +334,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     showToast("请选择单据");
                     return;
                 }
+                showLoadingView();
                 mPresenter.postAgreeDisagree(disApproveBeanList);
                 break;
         }
@@ -657,17 +661,17 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mApproveState = "3";
                 break;
             case R.id.tv_state_approving:
-                 setStateTextDefault();
+                setStateTextDefault();
                 setTextChecked(mTvStateApproving);
                 mApproveState = "2";
                 break;
             case R.id.tv_state_tackback:
-                 setStateTextDefault();
+                setStateTextDefault();
                 setTextChecked(mTvStateTackback);
                 mApproveState = "-1";
                 break;
             case R.id.tv_state_disagree:
-                 setStateTextDefault();
+                setStateTextDefault();
                 setTextChecked(mTvStateDisagree);
                 mApproveState = "0";
                 break;
@@ -742,6 +746,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onGetApproveDataSuccess(UpcomingTaskItemBean bean) {
+        mRvList.setVisibility(View.VISIBLE);
         mSrRefresh.setRefreshing(false);
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mDatas.size() > 0) {
@@ -773,8 +778,25 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     @Override
     public void onGetApproveDataFailure(int errorNo, String strMsg) {
         hideLoadingView();
-        showToast(strMsg);
-        setNoItemList(errorNo);
+        if (strMsg.contains("HttpException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("服务器异常，请稍后重试！");
+        }
+        if (strMsg.contains("SocketTimeoutException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        }
+        if (strMsg.contains("NullPointerException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        }
+        if (strMsg.contains("ConnectException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        } else {
+            mRvList.setVisibility(View.VISIBLE);
+            showToast(strMsg);
+        }
         mSrRefresh.setRefreshing(false);
     }
 
@@ -785,6 +807,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onSearchSuccess(UpcomingSearchResultBean bean) {
+        mRvList.setVisibility(View.VISIBLE);
         hideLoadingView();
         mSrRefresh.setRefreshing(false);
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
@@ -856,17 +879,22 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onApproveSuccess(AgreeDisagreeResultBean resultBean, List<ApporveBodyItemBean> list) {
+        mRvList.setVisibility(View.VISIBLE);
         hideLoadingView();
         List<AgreeDisagreeResultBean.DataBean> beanList = resultBean.getData();
         StringBuilder stringBuilder = new StringBuilder();
         int count = 0;
+        boolean show = false;
         for (int i = 0; i < beanList.size(); i++) {
             if (TextUtils.equals(beanList.get(i).getStatus(), "1")) {
                 stringBuilder.append(beanList.get(i).getReason() + "\n");
                 count++;
             }
+            if (TextUtils.equals(beanList.get(i).getStatus(), "2")) {
+                show = true;
+            }
         }
-        if (count == 0) {
+        if (show) {
             showDetailDialog(beanList);
             return;
         }
@@ -898,12 +926,25 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         if (mAlertDialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(stringBuilder.toString().trim() + "请重新审批。");
+            builder.setMessage(stringBuilder.toString().trim() + "的单据审批失败，请重新审批。");
             builder.setCancelable(true);
             builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     mAlertDialog.dismiss();
+                    initRefreshMode();
+                    mSrRefresh.setRefreshing(true);
+                    mSrRefresh.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ThreadUtils.runMainDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getListData();
+                                }
+                            }, 0);
+                        }
+                    });
                 }
             });
             mAlertDialog = builder.create();
@@ -915,7 +956,25 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     @Override
     public void onApproveFailure(int errorNo, String strMsg) {
         hideLoadingView();
-        showToast(strMsg);
+        if (strMsg.contains("HttpException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("服务器异常，请稍后重试！");
+        }
+        if (strMsg.contains("SocketTimeoutException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        }
+        if (strMsg.contains("NullPointerException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        }
+        if (strMsg.contains("ConnectException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+        } else {
+            mRvList.setVisibility(View.VISIBLE);
+            showToast(strMsg);
+        }
         if (errorNo == 20000) {
             mDatas.clear();
             mFinalRecycleAdapter.notifyDataSetChanged();
@@ -926,6 +985,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 101) {
+            mRvList.setVisibility(View.VISIBLE);
             mSrRefresh.setRefreshing(true);
             mSrRefresh.post(new Runnable() {
                 @Override

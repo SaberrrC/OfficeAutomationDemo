@@ -2,12 +2,12 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter;
 
 import android.text.TextUtils;
 
+import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.DeleteBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.TackBackResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksInfoContract;
