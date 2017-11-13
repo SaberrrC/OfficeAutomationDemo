@@ -528,6 +528,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
             }).start();
         }
         super.onStop();
+
     }
 
     @Override
@@ -625,6 +626,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     @Override
     protected void onDestroy() {
         EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
         super.onDestroy();
     }
 
