@@ -193,7 +193,9 @@ public class HolidaySearchActivity extends HttpBaseActivity<HolidaySearchPresent
         View inflate = LayoutInflater.from(this).inflate(R.layout.dialog_common_selected_type, null);
         RecyclerView rvSelectedType = (RecyclerView) inflate.findViewById(R.id.rv_selected_type);
         TextView tvTitle = (TextView) inflate.findViewById(R.id.tv_common_type_title);
-        tvTitle.setText(data.get(0));
+        View lineView = inflate.findViewById(R.id.tv_line_view);
+        tvTitle.setVisibility(View.GONE);
+        lineView.setVisibility(View.GONE);
         mTypeAdapter = new HolidayAdapter(this, data);
         rvSelectedType.setLayoutManager(new LinearLayoutManager(this));
         rvSelectedType.addItemDecoration(new ApproveDecorationLine(this));

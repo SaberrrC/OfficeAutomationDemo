@@ -212,7 +212,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             @Override
             public boolean onMessageBubbleClick(EMMessage message) {
-                //TODO 震动模式播放语音
+                //TODO 震动模式播放语音 待优化 声音小
                 try {
                     EMMessageBody body = message.getBody();
                     String body1 = body.toString();
