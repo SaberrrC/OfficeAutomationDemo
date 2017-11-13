@@ -85,6 +85,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     private int mCurrentMonth;
     private int mSelectedYear;
     private int mSelectedMonth;
+    private boolean isSelectedDay;
     private String mPrivateCode = "";
     private RecyclerView mRecyclerView;
     private DatePopAttandanceAdapter mAdapter;
@@ -236,9 +237,17 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         }
         mAdapter.notifyDataSetChanged();
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String format1 = format.format(new Date());
-        mPresenter.queryDayAttendance(mPrivateCode, format1);
+        if (!isSelectedDay) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String date = format.format(new Date());
+            mPresenter.queryDayAttendance(mPrivateCode, date);
+            isSelectedDay = true;
+        } else {
+            String year = tv_time.getText().toString().replace("年", "-");
+            String month = year.replace("月", "-");
+            String date = month + "01";
+            mPresenter.queryDayAttendance(mPrivateCode, date);
+        }
     }
 
     @Override
@@ -302,8 +311,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     public void onItemClicked(View v, int position) {
         String content = mData.get(position).getContent();
         mSelectedDay = Integer.parseInt(content);
-        String mDay = (mSelectedDay < 10) ?  "0" + mSelectedDay : mSelectedDay + "";
-        String date = mCurrentYear + "-" + mCurrentMonth + "-" + mDay;
+        String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
+        String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
+
+        String date = mCurrentYear + "-" + month + "-" + mDay;
         mPresenter.queryDayAttendance(mPrivateCode, date);
         for (int i = 0; i < mData.size(); i++) {
             if (i == position) {
