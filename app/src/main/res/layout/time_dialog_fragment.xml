@@ -77,28 +77,28 @@
                 app:wheel_visible_item_count="5" />
 
 
-            <com.aigestudio.wheelpicker.WheelPicker
-                android:id="@+id/wheelTimePicker"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.5"
-                android:visibility="visible"
-                app:wheel_curved="false"
-                app:wheel_cyclic="false"
-                app:wheel_indicator="true"
-                app:wheel_indicator_color="@color/gray_d5d5d5"
-                app:wheel_indicator_size="1dp"
-                app:wheel_item_space="20dp"
-                app:wheel_item_text_size="18sp"
-                app:wheel_selected_item_text_color="@color/black_333333"
-                app:wheel_visible_item_count="5" />
+            <!--<com.aigestudio.wheelpicker.WheelPicker-->
+                <!--android:id="@+id/wheelTimePicker"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1.5"-->
+                <!--android:visibility="visible"-->
+                <!--app:wheel_curved="false"-->
+                <!--app:wheel_cyclic="false"-->
+                <!--app:wheel_indicator="true"-->
+                <!--app:wheel_indicator_color="@color/gray_d5d5d5"-->
+                <!--app:wheel_indicator_size="1dp"-->
+                <!--app:wheel_item_space="20dp"-->
+                <!--app:wheel_item_text_size="18sp"-->
+                <!--app:wheel_selected_item_text_color="@color/black_333333"-->
+                <!--app:wheel_visible_item_count="5" />-->
 
 
             <com.aigestudio.wheelpicker.WheelPicker
                 android:id="@+id/wheelMinPickerHour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:visibility="visible"
                 app:wheel_curved="false"
                 app:wheel_cyclic="false"
@@ -114,7 +114,7 @@
                 android:id="@+id/wheelHoursPickerMinutes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:visibility="visible"
                 app:wheel_curved="false"
                 app:wheel_cyclic="false"

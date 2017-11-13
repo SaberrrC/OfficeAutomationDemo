@@ -45,8 +45,8 @@ public class TimeDialogFragment extends DialogFragment {
     WheelPicker mWheelMinPickerHour;
     @BindView(R.id.wheelHoursPickerMinutes)
     WheelPicker mWheelHoursPickerMinutes;
-    @BindView(R.id.wheelTimePicker)
-    WheelPicker mWheelTimePicker;
+//    @BindView(R.id.wheelTimePicker)
+//    WheelPicker mWheelTimePicker;
     @BindView(R.id.tv_title)
     TextView mTvTitle;
     private String mWeek;
@@ -96,24 +96,25 @@ public class TimeDialogFragment extends DialogFragment {
         mWheelDayPickerMonth.setSelectedItemPosition(position - 1);
 
 
-        //上午下午
-        timeFrameList = new ArrayList<>();
-        timeFrameList.add("上午");
-        timeFrameList.add("下午");
-        mWheelTimePicker.setData(timeFrameList);
+//        //上午下午
+//        timeFrameList = new ArrayList<>();
+//        timeFrameList.add("上午");
+//        timeFrameList.add("下午");
+//        mWheelTimePicker.setData(timeFrameList);
 
         //小时 处理
         hoursList = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 24; i++) {
             hoursList.add(i + 1 + "");
         }
         mWheelMinPickerHour.setData(hoursList);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH");
         int hour = Integer.parseInt(simpleDateFormat.format(new Date()));
-        if (hour > 12) {
-            mWheelTimePicker.setSelectedItemPosition(1);
-            hour = hour - 12;
-        }
+//        if (hour > 12) {
+////            mWheelTimePicker.setSelectedItemPosition(1);
+//            hour = hour - 12;
+//        }
+
         mWheelMinPickerHour.setSelectedItemPosition(hour - 1);
 
         //分钟 处理
@@ -179,24 +180,24 @@ public class TimeDialogFragment extends DialogFragment {
                 int currentItemPosition0 = mWheelDayPickerMonth.getCurrentItemPosition();
                 int currentItemPosition1 = mWheelMinPickerHour.getCurrentItemPosition();
                 int currentItemPosition2 = mWheelHoursPickerMinutes.getCurrentItemPosition();
-                int currentItemPosition3 = mWheelTimePicker.getCurrentItemPosition();
+//                int currentItemPosition3 = mWheelTimePicker.getCurrentItemPosition();
                 String day = mDayList.get(currentItemPosition0);
                 String hour = hoursList.get(currentItemPosition1);
                 String min = minList.get(currentItemPosition2);
-                String time = timeFrameList.get(currentItemPosition3);
+//                String time = timeFrameList.get(currentItemPosition3);
                 int number = Integer.parseInt(hour);
-                if (time.equals("下午")) {
-                    mSelectTime = number + 12;
-                } else {
-                    mSelectTime = number;
-                }
-                if (mSelectTime < 10) {
-                    mHour = "0" + mSelectTime;
-                } else if (mSelectTime == 24) {
+//                if (time.equals("下午")) {
+//                    mSelectTime = number + 12;
+//                } else {
+//                    mSelectTime = number;
+//                }
+                if (number < 10) {
+                    mHour = "0" + number;
+                } else if (number == 24) {
                     currentItemPosition0 = currentItemPosition0 + 1;
                     mHour = "00";
                 } else {
-                    mHour = "" + mSelectTime;
+                    mHour = "" + number;
                 }
                 if (currentItemPosition0 == 180) {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
