@@ -756,7 +756,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             }
         }
         if (bean.getData() == null) {
-
             mRvList.setVisibility(View.VISIBLE);
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
