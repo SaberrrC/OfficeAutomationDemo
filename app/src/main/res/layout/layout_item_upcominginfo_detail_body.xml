@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:gravity="center_vertical"
@@ -24,6 +25,7 @@
         android:paddingTop="24dp">
 
         <TextView
+            android:id="@+id/tv_approver_title"
             style="@style/textview_upcominginfo_title"
             />
 
@@ -42,6 +44,7 @@
         android:paddingTop="12dp">
 
         <TextView
+            android:id="@+id/tv_time_title"
             style="@style/textview_upcominginfo_title"
             />
 
@@ -60,6 +63,7 @@
         android:paddingTop="12dp">
 
         <TextView
+            android:id="@+id/tv_state_title"
             style="@style/textview_upcominginfo_title"
             />
 
@@ -80,6 +84,7 @@
         android:paddingTop="12dp">
 
         <TextView
+            android:id="@+id/tv_option_title"
             style="@style/textview_upcominginfo_title"
             />
 

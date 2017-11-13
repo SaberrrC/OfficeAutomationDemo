@@ -57,7 +57,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.shanlinjinrong.oa.R.id.tv_star;
-import static com.shanlinjinrong.oa.R.id.tv_time;
 
 public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInfoPresenter> implements UpcomingTasksInfoContract.View, FinalRecycleAdapter.OnViewAttachListener, FinalBaseAdapter.AdapterListener {
 
@@ -388,10 +387,20 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 itemData instanceof TraverResultBean.DataBean.NchrapplyWorkFlowBean ||
                 itemData instanceof RestResultBean.DataBean.NchrapplyWorkFlowBean ||
                 itemData instanceof OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) {
+            TextView tvTitle = (TextView) holder.getViewById(R.id.tv_title);
             TextView tvApprover = (TextView) holder.getViewById(R.id.tv_approver);
-            TextView tvTime = (TextView) holder.getViewById(tv_time);
+            TextView tvTime = (TextView) holder.getViewById(R.id.tv_time);
             TextView tvState = (TextView) holder.getViewById(R.id.tv_state);
             TextView tvOption = (TextView) holder.getViewById(R.id.tv_option);
+            TextView tvApproverTitle = (TextView) holder.getViewById(R.id.tv_approver_title);
+            TextView tvTimeTitle = (TextView) holder.getViewById(R.id.tv_time_title);
+            TextView tvStateTitle = (TextView) holder.getViewById(R.id.tv_state_title);
+            TextView tvOptionTitle = (TextView) holder.getViewById(R.id.tv_option_title);
+            tvTitle.setText("评阅详情");
+            tvApproverTitle.setText("审批人");
+            tvTimeTitle.setText("处理时间");
+            tvStateTitle.setText("审批状态");
+            tvOptionTitle.setText("审批意见");
             if (itemData instanceof CardResultBean.DataBean.ApplyWorkFlowsBean) {
                 CardResultBean.DataBean.ApplyWorkFlowsBean bean = (CardResultBean.DataBean.ApplyWorkFlowsBean) itemData;
                 tvApprover.setText(bean.getCheckUserName());
