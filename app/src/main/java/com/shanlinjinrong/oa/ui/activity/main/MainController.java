@@ -185,6 +185,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
+        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
     }
 
     @Override

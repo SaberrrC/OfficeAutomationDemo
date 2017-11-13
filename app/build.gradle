@@ -119,12 +119,22 @@ def devJavaAddress() {
 //    return "\"http://api.testoa.shanlinjinrong.com/\""
 //}
 
+//新 内网
+//def preJavaAddress() {
+//    return "\"http://10.5.202.122:9105/\""
+//}
+//
+//def prePHPAddress() {
+//    return "\"http://10.5.202.122:81/\""
+//}
+
+
 def preJavaAddress() {
-    return "\"116.62.216.129:9105/\""
+    return "\"http://116.62.216.129:9105/\""
 }
 
 def prePHPAddress() {
-    return "\"http://10.5.202.122:81/\""
+    return "\"http://116.62.216.129:81/\""
 }
 
 //TODO 生产环境
