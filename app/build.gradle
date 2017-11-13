@@ -120,7 +120,7 @@ def devJavaAddress() {
 //}
 
 def preJavaAddress() {
-    return "\"http://10.5.202.122:9105/\""
+    return "\"116.62.216.129:9105/\""
 }
 
 def prePHPAddress() {
