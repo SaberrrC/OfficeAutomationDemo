@@ -183,7 +183,11 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     }
 
     public void doHttp() {
-        mPresenter.sendData(mPrivateCode, mSelectedYear + "", mSelectedMonth + "", AttandenceMonthActivity.this);
+        String month = mSelectedMonth + "";
+        if (mSelectedMonth < 10) {
+            month = "0" + mSelectedMonth;
+        }
+        mPresenter.sendData(mPrivateCode, mSelectedYear + "", month + "", AttandenceMonthActivity.this);
     }
 
     @Override
@@ -238,14 +242,17 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         mAdapter.notifyDataSetChanged();
 
         if (!isSelectedDay) {
+            isSelectedDay = true;
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String date = format.format(new Date());
             mPresenter.queryDayAttendance(mPrivateCode, date);
-            isSelectedDay = true;
         } else {
-            String year = tv_time.getText().toString().replace("年", "-");
-            String month = year.replace("月", "-");
-            String date = month + "01";
+            String year = tv_time.getText().toString().substring(0, tv_time.getText().toString().indexOf("年"));
+            String month = mSelectedMonth + "";
+            if (mSelectedMonth < 10) {
+                month = "0" + mSelectedMonth;
+            }
+            String date = year + "-" + month + "-" + "01";
             mPresenter.queryDayAttendance(mPrivateCode, date);
         }
     }
@@ -343,6 +350,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                             public void confirm(String year, String month) {
                                 mSelectedYear = Integer.parseInt(year);
                                 mSelectedMonth = Integer.parseInt(month);
+
                                 tv_time.setText(year + "年" + month + "月");
                                 if (mSelectedMonth == mCurrentMonth) {
                                     setData(true, mSelectedMonth, mCurrentDay);
