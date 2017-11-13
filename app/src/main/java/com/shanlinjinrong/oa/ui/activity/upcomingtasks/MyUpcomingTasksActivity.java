@@ -270,6 +270,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                             bean.setIsChecked(false);
                         }
                     }
+                    mRvList.setVisibility(View.VISIBLE);
                     mFinalRecycleAdapter.notifyDataSetChanged();
                 } else {
                     finish();
@@ -413,6 +414,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 ThreadUtils.runMain(new Runnable() {
                     @Override
                     public void run() {
+                        mRvList.setVisibility(View.VISIBLE);
                         mFinalRecycleAdapter.notifyDataSetChanged();
                     }
                 });
@@ -746,6 +748,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     @Override
     public void onGetApproveDataSuccess(UpcomingTaskItemBean bean) {
         mRvList.setVisibility(View.VISIBLE);
+        mTvErrorShow.setVisibility(View.GONE);
         mSrRefresh.setRefreshing(false);
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mDatas.size() > 0) {
@@ -753,11 +756,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             }
         }
         if (bean.getData() == null) {
+
+            mRvList.setVisibility(View.VISIBLE);
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         List<UpcomingTaskItemBean.DataBean.DataListBean> dataList = bean.getData().getDataList();
         if (dataList == null) {
+            mRvList.setVisibility(View.VISIBLE);
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
@@ -766,6 +772,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         mDatas.addAll(dataList);
         mRvList.requestLayout();
+        mRvList.setVisibility(View.VISIBLE);
         mFinalRecycleAdapter.notifyDataSetChanged();
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mFinalRecycleAdapter.getItemCount() - 1 >= 0) {
@@ -780,41 +787,49 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mSrRefresh.setRefreshing(false);
         if (errorNo == -1) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("HttpException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("服务器异常，请稍后重试！");
             return;
         }
         if (strMsg.contains("SocketTimeoutException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("NullPointerException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("ConnectException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         mRvList.setVisibility(View.VISIBLE);
+        mTvErrorShow.setVisibility(View.GONE);
         showToast(strMsg);
     }
 
     private void setNoItemList(int errorNo) {
         mDatas.clear();
+        mRvList.setVisibility(View.VISIBLE);
         mFinalRecycleAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onSearchSuccess(UpcomingSearchResultBean bean) {
         mRvList.setVisibility(View.VISIBLE);
+        mTvErrorShow.setVisibility(View.GONE);
         hideLoadingView();
         mSrRefresh.setRefreshing(false);
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
@@ -823,11 +838,13 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             }
         }
         if (bean.getData() == null) {
+            mRvList.setVisibility(View.VISIBLE);
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         List<UpcomingSearchResultBean.DataBeanX.DataBean> dataList = bean.getData().getData();
         if (dataList == null) {
+            mRvList.setVisibility(View.VISIBLE);
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
@@ -871,11 +888,13 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 ThreadUtils.runMain(new Runnable() {
                     @Override
                     public void run() {
+                        mRvList.setVisibility(View.VISIBLE);
                         mFinalRecycleAdapter.notifyDataSetChanged();
                     }
                 });
             }
         });
+        mRvList.setVisibility(View.VISIBLE);
         mFinalRecycleAdapter.notifyDataSetChanged();
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mFinalRecycleAdapter.getItemCount() - 1 >= 0) {
@@ -887,6 +906,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     @Override
     public void onApproveSuccess(AgreeDisagreeResultBean resultBean, List<ApporveBodyItemBean> list) {
         mRvList.setVisibility(View.VISIBLE);
+        mTvErrorShow.setVisibility(View.GONE);
         hideLoadingView();
         List<AgreeDisagreeResultBean.DataBean> beanList = resultBean.getData();
         StringBuilder stringBuilder = new StringBuilder();
@@ -924,43 +944,53 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mSrRefresh.setRefreshing(false);
         if (errorNo == -1) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mSrRefresh.setRefreshing(false);
             hideLoadingView();
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (errorNo == 8192) {
-            showToast(strMsg);
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
+            mTvErrorShow.setText(strMsg);
             mDatas.clear();
+            mRvList.setVisibility(View.VISIBLE);
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         if (strMsg.contains("HttpException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("服务器异常，请稍后重试！");
             return;
         }
         if (strMsg.contains("SocketTimeoutException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("NullPointerException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("ConnectException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (errorNo == 20000) {
             mDatas.clear();
+            mRvList.setVisibility(View.VISIBLE);
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         mRvList.setVisibility(View.VISIBLE);
+        mTvErrorShow.setVisibility(View.GONE);
         mSrRefresh.setRefreshing(false);
         showToast(strMsg);
     }
@@ -1007,35 +1037,42 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         hideLoadingView();
         if (errorNo == -1) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("HttpException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("服务器异常，请稍后重试！");
             return;
         }
         if (strMsg.contains("SocketTimeoutException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("NullPointerException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("ConnectException")) {
             mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (errorNo == 20000) {
             mDatas.clear();
+            mRvList.setVisibility(View.VISIBLE);
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         mRvList.setVisibility(View.VISIBLE);
+        mTvErrorShow.setVisibility(View.GONE);
         showToast(strMsg);
     }
 
@@ -1044,6 +1081,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 101) {
             mRvList.setVisibility(View.VISIBLE);
+            mTvErrorShow.setVisibility(View.GONE);
             mSrRefresh.setRefreshing(true);
             mSrRefresh.post(new Runnable() {
                 @Override
@@ -1075,6 +1113,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     bean.setIsChecked(false);
                 }
             }
+            mRvList.setVisibility(View.VISIBLE);
             mFinalRecycleAdapter.notifyDataSetChanged();
         } else {
             super.onBackPressed();
