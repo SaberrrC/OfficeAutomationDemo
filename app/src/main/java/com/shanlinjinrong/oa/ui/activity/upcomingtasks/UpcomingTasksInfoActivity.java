@@ -727,25 +727,33 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     @Override
     public void onGetApproveInfoFailure(String errorNo, String strMsg) {
         hideLoadingView();
+        if (TextUtils.equals(errorNo, "-1")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
+        }
         if (strMsg.contains("HttpException")) {
             mRecyclerView.setVisibility(View.GONE);
             mTvErrorShow.setText("服务器异常，请稍后重试！");
+            return;
         }
         if (strMsg.contains("SocketTimeoutException")) {
             mRecyclerView.setVisibility(View.GONE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
         }
         if (strMsg.contains("NullPointerException")) {
             mRecyclerView.setVisibility(View.GONE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
         }
         if (strMsg.contains("ConnectException")) {
             mRecyclerView.setVisibility(View.GONE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
-        } else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            showToast(strMsg);
+            return;
         }
+        mRecyclerView.setVisibility(View.VISIBLE);
+        showToast(strMsg);
     }
 
     @Override
@@ -781,25 +789,33 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onApproveFailure(int errorNo, String strMsg) {
+        if (errorNo == -1) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
+        }
         if (strMsg.contains("HttpException")) {
             mRecyclerView.setVisibility(View.GONE);
             mTvErrorShow.setText("服务器异常，请稍后重试！");
+            return;
         }
         if (strMsg.contains("SocketTimeoutException")) {
             mRecyclerView.setVisibility(View.GONE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
         }
         if (strMsg.contains("NullPointerException")) {
             mRecyclerView.setVisibility(View.GONE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
         }
         if (strMsg.contains("ConnectException")) {
             mRecyclerView.setVisibility(View.GONE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
-        } else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            showToast(strMsg);
+            return;
         }
+        mRecyclerView.setVisibility(View.VISIBLE);
+        showToast(strMsg);
     }
 
     @Override
