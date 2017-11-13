@@ -10,8 +10,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
+import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +25,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,6 +51,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
+import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.EaseConstant;
@@ -59,6 +66,7 @@ import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.requestPermissionsListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.utils.MediaPlayerHelper;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseChatExtendMenu;
@@ -80,8 +88,12 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -174,10 +186,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         super.onActivityCreated(savedInstanceState);
     }
 
-
     private void initData() {
 
         setChatFragmentHelper(new EaseChatFragmentHelper() {
+
+
             @Override
             public void onSetMessageAttributes(EMMessage message) {
             }
@@ -199,6 +212,35 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             @Override
             public boolean onMessageBubbleClick(EMMessage message) {
+                //TODO 震动模式播放语音
+                try {
+                    EMMessageBody body = message.getBody();
+                    String body1 = body.toString();
+                    String amr = body1.substring(body1.indexOf("localurl") + 10, body1.indexOf("remoteurl") - 1);
+                    if (!TextUtils.isEmpty(amr.trim())) {
+                        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+                        int mode = audioManager.getRingerMode();
+                        switch (mode) {
+                            case AudioManager.RINGER_MODE_NORMAL:
+                                //普通模式
+                                break;
+                            case AudioManager.RINGER_MODE_VIBRATE:
+                                MediaPlayerHelper.playSound(amr, new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mediaPlayer) {
+                                        MediaPlayerHelper.realese();
+                                    }
+                                });
+                                //振动模式
+                                break;
+                            case AudioManager.RINGER_MODE_SILENT:
+                                //静音模式
+                                break;
+                        }
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
                 return false;
             }
 
@@ -225,6 +267,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             }
         });
     }
+
 
     /**
      * init view
