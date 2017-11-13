@@ -518,16 +518,32 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                         billType = mSearchBean.getPkBillType();
                     }
                     if (TextUtils.equals(billType, "6402")) {//签卡申请
-                        mDatas.addAll(mCardResultBean.getData().getApplyWorkFlows());
+                        if (mCardResultBean.getData() != null) {
+                            if (mCardResultBean.getData().getApplyWorkFlows() != null) {
+                                mDatas.addAll(mCardResultBean.getData().getApplyWorkFlows());
+                            }
+                        }
                     }
                     if (TextUtils.equals(billType, "6403")) {//出差申请
-                        mDatas.addAll(mTraverResultBean.getData().getNchrapplyWorkFlow());
+                        if (mTraverResultBean.getData() != null) {
+                            if (mTraverResultBean.getData().getNchrapplyWorkFlow() != null) {
+                                mDatas.addAll(mTraverResultBean.getData().getNchrapplyWorkFlow());
+                            }
+                        }
                     }
                     if (TextUtils.equals(billType, "6404")) {//休假申请
-                        mDatas.addAll(mRestResultBean.getData().getNchrapplyWorkFlow());
+                        if (mRestResultBean.getData() != null) {
+                            if (mRestResultBean.getData().getNchrapplyWorkFlow() != null) {
+                                mDatas.addAll(mRestResultBean.getData().getNchrapplyWorkFlow());
+                            }
+                        }
                     }
                     if (TextUtils.equals(billType, "6405")) {//加班申请
-                        mDatas.addAll(mOverTimeResultBean.getData().getNchrapplyWorkFlow());
+                        if (mOverTimeResultBean.getData() != null) {
+                            if (mOverTimeResultBean.getData().getNchrapplyWorkFlow() != null) {
+                                mDatas.addAll(mOverTimeResultBean.getData().getNchrapplyWorkFlow());
+                            }
+                        }
                     }
                     mFinalRecycleAdapter.notifyDataSetChanged();
                     mRecyclerView.scrollToPosition(0);
