@@ -275,8 +275,8 @@ public class MyAttandanceResponse implements Serializable  {
         private String twoendtime;
         private String tbmstatus;
         private String importsignflag;
-        private Object flg;
-        private Object signCause;
+        private String flg;
+        private String signCause;
 
         public String getPsname() {
             return psname;
@@ -334,19 +334,19 @@ public class MyAttandanceResponse implements Serializable  {
             this.importsignflag = importsignflag;
         }
 
-        public Object getFlg() {
+        public String getFlg() {
             return flg;
         }
 
-        public void setFlg(Object flg) {
+        public void setFlg(String flg) {
             this.flg = flg;
         }
 
-        public Object getSignCause() {
+        public String getSignCause() {
             return signCause;
         }
 
-        public void setSignCause(Object signCause) {
+        public void setSignCause(String signCause) {
             this.signCause = signCause;
         }
     }
@@ -371,8 +371,8 @@ public class MyAttandanceResponse implements Serializable  {
         private String twoendtime;
         private String tbmstatus;
         private String importsignflag;
-        private Object flg;
-        private Object signCause;
+        private String flg;
+        private String signCause;
 
         public String getPsname() {
             return psname;
@@ -430,19 +430,19 @@ public class MyAttandanceResponse implements Serializable  {
             this.importsignflag = importsignflag;
         }
 
-        public Object getFlg() {
+        public String getFlg() {
             return flg;
         }
 
-        public void setFlg(Object flg) {
+        public void setFlg(String flg) {
             this.flg = flg;
         }
 
-        public Object getSignCause() {
+        public String getSignCause() {
             return signCause;
         }
 
-        public void setSignCause(Object signCause) {
+        public void setSignCause(String signCause) {
             this.signCause = signCause;
         }
     }
@@ -463,12 +463,12 @@ public class MyAttandanceResponse implements Serializable  {
         private String psname;
         private String pk_psndoc;
         private String calendar;
-        private Object onebegintime;
-        private Object twoendtime;
+        private String onebegintime;
+        private String twoendtime;
         private String tbmstatus;
         private String importsignflag;
-        private Object flg;
-        private Object signCause;
+        private String flg;
+        private String signCause;
 
         public String getPsname() {
             return psname;
@@ -494,19 +494,19 @@ public class MyAttandanceResponse implements Serializable  {
             this.calendar = calendar;
         }
 
-        public Object getOnebegintime() {
+        public String getOnebegintime() {
             return onebegintime;
         }
 
-        public void setOnebegintime(Object onebegintime) {
+        public void setOnebegintime(String onebegintime) {
             this.onebegintime = onebegintime;
         }
 
-        public Object getTwoendtime() {
+        public String getTwoendtime() {
             return twoendtime;
         }
 
-        public void setTwoendtime(Object twoendtime) {
+        public void setTwoendtime(String twoendtime) {
             this.twoendtime = twoendtime;
         }
 
@@ -526,19 +526,19 @@ public class MyAttandanceResponse implements Serializable  {
             this.importsignflag = importsignflag;
         }
 
-        public Object getFlg() {
+        public String getFlg() {
             return flg;
         }
 
-        public void setFlg(Object flg) {
+        public void setFlg(String flg) {
             this.flg = flg;
         }
 
-        public Object getSignCause() {
+        public String getSignCause() {
             return signCause;
         }
 
-        public void setSignCause(Object signCause) {
+        public void setSignCause(String signCause) {
             this.signCause = signCause;
         }
     }
@@ -563,8 +563,8 @@ public class MyAttandanceResponse implements Serializable  {
         private String twoendtime;
         private String tbmstatus;
         private String importsignflag;
-        private Object flg;
-        private Object signCause;
+        private String flg;
+        private String signCause;
 
         public String getPsname() {
             return psname;
@@ -622,19 +622,19 @@ public class MyAttandanceResponse implements Serializable  {
             this.importsignflag = importsignflag;
         }
 
-        public Object getFlg() {
+        public String getFlg() {
             return flg;
         }
 
-        public void setFlg(Object flg) {
+        public void setFlg(String flg) {
             this.flg = flg;
         }
 
-        public Object getSignCause() {
+        public String getSignCause() {
             return signCause;
         }
 
-        public void setSignCause(Object signCause) {
+        public void setSignCause(String signCause) {
             this.signCause = signCause;
         }
     }
@@ -659,8 +659,8 @@ public class MyAttandanceResponse implements Serializable  {
         private String twoendtime;
         private String tbmstatus;
         private String importsignflag;
-        private Object flg;
-        private Object signCause;
+        private String flg;
+        private String signCause;
 
         public String getPsname() {
             return psname;
@@ -718,19 +718,19 @@ public class MyAttandanceResponse implements Serializable  {
             this.importsignflag = importsignflag;
         }
 
-        public Object getFlg() {
+        public String getFlg() {
             return flg;
         }
 
-        public void setFlg(Object flg) {
+        public void setFlg(String flg) {
             this.flg = flg;
         }
 
-        public Object getSignCause() {
+        public String getSignCause() {
             return signCause;
         }
 
-        public void setSignCause(Object signCause) {
+        public void setSignCause(String signCause) {
             this.signCause = signCause;
         }
     }
@@ -755,8 +755,8 @@ public class MyAttandanceResponse implements Serializable  {
         private String twoendtime;
         private String tbmstatus;
         private String importsignflag;
-        private Object flg;
-        private Object signCause;
+        private String flg;
+        private String signCause;
 
         public String getPsname() {
             return psname;
@@ -814,19 +814,19 @@ public class MyAttandanceResponse implements Serializable  {
             this.importsignflag = importsignflag;
         }
 
-        public Object getFlg() {
+        public String getFlg() {
             return flg;
         }
 
-        public void setFlg(Object flg) {
+        public void setFlg(String flg) {
             this.flg = flg;
         }
 
-        public Object getSignCause() {
+        public String getSignCause() {
             return signCause;
         }
 
-        public void setSignCause(Object signCause) {
+        public void setSignCause(String signCause) {
             this.signCause = signCause;
         }
     }
@@ -851,8 +851,8 @@ public class MyAttandanceResponse implements Serializable  {
         private String twoendtime;
         private String tbmstatus;
         private String importsignflag;
-        private Object flg;
-        private Object signCause;
+        private String flg;
+        private String signCause;
 
         public String getPsname() {
             return psname;
@@ -910,19 +910,19 @@ public class MyAttandanceResponse implements Serializable  {
             this.importsignflag = importsignflag;
         }
 
-        public Object getFlg() {
+        public String getFlg() {
             return flg;
         }
 
-        public void setFlg(Object flg) {
+        public void setFlg(String flg) {
             this.flg = flg;
         }
 
-        public Object getSignCause() {
+        public String getSignCause() {
             return signCause;
         }
 
-        public void setSignCause(Object signCause) {
+        public void setSignCause(String signCause) {
             this.signCause = signCause;
         }
     }

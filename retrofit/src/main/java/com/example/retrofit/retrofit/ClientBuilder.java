@@ -21,7 +21,6 @@ public class ClientBuilder {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
         builder.addInterceptor(new HeaderInterceptor());
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-
         if (BuildConfig.BUILD_TYPE.equals(DEBUG)) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -34,7 +33,6 @@ public class ClientBuilder {
                 .baseUrl(hostAddress)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
-
         return retrofitBuilder.build().create(clzz);
     }
 
