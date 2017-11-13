@@ -64,13 +64,19 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 try {
                     UpcomingTaskItemBean bean = new Gson().fromJson(t, UpcomingTaskItemBean.class);
                     if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                        mView.onGetApproveDataSuccess(bean);
+                        if (mView != null) {
+                            mView.onGetApproveDataSuccess(bean);
+                        }
                         return;
                     }
-                    mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    mView.onGetApproveDataFailure(500, "网络异常");
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(500, "网络异常");
+                    }
                 }
 
             }
@@ -84,7 +90,9 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.onGetApproveDataFailure(errorNo, strMsg);
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(errorNo, strMsg);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -131,17 +139,25 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 try {
                     UpcomingSearchResultBean bean = new Gson().fromJson(t, UpcomingSearchResultBean.class);
                     if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                        mView.onSearchSuccess(bean);
+                        if (mView != null) {
+                            mView.onSearchSuccess(bean);
+                        }
                         return;
                     }
-                    mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                     if (t.contains("\"code\":\"020000\"")) {
-                        mView.onGetApproveDataFailure(020000, "查询无结果");
+                        if (mView != null) {
+                            mView.onGetApproveDataFailure(020000, "查询无结果");
+                        }
                         return;
                     }
-                    mView.onGetApproveDataFailure(500, "网络异常");
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(500, "网络异常");
+                    }
                 }
             }
 
@@ -154,10 +170,14 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.onGetApproveDataFailure(errorNo, strMsg);
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(errorNo, strMsg);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    mView.onGetApproveDataFailure(500, "网络异常");
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(500, "网络异常");
+                    }
                 }
             }
         });
@@ -174,7 +194,9 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.onApproveFailure(errorNo, strMsg);
+                    if (mView != null) {
+                        mView.onApproveFailure(errorNo, strMsg);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -186,10 +208,14 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 try {
                     AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
                     if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                        mView.onApproveSuccess(resultBean,list);
+                        if (mView != null) {
+                            mView.onApproveSuccess(resultBean,list);
+                        }
                         return;
                     }
-                    mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
+                    if (mView != null) {
+                        mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
+                    }
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 } catch (NumberFormatException e) {

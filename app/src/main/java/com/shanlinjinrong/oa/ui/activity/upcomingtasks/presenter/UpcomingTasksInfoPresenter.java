@@ -51,7 +51,9 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
             public void onSuccess(String json) {
                 super.onSuccess(json);
                 try {
-                    mView.onGetApproveInfoSuccess(json);
+                     if (mView != null) {
+                         mView.onGetApproveInfoSuccess(json);
+                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -66,7 +68,9 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
+                     if (mView != null) {
+                         mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
+                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -89,7 +93,9 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);
                     try {
-                        mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
+                         if (mView != null) {
+                             mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
+                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -101,10 +107,14 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                     try {
                         TackBackResultBean tackBackResultBean = new Gson().fromJson(t, TackBackResultBean.class);
                         if (TextUtils.equals(tackBackResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                            mView.onTackBackSuccess(tackBackResultBean);
+                             if (mView != null) {
+                                 mView.onTackBackSuccess(tackBackResultBean);
+                             }
                             return;
                         }
-                        mView.onGetApproveInfoFailure(tackBackResultBean.getCode(), tackBackResultBean.getMessage());
+                         if (mView != null) {
+                             mView.onGetApproveInfoFailure(tackBackResultBean.getCode(), tackBackResultBean.getMessage());
+                         }
                     } catch (JsonSyntaxException e) {
                         e.printStackTrace();
                     }
@@ -126,7 +136,9 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.onApproveFailure(errorNo, strMsg);
+                     if (mView != null) {
+                         mView.onApproveFailure(errorNo, strMsg);
+                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -138,10 +150,14 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 try {
                     AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
                     if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                        mView.onApproveSuccess(resultBean);
+                         if (mView != null) {
+                             mView.onApproveSuccess(resultBean);
+                         }
                         return;
                     }
-                    mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
+                     if (mView != null) {
+                         mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
+                     }
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 } catch (NumberFormatException e) {
@@ -161,7 +177,9 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);
                     try {
-                        mView.onDeleteFailure(String.valueOf(errorNo), strMsg);
+                         if (mView != null) {
+                             mView.onDeleteFailure(String.valueOf(errorNo), strMsg);
+                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -173,15 +191,21 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                     try {
                         DeleteBean bean = new Gson().fromJson(t, DeleteBean.class);
                         if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                            mView.onDeleteSuccess(bean);
+                             if (mView != null) {
+                                 mView.onDeleteSuccess(bean);
+                             }
                             return;
                         }
-                        mView.onDeleteFailure(bean.getCode(), bean.getMessage());
+                         if (mView != null) {
+                             mView.onDeleteFailure(bean.getCode(), bean.getMessage());
+                         }
                     } catch (JsonSyntaxException e) {
                         e.printStackTrace();
                         if (t.contains("\"code\":\"000000\"")) {
                             try {
-                                mView.onDeleteFailure("500", "ok");
+                                 if (mView != null) {
+                                     mView.onDeleteFailure("500", "ok");
+                                 }
                             } catch (Exception e1) {
                                 e1.printStackTrace();
                             }
