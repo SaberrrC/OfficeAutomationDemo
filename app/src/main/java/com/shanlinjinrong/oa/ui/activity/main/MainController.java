@@ -185,7 +185,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
-//        sendToSamSungAllContentResolver();
     }
 
     @Override
@@ -518,22 +517,17 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
 
     @Override
     protected void onStop() {
-//        if (!Utils.isRunningForeground(this)) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
-//                    if (tempMsgCount != 0) {
-//                    }
-//                }
-//            }).start();
-//        }
-        super.onStop();
-        try {
-            BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
-        } catch (Throwable e) {
-            e.printStackTrace();
+        if (!Utils.isRunningForeground(this)) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (tempMsgCount != 0) {
+                        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
+                    }
+                }
+            }).start();
         }
+        super.onStop();
     }
 
     @Override
