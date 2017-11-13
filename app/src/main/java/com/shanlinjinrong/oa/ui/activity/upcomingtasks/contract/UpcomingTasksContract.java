@@ -24,6 +24,8 @@ public interface UpcomingTasksContract {
         void onApproveFailure(int errorNo, String strMsg);
 
         void onApproveSuccess(AgreeDisagreeResultBean resultBean, List<ApporveBodyItemBean> list);
+
+        void onSearchFailure(int i, String message);
     }
 
     interface Presenter extends BasePresenter<View> {

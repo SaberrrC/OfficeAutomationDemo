@@ -222,7 +222,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             @Override
             public void run() {
                 mSrRefresh.setRefreshing(true);
-
                 getListData();
             }
         });
@@ -891,12 +890,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         hideLoadingView();
         List<AgreeDisagreeResultBean.DataBean> beanList = resultBean.getData();
         StringBuilder stringBuilder = new StringBuilder();
-        int count = 0;
         boolean show = false;
         for (int i = 0; i < beanList.size(); i++) {
             if (TextUtils.equals(beanList.get(i).getStatus(), "1")) {
                 stringBuilder.append(beanList.get(i).getReason() + "\n");
-                count++;
             }
             if (TextUtils.equals(beanList.get(i).getStatus(), "2")) {
                 show = true;
@@ -905,9 +902,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         if (show) {
             showDetailDialog(beanList);
             return;
-        }
-        if (!TextUtils.isEmpty(stringBuilder.toString().trim())) {
-            showToast(stringBuilder.toString().trim());
         }
         initRefreshMode();
         mSrRefresh.setRefreshing(true);
@@ -922,6 +916,53 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 }, 0);
             }
         });
+    }
+
+    @Override
+    public void onSearchFailure(int errorNo, String strMsg) {
+        hideLoadingView();
+        mSrRefresh.setRefreshing(false);
+        if (errorNo == -1) {
+            mRvList.setVisibility(View.GONE);
+            mSrRefresh.setRefreshing(false);
+            hideLoadingView();
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
+        }
+        if (errorNo == 8192) {
+            showToast(strMsg);
+            mDatas.clear();
+            mFinalRecycleAdapter.notifyDataSetChanged();
+            return;
+        }
+        if (strMsg.contains("HttpException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("服务器异常，请稍后重试！");
+            return;
+        }
+        if (strMsg.contains("SocketTimeoutException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
+        }
+        if (strMsg.contains("NullPointerException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
+        }
+        if (strMsg.contains("ConnectException")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
+        }
+        if (errorNo == 20000) {
+            mDatas.clear();
+            mFinalRecycleAdapter.notifyDataSetChanged();
+            return;
+        }
+        mRvList.setVisibility(View.VISIBLE);
+        mSrRefresh.setRefreshing(false);
+        showToast(strMsg);
     }
 
     private void showDetailDialog(List<AgreeDisagreeResultBean.DataBean> beanList) {

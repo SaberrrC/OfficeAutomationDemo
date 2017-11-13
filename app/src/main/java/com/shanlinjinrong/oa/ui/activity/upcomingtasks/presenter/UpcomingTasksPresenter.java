@@ -142,13 +142,13 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                         return;
                     }
                     if (mView != null) {
-                        mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                        mView.onSearchFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
                     if (t.contains("\"code\":\"020000\"")) {
                         if (mView != null) {
-                            mView.onGetApproveDataFailure(020000, "查询无结果");
+                            mView.onSearchFailure(020000, "查询无结果");
                         }
                         return;
                     }
