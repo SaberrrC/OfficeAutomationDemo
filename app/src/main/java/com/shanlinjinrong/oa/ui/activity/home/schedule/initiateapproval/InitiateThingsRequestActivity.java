@@ -62,58 +62,65 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @BindView(R.id.top_view)
     CommonTopView mTopView;
+    @BindView(R.id.tv_coder_number)
+    TextView mTvCoderNumber;
+    @BindView(R.id.tv_not_network)
+    TextView mTvNotNetwork;
+    @BindView(R.id.tv_request_date)
+    TextView mTvRequestDate;
     @BindView(R.id.btn_add_details)
     TextView mBtnAddDetails;
     @BindView(R.id.sv_container_show)
     ScrollView mSvContainerShow;
+    @BindView(R.id.ll_container_view)
+    LinearLayout mLlContainerView;
     @BindView(R.id.tv_commonality_type)
     TextView mTvCommonalityType;
-    @BindView(R.id.ll_commonality_type)
-    LinearLayout mLlCommonalityType;
     @BindView(R.id.tv_commonality_coder)
     TextView mTvCommonalityCoder;
-    @BindView(R.id.tv_commonality_over_time)
-    TextView mTvCommonalityOverTime;
+    @BindView(R.id.ll_commonality_type)
+    LinearLayout mLlCommonalityType;
     @BindView(R.id.tv_commonality_type_dot)
     TextView mTvCommonalityTypeDot;
+    @BindView(R.id.tv_commonality_over_time)
+    TextView mTvCommonalityOverTime;
+    @BindView(R.id.tv_commonality_type_date)
+    TextView mTvCommonalityTypeDate;
     @BindView(R.id.tv_commonality_request_date)
     TextView mTvCommonalityRequestDate;
     @BindView(R.id.tv_commonality_type_selected)
     TextView mTvCommonalityTypeSelected;
     @BindView(R.id.ll_commonality_annual_leave)
     LinearLayout mLlCommonalityAnnualLeave;
-    @BindView(R.id.ll_container_view)
-    LinearLayout mLlContainerView;
-    @BindView(R.id.tv_coder_number)
-    TextView mTvCoderNumber;
-    @BindView(R.id.tv_request_date)
-    TextView mTvRequestDate;
-    @BindView(R.id.tv_not_network)
-    TextView mTvNotNetwork;
-    @BindView(R.id.tv_commonality_type_date)
-    TextView mTvCommonalityTypeDate;
-    private CommonTypeBean mCommonTypeBean;
 
-    private ImageView mDelete;
     private View mContentView1;
     private CustomDialogUtils mDialog;
+    private CommonTypeBean mCommonTypeBean;
     private int mIndex = 1, mYearPosition = 0;
     private YearDateSelected mYearDateSelected;
     private InitiateThingsTypeAdapter mTypeAdapter;
     private boolean isNextDate, isSeletcedNextType;
+
     private List<String> mDate = new ArrayList<>();
-    private List<Dialog_Common_bean> data = new ArrayList<>(); //Dialog 数据源
-    private String mBeginDate, mEndDate, mNext_begin_date, mNext_end_date; //时间选取
-    private String selectedRequestType, mSelectedTypeID, mSelectedNextID, mQueryDuration = "", mNextDuration = "";
-    private int REQUESTCODE1 = 6402, REQUESTCODE2 = 6403, REQUESTCODE3 = 6404, REQUESTCODE4 = 6405; //6402签卡申请,6403出差申请,6404休假申请,6405加班申请
-    private String mReceiverId = "", mReceiverName, mReceiverPost, mNextReceiverId, mNextReceiverName, mNextReceiverPost; //交接人
-    private LinearLayout mLl_common_show1, mLl_common_next_show1, mLl_common_show3, mLl_common_next_show3, mLl_common_end_time, mLl_common_next_end_time,
-            mLl_common_duration, mLl_common_next_duration, mLl_common_card_detail, mLl_common_next_card_detail;
-    private TextView mTv_common_show2, mTv_common_next_show2, mTv_common_next_show3, mTv_common_show3, mTv_common_duration, mTv_common_next_duration,
-            mTv_common_detail, mTv_common_next_detail, mTv_common_begin_time, mTv_common_next_begin_time, mTv_selected_show, mTv_selected_next_show,
-            mBegin_time, mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number,
-            mTv_common_next_show2_dot, mTv_common_show2_dot, mTv_common_show3_dot, mTv_common_next_show3_dot;
+    //Dialog 数据源
+    private List<Dialog_Common_bean> data = new ArrayList<>();
+
+    //时间选取 -- 时间选择
+    private String mBeginDate, mEndDate, mNext_begin_date, mNext_end_date,
+            mSelectedTypeID, mSelectedNextID, mQueryDuration = "", mNextDuration = "";
+
+    //6402签卡申请,6403出差申请,6404休假申请,6405加班申请
+    private int REQUESTCODE1 = 6402, REQUESTCODE2 = 6403, REQUESTCODE3 = 6404, REQUESTCODE4 = 6405;
+    //交接人
+    private String mReceiverId = "", mReceiverName, mReceiverPost, mNextReceiverId, mNextReceiverName, mNextReceiverPost;
+
     private EditText mEt_common_show2, mEt_common_next_show2, mEt_common_show1, mEt_common_next_show1;
+    private LinearLayout mLl_common_show1, mLl_common_next_show1, mLl_common_show3, mLl_common_next_show3, mLl_common_end_time,
+            mLl_common_next_end_time, mLl_common_duration, mLl_common_next_duration, mLl_common_card_detail, mLl_common_next_card_detail;
+
+    private TextView mTv_common_show2, mTv_common_next_show2, mTv_common_next_show3, mTv_common_show3, mTv_common_duration, mTv_common_next_duration,
+            mTv_common_detail, mTv_common_next_detail, mTv_common_begin_time, mTv_common_next_begin_time, mTv_selected_show, mTv_selected_next_show, mBegin_time,
+            mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number, mTv_common_next_show2_dot, mTv_common_show2_dot, mTv_common_show3_dot, mTv_common_next_show3_dot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +140,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     private void initData() {
-        initMonoCode();//获取编码
+        //获取编码
+        initMonoCode();
         //休假年度数据
         if (getIntent().getIntExtra("type", -1) == 2) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
@@ -200,6 +208,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         }
     }
 
+    //提交申请
     private void submitRequest() {
         mTopView.getRightView().setOnClickListener(view -> {
 
@@ -410,6 +419,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     //*********************************休假提交*********************************
+
     private void submitFurloughApply() {
         try {//休假申请
             if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
@@ -460,6 +470,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     //*********************************签卡提交*********************************
+
     private void submitRegistrationCard() {
         try {
             if (mBegin_time.getText().toString().trim().equals("请选择开始时间")) {
@@ -569,7 +580,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     private void selectedDate() {
-        mBegin_time.setOnClickListener(view -> {    //开始时间
+        //开始时间
+        mBegin_time.setOnClickListener(view -> {
             TimeDialogFragment timeDialogFragment = new TimeDialogFragment();
             timeDialogFragment.show(getSupportFragmentManager(), "0");
             Bundle bundle = new Bundle();
@@ -578,7 +590,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             bundle.putInt("isBegin", 0);
             timeDialogFragment.setArguments(bundle);
         });
-        mEnd_time.setOnClickListener(view -> {    //结束时间
+        //结束时间
+        mEnd_time.setOnClickListener(view -> {
             TimeDialogFragment timeDialogFragment = new TimeDialogFragment();
             timeDialogFragment.show(getSupportFragmentManager(), "0");
             Bundle bundle = new Bundle();
@@ -588,7 +601,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             timeDialogFragment.setArguments(bundle);
         });
         if (getIntent().getIntExtra("type", -1) != 3)
-            mEt_common_show3.setOnClickListener(view -> { //交接人
+            //交接人
+            mEt_common_show3.setOnClickListener(view -> {
                 Intent intent = new Intent(this, SelectContactActivity.class);
                 intent.putExtra("childId", mReceiverId);
                 intent.putExtra("isRequest", true);
@@ -612,7 +626,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     private void selectedNextDate() {
-        mNext_begin_time.setOnClickListener(view -> {   //开始时间
+        //开始时间
+        mNext_begin_time.setOnClickListener(view -> {
             TimeDialogFragment timeDialogFragment = new TimeDialogFragment();
             timeDialogFragment.show(getSupportFragmentManager(), "0");
             Bundle bundle = new Bundle();
@@ -621,7 +636,8 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             bundle.putInt("isBegin", 0);
             timeDialogFragment.setArguments(bundle);
         });
-        mNext_end_time.setOnClickListener(view -> {   //结束时间
+        //结束时间
+        mNext_end_time.setOnClickListener(view -> {
             TimeDialogFragment timeDialogFragment = new TimeDialogFragment();
             timeDialogFragment.show(getSupportFragmentManager(), "0");
             Bundle bundle = new Bundle();
@@ -630,14 +646,16 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             bundle.putInt("isBegin", 1);
             timeDialogFragment.setArguments(bundle);
         });
+        //交接人
         if (getIntent().getIntExtra("type", -1) != 3)
-            mEt_common_next_show3.setOnClickListener(view -> { //交接人
+            mEt_common_next_show3.setOnClickListener(view -> {
                 Intent intent = new Intent(this, SelectContactActivity.class);
                 intent.putExtra("childId", mReceiverId);
                 intent.putExtra("isRequest", true);
                 intent.putExtra("nextReceiver", 1);
                 startActivityForResult(intent, SELECT_OK);
             });
+
         mLl_common_next_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = true;
             if (mCommonTypeBean != null) {
@@ -713,7 +731,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mEt_common_show3.setHint("请填写签卡说明");
         mEt_common_show3.setClickable(false);
     }
-
 
     //出差申请
     private void onBusinessRequest1() {
@@ -802,7 +819,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     private void addDetail() {
         mContentView1 = LayoutInflater.from(this).inflate(R.layout.commonality_initiate_approval_item, null);
-        mDelete = (ImageView) mContentView1.findViewById(R.id.img_delete_detail);
+        ImageView mDelete = (ImageView) mContentView1.findViewById(R.id.img_delete_detail);
         mDelete.setOnClickListener(this);
         mLlContainerView.addView(mContentView1);
         initContentView1(mContentView1);

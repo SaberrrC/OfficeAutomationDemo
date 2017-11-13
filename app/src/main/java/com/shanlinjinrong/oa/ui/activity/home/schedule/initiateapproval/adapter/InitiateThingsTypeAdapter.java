@@ -31,6 +31,8 @@ public class InitiateThingsTypeAdapter extends BaseQuickAdapter<Dialog_Common_be
         TextView textView = baseViewHolder.getView(R.id.tv_commonality_type);
         if (s.isSelected()) {
             baseViewHolder.setTextColor(R.id.tv_commonality_type,mContext.getResources().getColor(R.color.blue_69B0F2));
+        }else {
+            baseViewHolder.setTextColor(R.id.tv_commonality_type,mContext.getResources().getColor(R.color.gray_d5d5d5));
         }
         baseViewHolder.setOnClickListener(R.id.tv_commonality_type, view -> {
             EventBus.getDefault().post(new SelectedTypeBean("selectedType", textView.getText().toString(), baseViewHolder.getPosition()));
