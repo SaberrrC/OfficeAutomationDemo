@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.presenter;
 
 //import com.example.retrofit.model.requestbody.AddWorkBody;
+
 import com.example.retrofit.net.HttpMethods;
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.ApiJava;
@@ -26,6 +27,8 @@ import rx.Subscriber;
  * 出差想申请
  */
 public class InitiateThingsRequestActivityPresenter extends HttpPresenter<InitiateThingsRequestActivityContract.View> implements InitiateThingsRequestActivityContract.Presenter {
+
+    private String tips;
 
     @Inject
     public InitiateThingsRequestActivityPresenter(MyKjHttp mKjHttp) {
@@ -218,7 +221,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             mView.uidNull(0);
                             break;
                         default:
-                            mView.submitFailureTips(queryMonoBean.getMessage() + queryMonoBean.getData());
+                            submitFailureTips(queryMonoBean);
                             break;
                     }
                 } catch (Throwable e) {
@@ -324,7 +327,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             mView.uidNull(0);
                             break;
                         default:
-                            mView.submitFailureTips(queryMonoBean.getMessage() + queryMonoBean.getData());
+                            submitFailureTips(queryMonoBean);
                             break;
                     }
                 } catch (Throwable e) {
@@ -427,7 +430,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             mView.uidNull(0);
                             break;
                         default:
-                            mView.submitFailureTips(queryMonoBean.getMessage() + queryMonoBean.getData());
+                            submitFailureTips(queryMonoBean);
                             break;
                     }
                 } catch (Throwable e) {
@@ -528,7 +531,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             mView.uidNull(0);
                             break;
                         default:
-                            mView.submitFailureTips(queryMonoBean.getMessage() + queryMonoBean.getData());
+                            submitFailureTips(queryMonoBean);
                             break;
                     }
                 } catch (Throwable e) {
@@ -553,5 +556,25 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 mView.requestFinish();
             }
         });
+    }
+
+    private void submitFailureTips(QueryMonoBean queryMonoBean) {
+        try {
+            if (queryMonoBean.getMessage() != null && queryMonoBean.getData() != null) {
+                tips = queryMonoBean.getMessage() + queryMonoBean.getData();
+            } else if (queryMonoBean.getMessage() != null) {
+                tips = queryMonoBean.getMessage();
+            } else if (queryMonoBean.getData() != null) {
+                tips = queryMonoBean.getData();
+            }
+            if (tips != null) {
+                String tip = tips.replace("NCHR系统错误", "");
+                mView.submitFailureTips(tip);
+            } else {
+                mView.submitFailureTips("提交失败，请稍后重试！");
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }
