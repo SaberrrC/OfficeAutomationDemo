@@ -39,7 +39,8 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                 try {
                     JSONObject jsonObject = new JSONObject(t);
                     JSONObject data = jsonObject.getJSONObject("data");
-                    mView.getIdentifyingCodeSuccess(data.getString("img"), data.getString("code"));
+                    if (mView != null)
+                        mView.getIdentifyingCodeSuccess(data.getString("img"), data.getString("code"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -49,7 +50,12 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getIdentifyingCodeFailed(errorNo);
+                try {
+                    if (mView != null)
+                        mView.getIdentifyingCodeFailed(errorNo);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -78,10 +84,12 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                             }
                             user.setEmail(email);
                             user.setCode(data.getJSONObject(0).getString("code"));
-                            mView.searchUserSuccess(user);
+                            if (mView != null)
+                                mView.searchUserSuccess(user);
                             break;
                         default:
-                            mView.searchUserFailed(code,jsonObject.getString("info"));
+                            if (mView != null)
+                                mView.searchUserFailed(code, jsonObject.getString("info"));
                             break;
                     }
 
@@ -93,13 +101,23 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    if (mView != null)
+                        mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.searchUserFailed(errorNo,strMsg);
+                try {
+                    if (mView != null)
+                        mView.searchUserFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

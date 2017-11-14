@@ -17,10 +17,6 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import javax.inject.Inject;
 
-/**
- * Created by tonny on 2017/9/21.
- */
-
 public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWeeklyNewspaperActivityContract.View> implements WriteWeeklyNewspaperActivityContract.Presenter {
 
     @Inject
@@ -35,7 +31,12 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             @Override
             public void onPreStart() {
                 super.onPreStart();
-                mView.showLoading();
+                try {
+                    if (mView != null)
+                        mView.showLoading();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -46,33 +47,47 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                     JSONObject jsonObject = new JSONObject(t);
                     switch (jsonObject.getString("code")) {
                         case ApiJava.REQUEST_CODE_OK:
-                            mView.sendWeeklyReportSuccess(jsonObject.getString("message"));
+                            if (mView != null)
+                                mView.sendWeeklyReportSuccess(jsonObject.getString("message"));
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
                         default:
-                            mView.sendWeeklyReportFailure(jsonObject.getString("code"), jsonObject.getString("message"));
+                            if (mView != null)
+                                mView.sendWeeklyReportFailure(jsonObject.getString("code"), jsonObject.getString("message"));
                             break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    mView.sendWeeklyReportFinish();
+                    if (mView != null)
+                        mView.sendWeeklyReportFinish();
                 }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.sendWeeklyReportFinish();
+                try {
+                    if (mView != null)
+                        mView.sendWeeklyReportFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.sendWeeklyReportFailure("" + errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.sendWeeklyReportFailure("" + errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -84,7 +99,12 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             @Override
             public void onPreStart() {
                 super.onPreStart();
-                mView.showLoading();
+                try {
+                    if (mView != null)
+                        mView.showLoading();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -94,34 +114,47 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                     JSONObject jsonObject = new JSONObject(t);
                     switch (jsonObject.getString("code")) {
                         case ApiJava.REQUEST_CODE_OK:
-                            mView.updateWeekReportSuccess();
+                            if (mView != null)
+                                mView.updateWeekReportSuccess();
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
                         default:
-                            mView.updateWeekReportFailed(jsonObject.getString("code"), jsonObject.getString("message"));
+                            if (mView != null)
+                                mView.updateWeekReportFailed(jsonObject.getString("code"), jsonObject.getString("message"));
                             break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    mView.requestFinish();
+                    if (mView != null)
+                        mView.requestFinish();
                 }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
 
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.updateWeekReportFailed("" + errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.updateWeekReportFailed("" + errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -138,15 +171,18 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                     switch (jo.getString("code")) {
                         case ApiJava.REQUEST_CODE_OK:
                             JSONObject data = jo.getJSONObject("data");
-                            mView.getDefaultReceiverSuccess(data.getString("id"), data.getString("username"), data.getString("post"));
+                            if (mView != null)
+                                mView.getDefaultReceiverSuccess(data.getString("id"), data.getString("username"), data.getString("post"));
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
                         default:
-                            mView.getDefaultReceiverFailed(jo.getString("message"));
+                            if (mView != null)
+                                mView.getDefaultReceiverFailed(jo.getString("message"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -156,13 +192,23 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getDefaultReceiverFailed(strMsg);
+                try {
+                    if (mView != null)
+                        mView.getDefaultReceiverFailed(strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    if (mView != null)
+                        mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -179,19 +225,22 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                 try {
                     JSONObject jsonObject = new JSONObject(t);
                     LastWeekPlanBean lastWeekPlanBean = new Gson().fromJson(jsonObject.toString(), LastWeekPlanBean.class);
-                    switch (lastWeekPlanBean.getCode()){
+                    switch (lastWeekPlanBean.getCode()) {
                         case ApiJava.REQUEST_CODE_OK:
-                            if (lastWeekPlanBean.getData() !=null){
-                                mView.getLastWeekPlanSuccess(lastWeekPlanBean.getData());
+                            if (lastWeekPlanBean.getData() != null) {
+                                if (mView != null)
+                                    mView.getLastWeekPlanSuccess(lastWeekPlanBean.getData());
                             }
-                        break;
+                            break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
                         default:
-                            mView.getLastWeekPlanFailure(Integer.parseInt(lastWeekPlanBean.getCode()),lastWeekPlanBean.getMessage());
+                            if (mView != null)
+                                mView.getLastWeekPlanFailure(Integer.parseInt(lastWeekPlanBean.getCode()), lastWeekPlanBean.getMessage());
                             break;
 
                     }
@@ -203,10 +252,13 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getLastWeekPlanFailure(errorNo,strMsg);
+                try {
+                    if (mView != null)
+                        mView.getLastWeekPlanFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
-
-
         });
     }
 
@@ -226,16 +278,19 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                         case ApiJava.REQUEST_CODE_OK:
                             JSONObject data = jo.getJSONObject("data");
                             WeekReportItemBean weekReportItem = new Gson().fromJson(data.toString(), WeekReportItemBean.class);
-                            mView.getReportSuccess(weekReportItem);
+                            if (mView != null)
+                                mView.getReportSuccess(weekReportItem);
                             break;
 
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
                         default:
-                            mView.getReportFailed(code, message);
+                            if (mView != null)
+                                mView.getReportFailed(code, message);
                             break;
                     }
                 } catch (Exception e) {
@@ -246,13 +301,23 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getReportFailed("" + errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.getReportFailed("" + errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    if (mView != null)
+                        mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -281,16 +346,19 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
                     String message = jo.getString("message");
                     switch (code) {
                         case ApiJava.REQUEST_CODE_OK:
-                            mView.evaluationReportSuccess();
+                            if (mView != null)
+                                mView.evaluationReportSuccess();
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
 
                         default:
-                            mView.evaluationReportFailed(code, message);
+                            if (mView != null)
+                                mView.evaluationReportFailed(code, message);
                             break;
                     }
                 } catch (Exception e) {
@@ -301,14 +369,24 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.evaluationReportFailed("" + errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.evaluationReportFailed("" + errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
 
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    if (mView != null)
+                        mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
 
