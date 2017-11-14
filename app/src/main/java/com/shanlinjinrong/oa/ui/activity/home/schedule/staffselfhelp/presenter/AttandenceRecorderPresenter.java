@@ -57,7 +57,7 @@ public class AttandenceRecorderPresenter extends HttpPresenter<AttandenceRecorde
                 try {
                     mView.sendDataFinish();
                     if (e instanceof HttpException) {
-                        if (((HttpException) e).code() > 500) {
+                        if (((HttpException) e).code() > 400) {
                             mView.sendDataFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
                         mView.uidNull(((HttpException) e).code());
