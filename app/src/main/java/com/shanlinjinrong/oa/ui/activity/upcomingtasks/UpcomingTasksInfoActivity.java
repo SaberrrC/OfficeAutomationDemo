@@ -262,7 +262,9 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             TextView tvCommonalityShow1Dot = (TextView) holder.getViewById(R.id.tv_commonality_show1_dot);
             tvCommonalityShow1Dot.setVisibility(View.GONE);
             TextView tvCommonalityShow1 = (TextView) holder.getViewById(R.id.tv_commonality_show1);
-            EditText etCommonalityShow1 = (EditText) holder.getViewById(R.id.et_commonality_show1);
+            // TODO: 2017-11-14
+            //            EditText etCommonalityShow1 = (EditText) holder.getViewById(R.id.et_commonality_show1);
+            TextView etCommonalityShow1 = (TextView) holder.getViewById(R.id.et_commonality_show1);
             LinearLayout llCommonalityShow2 = (LinearLayout) holder.getViewById(R.id.ll_commonality_show2);
             llCommonalityShow2.setVisibility(View.GONE);
             TextView tvCommonalityShow2 = (TextView) holder.getViewById(R.id.tv_commonality_show2);
@@ -270,11 +272,12 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             tvCommonalityShow2Dot.setVisibility(View.GONE);
             LinearLayout llRegistrationCardDetail = (LinearLayout) holder.getViewById(R.id.ll_registration_card_detail);
             llRegistrationCardDetail.setVisibility(View.GONE);
-            EditText etCommonalityShow2 = (EditText) holder.getViewById(R.id.et_commonality_show2);
+            //            EditText etCommonalityShow2 = (EditText) holder.getViewById(R.id.et_commonality_show2);
+            TextView etCommonalityShow2 = (TextView) holder.getViewById(R.id.et_commonality_show2);
             LinearLayout llCommonalityShow3 = (LinearLayout) holder.getViewById(R.id.ll_commonality_show3);
             llCommonalityShow3.setVisibility(View.GONE);
             TextView tvCommonalityShow3 = (TextView) holder.getViewById(R.id.tv_commonality_show3);
-            EditText etCommonalityShow3 = (EditText) holder.getViewById(R.id.et_commonality_show3);
+            TextView etCommonalityShow3 = (TextView) holder.getViewById(R.id.et_commonality_show3);
             TextView tvCommonalityShow3Dot = (TextView) holder.getViewById(R.id.tv_commonality_show3_dot);
             mEtCommonalityBeginTime.setEnabled(false);
             mEtCommonalityEndTime.setEnabled(false);
@@ -300,6 +303,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     bundle.putString("title", "结束时间");
                     timeDialogFragment.setArguments(bundle);
                     timeDialogFragment.show(getSupportFragmentManager(), "1");
+                    mLinearLayoutManager.setAutoMeasureEnabled(true);
                 }
             });
             if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean) {
@@ -770,27 +774,38 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         hideLoadingView();
         if (TextUtils.equals(errorNo, "-1")) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("HttpException")) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("服务器异常，请稍后重试！");
             return;
         }
         if (strMsg.contains("SocketTimeoutException")) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("NullPointerException")) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("ConnectException")) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
+        }
+        if (strMsg.contains("server error")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
+            mTvErrorShow.setText("服务器异常，请稍后重试！");
             return;
         }
         mRecyclerView.setVisibility(View.VISIBLE);
@@ -832,27 +847,38 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     public void onApproveFailure(int errorNo, String strMsg) {
         if (errorNo == -1) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("HttpException")) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("服务器异常，请稍后重试！");
             return;
         }
         if (strMsg.contains("SocketTimeoutException")) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("NullPointerException")) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
         if (strMsg.contains("ConnectException")) {
             mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
+        }
+        if (strMsg.contains("server error")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
+            mTvErrorShow.setText("服务器异常，请稍后重试！");
             return;
         }
         mRecyclerView.setVisibility(View.VISIBLE);

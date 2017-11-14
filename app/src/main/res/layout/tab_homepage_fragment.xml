@@ -294,7 +294,7 @@
                                 android:layout_below="@+id/iv_homepage_approval_wait_me_approval"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="8dp"
-                                android:text="待我审批"
+                                android:text="待办事宜"
                                 android:textSize="@dimen/text_common_icon_tips"/>
 
 
@@ -334,7 +334,7 @@
                             android:layout_below="@+id/iv_homepage_approval_me_approval"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
-                            android:text="我审批的"
+                            android:text="已办事宜"
                             android:textSize="@dimen/text_common_icon_tips"/>
 
 

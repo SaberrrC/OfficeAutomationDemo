@@ -814,6 +814,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvErrorShow.setText("网络不通，请检查网络连接！");
             return;
         }
+        if (strMsg.contains("server error")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
+            mTvErrorShow.setText("服务器异常，请稍后重试！");
+            return;
+        }
         mRvList.setVisibility(View.VISIBLE);
         mTvErrorShow.setVisibility(View.GONE);
         showToast(strMsg);
@@ -1062,6 +1068,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mRvList.setVisibility(View.GONE);
             mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText("网络不通，请检查网络连接！");
+            return;
+        }
+        if (strMsg.contains("server error")) {
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
+            mTvErrorShow.setText("服务器异常，请稍后重试！");
             return;
         }
         if (errorNo == 20000) {
