@@ -112,11 +112,25 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
+
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/psname"
                     android:layout_width="match_parent"
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
 
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/deptname"
@@ -124,11 +138,25 @@
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
+
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/jobname"
                     android:layout_width="match_parent"
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
 
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/lastdayorhour"
@@ -136,11 +164,25 @@
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
+
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/changelength"
                     android:layout_width="match_parent"
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
 
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/curdayorhour"
@@ -148,11 +190,25 @@
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
+
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/realdayorhour"
                     android:layout_width="match_parent"
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
 
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/yidayorhour"
@@ -160,17 +216,38 @@
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
+
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/restdayorhour"
                     android:layout_width="match_parent"
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
+
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/freezedayorhour"
                     android:layout_width="match_parent"
                     android:layout_height="46dp"
                     android:gravity="center_vertical"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/gray_E5E5E5"/>
 
                 <com.shanlinjinrong.oa.views.HolidaySearchItem
                     android:id="@+id/usefulrestdayorhour"

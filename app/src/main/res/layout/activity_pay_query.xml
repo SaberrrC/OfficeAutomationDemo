@@ -34,8 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/white"
-        android:visibility="gone"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -145,6 +145,13 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -171,6 +178,13 @@
                     android:textSize="14sp"
                     tools:text="010124228"/>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -200,6 +214,13 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -227,6 +248,13 @@
                     tools:text="2017-10"/>
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -249,11 +277,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -277,10 +312,17 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -304,11 +346,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -332,11 +381,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -360,11 +416,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -388,11 +451,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -416,11 +486,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -450,6 +527,13 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -478,6 +562,13 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -500,11 +591,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -528,11 +626,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -556,11 +661,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -584,11 +696,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -612,11 +731,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -640,11 +766,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -668,11 +801,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -696,11 +836,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -724,11 +871,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -752,11 +906,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -780,11 +941,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -808,11 +976,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -836,11 +1011,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -864,11 +1046,18 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/gray_E5E5E5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -892,9 +1081,9 @@
                     android:layout_marginLeft="14dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="0天"
                     android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:text="0天"/>
+                    android:textSize="14sp"/>
 
             </LinearLayout>
 
