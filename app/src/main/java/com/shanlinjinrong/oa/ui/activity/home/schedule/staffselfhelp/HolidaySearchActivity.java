@@ -251,7 +251,7 @@ public class HolidaySearchActivity extends HttpBaseActivity<HolidaySearchPresent
                 curdayorhour.setTextViewValue(holidaySearchResponse.getCurdayorhour() + "天");
                 realdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "天");
                 yidayorhour.setTextViewValue(holidaySearchResponse.getYidayorhour() + "天");
-                restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "天");
+                restdayorhour.setTextViewValue(holidaySearchResponse.getRestdayorhour() + "天");
                 freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour() + "天");
                 usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour() + "天");
             } else {
@@ -260,7 +260,7 @@ public class HolidaySearchActivity extends HttpBaseActivity<HolidaySearchPresent
                 curdayorhour.setTextViewValue(holidaySearchResponse.getCurdayorhour() + "小时");
                 realdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "小时");
                 yidayorhour.setTextViewValue(holidaySearchResponse.getYidayorhour() + "小时");
-                restdayorhour.setTextViewValue(holidaySearchResponse.getRealdayorhour() + "小时");
+                restdayorhour.setTextViewValue(holidaySearchResponse.getRestdayorhour() + "小时");
                 freezedayorhour.setTextViewValue(holidaySearchResponse.getFreezedayorhour() + "小时");
                 usefulrestdayorhour.setTextViewValue(holidaySearchResponse.getUsefulrestdayorhour() + "小时");
             }
