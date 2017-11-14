@@ -92,6 +92,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     private static final int CODE_GALLERY_REQUEST = 0x1;//相册
     private static final int CODE_CAMERA_REQUEST = 0x2;//拍照
     private static final int CROP_PICTURE_REQUEST = 0x3;//图片路径
+    private static final int MODIFICATION_EMAIL = 101;//邮箱修改
 
     private static final String TEMP_FILE_NAME = "temp_icon.jpg";
     private static final String CAMERA_FILE_NAME = "camera_pic.jpg";
@@ -177,7 +178,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                         ModifyPhoneActivity.class), UPDATE_PHONE);
                 break;
             case R.id.user_date_box://邮箱修改
-                startActivity(new Intent(this, ModificationEmailActivity.class));
+                startActivityForResult(new Intent(this, ModificationEmailActivity.class),101);
                 break;
             case R.id.btn_logout://登出
                 showLogoutTips();
@@ -289,8 +290,10 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode == MODIFICATION_EMAIL) {
+            user_mails.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
+        }
         if (resultCode == RESULT_CANCELED) {
             return;
         }

@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -186,8 +187,10 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
 
     @Override
     public void modificationEmailSuccess() {
-        finish();
+        AppConfig.getAppConfig(this).set(AppConfig.PREF_KEY_USER_EMAIL, mEtEmailRedact.getText().toString() + mTvEmailSelected.getText().toString());
+        setResult(101);
         showToast("修改成功");
+        finish();
     }
 
     @Override
