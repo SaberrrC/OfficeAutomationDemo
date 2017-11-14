@@ -312,8 +312,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     }
                     mTvState.setText(bean.get(i).getTbmstatus());
                 }
-
-
             } else {
                 mTvEmptyLayout.setText("暂无日考勤信息！");
                 mTvEmptyLayout.setVisibility(View.VISIBLE);
