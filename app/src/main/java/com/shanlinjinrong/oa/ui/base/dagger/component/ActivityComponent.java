@@ -15,6 +15,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInf
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingReservationRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.AttandenceMonthActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.AttandenceRecorderActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.PayQueryActivity;
@@ -130,4 +131,6 @@ public interface ActivityComponent {
     void inject(HolidaySearchActivity holidaySearchActivity);
 
     void inject(ModificationEmailActivity modificationEmailActivity);
+
+    void inject(AttandenceRecorderActivity attandenceRecorderActivity);
 }

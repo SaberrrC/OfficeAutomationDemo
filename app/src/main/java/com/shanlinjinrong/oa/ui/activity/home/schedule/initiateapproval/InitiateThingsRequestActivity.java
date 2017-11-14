@@ -1034,6 +1034,9 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     @Override
     public void registrationCardSuccess(String bean) {
         showToast("提交申请成功!");
+        if (getIntent().getBooleanExtra("signInRecord", false)) {
+            setResult(101);
+        }
         finish();
     }
 

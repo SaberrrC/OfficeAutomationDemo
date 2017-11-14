@@ -261,6 +261,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     @Override
     public void queryDayAttendanceSuccess(List<MyAttendanceResponse> bean) {
         try {
+            List<String> data = new ArrayList<>();
             if (bean != null) {
                 if (bean.size() > 0) {
                     mTvEmptyLayout.setVisibility(View.GONE);
@@ -274,10 +275,67 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 for (int i = 0; i < bean.size(); i++) {
                     tv_date.setText(bean.get(i).getCalendar());
                     tv_name.setText(bean.get(i).getPsname());
-                    mTvState.setText(bean.get(i).getTbmstatus());
                     tv_gowork_time.setText(bean.get(i).getOnebegintime());
                     tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
+
+                    for (int j = 0; j < bean.get(i).getTbmstatus().length(); j = j + 4) {
+                        data.add(bean.get(i).getTbmstatus().substring(j, j + 4));
+                    }
+
+                    String state = "";
+                    for (int x = 0; x < data.size(); x++) {
+                        String s1 = data.get(i);
+                        if (s1.equals("[出差]")) {
+                            mTvState.setText("[出差]");
+                            return;
+                        }
+                    }
+                    for (int j = 0; j < data.size(); j++) {
+                        String s1 = data.get(i);
+                        if (s1.equals("[加班]")) {
+                            mTvState.setText("[加班]");
+                            return;
+                        }
+                    }
+                    for (int j = 0; j < data.size(); j++) {
+                        String s1 = data.get(i);
+                        if (s1.equals("[休假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                    }
+                    for (int j = 0; j < data.size(); j++) {
+                        String s1 = data.get(i);
+                        if (s1.equals("[签卡]")) {
+                            mTvState.setText("[签卡]");
+                            return;
+                        }
+                    }
+                    for (int j = 0; j < data.size(); j++) {
+                        String s1 = data.get(i);
+                        if (s1.equals("[旷工]")) {
+                            mTvState.setText("[旷工]");
+                            return;
+                        }
+                    }
+                    for (int j = 0; j < data.size(); j++) {
+                        String s1 = data.get(i);
+                        if (s1.equals("[迟到]")) {
+                            mTvState.setText("[迟到]");
+                            return;
+                        }
+                    }
+                    for (int j = 0; j < data.size(); j++) {
+                        String s1 = data.get(i);
+                        if (s1.equals("[早退]")) {
+                            mTvState.setText("[早退]");
+                            return;
+                        }
+                    }
+                    mTvState.setText(bean.get(i).getTbmstatus());
                 }
+
+
             } else {
                 mTvEmptyLayout.setText("暂无日考勤信息！");
                 mTvEmptyLayout.setVisibility(View.VISIBLE);

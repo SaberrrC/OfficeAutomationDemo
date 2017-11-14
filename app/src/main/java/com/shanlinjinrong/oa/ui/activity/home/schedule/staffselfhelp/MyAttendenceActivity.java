@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.platform.comapi.map.E;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -15,8 +16,11 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.MyAttendenceActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.MyAttendenceActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 
@@ -105,6 +109,8 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
             case R.id.tv_absenteeism:
                 try {
                     Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
+                    intent.putExtra("year", mCurrentYear + "");
+                    intent.putExtra("month", mSendMonth + "");
                     intent.putExtra("date", tv_time.getText().toString());
                     if (mMyAttandanceResponse1 != null)
                         intent.putExtra("attandance", mMyAttandanceResponse1);

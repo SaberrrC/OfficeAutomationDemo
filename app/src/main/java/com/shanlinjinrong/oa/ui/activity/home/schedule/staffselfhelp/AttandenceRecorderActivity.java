@@ -1,19 +1,34 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.retrofit.model.responsebody.CommonAttendanceBean;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.HolidayAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandenceRecorderContract;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.AttandenceRecorderPresenter;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //考勤月历
-public class AttandenceRecorderActivity extends BaseActivity {
+public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecorderPresenter> implements AttandenceRecorderContract.View {
 
     @BindView(R.id.top_view)
     CommonTopView mTopView;
@@ -38,24 +53,34 @@ public class AttandenceRecorderActivity extends BaseActivity {
     private List<MyAttandanceResponse.AllWorkAttendanceListBean> mAllWorkAttendanceList;
     private List<MyAttandanceResponse.AllWorkAttendanceListBean> mData = new ArrayList<>();
     private HashMap<String, CommonAttendanceBean> mHashMap;
+    private CustomDialogUtils mDialog;
+    private MyAttandanceResponse mAttandance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attandance_recorder_list);
         ButterKnife.bind(this);
-        initData();
+        mAttandance = (MyAttandanceResponse) getIntent().getSerializableExtra("attandance");
+        initData(mAttandance);
         initView();
     }
 
-    private void initData() {
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
+
+    private void initData(MyAttandanceResponse response) {
         if (mAllWorkAttendanceList != null) {
             mAllWorkAttendanceList.clear();
         }
         try {
-            MyAttandanceResponse attandance = (MyAttandanceResponse) getIntent().getSerializableExtra("attandance");
-            if (attandance != null) {
-                mAllWorkAttendanceList = attandance.getAllWorkAttendanceList();
+
+            if (response != null) {
+                mAllWorkAttendanceList = response.getAllWorkAttendanceList();
                 if (mAllWorkAttendanceList != null) {
                     mHashMap = new HashMap<>();
                     for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
@@ -72,7 +97,7 @@ public class AttandenceRecorderActivity extends BaseActivity {
                         mHashMap.put(mAllWorkAttendanceList.get(i).getCalendar(), bean);
                     }
 
-                    List<MyAttandanceResponse.CdWorkAttendanceListBean> cdWorkAttendanceList = attandance.getCdWorkAttendanceList();
+                    List<MyAttandanceResponse.CdWorkAttendanceListBean> cdWorkAttendanceList = response.getCdWorkAttendanceList();
                     if (cdWorkAttendanceList != null) {
                         for (int i = 0; i < cdWorkAttendanceList.size(); i++) {
                             CommonAttendanceBean bean = new CommonAttendanceBean();
@@ -89,7 +114,7 @@ public class AttandenceRecorderActivity extends BaseActivity {
                         }
                     }
 
-                    List<MyAttandanceResponse.KgWorkAttendanceListBean> kgWorkAttendanceList = attandance.getKgWorkAttendanceList();
+                    List<MyAttandanceResponse.KgWorkAttendanceListBean> kgWorkAttendanceList = response.getKgWorkAttendanceList();
                     if (kgWorkAttendanceList != null) {
                         for (int i = 0; i < kgWorkAttendanceList.size(); i++) {
                             CommonAttendanceBean bean = new CommonAttendanceBean();
@@ -106,7 +131,7 @@ public class AttandenceRecorderActivity extends BaseActivity {
                         }
                     }
 
-                    List<MyAttandanceResponse.ZtWorkAttendanceListBean> ztWorkAttendanceList = attandance.getZtWorkAttendanceList();
+                    List<MyAttandanceResponse.ZtWorkAttendanceListBean> ztWorkAttendanceList = response.getZtWorkAttendanceList();
                     if (kgWorkAttendanceList != null) {
                         for (int i = 0; i < ztWorkAttendanceList.size(); i++) {
                             CommonAttendanceBean bean = new CommonAttendanceBean();
@@ -123,7 +148,7 @@ public class AttandenceRecorderActivity extends BaseActivity {
                         }
                     }
 
-                    List<MyAttandanceResponse.JbWorkAttendanceListBean> jbWorkAttendanceList = attandance.getJbWorkAttendanceList();
+                    List<MyAttandanceResponse.JbWorkAttendanceListBean> jbWorkAttendanceList = response.getJbWorkAttendanceList();
                     if (kgWorkAttendanceList != null) {
                         for (int i = 0; i < jbWorkAttendanceList.size(); i++) {
                             CommonAttendanceBean bean = new CommonAttendanceBean();
@@ -140,7 +165,7 @@ public class AttandenceRecorderActivity extends BaseActivity {
                         }
                     }
 
-                    List<MyAttandanceResponse.XjWorkAttendanceListBean> xjWorkAttendanceList = attandance.getXjWorkAttendanceList();
+                    List<MyAttandanceResponse.XjWorkAttendanceListBean> xjWorkAttendanceList = response.getXjWorkAttendanceList();
                     if (kgWorkAttendanceList != null) {
                         for (int i = 0; i < xjWorkAttendanceList.size(); i++) {
                             CommonAttendanceBean bean = new CommonAttendanceBean();
@@ -172,8 +197,6 @@ public class AttandenceRecorderActivity extends BaseActivity {
                     mTvEmptyAttendence.setVisibility(View.GONE);
                     mRecyclerView.setVisibility(View.VISIBLE);
                 }
-
-
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -195,7 +218,42 @@ public class AttandenceRecorderActivity extends BaseActivity {
         }
     }
 
+    private String mCalendar;
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void showLoading() {
+        showLoadingView();
+    }
+
+    @Override
+    public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
+        try {
+            if (myAttandanceResponse != null) {
+                mAttandance = myAttandanceResponse;
+                initData(mAttandance);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendDataFailed(int errCode, String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void sendDataFinish() {
+        hideLoadingView();
+    }
+
     private class AttandenceRecorderAdapter extends BaseQuickAdapter<MyAttandanceResponse.AllWorkAttendanceListBean> {
+
 
         public AttandenceRecorderAdapter(List<MyAttandanceResponse.AllWorkAttendanceListBean> data) {
             super(R.layout.work_month_list_item, data);
@@ -208,7 +266,7 @@ public class AttandenceRecorderActivity extends BaseActivity {
             CommonAttendanceBean bean1 = mHashMap.get(bean.getCalendar());
             if (bean1 != null) {
                 if (bean1.getSignCause() != null) {
-                    if (!TextUtils.isEmpty(bean1.getSignCause())) {
+                    if (!TextUtils.isEmpty(bean1.getSignCause().trim())) {
                         baseViewHolder.setVisible(R.id.tv_sign_in, true);
                     } else {
                         baseViewHolder.setVisible(R.id.tv_sign_in, false);
@@ -220,6 +278,88 @@ public class AttandenceRecorderActivity extends BaseActivity {
                 baseViewHolder.setText(R.id.tv_off_gowork_time, bean1.getTwoendtime());
                 baseViewHolder.setText(R.id.tv_state, bean1.getTbmstatus());
             }
+            baseViewHolder.setOnClickListener(R.id.ll_currentday_state, view -> {
+                try {
+
+                    mCalendar = bean.getCalendar();
+                    if (bean1.getSignCause() == null) {
+                        try {
+                            selectedDate(bean1);
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                            NonTokenDialog(bean1.getCalendar());
+                        }
+                    } else if (TextUtils.isEmpty(bean1.getSignCause())) {
+                        try {
+                            selectedDate(bean1);
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                            NonTokenDialog(bean1.getCalendar());
+                        }
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        private void selectedDate(CommonAttendanceBean bean) {
+            String year = bean.getCalendar().substring(0, 4);
+            String month = bean.getCalendar().substring(5, 7);
+            String day = bean.getCalendar().substring(8, bean.getCalendar().length());
+            String date = year + "年" + month + "月" + day + "日";
+            NonTokenDialog(date);
+        }
+    }
+
+    public void NonTokenDialog(String str) {
+        try {
+            //获取屏幕高宽
+            DisplayMetrics metric = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metric);
+            int windowsHeight = metric.heightPixels;
+            int windowsWight = metric.widthPixels;
+            View inflate = LayoutInflater.from(this).inflate(R.layout.common_custom_dialog, null);
+            TextView btn_cancel = (TextView) inflate.findViewById(R.id.btn_cancel);
+            TextView tv_content = (TextView) inflate.findViewById(R.id.tv_non_token_tip);
+            btn_cancel.setVisibility(View.VISIBLE);
+            tv_content.setText("是否对" + str + "进行签卡");
+            CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(this);
+            mDialog = builder.cancelTouchout(false)
+                    .view(inflate)
+                    .heightpx((int) (windowsHeight / 4.5))
+                    .widthpx((int) (windowsWight / 1.4))
+                    .style(R.style.dialog)
+                    .addViewOnclick(R.id.tv_non_token_confirm, view -> {
+                        Intent intent = new Intent(AttandenceRecorderActivity.this, InitiateThingsRequestActivity.class);
+                        intent.putExtra("type", 3);
+                        intent.putExtra("signInRecord", true);
+                        startActivityForResult(intent, 101);
+                        if (mDialog.isShowing()) {
+                            mDialog.cancel();
+                        }
+                    }).addViewOnclick(R.id.btn_cancel, view -> {
+                        if (mDialog.isShowing()) {
+                            mDialog.cancel();
+                        }
+                    })
+                    .build();
+            if (mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
+            mDialog.setCancelable(false);
+            mDialog.show();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 101) {
+            mPresenter.sendData(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode(), getIntent().getStringExtra("year"), getIntent().getStringExtra("month"), this);
         }
     }
 
