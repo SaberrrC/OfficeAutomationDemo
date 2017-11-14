@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -276,7 +277,14 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                 baseViewHolder.setText(R.id.tv_date, bean1.getCalendar());
                 baseViewHolder.setText(R.id.tv_gowork_time, bean1.getOnebegintime());
                 baseViewHolder.setText(R.id.tv_off_gowork_time, bean1.getTwoendtime());
-                baseViewHolder.setText(R.id.tv_state, bean1.getTbmstatus());
+                if (bean1.getTbmstatus() != null) {
+                    if (bean1.getTbmstatus().equals("[迟到]")) {
+                        baseViewHolder.setTextColor(R.id.tv_gowork_time, Color.RED);
+                    }
+                    if (bean1.getTbmstatus().equals("[早退]")) {
+                        baseViewHolder.setTextColor(R.id.tv_off_gowork_time, Color.RED);
+                    }
+                }
             }
             baseViewHolder.setOnClickListener(R.id.ll_currentday_state, view -> {
                 try {
@@ -301,6 +309,41 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                     e.printStackTrace();
                 }
             });
+            if (bean1.getTbmstatus() != null) {
+                if (bean1.getTbmstatus().contains("[出差]")) {
+                    baseViewHolder.setText(R.id.tv_state, "[出差]");
+                    return;
+                }
+                if (bean1.getTbmstatus().contains("[加班]")) {
+                    baseViewHolder.setText(R.id.tv_state, "[加班]");
+                    return;
+                }
+                if (bean1.getTbmstatus().contains("[休假]")) {
+                    baseViewHolder.setText(R.id.tv_state, "[休假]");
+                    return;
+                }
+                if (bean1.getTbmstatus().contains("[签卡]")) {
+                    baseViewHolder.setText(R.id.tv_state, "[签卡]");
+                    return;
+                }
+                if (bean1.getTbmstatus().contains("[旷工]")) {
+                    baseViewHolder.setText(R.id.tv_state, "[旷工]");
+                    return;
+                }
+                if (bean1.getTbmstatus().contains("[迟到]")) {
+                    baseViewHolder.setText(R.id.tv_state, "[迟到]");
+                    return;
+                }
+                if (bean1.getTbmstatus().contains("[早退]")) {
+                    baseViewHolder.setText(R.id.tv_state, "[早退]");
+                    return;
+                }
+                if (bean1.getTbmstatus().contains("[外出]")) {
+                    baseViewHolder.setText(R.id.tv_state, "[外出]");
+                    return;
+                }
+                baseViewHolder.setText(R.id.tv_state, bean1.getTbmstatus());
+            }
         }
 
         private void selectedDate(CommonAttendanceBean bean) {

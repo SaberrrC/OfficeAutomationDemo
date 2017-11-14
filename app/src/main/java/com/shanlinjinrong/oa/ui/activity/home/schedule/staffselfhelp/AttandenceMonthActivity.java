@@ -278,59 +278,37 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     tv_gowork_time.setText(bean.get(i).getOnebegintime());
                     tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
 
-                    for (int j = 0; j < bean.get(i).getTbmstatus().length(); j = j + 4) {
-                        data.add(bean.get(i).getTbmstatus().substring(j, j + 4));
+                    if (bean.get(i).getTbmstatus().contains("[出差]")) {
+                        mTvState.setText("[出差]");
+                        return;
                     }
-
-                    String state = "";
-                    for (int x = 0; x < data.size(); x++) {
-                        String s1 = data.get(i);
-                        if (s1.equals("[出差]")) {
-                            mTvState.setText("[出差]");
-                            return;
-                        }
+                    if (bean.get(i).getTbmstatus().contains("[加班]")) {
+                        mTvState.setText("[加班]");
+                        return;
                     }
-                    for (int j = 0; j < data.size(); j++) {
-                        String s1 = data.get(i);
-                        if (s1.equals("[加班]")) {
-                            mTvState.setText("[加班]");
-                            return;
-                        }
+                    if (bean.get(i).getTbmstatus().contains("[休假]")) {
+                        mTvState.setText("[休假]");
+                        return;
                     }
-                    for (int j = 0; j < data.size(); j++) {
-                        String s1 = data.get(i);
-                        if (s1.equals("[休假]")) {
-                            mTvState.setText("[休假]");
-                            return;
-                        }
+                    if (bean.get(i).getTbmstatus().contains("[签卡]")) {
+                        mTvState.setText("[签卡]");
+                        return;
                     }
-                    for (int j = 0; j < data.size(); j++) {
-                        String s1 = data.get(i);
-                        if (s1.equals("[签卡]")) {
-                            mTvState.setText("[签卡]");
-                            return;
-                        }
+                    if (bean.get(i).getTbmstatus().contains("[旷工]")) {
+                        mTvState.setText("[旷工]");
+                        return;
                     }
-                    for (int j = 0; j < data.size(); j++) {
-                        String s1 = data.get(i);
-                        if (s1.equals("[旷工]")) {
-                            mTvState.setText("[旷工]");
-                            return;
-                        }
+                    if (bean.get(i).getTbmstatus().contains("[迟到]")) {
+                        mTvState.setText("[迟到]");
+                        return;
                     }
-                    for (int j = 0; j < data.size(); j++) {
-                        String s1 = data.get(i);
-                        if (s1.equals("[迟到]")) {
-                            mTvState.setText("[迟到]");
-                            return;
-                        }
+                    if (bean.get(i).getTbmstatus().contains("[早退]")) {
+                        mTvState.setText("[早退]");
+                        return;
                     }
-                    for (int j = 0; j < data.size(); j++) {
-                        String s1 = data.get(i);
-                        if (s1.equals("[早退]")) {
-                            mTvState.setText("[早退]");
-                            return;
-                        }
+                    if (bean.get(i).getTbmstatus().contains("[外出]")) {
+                        mTvState.setText("[外出]");
+                        return;
                     }
                     mTvState.setText(bean.get(i).getTbmstatus());
                 }
