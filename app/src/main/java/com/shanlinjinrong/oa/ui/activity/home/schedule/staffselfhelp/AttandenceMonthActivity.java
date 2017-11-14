@@ -317,13 +317,6 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
     @Override
     public void onItemClicked(View v, int position) {
-        String content = mData.get(position).getContent();
-        mSelectedDay = Integer.parseInt(content);
-        String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
-        String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
-
-        String date = mCurrentYear + "-" + month + "-" + mDay;
-        mPresenter.queryDayAttendance(mPrivateCode, date);
         for (int i = 0; i < mData.size(); i++) {
             if (i == position) {
                 mData.get(position).setSelect(true);
@@ -332,6 +325,13 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             }
         }
         mAdapter.notifyDataSetChanged();
+        String content = mData.get(position).getContent();
+        mSelectedDay = Integer.parseInt(content);
+        String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
+        String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
+
+        String date = mCurrentYear + "-" + month + "-" + mDay;
+        mPresenter.queryDayAttendance(mPrivateCode, date);
     }
 
     @Override

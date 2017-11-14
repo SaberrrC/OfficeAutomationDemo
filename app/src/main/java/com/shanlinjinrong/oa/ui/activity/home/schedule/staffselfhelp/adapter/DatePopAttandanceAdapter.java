@@ -54,6 +54,7 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
 
         if (mData.get(position).isEnable()) {
             int dateType = 1;
+            holder.imageState.setVisibility(View.VISIBLE);
             dateType = mData.get(position).getDateType();
             switch (dateType) {
                 case 4:
@@ -75,6 +76,7 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
                 holder.item.setTextColor(0xFF4A4A4A);
         } else {
             holder.item.setTextColor(0xFF999999);
+            holder.imageState.setVisibility(View.GONE);
         }
 
 

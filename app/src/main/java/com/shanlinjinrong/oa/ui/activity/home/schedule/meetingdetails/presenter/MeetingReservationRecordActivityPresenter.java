@@ -69,13 +69,16 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                                 }
                                 data.add(dataBean);
                             }
-                            mView.getMeetingRecordSuccess(data);
+                            if (mView != null)
+                                mView.getMeetingRecordSuccess(data);
                             break;
                         case Api.RESPONSES_CODE_NO_CONTENT:
                             if (data.size() == 0) {
-                                mView.getMeetingRecordEmpty();
+                                if (mView != null)
+                                    mView.getMeetingRecordEmpty();
                             } else {
-                                mView.removeFooterView();
+                                if (mView != null)
+                                    mView.removeFooterView();
                             }
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:

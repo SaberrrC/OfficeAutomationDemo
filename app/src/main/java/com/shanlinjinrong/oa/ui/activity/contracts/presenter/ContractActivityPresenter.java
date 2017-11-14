@@ -40,7 +40,12 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.loadDataFinish();
+                try {
+                    if (mView != null)
+                        mView.loadDataFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -56,7 +61,7 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
                                     .getJSONArray("children");
                             for (int i = 0; i < jDepartment.length(); i++) {
                                 JSONObject d = jDepartment.getJSONObject(i);
-                                if(!d.getString("memberCount").equals("0")){
+                                if (!d.getString("memberCount").equals("0")) {
                                     Contacts c = new Contacts(d);
                                     items.add(c);
                                 }
@@ -88,16 +93,20 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
 
                                 items.add(c);
                             }
-                            mView.loadDataSuccess(items);
+                            if (mView != null)
+                                mView.loadDataSuccess(items);
                             break;
                         case Api.RESPONSES_CODE_DATA_EMPTY:
-                            mView.loadDataEmpty();
+                            if (mView != null)
+                                mView.loadDataEmpty();
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            mView.loadDataTokenNoMatch(Api.getCode(jo));
+                            if (mView != null)
+                                mView.loadDataTokenNoMatch(Api.getCode(jo));
                             break;
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(Api.getCode(jo));
+                            if (mView != null)
+                                mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {
@@ -107,8 +116,13 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
-                mView.loadDataFailed(errorNo, strMsg);
-                super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.loadDataFailed(errorNo, strMsg);
+                    super.onFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

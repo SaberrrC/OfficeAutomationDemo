@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.my;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,7 +77,27 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     private void initView() {
         mTvEmailSelected.setText(mData.get(0));
         mTopView.getRightView().setOnClickListener(view -> {
-            mPresenter.modificationEmail(mEtEmailRedact.getText().toString() + mTvEmailSelected.getText().toString(), AppConfig.getAppConfig(this).getPrivateCode());
+
+            if (TextUtils.isEmpty(mEtEmailRedact.getText().toString().trim())) {
+                showToast("邮箱名不能为空！");
+                return;
+            }
+
+            if (mEtEmailRedact.getText().toString().indexOf(" ") > 0) {
+                showToast("邮箱不能含有空格！");
+                return;
+            }
+
+            for (int i = 0; i < mEtEmailRedact.getText().toString().length(); i++) {
+                String str = mEtEmailRedact.getText().toString().substring(i, i + 1);
+                if (java.util.regex.Pattern.matches("[\u4E00-\u9FA5]", str)) {
+                    showToast("邮箱名不能含有中文！");
+                    return;
+                }
+            }
+
+
+            mPresenter.modificationEmail(mEtEmailRedact.getText().toString().trim() + mTvEmailSelected.getText().toString(), AppConfig.getAppConfig(this).getPrivateCode());
         });
     }
 
@@ -171,6 +194,10 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     public void modificationEmailFailed(int errorNo, String strMsg) {
         if (strMsg.equals("auth error")) {
             catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            return;
+        }
+        if (!TextUtils.isEmpty(strMsg)) {
+            showToast(strMsg);
             return;
         }
         showToast("修改邮箱失败！");
