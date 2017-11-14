@@ -176,7 +176,8 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 startActivityForResult(new Intent(UserInfoActivity.this,
                         ModifyPhoneActivity.class), UPDATE_PHONE);
                 break;
-            case R.id.user_date_box:
+            case R.id.user_date_box://邮箱修改
+                startActivity(new Intent(this, ModificationEmailActivity.class));
                 break;
             case R.id.btn_logout://登出
                 showLogoutTips();

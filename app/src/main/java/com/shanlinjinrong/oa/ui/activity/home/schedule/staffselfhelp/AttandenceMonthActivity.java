@@ -193,6 +193,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     @Override
     public void sendDataSuccess(MyAttandanceResponse myAttandanceResponse) {
         mAllWorkAttendanceList.clear();
+        mDataTypeMap.clear();
         mAllWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
         //出差
         List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();

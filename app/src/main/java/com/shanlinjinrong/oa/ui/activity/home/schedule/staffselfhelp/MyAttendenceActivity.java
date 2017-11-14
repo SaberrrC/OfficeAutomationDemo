@@ -55,6 +55,7 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     private String mPrivateCode = "";
     private MonthSelectPopWindow monthSelectPopWindow;
     private MyAttandanceResponse mMyAttandanceResponse1;
+    private String mSendMonth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,11 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
         mCurrentYear = cal.get(Calendar.YEAR);
         tv_time.setText(mCurrentYear + "年" + mCurrentMonth + "日");
         mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
-        mPresenter.sendData(mPrivateCode, mCurrentYear + "", mCurrentMonth + "", MyAttendenceActivity.this);
+        mSendMonth = mCurrentMonth + "";
+        if (mCurrentMonth < 10) {
+            mSendMonth = "0" + mCurrentMonth;
+        }
+        mPresenter.sendData(mPrivateCode, mCurrentYear + "", mSendMonth, MyAttendenceActivity.this);
     }
 
     @Override
@@ -120,7 +125,11 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
                         mCurrentYear = Integer.parseInt(year);
                         mCurrentMonth = Integer.parseInt(month);
                         tv_time.setText(year + "年" + month + "月");
-                        mPresenter.sendData(mPrivateCode, mCurrentYear + "", mCurrentMonth + "", MyAttendenceActivity.this);
+                        mSendMonth = mCurrentMonth + "";
+                        if (mCurrentMonth < 10) {
+                            mSendMonth = "0" + mCurrentMonth;
+                        }
+                        mPresenter.sendData(mPrivateCode, mCurrentYear + "", mSendMonth, MyAttendenceActivity.this);
                         monthSelectPopWindow.dismiss();
                     }
                 });
