@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.shanlinjinrong.oa.ui.activity.my.ModificationEmailActivity">
+
+
+    <com.shanlinjinrong.views.common.CommonTopView
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_height_48"
+        app:leftDrawable="@drawable/toolbar_back"
+        app:rightText="修改"
+        app:topTitle="邮箱修改"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/gray_99EFEFEF"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="邮箱："
+            android:textColor="@color/black_333333"
+            android:textSize="16sp"/>
+
+        <EditText
+            android:id="@+id/et_email_redact"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/edittext_input_round_bg"
+            android:gravity="center_vertical"
+            android:hint="请输入邮箱"
+            android:paddingLeft="5dp"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_email_selected"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:includeFontPadding="false"
+            android:layout_marginRight="10dp"
+            android:maxLines="1"
+            android:background="@drawable/edittext_input_round_bg"
+            android:drawableRight="@drawable/arrow_down_select"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/black_333333"
+            android:textSize="12sp"/>
+
+
+    </LinearLayout>
+</LinearLayout>

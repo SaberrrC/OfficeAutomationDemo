@@ -30,6 +30,7 @@ import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.login.WriteJobNumberActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
+import com.shanlinjinrong.oa.ui.activity.my.ModificationEmailActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPhoneActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UserInfoActivity;
@@ -127,4 +128,6 @@ public interface ActivityComponent {
     void inject(PayQueryActivity doneTasksActivity);
 
     void inject(HolidaySearchActivity holidaySearchActivity);
+
+    void inject(ModificationEmailActivity modificationEmailActivity);
 }
