@@ -408,31 +408,72 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(TextUtils.isEmpty(bean.getCheckNote()) ? "" : bean.getCheckNote());
-                return;
+                if (!TextUtils.isEmpty(bean.getCheckNote())) {
+                    tvOption.setText(bean.getCheckNote());
+                    return;
+                }
+                if (TextUtils.equals(bean.getApproveResult(), "Y")) {
+                    tvOption.setText("批准");
+                    return;
+                }
+                if (TextUtils.equals(bean.getApproveResult(), "N")) {
+                    tvOption.setText("驳回");
+                    return;
+                }
             }
             if (itemData instanceof TraverResultBean.DataBean.NchrapplyWorkFlowBean) {
                 TraverResultBean.DataBean.NchrapplyWorkFlowBean bean = (TraverResultBean.DataBean.NchrapplyWorkFlowBean) itemData;
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(TextUtils.isEmpty(bean.getCheckNote()) ? "" : bean.getCheckNote());
-                return;
+                if (!TextUtils.isEmpty(bean.getCheckNote())) {
+                    tvOption.setText(bean.getCheckNote());
+                    return;
+                }
+                if (TextUtils.equals(bean.getApproveResult(), "Y")) {
+                    tvOption.setText("批准");
+                    return;
+                }
+                if (TextUtils.equals(bean.getApproveResult(), "N")) {
+                    tvOption.setText("驳回");
+                    return;
+                }
             }
             if (itemData instanceof RestResultBean.DataBean.NchrapplyWorkFlowBean) {
                 RestResultBean.DataBean.NchrapplyWorkFlowBean bean = (RestResultBean.DataBean.NchrapplyWorkFlowBean) itemData;
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(TextUtils.isEmpty(bean.getCheckNote()) ? "" : bean.getCheckNote());
-                return;
+                if (!TextUtils.isEmpty(bean.getCheckNote())) {
+                    tvOption.setText(bean.getCheckNote());
+                    return;
+                }
+                if (TextUtils.equals(bean.getApproveResult(), "Y")) {
+                    tvOption.setText("批准");
+                    return;
+                }
+                if (TextUtils.equals(bean.getApproveResult(), "N")) {
+                    tvOption.setText("驳回");
+                    return;
+                }
             }
             if (itemData instanceof OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) {
                 OverTimeResultBean.DataBean.NchrapplyWorkFlowBean bean = (OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) itemData;
                 tvApprover.setText(bean.getCheckUserName());
                 tvTime.setText(TextUtils.isEmpty(bean.getDealDate()) ? "" : bean.getDealDate());
                 tvState.setText(bean.getIsCheckCH());
-                tvOption.setText(TextUtils.isEmpty(bean.getCheckNote()) ? "" : bean.getCheckNote());
+                if (!TextUtils.isEmpty(bean.getCheckNote())) {
+                    tvOption.setText(bean.getCheckNote());
+                    return;
+                }
+                if (TextUtils.equals(bean.getApproveResult(), "Y")) {
+                    tvOption.setText("批准");
+                    return;
+                }
+                if (TextUtils.equals(bean.getApproveResult(), "N")) {
+                    tvOption.setText("驳回");
+                    return;
+                }
             }
             return;
         }
