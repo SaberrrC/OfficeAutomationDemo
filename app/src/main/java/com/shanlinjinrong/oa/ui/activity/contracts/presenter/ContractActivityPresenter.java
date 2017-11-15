@@ -62,8 +62,8 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
                             for (int i = 0; i < jDepartment.length(); i++) {
                                 JSONObject d = jDepartment.getJSONObject(i);
                                 if (!d.getString("memberCount").equals("0")) {
-                                    Contacts c = new Contacts(d);
-                                    items.add(c);
+//                                    Contacts c = new Contacts(d);
+//                                    items.add(c);
                                 }
                             }
                             JSONArray jEmployee = Api.getDataToJSONObject(jo)

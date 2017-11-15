@@ -18,10 +18,13 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.model.Contacts;
+import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.contracts.contract.ContractActivityContract;
 import com.shanlinjinrong.oa.ui.activity.contracts.presenter.ContractActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.adapter.TabContactsAdapter;
+import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
+import com.shanlinjinrong.oa.ui.fragment.presenter.TabContractsFragmentPresenter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +39,7 @@ import butterknife.OnClick;
  * <h3>Description: 首页名片页面二级一下界面 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/9/22.<br />
  */
-public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter> implements ContractActivityContract.View {
+public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPresenter> implements TabContractsFragmentContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.btn_back)
@@ -80,7 +83,7 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
         ButterKnife.bind(this);
         setTranslucentStatus(this);
         initWidget();
-        loadData(pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID));
+        loadData(getIntent().getStringExtra(PAGE_MAP_DID));
     }
 
     @Override
@@ -116,44 +119,6 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
     }
 
     @Override
-    public void loadDataSuccess(List<Contacts> contacts) {
-        if (items.size() > 0 || items != null) {
-            items.clear();
-        }
-        items = contacts;
-        adapter.setNewData(items);
-    }
-
-    @Override
-    public void loadDataFailed(int errorNo, String strMsg) {
-        String info = "";
-        switch (errorNo) {
-            case Api.RESPONSES_CODE_NO_NETWORK:
-                info = "请确认是否已连接网络！";
-                break;
-            case Api.RESPONSES_CODE_NO_RESPONSE:
-                info = "网络不稳定，请重试！";
-                break;
-        }
-        showEmptyView(mRlRecyclerViewContainer, info, 0, false);
-    }
-
-    @Override
-    public void loadDataEmpty() {
-        showEmptyView(mRlRecyclerViewContainer, "您还没有联系人", 0, false);
-    }
-
-    @Override
-    public void loadDataFinish() {
-        hideLoadingView();
-    }
-
-    @Override
-    public void loadDataTokenNoMatch(int code) {
-        catchWarningByCode(code);
-    }
-
-    @Override
     public void uidNull(int code) {
         catchWarningByCode(code);
     }
@@ -162,9 +127,12 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
     class OnItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-
             switch (items.get(i).getItemType()) {
                 case Contacts.DEPARTMENT:
+                    //部门为0 禁止点击
+                    if (items.get(i).getDepartmentPersons().equals("0")) {
+                        return;
+                    }
                     if (!pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID).equals(
                             items.get(i).getDepartmentId())) {
                         pageMap.add(getPageParam(items.get(i).getDepartmentId(),
@@ -210,6 +178,69 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
                 back();
                 break;
         }
+    }
+
+    @Override
+    public void loadDataSuccess(List<Contacts> contacts) {
+        if (items.size() > 0 || items != null) {
+            items.clear();
+        }
+        items = contacts;
+        adapter.setNewData(items);
+    }
+
+    @Override
+    public void loadDataFailed(int errorNo, String strMsg) {
+        String info = "";
+        switch (errorNo) {
+            case Api.RESPONSES_CODE_NO_NETWORK:
+                info = "请确认是否已连接网络！";
+                break;
+            case Api.RESPONSES_CODE_NO_RESPONSE:
+                info = "网络不稳定，请重试！";
+                break;
+        }
+        showEmptyView(mRlRecyclerViewContainer, info, 0, false);
+    }
+
+    @Override
+    public void loadDataEmpty() {
+        showEmptyView(mRlRecyclerViewContainer, "您还没有联系人", 0, false);
+    }
+
+    @Override
+    public void loadDataFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void loadDataTokenNoMatch(int code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void autoSearchSuccess(List<User> users) {
+
+    }
+
+    @Override
+    public void autoSearchFailed(int errCode, String errMsg) {
+
+    }
+
+    @Override
+    public void autoSearchOther(String msg) {
+
+    }
+
+    @Override
+    public void autoSearchFinish() {
+
+    }
+
+    @Override
+    public void loadDataStart() {
+
     }
 
     @Override

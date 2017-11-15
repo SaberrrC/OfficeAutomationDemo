@@ -1,6 +1,8 @@
 package com.shanlinjinrong.oa.model;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.json.JSONException;
@@ -12,9 +14,9 @@ import java.io.Serializable;
  * <h3>Description: 用户实体类 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/30.<br />
  */
-public class User implements MultiItemEntity,Serializable {
+public class User implements MultiItemEntity, Serializable {
     private String yx_token;//云信token
-    private  String is_initial_pwd;
+    private String is_initial_pwd;
     private String uid;
     private String token;
     private String email;
@@ -24,7 +26,6 @@ public class User implements MultiItemEntity,Serializable {
     private String phone;
     private String isshow;
     private String oid;
-
 
 
     private String hiredate;//入职日期
@@ -41,19 +42,24 @@ public class User implements MultiItemEntity,Serializable {
     }
 
     public User(String username, String phone, String portraits, String sex, String postId, String code
-            , String departmentId, String postName, String departmentName, String email, String isshow){
-        this.username=username;
-        this.phone=phone;
-        this.portraits=portraits;
-        this.sex=sex;
-        this.postId=postId;
-        this.code=code;
-        this.departmentId=departmentId;
-        this.postName=postName;
-        this.departmentName=departmentName;
-        this.email=email;
-        this.isshow=isshow;
+            , String departmentId, String postName, String departmentName, String email) {
+        this.username = username;
+        this.phone = phone;
+        this.portraits = portraits;
+        this.sex = sex;
+        this.postId = postId;
+        this.code = code;
+        this.departmentId = departmentId;
+        this.postName = postName;
+        this.departmentName = departmentName;
+        this.email = email;
+        if (departmentId.equals(AppConfig.getAppConfig(AppManager.mContext).getDepartmentId())) {
+            isshow = "1";
+        } else {
+            isshow = "0";
+        }
     }
+
     public String getYx_token() {
         return yx_token;
     }
@@ -75,7 +81,7 @@ public class User implements MultiItemEntity,Serializable {
     }
 
     public String getPortraits() {
-        return "http://"+portraits;
+        return "http://" + portraits;
     }
 
     public String getUsername() {
@@ -227,9 +233,9 @@ public class User implements MultiItemEntity,Serializable {
             isleader = jsonObject.getString("isleader");
             yx_token = jsonObject.getString("yx_token");
             oid = jsonObject.getString("oid");
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
-            LogUtils.e("user解析异常-》"+e.toString());
+            LogUtils.e("user解析异常-》" + e.toString());
         }
     }
 

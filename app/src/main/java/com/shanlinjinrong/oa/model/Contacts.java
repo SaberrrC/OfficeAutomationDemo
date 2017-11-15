@@ -1,6 +1,8 @@
 package com.shanlinjinrong.oa.model;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.json.JSONException;
@@ -12,7 +14,7 @@ import java.io.Serializable;
  * <h3>Description: 通讯录实体类 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/9/1.<br />
  */
-public class Contacts implements MultiItemEntity,Serializable {
+public class Contacts implements MultiItemEntity, Serializable {
 
     /**
      * 0-部门
@@ -76,7 +78,6 @@ public class Contacts implements MultiItemEntity,Serializable {
     public String email;
 
 
-
     public String getEmail() {
         return email;
     }
@@ -91,30 +92,31 @@ public class Contacts implements MultiItemEntity,Serializable {
 
     public Contacts(JSONObject jsonObject) {
         try {
-//            type = jsonObject.getString("type");
-//            itemType = Integer.parseInt(type);
             departmentId = jsonObject.getString("id");
             departmentName = jsonObject.getString("name");
+            departmentPersons = jsonObject.getString("memberCount");
             itemType = 0;
-//            if (itemType == EMPLOYEE) {
-//                code = jsonObject.getString("CODE");
-//                portraits = "http://" + jsonObject.getString("portraits");
-//                uid = jsonObject.getString("uid");
-//                username = jsonObject.getString("username");
-//                sex = jsonObject.getString("sex");
-//
-//                postId = jsonObject.getString("post_id");
-//                postTitle = jsonObject.getString("post_title");
-//                phone = jsonObject.getString("phone");
-//                email=jsonObject.getString("email");
-//                isshow = jsonObject.getString("isshow");
-//            } else {
-                departmentPersons = jsonObject.getString("memberCount");
-//            }
         } catch (JSONException e) {
-            LogUtils.e("获取部门和员工异常：" + e.toString());
+            try {
+                uid = jsonObject.getString("uid");
+                username = jsonObject.getString("username");
+                phone = jsonObject.getString("phone");
+                email = jsonObject.getString("email");
+                portraits = "http://" + jsonObject.getString("portraits");
+                sex = jsonObject.getString("sex");
+                postTitle = jsonObject.getString("post_title");
+                postId = jsonObject.getString("department_id");
+                departmentName = jsonObject.getString("department_name");
+                code = jsonObject.getString("code");
+                itemType = 1;
+                setIsshow(AppConfig.getAppConfig(AppManager.mContext).getDepartmentId().equals(postId) ? "1" : "0");
+            } catch (Throwable e1) {
+                e1.printStackTrace();
+                LogUtils.e("获取部门和员工异常：" + e1.toString());
+            }
         }
     }
+
 
     public String getCode() {
         return code;

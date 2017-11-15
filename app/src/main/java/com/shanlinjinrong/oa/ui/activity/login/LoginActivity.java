@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -8,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -31,6 +33,7 @@ import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.AndroidAdjustResizeBugFix;
+import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.NetWorkUtils;
 import com.shanlinjinrong.oa.utils.Utils;
@@ -250,7 +253,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @Override
     public void requestFinish() {
-
     }
 
 
@@ -267,5 +269,10 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         finish();
     }
 
-
+    public static void goLoginContextActivity(Context context) {
+        //不能进行页面动画
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        context.startActivity(intent);
+    }
 }

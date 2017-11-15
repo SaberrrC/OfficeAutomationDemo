@@ -78,6 +78,11 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
             tvTips.setText("手机号码格式不正确");
             return false;
         }
+
+        if (userPhone.getText().toString().trim().length() != 11) {
+            return false;
+        }
+
         return true;
     }
 

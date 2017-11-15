@@ -26,7 +26,7 @@ public abstract class HttpBaseActivity<T extends BasePresenter> extends BaseActi
         initInject();
 
         if (mPresenter != null) {
-            mPresenter.attachView(this);
+            mPresenter.subscribe(this);
         }
 
     }
@@ -51,6 +51,6 @@ public abstract class HttpBaseActivity<T extends BasePresenter> extends BaseActi
         super.onDestroy();
         AppManager.sharedInstance().removeActivity(this);
         if (mPresenter != null)
-            mPresenter.detachView();
+            mPresenter.unSubscribe();
     }
 }

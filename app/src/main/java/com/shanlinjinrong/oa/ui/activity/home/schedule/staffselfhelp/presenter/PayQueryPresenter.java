@@ -1,8 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter;
 
 
+import com.example.retrofit.model.HttpResult;
 import com.example.retrofit.model.responsebody.QueryPayResponse;
 import com.example.retrofit.net.HttpMethods;
+import com.shanlinjinrong.oa.net.remote.ApiModule;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -13,17 +15,61 @@ import java.net.SocketTimeoutException;
 import javax.inject.Inject;
 
 import retrofit2.adapter.rxjava.HttpException;
+import rx.Observer;
 import rx.Subscriber;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
+//薪资查询
 public class PayQueryPresenter extends HttpPresenter<PayQueryContract.View> implements PayQueryContract.Presenter {
+
+
+    private CompositeSubscription mSubscription;
 
     @Inject
     public PayQueryPresenter(MyKjHttp mKjHttp) {
         super(mKjHttp);
+        mSubscription = new CompositeSubscription();
     }
 
     @Override
     public void payQueryInfo(String date) {
+//
+//        Subscription subscribe = ApiModule.getInstance().getHttpAPIWrapper().getPayInfoData(date)
+//                .subscribe(new Subscriber<HttpResult<QueryPayResponse>>() {
+//               @Override
+//               public void onStart() {
+//                   super.onStart();
+//                   mView.showLoading();
+//               }
+//
+//               @Override
+//               public void onCompleted() {
+//                   mView.payQueryInfoFinish();
+//               }
+//
+//               @Override
+//               public void onError(Throwable e) {
+//                   Throwable e11 = e;
+//                   mView.payQueryInfoFinish();
+//
+//               }
+//
+//               @Override
+//               public void onNext(HttpResult<QueryPayResponse> queryPayResponseHttpResult) {
+//                   try {
+//                       mView.payQueryInfoFinish();
+//                       if (queryPayResponseHttpResult.getData() != null) {
+//                           QueryPayResponse data = queryPayResponseHttpResult.getData();
+//                           mView.payQueryInfoSuccess(data);
+//                       }
+//                   } catch (Throwable e) {
+//                       e.printStackTrace();
+//                   }
+//               }
+//           });
+//        mSubscription.add(subscribe);
+
         HttpMethods.getInstance().getPayInfoData(date, new Subscriber<QueryPayResponse>() {
             @Override
             public void onStart() {
@@ -75,4 +121,11 @@ public class PayQueryPresenter extends HttpPresenter<PayQueryContract.View> impl
             }
         });
     }
+
+//    @Override
+//    public void unSubscribe() {
+//        if (!mSubscription.isUnsubscribed()) {
+//            mSubscription.unsubscribe();
+//        }
+//    }
 }
