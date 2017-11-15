@@ -24,7 +24,7 @@ import com.shanlinjinrong.oa.utils.Utils;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -34,21 +34,21 @@ import butterknife.ButterKnife;
  * Description:单个公告通知详细页
  */
 public class NoticesSingleInfoActivity extends HttpBaseActivity<NoticesSingleInfoPresenter> implements NoticesSingleInfoContract.View {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.tv_notice_detail_single_title_top)
+    @BindView(R.id.tv_notice_detail_single_title_top)
     TextView mTvNoticeDetailSingleTitleTop;
-    @Bind(R.id.tv_notice_detail_single_title)
+    @BindView(R.id.tv_notice_detail_single_title)
     TextView mTvNoticeDetailSingleTitle;
-    @Bind(R.id.tv_notice_detail_single_time)
+    @BindView(R.id.tv_notice_detail_single_time)
     TextView mTvNoticeDetailSingleTime;
-    @Bind(R.id.tv_notice_detail_single_content)
+    @BindView(R.id.tv_notice_detail_single_content)
     TextView mTvNoticeDetailSingleContent;
-    @Bind(R.id.ll_pictures)
+    @BindView(R.id.ll_pictures)
     LinearLayout llPictures;
     private Notice notice;
     private String nid;
@@ -169,7 +169,6 @@ public class NoticesSingleInfoActivity extends HttpBaseActivity<NoticesSingleInf
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @Override

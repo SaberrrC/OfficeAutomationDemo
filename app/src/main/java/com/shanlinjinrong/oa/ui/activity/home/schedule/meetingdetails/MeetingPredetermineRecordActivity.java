@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -20,15 +19,21 @@ import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.utils.DeviceUtil;
 import com.shanlinjinrong.views.common.CommonTopView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.kymjs.kjframe.http.HttpParams;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static butterknife.ButterKnife.bind;
 import static com.shanlinjinrong.oa.utils.DateUtils.longToDateString;
 import static com.shanlinjinrong.oa.utils.DateUtils.stringToDate;
 
@@ -37,43 +42,43 @@ import static com.shanlinjinrong.oa.utils.DateUtils.stringToDate;
  */
 public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingPredeterminePresenter> implements MeetingPredetermineContract.View, CompoundButton.OnCheckedChangeListener {
 
-    @Bind(R.id.selected_meeting_date1)
+    @BindView(R.id.selected_meeting_date1)
     CheckBox mSelectedMeetingDate1;
-    @Bind(R.id.selected_meeting_date2)
+    @BindView(R.id.selected_meeting_date2)
     CheckBox mSelectedMeetingDate2;
-    @Bind(R.id.selected_meeting_date3)
+    @BindView(R.id.selected_meeting_date3)
     CheckBox mSelectedMeetingDate3;
-    @Bind(R.id.selected_meeting_date4)
+    @BindView(R.id.selected_meeting_date4)
     CheckBox mSelectedMeetingDate4;
-    @Bind(R.id.selected_meeting_date5)
+    @BindView(R.id.selected_meeting_date5)
     CheckBox mSelectedMeetingDate5;
-    @Bind(R.id.selected_meeting_date6)
+    @BindView(R.id.selected_meeting_date6)
     CheckBox mSelectedMeetingDate6;
-    @Bind(R.id.selected_meeting_date7)
+    @BindView(R.id.selected_meeting_date7)
     CheckBox mSelectedMeetingDate7;
-    @Bind(R.id.selected_meeting_date8)
+    @BindView(R.id.selected_meeting_date8)
     CheckBox mSelectedMeetingDate8;
-    @Bind(R.id.selected_meeting_date9)
+    @BindView(R.id.selected_meeting_date9)
     CheckBox mSelectedMeetingDate9;
-    @Bind(R.id.btn_meeting_info_complete)
+    @BindView(R.id.btn_meeting_info_complete)
     TextView mBtnMeetingInfoComplete;
-    @Bind(R.id.ll_day_selector)
+    @BindView(R.id.ll_day_selector)
     LinearLayout mLlDaySelector;
-    @Bind(R.id.ll_month_selector)
+    @BindView(R.id.ll_month_selector)
     LinearLayout mLlMonthSelector;
-    @Bind(R.id.ll_date_layout)
+    @BindView(R.id.ll_date_layout)
     LinearLayout mDateLayout;
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.tv_month)
+    @BindView(R.id.tv_month)
     TextView mTvMonth;
-    @Bind(R.id.tv_day)
+    @BindView(R.id.tv_day)
     TextView mTvDay;
-    @Bind(R.id.tv_week)
+    @BindView(R.id.tv_week)
     TextView mTvWeek;
-    @Bind(R.id.tv_not_network)
+    @BindView(R.id.tv_not_network)
     TextView mTvNotNetwork;
-    @Bind(R.id.ll_content_show)
+    @BindView(R.id.ll_content_show)
     LinearLayout mLlContentShow;
 
     private int DateIndex;
@@ -85,7 +90,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     private List<Integer> mDays = new ArrayList<>();
     List<MeetingBookItem.DataBean> mSelectTime = new ArrayList<>();
-    public static MeetingPredetermineRecordActivity mRecordActivity;
 
     DatePopWindow datePopWindow;
 
@@ -108,7 +112,9 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_predetermine_record);
         ButterKnife.bind(this);
-        bind(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         initView();
     }
 
@@ -118,7 +124,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     }
 
     private void initView() {
-        mRecordActivity = this;
         mCheckBoxes.add(mSelectedMeetingDate1);
         mCheckBoxes.add(mSelectedMeetingDate2);
         mCheckBoxes.add(mSelectedMeetingDate3);
@@ -159,7 +164,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     }
 
     public int getWeek(int month, int day) {
-        Log.i("MeetingPredetermine", "month = " + month + ";;;;day = " + day);
         int pos = DateUtils.getWeek(month, day) - 1;
         return pos % 7;
     }
@@ -195,6 +199,21 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                     return;
                 }
 
+
+                if (mModifyMeeting) {
+                    HttpParams httpParams = new HttpParams();
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
+                        jsonObject.put("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    httpParams.putJsonParams(jsonObject.toString());
+                    mPresenter.modifyMeetingRooms(getIntent().getIntExtra("id", -1), httpParams);
+                    return;
+                }
+
                 Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
                 intent.putExtra("endDate", endDate);
                 intent.putExtra("isMeetingRecord", false);
@@ -210,9 +229,9 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                 } else {
                     intent.putExtra("isWriteMeetingInfo", true);
                 }
-
+                String replace = endDate.replace("—", "");
                 intent.putExtra("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
-                intent.putExtra("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
+                intent.putExtra("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + replace);
                 if (mModifyMeeting) {
                     intent.putExtra("modifyMeeting", true);
                     intent.putExtra("isMeetingRecord", true);
@@ -274,12 +293,34 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     }
 
     @Override
+    public void showLoading() {
+        showLoadingView();
+    }
+
+    @Override
+    public void requestFinish() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void requestNetworkError() {
+
+    }
+
+    @Override
     public void getMeetingPredetermineSuccess(List<MeetingBookItem.DataBean> dataBeen) {
-        mTvNotNetwork.setVisibility(View.GONE);
-        mLlContentShow.setVisibility(View.VISIBLE);
-        mSelectTime = dataBeen;
-        isNetwork = true;
-        refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
+        try {
+            mTvNotNetwork.setVisibility(View.GONE);
+            mLlContentShow.setVisibility(View.VISIBLE);
+            if (dataBeen == null) {
+                dataBeen = new ArrayList<>();
+            }
+            mSelectTime.addAll(dataBeen);
+            isNetwork = true;
+            refreshSelectTime(stringToDate(DateUtils.getTodayDate(false), "yyyy-MM-dd"));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -299,6 +340,38 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
             default:
                 mTvNotNetwork.setVisibility(View.GONE);
                 mLlContentShow.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    //会议室调期
+    @Override
+    public void modifyMeetingRoomsSuccess() {
+        String startDate = DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate;
+        EventBus.getDefault().post("finish");
+//        MeetingReservationRecordActivity.mRecordActivity.finish();
+        Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
+        intent.putExtra("mReservation", "您已经成功调期");
+        intent.putExtra("mMeetingDate", startDate.replace(" ", "  ") + " - " + endDate);
+        intent.putExtra("mMeetingName", getIntent().getStringExtra("meeting_name"));
+        startActivity(intent);
+        EventBus.getDefault().post("finish");
+//        MeetingPredetermineRecordActivity.mRecordActivity.finish();
+//        MeetingReservationRecordActivity.mRecordActivity.finish();
+        finish();
+    }
+
+    @Override
+    public void modifyMeetingRoomsFailed(int errorCode, String strMsg) {
+
+
+        switch (errorCode) {
+            case -1:
+                showToast(getString(R.string.net_no_connection));
+                break;
+            default:
+                if (!strMsg.equals(""))
+                    Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -497,5 +570,19 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFinish(String str) {
+        if (str.equals("finish"))
+            finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

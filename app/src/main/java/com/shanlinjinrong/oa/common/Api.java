@@ -9,9 +9,19 @@ import org.json.JSONObject;
  * Created by KevinMeng on 2016/7/28.
  */
 public class Api {
+
     public static final String PHP_DEBUG_URL = "http://118.31.18.67:86";
 
-    public static final String PHP_URL = "http://testoa.shanlinjinrong.com/webApi";
+    //TODO会议室管理、找回密码 测试环境
+//    public static final String PHP_URL = "http://testoa.shanlinjinrong.com/webApi/";
+    //新 内网
+//    public static final String PHP_URL = "http://10.5.202.122:82";
+    //新 外网
+//    public static final String PHP_URL = "http://116.62.216.129:82";
+
+    //TODO会议室管理、找回密码 生产环境
+    public static final String PHP_URL = "http://oa.shanlinjinrong.com/webApi";
+
 
     private static final String RESPONSES_KEY_CODE = "code";
 
@@ -39,6 +49,10 @@ public class Api {
      * 所有接口返回code=304表示Token不匹配
      */
     public static final int RESPONSES_CODE_TOKEN_NO_MATCH = 304;
+    /**
+     * 所有接口返回code=401表示Token不匹配
+     */
+    public static final int RESPONSES_JAVA_TOKEN_NO_MATCH = 401;
     /**
      * 所有接口返回code=362 表示反馈失败
      */
@@ -475,6 +489,15 @@ public class Api {
 
     // 找回密码，确认邮箱
     public static final String USERS_REPWD = "/users/repwd";
+
+    // 发起申请
+    public static final String INITIARE_REQUEST = "/queryMonocode";
+
+    //考勤月历查询
+    public static final String ATTANDANCE_MONTH_SEARCH = "/queryTimeTagForOnDay";
+
+    //修改邮箱 users/reemail
+    public static final String MODIFICATION_EMAIL = "/users/reemail";
 
     //*****************************************************************//
 

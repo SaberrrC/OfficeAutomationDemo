@@ -24,7 +24,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -32,21 +32,21 @@ import butterknife.ButterKnife;
  */
 public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingReservationRecordActivityPresenter> implements MeetingReservationRecordActivityContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.rv_meeting_Reservation_Record)
+    @BindView(R.id.rv_meeting_Reservation_Record)
     RecyclerView mRvMeetingReservationRecord;
-    @Bind(R.id.refresh)
+    @BindView(R.id.refresh)
     SwipeRefreshLayout mRefresh;
-    @Bind(R.id.tv_empty_view)
+    @BindView(R.id.tv_empty_view)
     TextView mTvEmptyView;
-    @Bind(R.id.tv_meeting_Reservation_Record)
+    @BindView(R.id.tv_meeting_Reservation_Record)
     TextView mTvMeetingReservationRecord;
     private int mPage;
     private int mNum = 15;
     private MeetingReservationRecordAdapter mRecordAdapter;
     private List<ReservationRecordBean.DataBean> data = new ArrayList<>();
-    public static MeetingReservationRecordActivity mRecordActivity;
+//    public static MeetingReservationRecordActivity mRecordActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     }
 
     private void initData() {
-        mRecordActivity = this;
+//        mRecordActivity = this;
         refreshData();
         mRefresh.setColorSchemeResources(android.R.color.holo_blue_dark);
         mTopView.getLeftView().setOnClickListener(this);
@@ -129,6 +129,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
 
     @Override
     public void getMeetingRecordFailed(int errorCode, String msgStr) {
+        mRefresh.setRefreshing(false);
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));
@@ -162,6 +163,9 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     public void MeetingDeleteSuccess(String str) {
         if (str.equals("meetingDeleteSuccess")) {
             mRefresh.setRefreshing(true);
+        }
+        if (str.equals("finish")){
+            finish();
         }
     }
 

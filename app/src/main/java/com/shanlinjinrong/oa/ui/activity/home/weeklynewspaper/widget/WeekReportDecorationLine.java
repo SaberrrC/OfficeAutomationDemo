@@ -15,10 +15,6 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.LaunchReportItem;
 
 import java.util.List;
 
-/**
- * Created by tonny on 2017/9/29.
- */
-
 public class WeekReportDecorationLine extends RecyclerView.ItemDecoration {
     private List<WorkContentBean> mData;
 

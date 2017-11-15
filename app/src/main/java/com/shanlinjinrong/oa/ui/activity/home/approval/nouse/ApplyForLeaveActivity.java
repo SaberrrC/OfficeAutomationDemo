@@ -46,7 +46,7 @@ import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.TimePicker;
@@ -58,27 +58,27 @@ import cn.qqtheme.framework.picker.TimePicker;
  * Description:请假申请
  */
 public class ApplyForLeaveActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.et_leave_reason_content)
+    @BindView(R.id.et_leave_reason_content)
     EditText mEtLeaveContent;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     LinearLayout mRootView;
-    @Bind(R.id.tv_travel_start_time)
+    @BindView(R.id.tv_travel_start_time)
     TextView tvTravelStartTime;
-    @Bind(R.id.tv_type)
+    @BindView(R.id.tv_type)
     TextView tvType;
-    @Bind(R.id.tv_travel_end_time)
+    @BindView(R.id.tv_travel_end_time)
     TextView tvTravelEndTime;
-    @Bind(R.id.tv_leave_days)
+    @BindView(R.id.tv_leave_days)
     EditText tvLeaveDurations;
-    @Bind(R.id.user_portrait)
+    @BindView(R.id.user_portrait)
     SimpleDraweeView mUserPortrait;
-    @Bind(R.id.tv_leader_name)
+    @BindView(R.id.tv_leader_name)
     TextView mTvLeaderName;
-    @Bind(R.id.ll_approval_container)
+    @BindView(R.id.ll_approval_container)
     LinearLayout mLlContainer;
     private TimePicker picker;
     private PopupWindow popupWindowTYpe;
@@ -523,7 +523,6 @@ public class ApplyForLeaveActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 

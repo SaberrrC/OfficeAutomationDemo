@@ -30,7 +30,7 @@
 //
 //import java.util.ArrayList;
 //
-//import butterknife.Bind;
+//import butterknife.BindView;
 //import butterknife.ButterKnife;
 //
 ///**
@@ -40,17 +40,17 @@
 // * Description: 选择参会人activity
 // */
 //public class SelectJoinPeopleActivity extends BaseActivity {
-//    @Bind(R.id.layout_content)
+//    @BindView(R.id.layout_content)
 //    RelativeLayout mRootView;
-//    @Bind(R.id.toolbar)
+//    @BindView(R.id.toolbar)
 //    Toolbar mToolBar;
-//    @Bind(R.id.tv_title)
+//    @BindView(R.id.tv_title)
 //    TextView mTvTitle;
-//    @Bind(R.id.select_recyclerView)
+//    @BindView(R.id.select_recyclerView)
 //    RecyclerView mRecyclerVeiw;
-//    @Bind(R.id.toolbar_text_btn)
+//    @BindView(R.id.toolbar_text_btn)
 //    TextView mToolBarText;
-//    @Bind(R.id.tv_department)
+//    @BindView(R.id.tv_department)
 //    TextView mTvDepartment;
 //    ArrayList<JoinPeople> list;
 //    private SelectJoinPeopleAdapter mAdapter;
@@ -60,7 +60,7 @@
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_select_join_people);
-//        ButterKnife.bind(this);
+//        ButterKnife.BindView(this);
 //        getContactType();
 //        initToolBar();
 //        setTranslucentStatus(this);
@@ -257,7 +257,7 @@
 //    @Override
 //    protected void onDestroy() {
 //        super.onDestroy();
-//        ButterKnife.unbind(this);
+//        ButterKnife.unBindView(this);
 //    }
 //}
 package com.shanlinjinrong.oa.ui.activity.home.schedule;
@@ -302,7 +302,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -316,16 +316,16 @@ import io.reactivex.schedulers.Schedulers;
  * Description: 选择参会人activity
  */
 public class SelectJoinPeopleActivity extends BaseActivity {
-    @Bind(R.id.layout_content)
+    @BindView(R.id.layout_content)
     RelativeLayout mRootView;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolBar;
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView mToolBarText;
 
-    @Bind(R.id.listView)
+    @BindView(R.id.listView)
     ExpandableListView mListView;
     ArrayList<GlightContact> list;
     ArrayList<Group> groups = new ArrayList<>();
@@ -333,11 +333,11 @@ public class SelectJoinPeopleActivity extends BaseActivity {
     private SelectJoinPeopleAdapter mAdapter;
     private boolean isFirstLoad = true;//刚进入页面，第一次加载数据
     //----------自己写的
-    @Bind(R.id.search_et_input)
+    @BindView(R.id.search_et_input)
     ClearEditText search_et_input;
-    @Bind(R.id.search_et_cancle)
+    @BindView(R.id.search_et_cancle)
     TextView tvCacle;
-    @Bind(R.id.cC_num)
+    @BindView(R.id.cC_num)
     TextView qty;
     protected BottomSheetLayout bottomSheetLayout;
     //    //----------------------
@@ -372,10 +372,8 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                     //--------------
                     new MyJoinPeopleFragment(selectedContacts).show(getSupportFragmentManager(), R.id.bottomsheet);
                 }
-
             }
         });
-
     }
 
     //搜索事件
@@ -627,7 +625,6 @@ public class SelectJoinPeopleActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     /**

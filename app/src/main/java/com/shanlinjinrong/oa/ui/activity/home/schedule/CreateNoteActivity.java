@@ -29,7 +29,7 @@ import com.shanlinjinrong.oa.utils.LogUtils;
 
 import java.util.Calendar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.DatePicker;
@@ -41,15 +41,15 @@ import cn.qqtheme.framework.picker.DatePicker;
  * Description:创建记事本,也是编译记事本界面
  */
 public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> implements CreateNoteContract.View {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @Bind(R.id.tv_note_date)
+    @BindView(R.id.tv_note_date)
     TextView mTvNoteDate;
-    @Bind(R.id.et_note_content)
+    @BindView(R.id.et_note_content)
     EditText mEtNoteContent;
     private DatePicker picker;
     private IflytekUtil iflyUtil;
@@ -258,7 +258,6 @@ public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> im
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @OnClick({R.id.tv_note_date, R.id.btn_voice_input})

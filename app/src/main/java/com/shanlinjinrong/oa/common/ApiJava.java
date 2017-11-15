@@ -27,15 +27,15 @@ public class ApiJava {
     public static final String NOT_LOGIN = "010005"; // 用户未登录
     public static final String NOT_EXIST_TOKEN = "010006";// token 不存在
     public static final String UNKNOW_EXCEPTION = "999999"; // 未知异常
-    public static final String EXCEL_ERROR="010007";//上传文件异常
-    public static final String NULL_DATE_ERROR="010008";//请求为空
-    public static final  String NO_CONTENT ="020000";//查询无结果
-    public static final  String EXISTENCE_REPORT_DAY = "030000";//该天日报以填写
-    public static final  String NULL_REPORT_ID = "010009";//日报id为空
-    public static final  String RATE_OVER = "010011";//日报以评，不能改
-    public static final  String ERROR_OPERATION="020008";//操作失败
-    public static final String FAST_DFS_CONNECTION_ERROR="010011";//文件存储异常
-    public static final String NULL_DATE_DISTANCE="010020";//"周报选择的时间跨度必须为7天"
+    public static final String EXCEL_ERROR = "010007";//上传文件异常
+    public static final String NULL_DATE_ERROR = "010008";//请求为空
+    public static final String NO_CONTENT = "020000";//查询无结果
+    public static final String EXISTENCE_REPORT_DAY = "030000";//该天日报以填写
+    public static final String NULL_REPORT_ID = "010009";//日报id为空
+    public static final String RATE_OVER = "010011";//日报以评，不能改
+    public static final String ERROR_OPERATION = "020008";//操作失败
+    public static final String FAST_DFS_CONNECTION_ERROR = "010011";//文件存储异常
+    public static final String NULL_DATE_DISTANCE = "010020";//"周报选择的时间跨度必须为7天"
     public static final String NOT_ROLE = "000001";//权限不足
     public static final String EXIST_NAME = "000002";//角色名已存在
 
@@ -61,7 +61,6 @@ public class ApiJava {
     //发起周报
     public static final String LOOK_LAST_WEEK = "weekreport/lastWeek";
 
-
     //审核日报列表
     public static final String LEADER_READ_DAILY_REPORT = "dailyreport/leader";
 
@@ -80,5 +79,53 @@ public class ApiJava {
 
     // 更新周报
     public static final String UPDATE_WEEK_REPORT = "weekreport/upd";
+
+    // 获取单据编号接口
+    public static final String GET_MONOCODE = "nchrcommon/getBillCode";
+
+    // 获取出差类别接口
+    public static final String EVENCTIONTYPE = "nchrEvection/queryBilltype";
+
+    //获取时长接口
+    public static final String QUERYDURATION = "nchrcommon/queryDuration";
+
+    //申请出差接口
+    public static final String EVECTIONAPPLY = "nchrEvection/submitEvectionApply";
+
+    //我的申请接口
+    public static final String MYAPPLY_QUERY_APPROVE = "myApply/queryApproveByAll";
+
+    //申请加班接口
+    public static final String ADDWEORKAPPLY = "WorkApply/addWorkApply";
+
+    //申请休假接口
+    public static final String SUBMITFURLOUGH = "nchrFurlough/submitFurlough";
+
+    //获取签卡编码
+    public static final String SIGNREASON = "nchrSign/findSignReason";
+
+    //获取签卡编码
+    public static final String SAVESIGN = "nchrSign/saveSign";
+
+    //获取工作交接人
+    public static final String HANDOVERUSER = "HandoverUser/getHandoverUser";
+
+    //薪资查询
+    public static final String QUERYSALART = "nchrsalary/querySalary";
+
+    //查看申请详情
+    public static final String MYAPPLY_QUERY_APPROVE_INFO = "myApply/queryApproveDetailByBillCode";
+
+    //查看申请详情
+    public static final String TACK_BACK = "myApply/approveCallBack";
+
+    //待办事宜
+    public static final String SEARCH_APPLICATION = "MyAplication/selectMyAplication";
+
+    //同意和驳回 Approve/allApprove
+    public static final String ARGEE_DISAGREE_APPROVE = "Approve/allApprove";
+
+    //同意和驳回 Approve/allApprove
+    public static final String DELETE_APPROVEL = "nchrSign/deleteBillByCode";
 
 }

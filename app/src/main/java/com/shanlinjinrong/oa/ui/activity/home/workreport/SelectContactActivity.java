@@ -1,10 +1,11 @@
-
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
@@ -21,6 +22,7 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.model.selectContacts.Group;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ContactAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.RequestContactAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.SelectContactActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.presenter.SelectContactActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -28,9 +30,10 @@ import com.shanlinjinrong.oa.views.ClearEditText;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -42,36 +45,41 @@ import io.reactivex.schedulers.Schedulers;
  * 申请用品：选择审批人界面
  * 发起日报：选择接收人界面
  */
-public class SelectContactActivity extends HttpBaseActivity<SelectContactActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, SelectContactActivityContract.View {
+public class SelectContactActivity extends HttpBaseActivity<SelectContactActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener, SelectContactActivityContract.View, OnSelectedContract {
 
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     LinearLayout mRootView;
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
 
-    @Bind(R.id.search_tool)
+    @BindView(R.id.search_tool)
     RelativeLayout mSearchTool;//搜索栏
 
-    @Bind(R.id.et_search)
+    @BindView(R.id.et_search)
     ClearEditText mSearchEdit;//搜索框
 
-    @Bind(R.id.contact_list)
+    @BindView(R.id.contact_list)
     ExpandableListView mContactList;
 
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Bind(R.id.tv_content_empty)
+    @BindView(R.id.tv_content_empty)
     TextView mContentEmpty;
 
+    @BindView(R.id.contact_recycler_view)
+    RecyclerView mContactRecyclerView;
 
-    ArrayList<Group> groups = new ArrayList<>();//联系人群组
+    private ArrayList<Group> groups = new ArrayList<>();//联系人群组
+    private List<Child> mChilds;
 
     private Child mSelectChild;//已选择
 
     private ContactAdapter mAdapter;
+    private RequestContactAdapter mRequestAdapter;
     private String mSelectChildId;
+    private List<Child> mChildren;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,16 +99,15 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     private void initView() {
         mTopView.setAppTitle("选择接收人");
-        mTopView.setRightText("确定");
-        mTopView.setRightAction(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSelectChild == null) {
-                    Toast.makeText(SelectContactActivity.this, "未选择接收人", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                setFinishResult();
+        if (!getIntent().getBooleanExtra("isRequest", false)) {
+            mTopView.setRightText("确定");
+        }
+        mTopView.setRightAction(v -> {
+            if (mSelectChild == null) {
+                Toast.makeText(SelectContactActivity.this, "未选择接收人", Toast.LENGTH_SHORT).show();
+                return;
             }
+            setFinishResult();
         });
 
 
@@ -169,9 +176,16 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     private void setFinishResult() {
         Intent intent = new Intent();
-        intent.putExtra("uid", mSelectChild.getUid());
-        intent.putExtra("name", mSelectChild.getUsername());
-        intent.putExtra("post", mSelectChild.getPost());
+        if (getIntent().getBooleanExtra("", false)) {
+            intent.putExtra("nextReceiver", getIntent().getIntExtra("nextReceiver", 0));
+            intent.putExtra("uid", mSelectChild.getUid());
+            intent.putExtra("name", mSelectChild.getUsername());
+        } else {
+            intent.putExtra("nextReceiver", getIntent().getIntExtra("nextReceiver", 0));
+            intent.putExtra("uid", mSelectChild.getUid());
+            intent.putExtra("name", mSelectChild.getUsername());
+            intent.putExtra("post", mSelectChild.getPost());
+        }
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -180,16 +194,20 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     //搜索事件
     private void autoSearch() {
         //EditText 自动搜索,间隔->输入停止1秒后自动搜索
-        RxTextView.textChanges(mSearchEdit)
-                .debounce(1000, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<CharSequence>() {
-                    @Override
-                    public void accept(CharSequence charSequence) throws Exception {
-                        loadData(mSearchEdit.getText().toString().trim());
-                    }
-                });
+        try {
+            RxTextView.textChanges(mSearchEdit)
+                    .debounce(1000, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Consumer<CharSequence>() {
+                        @Override
+                        public void accept(CharSequence charSequence) throws Exception {
+                            loadData(mSearchEdit.getText().toString().trim());
+                        }
+                    });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -212,14 +230,48 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
 
     @Override
     public void loadDataFailed(int errCode, String errMsg) {
-        if (errMsg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
-            return;
-        }
-        mContentEmpty.setVisibility(View.VISIBLE);
-        mContentEmpty.setText("没有搜索到该员工，请重新搜索");
+        try {
+            if (errMsg.equals("auth error")) {
+                catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+                return;
+            }
+            hideLoadingView();
+            mContentEmpty.setVisibility(View.VISIBLE);
+            mContentEmpty.setText("没有搜索到该员工，请重新搜索");
 //        showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);
-        catchWarningByCode(errCode);
+            catchWarningByCode(errCode);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void loadRequestDataSuccess(List<Child> child, Child selectChild) {
+        try {
+            if (child != null)
+                mChilds = child;
+            hideEmptyView();
+            hideLoadingView();
+            mSwipeRefreshLayout.setRefreshing(false);
+            mContactList.setVisibility(View.VISIBLE);
+            mContentEmpty.setVisibility(View.GONE);
+            mContactRecyclerView.setVisibility(View.VISIBLE);
+            mContactList.setVisibility(View.GONE);
+            mSelectChild = selectChild;
+            mRequestAdapter = new RequestContactAdapter(child, this);
+            mContactRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            mContactRecyclerView.setAdapter(mRequestAdapter);
+            mContactList.deferNotifyDataSetChanged();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void loadRequestDataFailed(int errCode, String errMsg) {
+        hideLoadingView();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -234,8 +286,8 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     public void loadDataEmpty() {
         mContactList.setVisibility(View.GONE);
         mContentEmpty.setVisibility(View.VISIBLE);
+        hideLoadingView();
         mContentEmpty.setText("没有搜索到该员工，请重新搜索");
-//        showEmptyView(mRootView, "数据暂无，请输入全名搜索", 0, false);
     }
 
     private void loadData(String name) {
@@ -245,6 +297,22 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
         mContentEmpty.setVisibility(View.GONE);
         String department_id = AppConfig.getAppConfig(AppManager.mContext)
                 .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
+        if (getIntent().getBooleanExtra("isRequest", false)) {
+            if (mChilds != null && !name.trim().equals("")) {
+                mChildren = new ArrayList<>();
+                for (int i = 0; i < mChilds.size(); i++) {
+                    if (mChilds.get(i).getUsername().contains(name)) {
+                        mChildren.add(mChilds.get(i));
+                    }
+                }
+                hideLoadingView();
+                mRequestAdapter.setNewData(mChildren);
+                mRequestAdapter.notifyDataSetChanged();
+                return;
+            }
+            mPresenter.loadRequestData();
+            return;
+        }
         mPresenter.loadData(department_id, name, mSelectChildId);
     }
 
@@ -252,11 +320,34 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @Override
     public void onRefresh() {
+        if (getIntent().getBooleanExtra("isRequest", false)) {
+            mPresenter.loadRequestData();
+            return;
+
+        }
         loadData(mSearchEdit.getText().toString().trim());
+    }
+
+    @Override
+    public void onClick(List<Child> mdata, int position) {
+        try {
+            if (!mSearchEdit.getText().toString().trim().equals("") && mChildren != null) {
+                mSelectChild = mChildren.get(position);
+                mRequestAdapter.setNewData(mChildren);
+                mRequestAdapter.notifyDataSetChanged();
+                setFinishResult();
+                return;
+            }
+            mSelectChild = mdata.get(position);
+            mRequestAdapter.setNewData(mdata);
+            mRequestAdapter.notifyDataSetChanged();
+            setFinishResult();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }

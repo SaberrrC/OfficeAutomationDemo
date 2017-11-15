@@ -8,12 +8,23 @@ public class PopItem {
     private String content;
     private boolean enable;
     private boolean isSelect;
+    private int dateType;
+
+    public int getDateType() {
+        return dateType;
+    }
+
+    public void setDateType(int dateType) {
+        this.dateType = dateType;
+    }
 
     public PopItem(String content, boolean enable, boolean isSelect) {
         this.enable = enable;
         this.content = content;
         this.isSelect = isSelect;
     }
+
+
 
     public String getContent() {
         return content;

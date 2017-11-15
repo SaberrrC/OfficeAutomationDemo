@@ -10,19 +10,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-/**
- * ProjectName: dev-beta-v1.0.1
- * PackageName: com.itcrm.GroupInformationPlatform.utils
- * Author:Created by Tsui on Date:2017/2/15 13:42
- * Description:桌面角标工具类
- */
-public  class BadgeUtil {
-
+public class BadgeUtil {
     private BadgeUtil() throws InstantiationException {
         throw new InstantiationException("This class is not for instantiation");
     }
@@ -49,7 +42,7 @@ public  class BadgeUtil {
         } else if (Build.MANUFACTURER.toLowerCase().contains("nova")) {
             setBadgeOfNova(context, count);
         } else {
-          //  Toast.makeText(context, "Not Found Support Launcher", Toast.LENGTH_LONG).show();
+            //  Toast.makeText(context, "Not Found Support Launcher", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -87,7 +80,7 @@ public  class BadgeUtil {
             isShow = false;
         }
         Intent localIntent = new Intent();
-        localIntent.setAction("com.sonyericsson.home.action.UPDATE_BADGE");
+        localIntent.setAction("android.intent.action.BADGE_COUNT_UPDATE");
         localIntent.putExtra("com.sonyericsson.home.intent.extra.badge.SHOW_MESSAGE", isShow);//是否显示
         localIntent.putExtra("com.sonyericsson.home.intent.extra.badge.ACTIVITY_NAME", launcherClassName);//启动页
         localIntent.putExtra("com.sonyericsson.home.intent.extra.badge.MESSAGE", String.valueOf(count));//数字
@@ -99,16 +92,13 @@ public  class BadgeUtil {
      * 设置三星的Badge\设置LG的Badge
      */
     private static void setBadgeOfSumsung(Context context, int count) {
-        // 获取你当前的应用
-        String launcherClassName = getLauncherClassName(context);
-        if (launcherClassName == null) {
-            return;
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("badgecount", count);
+            context.getContentResolver().update(Uri.parse("content://com.sec.badge/apps"), cv, "package=?", new String[]{context.getPackageName()});
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
-        Intent intent = new Intent("android.intent.action.BADGE_COUNT_UPDATE");
-        intent.putExtra("badge_count", count);
-        intent.putExtra("badge_count_package_name", context.getPackageName());
-        intent.putExtra("badge_count_class_name", launcherClassName);
-        context.sendBroadcast(intent);
     }
 
     /**

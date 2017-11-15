@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -58,6 +59,7 @@ import cn.jpush.android.api.TagAliasCallback;
 public class BaseActivity extends AppCompatActivity {
 
     private AlertDialog loadingDialog;
+    private CustomDialogUtils mDialog;
     private TextView msg;
     private KJHttp kjHttp;
     private Toast toast;
@@ -120,11 +122,18 @@ public class BaseActivity extends AppCompatActivity {
         switch (code) {
             case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                 AppConfig.getAppConfig(this).clearLoginInfo();
-                gotoLoginPage();
+                //gotoLoginPage();
+                NonTokenDialog();
+                break;
+            case Api.RESPONSES_JAVA_TOKEN_NO_MATCH:
+                AppConfig.getAppConfig(this).clearLoginInfo();
+                //gotoLoginPage();
+                NonTokenDialog();
                 break;
             case Api.RESPONSES_CODE_UID_NULL:
                 AppConfig.getAppConfig(this).clearLoginInfo();
-                gotoLoginPage();
+                //gotoLoginPage();
+                NonTokenDialog();
                 break;
             case Api.RESPONSES_CODE_NO_NETWORK:
                 showTips("请确认是否已连接网络！");
@@ -299,7 +308,7 @@ public class BaseActivity extends AppCompatActivity {
 
     /**
      * @param view
-     * @param str    要显示的文字
+     * @param str  要显示的文字
      */
     public void showEmptyView(ViewGroup view, String str) {
         empty = LayoutInflater.from(this).inflate(R.layout.public_empty_view, null);
@@ -425,6 +434,34 @@ public class BaseActivity extends AppCompatActivity {
             default:
 
                 break;
+        }
+    }
+
+    //环线 多地登陆退出
+    public void NonTokenDialog() {
+        try {
+            //获取屏幕高宽
+            DisplayMetrics metric = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metric);
+            int windowsHeight = metric.heightPixels;
+            int windowsWight = metric.widthPixels;
+            CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(this);
+            mDialog = builder.cancelTouchout(false)
+                    .view(R.layout.common_custom_dialog)
+                    .heightpx((int) (windowsHeight / 4.5))
+                    .widthpx((int) (windowsWight / 1.4))
+                    .style(R.style.dialog)
+                    .addViewOnclick(R.id.tv_non_token_confirm, view -> {
+                        gotoLoginPage();
+                    })
+                    .build();
+            if (mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
+            mDialog.setCancelable(false);
+            mDialog.show();
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 

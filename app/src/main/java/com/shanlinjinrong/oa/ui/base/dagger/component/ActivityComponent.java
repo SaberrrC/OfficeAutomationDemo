@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.base.dagger.component;
 
+import com.shanlinjinrong.oa.ui.activity.calendar.MouthCalenderActivity;
 import com.shanlinjinrong.oa.ui.activity.contracts.ContactsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApplyForOfficeSuppliesActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
@@ -8,10 +9,16 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.WaitApprovalReplyActivity
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateMeetingActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.CreateNoteActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.ScheduleActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingReservationRecordActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.AttandenceMonthActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.AttandenceRecorderActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.PayQueryActivity;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.CheckDailyReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
@@ -24,6 +31,7 @@ import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.login.WriteJobNumberActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
+import com.shanlinjinrong.oa.ui.activity.my.ModificationEmailActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPhoneActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UserInfoActivity;
@@ -31,6 +39,8 @@ import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticesSingleInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.push.PushListActivity;
 import com.shanlinjinrong.oa.ui.activity.push.SystemNoticesActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.UpcomingTasksInfoActivity;
 import com.shanlinjinrong.oa.ui.base.dagger.annotation.PerActivity;
 import com.shanlinjinrong.oa.ui.base.dagger.module.ActivityModule;
 
@@ -104,4 +114,23 @@ public interface ActivityComponent {
 
     void inject(MeetingPredetermineRecordActivity activity);
 
+    void inject(UpcomingTasksInfoActivity upcomingTasksInfoActivity);
+
+    void inject(InitiateThingsRequestActivity activity);
+
+    void inject(MyAttendenceActivity activity);
+
+    void inject(AttandenceMonthActivity activity);
+
+    void inject(MouthCalenderActivity mouthCalenderActivity);
+
+    void inject(MyUpcomingTasksActivity myUpcomingTasksActivity);
+
+    void inject(PayQueryActivity doneTasksActivity);
+
+    void inject(HolidaySearchActivity holidaySearchActivity);
+
+    void inject(ModificationEmailActivity modificationEmailActivity);
+
+    void inject(AttandenceRecorderActivity attandenceRecorderActivity);
 }

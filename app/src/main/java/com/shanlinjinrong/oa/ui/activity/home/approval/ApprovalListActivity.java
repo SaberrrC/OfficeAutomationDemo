@@ -46,7 +46,7 @@ import com.shanlinjinrong.oa.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -59,26 +59,26 @@ import static com.shanlinjinrong.oa.manager.AppManager.mContext;
  * Description:审批列表
  */
 public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, ApprovalListContract.View {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView mTolbarTextBtn;
-    @Bind(R.id.parting_line_top)
+    @BindView(R.id.parting_line_top)
     View partLineTop;
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     ApprovalListAdapter mAdapter;
-    @Bind(R.id.approvalListContentView)
+    @BindView(R.id.approvalListContentView)
     RelativeLayout mRootView;
-    @Bind(R.id.btn_group_box)
+    @BindView(R.id.btn_group_box)
     RadioGroup btnGroupBox;
 
-    @Bind(R.id.tv_empty_view)
+    @BindView(R.id.tv_empty_view)
     TextView mTvEmptyView;
 
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     private LinearLayoutManager linearLayoutManager;
     private ArrayList<Approval> list = new ArrayList<>();
@@ -94,11 +94,11 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
     private int limit = 10;//当前条目数量
     private PopupWindow popupWindow;
 
-    @Bind(R.id.rb_me_launch)
+    @BindView(R.id.rb_me_launch)
     RadioButton rbMeLaunch;
-    @Bind(R.id.rb_wait_approval)
+    @BindView(R.id.rb_wait_approval)
     RadioButton rbWaitApproval;
-    @Bind(R.id.rb_me_approvaled)
+    @BindView(R.id.rb_me_approvaled)
     RadioButton rbMeApprovaled;
 
     RadioButton rbDateAll;
@@ -537,7 +537,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
         mAdapter.notifyDataSetChanged();
     }
 
-    private void bind(View view) {
+    private void BindView(View view) {
         rbDateAll = (RadioButton) view.findViewById(R.id.rb_date_all);
         rbDateCurrentMonth = (RadioButton) view.findViewById(R.id.rb_date_current_month);
         rbDateLastMonth = (RadioButton) view.findViewById(R.id.rb_date_last_month);
@@ -662,7 +662,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
 
     private void showPopupWindow() {
         View view = View.inflate(this, R.layout.tab_approval_list_popwindow, null);
-        bind(view);
+        BindView(view);
         addRadioButtonToList();
         Button btnConfirm = (Button) view.findViewById(R.id.btn_confirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -701,7 +701,6 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         handler.removeCallbacksAndMessages(null);
     }
 

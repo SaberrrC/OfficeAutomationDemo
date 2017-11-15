@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.views.common.CommonTopView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -17,11 +17,11 @@ import butterknife.OnClick;
  */
 public class MeetingReservationSucceedActivity extends AppCompatActivity {
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.tv_tips_Message)
+    @BindView(R.id.tv_tips_Message)
     TextView mTvTipsMessage;
-    @Bind(R.id.tv_reservation_success)
+    @BindView(R.id.tv_reservation_success)
     TextView mTvReservationSuccess;
 
     @Override

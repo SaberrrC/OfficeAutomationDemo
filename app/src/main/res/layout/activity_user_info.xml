@@ -59,16 +59,17 @@
                         android:layout_toLeftOf="@id/arrow"
                         fresco:placeholderImage="@drawable/tab_me_head_default"
                         fresco:placeholderImageScaleType="fitXY"
+                        fresco:roundAsCircle="true"
                         fresco:roundBottomLeft="true"
                         fresco:roundBottomRight="true"
                         fresco:roundTopLeft="true"
                         fresco:roundTopRight="true"
                         fresco:roundedCornerRadius="5dp"
-                        fresco:roundAsCircle="true"
-                       />
+                        />
                 </RelativeLayout>
 
                 <include layout="@layout/toolbar_shadow"/>
+
                 <RelativeLayout
                     android:id="@+id/user_jopnumber_box"
                     android:layout_width="match_parent"
@@ -95,7 +96,9 @@
                         android:textSize="@dimen/text_common_dp"
                         />
                 </RelativeLayout>
+
                 <include layout="@layout/toolbar_shadow"/>
+
                 <RelativeLayout
                     android:id="@+id/user_sex_box"
                     android:layout_width="match_parent"
@@ -264,8 +267,15 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/user_mails_message"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"
-                        />
+                        android:textSize="@dimen/text_common_dp"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="20dp"
+                        android:src="@drawable/tab_me_arrow"/>
                 </RelativeLayout>
 
                 <include layout="@layout/toolbar_shadow"/>

@@ -59,6 +59,8 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                                 dataBean.setMeeting_place(jsonObject1.getString("meeting_place"));
                                 dataBean.setRoom_id(jsonObject1.getInt("room_id"));
                                 dataBean.setId(jsonObject1.getInt("id"));
+                                dataBean.setTitle(jsonObject1.getString("title"));
+                                dataBean.setRoomname(jsonObject1.optString("roomname"));
                                 dataBean.setStart_time(jsonObject1.getString("start_time") + "");
                                 if (i == jsonArray.length() - 1) {
                                     dataBean.setItemType(0);
@@ -67,32 +69,44 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                                 }
                                 data.add(dataBean);
                             }
-                            mView.getMeetingRecordSuccess(data);
+                            if (mView != null)
+                                mView.getMeetingRecordSuccess(data);
                             break;
                         case Api.RESPONSES_CODE_NO_CONTENT:
                             if (data.size() == 0) {
-                                mView.getMeetingRecordEmpty();
+                                if (mView != null)
+                                    mView.getMeetingRecordEmpty();
                             } else {
-                                mView.removeFooterView();
+                                if (mView != null)
+                                    mView.removeFooterView();
                             }
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(jsonObject.getInt("code"));
+                            if (mView != null)
+                                mView.uidNull(jsonObject.getInt("code"));
                             break;
                         default:
-                            mView.getMeetingRecordFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
+                            if (mView != null)
+                                mView.getMeetingRecordFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
                             break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
+                    if (mView != null)
+                        mView.getMeetingRecordFailed(-2, e.getMessage());
                 }
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.getMeetingRecordFailed(errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.getMeetingRecordFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
         });

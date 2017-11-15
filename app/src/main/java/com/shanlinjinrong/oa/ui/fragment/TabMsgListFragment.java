@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
  */
 public class TabMsgListFragment extends BaseFragment {
 
-//    @Bind(R.id.notice_detail_recyclerView)
+//    @BindView(R.id.notice_detail_recyclerView)
 //    RecyclerView mRecyclerView;
 //
 //    RadioButton rbDateAll;
@@ -39,19 +39,19 @@ public class TabMsgListFragment extends BaseFragment {
 //
 //    private ArrayList<PushMsg> list;
 //    private TabMsgListAdapter mAdapter;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     RelativeLayout mRootView;
-//    @Bind(R.id.layout_content)
+//    @BindView(R.id.layout_content)
 //    RelativeLayout mContentView;
-//    @Bind(R.id.rl_condition)
+//    @BindView(R.id.rl_condition)
 //    RelativeLayout mRlCondition;
-//    @Bind(R.id.tab_homepage_top)
+//    @BindView(R.id.tab_homepage_top)
 //    RelativeLayout mTabHomePageTop;
 //
 //    private ArrayList<RadioButton> listDate;
 //    private ArrayList<RadioButton> listType;
 //
-//    @Bind(R.id.swipeRefreshLayout)
+//    @BindView(R.id.swipeRefreshLayout)
 //    SwipeRefreshLayout mSwipeRefreshLayout;
 //    private LinearLayoutManager linearLayoutManager;
 //    private int limit = 10;//当前条目数量
@@ -206,7 +206,7 @@ public class TabMsgListFragment extends BaseFragment {
 //
 //    private void showPopupWindow() {
 //        View view = View.inflate(mContext, R.layout.tab_msg_list_popwindow, null);
-//        bind(view);
+//        BindView(view);
 //        addRadioButtonToList();
 //        Button btnConfirm = (Button) view.findViewById(R.id.btn_confirm);
 //        btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -242,7 +242,7 @@ public class TabMsgListFragment extends BaseFragment {
 //        }
 //    }
 //
-//    private void bind(View view) {
+//    private void BindView(View view) {
 //        rbDateAll = (RadioButton) view.findViewById(R.id.rb_date_all);
 //        rbDateCurrentMonth = (RadioButton) view.findViewById(R.id.rb_date_current_month);
 //        rbDateLastMonth = (RadioButton) view.findViewById(R.id.rb_date_last_month);
@@ -543,7 +543,6 @@ public class TabMsgListFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
 //        handler.removeCallbacksAndMessages(null);
 //        if (EventBus.getDefault().isRegistered(this)) {
 //            EventBus.getDefault().unregister(this);

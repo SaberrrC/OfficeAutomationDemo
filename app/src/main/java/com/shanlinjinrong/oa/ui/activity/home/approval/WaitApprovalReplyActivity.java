@@ -25,7 +25,7 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import org.json.JSONObject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -35,17 +35,17 @@ import butterknife.ButterKnife;
  * Description:待我审批回复
  */
 public class WaitApprovalReplyActivity extends HttpBaseActivity<WaitApprovalReplyPresenter> implements View.OnClickListener, WaitApprovalReplyContract.View {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.btn_voice_input)
+    @BindView(R.id.btn_voice_input)
     Button mBtnVoiceInput;
-    @Bind(R.id.et_reply)
+    @BindView(R.id.et_reply)
     EditText mEtReply;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @Bind(R.id.tv_add_pic_tips)
+    @BindView(R.id.tv_add_pic_tips)
     TextView tvAddPicTips;
 
     private String appr_id;
@@ -56,8 +56,6 @@ public class WaitApprovalReplyActivity extends HttpBaseActivity<WaitApprovalRepl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reply);
-        ButterKnife.bind(this);
-
         setTranslucentStatus(this);
         initWidget();
         initData();

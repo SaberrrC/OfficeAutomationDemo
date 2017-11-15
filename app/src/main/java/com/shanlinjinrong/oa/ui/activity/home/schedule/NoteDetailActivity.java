@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -37,20 +37,20 @@ import butterknife.OnClick;
  * Description:记事本详情
  */
 public class NoteDetailActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView mTolbarTextBtn;
 
-    @Bind(R.id.tv_note_date)
+    @BindView(R.id.tv_note_date)
     TextView tvNoteDate;
-    @Bind(R.id.tv_note_content)
+    @BindView(R.id.tv_note_content)
     TextView tvNoteContent;
-    @Bind(R.id.rl_root_view)
+    @BindView(R.id.rl_root_view)
     RelativeLayout mRootView;
-    @Bind(R.id.btn_note_delete)
+    @BindView(R.id.btn_note_delete)
     Button mBtnNoteDelete;
 
     private String note_id;
@@ -225,7 +225,6 @@ LogUtils.e("200-->"+jo.getString("time"));
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @OnClick(R.id.btn_note_delete)

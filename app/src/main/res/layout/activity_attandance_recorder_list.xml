@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#fff"
+              android:orientation="vertical">
+
+    <com.shanlinjinrong.views.common.CommonTopView
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_height_48"
+        app:leftDrawable="@drawable/toolbar_back"
+        app:topTitle="考勤月历"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/gray_d5d5d5"/>
+
+    <TextView
+        android:id="@+id/tv_calendar_year"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@drawable/icon_attendance_title"
+        android:gravity="center_vertical"
+        android:textColor="@color/black_333333"
+        android:textSize="16sp"
+        tools:text="  2017年11月"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/gray_d5d5d5"/>
+
+    <TextView
+        android:id="@+id/tv_empty_attendence"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="当月暂无考勤记录"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view1"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

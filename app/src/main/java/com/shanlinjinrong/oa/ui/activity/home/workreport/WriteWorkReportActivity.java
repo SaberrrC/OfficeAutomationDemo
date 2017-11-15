@@ -21,7 +21,7 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -30,10 +30,10 @@ import butterknife.ButterKnife;
  */
 public class WriteWorkReportActivity extends FragmentActivity implements WriteReportFragment.OnFragmentStartChangeListener, WriteReportFragment.OnPageBthClickListener {
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
 
-    @Bind(R.id.view_pager)
+    @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
     private int mPosition; //条目位置
@@ -184,7 +184,6 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.bind(this);
     }
 
     @Override

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.relex.photodraweeview.OnPhotoTapListener;
 import me.relex.photodraweeview.OnViewTapListener;
@@ -26,14 +26,14 @@ import me.relex.photodraweeview.PhotoDraweeView;
  * Description:确认上传的图片activity
  */
 public class AffirmPictureActivity extends BaseActivity {
-    @Bind(R.id.sd_single_picture)
+    @BindView(R.id.sd_single_picture)
     PhotoDraweeView sdSinglePicture;
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView mTolbarTextBtn;
     private String picUrl;
 

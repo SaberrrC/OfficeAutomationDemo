@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.DatePicker;
@@ -48,21 +48,21 @@ import cn.qqtheme.framework.picker.DatePicker;
  * Description:差旅申请
  */
 public class ApplyForTravelActivity extends BaseActivity {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.et_travel_reason_content)
+    @BindView(R.id.et_travel_reason_content)
     EditText mEtContent;
-    @Bind(R.id.tv_travel_start_time)
+    @BindView(R.id.tv_travel_start_time)
     TextView tvTravelStartTime;
-    @Bind(R.id.tv_travel_end_time)
+    @BindView(R.id.tv_travel_end_time)
     TextView tvTravelEndTime;
-    @Bind(R.id.et_travel_duration)
+    @BindView(R.id.et_travel_duration)
     EditText etTravelDuration;
-    @Bind(R.id.ll_travel_list)
+    @BindView(R.id.ll_travel_list)
     LinearLayout mLlTravelList;
-    @Bind(R.id.ll_approval_container)
+    @BindView(R.id.ll_approval_container)
     LinearLayout mLlContainer;
     private DatePicker picker;
     private int totalDays = 0;//总共的天数
@@ -226,7 +226,6 @@ public class ApplyForTravelActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @OnClick({R.id.tv_travel_start_time, R.id.tv_travel_end_time, R.id.btn_voice_input,

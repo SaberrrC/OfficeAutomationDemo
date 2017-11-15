@@ -71,19 +71,27 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
                                         item.getString("releaseDate"),
                                         item.getInt("speedOfProgress")));
                             }
-                            mView.loadDataSuccess(items, pageNum, hasNextPage, isLoadMore);
+                            if (mView != null) {
+                                mView.loadDataSuccess(items, pageNum, hasNextPage, isLoadMore);
+                            }
                             break;
 
                         case ApiJava.REQUEST_NO_RESULT:
-                            mView.loadDataEmpty();
+                            if (mView != null) {
+                                mView.loadDataEmpty();
+                            }
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null) {
+                                mView.uidNull(0);
+                            }
                             break;
                         default:
-                            mView.loadDataFailed(0, message);
+                            if (mView != null) {
+                                mView.loadDataFailed(0, message);
+                            }
                             break;
                     }
 
@@ -96,13 +104,17 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.loadDataFailed(errorNo, strMsg);
+                if (mView != null) {
+                    mView.loadDataFailed(errorNo, strMsg);
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.loadDataFinish();
+                if (mView != null) {
+                    mView.loadDataFinish();
+                }
             }
         });
     }
@@ -122,15 +134,21 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
                     String message = jo.getString("message");
                     switch (code) {
                         case ApiJava.REQUEST_CODE_OK:
-                            mView.rejectReportSuccess(position);
+                            if (mView != null) {
+                                mView.rejectReportSuccess(position);
+                            }
                             break;
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null) {
+                                mView.uidNull(0);
+                            }
                             break;
                         default:
-                            mView.rejectReportFailed(0, message);
+                            if (mView != null) {
+                                mView.rejectReportFailed(0, message);
+                            }
                             break;
                     }
 
@@ -142,7 +160,9 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.rejectReportFailed(errorNo, strMsg);
+                if (mView != null) {
+                    mView.rejectReportFailed(errorNo, strMsg);
+                }
             }
         });
     }

@@ -34,7 +34,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -46,23 +46,23 @@ import static com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunch
  */
 public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportPresenter> implements CheckDailyReportContract.View, CheckDailyReportAdapter.OnItemClickListener {
 
-    @Bind(R.id.report_list)
+    @BindView(R.id.report_list)
     AllRecyclerView mReportList;
 
-    @Bind(R.id.ll_select_date)
+    @BindView(R.id.ll_select_date)
     RelativeLayout mSelectDate; // 选择日期
 
-    @Bind(R.id.tv_date)
+    @BindView(R.id.tv_date)
     TextView mDate; // 日期
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;//标题栏
 
 
-    @Bind(R.id.report_scroll_view)
+    @BindView(R.id.report_scroll_view)
     ScrollView mScroll;
 
-    @Bind(R.id.tv_one_evaluation)
+    @BindView(R.id.tv_one_evaluation)
     TextView mOneEvaluation;
 
     private List<HourReportBean> mHourReportData;

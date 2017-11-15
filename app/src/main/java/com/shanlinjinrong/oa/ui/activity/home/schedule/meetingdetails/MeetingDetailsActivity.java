@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.iflytek.cloud.thirdparty.V;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.MeetingDetailsAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRoomsBean;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,13 +33,13 @@ import io.reactivex.functions.Consumer;
  */
 public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActivityPresenter> implements MeetingDetailsActivityContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @Bind(R.id.meeting_details_list)
+    @BindView(R.id.meeting_details_list)
     RecyclerView mMeetingDetailsList;
-    @Bind(R.id.refresh_layout)
+    @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
-    @Bind(R.id.tv_network_error)
+    @BindView(R.id.tv_network_error)
     TextView mTvNetworkError;
     private MeetingDetailsAdapter mMeetingRoomAdapter;
     private List<MeetingRoomsBean.DataBean> data = new ArrayList<>();

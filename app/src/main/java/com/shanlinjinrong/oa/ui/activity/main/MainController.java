@@ -1,7 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.main;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -12,7 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -22,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.retrofit.net.RetrofitConfig;
 import com.google.gson.Gson;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
@@ -33,11 +36,11 @@ import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.util.NetUtils;
+import com.iflytek.cloud.thirdparty.B;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
@@ -50,7 +53,6 @@ import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.BadgeUtil;
-import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
@@ -59,7 +61,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
@@ -94,49 +96,49 @@ import q.rorbin.badgeview.QBadgeView;
  */
 public class MainController extends HttpBaseActivity<MainControllerPresenter> implements MainControllerContract.View {
 
-    @Bind(R.id.controller)
+    @BindView(R.id.controller)
     ViewPager mController;
-    @Bind(R.id.tab_message_icon)
+    @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
-    @Bind(R.id.tab_message_text)
+    @BindView(R.id.tab_message_text)
     TextView tabMessageText;
-    @Bind(R.id.tab_contacts_icon)
+    @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
-    @Bind(R.id.tab_contacts_text)
+    @BindView(R.id.tab_contacts_text)
     TextView tabContactsText;
-    @Bind(R.id.tab_group_icon)
+    @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
-    @Bind(R.id.tab_group_text)
+    @BindView(R.id.tab_group_text)
     TextView tabGroupText;
-    @Bind(R.id.tab_me_icon)
+    @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
-    @Bind(R.id.tab_me_text)
+    @BindView(R.id.tab_me_text)
     TextView tabMeText;
-    @Bind(R.id.tab_home_text)
+    @BindView(R.id.tab_home_text)
     TextView tabHomeText;
-    @Bind(R.id.tv_msg_unread)
+    @BindView(R.id.tv_msg_unread)
     TextView tvMsgUnRead;
 
 
-    @Bind(R.id.tab_message_icon_light)
+    @BindView(R.id.tab_message_icon_light)
     ImageView tabMessageIconLight;
 
-    @Bind(R.id.tab_home_icon)
+    @BindView(R.id.tab_home_icon)
     ImageView tabHomeIcon;
 
-    @Bind(R.id.tab_home_icon_light)
+    @BindView(R.id.tab_home_icon_light)
     ImageView tabHomeIconLight;
 
-    @Bind(R.id.tab_contacts_icon_light)
+    @BindView(R.id.tab_contacts_icon_light)
     ImageView tabContactsIconLight;
 
-    @Bind(R.id.tab_group_icon_light)
+    @BindView(R.id.tab_group_icon_light)
     ImageView tabGroupIconLight;
 
-    @Bind(R.id.tab_me_icon_light)
+    @BindView(R.id.tab_me_icon_light)
     ImageView tabMeIconLight;
 
-    @Bind(R.id.view_message_remind)
+    @BindView(R.id.view_message_remind)
     View communicationRedSupport;
 
 
@@ -166,7 +168,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     int tempMsgCount = 0;
     private QBadgeView qBadgeView;
     private AlertDialog dialog;
-    TabCommunicationFragment tabCommunicationFragment;
+    private TabCommunicationFragment tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
     private EaseUI easeUI;
 
@@ -183,6 +185,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
+        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
     }
 
     @Override
@@ -449,6 +452,9 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
      * 初始化数据
      */
     private void initData() {
+        RetrofitConfig.getInstance().setAuthToken(AppConfig.getAppConfig(AppManager.mContext).getPrivateToken());
+        RetrofitConfig.getInstance().setUserId(AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
+        RetrofitConfig.getInstance().setUserCode(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
         //检测推送页面
         easeUI = EaseUI.getInstance();
         //极光推送设置别名和部门
@@ -517,12 +523,13 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 @Override
                 public void run() {
                     if (tempMsgCount != 0) {
-                        BadgeUtil.setBadgeCount(MainController.this, tempMsgCount, R.drawable.ring_red);
+                        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
                     }
                 }
             }).start();
         }
         super.onStop();
+
     }
 
     @Override
@@ -619,8 +626,8 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
 
     @Override
     protected void onDestroy() {
-        ButterKnife.unbind(this);
         EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
         super.onDestroy();
     }
 
@@ -645,36 +652,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                     }
                 }
             });
-        }
-    }
-
-    private CustomDialogUtils mDialog;
-
-    //环线 多地登陆退出
-    private void NonTokenDialog() {
-        try {
-            //获取屏幕高宽
-            DisplayMetrics metric = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(metric);
-            int windowsHeight = metric.heightPixels;
-            int windowsWight = metric.widthPixels;
-            CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(this);
-            mDialog = builder.cancelTouchout(false)
-                    .view(R.layout.common_custom_dialog)
-                    .heightpx((int) (windowsHeight / 4.5))
-                    .widthpx((int) (windowsWight / 1.4))
-                    .style(R.style.dialog)
-                    .addViewOnclick(R.id.tv_non_token_confirm, view -> {
-                        catchWarningByCode(Api.RESPONSES_CODE_TOKEN_NO_MATCH);
-                    })
-                    .build();
-            if (mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
-            mDialog.setCancelable(false);
-            mDialog.show();
-        } catch (Throwable e) {
-            e.printStackTrace();
         }
     }
 }

@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -36,24 +36,24 @@ import butterknife.OnClick;
  */
 public class ModifyPwdActivity extends HttpBaseActivity<ModifyPswActivityPresenter> implements ModifyPswActivityContract.View {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.toolbar_image_btn)
+    @BindView(R.id.toolbar_image_btn)
     ImageView toolbarBack;
-    @Bind(R.id.toolbar_text_btn)
+    @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @Bind(R.id.old_pwd)
+    @BindView(R.id.old_pwd)
     EditText oldPwd;
-    @Bind(R.id.new_pwd)
+    @BindView(R.id.new_pwd)
     EditText newPwd;
-    @Bind(R.id.new_pwd_confirm)
+    @BindView(R.id.new_pwd_confirm)
     EditText newPwdConfirm;
-    @Bind(R.id.tv_original_pwd)
+    @BindView(R.id.tv_original_pwd)
     TextView tvOriginalPwd;
 
-    @Bind(R.id.tv_new_pwd)
+    @BindView(R.id.tv_new_pwd)
     TextView tvNewPwd;
 
 
@@ -165,7 +165,6 @@ public class ModifyPwdActivity extends HttpBaseActivity<ModifyPswActivityPresent
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @Override

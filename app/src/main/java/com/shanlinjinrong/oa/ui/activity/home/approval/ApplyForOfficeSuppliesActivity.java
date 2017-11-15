@@ -27,7 +27,7 @@ import org.json.JSONException;
 
 import java.util.Calendar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.DatePicker;
@@ -39,17 +39,17 @@ import cn.qqtheme.framework.picker.DatePicker;
  * Description：办公用品申请
  */
 public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOfficeSuppliesPresenter> implements ApplyForOfficeSuppliesContract.View {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.tv_select_date)
+    @BindView(R.id.tv_select_date)
     TextView mTvSelectDate;
 
-    @Bind(R.id.et_office_supplies_reason_content)
+    @BindView(R.id.et_office_supplies_reason_content)
     EditText mEtContent;
 
-    @Bind(R.id.ll_approval_container)
+    @BindView(R.id.ll_approval_container)
     LinearLayout mLlContainer;
     private DatePicker picker;
 
@@ -230,7 +230,6 @@ public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOff
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 

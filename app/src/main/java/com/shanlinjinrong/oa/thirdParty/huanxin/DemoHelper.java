@@ -349,7 +349,7 @@ public class DemoHelper {
     }
 
     protected void setEaseUIProviders() {
-        //set user avatar to circle shape
+        //set user avatar to circle_red shape
         EaseAvatarOptions avatarOptions = new EaseAvatarOptions();
         avatarOptions.setAvatarShape(1);
         easeUI.setAvatarOptions(avatarOptions);

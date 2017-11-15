@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+
+        android:textColor="#898989"
+        android:textSize="14sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="24dp">
+
+        <TextView
+            android:id="@+id/tv_approver_title"
+            style="@style/textview_upcominginfo_title"
+            />
+
+        <TextView
+            android:id="@+id/tv_approver"
+            style="@style/textview_upcominginfo_content"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="12dp">
+
+        <TextView
+            android:id="@+id/tv_time_title"
+            style="@style/textview_upcominginfo_title"
+            />
+
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/textview_upcominginfo_content"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="12dp">
+
+        <TextView
+            android:id="@+id/tv_state_title"
+            style="@style/textview_upcominginfo_title"
+            />
+
+        <TextView
+            android:id="@+id/tv_state"
+            style="@style/textview_upcominginfo_content"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="24dp"
+        android:paddingTop="12dp">
+
+        <TextView
+            android:id="@+id/tv_option_title"
+            style="@style/textview_upcominginfo_title"
+            />
+
+        <TextView
+            android:id="@+id/tv_option"
+            style="@style/textview_upcominginfo_content"
+            />
+    </LinearLayout>
+</LinearLayout>

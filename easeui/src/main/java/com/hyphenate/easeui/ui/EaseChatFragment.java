@@ -10,8 +10,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
+import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +25,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,6 +51,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
+import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.EaseConstant;
@@ -59,6 +66,7 @@ import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.requestPermissionsListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.utils.MediaPlayerHelper;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseChatExtendMenu;
@@ -72,6 +80,7 @@ import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
+import com.superrtc.call.ThreadUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -79,8 +88,12 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -173,10 +186,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         super.onActivityCreated(savedInstanceState);
     }
 
-
     private void initData() {
 
         setChatFragmentHelper(new EaseChatFragmentHelper() {
+
+
             @Override
             public void onSetMessageAttributes(EMMessage message) {
             }
@@ -198,6 +212,35 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             @Override
             public boolean onMessageBubbleClick(EMMessage message) {
+                //TODO 震动模式播放语音 待优化 声音小
+                try {
+                    EMMessageBody body = message.getBody();
+                    String body1 = body.toString();
+                    String amr = body1.substring(body1.indexOf("localurl") + 10, body1.indexOf("remoteurl") - 1);
+                    if (!TextUtils.isEmpty(amr.trim())) {
+                        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+                        int mode = audioManager.getRingerMode();
+                        switch (mode) {
+                            case AudioManager.RINGER_MODE_NORMAL:
+                                //普通模式
+                                break;
+                            case AudioManager.RINGER_MODE_VIBRATE:
+                                MediaPlayerHelper.playSound(amr, new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mediaPlayer) {
+                                        MediaPlayerHelper.realese();
+                                    }
+                                });
+                                //振动模式
+                                break;
+                            case AudioManager.RINGER_MODE_SILENT:
+                                //静音模式
+                                break;
+                        }
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
                 return false;
             }
 
@@ -225,6 +268,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         });
     }
 
+
     /**
      * init view
      */
@@ -250,6 +294,21 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             @Override
             public void onSendMessage(String content) {
                 sendTextMessage(content);
+                //TODO 消息测试
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            for (int i = 0; i < 40000; i++) {
+//                                Thread.sleep(100);
+//                                sendTextMessage(i+"条消息");
+//                            }
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }).start();
+
             }
 
             @Override
@@ -748,7 +807,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         String newUserInfo_self = null;
         String newUserInfo = null;
         try {
-        if (!from.equals("sl_" + bean.CODE_self)) {
+            if (!from.equals("sl_" + bean.CODE_self)) {
                 newUserInfo_self = userInfo_self.replaceAll("_self", "");
                 newUserInfo = userInfo.replace("phone", "phone_self");
                 newUserInfo = newUserInfo.replace("CODE", "CODE_self");
@@ -764,14 +823,14 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 message.setAttribute("userInfo_self", sendUserInfo);
                 message.setAttribute("userInfo", sendUserInfo_self);
 
-        } else {
+            } else {
                 sendUserInfo_self = new JSONObject(userInfo_self);
                 sendUserInfo = new JSONObject(userInfo);
                 message.setAttribute("userInfo_self", sendUserInfo_self);
                 message.setAttribute("userInfo", sendUserInfo);
             }
         } catch (Throwable e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -789,7 +848,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 if (userInfo.equals("") && mEmMessage.getStringAttribute("userInfo", "") != null) {
                     userInfo = mEmMessage.getStringAttribute("userInfo", "");
                 }
-            }catch (Throwable e1){
+            } catch (Throwable e1) {
                 e1.printStackTrace();
             }
             String user_code = getArguments().getString("user_code", "-");
@@ -912,6 +971,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             message.setChatType(ChatType.ChatRoom);
         }
         //send message
+
         EMClient.getInstance().chatManager().sendMessage(message);
         //refresh ui
         if (isMessageListInited) {

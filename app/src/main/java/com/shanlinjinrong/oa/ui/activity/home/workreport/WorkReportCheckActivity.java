@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.widget.RadioButton;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ReportCheckAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.CheckReportItem;
@@ -37,7 +39,7 @@ import com.shanlinjinrong.views.swipeRecycleview.widget.DefaultItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -51,22 +53,22 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     public static String HAS_EVALUATION = "has_evaluation";
 
 
-    @Bind(R.id.report_check_list)
+    @BindView(R.id.report_check_list)
     SwipeMenuRecyclerView mReportCheckList;
 
-    @Bind(R.id.report_no_check_list)
+    @BindView(R.id.report_no_check_list)
     SwipeMenuRecyclerView mReportNoCheckList;
 
-    @Bind(R.id.tv_check_pending)
+    @BindView(R.id.tv_check_pending)
     RadioButton mTvCheckPending;
 
-    @Bind(R.id.tv_checked)
+    @BindView(R.id.tv_checked)
     RadioButton mTvChecked;
 
-    @Bind(R.id.refresh_layout)
+    @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;
 
     private static int DEFAULT_PAGE_SIZE = 20;
@@ -370,9 +372,9 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     public void loadDataFailed(int errCode, String errMsg) {
 //        mReportCheckList.loadMoreError(errCode, errMsg);
         if (errCode == -1) {
-            if (errMsg.equals("auth error")){
+            if (errMsg.equals("auth error")) {
                 catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
-            }else {
+            } else {
                 showToast(getString(R.string.net_no_connection));
             }
         } else {
@@ -388,18 +390,21 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     @Override
     public void loadDataEmpty() {
-        if (mReportStatus == 1) {
-            mReportNoCheckData.clear();
-            mNoCheckAdapter.notifyDataSetChanged();
-            mReportNoCheckList.loadMoreFinish(true, false);
-            mReportNoCheckList.setVisibility(View.VISIBLE);
-        } else {
-            mReportCheckData.clear();
-            mCheckAdapter.notifyDataSetChanged();
-            mReportCheckList.loadMoreFinish(true, false);
-            mReportCheckList.setVisibility(View.VISIBLE);
+        try {
+            if (mReportStatus == 1) {
+                mReportNoCheckData.clear();
+                mNoCheckAdapter.notifyDataSetChanged();
+                mReportNoCheckList.loadMoreFinish(true, false);
+                mReportNoCheckList.setVisibility(View.VISIBLE);
+            } else {
+                mReportCheckData.clear();
+                mCheckAdapter.notifyDataSetChanged();
+                mReportCheckList.loadMoreFinish(true, false);
+                mReportCheckList.setVisibility(View.VISIBLE);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
-
     }
 
     @Override

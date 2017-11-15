@@ -21,31 +21,31 @@ import com.shanlinjinrong.oa.utils.EmojiFilter;
 
 import org.greenrobot.eventbus.EventBus;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class WeeklyWorkContentFragment extends Fragment {
 
-    @Bind(R.id.work_plan)
+    @BindView(R.id.work_plan)
     TextView mWorkPlan;
-    @Bind(R.id.et_next_work_plan)
+    @BindView(R.id.et_next_work_plan)
     EditText mEtNextWorkPlan;
-    @Bind(R.id.practical_work)
+    @BindView(R.id.practical_work)
     TextView mPracticalWork;
-    @Bind(R.id.et_next_practical_work)
+    @BindView(R.id.et_next_practical_work)
     EditText mEtNextPracticalWork;
-    @Bind(R.id.work_analyzes)
+    @BindView(R.id.work_analyzes)
     TextView mWorkAnalyzes;
-    @Bind(R.id.et_next_work_analyzes)
+    @BindView(R.id.et_next_work_analyzes)
     EditText mEtNextWorkAnalyzes;
-    @Bind(R.id.work_remark)
+    @BindView(R.id.work_remark)
     TextView mWorkRemark;
-    @Bind(R.id.et_next_work_remark)
+    @BindView(R.id.et_next_work_remark)
     EditText mEtNextWorkRemark;
-    @Bind(R.id.btn_write_next_work)
+    @BindView(R.id.btn_write_next_work)
     TextView mBtnWriteNextWork;
-    @Bind(R.id.btn_back_up_work)
+    @BindView(R.id.btn_back_up_work)
     TextView mBtnBackUpWork;
 
     private int mPageIndex;
@@ -174,7 +174,6 @@ public class WeeklyWorkContentFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         backStateNotify();
-        ButterKnife.unbind(this);
     }
 
     /**

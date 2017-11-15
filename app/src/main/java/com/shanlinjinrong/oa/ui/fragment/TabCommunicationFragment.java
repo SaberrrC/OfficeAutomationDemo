@@ -60,20 +60,15 @@ public class TabCommunicationFragment extends BaseFragment  {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.easeConversationListFragment, myConversationListFragment).commit();
         myConversationListFragment
-                .setConversationListItemClickListener(new EaseConversationListFragment
-                        .EaseConversationListItemClickListener() {
-
-                    @Override
-                    public void onListItemClicked(EMConversation conversation) {
-                        EMMessage lastMessage = conversation.getLastMessage();
-                        userInfo = lastMessage.getStringAttribute("userInfo", "");
-                        userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
-                        startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
-                                .putExtra("u_id", conversation.conversationId())
-                                .putExtra("userInfo_self",userInfo_self)
-                                .putExtra("userInfo", userInfo)
-                                .putExtra("nikename", ""));
-                    }
+                .setConversationListItemClickListener(conversation -> {
+                    EMMessage lastMessage = conversation.getLastMessage();
+                    userInfo = lastMessage.getStringAttribute("userInfo", "");
+                    userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
+                    startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
+                            .putExtra("u_id", conversation.conversationId())
+                            .putExtra("userInfo_self",userInfo_self)
+                            .putExtra("userInfo", userInfo)
+                            .putExtra("nikename", ""));
                 });
     }
 
@@ -89,7 +84,6 @@ public class TabCommunicationFragment extends BaseFragment  {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
 }

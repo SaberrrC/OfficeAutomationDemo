@@ -22,7 +22,7 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPresenter> implements ConfirmEmailContract.View {
@@ -31,28 +31,28 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
     public static String EMAIL_ADDRESS = "email_address";
 
 
-    @Bind(R.id.ll_confirm_email)
+    @BindView(R.id.ll_confirm_email)
     LinearLayout mConfirmEmailLayout;
 
-    @Bind(R.id.ll_find_email_layout)
+    @BindView(R.id.ll_find_email_layout)
     LinearLayout mFindEmailLayout;
 
-    @Bind(R.id.iv_icon)
+    @BindView(R.id.iv_icon)
     ImageView mIcon;
 
-    @Bind(R.id.et_email)
+    @BindView(R.id.et_email)
     EditText mEmail;
 
-    @Bind(R.id.tv_email_suffix)
+    @BindView(R.id.tv_email_suffix)
     AutoCompleteTextView mEmailSuffix;
 
-    @Bind(R.id.tv_email_address)
+    @BindView(R.id.tv_email_address)
     TextView mUserEmail;
 
-    @Bind(R.id.btn_sure)
+    @BindView(R.id.btn_sure)
     Button mSureBtn;
 
-    @Bind(R.id.iv_email_select_arrow)
+    @BindView(R.id.iv_email_select_arrow)
     LinearLayout mEmailSelectIcon;
 
     private boolean mStatus; //是否查找到邮箱的状态

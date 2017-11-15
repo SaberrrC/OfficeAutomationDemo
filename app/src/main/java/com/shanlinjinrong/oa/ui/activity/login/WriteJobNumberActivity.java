@@ -21,22 +21,22 @@ import com.shanlinjinrong.oa.ui.activity.login.contract.WriteJobNumberContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.WriteJobNumberPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPresenter> implements WriteJobNumberContract.View {
 
-    @Bind(R.id.et_job_number)
+    @BindView(R.id.et_job_number)
     EditText mJobNumber;
 
-    @Bind(R.id.et_identifying_code)
+    @BindView(R.id.et_identifying_code)
     EditText mIdentifyingCode;
 
-    @Bind(R.id.iv_identifying_code)
+    @BindView(R.id.iv_identifying_code)
     ImageView mIdentifyingCodeImg;
 
-    @Bind(R.id.btn_sure)
+    @BindView(R.id.btn_sure)
     Button mSureBtn;
 
     private String mCode;//验证码内容

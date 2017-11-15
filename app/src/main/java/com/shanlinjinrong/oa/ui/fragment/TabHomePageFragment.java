@@ -12,25 +12,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.model.EventMessage;
-import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.LaunchApprovalActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MineWorkRecordActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.PayQueryActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -40,28 +39,26 @@ import butterknife.OnClick;
  */
 public class TabHomePageFragment extends BaseFragment {
 
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView mTvTitle;
 
-    @Bind(R.id.iv_send_to_me_dot)
+    @BindView(R.id.iv_send_to_me_dot)
     ImageView mSendToMeDot;
 
-    @Bind(R.id.iv_wait_me_approval_dot)
+    @BindView(R.id.iv_wait_me_approval_dot)
     ImageView mWaitMeApprovalDot;
 
     private RelativeLayout mRootView;
 
-    private static int TYPE_SEND_TO_ME = 0;//发送我的
-    private static int TYPE_WAIT_ME_APPROVAL = 1;//待我审批
-    private static String DOT_STATUS = "DOT_STATUS";
-    public static String DOT_SEND = "DOT_SEND";
-    public static String DOT_APPORVAL = "DOT_APPORVAL";
+    private static int    TYPE_SEND_TO_ME       = 0;//发送我的
+    private static int    TYPE_WAIT_ME_APPROVAL = 1;//待我审批
+    private static String DOT_STATUS            = "DOT_STATUS";
+    public static  String DOT_SEND              = "DOT_SEND";
+    public static  String DOT_APPORVAL          = "DOT_APPORVAL";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        mRootView = (RelativeLayout) inflater.inflate(R.layout.tab_homepage_fragment, container,
-                false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mRootView = (RelativeLayout) inflater.inflate(R.layout.tab_homepage_fragment, container, false);
         ButterKnife.bind(this, mRootView);
         return mRootView;
     }
@@ -96,7 +93,6 @@ public class TabHomePageFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     private void refreshDot() {
@@ -120,11 +116,12 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me,
-            R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report,
-            R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval,
-            R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
-            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_schedule_note})
+    @OnClick({R.id.rl_test, R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me,
+            R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch,
+            R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
+            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance,
+            R.id.rl_holiday_search,R.id.rl_pay_search
+    })
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -151,19 +148,19 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_approval_me_launch:
                 //我的申请
-                intent = new Intent(mContext, ApprovalListActivity.class);
-                intent.putExtra("whichList", 1);
+                intent = new Intent(mContext, MyUpcomingTasksActivity.class);
+                intent.putExtra("whichList", "1");
                 break;
             case R.id.rl_approval_wait_me_approval:
                 //待我审批
-                intent = new Intent(mContext, ApprovalListActivity.class);
-                intent.putExtra("whichList", 2);
+                intent = new Intent(mContext, MyUpcomingTasksActivity.class);
+                intent.putExtra("whichList", "2");
                 clearDot(getContext(), DOT_APPORVAL);
                 break;
             case R.id.rl_approval_me_approvaled:
                 //我审批的
-                intent = new Intent(mContext, ApprovalListActivity.class);
-                intent.putExtra("whichList", 3);
+                intent = new Intent(mContext, MyUpcomingTasksActivity.class);
+                intent.putExtra("whichList", "3");
                 break;
             case R.id.rl_approval_launch_approval:
                 //发起审批
@@ -173,9 +170,22 @@ public class TabHomePageFragment extends BaseFragment {
                 //会议室预定
                 intent = new Intent(mContext, MeetingDetailsActivity.class);
                 break;
-            case R.id.rl_schedule_note:
-                //会议室预定
-                intent = new Intent(mContext, MineWorkRecordActivity.class);
+            case R.id.rl_my_attandance:
+                //我的考勤
+                intent = new Intent(mContext, MyAttendenceActivity.class);
+                break;
+            case R.id.rl_pay_search:
+                //薪资查询
+                intent = new Intent(mContext, PayQueryActivity.class);
+                break;
+            case R.id.rl_test:
+                if (BuildConfig.DEBUG) {
+//                    intent = new Intent(mContext, UpcomingTasksActivity.class);
+                }
+                break;
+            case R.id.rl_holiday_search:
+                //假期查询
+                intent = new Intent(mContext, HolidaySearchActivity.class);
                 break;
         }
         if (intent != null) {

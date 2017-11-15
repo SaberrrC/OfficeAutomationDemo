@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:gravity="bottom"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp">
+
+            <Button
+                android:id="@+id/dimissButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:text="取消"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/sureButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:background="@null"
+                android:text="确定"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="开始时间"
+                android:textColor="@color/black_333333"
+                android:textSize="17sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/gray_d5d5d5" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.aigestudio.wheelpicker.WheelPicker
+                android:id="@+id/wheelDayPickerYear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:visibility="visible"
+                app:wheel_curved="false"
+                app:wheel_cyclic="false"
+                app:wheel_indicator="true"
+                app:wheel_indicator_color="@color/gray_d5d5d5"
+                app:wheel_indicator_size="1dp"
+                app:wheel_item_space="20dp"
+                app:wheel_item_text_size="18sp"
+                app:wheel_selected_item_text_color="@color/black_333333"
+                app:wheel_visible_item_count="5" />
+
+
+            <!--<com.aigestudio.wheelpicker.WheelPicker-->
+                <!--android:id="@+id/wheelTimePicker"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1.5"-->
+                <!--android:visibility="visible"-->
+                <!--app:wheel_curved="false"-->
+                <!--app:wheel_cyclic="false"-->
+                <!--app:wheel_indicator="true"-->
+                <!--app:wheel_indicator_color="@color/gray_d5d5d5"-->
+                <!--app:wheel_indicator_size="1dp"-->
+                <!--app:wheel_item_space="20dp"-->
+                <!--app:wheel_item_text_size="18sp"-->
+                <!--app:wheel_selected_item_text_color="@color/black_333333"-->
+                <!--app:wheel_visible_item_count="5" />-->
+
+
+            <com.aigestudio.wheelpicker.WheelPicker
+                android:id="@+id/wheelMinPickerHour"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:visibility="visible"
+                app:wheel_curved="false"
+                app:wheel_cyclic="false"
+                app:wheel_indicator="true"
+                app:wheel_indicator_color="@color/gray_d5d5d5"
+                app:wheel_indicator_size="1dp"
+                app:wheel_item_space="20dp"
+                app:wheel_item_text_size="18sp"
+                app:wheel_selected_item_text_color="@color/black_333333"
+                app:wheel_visible_item_count="5" />
+
+            <com.aigestudio.wheelpicker.WheelPicker
+                android:id="@+id/wheelHoursPickerMinutes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:visibility="visible"
+                app:wheel_curved="false"
+                app:wheel_cyclic="false"
+                app:wheel_indicator="true"
+                app:wheel_indicator_color="@color/gray_d5d5d5"
+                app:wheel_indicator_size="1dp"
+                app:wheel_item_space="20dp"
+                app:wheel_item_text_size="18sp"
+                app:wheel_selected_item_text_color="@color/black_333333"
+                app:wheel_visible_item_count="5" />
+        </LinearLayout>
+
+        <!--<com.aigestudio.wheelpicker.widgets.WheelDatePicker-->
+        <!--android:id="@+id/wheelDatePicker"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="gone"/>-->
+    </LinearLayout>
+
+</LinearLayout>

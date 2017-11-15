@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -37,25 +37,25 @@ import butterknife.OnClick;
  * <b>Notes:</b> Created by KevinMeng on 2016/9/22.<br />
  */
 public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter> implements ContractActivityContract.View {
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @Bind(R.id.btn_back)
+    @BindView(R.id.btn_back)
     ImageView btnBack;
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView title;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     RelativeLayout mRootView;
 
-    @Bind(R.id.rl_top2)
+    @BindView(R.id.rl_top2)
     RelativeLayout mRLSearchView;
 
     private List<Contacts> items = new ArrayList<>();
     private List<Map<String, String>> pageMap;
     private TabContactsAdapter adapter;
     private RelativeLayout view;
-    @Bind(R.id.rl_recycler_view_container)
+    @BindView(R.id.rl_recycler_view_container)
     RelativeLayout mRlRecyclerViewContainer;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
 
@@ -229,7 +229,6 @@ public class ContactsActivity extends HttpBaseActivity<ContractActivityPresenter
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         if (popupWindow != null) {
             popupWindow.dismiss();
             popupWindow = null;

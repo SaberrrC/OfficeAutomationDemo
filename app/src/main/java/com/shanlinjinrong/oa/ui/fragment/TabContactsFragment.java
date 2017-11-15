@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -64,21 +64,21 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabContractsFragmentContract.View {
 
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView title;
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    @Bind(R.id.recycler_search_result_view)
+    @BindView(R.id.recycler_search_result_view)
     RecyclerView recyclerViewSearchResult;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     RelativeLayout mRootView;
 
-    @Bind(R.id.search_et_input)
+    @BindView(R.id.search_et_input)
     ClearEditText search_et_input;
-    @Bind(R.id.search_et_cancle)
+    @BindView(R.id.search_et_cancle)
     TextView tvCacle;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
 
@@ -534,7 +534,6 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
         if (dialog != null) {
             dialog.dismiss();
             dialog = null;

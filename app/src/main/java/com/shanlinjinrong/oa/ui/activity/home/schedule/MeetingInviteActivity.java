@@ -9,15 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.views.listview.decoration.LineItemDecoration;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MeetingInviteActivity extends AppCompatActivity {
 
-    @Bind(R.id.refresh_layout)
+    @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
 
-    @Bind(R.id.meeting_list)
+    @BindView(R.id.meeting_list)
     RecyclerView mMeetingList;
 
     @Override

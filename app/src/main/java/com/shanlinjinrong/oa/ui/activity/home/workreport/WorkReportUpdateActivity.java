@@ -39,7 +39,7 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -53,25 +53,25 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     public static final int WRITE_REPORT_OK = 100;//填写日报
     public static final int SELECT_OK = 101;//选择成功，requestcode
 
-    @Bind(R.id.report_scroll_view)
+    @BindView(R.id.report_scroll_view)
     ScrollView mScrollView;
 
-    @Bind(R.id.work_report_list)
+    @BindView(R.id.work_report_list)
     AllRecyclerView mWorkReportList;
 
-    @Bind(R.id.ll_select_date)
+    @BindView(R.id.ll_select_date)
     RelativeLayout mSelectDate; // 选择日期
 
-    @Bind(R.id.tv_date)
+    @BindView(R.id.tv_date)
     TextView mDate; // 日期
 
-    @Bind(R.id.top_view)
+    @BindView(R.id.top_view)
     CommonTopView mTopView;//标题栏
 
-    @Bind(R.id.tv_receiver)
+    @BindView(R.id.tv_receiver)
     TextView mReceiver;//接收人
 
-    @Bind(R.id.et_tomorrow_plan)
+    @BindView(R.id.et_tomorrow_plan)
     EditText mTomorrowPlan;//明日计划
 
 

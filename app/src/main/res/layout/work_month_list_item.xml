@@ -1,110 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/ll_container_attendance"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="bottom"
+              android:background="#fff"
+              android:orientation="vertical">
+
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp"
+        android:background="@color/divider_gray"/>
+
+    <TextView
+        android:id="@+id/tv_empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="154dp"
+        android:gravity="center"
+      />
+
+    <LinearLayout
+        android:id="@+id/ll_currentday_state"
+        android:layout_width="match_parent"
+        android:layout_height="154dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <LinearLayout
-            android:layout_marginTop="6dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="20dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
             <TextView
-                android:textColor="@color/grey"
-                android:text="2017-12-09"
+                android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-            <TextView
+                android:layout_height="match_parent"
                 android:textColor="@color/grey"
+                tools:text="2017-12-09"/>
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:id="@+id/tv_name"
-                android:text="士大夫"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
+                android:textColor="@color/grey"
+                tools:text="士大夫"/>
         </LinearLayout>
 
         <View
-            android:background="@color/common_line_color"
             android:layout_width="match_parent"
-            android:layout_height="1dp"/>
+            android:layout_height="0.5dp"
+            android:background="@color/common_line_color"/>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:layout_marginTop="6dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="@color/grey"
-                    android:text="上班"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textColor="@color/grey"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:id="@+id/tv_gowork_time"
-                    android:text="2017 09 06 55"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            android:layout_height="20dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_marginTop="4dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="@color/grey"
-                    android:text="下班"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textColor="@color/grey"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:id="@+id/off_gowork_time"
-                    android:text="2017 09 06 55"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="上班"
+                android:textColor="@color/grey"/>
 
-            <LinearLayout
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="@color/grey"
-                    android:text="状态"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textColor="#FF333333"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:id="@+id/tv_state"
-                    android:text="加班"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
+            <TextView
+                android:id="@+id/tv_gowork_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="@color/grey"
+                tools:text="2017 09 06 55"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="下班"
+                android:textColor="@color/grey"/>
+
+            <TextView
+                android:id="@+id/tv_off_gowork_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="@color/grey"
+                tools:text="2017 09 06 55"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="状态"
+                android:textColor="@color/grey"/>
+
+            <ImageView
+                android:id="@+id/tv_sign_in"
+                android:layout_width="54dp"
+                android:layout_height="46dp"
+                android:layout_marginRight="10dp"
+                android:visibility="gone"
+                android:src="@drawable/icon_sign_in"/>
+
+            <TextView
+                android:id="@+id/tv_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="#FF333333"
+                tools:text="加班"/>
+        </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_divider"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/divider_gray"/>
 
 </LinearLayout>

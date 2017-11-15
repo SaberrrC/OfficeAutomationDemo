@@ -28,17 +28,17 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
 public class SelectVedioMeetingRoomActivity extends BaseActivity implements View.OnClickListener {
-    @Bind(R.id.toobar_back)
+    @BindView(R.id.toobar_back)
     ImageView toobar_back;
-    @Bind(R.id.select_meet_room_list)
+    @BindView(R.id.select_meet_room_list)
     RecyclerView mRecyclerViewList;
-    @Bind(R.id.jump_over)
+    @BindView(R.id.jump_over)
     TextView jumpOver;
     private SelectOrdinaryMeetingRoomAdapter selectOrdinaryMeetingRoomAdapter;
     List<MeetRoom> listMeeting = null;

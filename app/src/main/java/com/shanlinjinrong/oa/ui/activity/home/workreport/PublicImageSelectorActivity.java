@@ -17,7 +17,7 @@ import com.shanlinjinrong.oa.utils.LogUtils;
 
 import java.io.File;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.nereo.multi_image_selector.MultiImageSelectorFragment;
 
@@ -28,9 +28,9 @@ import me.nereo.multi_image_selector.MultiImageSelectorFragment;
 public class PublicImageSelectorActivity extends BaseActivity implements
         MultiImageSelectorFragment.Callback {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     public static final int PHOTO_REQUEST_IMAGE = 1;// 裁剪结果
@@ -130,6 +130,5 @@ public class PublicImageSelectorActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 }

@@ -28,7 +28,7 @@ import com.shanlinjinrong.oa.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -41,32 +41,32 @@ import static com.shanlinjinrong.oa.manager.AppManager.mContext;
  * 通讯录联系人详情页
  */
 public class Contact_Details_Activity2 extends BaseActivity {
-    @Bind(R.id.btn_back)
+    @BindView(R.id.btn_back)
     ImageView btn_back;
-    @Bind(R.id.tv_user_name)
+    @BindView(R.id.tv_user_name)
     TextView tv_user_name;
-    @Bind(R.id.rel_send_message)
+    @BindView(R.id.rel_send_message)
     RelativeLayout rel_send_message;
-    @Bind(R.id.rel_voice_call)
+    @BindView(R.id.rel_voice_call)
     RelativeLayout rel_voice_call;
-    @Bind(R.id.rel_phone_call)
+    @BindView(R.id.rel_phone_call)
     RelativeLayout rel_phone_call;
-    @Bind(R.id.tv_department)
+    @BindView(R.id.tv_department)
     TextView tv_department;
-    @Bind(R.id.tv_duties)
+    @BindView(R.id.tv_duties)
     TextView tv_duties;
-    @Bind(R.id.tv_sex)
+    @BindView(R.id.tv_sex)
     TextView tv_sex;
-    @Bind(R.id.tv_phone_number)
+    @BindView(R.id.tv_phone_number)
     TextView tv_phone_number;
-    @Bind(R.id.tv_mails)
+    @BindView(R.id.tv_mails)
     TextView tv_mails;
-    @Bind(R.id.send_message)
+    @BindView(R.id.send_message)
     ImageView send_message;
-    @Bind(R.id.send_voice)
+    @BindView(R.id.send_voice)
     ImageView send_voice;
 
-    @Bind(R.id.iv_phone)
+    @BindView(R.id.iv_phone)
     ImageView iv_phone;
     private Contacts constants;
 

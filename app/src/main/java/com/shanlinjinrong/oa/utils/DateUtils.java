@@ -65,7 +65,7 @@ public class DateUtils {
      * @param
      * @return 时间戳
      */
-    public static long getTimestampFromString(String time,String pattern) {
+    public static long getTimestampFromString(String time, String pattern) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         Date date = null;
         try {
@@ -425,6 +425,55 @@ public class DateUtils {
         return data;
     }
 
+    public static List<PopItem> getAttandenceDate(int month, int select) {
+        List<PopItem> data = new ArrayList<>();
+        if (month < 1 || month > 12) {
+            return null;
+        }
+        PopItem item;
+        Calendar cal = Calendar.getInstance();
+        int curDay = cal.get(Calendar.DAY_OF_MONTH);
+        int curMonth = cal.get(Calendar.MONTH);
+        int monthDays = calculateDaysInMonth(Calendar.YEAR, month); //获取当月天数
+        int lastMonthDays;//上个月的天数
+        if (month == 1) {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR - 1, 11);
+        } else {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
+        }
+
+        //设置月份
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 0);
+        int col = cal.get(Calendar.DAY_OF_WEEK);   //获取该天在本星期的第几天 ，也就是第几列
+        for (int i = col - 2; i >= 0; i--) {
+            item = new PopItem("" + (lastMonthDays - i), false, false);
+            data.add(item);
+        }
+
+        for (int i = 1; i <= monthDays; i++) {
+            if (i < curDay && month == curMonth + 1) {
+                item = new PopItem("" + i, true, false);
+            } else {
+                item = new PopItem("" + i, true, false);
+            }
+            if (select == i) {
+                item.setSelect(true);
+            }
+            data.add(item);
+        }
+
+
+        if (data.size() % 7 != 0) {
+            int size = 7 - data.size() % 7;
+            for (int i = 1; i <= size; i++) {
+                item = new PopItem("" + i, false, false);
+                data.add(item);
+            }
+        }
+        return data;
+    }
+
 
     /**
      * 获取当前日期之前的所有周一时间
@@ -556,7 +605,6 @@ public class DateUtils {
     }
 
 
-
     /**
      * 判断字符串是否为日期字符串
      */
@@ -623,8 +671,8 @@ public class DateUtils {
     }
 
 
-    public static String stringToDate(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日  HH:mm");
+    public static String stringToDateTransform(String time, String pattern) {
+        SimpleDateFormat sdr = new SimpleDateFormat(pattern);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
@@ -639,12 +687,12 @@ public class DateUtils {
         Calendar c1 = Calendar.getInstance();
         c1.setTimeInMillis(date);
         int year1 = c1.get(Calendar.YEAR);
-        int month1 = c1.get(Calendar.MONTH)+1;
+        int month1 = c1.get(Calendar.MONTH) + 1;
         int day1 = c1.get(Calendar.DAY_OF_MONTH);
         Calendar c2 = Calendar.getInstance();
         c2.setTime(new Date());
         int year2 = c2.get(Calendar.YEAR);
-        int month2 = c2.get(Calendar.MONTH)+1;
+        int month2 = c2.get(Calendar.MONTH) + 1;
         int day2 = c2.get(Calendar.DAY_OF_MONTH);
         return year1 == year2 && month1 == month2 && day1 == day2;
     }
@@ -652,7 +700,7 @@ public class DateUtils {
 
     public static boolean isSameDay(long date, Date sameDate) {
 
-        if ( null == sameDate) {
+        if (null == sameDate) {
 
             return false;
 

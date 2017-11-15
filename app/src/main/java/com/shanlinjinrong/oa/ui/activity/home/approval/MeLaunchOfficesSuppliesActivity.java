@@ -25,7 +25,7 @@ import com.shanlinjinrong.oa.utils.Utils;
 
 import org.json.JSONObject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -36,31 +36,31 @@ import butterknife.OnClick;
  * Description:我发起的(办公用品)
  */
 public class MeLaunchOfficesSuppliesActivity extends HttpBaseActivity<MeLaunchOfficesSuppliesPresenter> implements MeLaunchOfficesSuppliesContract.View {
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.rl_root_view)
+    @BindView(R.id.rl_root_view)
     RelativeLayout mRootView;
-    @Bind(R.id.iv_top_status)
+    @BindView(R.id.iv_top_status)
     ImageView ivApprovalTopState;
-    @Bind(R.id.tv_event_type)
+    @BindView(R.id.tv_event_type)
     TextView tvEventType;
-    @Bind(R.id.tv_application_date)
+    @BindView(R.id.tv_application_date)
     TextView tvApprovalDate;
-    @Bind(R.id.tv_approval_content)
+    @BindView(R.id.tv_approval_content)
     TextView mTvApprovalContent;
     private String appr_id;
     private String oal_id;
-    @Bind(R.id.ll_approval_state_iv_container)
+    @BindView(R.id.ll_approval_state_iv_container)
     LinearLayout mLlApprovalStateIvContainer;
-    @Bind(R.id.ll_approval_info_container)
+    @BindView(R.id.ll_approval_info_container)
     LinearLayout mLlApprovalInfoContainer;
-    @Bind(R.id.ll_approval_launcher_info_layout)
+    @BindView(R.id.ll_approval_launcher_info_layout)
     LinearLayout mLlApprovalLaunchInfoContainer;
-    @Bind(R.id.ll_approval_process_layout)
+    @BindView(R.id.ll_approval_process_layout)
     LinearLayout mLlApprovalProcessLayout;
-    @Bind(R.id.ll_not_approval_operate_layout)
+    @BindView(R.id.ll_not_approval_operate_layout)
     LinearLayout mLlApprovalOperateContainer;
     private String status = "0";
     private String titleName;
@@ -352,7 +352,6 @@ public class MeLaunchOfficesSuppliesActivity extends HttpBaseActivity<MeLaunchOf
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 

@@ -53,7 +53,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
@@ -67,31 +67,32 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
 
     public static final int UPDATE_PHONE = 0x4;//修改电话
     public static final int UPDATE_PROTRAIT = 2;//修改头像
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.user_portrait)
+    @BindView(R.id.user_portrait)
     SimpleDraweeView userPortrait;
-    @Bind(R.id.user_sex)
+    @BindView(R.id.user_sex)
     TextView userSex;
-    @Bind(R.id.user_department)
+    @BindView(R.id.user_department)
     TextView userDepartment;
-    @Bind(R.id.user_post)
+    @BindView(R.id.user_post)
     TextView userPost;
-    @Bind(R.id.user_phone)
+    @BindView(R.id.user_phone)
     TextView userPhone;
-    @Bind(R.id.layout_root)
+    @BindView(R.id.layout_root)
     LinearLayout mRootView;
-    @Bind(R.id.user_mails)
+    @BindView(R.id.user_mails)
     TextView user_mails;
-    @Bind(R.id.user_jopnumber)
+    @BindView(R.id.user_jopnumber)
     TextView user_jopnumber;
 
     private BottomPushPopupWindow mPop;
     private static final int CODE_GALLERY_REQUEST = 0x1;//相册
     private static final int CODE_CAMERA_REQUEST = 0x2;//拍照
     private static final int CROP_PICTURE_REQUEST = 0x3;//图片路径
+    private static final int MODIFICATION_EMAIL = 101;//邮箱修改
 
     private static final String TEMP_FILE_NAME = "temp_icon.jpg";
     private static final String CAMERA_FILE_NAME = "camera_pic.jpg";
@@ -176,7 +177,8 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 startActivityForResult(new Intent(UserInfoActivity.this,
                         ModifyPhoneActivity.class), UPDATE_PHONE);
                 break;
-            case R.id.user_date_box:
+            case R.id.user_date_box://邮箱修改
+                startActivityForResult(new Intent(this, ModificationEmailActivity.class),101);
                 break;
             case R.id.btn_logout://登出
                 showLogoutTips();
@@ -288,8 +290,10 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode == MODIFICATION_EMAIL) {
+            user_mails.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
+        }
         if (resultCode == RESULT_CANCELED) {
             return;
         }
@@ -497,6 +501,5 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 }

@@ -64,7 +64,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -74,21 +74,21 @@ import butterknife.OnClick;
  */
 public class MeetingVideoActivity extends BaseActivity implements AVChatStateObserver {
 
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.video_layout)
+    @BindView(R.id.video_layout)
     ViewGroup videoLayout;
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
-    @Bind(R.id.tv_member_ratio)
+    @BindView(R.id.tv_member_ratio)
     TextView mTvMemberRatio;//成员比例
-    @Bind(R.id.cb_sound)
+    @BindView(R.id.cb_sound)
     CheckBox mCbSound;//
-    @Bind(R.id.rl_handler)
+    @BindView(R.id.rl_handler)
     RelativeLayout mRlHandler;
-    @Bind(R.id.rl_leave_meeting)
+    @BindView(R.id.rl_leave_meeting)
     RelativeLayout mRlLeveRoom;//创建者没有该选项
 
     private String currentSpeakerMember;//当前说话成员
@@ -827,7 +827,6 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         registerObservers(false);
         leaveRoom();
     }
