@@ -4,13 +4,7 @@ import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
-import com.shanlinjinrong.oa.ui.fragment.bean.ContactsDepartmentBean;
-
 import java.util.List;
-
-/**
- * Created by 丁 on 2017/8/21.
- */
 
 public interface TabContractsFragmentContract {
     interface View extends BaseView {
