@@ -211,7 +211,7 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     public void modificationEmailSuccess() {
         AppConfig.getAppConfig(this).set(AppConfig.PREF_KEY_USER_EMAIL, mEtEmailRedact.getText().toString() + mTvEmailSelected.getText().toString());
         setResult(101);
-        showToast("修改成功");
+        showToast("修改成功！");
         finish();
     }
 

@@ -142,7 +142,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
 
     @Override
     public void modifySuccess(String newNumber) {
-        showToast("修改成功");
+        showToast("修改成功！");
         AppConfig.getAppConfig(ModifyPhoneActivity.this).set(
                 AppConfig.PREF_KEY_PHONE, newNumber);
         setResult(RESULT_OK);
