@@ -191,7 +191,11 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                         mData.add(mAllWorkAttendanceList.get(i));
                     } catch (Throwable e) {
                         e.printStackTrace();
-                        mData.add(mAllWorkAttendanceList.get(i));
+                        try {
+                            mData.add(mAllWorkAttendanceList.get(i));
+                        } catch (Throwable e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
                 if (mAllWorkAttendanceList.size() > 0) {
@@ -316,7 +320,7 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                         return;
                     }
                     if (bean1.getTbmstatus().contains("[外出]")) {
-                        baseViewHolder.setText(R.id.tv_state, "[外出]");
+                        baseViewHolder.setText(R.id.tv_state, "[出差]");
                         return;
                     }
                     if (bean1.getTbmstatus().contains("[加班]")) {
@@ -421,6 +425,9 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                     }
                     if (bean1.getTbmstatus().contains("[早退]")) {
                         baseViewHolder.setText(R.id.tv_state, "[早退]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus() == null) {
                         return;
                     }
                     baseViewHolder.setText(R.id.tv_state, bean1.getTbmstatus());
