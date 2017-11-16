@@ -8,7 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retrofit.model.responsebody.QueryPayResponse;
-import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.PayQueryPresenter;
@@ -186,6 +185,7 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
         mSlContainer.setVisibility(View.GONE);
         mTvNotNetwork.setVisibility(View.VISIBLE);
         mLlContainerLayout.setVisibility(View.GONE);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

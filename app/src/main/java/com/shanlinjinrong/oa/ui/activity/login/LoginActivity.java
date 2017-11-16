@@ -33,7 +33,6 @@ import com.shanlinjinrong.oa.utils.NetWorkUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.oa.views.KeyboardLayout;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import butterknife.BindView;
