@@ -199,18 +199,27 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         //迟到
         List<MyAttandanceResponse.CdWorkAttendanceListBean> cdWorkAttendanceList = myAttandanceResponse.getCdWorkAttendanceList();
         for (MyAttandanceResponse.CdWorkAttendanceListBean item : cdWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[迟到]") + "");
         }
         //旷工
         List<MyAttandanceResponse.KgWorkAttendanceListBean> kgWorkAttendanceList = myAttandanceResponse.getKgWorkAttendanceList();
         for (MyAttandanceResponse.KgWorkAttendanceListBean item : kgWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[旷工]") + "");
         }
         //早退
         List<MyAttandanceResponse.ZtWorkAttendanceListBean> ztWorkAttendanceList = myAttandanceResponse.getZtWorkAttendanceList();
         for (MyAttandanceResponse.ZtWorkAttendanceListBean item : ztWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[早退]") + "");
         }
@@ -218,6 +227,9 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         //休假
         List<MyAttandanceResponse.XjWorkAttendanceListBean> xjWorkAttendanceList = myAttandanceResponse.getXjWorkAttendanceList();
         for (MyAttandanceResponse.XjWorkAttendanceListBean item : xjWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[休假]") + "");
         }
@@ -225,6 +237,9 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         //加班
         List<MyAttandanceResponse.JbWorkAttendanceListBean> jbWorkAttendanceList = myAttandanceResponse.getJbWorkAttendanceList();
         for (MyAttandanceResponse.JbWorkAttendanceListBean item : jbWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[加班]") + "");
         }
@@ -232,6 +247,9 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         //出差
         List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();
         for (MyAttandanceResponse.CcWorkAttendanceListBean item : ccWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[出差]") + "");
         }
