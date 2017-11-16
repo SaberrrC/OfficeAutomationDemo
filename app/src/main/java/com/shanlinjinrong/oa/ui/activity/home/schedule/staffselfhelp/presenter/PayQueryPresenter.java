@@ -1,10 +1,8 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter;
 
 
-import com.example.retrofit.model.HttpResult;
 import com.example.retrofit.model.responsebody.QueryPayResponse;
 import com.example.retrofit.net.HttpMethods;
-import com.shanlinjinrong.oa.net.remote.ApiModule;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -15,9 +13,7 @@ import java.net.SocketTimeoutException;
 import javax.inject.Inject;
 
 import retrofit2.adapter.rxjava.HttpException;
-import rx.Observer;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 //薪资查询
