@@ -427,10 +427,9 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                         baseViewHolder.setText(R.id.tv_state, "[早退]");
                         return;
                     }
-                    if (bean1.getTbmstatus() == null) {
-                        return;
-                    }
                     baseViewHolder.setText(R.id.tv_state, bean1.getTbmstatus());
+                } else {
+                    baseViewHolder.setText(R.id.tv_state, "");
                 }
             } catch (Throwable e) {
                 e.printStackTrace();
