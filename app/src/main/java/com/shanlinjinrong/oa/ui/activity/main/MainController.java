@@ -452,9 +452,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
      * 初始化数据
      */
     private void initData() {
-        RetrofitConfig.getInstance().setAuthToken(AppConfig.getAppConfig(AppManager.mContext).getPrivateToken());
-        RetrofitConfig.getInstance().setUserId(AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
-        RetrofitConfig.getInstance().setUserCode(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
         //检测推送页面
         easeUI = EaseUI.getInstance();
         //极光推送设置别名和部门

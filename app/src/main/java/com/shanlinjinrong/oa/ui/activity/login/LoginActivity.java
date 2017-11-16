@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.login;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -8,8 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -21,24 +18,22 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.retrofit.net.RetrofitConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.AndroidAdjustResizeBugFix;
-import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.NetWorkUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.oa.views.KeyboardLayout;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import butterknife.BindView;

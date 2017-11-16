@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.manager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -34,6 +35,7 @@ import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerAppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.module.AppManagerModule;
 import com.shanlinjinrong.oa.ui.base.dagger.module.KjHttpModule;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
+import com.shanlinjinrong.oa.utils.ToastManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -41,6 +43,7 @@ import com.tencent.bugly.crashreport.CrashReport;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
@@ -72,6 +75,7 @@ public class AppManager extends MultiDexApplication {
     private static Stack<Activity> activityStack;
     private static AppManager instance;
     public static Context mContext;
+    public static ToastManager sToastManager;
 
     private AppComponent appComponent;
 
@@ -86,8 +90,9 @@ public class AppManager extends MultiDexApplication {
 //    内存检测end
 
     public AppManager() {
-
-
+        if (sToastManager == null) {
+            sToastManager = new ToastManager(new WeakReference<Application>(this));
+        }
     }
 
     @Override
@@ -150,7 +155,7 @@ public class AppManager extends MultiDexApplication {
 
         //leakCanary
 //        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this);
+        LeakCanary.install(this);
 //        }
 
         //blockCanary

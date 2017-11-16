@@ -186,7 +186,6 @@ public class PayQueryActivity extends HttpBaseActivity<PayQueryPresenter> implem
         mSlContainer.setVisibility(View.GONE);
         mTvNotNetwork.setVisibility(View.VISIBLE);
         mLlContainerLayout.setVisibility(View.GONE);
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
