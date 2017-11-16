@@ -314,6 +314,10 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     tv_gowork_time.setText(bean.get(i).getOnebegintime());
                     tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
                     try {
+                        if (bean.get(i).getTbmstatus() == null){
+                            mTvState.setText("");
+                            return;
+                        }
                         if (bean.get(i).getTbmstatus().contains("[出差]")) {
                             mTvState.setText("[出差]");
                             return;
