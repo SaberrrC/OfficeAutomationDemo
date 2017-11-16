@@ -319,8 +319,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                             return;
                         }
                         if (bean.get(i).getTbmstatus().contains("[外出]")) {
-                            mTvState.setText("[出差" +
-                                    "]");
+                            mTvState.setText("[出差]");
                             return;
                         }
                         if (bean.get(i).getTbmstatus().contains("[加班]")) {
