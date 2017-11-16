@@ -196,11 +196,11 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         mDataTypeMap.clear();
         mAllWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
 
-        //出差
+        //所有考勤
         List<MyAttandanceResponse.AllWorkAttendanceListBean> allWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
         for (MyAttandanceResponse.AllWorkAttendanceListBean item : allWorkAttendanceList) {
             if (item.getSignCause() != null) {
-                return;
+                continue;
             }
             try {
                 String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
@@ -262,7 +262,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();
         for (MyAttandanceResponse.CcWorkAttendanceListBean item : ccWorkAttendanceList) {
             if (item.getSignCause() != null) {
-                return;
+                continue;
             }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[出差]") + "");
