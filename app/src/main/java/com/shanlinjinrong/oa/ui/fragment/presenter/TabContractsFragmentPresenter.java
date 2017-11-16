@@ -107,6 +107,10 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                         List<Contacts> contacts = new ArrayList<>();
                         for (int i = 0; i < children.length(); i++) {
                             JSONObject department = children.getJSONObject(i);
+                            String number = department.getString("memberCount");
+                            if (number.equals("0")) {
+                                continue;
+                            }
                             Contacts contact = new Contacts(department);
                             contacts.add(contact);
                         }

@@ -325,10 +325,6 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
             Intent intent = new Intent();
             switch (items.get(i).getItemType()) {
                 case Contacts.DEPARTMENT:
-                    //部门为0 禁止点击
-                    if (items.get(i).getDepartmentPersons().equals("0")){
-                        return;
-                    }
                     intent.setClass(getActivity(), ContactsActivity.class);
                     intent.putExtra(ContactsActivity.PAGE_MAP_DID,
                             items.get(i).getDepartmentId());
