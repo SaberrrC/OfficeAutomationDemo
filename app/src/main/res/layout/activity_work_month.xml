@@ -10,125 +10,136 @@
 
     <include layout="@layout/toolbar"/>
 
-    <LinearLayout
-        android:id="@+id/ll_top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="统计时间"
-                android:textColor="@color/grey"
-                android:textSize="14sp"/>
-
-            <LinearLayout
-                android:id="@+id/ll_chose_time"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="12dp"
-                android:background="@drawable/edittext_input_square_bg"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tv_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="6dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#FF333333"
-                    android:textSize="14sp"/>
-
-                <ImageView
-                    android:layout_width="5.5dp"
-                    android:layout_height="5.5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/arrow_down_select"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="统计人员"
-                android:textColor="@color/grey"
-                android:textSize="14sp"/>
-
-            <LinearLayout
-                android:id="@+id/ll_count_people"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="12dp"
-                android:background="@drawable/edittext_input_square_bg"
-                android:gravity="center_vertical|center_horizontal">
-
-                <TextView
-                    android:id="@+id/tv_people"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="6dp"
-                    android:gravity="center_vertical"
-                    android:text="本人"
-                    android:textColor="#FF333333"
-                    android:textSize="14sp"/>
-
-                <ImageView
-                    android:layout_width="5.5dp"
-                    android:layout_height="5.5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/arrow_down_select"/>
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_month"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-    </LinearLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/common_line_color"/>
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+   >
 
-        <include
-            android:id="@+id/ll_month_list_item"
-            layout="@layout/work_month_list_item"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="统计时间"
+                        android:textColor="@color/grey"
+                        android:textSize="14sp"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_chose_time"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="12dp"
+                        android:background="@drawable/edittext_input_square_bg"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="6dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="#FF333333"
+                            android:textSize="14sp"/>
+
+                        <ImageView
+                            android:layout_width="5.5dp"
+                            android:layout_height="5.5dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/arrow_down_select"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="统计人员"
+                        android:textColor="@color/grey"
+                        android:textSize="14sp"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_count_people"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="12dp"
+                        android:background="@drawable/edittext_input_square_bg"
+                        android:gravity="center_vertical|center_horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_people"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="6dp"
+                            android:gravity="center_vertical"
+                            android:text="本人"
+                            android:textColor="#FF333333"
+                            android:textSize="14sp"/>
+
+                        <ImageView
+                            android:layout_width="5.5dp"
+                            android:layout_height="5.5dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/arrow_down_select"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_month"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/common_line_color"/>
+
+
+            <include
+                android:id="@+id/ll_month_list_item"
+                layout="@layout/work_month_list_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"/>
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

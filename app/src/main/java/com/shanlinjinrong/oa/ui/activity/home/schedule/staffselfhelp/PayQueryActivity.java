@@ -8,7 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retrofit.model.responsebody.QueryPayResponse;
-import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.PayQueryPresenter;

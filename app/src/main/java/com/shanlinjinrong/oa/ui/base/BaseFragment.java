@@ -244,7 +244,9 @@ public abstract class BaseFragment extends Fragment {
     public void hideLoadingView() {
         LogUtils.e("hideLoadingView");
         LogUtils.e("getClass " + getClass());
-        loadingDialog.dismiss();
+        if (loadingDialog.isShowing()) {
+            loadingDialog.cancel();
+        }
     }
 
     public void showToast(

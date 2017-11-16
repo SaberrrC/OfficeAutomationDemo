@@ -85,13 +85,23 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.loadDataFailed(errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.loadDataFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.loadDataFinish();
+                try {
+                    if (mView != null)
+                        mView.loadDataFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
 

@@ -4,12 +4,7 @@ import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
-
 import java.util.List;
-
-/**
- * Created by 丁 on 2017/8/21.
- */
 
 public interface TabContractsFragmentContract {
     interface View extends BaseView {
@@ -36,8 +31,8 @@ public interface TabContractsFragmentContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void autoSearch(String departmentId, String isleader, String name);
+        void autoSearch(String name);
 
-        void loadData();
+        void loadData(String orgId);
     }
 }

@@ -176,11 +176,11 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_pay_search:
                 //薪资查询
-                intent = new Intent(mContext, PayQueryActivity.class);
+                //intent = new Intent(mContext, PayQueryActivity.class);
                 break;
             case R.id.rl_test:
                 if (BuildConfig.DEBUG) {
-//                    intent = new Intent(mContext, UpcomingTasksActivity.class);
+                //intent = new Intent(mContext, UpcomingTasksActivity.class);
                 }
                 break;
             case R.id.rl_holiday_search:

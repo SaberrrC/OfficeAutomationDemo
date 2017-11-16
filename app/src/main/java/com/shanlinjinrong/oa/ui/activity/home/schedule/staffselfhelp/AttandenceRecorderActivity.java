@@ -191,7 +191,11 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                         mData.add(mAllWorkAttendanceList.get(i));
                     } catch (Throwable e) {
                         e.printStackTrace();
-                        mData.add(mAllWorkAttendanceList.get(i));
+                        try {
+                            mData.add(mAllWorkAttendanceList.get(i));
+                        } catch (Throwable e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
                 if (mAllWorkAttendanceList.size() > 0) {
@@ -309,40 +313,126 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                     e.printStackTrace();
                 }
             });
-            if (bean1.getTbmstatus() != null) {
-                if (bean1.getTbmstatus().contains("[出差]")) {
-                    baseViewHolder.setText(R.id.tv_state, "[出差]");
-                    return;
+            try {
+                if (bean1.getTbmstatus() != null) {
+                    if (bean1.getTbmstatus().contains("[出差]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[出差]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[外出]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[出差]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[加班]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[加班]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[转调休加班]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[加班]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[加班费加班]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[加班]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[休假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[事假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[婚假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[年假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[丧假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[工伤]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[加班转调休]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[哺乳假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[带薪病假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[不带薪病假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[带薪产假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[不带薪产假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[陪产假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[产检假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[特殊哺乳假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[特殊产前假]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[休假]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[签卡]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[签卡]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[忘记打卡]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[忘记打卡]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[考勤机故障]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[考勤机故障]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[地铁故障]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[地铁故障]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[旷工]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[旷工]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[迟到]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[迟到]");
+                        return;
+                    }
+                    if (bean1.getTbmstatus().contains("[早退]")) {
+                        baseViewHolder.setText(R.id.tv_state, "[早退]");
+                        return;
+                    }
+                    baseViewHolder.setText(R.id.tv_state, bean1.getTbmstatus());
+                } else {
+                    baseViewHolder.setText(R.id.tv_state, "");
                 }
-                if (bean1.getTbmstatus().contains("[加班]")) {
-                    baseViewHolder.setText(R.id.tv_state, "[加班]");
-                    return;
-                }
-                if (bean1.getTbmstatus().contains("[休假]")) {
-                    baseViewHolder.setText(R.id.tv_state, "[休假]");
-                    return;
-                }
-                if (bean1.getTbmstatus().contains("[签卡]")) {
-                    baseViewHolder.setText(R.id.tv_state, "[签卡]");
-                    return;
-                }
-                if (bean1.getTbmstatus().contains("[旷工]")) {
-                    baseViewHolder.setText(R.id.tv_state, "[旷工]");
-                    return;
-                }
-                if (bean1.getTbmstatus().contains("[迟到]")) {
-                    baseViewHolder.setText(R.id.tv_state, "[迟到]");
-                    return;
-                }
-                if (bean1.getTbmstatus().contains("[早退]")) {
-                    baseViewHolder.setText(R.id.tv_state, "[早退]");
-                    return;
-                }
-                if (bean1.getTbmstatus().contains("[外出]")) {
-                    baseViewHolder.setText(R.id.tv_state, "[外出]");
-                    return;
-                }
-                baseViewHolder.setText(R.id.tv_state, bean1.getTbmstatus());
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         }
 

@@ -195,41 +195,77 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         mAllWorkAttendanceList.clear();
         mDataTypeMap.clear();
         mAllWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
-        //出差
-        List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();
-        for (MyAttandanceResponse.CcWorkAttendanceListBean item : ccWorkAttendanceList) {
-            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType("[出差]") + "");
+
+        //所有考勤
+        List<MyAttandanceResponse.AllWorkAttendanceListBean> allWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
+        for (MyAttandanceResponse.AllWorkAttendanceListBean item : allWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
+            try {
+                String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+                mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
+
         //迟到
         List<MyAttandanceResponse.CdWorkAttendanceListBean> cdWorkAttendanceList = myAttandanceResponse.getCdWorkAttendanceList();
         for (MyAttandanceResponse.CdWorkAttendanceListBean item : cdWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[迟到]") + "");
-        }
-        //加班
-        List<MyAttandanceResponse.JbWorkAttendanceListBean> jbWorkAttendanceList = myAttandanceResponse.getJbWorkAttendanceList();
-        for (MyAttandanceResponse.JbWorkAttendanceListBean item : jbWorkAttendanceList) {
-            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType("[加班]") + "");
         }
         //旷工
         List<MyAttandanceResponse.KgWorkAttendanceListBean> kgWorkAttendanceList = myAttandanceResponse.getKgWorkAttendanceList();
         for (MyAttandanceResponse.KgWorkAttendanceListBean item : kgWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[旷工]") + "");
-        }
-        //休假
-        List<MyAttandanceResponse.XjWorkAttendanceListBean> xjWorkAttendanceList = myAttandanceResponse.getXjWorkAttendanceList();
-        for (MyAttandanceResponse.XjWorkAttendanceListBean item : xjWorkAttendanceList) {
-            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
-            mDataTypeMap.put(key, getType("[休假]") + "");
         }
         //早退
         List<MyAttandanceResponse.ZtWorkAttendanceListBean> ztWorkAttendanceList = myAttandanceResponse.getZtWorkAttendanceList();
         for (MyAttandanceResponse.ZtWorkAttendanceListBean item : ztWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[早退]") + "");
+        }
+
+        //休假
+        List<MyAttandanceResponse.XjWorkAttendanceListBean> xjWorkAttendanceList = myAttandanceResponse.getXjWorkAttendanceList();
+        for (MyAttandanceResponse.XjWorkAttendanceListBean item : xjWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
+            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+            mDataTypeMap.put(key, getType("[休假]") + "");
+        }
+
+        //加班
+        List<MyAttandanceResponse.JbWorkAttendanceListBean> jbWorkAttendanceList = myAttandanceResponse.getJbWorkAttendanceList();
+        for (MyAttandanceResponse.JbWorkAttendanceListBean item : jbWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
+            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+            mDataTypeMap.put(key, getType("[加班]") + "");
+        }
+
+        //出差
+        List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();
+        for (MyAttandanceResponse.CcWorkAttendanceListBean item : ccWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                continue;
+            }
+            String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+            mDataTypeMap.put(key, getType("[出差]") + "");
         }
 
         for (PopItem mDataItrm : mData) {
@@ -277,40 +313,127 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     tv_name.setText(bean.get(i).getPsname());
                     tv_gowork_time.setText(bean.get(i).getOnebegintime());
                     tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
-
-                    if (bean.get(i).getTbmstatus().contains("[出差]")) {
-                        mTvState.setText("[出差]");
-                        return;
+                    try {
+                        if (bean.get(i).getTbmstatus() == null){
+                            mTvState.setText("");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[出差]")) {
+                            mTvState.setText("[出差]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[外出]")) {
+                            mTvState.setText("[出差]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[加班]")) {
+                            mTvState.setText("[加班]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[转调休加班]")) {
+                            mTvState.setText("[加班]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[加班费加班]")) {
+                            mTvState.setText("[加班]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[休假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[事假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[婚假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[年假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[丧假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[工伤]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[加班转调休]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[哺乳假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[带薪病假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[不带薪病假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[带薪产假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[不带薪产假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[陪产假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[产检假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[特殊哺乳假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[特殊产前假]")) {
+                            mTvState.setText("[休假]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[签卡]")) {
+                            mTvState.setText("[签卡]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[忘记打卡]")) {
+                            mTvState.setText("[忘记打卡]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[考勤机故障]")) {
+                            mTvState.setText("[考勤机故障]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[地铁故障]")) {
+                            mTvState.setText("[地铁故障]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[旷工]")) {
+                            mTvState.setText("[旷工]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[迟到]")) {
+                            mTvState.setText("[迟到]");
+                            return;
+                        }
+                        if (bean.get(i).getTbmstatus().contains("[早退]")) {
+                            mTvState.setText("[早退]");
+                            return;
+                        }
+                        mTvState.setText(bean.get(i).getTbmstatus());
+                    } catch (Throwable e) {
+                        e.printStackTrace();
                     }
-                    if (bean.get(i).getTbmstatus().contains("[加班]")) {
-                        mTvState.setText("[加班]");
-                        return;
-                    }
-                    if (bean.get(i).getTbmstatus().contains("[休假]")) {
-                        mTvState.setText("[休假]");
-                        return;
-                    }
-                    if (bean.get(i).getTbmstatus().contains("[签卡]")) {
-                        mTvState.setText("[签卡]");
-                        return;
-                    }
-                    if (bean.get(i).getTbmstatus().contains("[旷工]")) {
-                        mTvState.setText("[旷工]");
-                        return;
-                    }
-                    if (bean.get(i).getTbmstatus().contains("[迟到]")) {
-                        mTvState.setText("[迟到]");
-                        return;
-                    }
-                    if (bean.get(i).getTbmstatus().contains("[早退]")) {
-                        mTvState.setText("[早退]");
-                        return;
-                    }
-                    if (bean.get(i).getTbmstatus().contains("[外出]")) {
-                        mTvState.setText("[外出]");
-                        return;
-                    }
-                    mTvState.setText(bean.get(i).getTbmstatus());
                 }
             } else {
                 mTvEmptyLayout.setText("暂无日考勤信息！");

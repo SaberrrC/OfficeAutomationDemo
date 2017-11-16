@@ -71,7 +71,7 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
         setTitle("");//必须在setSupportActionBar之前调用
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(mToolbar);
-        mTvTitle.setText("发起审批");
+        mTvTitle.setText("发起申请");
         Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
                 Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;

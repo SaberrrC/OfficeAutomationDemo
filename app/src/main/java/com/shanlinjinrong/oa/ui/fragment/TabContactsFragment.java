@@ -1,23 +1,18 @@
 
 package com.shanlinjinrong.oa.ui.fragment;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -152,19 +147,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         recyclerView.addOnItemTouchListener(new ItemClick());
         mContactAdapter = new TabContactsAdapter(items);
         recyclerView.setAdapter(mContactAdapter);
-//        title.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_COMPANY_NAME));
         loadData();
-
-
-        search_et_input.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                recyclerView.setVisibility(View.GONE);
-                reSetSwipRefreash();
-                tvCacle.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
 
 
         //EditText 自动搜索,间隔->输入停止1秒后自动搜索
@@ -172,20 +155,19 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 .debounce(1000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<CharSequence>() {
-                    @Override
-                    public void accept(CharSequence charSequence) throws Exception {
-                        if (search_et_input == null) {
-                            return;
-                        }
-                        if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())) {
-                            String departmentId = AppConfig.getAppConfig(AppManager.mContext)
-                                    .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
-                            String isleader = AppConfig.getAppConfig(AppManager.mContext)
-                                    .get(AppConfig.PREF_KEY_IS_LEADER);
-                            mPresenter.autoSearch(departmentId, isleader, search_et_input.getText().toString().trim());
-
-                        }
+                .subscribe(charSequence -> {
+                    if (search_et_input == null) {
+                        return;
+                    }
+                    if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())) {
+                        String departmentId = AppConfig.getAppConfig(AppManager.mContext)
+                                .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
+                        String isleader = AppConfig.getAppConfig(AppManager.mContext)
+                                .get(AppConfig.PREF_KEY_IS_LEADER);
+                        mPresenter.autoSearch(search_et_input.getText().toString().trim());
+                    } else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        recyclerViewSearchResult.setVisibility(View.GONE);
                     }
                 });
     }
@@ -197,21 +179,19 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     protected void lazyLoadData() {
-        mPresenter.loadData();
+        mPresenter.loadData("1");
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-//        loadData();
     }
 
     /**
      * 加载通讯录数据
      */
     private void loadData() {
-        //mPresenter.loadData();
     }
 
     public void reSetSwipRefreash() {
@@ -222,7 +202,6 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 mSwipeRefreshLayout.setEnabled(false);
             }
         }
-
     }
 
     @Override
@@ -254,19 +233,20 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         }
 
         hideEmptyView();
-        if (recyclerViewSearchResult != null)
+        if (recyclerViewSearchResult != null) {
+            recyclerView.setVisibility(View.GONE);
             recyclerViewSearchResult.setVisibility(View.VISIBLE);
+        }
+        mSearchUserResultAdapter.notifyDataSetChanged();
         reSetSwipRefreash();
     }
 
     @Override
     public void autoSearchFailed(int errCode, String errMsg) {
-//        catchWarningByCode(errCode);
     }
 
     @Override
     public void autoSearchOther(String msg) {
-//        showToast(msg);
     }
 
     @Override
@@ -339,7 +319,6 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         catchWarningByCode(code);
     }
 
-
     class ItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
@@ -354,8 +333,6 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                     startActivity(intent);
                     break;
                 case Contacts.EMPLOYEE:
-//                    showContactsInfo(items.get(i));
-
                     break;
             }
         }
@@ -377,159 +354,6 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         intent.putExtras(bundle);
         startActivity(intent);
     }
-
-//    @SuppressLint("SetTextI18n")
-//    private void showContactsInfo(final User user) {
-//
-//        LayoutInflater factory = LayoutInflater.from(getActivity());
-//
-//        @SuppressLint("InflateParams")
-//        View view = factory.inflate(R.layout.custom_dialog, null);
-//
-//
-//        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams
-//                .WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
-//        popupWindow.setOutsideTouchable(true);
-//        popupWindow.setFocusable(true);
-//        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-//        TextView name = (TextView) view.findViewById(R.id.name);
-//        name.setText(user.getUsername());
-//        final TextView phoneNumber = (TextView) view.findViewById(R.id.tv_phone_number);
-//        LinearLayout btnCall = (LinearLayout) view.findViewById(R.id.ll_phone_layout);
-//        Button btnVoiceCall = (Button) view.findViewById(R.id.btn_voice_call);
-//        Button btnSendMsg = (Button) view.findViewById(R.id.btn_send_msg);
-//        View partLine = view.findViewById(R.id.partLine);
-//
-//        String isshow = user.getIsshow();
-//
-//
-//        if (isshow.equals("1")) {
-//            //显示电话
-//            phoneNumber.setText(user.getPhone());
-//        } else {
-//            btnCall.setVisibility(View.GONE);
-//            partLine.setVisibility(View.INVISIBLE);
-//        }
-//
-//
-//        SimpleDraweeView portrait = (SimpleDraweeView) view.findViewById(R.id.user_portrait);
-//        portrait.setImageURI(user.getPortraits());
-//
-//
-//        btnVoiceCall.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                boolean availabl = Utils.isNetworkAvailabl(mContext);
-//                if (!availabl) {
-//                    showToast("网络不稳定，请重试");
-//                    return;
-//                }
-//
-//                addOrUpdateFriendInfo(user);
-//
-//                startActivity(new Intent(mContext, VoiceCallActivity.class)
-//                        .putExtra("username", Constants.CID + "_" + user.getCode())
-//                        .putExtra("nike", user.getUsername())
-//                        .putExtra("portrait", user.getPortraits())
-//                        .putExtra("isComingCall", false));
-//
-//                popupWindow.dismiss();
-//                popupWindow = null;
-//            }
-//        });
-//        btnSendMsg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                boolean availabl = Utils.isNetworkAvailabl(mContext);
-//                if (!availabl) {
-//                    showToast("网络不稳定，请重试");
-//                    return;
-//                }
-//
-//                addOrUpdateFriendInfo(user);
-//
-//
-//                startActivity(new Intent(mContext, EaseChatMessageActivity.class)
-//                        .putExtra("usernike", user.getUsername())
-//                        .putExtra("user_pic", user.getPortraits())
-//                        .putExtra("u_id", Constants.CID + "_" + user.getCode()));
-//
-//                popupWindow.dismiss();
-//                popupWindow = null;
-//            }
-//        });
-//        btnCall.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
-//                    @Override
-//                    public void onGranted() {
-//                        Intent intent = new Intent(Intent.ACTION_CALL,
-//                                Uri.parse("tel:" + user.getPhone()));
-//
-//                        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                            // TODO: Consider calling
-//                            //    ActivityCompat#requestPermissions
-//                            // here to request the missing permissions, and then overriding
-//                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                            //                                          int[] grantResults)
-//                            // to handle the case where the user grants the permission. See the documentation
-//                            // for ActivityCompat#requestPermissions for more details.
-//                            return;
-//                        }
-//                        startActivity(intent);
-//                    }
-//
-//                    @Override
-//                    public void onDenied() {
-//                        showToast("拨打电话权限被拒绝，请手动设置");
-//                    }
-//                });
-//            }
-//        });
-//
-//        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-//        lp.alpha = 0.5f;
-//        getActivity().getWindow().setAttributes(lp);
-//        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//
-//            @Override
-//            public void onDismiss() {
-//                WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-//                lp.alpha = 1f;
-//                getActivity().getWindow().setAttributes(lp);
-//            }
-//        });
-//
-//        popupWindow.setAnimationStyle(R.style.dialog_pop_anim_style);
-//        popupWindow.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
-//    }
-
-    private void addOrUpdateFriendInfo(User user) {
-//        Friends friend = new Friends();
-//        friend.setUser_id(Constants.CID + "_" + user.getCode());
-//        friend.setNickname(user.getUsername());
-//        friend.setPortrait(user.getPortraits());
-//        FriendsInfoCacheSvc.getInstance(mContext).addOrUpdateFriends(friend);
-    }
-
-    public void callPhone(String phone) {
-        //用intent启动拨打电话
-        Intent intent = new Intent(Intent.ACTION_CALL,
-                Uri.parse("tel:" + phone));
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        startActivity(intent);
-    }
-
 
     @Override
     public void onDestroyView() {

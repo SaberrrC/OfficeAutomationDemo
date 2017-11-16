@@ -12,6 +12,8 @@ public class Api {
 
     public static final String PHP_DEBUG_URL = "http://118.31.18.67:86";
 
+//    public static final String PHP_URL = "http://118.31.18.67:86";
+
     //TODO会议室管理、找回密码 测试环境
 //    public static final String PHP_URL = "http://testoa.shanlinjinrong.com/webApi/";
     //新 内网
@@ -127,11 +129,17 @@ public class Api {
     /**
      * 获取通讯录接口2
      */
-    public static final String GET_CONTACTS = "organization/queryAllOrganiza";
+    public static final String GET_CONTACTS = "organization/queryOrgAndUser";
+
+//    /**
+//     * 搜索联系人
+//     */
+//    public static final String PHONEBOOK_SEARCHPHONEBOOK = "phonebook/searchphonebook";
+
     /**
      * 搜索联系人
      */
-    public static final String PHONEBOOK_SEARCHPHONEBOOK = "phonebook/searchphonebook";
+    public static final String PHONEBOOK_SEARCHPHONEBOOK = "organization/queryUserByName";
     /**
      * 登录时间判断接口
      */

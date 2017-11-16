@@ -474,18 +474,18 @@
                         android:layout_weight="1"
                         android:gravity="center">
 
-                        <ImageView
-                            android:id="@+id/iv_pay_search"
-                            style="@style/home_page_icon_style"
-                            android:background="@mipmap/pay_search"/>
+                        <!--<ImageView-->
+                            <!--android:id="@+id/iv_pay_search"-->
+                            <!--style="@style/home_page_icon_style"-->
+                            <!--android:background="@mipmap/pay_search"/>-->
 
-                        <TextView
-                            style="@style/common_text_style"
-                            android:layout_below="@+id/iv_pay_search"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp"
-                            android:text="薪资查询"
-                            android:textSize="@dimen/text_common_icon_tips"/>
+                        <!--<TextView-->
+                            <!--style="@style/common_text_style"-->
+                            <!--android:layout_below="@+id/iv_pay_search"-->
+                            <!--android:layout_centerHorizontal="true"-->
+                            <!--android:layout_marginTop="8dp"-->
+                            <!--android:text="薪资查询"-->
+                            <!--android:textSize="@dimen/text_common_icon_tips"/>-->
                     </RelativeLayout>
 
 

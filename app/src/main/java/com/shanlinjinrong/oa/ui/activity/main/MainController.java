@@ -1,10 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.main;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -36,7 +33,6 @@ import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.util.NetUtils;
-import com.iflytek.cloud.thirdparty.B;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -293,11 +289,11 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         new Thread(new Runnable() {
             @Override
             public void run() {
-//                try {
+                //                try {
                 mPresenter.loadConversationList();
-//                } catch (Exception e) {
-//                    LogUtils.e("加载环信抛异常了");
-//                }
+                //                } catch (Exception e) {
+                //                    LogUtils.e("加载环信抛异常了");
+                //                }
             }
         }).start();
     }
@@ -512,7 +508,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         //添加环信监听
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
         refreshCommCount();
-//        refreshUnReadMsgCount();
+        //        refreshUnReadMsgCount();
         super.onResume();
     }
 

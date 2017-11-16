@@ -34,7 +34,6 @@ public class HeaderInterceptor implements Interceptor {
         return null;
     }
 
-    //TODO 测试个人
     private Request addHeaders(Request request) {
         return request.newBuilder()
                 .addHeader("token", RetrofitConfig.getInstance().getAuthToken())

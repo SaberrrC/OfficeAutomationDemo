@@ -25,7 +25,7 @@ public abstract class BaseHttpFragment<T extends BasePresenter> extends BaseFrag
         super.onViewCreated(view, savedInstanceState);
         initInject();
         if (mPresenter != null) {
-            mPresenter.attachView(this);
+            mPresenter.subscribe(this);
         }
     }
 
@@ -48,6 +48,6 @@ public abstract class BaseHttpFragment<T extends BasePresenter> extends BaseFrag
     public void onDestroy() {
         super.onDestroy();
         if (mPresenter != null)
-            mPresenter.detachView();
+            mPresenter.unSubscribe();
     }
 }

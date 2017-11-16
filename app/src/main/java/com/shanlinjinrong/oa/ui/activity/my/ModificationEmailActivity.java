@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.my;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -19,7 +19,6 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.Hol
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.event.HolidayEvent;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModificationEmailContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.ModificationEmailPresenter;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
@@ -30,12 +29,14 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 //修改邮箱
 public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmailPresenter> implements ModificationEmailContract.View {
@@ -46,6 +47,8 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     EditText mEtEmailRedact;
     @BindView(R.id.tv_email_selected)
     TextView mTvEmailSelected;
+    @BindView(R.id.tv_tips)
+    TextView mTvTips;
 
     private List<String> mData;
     private CustomDialogUtils mDialog;
@@ -78,28 +81,47 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     private void initView() {
         mTvEmailSelected.setText(mData.get(0));
         mTopView.getRightView().setOnClickListener(view -> {
-
-            if (TextUtils.isEmpty(mEtEmailRedact.getText().toString().trim())) {
-                showToast("邮箱名不能为空！");
-                return;
+            if (check()) {
+                mPresenter.modificationEmail(mEtEmailRedact.getText().toString().trim() + mTvEmailSelected.getText().toString(), AppConfig.getAppConfig(this).getPrivateCode());
             }
-
-            if (mEtEmailRedact.getText().toString().indexOf(" ") > 0) {
-                showToast("邮箱不能含有空格！");
-                return;
-            }
-
-            for (int i = 0; i < mEtEmailRedact.getText().toString().length(); i++) {
-                String str = mEtEmailRedact.getText().toString().substring(i, i + 1);
-                if (java.util.regex.Pattern.matches("[\u4E00-\u9FA5]", str)) {
-                    showToast("邮箱名不能含有中文！");
-                    return;
-                }
-            }
-
-
-            mPresenter.modificationEmail(mEtEmailRedact.getText().toString().trim() + mTvEmailSelected.getText().toString(), AppConfig.getAppConfig(this).getPrivateCode());
         });
+
+        try {
+            //EditText 自动搜索,间隔->输入停止1秒后自动搜索
+            RxTextView.textChanges(mEtEmailRedact)
+                    .debounce(500, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(charSequence -> {
+                        check();
+                    });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean check() {
+        if (TextUtils.isEmpty(mEtEmailRedact.getText().toString().trim()) && mEtEmailRedact.getText().toString().length() > 0) {
+            mTvTips.setText("邮箱名不能为空！");
+            return false;
+        }
+
+        for (int i = 0; i < mEtEmailRedact.getText().toString().length(); i++) {
+            if (mEtEmailRedact.getText().toString().substring(i, i + 1).equals(" ")) {
+                mTvTips.setText("邮箱名不能含有空格！");
+                return false;
+            }
+        }
+
+        for (int i = 0; i < mEtEmailRedact.getText().toString().length(); i++) {
+            String str = mEtEmailRedact.getText().toString().substring(i, i + 1);
+            if (Pattern.matches("[\u4E00-\u9FA5]", str)) {
+                mTvTips.setText("邮箱名不能含有中文！");
+                return false;
+            }
+        }
+        mTvTips.setText("");
+        return true;
     }
 
     @OnClick(R.id.tv_email_selected)
@@ -189,7 +211,7 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     public void modificationEmailSuccess() {
         AppConfig.getAppConfig(this).set(AppConfig.PREF_KEY_USER_EMAIL, mEtEmailRedact.getText().toString() + mTvEmailSelected.getText().toString());
         setResult(101);
-        showToast("修改成功");
+        showToast("修改成功！");
         finish();
     }
 

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -19,12 +18,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.retrofit.net.RetrofitConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
@@ -250,7 +247,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @Override
     public void requestFinish() {
-
     }
 
 
@@ -267,5 +263,10 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         finish();
     }
 
-
+    public static void goLoginContextActivity(Context context) {
+        //不能进行页面动画
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        context.startActivity(intent);
+    }
 }

@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import com.alibaba.fastjson.JSONObject;
 
-/**
- * Created by gaobin on 2017/8/14.
- */
 public class BaseResponse implements Parcelable {
 
     private int code;

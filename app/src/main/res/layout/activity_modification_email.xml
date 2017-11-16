@@ -52,20 +52,29 @@
         <TextView
             android:id="@+id/tv_email_selected"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:includeFontPadding="false"
             android:layout_marginRight="10dp"
-            android:maxLines="1"
+            android:layout_weight="1"
             android:background="@drawable/edittext_input_round_bg"
             android:drawableRight="@drawable/arrow_down_select"
             android:gravity="center"
+            android:includeFontPadding="false"
+            android:maxLines="1"
             android:paddingLeft="5dp"
             android:paddingRight="15dp"
             android:textColor="@color/black_333333"
             android:textSize="12sp"/>
 
-
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/text_red_color"
+        android:textSize="14sp"/>
+
 </LinearLayout>

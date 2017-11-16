@@ -3,22 +3,29 @@ package com.shanlinjinrong.oa.ui.activity.my;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPhoneActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.ModifyPhoneActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * <h3>Description: 修改电话 </h3>
@@ -46,7 +53,20 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
         setTranslucentStatus(this);
         userPhone.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PHONE));
         userPhone.setSelection(userPhone.getText().length());
+        try {
+            //EditText 自动搜索,间隔->输入停止1秒后自动搜索
+            RxTextView.textChanges(userPhone)
+                    .debounce(500, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(charSequence -> {
+                        check();
+                    });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
+
 
     @Override
     protected void initInject() {
@@ -78,6 +98,11 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
             tvTips.setText("手机号码格式不正确");
             return false;
         }
+
+        if (userPhone.getText().toString().trim().length() != 11) {
+            return false;
+        }
+        tvTips.setText("");
         return true;
     }
 
@@ -117,7 +142,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
 
     @Override
     public void modifySuccess(String newNumber) {
-        showToast("修改成功");
+        showToast("修改成功！");
         AppConfig.getAppConfig(ModifyPhoneActivity.this).set(
                 AppConfig.PREF_KEY_PHONE, newNumber);
         setResult(RESULT_OK);
