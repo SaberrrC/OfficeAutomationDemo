@@ -196,6 +196,20 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         mDataTypeMap.clear();
         mAllWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
 
+        //出差
+        List<MyAttandanceResponse.AllWorkAttendanceListBean> allWorkAttendanceList = myAttandanceResponse.getAllWorkAttendanceList();
+        for (MyAttandanceResponse.AllWorkAttendanceListBean item : allWorkAttendanceList) {
+            if (item.getSignCause() != null) {
+                return;
+            }
+            try {
+                String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
+                mDataTypeMap.put(key, getType(item.getTbmstatus()) + "");
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+
         //迟到
         List<MyAttandanceResponse.CdWorkAttendanceListBean> cdWorkAttendanceList = myAttandanceResponse.getCdWorkAttendanceList();
         for (MyAttandanceResponse.CdWorkAttendanceListBean item : cdWorkAttendanceList) {
@@ -248,7 +262,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         List<MyAttandanceResponse.CcWorkAttendanceListBean> ccWorkAttendanceList = myAttandanceResponse.getCcWorkAttendanceList();
         for (MyAttandanceResponse.CcWorkAttendanceListBean item : ccWorkAttendanceList) {
             if (item.getSignCause() != null) {
-                continue;
+                return;
             }
             String key = Integer.parseInt(item.getCalendar().split("-")[2]) + "";
             mDataTypeMap.put(key, getType("[出差]") + "");
