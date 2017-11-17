@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;

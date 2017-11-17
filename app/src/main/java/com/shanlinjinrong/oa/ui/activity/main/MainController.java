@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -52,6 +53,7 @@ import com.shanlinjinrong.oa.utils.BadgeUtil;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -228,7 +230,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
      */
     private void judeIsInitPwd() {
         //1初始密码，2已修改
-        String isInitPwd = AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_IS_INIT_PWD);
+        String isInitPwd = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_IS_INIT_PWD);
         if (isInitPwd.equals("1")) {
             showSetPwdDialog();
         }
@@ -275,7 +277,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     public void LoginIm() {
         //注册一个监听连接状态的listener
         EMClient.getInstance().addConnectionListener(new MyConnectionListener());
-        LoginUtils.loginIm(MainController.this, null);
+        LoginUtils.loginIm(AppManager.mContext, null);
     }
 
     /**
@@ -454,7 +456,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         //检测推送页面
         easeUI = EaseUI.getInstance();
         //极光推送设置别名和部门
-        String uid = AppConfig.getAppConfig(this).getPrivateUid();
+        String uid = AppConfig.getAppConfig(AppManager.mContext).getPrivateUid();
         if (uid != null) {
             JPushInterface.setAlias(this, uid, new TagAliasCallback() {
                 //在TagAliasCallback 的 gotResult 方法，返回对应的参数 alias, tags。并返回对应的状态码：0为成功，其他返回码请参考错误码定义
@@ -464,7 +466,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 }
             });
             Set<String> set = new HashSet<>();
-            set.add(AppConfig.getAppConfig(this).getDepartmentId());
+            set.add(AppConfig.getAppConfig(AppManager.mContext).getDepartmentId());
             JPushInterface.setTags(this, set, null);
         }
         mTabs = new ArrayList<>();
@@ -612,9 +614,13 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         switch (requestCode) {
             case 100:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    PgyUpdateManager.register(this, "com.shanlinjinrong.oa.fileprovider");
+                    try {
+                        PgyUpdateManager.register(new WeakReference<Activity>(this).get(), "com.shanlinjinrong.oa.fileprovider");
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
                 } else {
-                    Toast.makeText(this, "该权限被禁用 无法更新！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(new WeakReference<Activity>(this).get(), "该权限被禁用 无法更新！", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -640,12 +646,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                     NonTokenDialog();
                 } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     NonTokenDialog();
-                } else {
-                    if (NetUtils.hasNetwork(MainController.this)) {
-                        //连接不到聊天服务器
-                    } else {
-                        //当前网络不可用，请检查网络设置
-                    }
                 }
             });
         }
