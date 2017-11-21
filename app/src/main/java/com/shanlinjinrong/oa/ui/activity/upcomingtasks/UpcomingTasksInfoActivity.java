@@ -173,9 +173,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     mRlTackBack.setVisibility(View.VISIBLE);
                     mTvTackBack.setBackgroundResource(R.drawable.shape_upcoming_dialog_ok);
                 }
-                if (TextUtils.equals(mBean.getApproveState(), "0") ||
-                        TextUtils.equals(mBean.getApproveState(), "1") ||
-                        TextUtils.equals(mBean.getApproveState(), "2")) {
+                if (TextUtils.equals(mBean.getApproveState(), "0") || TextUtils.equals(mBean.getApproveState(), "1") || TextUtils.equals(mBean.getApproveState(), "2")) {
                     mRlTackBack.setVisibility(View.GONE);
                 }
                 mTvTitle.setText(mBean.getUserName() + "的" + mBean.getBillTypeName());
@@ -236,10 +234,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             }
             return;
         }
-        if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean ||
-                itemData instanceof TraverResultBean.DataBean.NchrevectionApplyDetailBean ||
-                itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean ||
-                itemData instanceof OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) {
+        if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean || itemData instanceof TraverResultBean.DataBean.NchrevectionApplyDetailBean || itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean || itemData instanceof OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) {
             RelativeLayout rlTop = (RelativeLayout) holder.getViewById(R.id.rl_top);
             ImageView imgDeleteDetail = (ImageView) holder.getViewById(R.id.img_delete_detail);
             imgDeleteDetail.setVisibility(View.GONE);
@@ -389,10 +384,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             }
             return;
         }
-        if (itemData instanceof CardResultBean.DataBean.ApplyWorkFlowsBean ||
-                itemData instanceof TraverResultBean.DataBean.NchrapplyWorkFlowBean ||
-                itemData instanceof RestResultBean.DataBean.NchrapplyWorkFlowBean ||
-                itemData instanceof OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) {
+        if (itemData instanceof CardResultBean.DataBean.ApplyWorkFlowsBean || itemData instanceof TraverResultBean.DataBean.NchrapplyWorkFlowBean || itemData instanceof RestResultBean.DataBean.NchrapplyWorkFlowBean || itemData instanceof OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) {
             TextView tvTitle = (TextView) holder.getViewById(R.id.tv_title);
             TextView tvApprover = (TextView) holder.getViewById(R.id.tv_approver);
             TextView tvTime = (TextView) holder.getViewById(R.id.tv_time);
