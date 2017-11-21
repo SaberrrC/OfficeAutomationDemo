@@ -46,7 +46,6 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     private int mNum = 15;
     private MeetingReservationRecordAdapter mRecordAdapter;
     private List<ReservationRecordBean.DataBean> data = new ArrayList<>();
-//    public static MeetingReservationRecordActivity mRecordActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +59,6 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     }
 
     private void initData() {
-//        mRecordActivity = this;
         refreshData();
         mRefresh.setColorSchemeResources(android.R.color.holo_blue_dark);
         mTopView.getLeftView().setOnClickListener(this);
