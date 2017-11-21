@@ -231,4 +231,25 @@ public class Contacts implements MultiItemEntity, Serializable {
     public int getItemType() {
         return itemType;
     }
+
+    @Override
+    public String toString() {
+        return "Contacts{" +
+                "code='" + code + '\'' +
+                ", itemType=" + itemType +
+                ", type='" + type + '\'' +
+                ", departmentId='" + departmentId + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                ", departmentPersons='" + departmentPersons + '\'' +
+                ", uid='" + uid + '\'' +
+                ", username='" + username + '\'' +
+                ", sex='" + sex + '\'' +
+                ", postId='" + postId + '\'' +
+                ", postTitle='" + postTitle + '\'' +
+                ", phone='" + phone + '\'' +
+                ", isshow='" + isshow + '\'' +
+                ", portraits='" + portraits + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

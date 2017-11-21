@@ -60,6 +60,30 @@ public class DateUtils {
     }
 
     /**
+     * 获取到当前日期格式
+     *
+     * @param pattern
+     * @return
+     */
+    public static String getCurrentDate(String pattern) {
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        return simpleDateFormat.format(date);
+    }
+
+
+    public static String getOldDate() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, -1);
+        String format = simpleDateFormat.format(calendar.getTime());
+        return format;
+    }
+
+    /**
      * 格式化日期显示 <br/>
      *
      * @param

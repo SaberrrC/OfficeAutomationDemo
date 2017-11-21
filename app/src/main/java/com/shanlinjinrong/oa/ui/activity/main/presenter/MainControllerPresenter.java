@@ -16,7 +16,7 @@ import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
-import com.shanlinjinrong.oa.utils.SharedPreferenceUtil;
+import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
@@ -44,7 +44,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
     public void applyPermission(Activity context) {
         if (ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (SharedPreferenceUtil.getShouldAskPermission(context, "firstshould") &&
+            if (SharedPreferenceUtils.getShouldAskPermission(context, "firstshould") &&
                     !ActivityCompat.shouldShowRequestPermissionRationale(context,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//第一次已被拒绝
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -62,7 +62,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
                     }
                 }).show();
             } else {//
-                SharedPreferenceUtil.setShouldAskPermission(context, "firstshould",
+                SharedPreferenceUtils.setShouldAskPermission(context, "firstshould",
                         ActivityCompat.shouldShowRequestPermissionRationale(context,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE));
                 ActivityCompat.requestPermissions(context, new String[]{

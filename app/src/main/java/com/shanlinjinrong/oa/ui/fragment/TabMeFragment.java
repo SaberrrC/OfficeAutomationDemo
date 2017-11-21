@@ -40,7 +40,7 @@ import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.FileUtils;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
-import com.shanlinjinrong.oa.utils.SharedPreferenceUtil;
+import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -151,7 +151,7 @@ public class TabMeFragment extends BaseFragment {
     private void applyPermission() {
         if (ActivityCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (SharedPreferenceUtil.getShouldAskPermission(getActivity(), "firstshould") &&
+            if (SharedPreferenceUtils.getShouldAskPermission(getActivity(), "firstshould") &&
                     ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) == false) {//第一次已被拒绝
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -169,7 +169,7 @@ public class TabMeFragment extends BaseFragment {
                     }
                 }).show();
             } else {//
-                SharedPreferenceUtil.setShouldAskPermission(getActivity(), "firstshould",
+                SharedPreferenceUtils.setShouldAskPermission(getActivity(), "firstshould",
                         ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE));
                 ActivityCompat.requestPermissions(getActivity(), new String[]{

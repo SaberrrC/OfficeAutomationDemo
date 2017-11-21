@@ -1,15 +1,22 @@
 package com.shanlinjinrong.oa.ui.fragment.presenter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Base64;
 import android.util.Log;
 
+import com.iflytek.cloud.thirdparty.S;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
+import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,7 +110,6 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                         JSONArray children = jsonObject1.getJSONArray("children");
                         JSONArray users = jsonObject1.getJSONArray("users");
-
                         List<Contacts> contacts = new ArrayList<>();
                         for (int i = 0; i < children.length(); i++) {
                             JSONObject department = children.getJSONObject(i);
@@ -121,6 +127,17 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                             contacts.add(userInfo);
                         }
                         mView.loadDataSuccess(contacts);
+                        if (orgId.equals("1")) {
+                            SharedPreferenceUtils.remove(AppManager.mContext, DateUtils.getOldDate(), "children");
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", children.toString());
+                            SharedPreferenceUtils.remove(AppManager.mContext, DateUtils.getOldDate(), "users");
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
+                        } else {
+                            SharedPreferenceUtils.remove(AppManager.mContext, DateUtils.getOldDate(), "children");
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children" + orgId, children.toString());
+                            SharedPreferenceUtils.remove(AppManager.mContext, DateUtils.getOldDate(), "users");
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
+                        }
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
