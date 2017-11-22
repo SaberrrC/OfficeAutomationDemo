@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_E5E5E5"
     android:orientation="vertical"
     tools:context="com.shanlinjinrong.oa.ui.activity.message.EaseChatDetailsActivity">
 
@@ -21,12 +20,176 @@
         android:background="@color/gray_d5d5d5" />
 
     <android.support.v7.widget.RecyclerView
-
+        android:id="@+id/rv_person_show"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="80dp"
+        android:background="@color/white" />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_modification_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="群组名称"
+            android:textColor="@color/black_333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_modification_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/img_modification_group_name"
+            android:gravity="center_vertical"
+            android:text="OA项目开发"
+            android:textColor="@color/black_99333333"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/img_modification_group_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/tab_me_arrow" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="8dp"
+            android:background="@color/gray_d5d5d5" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_group_person"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="群主"
+            android:textColor="@color/black_333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_modification_person"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/img_group_person"
+            android:gravity="center_vertical"
+            android:text="吴方华"
+            android:textColor="@color/black_99333333"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/img_group_person"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/tab_me_arrow" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="8dp"
+            android:background="@color/gray_d5d5d5" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_group_portrait"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="群组头像"
+            android:textColor="@color/black_333333"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/img_modification_portrait"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toLeftOf="@+id/img_portrait"
+            android:src="@drawable/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/img_portrait"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/tab_me_arrow" />
+
+    </RelativeLayout>
+
 
     <TextView
+        android:id="@+id/btn_look_message_record"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp" />
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/white"
+        android:drawableRight="@drawable/tab_me_arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="查看聊天记录"
+        android:textColor="@color/black_333333"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_clear_message_record"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="清空聊天记录"
+        android:textColor="@color/black_333333"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn_chat_delete"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/chat_details_btn_enable"
+        android:text="删除并退出"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone" />
 </LinearLayout>
