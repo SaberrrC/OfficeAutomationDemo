@@ -18,7 +18,14 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
+import com.shanlinjinrong.oa.ui.activity.message.event.UpdateMessageCountEvent;
+import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatMessagePresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +37,7 @@ import butterknife.OnClick;
  * Author:Created by Tsui on Date:2016/12/16 15:10
  * Description:聊天界面 com.hyphenate.easeui.widget.EaseChatMessageList
  */
-public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFragmentListener {
+public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
 
     @BindView(R.id.tv_count)
@@ -47,7 +54,18 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ease_chat_message);
         ButterKnife.bind(this);
-        initToolBar();
+        EventBus.getDefault().register(this);
+        mTvTitle.setText(u_id);
+        initCount();
+    }
+
+    private void initCount() {
+        mPresenter.getUnReadCount();
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     private void initData() {
@@ -104,13 +122,10 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }
 
-    private void initToolBar() {
-        mTvTitle.setText(u_id);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -169,5 +184,19 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
                 startActivity(intent2);
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setCount(UpdateMessageCountEvent event) {
+        mPresenter.getUnReadCount();
+    }
+
+    @Override
+    public void uidNull(int code) {
+    }
+
+    @Override
+    public void setUnreadCount(int tempCount) {
+        mTvCount.setText("消息(" + tempCount + ")");
     }
 }
