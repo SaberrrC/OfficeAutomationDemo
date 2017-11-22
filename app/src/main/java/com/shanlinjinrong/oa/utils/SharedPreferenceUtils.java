@@ -15,7 +15,7 @@ public class SharedPreferenceUtils {
         SharedPreferences sp = context.getSharedPreferences("value", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean getShouldAskPermission(Context context, String key) {
@@ -33,7 +33,7 @@ public class SharedPreferenceUtils {
     public static void putIntValue(Context context, String name, String key, int value) {
         SharedPreferences.Editor sp = context.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
         sp.putInt(key, value);
-        sp.commit();
+        sp.apply();
     }
 
     /**
@@ -46,7 +46,7 @@ public class SharedPreferenceUtils {
     public static void putStringValue(Context context, String name, String key, String value) {
         SharedPreferences.Editor sp = context.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
         sp.putString(key, value);
-        sp.commit();
+        sp.apply();
     }
 
     /**
@@ -86,7 +86,7 @@ public class SharedPreferenceUtils {
     public static void remove(Context context, String name, String key) {
         SharedPreferences.Editor sp = context.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
         sp.remove(key);
-        sp.commit();
+        sp.apply();
     }
 
     /**
@@ -95,8 +95,12 @@ public class SharedPreferenceUtils {
      * @param context
      */
     public static void clear(Context context, String name) {
-        SharedPreferences.Editor sp = context.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
-        sp.clear();
-        sp.commit();
+        try {
+            SharedPreferences.Editor sp = context.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
+            sp.clear();
+            sp.apply();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }
