@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -98,6 +97,7 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn_look_message_record:
                 //TODO 查看聊天记录
+                intent.setClass(this, LookMessageRecordActivity.class);
                 break;
             case R.id.tv_clear_message_record:
                 //TODO 清空聊天消息
@@ -108,21 +108,22 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
                 break;
             case R.id.rl_group_name:
                 intent.setClass(this, ModificationGroupNameActivity.class);
-                startActivity(intent);
                 break;
             case R.id.rl_group_person:
-//                intent.setClass(this, )
+                intent.setClass(this, SelectedChatAdminActivity.class);
                 break;
             case R.id.rl_group_portrait:
                 break;
         }
+        startActivity(intent);
     }
 
     class ItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             if (i == mData.size() - 1) {
-                Toast.makeText(EaseChatDetailsActivity.this, "添加", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(EaseChatDetailsActivity.this, SelectedChatAdminActivity.class);
+                startActivity(intent);
             }
         }
     }

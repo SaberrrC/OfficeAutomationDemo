@@ -803,6 +803,15 @@
         <activity
             android:name=".ui.activity.message.SearchMessageRecordActivity"
             android:screenOrientation="portrait" />
+        <!-- 选择管理员界面 -->
+        <activity
+            android:name=".ui.activity.message.SelectedChatAdminActivity"
+            android:screenOrientation="portrait" />
+        <!-- 群组列表界面 -->
+        <activity
+            android:name=".ui.activity.message.GroupChatListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

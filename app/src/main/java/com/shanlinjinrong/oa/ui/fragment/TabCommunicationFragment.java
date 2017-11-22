@@ -12,9 +12,12 @@ import com.hyphenate.chat.EMMessage;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
+import com.shanlinjinrong.oa.ui.activity.message.GroupChatListActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.views.common.CommonTopView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
@@ -29,6 +32,9 @@ public class TabCommunicationFragment extends BaseFragment {
     public ConversationListFragment myConversationListFragment;
     String userInfo_self;
     String userInfo;
+    @BindView(R.id.topView)
+    CommonTopView mTopView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,6 +65,11 @@ public class TabCommunicationFragment extends BaseFragment {
             userInfo = lastMessage.getStringAttribute("userInfo", "");
             userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
             startActivity(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("u_id", conversation.conversationId()).putExtra("userInfo_self", userInfo_self).putExtra("userInfo", userInfo).putExtra("nikename", ""));
+        });
+        mTopView.getRightView().setOnClickListener(view -> {
+            //TODO 跳转群聊列表
+            Intent intent = new Intent(getContext(), GroupChatListActivity.class);
+            startActivity(intent);
         });
     }
 
