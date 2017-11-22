@@ -192,6 +192,9 @@ dependencies {
 
     //小红点提示
     compile 'q.rorbin:badgeview:1.0.5'
+    
+    //圆形图片
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 
     //adapterHelp
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v2.1.0'

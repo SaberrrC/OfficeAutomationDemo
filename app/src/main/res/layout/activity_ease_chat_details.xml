@@ -22,17 +22,16 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_person_show"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:background="@color/white" />
 
 
     <RelativeLayout
-        android:id="@+id/rl_modification_group_name"
+        android:id="@+id/rl_group_name"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
-        android:background="@color/white"
-        android:visibility="gone">
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,8 +76,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/white"
-        android:visibility="gone">
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -120,8 +118,7 @@
         android:id="@+id/rl_group_portrait"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/white"
-        android:visibility="gone">
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -132,12 +129,16 @@
             android:textColor="@color/black_333333"
             android:textSize="16sp" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_modification_portrait"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/img_portrait"
-            android:src="@drawable/ic_launcher" />
+            android:src="@color/blue_69B0F2"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="0.1dp" />
 
         <ImageView
             android:id="@+id/img_portrait"
