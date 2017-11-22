@@ -41,6 +41,7 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.MainControllerPresenter;
+import com.shanlinjinrong.oa.ui.activity.message.event.UpdateMessageCountEvent;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.TabCommunicationFragment;
@@ -51,6 +52,8 @@ import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.BadgeUtil;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -562,6 +565,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                         userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost,
                         userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
             }
+            EventBus.getDefault().post(new UpdateMessageCountEvent());
             refreshCommCount();
         }
 

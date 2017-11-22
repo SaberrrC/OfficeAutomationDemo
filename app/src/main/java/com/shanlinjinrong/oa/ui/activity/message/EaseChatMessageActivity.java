@@ -1,12 +1,9 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -25,6 +22,7 @@ import com.shanlinjinrong.oa.ui.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -34,16 +32,14 @@ import butterknife.ButterKnife;
  */
 public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFragmentListener {
 
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.layout_root)
-    LinearLayout mRootView;
-    @BindView(R.id.toolbar_image_btn)
-    LinearLayout toolbarImageBtn;
 
-    private String u_id;
+    @BindView(R.id.tv_count)
+    TextView  mTvCount;
+    @BindView(R.id.tv_title)
+    TextView  mTvTitle;
+    @BindView(R.id.iv_detail)
+    ImageView mIvDetail;
+    private String           u_id;
     private EaseChatFragment chatFragment;
 
     @Override
@@ -63,9 +59,9 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
         UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
 
         if (userInfoDetailsBean != null && u_id.contains(userInfoDetailsBean.getCODE()))
-            tvTitle.setText(userInfoDetailsBean.getUsername());
+            mTvTitle.setText(userInfoDetailsBean.getUsername());
         else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
-            tvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
+            mTvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
         }
 
         //传入参数
@@ -109,24 +105,7 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     }
 
     private void initToolBar() {
-        if (toolbar == null) {
-            return;
-        }
-        setTitle("");//必须在setSupportActionBar之前调用
-        toolbar.setTitleTextColor(Color.parseColor("#000000"));
-        setSupportActionBar(toolbar);
-        tvTitle.setText(u_id);
-        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
-                Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
-        lp.gravity = Gravity.CENTER_HORIZONTAL;
-        tvTitle.setLayoutParams(lp);
-
-        toolbar.setNavigationIcon(R.drawable.toolbar_back);
-        toolbar.setNavigationOnClickListener(view -> finish());
-        toolbarImageBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(this, EaseChatDetailsActivity.class);
-            startActivity(intent);
-        });
+        mTvTitle.setText(u_id);
     }
 
     @Override
@@ -141,21 +120,9 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
                 userInfo = mEmMessage.getStringAttribute("userInfo", "");
                 userInfo_self = mEmMessage.getStringAttribute("userInfo_self", "");
                 final UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
-                startActivity(new Intent(this, VoiceCallActivity.class)
-                        .putExtra("nike", userInfoDetailsBean.username)
-                        .putExtra("CODE", userInfoDetailsBean.CODE)
-                        .putExtra("portrait", userInfoDetailsBean.portrait)
-                        .putExtra("post_name", userInfoDetailsBean.post_title)
-                        .putExtra("sex", userInfoDetailsBean.sex)
-                        .putExtra("phone", userInfoDetailsBean.phone)
-                        .putExtra("email", userInfoDetailsBean.email)
-                        .putExtra("department_name", userInfoDetailsBean.department_name)
-                        .putExtra("username", toChatUsername)
-                        .putExtra("isomingCall", false));
+                startActivity(new Intent(this, VoiceCallActivity.class).putExtra("nike", userInfoDetailsBean.username).putExtra("CODE", userInfoDetailsBean.CODE).putExtra("portrait", userInfoDetailsBean.portrait).putExtra("post_name", userInfoDetailsBean.post_title).putExtra("sex", userInfoDetailsBean.sex).putExtra("phone", userInfoDetailsBean.phone).putExtra("email", userInfoDetailsBean.email).putExtra("department_name", userInfoDetailsBean.department_name).putExtra("username", toChatUsername).putExtra("isomingCall", false));
             } else {
-                startActivity(new Intent(this, VoiceCallActivity.class)
-                        .putExtra("username", toChatUsername)
-                        .putExtra("isomingCall", false));
+                startActivity(new Intent(this, VoiceCallActivity.class).putExtra("username", toChatUsername).putExtra("isomingCall", false));
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -185,5 +152,22 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
     protected void onResume() {
         super.onResume();
         initData();
+    }
+
+    @OnClick({R.id.iv_back, R.id.tv_count, R.id.iv_detail})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                Intent intent = new Intent(this, EaseChatDetailsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.tv_count:
+                break;
+            case R.id.iv_detail:
+                Intent intent2 = new Intent(this, EaseChatDetailsActivity.class);
+                startActivity(intent2);
+                break;
+        }
     }
 }
