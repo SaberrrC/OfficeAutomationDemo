@@ -756,7 +756,7 @@
         <activity
             android:name=".ui.activity.upcomingtasks.UpcomingTasksInfoActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 统计人员 -->
         <activity
@@ -787,9 +787,21 @@
         <activity
             android:name=".ui.activity.my.ModificationEmailActivity"
             android:screenOrientation="portrait" />
-        <!-- 聊天详情界面-->
+        <!-- 聊天详情界面 -->
         <activity
             android:name=".ui.activity.message.EaseChatDetailsActivity"
+            android:screenOrientation="portrait" />
+        <!-- 修改群组名称界面 -->
+        <activity
+            android:name=".ui.activity.message.chatgroup.ModificationGroupNameActivity"
+            android:screenOrientation="portrait" />
+        <!-- 查看消息记录界面 -->
+        <activity
+            android:name=".ui.activity.message.LookMessageRecordActivity"
+            android:screenOrientation="portrait" />
+        <!-- 搜说消息记录界面 -->
+        <activity
+            android:name=".ui.activity.message.SearchMessageRecordActivity"
             android:screenOrientation="portrait" />
     </application>
 

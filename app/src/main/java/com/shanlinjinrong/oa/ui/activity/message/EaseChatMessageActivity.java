@@ -41,13 +41,14 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
 
     @BindView(R.id.tv_count)
-    TextView  mTvCount;
+    TextView mTvCount;
     @BindView(R.id.tv_title)
-    TextView  mTvTitle;
+    TextView mTvTitle;
     @BindView(R.id.iv_detail)
     ImageView mIvDetail;
-    private String           u_id;
+    private String u_id;
     private EaseChatFragment chatFragment;
+    private UserInfoDetailsBean mUserInfoDetailsBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +74,11 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         userInfo = getIntent().getStringExtra("userInfo");
         u_id = getIntent().getStringExtra("u_id");
 
-        UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
+        mUserInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
         UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
 
-        if (userInfoDetailsBean != null && u_id.contains(userInfoDetailsBean.getCODE()))
-            mTvTitle.setText(userInfoDetailsBean.getUsername());
+        if (mUserInfoDetailsBean != null && u_id.contains(mUserInfoDetailsBean.getCODE()))
+            mTvTitle.setText(mUserInfoDetailsBean.getUsername());
         else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
             mTvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
         }
@@ -89,13 +90,13 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             args.putString(EaseConstant.EXTRA_USER_ID, u_id);
             //对方的信息
             args.putString("to_user_code", getIntent().getStringExtra("code"));
-            args.putString("to_user_nike", userInfoDetailsBean.getUsername() == null ? "" : userInfoDetailsBean.getUsername());
-            args.putString("to_user_pic", userInfoDetailsBean.getPortrait() == null ? "" : userInfoDetailsBean.getPortrait());
-            args.putString("to_user_department", userInfoDetailsBean.getDepartment_name());
-            args.putString("to_user_post", userInfoDetailsBean.getPost_title());
-            args.putString("to_user_sex", userInfoDetailsBean.getSex());
-            args.putString("to_user_phone", userInfoDetailsBean.getPhone());
-            args.putString("to_user_email", userInfoDetailsBean.getEmail());
+            args.putString("to_user_nike", mUserInfoDetailsBean.getUsername() == null ? "" : mUserInfoDetailsBean.getUsername());
+            args.putString("to_user_pic", mUserInfoDetailsBean.getPortrait() == null ? "" : mUserInfoDetailsBean.getPortrait());
+            args.putString("to_user_department", mUserInfoDetailsBean.getDepartment_name());
+            args.putString("to_user_post", mUserInfoDetailsBean.getPost_title());
+            args.putString("to_user_sex", mUserInfoDetailsBean.getSex());
+            args.putString("to_user_phone", mUserInfoDetailsBean.getPhone());
+            args.putString("to_user_email", mUserInfoDetailsBean.getEmail());
 
             args.putString("userInfo", userInfo);
             args.putString("userInfo_self", userInfo_self);
@@ -174,14 +175,16 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
-                Intent intent = new Intent(this, EaseChatDetailsActivity.class);
-                startActivity(intent);
                 break;
             case R.id.tv_count:
                 break;
             case R.id.iv_detail:
-                Intent intent2 = new Intent(this, EaseChatDetailsActivity.class);
-                startActivity(intent2);
+                Intent intent = new Intent(this, EaseChatDetailsActivity.class);
+                intent.putExtra("name_self", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USERNAME));
+                intent.putExtra("portraits_self", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
+                intent.putExtra("name", mUserInfoDetailsBean.getUsername() == null ? "" : mUserInfoDetailsBean.getUsername());
+                intent.putExtra("portraits", mUserInfoDetailsBean.getPortrait() == null ? "" : mUserInfoDetailsBean.getPortrait());
+                startActivity(intent);
                 break;
         }
     }
