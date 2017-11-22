@@ -39,15 +39,14 @@ import butterknife.OnClick;
  */
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
-
     @BindView(R.id.tv_count)
-    TextView mTvCount;
+    TextView  mTvCount;
     @BindView(R.id.tv_title)
-    TextView mTvTitle;
+    TextView  mTvTitle;
     @BindView(R.id.iv_detail)
     ImageView mIvDetail;
-    private String u_id;
-    private EaseChatFragment chatFragment;
+    private String              u_id;
+    private EaseChatFragment    chatFragment;
     private UserInfoDetailsBean mUserInfoDetailsBean;
 
     @Override
@@ -177,6 +176,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 finish();
                 break;
             case R.id.tv_count:
+                finish();
                 break;
             case R.id.iv_detail:
                 Intent intent = new Intent(this, EaseChatDetailsActivity.class);
@@ -200,6 +200,10 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Override
     public void setUnreadCount(int tempCount) {
+        if (tempCount == 0) {
+            mTvCount.setText("");
+            return;
+        }
         mTvCount.setText("消息(" + tempCount + ")");
     }
 }
