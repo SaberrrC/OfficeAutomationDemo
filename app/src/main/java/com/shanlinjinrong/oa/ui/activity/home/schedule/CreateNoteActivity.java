@@ -22,7 +22,7 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.thirdParty.iflytek.IflytekUtil;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.CreateNoteContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.presenter.CreateNotePresenter;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -296,7 +296,7 @@ public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> im
     @Override
     public void createSuccess() {
         showToast("创建记事成功");
-        startActivity(new Intent(CreateNoteActivity.this, MainController.class));
+        startActivity(new Intent(CreateNoteActivity.this, MainActivity.class));
         CreateNoteActivity.this.finish();
     }
 

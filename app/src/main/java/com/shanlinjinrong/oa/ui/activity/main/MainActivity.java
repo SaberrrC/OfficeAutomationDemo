@@ -33,7 +33,6 @@ import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.hyphenate.util.NetUtils;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -92,7 +91,7 @@ import q.rorbin.badgeview.QBadgeView;
  * <h3>Description: 首页控制器 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br />
  */
-public class MainController extends HttpBaseActivity<MainControllerPresenter> implements MainControllerContract.View {
+public class MainActivity extends HttpBaseActivity<MainControllerPresenter> implements MainControllerContract.View {
 
     @BindView(R.id.controller)
     ViewPager mController;
@@ -183,7 +182,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
-        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
+        BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
     }
 
     @Override
@@ -242,7 +241,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         btnSetPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainController.this, ModifyPwdActivity.class);
+                Intent intent = new Intent(MainActivity.this, ModifyPwdActivity.class);
                 startActivity(intent);
                 dialog.dismiss();
             }
@@ -284,7 +283,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
      * 初始化云信视频的相关数据
      */
     private void initEaseData() {
-        LoginUtils.initEase(MainController.this, null);
+        LoginUtils.initEase(MainActivity.this, null);
     }
 
     public void refreshCommCount() {
@@ -462,7 +461,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 //在TagAliasCallback 的 gotResult 方法，返回对应的参数 alias, tags。并返回对应的状态码：0为成功，其他返回码请参考错误码定义
                 @Override
                 public void gotResult(int i, String s, Set<String> set) {
-                    Log.i("MainController", "MainController : + gotResult");
+                    Log.i("MainActivity", "MainActivity : + gotResult");
                 }
             });
             Set<String> set = new HashSet<>();
@@ -521,7 +520,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 @Override
                 public void run() {
                     if (tempMsgCount != 0) {
-                        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
+                        BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
                     }
                 }
             }).start();
@@ -629,7 +628,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     @Override
     protected void onDestroy() {
         EMClient.getInstance().chatManager().removeMessageListener(messageListener);
-        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
+        BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
         super.onDestroy();
     }
 

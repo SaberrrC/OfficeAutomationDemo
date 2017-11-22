@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -23,24 +23,21 @@ import butterknife.ButterKnife;
  * <h3>Description: 首页通讯列表页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class TabCommunicationFragment extends BaseFragment  {
+public class TabCommunicationFragment extends BaseFragment {
 
-//    private EaseConversationListFragment conversationListFragment;
+    //    private EaseConversationListFragment conversationListFragment;
     public ConversationListFragment myConversationListFragment;
     String userInfo_self;
     String userInfo;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_communication_fragment, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
 
-
     @Override
-
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initData();
@@ -57,24 +54,19 @@ public class TabCommunicationFragment extends BaseFragment  {
         }
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.easeConversationListFragment, myConversationListFragment).commit();
-        myConversationListFragment
-                .setConversationListItemClickListener(conversation -> {
-                    EMMessage lastMessage = conversation.getLastMessage();
-                    userInfo = lastMessage.getStringAttribute("userInfo", "");
-                    userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
-                    startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
-                            .putExtra("u_id", conversation.conversationId())
-                            .putExtra("userInfo_self",userInfo_self)
-                            .putExtra("userInfo", userInfo)
-                            .putExtra("nikename", ""));
-                });
+        myConversationListFragment.setConversationListItemClickListener(conversation -> {
+            EMMessage lastMessage = conversation.getLastMessage();
+            userInfo = lastMessage.getStringAttribute("userInfo", "");
+            userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
+            startActivity(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("u_id", conversation.conversationId()).putExtra("userInfo_self", userInfo_self).putExtra("userInfo", userInfo).putExtra("nikename", ""));
+        });
     }
 
     @Override
     public void onResume() {
         LogUtils.e("刷新下主界面消息的数量");
         //刷新下主界面消息的数量
-        MainController mainController = (MainController) getActivity();
+        MainActivity mainController = (MainActivity) getActivity();
         mainController.refreshCommCount();
         super.onResume();
     }

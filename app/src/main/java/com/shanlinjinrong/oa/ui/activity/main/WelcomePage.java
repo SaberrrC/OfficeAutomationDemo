@@ -68,7 +68,7 @@ public class WelcomePage extends Activity {
 
     public void startNext() {
         if (!TextUtils.isEmpty(uid) && !TextUtils.isEmpty(token)) {//登陆过
-            startActivity(new Intent(AppManager.mContext, MainController.class));
+            startActivity(new Intent(AppManager.mContext, MainActivity.class));
         } else {
             //未登录
             startActivity(new Intent(AppManager.mContext, LoginActivity.class));

@@ -23,7 +23,7 @@ import com.hyphenate.util.NetUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -83,7 +83,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
                     Toast.makeText(getActivity(), R.string.Cant_chat_with_yourself, Toast.LENGTH_SHORT).show();
                 else {
                     // start chat acitivity
-                    Intent intent = new Intent(getActivity(), MainController.class);
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
                     if (conversation.isGroup()) {
                         if (conversation.getType() == EMConversationType.ChatRoom) {
                             // it's group chat
@@ -169,12 +169,12 @@ public class ConversationListFragment extends EaseConversationListFragment {
         refresh();
 
         // update unread count
-//        ((MainController) getActivity()).updateUnreadLabel();
+//        ((MainActivity) getActivity()).updateUnreadLabel();
         return true;
     }
 
     public void connectHuanXin() {
-//        MainController activity = (MainController) getActivity();
+//        MainActivity activity = (MainActivity) getActivity();
 //        activity.LoginIm();
         LoginUtils.loginIm(getContext(), null);
     }

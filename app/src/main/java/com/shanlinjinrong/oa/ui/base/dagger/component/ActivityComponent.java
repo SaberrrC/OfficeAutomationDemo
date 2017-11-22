@@ -29,7 +29,7 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportUpdateActivit
 import com.shanlinjinrong.oa.ui.activity.login.ConfirmCompanyEmailActivity;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.login.WriteJobNumberActivity;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModificationEmailActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPhoneActivity;
@@ -52,7 +52,7 @@ import dagger.Component;
 @PerActivity
 @Component(dependencies = AppComponent.class, modules = ActivityModule.class)
 public interface ActivityComponent {
-    void inject(MainController activity);
+    void inject(MainActivity activity);
 
     void inject(LoginActivity activity);
 
