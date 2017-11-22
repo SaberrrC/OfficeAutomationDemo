@@ -294,21 +294,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             @Override
             public void onSendMessage(String content) {
                 sendTextMessage(content);
-                //TODO 消息测试
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            for (int i = 0; i < 40000; i++) {
-//                                Thread.sleep(100);
-//                                sendTextMessage(i+"条消息");
-//                            }
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }).start();
-
             }
 
             @Override

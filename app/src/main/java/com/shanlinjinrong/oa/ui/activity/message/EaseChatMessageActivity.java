@@ -2,13 +2,10 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,13 +34,15 @@ import butterknife.ButterKnife;
  */
 public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFragmentListener {
 
-
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.layout_root)
     LinearLayout mRootView;
+    @BindView(R.id.toolbar_image_btn)
+    LinearLayout toolbarImageBtn;
+
     private String u_id;
     private EaseChatFragment chatFragment;
 
@@ -124,6 +123,10 @@ public class EaseChatMessageActivity extends BaseActivity implements onEaseUIFra
 
         toolbar.setNavigationIcon(R.drawable.toolbar_back);
         toolbar.setNavigationOnClickListener(view -> finish());
+        toolbarImageBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(this, EaseChatDetailsActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override

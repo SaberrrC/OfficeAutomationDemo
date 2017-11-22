@@ -47,6 +47,4 @@ public abstract class EaseBaseFragment extends Fragment{
     protected abstract void initView();
     
     protected abstract void setUpView();
-
-
 }

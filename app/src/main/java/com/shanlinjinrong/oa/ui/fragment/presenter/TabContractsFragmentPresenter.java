@@ -128,14 +128,12 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                         }
                         mView.loadDataSuccess(contacts);
                         if (orgId.equals("1")) {
-                            SharedPreferenceUtils.remove(AppManager.mContext, DateUtils.getOldDate(), "children");
+                            SharedPreferenceUtils.clear(AppManager.mContext, SharedPreferenceUtils.getStringValue(AppManager.mContext, "cacheDate", "dateName", ""));
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, "cacheDate", "dateName", DateUtils.getCurrentDate("yyyy-MM-dd"));
                             SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", children.toString());
-                            SharedPreferenceUtils.remove(AppManager.mContext, DateUtils.getOldDate(), "users");
                             SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
                         } else {
-                            SharedPreferenceUtils.remove(AppManager.mContext, DateUtils.getOldDate(), "children");
                             SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children" + orgId, children.toString());
-                            SharedPreferenceUtils.remove(AppManager.mContext, DateUtils.getOldDate(), "users");
                             SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
                         }
                     }
