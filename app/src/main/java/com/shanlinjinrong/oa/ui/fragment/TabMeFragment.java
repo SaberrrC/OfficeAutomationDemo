@@ -134,9 +134,7 @@ public class TabMeFragment extends BaseFragment {
                             001);
                 }*/
 //                getNewVersionInfo();
-
                 applyPermission();
-
                 break;
             case R.id.btn_about_us://关于我们
                 startActivity(new Intent(getActivity(), AboutUsActivity.class));
