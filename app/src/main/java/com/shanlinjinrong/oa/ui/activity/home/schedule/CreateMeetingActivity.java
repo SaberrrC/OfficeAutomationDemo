@@ -20,7 +20,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.CreateMeetingContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.presenter.CreateMeetingPresenter;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.StringUtils;
@@ -337,7 +337,7 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
     @Override
     public void sendDataSuccess() {
         showToast("发送成功");
-        startActivity(new Intent(CreateMeetingActivity.this, MainController.class));
+        startActivity(new Intent(CreateMeetingActivity.this, MainActivity.class));
         finish();
     }
 

@@ -55,7 +55,7 @@ import com.shanlinjinrong.oa.thirdParty.huanxin.domain.RobotUser;
 import com.shanlinjinrong.oa.thirdParty.huanxin.manager.UserProfileManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.receiver.CallReceiver;
 import com.shanlinjinrong.oa.thirdParty.huanxin.manager.PreferenceManager;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 
 import java.util.ArrayList;
@@ -474,7 +474,7 @@ public class DemoHelper {
             @Override
             public Intent getLaunchIntent(EMMessage message) {
                 // you can set what activity you want display when user click the notification
-                Intent intent = new Intent(appContext, MainController.class);
+                Intent intent = new Intent(appContext, MainActivity.class);
                 // open calling activity if there is call
                 if (isVideoCalling) {
 //                    intent = new Intent(appContext, VideoCallActivity.class);
@@ -1190,7 +1190,7 @@ public class DemoHelper {
      */
     protected void onUserException(String exception) {
         EMLog.e(TAG, "onUserException: " + exception);
-        Intent intent = new Intent(appContext, MainController.class);
+        Intent intent = new Intent(appContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         intent.putExtra(exception, true);

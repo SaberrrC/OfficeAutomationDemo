@@ -395,7 +395,7 @@ public class TabMsgListFragment extends BaseFragment {
 //     * 刷新消息未读的红点数量
 //     */
 //    private void reFresUnRedCount() {
-//        MainController activity = (MainController) getActivity();
+//        MainActivity activity = (MainActivity) getActivity();
 //        activity.refreshUnReadMsgCount();
 //    }
 //

@@ -25,7 +25,7 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.AndroidAdjustResizeBugFix;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -259,7 +259,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     private void goToLogin() {
         showToast("登录成功");
         hideLoadingView();
-        startActivity(new Intent(LoginActivity.this, MainController.class));
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
 
