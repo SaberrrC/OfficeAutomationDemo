@@ -40,13 +40,13 @@ import butterknife.OnClick;
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
     @BindView(R.id.tv_count)
-    TextView  mTvCount;
+    TextView mTvCount;
     @BindView(R.id.tv_title)
-    TextView  mTvTitle;
+    TextView mTvTitle;
     @BindView(R.id.iv_detail)
     ImageView mIvDetail;
-    private String              u_id;
-    private EaseChatFragment    chatFragment;
+    private String u_id;
+    private EaseChatFragment chatFragment;
     private UserInfoDetailsBean mUserInfoDetailsBean;
 
     @Override
@@ -76,10 +76,14 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         mUserInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
         UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
 
-        if (mUserInfoDetailsBean != null && u_id.contains(mUserInfoDetailsBean.getCODE()))
-            mTvTitle.setText(mUserInfoDetailsBean.getUsername());
-        else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
-            mTvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
+        if (getIntent().getIntExtra("chatType", 0) == 2) {
+            mTvTitle.setText(getIntent().getStringExtra("groupName"));
+        } else {
+            if (mUserInfoDetailsBean != null && u_id.contains(mUserInfoDetailsBean.getCODE()))
+                mTvTitle.setText(mUserInfoDetailsBean.getUsername());
+            else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
+                mTvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
+            }
         }
 
         //传入参数
@@ -118,6 +122,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
         chatFragment.setArguments(args);
+        chatFragment.setArguments(getIntent().getExtras());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }

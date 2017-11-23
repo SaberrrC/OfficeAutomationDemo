@@ -101,15 +101,12 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         //        //--------------------------
         //底部弹出框
         bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomsheet);
-        findViewById(R.id.rel_choose_people_num).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedContacts.size() > 0) {
-                    //-------------
-                    appManager.setJoinhandler(mJoinHandler);
-                    //--------------
-                    new MyJoinPeopleFragment(selectedContacts).show(getSupportFragmentManager(), R.id.bottomsheet);
-                }
+        findViewById(R.id.rel_choose_people_num).setOnClickListener(v -> {
+            if (selectedContacts.size() > 0) {
+                //-------------
+                appManager.setJoinhandler(mJoinHandler);
+                //--------------
+                new MyJoinPeopleFragment(selectedContacts).show(getSupportFragmentManager(), R.id.bottomsheet);
             }
         });
     }
@@ -320,24 +317,19 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         mTvTitle.setLayoutParams(lp);
 
         mToolBar.setNavigationIcon(R.drawable.toolbar_back);
-        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        mToolBarText.setText("下一步");
+        mToolBar.setNavigationOnClickListener(view -> finish());
+        if (getIntent().getBooleanExtra("isCreate", false)) {
+            mToolBarText.setText("创建");
+        } else {
+            mToolBarText.setText("下一步");
+        }
         mToolBarText.setVisibility(View.VISIBLE);
-        mToolBarText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //ArrayList<Child> selectedContacts = getSelectedContacts();
-
-                Intent intent = new Intent();
-                intent.putParcelableArrayListExtra("contacts", selectedContacts);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
+        mToolBarText.setOnClickListener(v -> {
+            //ArrayList<Child> selectedContacts = getSelectedContacts();
+            Intent intent = new Intent();
+            intent.putParcelableArrayListExtra("contacts", selectedContacts);
+            setResult(RESULT_OK, intent);
+            finish();
         });
     }
 

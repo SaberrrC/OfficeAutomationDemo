@@ -134,6 +134,15 @@ public abstract class EaseChatRow extends LinearLayout {
                 }
             }
         }
+        if(userAvatarView != null) {
+            //set nickname and avatar
+            if (message.direct() == Direct.SEND) {
+                EaseUserUtils.setUserAvatar(context, EMClient.getInstance().getCurrentUser(), userAvatarView);
+            } else {
+                EaseUserUtils.setUserAvatar(context, message.getFrom(), userAvatarView);
+                EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+            }
+        }
         if (userAvatarView != null) {
             try {
                 String user_Info_self = mPrevMessage.getStringAttribute("userInfo_self", "");

@@ -359,46 +359,52 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
 
     protected void onConversationInit() {
-        conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
-        conversation.markAllMessagesAsRead();
-        // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
-        // you can change this number
+//        if (conversation != null) {
+            String name  = toChatUsername;
+            EMConversation.EMConversationType conversationType = EaseCommonUtils.getConversationType(chatType);
 
-        if (!isRoaming) {
-            final List<EMMessage> msgs = conversation.getAllMessages();
-            int msgCount = msgs != null ? msgs.size() : 0;
-            if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
-                String msgId = null;
-                if (msgs != null && msgs.size() > 0) {
-                    msgId = msgs.get(0).getMsgId();
-                    mEmMessage = msgs.get(0);
-                }
-                conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
-            }
-        } else {
-            fetchQueue.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        EMClient.getInstance().chatManager().fetchHistoryMessages(
-                                toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, "");
-                        final List<EMMessage> msgs = conversation.getAllMessages();
-                        int msgCount = msgs != null ? msgs.size() : 0;
-                        if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
-                            String msgId = null;
-                            if (msgs != null && msgs.size() > 0) {
-                                msgId = msgs.get(0).getMsgId();
-                            }
-                            List<EMMessage> emMessages = conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
-                            mEmMessage = emMessages.get(0);
-                        }
-                        messageList.refreshSelectLast();
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
+
+            conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
+            conversation.markAllMessagesAsRead();
+            // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
+            // you can change this number
+
+            if (!isRoaming) {
+                final List<EMMessage> msgs = conversation.getAllMessages();
+                int msgCount = msgs != null ? msgs.size() : 0;
+                if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
+                    String msgId = null;
+                    if (msgs != null && msgs.size() > 0) {
+                        msgId = msgs.get(0).getMsgId();
+                        mEmMessage = msgs.get(0);
                     }
+                    conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
                 }
-            });
-        }
+            } else {
+                fetchQueue.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            EMClient.getInstance().chatManager().fetchHistoryMessages(
+                                    toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, "");
+                            final List<EMMessage> msgs = conversation.getAllMessages();
+                            int msgCount = msgs != null ? msgs.size() : 0;
+                            if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
+                                String msgId = null;
+                                if (msgs != null && msgs.size() > 0) {
+                                    msgId = msgs.get(0).getMsgId();
+                                }
+                                List<EMMessage> emMessages = conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+                                mEmMessage = emMessages.get(0);
+                            }
+                            messageList.refreshSelectLast();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+//        }
     }
 
     protected void onMessageListInit() {

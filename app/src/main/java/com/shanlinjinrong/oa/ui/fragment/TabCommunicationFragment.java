@@ -64,7 +64,7 @@ public class TabCommunicationFragment extends BaseFragment {
             EMMessage lastMessage = conversation.getLastMessage();
             userInfo = lastMessage.getStringAttribute("userInfo", "");
             userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
-            startActivity(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("u_id", conversation.conversationId()).putExtra("userInfo_self", userInfo_self).putExtra("userInfo", userInfo).putExtra("nikename", ""));
+            startActivity(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("userId", conversation.conversationId()).putExtra("userInfo_self", userInfo_self).putExtra("userInfo", userInfo).putExtra("nikename", ""));
         });
         mTopView.getRightView().setOnClickListener(view -> {
             //TODO 跳转群聊列表

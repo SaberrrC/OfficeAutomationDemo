@@ -547,35 +547,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         }
     }
 
-//    //会议室调期
-//    @Override
-//    public void modifyMeetingRoomsSuccess() {
-//        MeetingReservationRecordActivity.mRecordActivity.finish();
-//        Intent intent = new Intent(this, MeetingReservationSucceedActivity.class);
-//        intent.putExtra("mReservation", "您已经成功调期");
-//        intent.putExtra("mMeetingDate", mStartTime.replace(" ", "  ") + " - " + mEndDate);
-//        intent.putExtra("mMeetingName", mTvMeetingName.getText().toString());
-//        startActivity(intent);
-//        EventBus.getDefault().post("finish");
-////        MeetingPredetermineRecordActivity.mRecordActivity.finish();
-//        MeetingReservationRecordActivity.mRecordActivity.finish();
-//        finish();
-//    }
-//
-//    @Override
-//    public void modifyMeetingRoomsFailed(int errorCode, String strMsg) {
-//        switch (errorCode) {
-//            case -1:
-//                showToast(getString(R.string.net_no_connection));
-//                break;
-//            default:
-//                isMeetingRequestComplete = true;
-//                if (!strMsg.equals(""))
-//                    Toast.makeText(this, strMsg, Toast.LENGTH_SHORT).show();
-//                break;
-//        }
-//    }
-
     @Override
     public void onBackPressed() {
         if (isWriteMeetingInfo && (!mEdMeetingContent.getText().toString().trim().equals("") || !mEdMeetingPerson.getText().toString().trim().equals("")

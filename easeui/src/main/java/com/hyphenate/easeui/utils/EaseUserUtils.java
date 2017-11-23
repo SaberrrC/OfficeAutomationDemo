@@ -141,10 +141,10 @@ public class EaseUserUtils {
 
             if (user != null && user.getNick() != null) {
                 if (textView.getText().equals(""))
-                    textView.setText(nickName);
+                    textView.setText(username);
             } else {
                 if (textView.getText().equals(""))
-                    textView.setText(nickName);
+                    textView.setText(username);
             }
         }
     }
