@@ -46,7 +46,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     TextView  mTvTitle;
     @BindView(R.id.iv_detail)
     ImageView mIvDetail;
-    private String              u_id;
+    private String              mTitle;
     private EaseChatFragment    chatFragment;
     private UserInfoDetailsBean mUserInfoDetailsBean;
 
@@ -56,13 +56,9 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         setContentView(R.layout.activity_ease_chat_message);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        setTitle(u_id);
         initCount();
     }
 
-    private void setTitle(String u_id) {
-        mTvTitle.setText(u_id);
-    }
 
     private void initCount() {
         int tempCount = EMClient.getInstance().chatManager().getUnreadMsgsCount();
@@ -79,82 +75,70 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
     private void initData() {
-        userInfo_self = getIntent().getStringExtra("userInfo_self");
-        userInfo = getIntent().getStringExtra("userInfo");
-        u_id = getIntent().getStringExtra("u_id");
-
-        mUserInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
-        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
+        //TODO 暂做更改
+//        userInfo_self = getIntent().getStringExtra("userInfo_self");
+//        userInfo = getIntent().getStringExtra("userInfo");
+        mTitle = getIntent().getStringExtra("title");
+//        mUserInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
+//        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
 
         if (getIntent().getIntExtra("chatType", 0) == 2) {
             setTitle(getIntent().getStringExtra("groupName"));
         } else {
-            if (mUserInfoDetailsBean != null && u_id.contains(mUserInfoDetailsBean.getCODE()))
-                setTitle(mUserInfoDetailsBean.getUsername());
-            else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
-                setTitle(userInfoSelfDetailsBean.getUsername_self());
-            }
+            //TODO 暂作修改 消息透传
+//            if (mUserInfoDetailsBean != null && u_id.contains(mUserInfoDetailsBean.getCODE()))
+//                mTvTitle.setText(mUserInfoDetailsBean.getUsername());
+//            else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
+//                mTvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
+//            }
+
+            mTvTitle.setText(mTitle);
         }
 
         //传入参数
         Bundle args = new Bundle();
         args.putInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         try {
-            args.putString(EaseConstant.EXTRA_USER_ID, u_id);
-            //对方的信息
-            args.putString("to_user_code", getIntent().getStringExtra("code"));
-            args.putString("to_user_nike", mUserInfoDetailsBean.getUsername() == null ? "" : mUserInfoDetailsBean.getUsername());
-            args.putString("to_user_pic", mUserInfoDetailsBean.getPortrait() == null ? "" : mUserInfoDetailsBean.getPortrait());
-            args.putString("to_user_department", mUserInfoDetailsBean.getDepartment_name());
-            args.putString("to_user_post", mUserInfoDetailsBean.getPost_title());
-            args.putString("to_user_sex", mUserInfoDetailsBean.getSex());
-            args.putString("to_user_phone", mUserInfoDetailsBean.getPhone());
-            args.putString("to_user_email", mUserInfoDetailsBean.getEmail());
-            args.putString("userInfo", userInfo);
-            args.putString("userInfo_self", userInfo_self);
 
-            //自己的信息
-            args.putString("user_code", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_CODE));
-            args.putString("meId", Constants.CID + "_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
-            args.putString("userName", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USERNAME));
-            args.putString("userPic", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
-            args.putString("userSex", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_SEX));
-            args.putString("userPhone", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PHONE));
-            args.putString("userPost", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_POST_NAME));
-            args.putString("userDepartment", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
-            args.putString("userEmail", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_EMAIL));
-            args.putString("userDepartmentId", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT));
+            //TODO 消息透传 修改
+//            args.putString(EaseConstant.EXTRA_USER_ID, u_id);
+//            //对方的信息
+//            args.putString("to_user_code", getIntent().getStringExtra("code"));
+//            args.putString("to_user_nike", mUserInfoDetailsBean.getUsername() == null ? "" : mUserInfoDetailsBean.getUsername());
+//            args.putString("to_user_pic", mUserInfoDetailsBean.getPortrait() == null ? "" : mUserInfoDetailsBean.getPortrait());
+//            args.putString("to_user_department", mUserInfoDetailsBean.getDepartment_name());
+//            args.putString("to_user_post", mUserInfoDetailsBean.getPost_title());
+//            args.putString("to_user_sex", mUserInfoDetailsBean.getSex());
+//            args.putString("to_user_phone", mUserInfoDetailsBean.getPhone());
+//            args.putString("to_user_email", mUserInfoDetailsBean.getEmail());
+
+//            args.putString("userInfo", userInfo);
+//            args.putString("userInfo_self", userInfo_self);
+
+//            //自己的信息
+//            args.putString("user_code", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_CODE));
+//            args.putString("meId", Constants.CID + "_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+//            args.putString("userName", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USERNAME));
+//            args.putString("userPic", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
+//            args.putString("userSex", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_SEX));
+//            args.putString("userPhone", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PHONE));
+//            args.putString("userPost", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_POST_NAME));
+//            args.putString("userDepartment", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
+//            args.putString("userEmail", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_EMAIL));
+//            args.putString("userDepartmentId", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT));
+
+            //TODO 消息透传 修改
+            args.putString("userId", AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
+            args.putString("userName", AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
+            args.putString("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
+            args.putString("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
 
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        String cmy = getIntent().getStringExtra("cmy");
-        if (cmy == "cmy") {
-            args.putString("to_user_code","sl_010122579");
-            args.putString("to_user_nike","to_user_nike");
-            args.putString("to_user_pic","to_user_pic");
-            args.putString("to_user_department","to_user_department");
-            args.putString("to_user_post","to_user_post");
-            args.putString("to_user_sex","to_user_sex");
-            args.putString("to_user_phone","to_user_phone");
-            args.putString("to_user_email","to_user_email");
-            args.putString("userInfo","userInfo");
-            args.putString("userInfo_self","userInfo_self");
-
-            args.putString("user_code","sl_010088966");
-            args.putString("meId","meId");
-            args.putString("userName","userName");
-            args.putString("userPic","userPic");
-            args.putString("userSex","userSex");
-            args.putString("userPhone","userPhone");
-            args.putString("userPost","userPost");
-            args.putString("userDepartment","userDepartment");
-            args.putString("userEmail","userEmail");
-            args.putString("userDepartmentId","userDepartmentId");
-        }
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
-        chatFragment.setArguments(args);
+//        chatFragment.setArguments(args);
         chatFragment.setArguments(getIntent().getExtras());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();

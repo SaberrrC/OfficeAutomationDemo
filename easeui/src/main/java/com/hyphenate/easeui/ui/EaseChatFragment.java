@@ -346,50 +346,46 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     protected void onConversationInit() {
 //        if (conversation != null) {
-            String name  = toChatUsername;
-            EMConversation.EMConversationType conversationType = EaseCommonUtils.getConversationType(chatType);
+        conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
+        conversation.markAllMessagesAsRead();
+        // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
+        // you can change this number
 
-
-            conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
-            conversation.markAllMessagesAsRead();
-            // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
-            // you can change this number
-
-            if (!isRoaming) {
-                final List<EMMessage> msgs = conversation.getAllMessages();
-                int msgCount = msgs != null ? msgs.size() : 0;
-                if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
-                    String msgId = null;
-                    if (msgs != null && msgs.size() > 0) {
-                        msgId = msgs.get(0).getMsgId();
-                        mEmMessage = msgs.get(0);
-                    }
-                    conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+        if (!isRoaming) {
+            final List<EMMessage> msgs = conversation.getAllMessages();
+            int msgCount = msgs != null ? msgs.size() : 0;
+            if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
+                String msgId = null;
+                if (msgs != null && msgs.size() > 0) {
+                    msgId = msgs.get(0).getMsgId();
+                    mEmMessage = msgs.get(0);
                 }
-            } else {
-                fetchQueue.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            EMClient.getInstance().chatManager().fetchHistoryMessages(
-                                    toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, "");
-                            final List<EMMessage> msgs = conversation.getAllMessages();
-                            int msgCount = msgs != null ? msgs.size() : 0;
-                            if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
-                                String msgId = null;
-                                if (msgs != null && msgs.size() > 0) {
-                                    msgId = msgs.get(0).getMsgId();
-                                }
-                                List<EMMessage> emMessages = conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
-                                mEmMessage = emMessages.get(0);
-                            }
-                            messageList.refreshSelectLast();
-                        } catch (HyphenateException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
             }
+        } else {
+            fetchQueue.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        EMClient.getInstance().chatManager().fetchHistoryMessages(
+                                toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, "");
+                        final List<EMMessage> msgs = conversation.getAllMessages();
+                        int msgCount = msgs != null ? msgs.size() : 0;
+                        if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
+                            String msgId = null;
+                            if (msgs != null && msgs.size() > 0) {
+                                msgId = msgs.get(0).getMsgId();
+                            }
+                            List<EMMessage> emMessages = conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+                            mEmMessage = emMessages.get(0);
+                        }
+                        messageList.refreshSelectLast();
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
 //        }
     }
 
@@ -726,7 +722,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     break;
             }
         }
-
     }
 
     /**
@@ -760,104 +755,137 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         inputAtUsername(username, true);
     }
 
-    String userInfo_self;
-    String userInfo;
-    JSONObject sendUserInfo_self;
-    JSONObject sendUserInfo;
+    //TODO 偷传 暂作修改
+    //String userInfo_self;
+    //String userInfo;
+    //JSONObject sendUserInfo_self;
+    //JSONObject sendUserInfo;
 
     //send message
     protected void sendTextMessage(String content) {
-        readUserInfoDetailsMessage();
+        //TODO 暂作修改
+        //readUserInfoDetailsMessage();
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
         } else {
             EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
+
+            //TODO 存储数据
+            if (!message.getFrom().equals(getArguments().getString("toChatUsername", ""))) {
+                EMConversation conversationDB = EMClient.getInstance().chatManager().getConversation(toChatUsername);
+                if (conversationDB != null) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("userName", getArguments().getString("userName", ""));
+                        jsonObject.put("userCode", getArguments().getString("toChatUsername", ""));
+                        jsonObject.put("userHead", getArguments().getString("userHead", ""));
+                        conversationDB.setExtField(jsonObject.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             sendUserInfoDetailsMessage(message);
             sendMessage(message);
-            mEmMessage = message;
+//            mEmMessage = message;
         }
     }
 
     private void sendUserInfoDetailsMessage(EMMessage message) {
-        String from = message.getFrom();
-        UserInfoSelfDetailsBean bean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
-        String newUserInfo_self = null;
-        String newUserInfo = null;
+
+        //TODO 暂做修改
+//        String from = message.getFrom();
+//        UserInfoSelfDetailsBean bean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
+//        String newUserInfo_self = null;
+//        String newUserInfo = null;
+//        try {
+//            if (!from.equals("sl_" + bean.CODE_self)) {
+//                newUserInfo_self = userInfo_self.replaceAll("_self", "");
+//                newUserInfo = userInfo.replace("phone", "phone_self");
+//                newUserInfo = newUserInfo.replace("CODE", "CODE_self");
+//                newUserInfo = newUserInfo.replace("sex", "sex_self");
+//                newUserInfo = newUserInfo.replace("post_title", "post_title_self");
+//                newUserInfo = newUserInfo.replace("username", "username_self");
+//                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
+//                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
+//                newUserInfo = newUserInfo.replace("email", "email_self");
+//                newUserInfo = newUserInfo.replace("department_name", "department_name_self");
+//                sendUserInfo_self = new JSONObject(newUserInfo_self);
+//                sendUserInfo = new JSONObject(newUserInfo);
+//                message.setAttribute("userInfo_self", sendUserInfo);
+//                message.setAttribute("userInfo", sendUserInfo_self);
+//
+//            } else {
+//                sendUserInfo_self = new JSONObject(userInfo_self);
+//                sendUserInfo = new JSONObject(userInfo);
+//                message.setAttribute("userInfo_self", sendUserInfo_self);
+//                message.setAttribute("userInfo", sendUserInfo);
+//            }
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
+
+        //TODO 新消息扩展
+        JSONObject jsonObject = new JSONObject();
         try {
-            if (!from.equals("sl_" + bean.CODE_self)) {
-                newUserInfo_self = userInfo_self.replaceAll("_self", "");
-                newUserInfo = userInfo.replace("phone", "phone_self");
-                newUserInfo = newUserInfo.replace("CODE", "CODE_self");
-                newUserInfo = newUserInfo.replace("sex", "sex_self");
-                newUserInfo = newUserInfo.replace("post_title", "post_title_self");
-                newUserInfo = newUserInfo.replace("username", "username_self");
-                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
-                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
-                newUserInfo = newUserInfo.replace("email", "email_self");
-                newUserInfo = newUserInfo.replace("department_name", "department_name_self");
-                sendUserInfo_self = new JSONObject(newUserInfo_self);
-                sendUserInfo = new JSONObject(newUserInfo);
-                message.setAttribute("userInfo_self", sendUserInfo);
-                message.setAttribute("userInfo", sendUserInfo_self);
-
-            } else {
-                sendUserInfo_self = new JSONObject(userInfo_self);
-                sendUserInfo = new JSONObject(userInfo);
-                message.setAttribute("userInfo_self", sendUserInfo_self);
-                message.setAttribute("userInfo", sendUserInfo);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void readUserInfoDetailsMessage() {
-        //TODO TEXT 携带消息
-        JSONObject object_self = new JSONObject();
-        JSONObject object = new JSONObject();
-        try {
-            userInfo_self = getArguments().getString("userInfo_self", "");
-            userInfo = getArguments().getString("userInfo", "");
-            try {
-                if (userInfo_self.equals("") && mEmMessage.getStringAttribute("userInfo_self", "") != null) {
-                    userInfo_self = mEmMessage.getStringAttribute("userInfo_self", "");
-                }
-                if (userInfo.equals("") && mEmMessage.getStringAttribute("userInfo", "") != null) {
-                    userInfo = mEmMessage.getStringAttribute("userInfo", "");
-                }
-            } catch (Throwable e1) {
-                e1.printStackTrace();
-            }
-            String user_code = getArguments().getString("user_code", "-");
-            String to_user_code = getArguments().getString("to_user_code", "-");
-
-            if (!user_code.equals("-") && getArguments().getString("user_code", "-").equals(user_code) && userInfo_self.equals("")) {
-                object_self.put("CODE_self", getArguments().getString("user_code", "-"));
-                object_self.put("phone_self", getArguments().getString("userPhone", "-"));
-                object_self.put("sex_self", getArguments().getString("userSex", "-"));
-                object_self.put("post_title_self", getArguments().getString("userPost", "-"));
-                object_self.put("username_self", getArguments().getString("userName", "-"));
-                object_self.put("portrait_self", getArguments().getString("userPic", "-"));
-                object_self.put("email_self", getArguments().getString("userEmail", "-"));
-                object_self.put("department_name_self", getArguments().getString("userDepartment", "-"));
-                userInfo_self = object_self.toString();
-            }
-
-            if (!to_user_code.equals("-") && userInfo.equals("")) {
-                object.put("CODE", getArguments().getString("to_user_code", "-"));
-                object.put("phone", getArguments().getString("to_user_phone", "-"));
-                object.put("sex", getArguments().getString("to_user_sex", "-"));
-                object.put("post_title", getArguments().getString("to_user_post", "-"));
-                object.put("username", getArguments().getString("to_user_nike", "-"));
-                object.put("portrait", getArguments().getString("to_user_pic", "-"));
-                object.put("email", getArguments().getString("to_user_email", "-"));
-                object.put("department_name", getArguments().getString("to_user_department", "-"));
-                userInfo = object.toString();
-            }
+            jsonObject.put("userHead", getArguments().getString("userHeadSelf", ""));
+            jsonObject.put("userId", getArguments().getString("userIdSelf", ""));
+            jsonObject.put("userCode", getArguments().getString("userCodeSelf", ""));
+            jsonObject.put("userName", getArguments().getString("userNameSelf", ""));
+            message.setAttribute("userInfo", jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+    //TODO TEXT 携带消息  暂做修改
+//    private void readUserInfoDetailsMessage() {
+//        JSONObject object_self = new JSONObject();
+//        JSONObject object = new JSONObject();
+//        try {
+//            userInfo_self = getArguments().getString("userInfo_self", "");
+//            userInfo = getArguments().getString("userInfo", "");
+//            try {
+//                if (userInfo_self.equals("") && mEmMessage.getStringAttribute("userInfo_self", "") != null) {
+//                    userInfo_self = mEmMessage.getStringAttribute("userInfo_self", "");
+//                }
+//                if (userInfo.equals("") && mEmMessage.getStringAttribute("userInfo", "") != null) {
+//                    userInfo = mEmMessage.getStringAttribute("userInfo", "");
+//                }
+//            } catch (Throwable e1) {
+//                e1.printStackTrace();
+//            }
+//            String user_code = getArguments().getString("user_code", "-");
+//            String to_user_code = getArguments().getString("to_user_code", "-");
+//
+//            if (!user_code.equals("-") && getArguments().getString("user_code", "-").equals(user_code) && userInfo_self.equals("")) {
+//                object_self.put("CODE_self", getArguments().getString("user_code", "-"));
+//                object_self.put("phone_self", getArguments().getString("userPhone", "-"));
+//                object_self.put("sex_self", getArguments().getString("userSex", "-"));
+//                object_self.put("post_title_self", getArguments().getString("userPost", "-"));
+//                object_self.put("username_self", getArguments().getString("userName", "-"));
+//                object_self.put("portrait_self", getArguments().getString("userPic", "-"));
+//                object_self.put("email_self", getArguments().getString("userEmail", "-"));
+//                object_self.put("department_name_self", getArguments().getString("userDepartment", "-"));
+//                userInfo_self = object_self.toString();
+//            }
+//
+//            if (!to_user_code.equals("-") && userInfo.equals("")) {
+//                object.put("CODE", getArguments().getString("to_user_code", "-"));
+//                object.put("phone", getArguments().getString("to_user_phone", "-"));
+//                object.put("sex", getArguments().getString("to_user_sex", "-"));
+//                object.put("post_title", getArguments().getString("to_user_post", "-"));
+//                object.put("username", getArguments().getString("to_user_nike", "-"));
+//                object.put("portrait", getArguments().getString("to_user_pic", "-"));
+//                object.put("email", getArguments().getString("to_user_email", "-"));
+//                object.put("department_name", getArguments().getString("to_user_department", "-"));
+//                userInfo = object.toString();
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * send @ message, only support group chat message
@@ -892,7 +920,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected void sendVoiceMessage(String filePath, int length) {
         EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, toChatUsername);
         //TODO 语音携带消息
-        readUserInfoDetailsMessage();
+        //TODO TEXT 携带消息  暂做修改
+        //readUserInfoDetailsMessage();
         sendUserInfoDetailsMessage(message);
         sendMessage(message);
     }
@@ -900,7 +929,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected void sendImageMessage(String imagePath) {
         EMMessage message = EMMessage.createImageSendMessage(imagePath, false, toChatUsername);
         //TODO 图片携带消息
-        readUserInfoDetailsMessage();
+        //TODO TEXT 携带消息  暂做修改
+        //readUserInfoDetailsMessage();
         sendUserInfoDetailsMessage(message);
         sendMessage(message);
     }
@@ -918,7 +948,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected void sendFileMessage(String filePath) {
         EMMessage message = EMMessage.createFileSendMessage(filePath, toChatUsername);
         //TODO 文件携带消息
-        readUserInfoDetailsMessage();
+        //TODO TEXT 携带消息  暂做修改
+        //readUserInfoDetailsMessage();
         sendUserInfoDetailsMessage(message);
         sendMessage(message);
     }
@@ -930,14 +961,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     protected void sendMessage(EMMessage message) {
         //给对方发送自己的扩展信息用户名和头像
-//        message.setAttribute("conversationId", meId);
-//        message.setAttribute("nickname", userName);
-//        message.setAttribute("avatarURL", userPic);
-//        FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(toChatUsername,
-//                toChatUsernike, toChatUserpic));
+        //FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(toChatUsername,
+        //toChatUsernike, toChatUserpic));
         if (message == null) {
             return;
         }
+
         if (chatFragmentHelper != null) {
             //set extension
             chatFragmentHelper.onSetMessageAttributes(message);
@@ -948,8 +977,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             message.setChatType(ChatType.ChatRoom);
         }
         //send message
-
         EMClient.getInstance().chatManager().sendMessage(message);
+
         //refresh ui
         if (isMessageListInited) {
             messageList.refreshSelectLast();

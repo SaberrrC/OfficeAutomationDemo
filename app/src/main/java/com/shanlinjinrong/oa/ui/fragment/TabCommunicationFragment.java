@@ -8,14 +8,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.GroupChatListActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,8 +39,8 @@ public class TabCommunicationFragment extends BaseFragment {
 
     //    private EaseConversationListFragment conversationListFragment;
     public ConversationListFragment myConversationListFragment;
-    String userInfo_self;
-    String userInfo;
+    //    String userInfo_self;
+    //    String userInfo;
     @BindView(R.id.topView)
     CommonTopView mTopView;
 
@@ -61,11 +70,58 @@ public class TabCommunicationFragment extends BaseFragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.easeConversationListFragment, myConversationListFragment).commit();
         myConversationListFragment.setConversationListItemClickListener(conversation -> {
-            EMMessage lastMessage = conversation.getLastMessage();
-            userInfo = lastMessage.getStringAttribute("userInfo", "");
-            userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
 
-            startActivity(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("userId", conversation.conversationId()).putExtra("userInfo_self", userInfo_self).putExtra("userInfo", userInfo).putExtra("nikename", ""));
+            EMMessage lastMessage = conversation.getLastMessage();
+
+            EMConversation conversation1 = EMClient.getInstance().chatManager().getConversation(lastMessage.getTo());
+            String title = "";
+            if (conversation1 != null) {
+                String extField = conversation1.getExtField();
+                try {
+                    JSONObject jsonObject = new JSONObject(extField);
+                    title = jsonObject.getString("userName");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            //TODO 暂做修改 消息透传部分
+//            userInfo = lastMessage.getStringAttribute("userInfo", "");
+//            userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
+//            startActivity(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("userId", conversation.conversationId()).putExtra("userInfo_self", userInfo_self).putExtra("userInfo", userInfo).putExtra("nikename", ""));
+//            Intent intent = new Intent(getActivity(), EaseChatMessageActivity.class);
+//            intent.putExtra("userCode", lastMessage.getStringAttribute("userCode", ""));
+//            intent.putExtra("userName", lastMessage.getStringAttribute("userName", ""));
+//            intent.putExtra("userId", lastMessage.getStringAttribute("userId", ""));
+//            intent.putExtra("userHead", lastMessage.getStringAttribute("userHead", ""));
+//            startActivity(intent);
+
+
+            Intent intent = new Intent(getActivity(), EaseChatMessageActivity.class);
+            intent.putExtra("userCodeSelf", "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+            intent.putExtra("userNameSelf", AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
+            intent.putExtra("userIdSelf", AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
+            intent.putExtra("userHeadSelf", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
+            intent.putExtra("title", title);
+
+            //TODO 获取携带的消息
+            String userInfo = lastMessage.getStringAttribute("userInfo", "");
+            if (!userInfo.equals("")) {
+                try {
+                    JSONObject jsonObject = new JSONObject(userInfo);
+                    if (lastMessage.getTo().equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                        intent.putExtra("toChatUsername", lastMessage.getFrom());
+                    } else {
+                        intent.putExtra("toChatUsername", lastMessage.getTo());
+                    }
+                    intent.putExtra("userCode", jsonObject.getString("userCode"));
+                    intent.putExtra("userName", jsonObject.getString("userName"));
+                    intent.putExtra("userId", jsonObject.getString("userId"));
+                    intent.putExtra("userHead", jsonObject.getString("userHead"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            startActivity(intent);
         });
         mTopView.getRightView().setOnClickListener(view -> {
             //TODO 跳转群聊列表

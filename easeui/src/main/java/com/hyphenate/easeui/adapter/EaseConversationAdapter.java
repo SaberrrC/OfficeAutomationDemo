@@ -33,6 +33,8 @@ import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelp
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +42,8 @@ import java.util.List;
 /**
  * conversation list adapter
  */
+
+//TODO 最外边列表展示 Adapter
 public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     private static final String TAG = "ChatAllHistoryAdapter";
     private List<EMConversation> conversationList;
@@ -58,8 +62,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     UserInfoSelfDetailsBean userInfoSelfDetailsBean;
     EMMessage lastMessage;
 
-    public EaseConversationAdapter(Context context, int resource,
-                                   List<EMConversation> objects) {
+    public EaseConversationAdapter(Context context, int resource, List<EMConversation> objects) {
         super(context, resource, objects);
         mContext = context;
         conversationList = objects;
@@ -152,57 +155,69 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
         }
         try {
-            String user_Info_self = lastMessage.getStringAttribute("userInfo_self", "");
-            String user_Info = lastMessage.getStringAttribute("userInfo", "");
-            userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
-            userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
+
+            //TODO 暂作修改 消息 透传
+//            String user_Info_self = lastMessage.getStringAttribute("userInfo_self", "");
+//            String user_Info = lastMessage.getStringAttribute("userInfo", "");
+//            userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
+//            userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
+//            String userName = lastMessage.getStringAttribute("userName", "");
+//            String userHead = lastMessage.getStringAttribute("userHead", "");
 
             String user = EMClient.getInstance().getCurrentUser();
             //角色转换
-            if (!EMClient.getInstance().getCurrentUser().contains(userInfoDetailsBean.getCODE())){
-                UserInfoDetailsBean userInfoDetailsBeanTemp = userInfoDetailsBean;
-                userInfoDetailsBean = EaseUserUtils.changeSelfToUserInfo(userInfoSelfDetailsBean);
-                userInfoSelfDetailsBean = EaseUserUtils.changeUserInfoToSelf(userInfoDetailsBeanTemp);
-            }
+//            if (!EMClient.getInstance().getCurrentUser().contains(userInfoDetailsBean.getCODE())) {
+//                UserInfoDetailsBean userInfoDetailsBeanTemp = userInfoDetailsBean;
+//                userInfoDetailsBean = EaseUserUtils.changeSelfToUserInfo(userInfoSelfDetailsBean);
+//                userInfoSelfDetailsBean = EaseUserUtils.changeUserInfoToSelf(userInfoDetailsBeanTemp);
+//            }
 
-            if (userInfoDetailsBean != null && username.equals("sl_" + userInfoDetailsBean.CODE)) {
-                if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
-                    String groupId = conversation.conversationId();
-                    if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
-                        holder.motioned.setVisibility(View.VISIBLE);
-                    } else {
-                        holder.motioned.setVisibility(View.GONE);
-                    }
-                    // group message, show group avatar
-                    holder.avatar.setImageResource(R.drawable.ease_group_icon);
-                    EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
-                    holder.name.setText(group != null ? group.getGroupName() : username);
-                } else if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
-                    holder.avatar.setImageResource(R.drawable.ease_group_icon);
-                    EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
-                    holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
-                    holder.motioned.setVisibility(View.GONE);
+//            if (userInfoDetailsBean != null && username.equals("sl_" + userInfoDetailsBean.CODE)) {
+
+            if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
+                String groupId = conversation.conversationId();
+                if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
+                    holder.motioned.setVisibility(View.VISIBLE);
                 } else {
-//                EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
-//                EaseUserUtils.setUserNick(username, holder.name);
-//                holder.motioned.setVisibility(View.GONE);
-                    EaseUserUtils.setUserAvatarBean(getContext(), userInfoDetailsBean, holder.avatar);
-//                EaseUserUtils.setUserNick(username, holder.name);
-                    EaseUserUtils.setUserNickBean(userInfoDetailsBean, holder.name);
-                    holder.name.setText(userInfoDetailsBean.username);
                     holder.motioned.setVisibility(View.GONE);
                 }
-            } else if (userInfoSelfDetailsBean != null && username.contains("sl_" + userInfoSelfDetailsBean.CODE_self)) {
-                try {
-                    EaseUserUtils.setUserAvatarBeanSelf(getContext(), userInfoSelfDetailsBean, holder.avatar);
+                // group message, show group avatar
+
+                holder.avatar.setImageResource(R.drawable.ease_group_icon);
+                EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
+                holder.name.setText(group != null ? group.getGroupName() : username);
+            } else {
+
+                String toUserCode = "";
+                if (user.equals(lastMessage.getTo())) {
+                    toUserCode = lastMessage.getFrom();
+                } else {
+                    toUserCode = lastMessage.getTo();
+                }
+
+                EMConversation conversation1 = EMClient.getInstance().chatManager().getConversation(toUserCode);
+                if (conversation1 != null) {
+                    String extField = conversation1.getExtField();
+                    JSONObject jsonObject = new JSONObject(extField);
+                    String name = jsonObject.getString("userName");
+                    String portraits = jsonObject.getString("userHead");
+                    EaseUserUtils.setUserAvatar(getContext(), portraits, holder.avatar);
+                    EaseUserUtils.setUserNick(name, holder.name);
+                    holder.motioned.setVisibility(View.GONE);
+                }
+            }
+//            }
+//            else if (userInfoSelfDetailsBean != null && username.contains("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+            try {
+                EaseUserUtils.setUserAvatarBeanSelf(getContext(), userInfoSelfDetailsBean, holder.avatar);
 //                    EaseUserUtils.setUserNick(username, holder.name);
 //                    EaseUserUtils.setUserNickSelfBean(userInfoSelfDetailsBean, holder.name);
-                    holder.name.setText(userInfoSelfDetailsBean.username_self);
-                    holder.motioned.setVisibility(View.GONE);
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
+                holder.name.setText(userInfoSelfDetailsBean.username_self);
+                holder.motioned.setVisibility(View.GONE);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
             }
+//            }
         } catch (Throwable e) {
             e.printStackTrace();
         }

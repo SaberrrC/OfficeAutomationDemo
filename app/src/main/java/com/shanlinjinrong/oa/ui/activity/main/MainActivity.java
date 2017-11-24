@@ -28,6 +28,7 @@ import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.UserInfoBean;
@@ -54,6 +55,8 @@ import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -101,23 +104,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView  tabMessageText;
+    TextView tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView  tabContactsText;
+    TextView tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView  tabGroupText;
+    TextView tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView  tabMeText;
+    TextView tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView  tabHomeText;
+    TextView tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView  tvMsgUnRead;
+    TextView tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -142,13 +145,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment>       mTabs;
+    private List<Fragment> mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE  = 0;
+    private static final int TAB_MESSAGE = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME     = 2;
-    private static final int TAB_GROUP    = 3;
-    private static final int TAB_ME       = 4;
+    private static final int TAB_HOME = 2;
+    private static final int TAB_GROUP = 3;
+    private static final int TAB_ME = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -163,14 +166,14 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
-    private TextView[]  mTextViews;
+    private TextView[] mTextViews;
 
     int tempMsgCount = 0;
-    private QBadgeView                 qBadgeView;
-    private AlertDialog                dialog;
-    private TabCommunicationFragment   tabCommunicationFragment;
+    private QBadgeView qBadgeView;
+    private AlertDialog dialog;
+    private TabCommunicationFragment tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
-    private EaseUI                     easeUI;
+    private EaseUI easeUI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -528,14 +531,30 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
              * im通知，具有通知功能
              */
             for (EMMessage message : list) {
-                String from = message.getFrom();
+
                 if (!easeUI.hasForegroundActivies()) {
                     easeUI.getNotifier().onNewMsg(message);
                 }
                 //获取个人信息
+//                String userInfo = message.getStringAttribute("userInfo", "");
+//                UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
+//                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic, userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost, userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
+
                 String userInfo = message.getStringAttribute("userInfo", "");
-                UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
-                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic, userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost, userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(userInfo);
+//                    String userName = jsonObject1.getString("userName");
+//                    String userHead = jsonObject1.getString("userHead");
+                    String userCode = jsonObject1.getString("userCode");
+//                    String userId = jsonObject1.getString("userId");
+                    EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userCode);
+                    if (conversation != null) {
+                        conversation.setExtField(jsonObject1.toString());
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
             EventBus.getDefault().post(new UpdateMessageCountEvent());
             refreshCommCount();

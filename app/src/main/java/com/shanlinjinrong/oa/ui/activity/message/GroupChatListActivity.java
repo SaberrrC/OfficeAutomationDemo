@@ -187,6 +187,8 @@ public class GroupChatListActivity extends AppCompatActivity {
             intent.putExtra("groupName", mGroupList.get(i).getGroupName());
             intent.putExtra("chatType", 2);
             intent.putExtra("userId", mGroupList.get(i).getGroupId());
+            intent.putExtra("userHead",AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
+            intent.putExtra("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
             startActivity(intent);
         }
     }

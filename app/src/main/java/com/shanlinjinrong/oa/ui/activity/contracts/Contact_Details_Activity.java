@@ -71,7 +71,6 @@ public class Contact_Details_Activity extends BaseActivity {
     TextView tv_mails;
     @BindView(R.id.iv_phone)
     ImageView iv_phone;
-
     @BindView(R.id.send_message)
     ImageView send_message;
     @BindView(R.id.send_voice)
@@ -101,6 +100,8 @@ public class Contact_Details_Activity extends BaseActivity {
         String userCode = this.getIntent().getStringExtra("user_code");
         String userInfo = this.getIntent().getStringExtra("userInfo");
         String userInfo_self = this.getIntent().getStringExtra("userInfo_self");
+        User user = getIntent().getParcelableExtra("user");
+
         final UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
         final UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
         try {
@@ -217,31 +218,34 @@ public class Contact_Details_Activity extends BaseActivity {
                     Toast.makeText(getApplication(), "不能给自己发消息", Toast.LENGTH_SHORT);
                     send_message.setImageResource(R.mipmap.ico_message_disabled);
                 } else {
-                    rel_send_message.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            boolean availabl = Utils.isNetworkAvailabl(mContext);
-                            if (!availabl) {
-                                showToast("网络不稳定，请重试");
-                                return;
+                    rel_send_message.setOnClickListener(v -> {
+                        boolean availabl = Utils.isNetworkAvailabl(mContext);
+                        if (!availabl) {
+                            showToast("网络不稳定，请重试");
+                            return;
+                        }
+                        try {
+//                                startActivity(new Intent(mContext, EaseChatMessageActivity.class)
+//                                        .putExtra("usernike", userInfoDetailsBean.username)
+//                                        .putExtra("user_pic", userInfoDetailsBean.portrait)
+//                                        .putExtra("u_id", Constants.CID + "_" + userInfoDetailsBean.CODE)
+//                                        .putExtra("department_name", userInfoDetailsBean.department_name)
+//                                        .putExtra("post_name", userInfoDetailsBean.post_title)
+//                                        .putExtra("sex", userInfoDetailsBean.sex)
+//                                        .putExtra("uid", constants.getUid())
+//                                        .putExtra("phone", userInfoDetailsBean.phone)
+//                                        .putExtra("email", userInfoDetailsBean.email));
+
+                            Intent intent = new Intent(mContext, EaseChatMessageActivity.class);
+                            if (user != null) {
+                                intent.putExtra("userId", user.getUid());
+                                intent.putExtra("userName", user.getUsername());
+                                intent.putExtra("userHead", user.getPortraits());
+                                intent.putExtra("userCode", user.getCode());
                             }
-                            try {
-
-
-
-                                startActivity(new Intent(mContext, EaseChatMessageActivity.class)
-                                        .putExtra("usernike", userInfoDetailsBean.username)
-                                        .putExtra("user_pic", userInfoDetailsBean.portrait)
-                                        .putExtra("u_id", Constants.CID + "_" + userInfoDetailsBean.CODE)
-                                        .putExtra("department_name", userInfoDetailsBean.department_name)
-                                        .putExtra("post_name", userInfoDetailsBean.post_title)
-                                        .putExtra("sex", userInfoDetailsBean.sex)
-//                                      .putExtra("uid", constants.getUid())
-                                        .putExtra("phone", userInfoDetailsBean.phone)
-                                        .putExtra("email", userInfoDetailsBean.email));
-                            } catch (Throwable e) {
-                                e.printStackTrace();
-                            }
+                            startActivity(intent);
+                        } catch (Throwable e) {
+                            e.printStackTrace();
                         }
                     });
                 }
@@ -477,22 +481,38 @@ public class Contact_Details_Activity extends BaseActivity {
                     }
 
                     addOrUpdateFriendInfo(user);
-
-                    Intent intent = new Intent(Contact_Details_Activity.this, EaseChatMessageActivity.class);
+                    //TODO 消息透传 暂作修改
+//                    Intent intent = new Intent(Contact_Details_Activity.this, EaseChatMessageActivity.class);
                     try {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("CODE", user.getCode());
-                        jsonObject.put("department_name", user.getDepartmentName());
-                        jsonObject.put("email", user.getEmail());
-                        jsonObject.put("phone", user.getPhone());
-                        jsonObject.put("portrait", user.getPortraits());
-                        jsonObject.put("post_title", user.getPostName());
-                        jsonObject.put("sex", user.getSex());
-                        jsonObject.put("username", user.getUsername());
-                        intent.putExtra("u_id", Constants.CID + "_" + user.getCode());
-                        intent.putExtra("userInfo", jsonObject.toString());
+//                        JSONObject jsonObject = new JSONObject();
+//                        jsonObject.put("CODE", user.getCode());
+//                        jsonObject.put("department_name", user.getDepartmentName());
+//                        jsonObject.put("email", user.getEmail());
+//                        jsonObject.put("phone", user.getPhone());
+//                        jsonObject.put("portrait", user.getPortraits());
+//                        jsonObject.put("post_title", user.getPostName());
+//                        jsonObject.put("sex", user.getSex());
+//                        jsonObject.put("username", user.getUsername());
+//                        intent.putExtra("u_id", Constants.CID + "_" + user.getCode());
+//                        intent.putExtra("userInfo", jsonObject.toString());
+//                        startActivity(intent);
+
+                        Intent intent = new Intent(mContext, EaseChatMessageActivity.class);
+                        if (user != null) {
+                            intent.putExtra("userName", user.getUsername());
+                            intent.putExtra("title", user.getUsername());
+                            intent.putExtra("toChatUsername", "sl_" + user.getCode());
+                            intent.putExtra("userCode", "sl_" + user.getCode());
+                            intent.putExtra("userHead", user.getPortraits());
+
+
+                            intent.putExtra("userCodeSelf", "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+                            intent.putExtra("userNameSelf", AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
+                            intent.putExtra("userIdSelf", AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
+                            intent.putExtra("userHeadSelf", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
+                        }
                         startActivity(intent);
-                    } catch (JSONException e) {
+                    } catch (Throwable e) {
                         e.printStackTrace();
                     }
                 }
