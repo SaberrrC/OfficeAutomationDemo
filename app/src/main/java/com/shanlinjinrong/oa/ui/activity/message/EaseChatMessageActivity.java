@@ -56,8 +56,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         setContentView(R.layout.activity_ease_chat_message);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        mTvTitle.setText(u_id);
+        setTitle(u_id);
         initCount();
+    }
+
+    private void setTitle(String u_id) {
+        mTvTitle.setText(u_id);
     }
 
     private void initCount() {
@@ -83,12 +87,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
 
         if (getIntent().getIntExtra("chatType", 0) == 2) {
-            mTvTitle.setText(getIntent().getStringExtra("groupName"));
+            setTitle(getIntent().getStringExtra("groupName"));
         } else {
             if (mUserInfoDetailsBean != null && u_id.contains(mUserInfoDetailsBean.getCODE()))
-                mTvTitle.setText(mUserInfoDetailsBean.getUsername());
+                setTitle(mUserInfoDetailsBean.getUsername());
             else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
-                mTvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
+                setTitle(userInfoSelfDetailsBean.getUsername_self());
             }
         }
 
