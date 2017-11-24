@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.model.UserInfoDetailsBean;
@@ -40,13 +41,13 @@ import butterknife.OnClick;
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
     @BindView(R.id.tv_count)
-    TextView mTvCount;
+    TextView  mTvCount;
     @BindView(R.id.tv_title)
-    TextView mTvTitle;
+    TextView  mTvTitle;
     @BindView(R.id.iv_detail)
     ImageView mIvDetail;
-    private String u_id;
-    private EaseChatFragment chatFragment;
+    private String              u_id;
+    private EaseChatFragment    chatFragment;
     private UserInfoDetailsBean mUserInfoDetailsBean;
 
     @Override
@@ -60,7 +61,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
     private void initCount() {
-        mPresenter.getUnReadCount();
+        int tempCount = EMClient.getInstance().chatManager().getUnreadMsgsCount();
+        if (tempCount == 0) {
+            mTvCount.setText("");
+            return;
+        }
+        mTvCount.setText("消息(" + tempCount + ")");
     }
 
     @Override
@@ -196,19 +202,10 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCount(UpdateMessageCountEvent event) {
-        mPresenter.getUnReadCount();
+        initCount();
     }
 
     @Override
     public void uidNull(int code) {
-    }
-
-    @Override
-    public void setUnreadCount(int tempCount) {
-        if (tempCount == 0) {
-            mTvCount.setText("");
-            return;
-        }
-        mTvCount.setText("消息(" + tempCount + ")");
     }
 }

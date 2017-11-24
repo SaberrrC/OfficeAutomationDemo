@@ -9,11 +9,9 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 
 public interface EaseChatMessageContract {
     interface View extends BaseView {
-        void setUnreadCount(int tempCount);
     }
 
     interface Presenter extends BasePresenter<EaseChatMessageContract.View> {
-        void getUnReadCount();
 
     }
 }

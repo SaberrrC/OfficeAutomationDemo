@@ -2,13 +2,10 @@ package com.shanlinjinrong.oa.ui.activity.main.contract;
 
 import android.app.Activity;
 
-import com.hyphenate.chat.EMConversation;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
-
-import java.util.List;
 
 /**
  * Created by 丁 on 2017/8/19.
@@ -31,12 +28,11 @@ public interface MainControllerContract {
 
         void applyPermission(Activity activity); // 申请权限
 
-        void loadUnReadMsg(); //获取未读消息数量
 
-        List<EMConversation> loadConversationList();
-//
-//        void loginIm(Context context);//登录环信
-//
-//        void initEase(AbortableFuture<LoginInfo> loginRequest, String account, String token); //登录云信
+        void setUnreadMessageCount();
+        //
+        //        void loginIm(Context context);//登录环信
+        //
+        //        void initEase(AbortableFuture<LoginInfo> loginRequest, String account, String token); //登录云信
     }
 }

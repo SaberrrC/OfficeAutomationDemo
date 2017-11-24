@@ -101,23 +101,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView tabMessageText;
+    TextView  tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView tabContactsText;
+    TextView  tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView tabGroupText;
+    TextView  tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView tabMeText;
+    TextView  tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView tabHomeText;
+    TextView  tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView tvMsgUnRead;
+    TextView  tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -142,13 +142,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment> mTabs;
+    private List<Fragment>       mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE = 0;
+    private static final int TAB_MESSAGE  = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME = 2;
-    private static final int TAB_GROUP = 3;
-    private static final int TAB_ME = 4;
+    private static final int TAB_HOME     = 2;
+    private static final int TAB_GROUP    = 3;
+    private static final int TAB_ME       = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -163,14 +163,14 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
-    private TextView[] mTextViews;
+    private TextView[]  mTextViews;
 
     int tempMsgCount = 0;
-    private QBadgeView qBadgeView;
-    private AlertDialog dialog;
-    private TabCommunicationFragment tabCommunicationFragment;
+    private QBadgeView                 qBadgeView;
+    private AlertDialog                dialog;
+    private TabCommunicationFragment   tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
-    private EaseUI easeUI;
+    private EaseUI                     easeUI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,13 +207,10 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
     private void initWidget() {
         initColor();
-        mBorderimageViews = new ImageView[]{tabGroupIcon, tabContactsIcon, tabHomeIcon, tabMessageIcon,
-                tabMeIcon};
-        mContentImageViews = new ImageView[]{tabGroupIconLight, tabContactsIconLight, tabHomeIconLight,
-                tabMessageIconLight, tabMeIconLight};
+        mBorderimageViews = new ImageView[]{tabGroupIcon, tabContactsIcon, tabHomeIcon, tabMessageIcon, tabMeIcon};
+        mContentImageViews = new ImageView[]{tabGroupIconLight, tabContactsIconLight, tabHomeIconLight, tabMessageIconLight, tabMeIconLight};
 
-        mTextViews = new TextView[]{tabGroupText, tabContactsText, tabHomeText, tabMessageText, tabMeText
-        };
+        mTextViews = new TextView[]{tabGroupText, tabContactsText, tabHomeText, tabMessageText, tabMeText};
     }
 
     private void initColor() {
@@ -290,25 +287,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     }
 
     public void refreshCommCount() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //                try {
-                mPresenter.loadConversationList();
-                //                } catch (Exception e) {
-                //                    LogUtils.e("加载环信抛异常了");
-                //                }
-            }
-        }).start();
-    }
-
-    public void refreshUnReadMsgCount() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mPresenter.loadUnReadMsg();
-            }
-        }).start();
+        mPresenter.setUnreadMessageCount();
     }
 
     @Override
@@ -410,10 +389,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         return Color.argb(255, red, green, blue);
     }
 
-    @OnClick({R.id.tab_message_icon, R.id.tab_message_text, R.id.tab_message_box,
-            R.id.tab_contacts_icon, R.id.tab_contacts_text, R.id.tab_contacts_box,
-            R.id.tab_group_icon, R.id.tab_group_text, R.id.tab_group_box, R.id.tab_me_icon,
-            R.id.tab_me_text, R.id.tab_me_box, R.id.tab_home_box, R.id.tab_home_icon})
+    @OnClick({R.id.tab_message_icon, R.id.tab_message_text, R.id.tab_message_box, R.id.tab_contacts_icon, R.id.tab_contacts_text, R.id.tab_contacts_box, R.id.tab_group_icon, R.id.tab_group_text, R.id.tab_group_box, R.id.tab_me_icon, R.id.tab_me_text, R.id.tab_me_box, R.id.tab_home_box, R.id.tab_home_icon})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tab_message_icon:
@@ -512,7 +488,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         //添加环信监听
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
         refreshCommCount();
-        //        refreshUnReadMsgCount();
         super.onResume();
     }
 
@@ -553,17 +528,14 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
              * im通知，具有通知功能
              */
             for (EMMessage message : list) {
-
+                String from = message.getFrom();
                 if (!easeUI.hasForegroundActivies()) {
                     easeUI.getNotifier().onNewMsg(message);
                 }
                 //获取个人信息
                 String userInfo = message.getStringAttribute("userInfo", "");
                 UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
-                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
-                        Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic,
-                        userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost,
-                        userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
+                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic, userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost, userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
             }
             EventBus.getDefault().post(new UpdateMessageCountEvent());
             refreshCommCount();
@@ -611,8 +583,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
     //位置权限回调
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 100:
