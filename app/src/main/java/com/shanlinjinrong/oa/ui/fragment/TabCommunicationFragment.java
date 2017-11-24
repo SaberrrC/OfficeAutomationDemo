@@ -63,6 +63,9 @@ public class TabCommunicationFragment extends BaseFragment {
 
     }
 
+    private EMConversation mConversation;
+    private String mTitle;
+
     private void initData() {
         if (myConversationListFragment == null) {
             myConversationListFragment = new ConversationListFragment();
@@ -70,16 +73,17 @@ public class TabCommunicationFragment extends BaseFragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.easeConversationListFragment, myConversationListFragment).commit();
         myConversationListFragment.setConversationListItemClickListener(conversation -> {
-
             EMMessage lastMessage = conversation.getLastMessage();
-
-            EMConversation conversation1 = EMClient.getInstance().chatManager().getConversation(lastMessage.getTo());
-            String title = "";
-            if (conversation1 != null) {
-                String extField = conversation1.getExtField();
+            if (lastMessage.getTo().equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                mConversation = EMClient.getInstance().chatManager().getConversation(lastMessage.getFrom());
+            } else {
+                mConversation = EMClient.getInstance().chatManager().getConversation(lastMessage.getTo());
+            }
+            if (mConversation != null) {
+                String extField = mConversation.getExtField();
                 try {
                     JSONObject jsonObject = new JSONObject(extField);
-                    title = jsonObject.getString("userName");
+                    mTitle = jsonObject.getString("userName");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -101,7 +105,7 @@ public class TabCommunicationFragment extends BaseFragment {
             intent.putExtra("userNameSelf", AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
             intent.putExtra("userIdSelf", AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
             intent.putExtra("userHeadSelf", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
-            intent.putExtra("title", title);
+            intent.putExtra("title", mTitle);
 
             //TODO 获取携带的消息
             String userInfo = lastMessage.getStringAttribute("userInfo", "");
