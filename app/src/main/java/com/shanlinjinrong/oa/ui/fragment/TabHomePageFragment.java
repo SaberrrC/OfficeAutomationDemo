@@ -20,12 +20,11 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.PayQueryActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
+import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
@@ -116,12 +115,7 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.rl_test, R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me,
-            R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch,
-            R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
-            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance,
-            R.id.rl_holiday_search,R.id.rl_pay_search
-    })
+    @OnClick({R.id.rl_test, R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me, R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance, R.id.rl_holiday_search, R.id.rl_pay_search})
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -180,7 +174,8 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_test:
                 if (BuildConfig.DEBUG) {
-                //intent = new Intent(mContext, UpcomingTasksActivity.class);
+                    intent = new Intent(mContext, EaseChatMessageActivity.class);
+                    intent.putExtra("cmy", "cmy");
                 }
                 break;
             case R.id.rl_holiday_search:

@@ -110,7 +110,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             args.putString("to_user_sex", mUserInfoDetailsBean.getSex());
             args.putString("to_user_phone", mUserInfoDetailsBean.getPhone());
             args.putString("to_user_email", mUserInfoDetailsBean.getEmail());
-
             args.putString("userInfo", userInfo);
             args.putString("userInfo_self", userInfo_self);
 
@@ -128,6 +127,30 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
         } catch (Throwable e) {
             e.printStackTrace();
+        }
+        String cmy = getIntent().getStringExtra("cmy");
+        if (cmy == "cmy") {
+            args.putString("to_user_code","sl_010122579");
+            args.putString("to_user_nike","to_user_nike");
+            args.putString("to_user_pic","to_user_pic");
+            args.putString("to_user_department","to_user_department");
+            args.putString("to_user_post","to_user_post");
+            args.putString("to_user_sex","to_user_sex");
+            args.putString("to_user_phone","to_user_phone");
+            args.putString("to_user_email","to_user_email");
+            args.putString("userInfo","userInfo");
+            args.putString("userInfo_self","userInfo_self");
+
+            args.putString("user_code","sl_010088966");
+            args.putString("meId","meId");
+            args.putString("userName","userName");
+            args.putString("userPic","userPic");
+            args.putString("userSex","userSex");
+            args.putString("userPhone","userPhone");
+            args.putString("userPost","userPost");
+            args.putString("userDepartment","userDepartment");
+            args.putString("userEmail","userEmail");
+            args.putString("userDepartmentId","userDepartmentId");
         }
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
