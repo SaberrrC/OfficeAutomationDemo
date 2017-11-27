@@ -2,7 +2,6 @@ package com.hyphenate.easeui.ui;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -37,8 +36,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hyphenate.EMMessageListener;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
@@ -570,48 +567,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         }
     }
 
-    protected void onChatRoomViewCreation() {
-        final ProgressDialog pd = ProgressDialog.show(getActivity(), "", "Joining......");
-        EMClient.getInstance().chatroomManager().joinChatRoom(toChatUsername, new EMValueCallBack<EMChatRoom>() {
-
-            @Override
-            public void onSuccess(final EMChatRoom value) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (getActivity().isFinishing() || !toChatUsername.equals(value.getId()))
-                            return;
-                        pd.dismiss();
-                        EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(toChatUsername);
-                        if (room != null) {
-                            titleBar.setTitle(room.getName());
-                            EMLog.d(TAG, "join room success : " + room.getName());
-                        } else {
-                            titleBar.setTitle(toChatUsername);
-                        }
-                        onConversationInit();
-                        onMessageListInit();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(final int error, String errorMsg) {
-                // TODO Auto-generated method stub
-                EMLog.d(TAG, "join room failure : " + error);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        pd.dismiss();
-                    }
-                });
-                getActivity().finish();
-            }
-        });
-    }
-
     EMMessage mEmMessage;
-
 
     // implement methods in EMMessageListener
     @Override
@@ -627,7 +583,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 // single chat message
                 username = message.getFrom();
             }
-
             // if the message is for current conversation
             if (username.equals(toChatUsername) || message.getTo().equals(toChatUsername) || message.conversationId().equals(toChatUsername)) {
                 messageList.refreshSelectLast();
