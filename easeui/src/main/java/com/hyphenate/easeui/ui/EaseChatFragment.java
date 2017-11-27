@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -90,7 +91,7 @@ import java.util.concurrent.Executors;
  * <br/>
  * you can see ChatActivity in demo for your reference
  */
-public class EaseChatFragment extends EaseBaseFragment implements EMMessageListener {
+public class EaseChatFragment extends EaseBaseFragment implements EMMessageListener, View.OnClickListener {
     protected static final String TAG                          = "EaseChatFragment";
     protected static final int    REQUEST_CODE_MAP             = 1;
     protected static final int    REQUEST_CODE_CAMERA          = 2;
@@ -146,6 +147,10 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     private onEaseUIFragmentListener mListener;
     //麦克风权限请求码
     private static final int REQUEST_RECORD_AUDIO = 100;
+    private ImageView mIvfirst;
+    private ImageView mIvLast;
+    private ImageView mIvNext;
+    private ImageView mIvFinal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -239,10 +244,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         };
     }
 
-
-    /**
-     * init view
-     */
     protected void initView() {
         // hold to record voice
         //noinspection ConstantConditions
@@ -293,15 +294,25 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (isRoaming) {
             fetchQueue = Executors.newSingleThreadExecutor();
         }
+        initHistoryBottomView();
+    }
+
+    private void initHistoryBottomView() {
+        mIvfirst = (ImageView) getView().findViewById(R.id.iv_first);
+        mIvLast = (ImageView) getView().findViewById(R.id.iv_last);
+        mIvNext = (ImageView) getView().findViewById(R.id.iv_next);
+        mIvFinal = (ImageView) getView().findViewById(R.id.iv_final);
+        mIvfirst.setOnClickListener(this);
+        mIvLast.setOnClickListener(this);
+        mIvNext.setOnClickListener(this);
+        mIvFinal.setOnClickListener(this);
     }
 
     protected void setUpView() {
-
         if (chatType != EaseConstant.CHATTYPE_CHATROOM) {
             onConversationInit();
             onMessageListInit();
         }
-
         setRefreshLayoutListener();
 
         // show forward message if the message is not null
@@ -327,19 +338,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         conversation.markAllMessagesAsRead();
         // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
         // you can change this number
-
-        if (!isRoaming) {
-            final List<EMMessage> msgs = conversation.getAllMessages();
-            int msgCount = msgs != null ? msgs.size() : 0;
-            if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
-                String msgId = null;
-                if (msgs != null && msgs.size() > 0) {
-                    msgId = msgs.get(0).getMsgId();
-                    mEmMessage = msgs.get(0);
-                }
-                conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
-            }
-        } else {
+        if (isRoaming) {
             fetchQueue.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -361,14 +360,23 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     }
                 }
             });
+            return;
         }
-        //        }
+        final List<EMMessage> msgs = conversation.getAllMessages();
+        int msgCount = msgs != null ? msgs.size() : 0;
+        if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
+            String msgId = null;
+            if (msgs != null && msgs.size() > 0) {
+                msgId = msgs.get(0).getMsgId();
+                mEmMessage = msgs.get(0);
+            }
+            conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+        }
     }
 
     protected void onMessageListInit() {
         messageList.init(toChatUsername, chatType, chatFragmentHelper != null ? chatFragmentHelper.onSetCustomChatRowProvider() : null);
         setListItemClickListener();
-
         messageList.getListView().setOnTouchListener(new OnTouchListener() {
 
             @Override
@@ -378,7 +386,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 return false;
             }
         });
-
         isMessageListInited = true;
     }
 
@@ -662,6 +669,23 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     public void onMessageChanged(EMMessage emMessage, Object change) {
         if (isMessageListInited) {
             messageList.refresh();
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        int i = view.getId();
+        if (i == R.id.iv_first) {
+            Toast.makeText(getActivity(),"" + i,Toast.LENGTH_SHORT).show();
+        }
+        if (i == R.id.iv_last) {
+            Toast.makeText(getActivity(),"" + i,Toast.LENGTH_SHORT).show();
+        }
+        if (i == R.id.iv_next) {
+            Toast.makeText(getActivity(),"" + i,Toast.LENGTH_SHORT).show();
+        }
+        if (i == R.id.iv_final) {
+            Toast.makeText(getActivity(),"" + i,Toast.LENGTH_SHORT).show();
         }
     }
 
