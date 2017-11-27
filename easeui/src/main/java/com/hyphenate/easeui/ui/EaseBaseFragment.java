@@ -19,7 +19,7 @@ public abstract class EaseBaseFragment extends Fragment{
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         //noinspection ConstantConditions
         //、titleBar = (EaseTitleBar) getView().findViewById(R.id.title_bar);
-        
+
         initView();
         setUpView();
     }
@@ -43,8 +43,8 @@ public abstract class EaseBaseFragment extends Fragment{
                         InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
-    
+
     protected abstract void initView();
-    
+
     protected abstract void setUpView();
 }
