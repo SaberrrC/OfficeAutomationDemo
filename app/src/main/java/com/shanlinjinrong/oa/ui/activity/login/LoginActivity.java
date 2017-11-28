@@ -94,12 +94,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         mCbAutoLogin.setChecked(AppConfig.getAppConfig(LoginActivity.this).get(AppConfig.PREF_KEY_PASSWORD_FLAG, false));
         AppConfig.getAppConfig(LoginActivity.this).setAutoLogin(true);
         userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
-        mTvFindPwd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class));
-            }
-        });
+        mTvFindPwd.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class)));
     }
 
     @Override

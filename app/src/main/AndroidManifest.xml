@@ -148,7 +148,7 @@
         <meta-data
             android:name="EASEMOB_APPKEY"
             android:value="1149161031178682#ezhitongoasltest" />
-        <!--android:value="1149161031178682#ezhitongoasl" -->
+        <!--android:value="1149161031178682#ezhitongoasl" />-->
 
         <!-- 声明SDK所需的service SDK核心功能 -->
         <service
@@ -207,7 +207,8 @@
             tools:ignore="ExportedService" />
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
-            android:enabled="true" />
+            android:enabled="true"
+            />
 
         <receiver
             android:name="com.hyphenate.chat.EMMipushReceiver"

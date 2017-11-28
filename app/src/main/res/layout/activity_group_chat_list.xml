@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context="com.shanlinjinrong.oa.ui.activity.message.GroupChatListActivity">
 
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:rightDrawable="@drawable/ic_launcher"
+        app:rightDrawable="@mipmap/icon_add_chat_group"
         app:topTitle="群聊列表" />
 
     <View
@@ -24,10 +25,14 @@
         android:id="@+id/ed_search_group"
         style="@null"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/white"
-        android:drawableLeft="@drawable/ic_launcher"
-        android:hint="搜索"
+        android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/search_edittext_shape"
+        android:drawableLeft="@mipmap/icon_contacts_search"
+        android:hint="  搜索"
         android:paddingLeft="10dp"
         android:textSize="14sp" />
 
@@ -35,7 +40,6 @@
         android:id="@+id/rv_group_show"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
         android:background="@color/white" />
 
 </LinearLayout>
