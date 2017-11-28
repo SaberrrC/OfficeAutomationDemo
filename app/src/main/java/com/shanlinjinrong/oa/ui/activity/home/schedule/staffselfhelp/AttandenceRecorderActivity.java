@@ -186,16 +186,15 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
 
                 for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
                     try {
-                        if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]"))
+                        if ((mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]") || mAllWorkAttendanceList.get(i).getTbmstatus().equals("")))
                             continue;
-                        mData.add(mAllWorkAttendanceList.get(i));
+                        if ((mAllWorkAttendanceList.get(i).getTbmstatus().equals("[迟到]") && getIntent().getIntExtra("exception", 0) == 0) ||
+                            (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[早退]") && getIntent().getIntExtra("exception", 0) == 1) ||
+                            (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[旷工]") && getIntent().getIntExtra("exception", 0) == 2)) {
+                            mData.add(mAllWorkAttendanceList.get(i));
+                        }
                     } catch (Throwable e) {
                         e.printStackTrace();
-                        try {
-                            mData.add(mAllWorkAttendanceList.get(i));
-                        } catch (Throwable e1) {
-                            e1.printStackTrace();
-                        }
                     }
                 }
                 if (mAllWorkAttendanceList.size() > 0) {

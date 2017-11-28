@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout_root"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <!--<include layout="@layout/toolbar"/>-->
 
@@ -14,12 +14,12 @@
 
         <ImageView
             android:id="@+id/iv_back"
-            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/toolbar_back"/>
+            android:padding="10dp"
+            android:src="@drawable/toolbar_back" />
 
         <TextView
             android:id="@+id/tv_count"
@@ -29,7 +29,7 @@
             android:gravity="center"
             android:text="未读消息"
             android:textColor="@color/black_333333"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -40,21 +40,31 @@
             android:text="标题"
             android:textAllCaps="false"
             android:textColor="@color/black_333333"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
-        <ImageView
+        <LinearLayout
             android:id="@+id/iv_detail"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_launcher"/>
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:src="@mipmap/icon_contacts_details" />
+        </LinearLayout>
 
     </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/message_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

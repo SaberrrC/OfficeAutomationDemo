@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:topTitle="聊天详情" />
+        app:topTitle="详细资料" />
 
     <View
         android:layout_width="match_parent"
@@ -22,16 +22,17 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_person_show"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="95dp"
         android:background="@color/white" />
 
 
     <RelativeLayout
         android:id="@+id/rl_group_name"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="25dp"
-        android:background="@color/white">
+        android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -72,16 +73,15 @@
     <RelativeLayout
         android:id="@+id/rl_group_person"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/white">
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:text="群主"
             android:textColor="@color/black_333333"
@@ -91,8 +91,10 @@
             android:id="@+id/tv_modification_person"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/img_group_person"
+            android:layout_toStartOf="@+id/img_group_person"
             android:gravity="center_vertical"
             android:text="吴方华"
             android:textColor="@color/black_99333333"
@@ -102,7 +104,9 @@
             android:id="@+id/img_group_person"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/tab_me_arrow" />
 
@@ -111,19 +115,22 @@
             android:layout_height="0.1dp"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:background="@color/gray_d5d5d5" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_group_portrait"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/white">
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:text="群组头像"
             android:textColor="@color/black_333333"
@@ -134,8 +141,10 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/img_portrait"
+            android:layout_toStartOf="@+id/img_portrait"
             android:src="@color/blue_69B0F2"
             app:civ_border_color="#FF000000"
             app:civ_border_width="0.1dp" />
@@ -144,7 +153,9 @@
             android:id="@+id/img_portrait"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/tab_me_arrow" />
 
@@ -154,9 +165,10 @@
     <TextView
         android:id="@+id/btn_look_message_record"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="44dp"
         android:layout_marginTop="25dp"
         android:background="@color/white"
+        android:drawableEnd="@drawable/tab_me_arrow"
         android:drawableRight="@drawable/tab_me_arrow"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
@@ -168,7 +180,7 @@
     <TextView
         android:id="@+id/tv_clear_message_record"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="44dp"
         android:layout_marginTop="25dp"
         android:background="@color/white"
         android:gravity="center_vertical"
@@ -183,14 +195,22 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <Button
+    <TextView
         android:id="@+id/btn_chat_delete"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="15dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
         android:background="@drawable/chat_details_btn_enable"
         android:text="删除并退出"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:visibility="gone" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.5" />
+
 </LinearLayout>

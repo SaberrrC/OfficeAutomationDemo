@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+//找回密码功能
 public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPresenter> implements WriteJobNumberContract.View {
 
     @BindView(R.id.et_job_number)
@@ -73,6 +74,7 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
                 showToast("验证码不正确");
                 mPresenter.getIdentifyingCode();
             } else {
+                //TODO 找回密码 逻辑判断 检测邮箱是否存在
                 mPresenter.searchUser(mJobNumber.getText().toString().trim());
             }
         }
@@ -81,24 +83,8 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     @Override
     public void getIdentifyingCodeSuccess(String picUrl, String mCode) {
         this.mCode = mCode;
-//        if (BuildConfig.DEBUG) {
-//            picUrl = Api.PHP_DEBUG_URL + picUrl;
-//        } else {
-//            picUrl = Api.PHP_URL + picUrl;
-//        }
-
         picUrl = "data:image/gif;base64," + picUrl;
-        Log.i("WriteJobNumberActivity", "mCode : " + mCode);
-        Log.i("WriteJobNumberActivity", "picUrl : " + picUrl);
-
         mIdentifyingCodeImg.setImageBitmap(base64ToBitmap(picUrl));
-
-        Log.i("WriteJobNumberActivity", "mCode : " + mCode);
-
-
-//        Glide.with(this).load(picUrl).into(mIdentifyingCodeImg);
-
-
     }
 
     /**

@@ -3,8 +3,8 @@ package com.shanlinjinrong.oa.ui.activity.message;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
@@ -13,8 +13,6 @@ import com.hyphenate.easeui.model.UserInfoDetailsBean;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
 import com.shanlinjinrong.oa.ui.activity.message.event.UpdateMessageCountEvent;
@@ -38,14 +36,16 @@ import butterknife.OnClick;
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
     @BindView(R.id.tv_count)
-    TextView  mTvCount;
+    TextView mTvCount;
     @BindView(R.id.tv_title)
-    TextView  mTvTitle;
+    TextView mTvTitle;
     @BindView(R.id.iv_detail)
-    ImageView mIvDetail;
-    private String              mTitle;
-    private EaseChatFragment    chatFragment;
+    LinearLayout mIvDetail;
+    private String mTitle;
+    private EaseChatFragment chatFragment;
     private UserInfoDetailsBean mUserInfoDetailsBean;
+    private int mChatType;
+    private int CHAT_GROUP = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
     private void initData() {
+
+        mChatType = getIntent().getIntExtra("chatType", 0);
         //TODO 暂做更改
 //        userInfo_self = getIntent().getStringExtra("userInfo_self");
 //        userInfo = getIntent().getStringExtra("userInfo");
@@ -79,8 +81,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 //        mUserInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
 //        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
 
-        if (getIntent().getIntExtra("chatType", 0) == 2) {
-            setTitle(getIntent().getStringExtra("groupName"));
+        if (mChatType == CHAT_GROUP) {
+            mTvTitle.setText(getIntent().getStringExtra("groupName"));
         } else {
             //TODO 暂作修改 消息透传
 //            if (mUserInfoDetailsBean != null && u_id.contains(mUserInfoDetailsBean.getCODE()))
@@ -88,7 +90,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 //            else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
 //                mTvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
 //            }
-
             mTvTitle.setText(mTitle);
         }
         try {
@@ -120,20 +121,14 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 //            args.putString("userEmail", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_EMAIL));
 //            args.putString("userDepartmentId", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT));
 
-//            //TODO 消息透传 修改
-//            args.putString("userId", AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
-//            args.putString("userName", AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
-//            args.putString("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
-//            args.putString("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
-
         } catch (Throwable e) {
             e.printStackTrace();
         }
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
-//        chatFragment.setArguments(args);
         Bundle extras = getIntent().getExtras();
         extras.putString("PAGE_TYPE", "HISTORY");
+        extras.putInt("CHAT_TYPE", mChatType);
         chatFragment.setArguments(extras);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }
@@ -196,10 +191,17 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 break;
             case R.id.iv_detail:
                 Intent intent = new Intent(this, EaseChatDetailsActivity.class);
-                intent.putExtra("name_self", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USERNAME));
-                intent.putExtra("portraits_self", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
-                intent.putExtra("name", mUserInfoDetailsBean.getUsername() == null ? "" : mUserInfoDetailsBean.getUsername());
-                intent.putExtra("portraits", mUserInfoDetailsBean.getPortrait() == null ? "" : mUserInfoDetailsBean.getPortrait());
+                if (mChatType == CHAT_GROUP) {
+                    intent.putExtra("chatType", true);
+                    intent.putExtra("groupId", getIntent().getStringExtra("toChatUsername"));
+                } else {
+                    intent.putExtra("chatType", false);
+
+                }
+//                intent.putExtra("name_self", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USERNAME));
+//                intent.putExtra("portraits_self", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
+//                intent.putExtra("name", mUserInfoDetailsBean.getUsername() == null ? "" : mUserInfoDetailsBean.getUsername());
+//                intent.putExtra("portraits", mUserInfoDetailsBean.getPortrait() == null ? "" : mUserInfoDetailsBean.getPortrait());
                 startActivity(intent);
                 break;
         }
