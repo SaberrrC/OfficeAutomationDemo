@@ -39,19 +39,25 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                 try {
                     JSONObject jo = new JSONObject(t);
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                        mView.loginSuccess(Api.getDataToJSONObject(jo));
+                        if (mView != null)
+                            mView.loginSuccess(Api.getDataToJSONObject(jo));
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        mView.loginFailed(Api.getCode(jo));
+                        if (mView != null)
+                            mView.loginFailed(Api.getCode(jo));
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR)) {
-                        mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
+                        if (mView != null)
+                            mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_USERNAME_NOT_EXIST)) {
-                        mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
+                        if (mView != null)
+                            mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_USER_FREEZE)) {
-                        mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
+                        if (mView != null)
+                            mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
                     } else {
-                        mView.loginOtherError();
+                        if (mView != null)
+                            mView.loginOtherError();
                     }
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -59,14 +65,24 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 LogUtils.e(errorNo + "--" + strMsg);
-                mView.loginFailed(errorNo);
-                super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.loginFailed(errorNo);
+                    super.onFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    if (mView != null)
+                        mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
