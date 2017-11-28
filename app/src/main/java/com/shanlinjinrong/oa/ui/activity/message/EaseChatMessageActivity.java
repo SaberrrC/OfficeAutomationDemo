@@ -133,7 +133,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         chatFragment.setListener(this);
 //        chatFragment.setArguments(args);
         Bundle extras = getIntent().getExtras();
-        extras.putString("PAGE_TYPE", "HISTORY");
+        extras.putString("PAGE_TYPE", "CHAT");
         chatFragment.setArguments(extras);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }

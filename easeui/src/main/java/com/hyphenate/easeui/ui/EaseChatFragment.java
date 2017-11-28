@@ -165,12 +165,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         fragmentArgs = getArguments();
-        // check if single chat or group chat
         chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
-        // userId you are chat with or group id
         toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
         PAGE_TYPE = fragmentArgs.getString("PAGE_TYPE");
-
         initData();
         super.onActivityCreated(savedInstanceState);
     }
@@ -259,52 +256,52 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         extendMenuItemClickListener = new MyItemClickListener();
         swipeRefreshLayout = messageList.getSwipeRefreshLayout();
         swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light, R.color.holo_orange_light, R.color.holo_red_light);
-        if (TextUtils.equals(PAGE_TYPE, "CHAT")) {
-            mLlHistory.setVisibility(View.GONE);
-            registerExtendMenuItem();
-            inputMenu.init(null);
-            inputMenu.setChatInputMenuListener(new ChatInputMenuListener() {
+        PAGE_TYPE = "CHAT";
+        //        if (TextUtils.equals(PAGE_TYPE, "CHAT")) {
+        //            mLlHistory.setVisibility(View.GONE);
+        registerExtendMenuItem();
+        inputMenu.init(null);
+        inputMenu.setChatInputMenuListener(new ChatInputMenuListener() {
 
-                @Override
-                public void onSendMessage(String content) {
-                    sendTextMessage(content);
-                }
-
-                @Override
-                public boolean onPressToSpeakBtnTouch(View v, MotionEvent event) {
-                    return voiceRecorderView.onPressToSpeakBtnTouch(new requestPermissionsListener() {
-                        @Override
-                        public void requestPermissions() {
-                            //TODO 请求录音权限
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
-                        }
-                    }, v, event, new EaseVoiceRecorderCallback() {
-                        @Override
-                        public void onVoiceRecordComplete(String voiceFilePath, int voiceTimeLength) {
-                            sendVoiceMessage(voiceFilePath, voiceTimeLength);
-                        }
-                    });
-                }
-
-                @Override
-                public void onBigExpressionClicked(EaseEmojicon emojicon) {
-                    sendBigExpressionMessage(emojicon.getName(), emojicon.getIdentityCode());
-                }
-            });
-            // TODO: 2017-11-27 saberrc 历史消息界面不显示
-            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            if (isRoaming) {
-                fetchQueue = Executors.newSingleThreadExecutor();
+            @Override
+            public void onSendMessage(String content) {
+                sendTextMessage(content);
             }
+
+            @Override
+            public boolean onPressToSpeakBtnTouch(View v, MotionEvent event) {
+                return voiceRecorderView.onPressToSpeakBtnTouch(new requestPermissionsListener() {
+                    @Override
+                    public void requestPermissions() {
+                        //TODO 请求录音权限
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
+                    }
+                }, v, event, new EaseVoiceRecorderCallback() {
+                    @Override
+                    public void onVoiceRecordComplete(String voiceFilePath, int voiceTimeLength) {
+                        sendVoiceMessage(voiceFilePath, voiceTimeLength);
+                    }
+                });
+            }
+
+            @Override
+            public void onBigExpressionClicked(EaseEmojicon emojicon) {
+                sendBigExpressionMessage(emojicon.getName(), emojicon.getIdentityCode());
+            }
+        });
+        inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (isRoaming) {
+            fetchQueue = Executors.newSingleThreadExecutor();
         }
+        //        }
         mLlHistory = (LinearLayout) getView().findViewById(R.id.ll_history);
-        if (TextUtils.equals(PAGE_TYPE, "HISTORY")) {
-            mLlHistory.setVisibility(View.VISIBLE);
-            inputMenu.setVisibility(View.GONE);
-            initHistoryBottomView();
-        }
+        //        if (TextUtils.equals(PAGE_TYPE, "HISTORY")) {
+        mLlHistory.setVisibility(View.VISIBLE);
+        //            inputMenu.setVisibility(View.GONE);
+        initHistoryBottomView();
+        //        }
     }
 
     private void initHistoryBottomView() {
@@ -318,8 +315,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         mIvFinal.setOnClickListener(this);
     }
 
+    @Override
     protected void setUpView() {
-
         if (chatType != EaseConstant.CHATTYPE_CHATROOM) {
             onConversationInit();
             onMessageListInit();
@@ -656,7 +653,25 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
         }
         if (i == R.id.iv_last) {
-            Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
+            if (haveMoreData) {
+                List<EMMessage> messages;
+                try {
+                    messages = conversation.loadMoreMsgFromDB(conversation.getAllMessages().size() == 0 ? "" : conversation.getAllMessages().get(0).getMsgId(), pagesize);
+                } catch (Exception e1) {
+                    return;
+                }
+                if (messages.size() > 0) {
+                    messageList.refreshSeekTo(messages.size() - 1);
+                    if (messages.size() != pagesize) {
+                        haveMoreData = false;
+                    }
+                } else {
+                    haveMoreData = false;
+                }
+                isloading = false;
+            } else {
+                Toast.makeText(getActivity(), getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
+            }
         }
         if (i == R.id.iv_next) {
             Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
@@ -1158,9 +1173,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         }
     }
 
-    /**
-     * hide
-     */
     protected void hideKeyboard() {
         if (getActivity().getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (getActivity().getCurrentFocus() != null)
@@ -1170,38 +1182,30 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     /**
      * forward message
-     *
-     * @param forward_msg_id
      */
     protected void forwardMessage(String forward_msg_id) {
         final EMMessage forward_msg = EMClient.getInstance().chatManager().getMessage(forward_msg_id);
         EMMessage.Type type = forward_msg.getType();
-        switch (type) {
-            case TXT:
-                if (forward_msg.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
-                    sendBigExpressionMessage(((EMTextMessageBody) forward_msg.getBody()).getMessage(), forward_msg.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, null));
-                } else {
-                    // get the content and send it
-                    String content = ((EMTextMessageBody) forward_msg.getBody()).getMessage();
-                    sendTextMessage(content);
-                }
-                break;
-            case IMAGE:
-                // send image
-                String filePath = ((EMImageMessageBody) forward_msg.getBody()).getLocalUrl();
-                if (filePath != null) {
-                    File file = new File(filePath);
-                    if (!file.exists()) {
-                        // send thumb nail if original image does not exist
-                        filePath = ((EMImageMessageBody) forward_msg.getBody()).thumbnailLocalPath();
-                    }
-                    sendImageMessage(filePath);
-                }
-                break;
-            default:
-                break;
+        if (type == EMMessage.Type.TXT) {
+            if (forward_msg.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
+                sendBigExpressionMessage(((EMTextMessageBody) forward_msg.getBody()).getMessage(), forward_msg.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, null));
+            } else {
+                // get the content and send it
+                String content = ((EMTextMessageBody) forward_msg.getBody()).getMessage();
+                sendTextMessage(content);
+            }
         }
-
+        if (type == EMMessage.Type.IMAGE) {
+            String filePath = ((EMImageMessageBody) forward_msg.getBody()).getLocalUrl();
+            if (filePath != null) {
+                File file = new File(filePath);
+                if (!file.exists()) {
+                    // send thumb nail if original image does not exist
+                    filePath = ((EMImageMessageBody) forward_msg.getBody()).thumbnailLocalPath();
+                }
+                sendImageMessage(filePath);
+            }
+        }
         if (forward_msg.getChatType() == ChatType.ChatRoom) {
             EMClient.getInstance().chatroomManager().leaveChatRoom(forward_msg.getTo());
         }
@@ -1210,12 +1214,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     /**
      * listen the group event
      */
-    class GroupListener extends EaseGroupListener {
+    private class GroupListener extends EaseGroupListener {
 
         @Override
         public void onUserRemoved(final String groupId, String groupName) {
             getActivity().runOnUiThread(new Runnable() {
-
                 public void run() {
                     if (toChatUsername.equals(groupId)) {
                         Toast.makeText(getActivity(), R.string.you_are_group, Toast.LENGTH_LONG).show();
