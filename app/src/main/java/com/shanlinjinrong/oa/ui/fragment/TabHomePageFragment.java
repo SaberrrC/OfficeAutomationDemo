@@ -20,11 +20,12 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.PayQueryActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
-import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
@@ -43,17 +44,20 @@ public class TabHomePageFragment extends BaseFragment {
 
     @BindView(R.id.iv_send_to_me_dot)
     ImageView mSendToMeDot;
+    @BindView(R.id.tv_send_to_me_dot)
+    TextView tvsendtomedot;
 
     @BindView(R.id.iv_wait_me_approval_dot)
     ImageView mWaitMeApprovalDot;
 
     private RelativeLayout mRootView;
 
-    private static int    TYPE_SEND_TO_ME       = 0;//发送我的
-    private static int    TYPE_WAIT_ME_APPROVAL = 1;//待我审批
-    private static String DOT_STATUS            = "DOT_STATUS";
-    public static  String DOT_SEND              = "DOT_SEND";
-    public static  String DOT_APPORVAL          = "DOT_APPORVAL";
+    private static int TYPE_SEND_TO_ME = 0;//发送我的
+    private static int TYPE_WAIT_ME_APPROVAL = 1;//待我审批
+    private static String DOT_STATUS = "DOT_STATUS";
+    public static String DOT_SEND = "DOT_SEND";
+    public static String DOT_SEND_INT = "DOT_SEND_INT";
+    public static String DOT_APPORVAL = "DOT_APPORVAL";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -98,8 +102,11 @@ public class TabHomePageFragment extends BaseFragment {
         SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
         if (sp.getBoolean(DOT_SEND, false)) {
             mSendToMeDot.setVisibility(View.VISIBLE);
+            tvsendtomedot.setVisibility(View.VISIBLE);
+            tvsendtomedot.setText(sp.getInt(DOT_SEND_INT,0)+"");
         } else {
             mSendToMeDot.setVisibility(View.GONE);
+            tvsendtomedot.setVisibility(View.GONE);
         }
         if (sp.getBoolean(DOT_APPORVAL, false)) {
             mWaitMeApprovalDot.setVisibility(View.VISIBLE);
@@ -115,7 +122,12 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.rl_test, R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me, R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance, R.id.rl_holiday_search, R.id.rl_pay_search})
+    @OnClick({R.id.rl_test, R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me,
+            R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch,
+            R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
+            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance,
+            R.id.rl_holiday_search, R.id.rl_pay_search
+    })
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -174,8 +186,7 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_test:
                 if (BuildConfig.DEBUG) {
-                    intent = new Intent(mContext, EaseChatMessageActivity.class);
-                    intent.putExtra("cmy", "cmy");
+                    //intent = new Intent(mContext, UpcomingTasksActivity.class);
                 }
                 break;
             case R.id.rl_holiday_search:
