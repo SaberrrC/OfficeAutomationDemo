@@ -32,6 +32,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -144,11 +145,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     private onEaseUIFragmentListener mListener;
     //麦克风权限请求码
     private static final int REQUEST_RECORD_AUDIO = 100;
-    private ImageView mIvfirst;
-    private ImageView mIvLast;
-    private ImageView mIvNext;
-    private ImageView mIvFinal;
-    private String PAGE_TYPE;
+    private ImageView    mIvfirst;
+    private ImageView    mIvLast;
+    private ImageView    mIvNext;
+    private ImageView    mIvFinal;
+    private String       PAGE_TYPE;
+    private LinearLayout mLlHistory;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -253,48 +255,56 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             messageList.setShowUserNick(true);
         //        messageList.setAvatarShape(1);
         listView = messageList.getListView();
-        extendMenuItemClickListener = new MyItemClickListener();
         inputMenu = (EaseChatInputMenu) getView().findViewById(R.id.input_menu);
-        registerExtendMenuItem();
-        inputMenu.init(null);
-        inputMenu.setChatInputMenuListener(new ChatInputMenuListener() {
-
-            @Override
-            public void onSendMessage(String content) {
-                sendTextMessage(content);
-            }
-
-            @Override
-            public boolean onPressToSpeakBtnTouch(View v, MotionEvent event) {
-                return voiceRecorderView.onPressToSpeakBtnTouch(new requestPermissionsListener() {
-                    @Override
-                    public void requestPermissions() {
-                        //TODO 请求录音权限
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
-                    }
-                }, v, event, new EaseVoiceRecorderCallback() {
-                    @Override
-                    public void onVoiceRecordComplete(String voiceFilePath, int voiceTimeLength) {
-                        sendVoiceMessage(voiceFilePath, voiceTimeLength);
-                    }
-                });
-            }
-
-            @Override
-            public void onBigExpressionClicked(EaseEmojicon emojicon) {
-                sendBigExpressionMessage(emojicon.getName(), emojicon.getIdentityCode());
-            }
-        });
-        // TODO: 2017-11-27 saberrc 历史消息界面不显示
+        extendMenuItemClickListener = new MyItemClickListener();
         swipeRefreshLayout = messageList.getSwipeRefreshLayout();
         swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light, R.color.holo_orange_light, R.color.holo_red_light);
-        inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if (isRoaming) {
-            fetchQueue = Executors.newSingleThreadExecutor();
+        if (TextUtils.equals(PAGE_TYPE, "CHAT")) {
+            mLlHistory.setVisibility(View.GONE);
+            registerExtendMenuItem();
+            inputMenu.init(null);
+            inputMenu.setChatInputMenuListener(new ChatInputMenuListener() {
+
+                @Override
+                public void onSendMessage(String content) {
+                    sendTextMessage(content);
+                }
+
+                @Override
+                public boolean onPressToSpeakBtnTouch(View v, MotionEvent event) {
+                    return voiceRecorderView.onPressToSpeakBtnTouch(new requestPermissionsListener() {
+                        @Override
+                        public void requestPermissions() {
+                            //TODO 请求录音权限
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
+                        }
+                    }, v, event, new EaseVoiceRecorderCallback() {
+                        @Override
+                        public void onVoiceRecordComplete(String voiceFilePath, int voiceTimeLength) {
+                            sendVoiceMessage(voiceFilePath, voiceTimeLength);
+                        }
+                    });
+                }
+
+                @Override
+                public void onBigExpressionClicked(EaseEmojicon emojicon) {
+                    sendBigExpressionMessage(emojicon.getName(), emojicon.getIdentityCode());
+                }
+            });
+            // TODO: 2017-11-27 saberrc 历史消息界面不显示
+            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            if (isRoaming) {
+                fetchQueue = Executors.newSingleThreadExecutor();
+            }
         }
-        initHistoryBottomView();
+        mLlHistory = (LinearLayout) getView().findViewById(R.id.ll_history);
+        if (TextUtils.equals(PAGE_TYPE, "HISTORY")) {
+            mLlHistory.setVisibility(View.VISIBLE);
+            inputMenu.setVisibility(View.GONE);
+            initHistoryBottomView();
+        }
     }
 
     private void initHistoryBottomView() {
@@ -309,12 +319,18 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     protected void setUpView() {
+
         if (chatType != EaseConstant.CHATTYPE_CHATROOM) {
             onConversationInit();
             onMessageListInit();
         }
         setRefreshLayoutListener();
+        if (TextUtils.equals(PAGE_TYPE, "CHAT")) {
 
+        }
+        if (TextUtils.equals(PAGE_TYPE, "HISTORY")) {
+            swipeRefreshLayout.setEnabled(false);
+        }
         // show forward message if the message is not null
         String forward_msg_id = getArguments().getString("forward_msg_id");
         if (forward_msg_id != null) {
@@ -381,6 +397,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (TextUtils.equals(PAGE_TYPE, "HISTORY")) {
+                    return false;
+                }
                 hideKeyboard();
                 inputMenu.hideExtendMenuContainer();
                 return false;
@@ -634,16 +653,16 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     public void onClick(View view) {
         int i = view.getId();
         if (i == R.id.iv_first) {
-            Toast.makeText(getActivity(),"" + i,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
         }
         if (i == R.id.iv_last) {
-            Toast.makeText(getActivity(),"" + i,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
         }
         if (i == R.id.iv_next) {
-            Toast.makeText(getActivity(),"" + i,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
         }
         if (i == R.id.iv_final) {
-            Toast.makeText(getActivity(),"" + i,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
         }
     }
 
