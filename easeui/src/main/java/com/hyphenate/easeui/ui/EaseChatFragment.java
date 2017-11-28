@@ -661,7 +661,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     return;
                 }
                 if (messages.size() > 0) {
-                    messageList.refreshSeekTo(messages.size() - 1);
+
+//                    messageList.refreshSeekTo(messages.size() - 1);
+                    messageList.refreshPageSizeItem(messages);
                     if (messages.size() != pagesize) {
                         haveMoreData = false;
                     }

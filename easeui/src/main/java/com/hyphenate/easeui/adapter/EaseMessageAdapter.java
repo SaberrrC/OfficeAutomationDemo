@@ -39,6 +39,8 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRowVideo;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowVoice;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 
+import java.util.List;
+
 public class EaseMessageAdapter extends BaseAdapter {
 
     private final static String TAG = "msg";
@@ -91,12 +93,18 @@ public class EaseMessageAdapter extends BaseAdapter {
         this.conversation = EMClient.getInstance().chatManager().getConversation(username, EaseCommonUtils.getConversationType(chatType), true);
     }
 
+    public void refreshList( List<EMMessage> var) {
+        messages = var.toArray(new EMMessage[var.size()]);
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         private void refreshList() {
             // you should not call getAllMessages() in UI thread
             // otherwise there is problem when refreshing UI and there is new message arrive
             if (conversation != null) {
-                java.util.List<EMMessage> var = conversation.getAllMessages();
+                List<EMMessage> var = conversation.getAllMessages();
                 messages = var.toArray(new EMMessage[var.size()]);
                 conversation.markAllMessagesAsRead();
                 notifyDataSetChanged();
