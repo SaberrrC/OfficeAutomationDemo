@@ -148,6 +148,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     private ImageView mIvLast;
     private ImageView mIvNext;
     private ImageView mIvFinal;
+    private String PAGE_TYPE;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -166,6 +167,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         // userId you are chat with or group id
         toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
+        PAGE_TYPE = fragmentArgs.getString("PAGE_TYPE");
+
         initData();
         super.onActivityCreated(savedInstanceState);
     }

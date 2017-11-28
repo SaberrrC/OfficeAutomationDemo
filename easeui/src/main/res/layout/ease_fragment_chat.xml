@@ -40,7 +40,7 @@
         android:background="#EFEFEF"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <FrameLayout
             android:layout_width="0dp"

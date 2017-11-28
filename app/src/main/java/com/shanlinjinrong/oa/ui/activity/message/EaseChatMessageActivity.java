@@ -9,13 +9,10 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.model.UserInfoDetailsBean;
-import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
@@ -94,10 +91,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
             mTvTitle.setText(mTitle);
         }
-
-        //传入参数
-        Bundle args = new Bundle();
-        args.putInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         try {
 
             //TODO 消息透传 修改
@@ -127,11 +120,11 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 //            args.putString("userEmail", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_EMAIL));
 //            args.putString("userDepartmentId", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT));
 
-            //TODO 消息透传 修改
-            args.putString("userId", AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
-            args.putString("userName", AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
-            args.putString("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
-            args.putString("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+//            //TODO 消息透传 修改
+//            args.putString("userId", AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
+//            args.putString("userName", AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
+//            args.putString("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
+//            args.putString("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -139,8 +132,9 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
 //        chatFragment.setArguments(args);
-        chatFragment.setArguments(getIntent().getExtras());
-
+        Bundle extras = getIntent().getExtras();
+        extras.putString("PAGE_TYPE", "CHAT");
+        chatFragment.setArguments(extras);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }
 

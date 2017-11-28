@@ -24,8 +24,6 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
