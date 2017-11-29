@@ -20,16 +20,11 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.HolidayAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandenceRecorderContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.AttandenceRecorderPresenter;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -186,16 +181,15 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
 
                 for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
                     try {
-                        if (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]"))
+                        if ((mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]") || mAllWorkAttendanceList.get(i).getTbmstatus().equals("")))
                             continue;
-                        mData.add(mAllWorkAttendanceList.get(i));
+                        if ((mAllWorkAttendanceList.get(i).getTbmstatus().equals("[迟到]") && getIntent().getIntExtra("exception", 0) == 0) ||
+                            (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[早退]") && getIntent().getIntExtra("exception", 0) == 1) ||
+                            (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[旷工]") && getIntent().getIntExtra("exception", 0) == 2)) {
+                            mData.add(mAllWorkAttendanceList.get(i));
+                        }
                     } catch (Throwable e) {
                         e.printStackTrace();
-                        try {
-                            mData.add(mAllWorkAttendanceList.get(i));
-                        } catch (Throwable e1) {
-                            e1.printStackTrace();
-                        }
                     }
                 }
                 if (mAllWorkAttendanceList.size() > 0) {

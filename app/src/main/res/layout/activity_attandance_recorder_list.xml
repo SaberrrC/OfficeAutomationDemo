@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:topTitle="考勤月历"/>
+        app:topTitle="异常考勤明细"/>
 
     <View
         android:layout_width="match_parent"
