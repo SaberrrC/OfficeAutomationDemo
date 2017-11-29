@@ -89,17 +89,17 @@ import java.util.concurrent.Executors;
  */
 public class EaseChatFragment extends EaseBaseFragment implements EMMessageListener{
     protected static final String TAG                          = "EaseChatFragment";
-    protected static final int    REQUEST_CODE_MAP             = 1;
-    protected static final int    REQUEST_CODE_CAMERA          = 2;
-    protected static final int    REQUEST_CODE_LOCAL           = 3;
-    private static final   int    REQUEST_CODE_SELECT_VIDEO    = 11;
-    private static final   int    REQUEST_CODE_SELECT_FILE     = 12;
-    private static final   int    REQUEST_CODE_SELECT_AT_USER  = 15;
-    private static final   int    MESSAGE_TYPE_SENT_VOICE_CALL = 1;
-    private static final   int    MESSAGE_TYPE_RECV_VOICE_CALL = 2;
-    private static final   int    MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
-    private static final   int    MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
-    private static final   int    MESSAGE_TYPE_RECALL          = 9;
+    public static final int    REQUEST_CODE_MAP             = 1;
+    public static final int    REQUEST_CODE_CAMERA          = 2;
+    public static final int    REQUEST_CODE_LOCAL           = 3;
+    public static final   int    REQUEST_CODE_SELECT_VIDEO    = 11;
+    public static final   int    REQUEST_CODE_SELECT_FILE     = 12;
+    public static final   int    REQUEST_CODE_SELECT_AT_USER  = 15;
+    public static final   int    MESSAGE_TYPE_SENT_VOICE_CALL = 1;
+    public static final   int    MESSAGE_TYPE_RECV_VOICE_CALL = 2;
+    public static final   int    MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
+    public static final   int    MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
+    public static final   int    MESSAGE_TYPE_RECALL          = 9;
 
     /**
      * params to fragment
@@ -1296,7 +1296,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         EaseCustomChatRowProvider onSetCustomChatRowProvider();
     }
 
-    private static final int REQUEST_CODE_CONTEXT_MENU = 14;
+    public static final int REQUEST_CODE_CONTEXT_MENU = 14;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1429,7 +1429,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     /**
      * chat row provider
      */
-    private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
+    public final class CustomChatRowProvider implements EaseCustomChatRowProvider {
         @Override
         public int getCustomChatRowTypeCount() {
             //here the number is the message type in EMMessage::Type
@@ -1469,6 +1469,5 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             }
             return null;
         }
-
     }
 }
