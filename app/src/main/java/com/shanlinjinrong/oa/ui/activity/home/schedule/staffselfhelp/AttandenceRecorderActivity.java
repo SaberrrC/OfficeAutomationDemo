@@ -215,6 +215,16 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
+
+        if (getIntent().getIntExtra("exception", -1) == 0) {
+            mTopView.setAppTitle("迟到考勤明细");
+        } else if (getIntent().getIntExtra("exception", -1) == 1) {
+            mTopView.setAppTitle("早退考勤明细");
+        } else if (getIntent().getIntExtra("exception", -1) == 2) {
+            mTopView.setAppTitle("旷工考勤明细");
+        } else {
+            mTopView.setAppTitle("异常考勤明细");
+        }
     }
 
     private String mCalendar;
