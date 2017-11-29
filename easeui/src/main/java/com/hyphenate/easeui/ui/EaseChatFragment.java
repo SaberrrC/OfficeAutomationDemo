@@ -31,6 +31,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -104,42 +106,42 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     /**
      * params to fragment
      */
-    protected Bundle              fragmentArgs;
-    protected int                 chatType;
-    protected String              toChatUsername;
+    protected Bundle fragmentArgs;
+    protected int chatType;
+    protected String toChatUsername;
     protected EaseChatMessageList messageList;
-    protected EaseChatInputMenu   inputMenu;
+    protected EaseChatInputMenu inputMenu;
 
     protected EMConversation conversation;
 
     protected InputMethodManager inputManager;
-    protected ClipboardManager   clipboard;
+    protected ClipboardManager clipboard;
 
     protected Handler handler = new Handler();
-    protected File                  cameraFile;
+    protected File cameraFile;
     protected EaseVoiceRecorderView voiceRecorderView;
-    protected SwipeRefreshLayout    swipeRefreshLayout;
-    protected ListView              listView;
+    protected SwipeRefreshLayout swipeRefreshLayout;
+    protected ListView listView;
 
     protected boolean isloading;
     protected boolean haveMoreData = true;
-    protected int     pagesize     = 20;
-    protected GroupListener    groupListener;
+    protected int pagesize = 20;
+    protected GroupListener groupListener;
     protected ChatRoomListener chatRoomListener;
-    protected EMMessage        contextMenuMessage;
+    protected EMMessage contextMenuMessage;
 
     static final int ITEM_TAKE_PICTURE = 1;
-    static final int ITEM_PICTURE      = 2;
-    static final int ITEM_VOICECALL    = 3;
+    static final int ITEM_PICTURE = 2;
+    static final int ITEM_VOICECALL = 3;
 
-    protected int[] itemStrings   = {R.string.attach_take_pic, R.string.attach_picture, R.string.attach_voice_call};
+    protected int[] itemStrings = {R.string.attach_take_pic, R.string.attach_picture, R.string.attach_voice_call};
     protected int[] itemdrawables = {R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector, R.drawable.ease_chat_location_selector};
-    protected int[] itemIds       = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICECALL};
-    private   boolean             isMessageListInited;
+    protected int[] itemIds = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICECALL};
+    private boolean isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
     protected boolean isRoaming = false;
-    private ExecutorService          fetchQueue;
-    private String                   userName;
+    private ExecutorService fetchQueue;
+    private String userName;
     private onEaseUIFragmentListener mListener;
     //麦克风权限请求码
     private static final int REQUEST_RECORD_AUDIO = 100;
@@ -472,10 +474,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 public void run() {
                     try {
                         List<EMMessage> messages = conversation.getAllMessages();
-                        EMClient.getInstance().chatManager()
-                                .fetchHistoryMessages(toChatUsername,
-                                        EaseCommonUtils.getConversationType(chatType),
-                                        pagesize, (messages != null && messages.size() > 0) ? messages.get(0).getMsgId() : "");
+                        EMClient.getInstance().chatManager().fetchHistoryMessages(toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, (messages != null && messages.size() > 0) ? messages.get(0).getMsgId() : "");
                         mEmMessage = (messages != null && messages.size() > 0) ? messages.get(0) : null;
                     } catch (HyphenateException e) {
                         e.printStackTrace();
@@ -690,6 +689,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                         jsonObject.put("userName", getArguments().getString("userName", ""));
                         jsonObject.put("userCode", getArguments().getString("toChatUsername", ""));
                         jsonObject.put("userHead", getArguments().getString("userHead", ""));
+                        jsonObject.put("userId", getArguments().getString("userId", ""));
                         conversationDB.setExtField(jsonObject.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();

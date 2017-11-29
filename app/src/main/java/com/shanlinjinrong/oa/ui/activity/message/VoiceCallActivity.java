@@ -44,13 +44,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
-import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMMessageBody;
-import com.hyphenate.chat.adapter.message.EMACmdMessageBody;
 import com.hyphenate.easeui.adapter.EaseConversationAdapter;
 import com.hyphenate.easeui.model.UserInfoDetailsBean;
 import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
@@ -62,11 +58,9 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
 import java.util.UUID;
 
 /**

@@ -46,15 +46,15 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.DemoDBManager;
+import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.UserDao;
 import com.shanlinjinrong.oa.thirdParty.huanxin.domain.EmojiconExampleGroupData;
 import com.shanlinjinrong.oa.thirdParty.huanxin.domain.InviteMessage;
 import com.shanlinjinrong.oa.thirdParty.huanxin.domain.RobotUser;
+import com.shanlinjinrong.oa.thirdParty.huanxin.manager.PreferenceManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.manager.UserProfileManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.receiver.CallReceiver;
-import com.shanlinjinrong.oa.thirdParty.huanxin.manager.PreferenceManager;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 
@@ -168,16 +168,12 @@ public class DemoHelper {
     public void init(Context context) {
         demoModel = new DemoModel(context);
         EMOptions options = initChatOptions();
-//        options.setRestServer("103.241.230.122:31111");
-//        options.setIMServer("103.241.230.122");
-//        options.setImPort(31097);
-
         //use default options if options is null
         if (EaseUI.getInstance().init(context, options)) {
             appContext = context;
 
             //debug mode, you'd better set it to false, if you want release your App officially.
-            EMClient.getInstance().setDebugMode(false);
+            EMClient.getInstance().setDebugMode(true);
             //get easeui instance
             easeUI = EaseUI.getInstance();
             //to set user's profile and avatar
@@ -242,7 +238,7 @@ public class DemoHelper {
             EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
 
             // Offline call push
-            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(false);
+            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(true);
 
             setGlobalListeners();
             broadcastManager = LocalBroadcastManager.getInstance(appContext);
@@ -265,11 +261,7 @@ public class DemoHelper {
         //you need apply & set your own id if you want to use google cloud messaging.
         options.setGCMNumber("324169311137");
         //you need apply & set your own id if you want to use Mi push notification
-        options.setMipushConfig("2882303761517604089", "5621760418089");
-        //you need apply & set your own id if you want to use Huawei push notification
-
-        //TODO 华为PUSH
-        //options.setHuaweiPushAppId("100062817");
+        options.setMipushConfig("2882303761517608752", "5511760882752");
 
         //set custom servers, commonly used in private deployment
         if (demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {

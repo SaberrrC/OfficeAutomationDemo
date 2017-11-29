@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +22,6 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.GroupChatListAdapter;
-import com.shanlinjinrong.oa.ui.activity.message.bean.ChatMessageDetailsBean;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.ArrayList;
@@ -32,12 +30,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
-import rx.Scheduler;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -53,7 +47,8 @@ public class GroupChatListActivity extends AppCompatActivity {
 
     private GroupChatListAdapter mAdapter;
     private List<EMGroup> mGroupList;
-    private int REQUESTCODE = 101;
+    @SuppressWarnings("SpellCheckingInspection")
+    private final int REQUESTCODE = 101, RESULTSUCCESS = -2;
     private CompositeSubscription mSubscription;
 
     @Override
@@ -126,7 +121,7 @@ public class GroupChatListActivity extends AppCompatActivity {
 
                 option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
                 try {
-                    EMClient.getInstance().groupManager().createGroup(groupName, "", account.toArray(new String[0]), "邀请加入群", option);
+                    EMClient.getInstance().groupManager().createGroup(groupName, "", account.toArray(new String[]{String.valueOf(account)}), "邀请加入群", option);
                 } catch (HyphenateException e) {
                     Toast.makeText(this, "群组创建失败", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
@@ -159,18 +154,23 @@ public class GroupChatListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //返回选择的群组人员
-        if (REQUESTCODE == requestCode && resultCode == RESULT_OK) {
-            Subscription subscribe = Observable
-                    .create(subscriber -> {
-                        createGroup(data);
-                        subscriber.onCompleted();
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(o -> {
-                    }, Throwable::printStackTrace, this::refreshData);
-            mSubscription.add(subscribe);
+
+        switch (resultCode) {
+            case RESULT_OK: //返回选择的群组人员
+                Subscription subscribe = Observable
+                        .create(subscriber -> {
+                            createGroup(data);
+                            subscriber.onCompleted();
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(o -> {
+                        }, Throwable::printStackTrace, this::refreshData);
+                mSubscription.add(subscribe);
+                break;
+            case RESULTSUCCESS: //刷新界面
+                refreshData(); //TODO 待优化 本地做删除
+                break;
         }
     }
 
@@ -187,9 +187,9 @@ public class GroupChatListActivity extends AppCompatActivity {
             intent.putExtra("groupName", mGroupList.get(i).getGroupName());
             intent.putExtra("chatType", 2);
             intent.putExtra("toChatUsername", mGroupList.get(i).getGroupId());
-            intent.putExtra("userHead",AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
+            intent.putExtra("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
             intent.putExtra("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
-            startActivity(intent);
+            startActivityForResult(intent, REQUESTCODE);
         }
     }
 }
