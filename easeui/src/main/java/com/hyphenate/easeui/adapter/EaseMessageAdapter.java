@@ -39,7 +39,6 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRowVideo;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowVoice;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EaseMessageAdapter extends BaseAdapter {
@@ -93,14 +92,11 @@ public class EaseMessageAdapter extends BaseAdapter {
         this.conversation = EMClient.getInstance().chatManager().getConversation(username, EaseCommonUtils.getConversationType(chatType), true);
     }
 
-    public int messageCount() {
-        return mVar.size();
-    }
-
     public void refreshRangeList(int start, int stop) {
         notifyDataSetChanged();
     }
 
+    private EMMessage[] messages;
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         private void refreshList() {
