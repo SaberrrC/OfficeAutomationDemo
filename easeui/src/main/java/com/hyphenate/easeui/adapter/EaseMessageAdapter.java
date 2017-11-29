@@ -39,6 +39,7 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRowVideo;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowVoice;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EaseMessageAdapter extends BaseAdapter {
@@ -48,21 +49,21 @@ public class EaseMessageAdapter extends BaseAdapter {
     private Context context;
 
     private static final int HANDLER_MESSAGE_REFRESH_LIST = 0;
-    private static final int HANDLER_MESSAGE_SELECT_LAST = 1;
-    private static final int HANDLER_MESSAGE_SEEK_TO = 2;
+    private static final int HANDLER_MESSAGE_SELECT_LAST  = 1;
+    private static final int HANDLER_MESSAGE_SEEK_TO      = 2;
 
-    private static final int MESSAGE_TYPE_RECV_TXT = 0;
-    private static final int MESSAGE_TYPE_SENT_TXT = 1;
-    private static final int MESSAGE_TYPE_SENT_IMAGE = 2;
-    private static final int MESSAGE_TYPE_SENT_LOCATION = 3;
-    private static final int MESSAGE_TYPE_RECV_LOCATION = 4;
-    private static final int MESSAGE_TYPE_RECV_IMAGE = 5;
-    private static final int MESSAGE_TYPE_SENT_VOICE = 6;
-    private static final int MESSAGE_TYPE_RECV_VOICE = 7;
-    private static final int MESSAGE_TYPE_SENT_VIDEO = 8;
-    private static final int MESSAGE_TYPE_RECV_VIDEO = 9;
-    private static final int MESSAGE_TYPE_SENT_FILE = 10;
-    private static final int MESSAGE_TYPE_RECV_FILE = 11;
+    private static final int MESSAGE_TYPE_RECV_TXT        = 0;
+    private static final int MESSAGE_TYPE_SENT_TXT        = 1;
+    private static final int MESSAGE_TYPE_SENT_IMAGE      = 2;
+    private static final int MESSAGE_TYPE_SENT_LOCATION   = 3;
+    private static final int MESSAGE_TYPE_RECV_LOCATION   = 4;
+    private static final int MESSAGE_TYPE_RECV_IMAGE      = 5;
+    private static final int MESSAGE_TYPE_SENT_VOICE      = 6;
+    private static final int MESSAGE_TYPE_RECV_VOICE      = 7;
+    private static final int MESSAGE_TYPE_SENT_VIDEO      = 8;
+    private static final int MESSAGE_TYPE_RECV_VIDEO      = 9;
+    private static final int MESSAGE_TYPE_SENT_FILE       = 10;
+    private static final int MESSAGE_TYPE_RECV_FILE       = 11;
     private static final int MESSAGE_TYPE_SENT_EXPRESSION = 12;
     private static final int MESSAGE_TYPE_RECV_EXPRESSION = 13;
 
@@ -71,19 +72,18 @@ public class EaseMessageAdapter extends BaseAdapter {
 
     // reference to conversation object in chatsdk
     private EMConversation conversation;
-    EMMessage[] messages = null;
 
     private String toChatUsername;
 
     private MessageListItemClickListener itemClickListener;
-    private EaseCustomChatRowProvider customRowProvider;
+    private EaseCustomChatRowProvider    customRowProvider;
 
-    private boolean showUserNick;
-    private boolean showAvatar;
+    private boolean  showUserNick;
+    private boolean  showAvatar;
     private Drawable myBubbleBg;
     private Drawable otherBuddleBg;
 
-    private ListView listView;
+    private ListView                 listView;
     private EaseMessageListItemStyle itemStyle;
 
     public EaseMessageAdapter(Context context, String username, int chatType, ListView listView) {
@@ -93,19 +93,52 @@ public class EaseMessageAdapter extends BaseAdapter {
         this.conversation = EMClient.getInstance().chatManager().getConversation(username, EaseCommonUtils.getConversationType(chatType), true);
     }
 
-    public void refreshList( List<EMMessage> var) {
-        messages = var.toArray(new EMMessage[var.size()]);
+    public int messageCount() {
+        return mVar.size();
+    }
+
+    public void refreshRangeList(int start, int stop) {
         notifyDataSetChanged();
     }
 
+    public void refreshFirstList() {
+        mVar.clear();
+        if (mAllMessages.size() <= 20) {
+            mVar = mAllMessages;
+        }
+        if (mAllMessages.size() > 20) {
+            for (int i = 0; i < 20; i++) {
+                mVar.add(mAllMessages.get(i));
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void refreshFinalList() {
+        mVar.clear();
+        if (mAllMessages.size() <= 20) {
+            mVar = mAllMessages;
+        }
+        if (mAllMessages.size() > 20) {
+            for (int i = mAllMessages.size() - 20; i < mAllMessages.size(); i++) {
+                mVar.add(mAllMessages.get(i));
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    private List<EMMessage> mVar = new ArrayList<>();
+    private List<EMMessage> mAllMessages;
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
+
+
         private void refreshList() {
             // you should not call getAllMessages() in UI thread
             // otherwise there is problem when refreshing UI and there is new message arrive
             if (conversation != null) {
-                List<EMMessage> var = conversation.getAllMessages();
-                messages = var.toArray(new EMMessage[var.size()]);
+                mAllMessages = conversation.getAllMessages();
+                mVar = mAllMessages;
                 conversation.markAllMessagesAsRead();
                 notifyDataSetChanged();
             }
@@ -118,8 +151,8 @@ public class EaseMessageAdapter extends BaseAdapter {
                     refreshList();
                     break;
                 case HANDLER_MESSAGE_SELECT_LAST:
-                    if (messages != null && messages.length > 0) {
-                        listView.setSelection(messages.length - 1);
+                    if (mVar != null && mVar.size() > 0) {
+                        listView.setSelection(mVar.size() - 1);
                     }
                     break;
                 case HANDLER_MESSAGE_SEEK_TO:
@@ -159,8 +192,8 @@ public class EaseMessageAdapter extends BaseAdapter {
     }
 
     public EMMessage getItem(int position) {
-        if (messages != null && position < messages.length) {
-            return messages[position];
+        if (mVar != null && position < mVar.size()) {
+            return mVar.get(position);
         }
         return null;
     }
@@ -173,7 +206,7 @@ public class EaseMessageAdapter extends BaseAdapter {
      * get count of messages
      */
     public int getCount() {
-        return messages == null ? 0 : messages.length;
+        return mVar == null ? 0 : mVar.size();
     }
 
     /**

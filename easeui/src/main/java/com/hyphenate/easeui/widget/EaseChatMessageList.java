@@ -17,8 +17,6 @@ import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 
-import java.util.List;
-
 public class EaseChatMessageList extends RelativeLayout{
 
     protected static final String TAG = "EaseChatMessageList";
@@ -105,11 +103,20 @@ public class EaseChatMessageList extends RelativeLayout{
         }
     }
 
-    public void refreshPageSizeItem(List<EMMessage> var) {
-        messageAdapter.refreshList(var);
-        messageAdapter.notifyDataSetChanged();
+    public int getMessageCount() {
+        return messageAdapter.messageCount();
     }
-    
+
+    public void refreshRangeList(int start, int stop) {
+        messageAdapter.refreshRangeList(start, stop);
+    }
+    public void refreshFirstList() {
+        messageAdapter.refreshFirstList();
+    }
+    public void refreshFinalList() {
+        messageAdapter.refreshFinalList();
+    }
+
     /**
      * refresh and jump to the position
      * @param position
