@@ -103,19 +103,6 @@ public class EaseChatMessageList extends RelativeLayout{
         }
     }
 
-    public int getMessageCount() {
-        return messageAdapter.messageCount();
-    }
-
-    public void refreshRangeList(int start, int stop) {
-        messageAdapter.refreshRangeList(start, stop);
-    }
-    public void refreshFirstList() {
-        messageAdapter.refreshFirstList();
-    }
-    public void refreshFinalList() {
-        messageAdapter.refreshFinalList();
-    }
 
     /**
      * refresh and jump to the position

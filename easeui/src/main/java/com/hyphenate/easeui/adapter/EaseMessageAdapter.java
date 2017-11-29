@@ -101,44 +101,14 @@ public class EaseMessageAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void refreshFirstList() {
-        mVar.clear();
-        if (mAllMessages.size() <= 20) {
-            mVar = mAllMessages;
-        }
-        if (mAllMessages.size() > 20) {
-            for (int i = 0; i < 20; i++) {
-                mVar.add(mAllMessages.get(i));
-            }
-        }
-        notifyDataSetChanged();
-    }
-
-    public void refreshFinalList() {
-        mVar.clear();
-        if (mAllMessages.size() <= 20) {
-            mVar = mAllMessages;
-        }
-        if (mAllMessages.size() > 20) {
-            for (int i = mAllMessages.size() - 20; i < mAllMessages.size(); i++) {
-                mVar.add(mAllMessages.get(i));
-            }
-        }
-        notifyDataSetChanged();
-    }
-
-    private List<EMMessage> mVar = new ArrayList<>();
-    private List<EMMessage> mAllMessages;
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
-
-
         private void refreshList() {
             // you should not call getAllMessages() in UI thread
             // otherwise there is problem when refreshing UI and there is new message arrive
             if (conversation != null) {
-                mAllMessages = conversation.getAllMessages();
-                mVar = mAllMessages;
+                List<EMMessage> var = conversation.getAllMessages();
+                messages = var.toArray(new EMMessage[var.size()]);
                 conversation.markAllMessagesAsRead();
                 notifyDataSetChanged();
             }
@@ -151,8 +121,8 @@ public class EaseMessageAdapter extends BaseAdapter {
                     refreshList();
                     break;
                 case HANDLER_MESSAGE_SELECT_LAST:
-                    if (mVar != null && mVar.size() > 0) {
-                        listView.setSelection(mVar.size() - 1);
+                    if (messages != null && messages.length > 0) {
+                        listView.setSelection(messages.length - 1);
                     }
                     break;
                 case HANDLER_MESSAGE_SEEK_TO:
@@ -192,8 +162,8 @@ public class EaseMessageAdapter extends BaseAdapter {
     }
 
     public EMMessage getItem(int position) {
-        if (mVar != null && position < mVar.size()) {
-            return mVar.get(position);
+        if (messages != null && position < messages.length) {
+            return messages[position];
         }
         return null;
     }
@@ -206,7 +176,7 @@ public class EaseMessageAdapter extends BaseAdapter {
      * get count of messages
      */
     public int getCount() {
-        return mVar == null ? 0 : mVar.size();
+        return messages == null ? 0 : messages.length;
     }
 
     /**
