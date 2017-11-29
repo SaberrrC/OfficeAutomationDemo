@@ -12,6 +12,7 @@ import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -126,6 +127,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                         if (orgId.equals("1")) {
                             SharedPreferenceUtils.clear(AppManager.mContext, SharedPreferenceUtils.getStringValue(AppManager.mContext, "cacheDate", "dateName", ""));
                             SharedPreferenceUtils.putStringValue(AppManager.mContext, "cacheDate", "dateName", DateUtils.getCurrentDate("yyyy-MM-dd"));
+
                             SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", children.toString());
                             SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
                         } else {

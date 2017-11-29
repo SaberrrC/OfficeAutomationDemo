@@ -37,9 +37,17 @@ import com.shanlinjinrong.oa.ui.fragment.adapter.SearchUserResultAdapter;
 import com.shanlinjinrong.oa.ui.fragment.adapter.TabContactsAdapter;
 import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
 import com.shanlinjinrong.oa.ui.fragment.presenter.TabContractsFragmentPresenter;
+import com.shanlinjinrong.oa.utils.DateUtils;
+import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 import com.shanlinjinrong.oa.views.ClearEditText;
+import com.shanlinjinrong.utils.DataUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -47,7 +55,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //import com.hyphenate.chatuidemo.db.Friends;
@@ -89,6 +96,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     private boolean isPullRefreashing = false;
     private SearchUserResultAdapter mSearchUserResultAdapter;
     private TabContactsAdapter mContactAdapter;
+    private List<Contacts> mContacts;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -113,6 +121,15 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setEnabled(true);
+
+        View viewBack = view.findViewById(R.id.btn_back);
+        viewBack.setVisibility(View.GONE);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //在初始化是为RecyclerView添加点击事件，这样可以防止重复点击问题
+        recyclerView.addOnItemTouchListener(new ItemClick());
+        mContactAdapter = new TabContactsAdapter(items);
+        recyclerView.setAdapter(mContactAdapter);
     }
 
     @OnClick({R.id.search_et_cancle})
@@ -179,7 +196,41 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     protected void lazyLoadData() {
-        mPresenter.loadData("1");
+        try {
+            //TODO 缓存当天的数据
+            if (!SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", "").equals("")) {
+                String childrens = SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", "");
+                JSONArray children = new JSONArray(childrens);
+                mContacts = new ArrayList<>();
+                for (int i = 0; i < children.length(); i++) {
+                    JSONObject department = children.getJSONObject(i);
+                    String number = department.getString("memberCount");
+                    if (number.equals("0")) {
+                        continue;
+                    }
+                    Contacts contact = new Contacts(department);
+                    mContacts.add(contact);
+                }
+                String users = SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users1", "");
+                if (!users.equals("")) {
+                    JSONArray user = new JSONArray(users);
+                    for (int i = 0; i < user.length(); i++) {
+                        JSONObject userInfo = user.getJSONObject(i);
+                        Contacts person = new Contacts(userInfo);
+                        mContacts.add(person);
+                    }
+                }
+                items = mContacts;
+                hideEmptyView();
+                mContactAdapter.setNewData(mContacts);
+                mContactAdapter.notifyDataSetChanged();
+                reSetSwipRefreash();
+                return;
+            }
+            mPresenter.loadData("1");
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
 
