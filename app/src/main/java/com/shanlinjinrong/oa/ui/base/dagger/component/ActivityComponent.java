@@ -31,6 +31,7 @@ import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.ui.activity.login.WriteJobNumberActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
+import com.shanlinjinrong.oa.ui.activity.message.LookMessageRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModificationEmailActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPhoneActivity;
@@ -136,4 +137,7 @@ public interface ActivityComponent {
     void inject(AttandenceRecorderActivity attandenceRecorderActivity);
 
     void inject(EaseChatMessageActivity easeChatMessageActivity);
+
+    void inject(LookMessageRecordActivity lookMessageRecordActivity);
+
 }

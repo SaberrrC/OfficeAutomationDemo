@@ -1,20 +1,22 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.message.contract.LookMessageRecordContract;
+import com.shanlinjinrong.oa.ui.activity.message.presenter.LookMessageRecordPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 //查看消息记录界面
-public class LookMessageRecordActivity extends AppCompatActivity {
+public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecordPresenter> implements LookMessageRecordContract.View {
 
     @BindView(R.id.tv_title)
     TextView            mTvTitle;
@@ -30,20 +32,13 @@ public class LookMessageRecordActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
     private void initView() {
         listView = messageList.getListView();
-//        messageList.init(toChatUsername, chatType, chatFragmentHelper != null ? chatFragmentHelper.onSetCustomChatRowProvider() : null);
-//        setListItemClickListener();
-//
-//        messageList.getListView().setOnTouchListener(new OnTouchListener() {
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                hideKeyboard();
-//                inputMenu.hideExtendMenuContainer();
-//                return false;
-//            }
-//        });
     }
 
     @OnClick({R.id.iv_back, R.id.iv_search})
@@ -53,7 +48,13 @@ public class LookMessageRecordActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.iv_search:
+
                 break;
         }
+    }
+
+    @Override
+    public void uidNull(int code) {
+
     }
 }
