@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.message.chatgroup;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.EditText;
 
 import com.shanlinjinrong.oa.R;
@@ -10,6 +9,7 @@ import com.shanlinjinrong.views.common.CommonTopView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 //修改 群组名称
 public class ModificationGroupNameActivity extends AppCompatActivity {
 

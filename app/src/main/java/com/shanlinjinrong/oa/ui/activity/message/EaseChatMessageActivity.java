@@ -3,8 +3,8 @@ package com.shanlinjinrong.oa.ui.activity.message;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
@@ -46,6 +46,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private UserInfoDetailsBean mUserInfoDetailsBean;
     private int mChatType;
     private int CHAT_GROUP = 2;
+    private final int REQUEST_CODE = 101, RESULT_CODE = -2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,13 +198,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                     intent.putExtra("groupId", getIntent().getStringExtra("toChatUsername"));
                 } else {
                     intent.putExtra("chatType", false);
-
                 }
-//                intent.putExtra("name_self", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USERNAME));
-//                intent.putExtra("portraits_self", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
-//                intent.putExtra("name", mUserInfoDetailsBean.getUsername() == null ? "" : mUserInfoDetailsBean.getUsername());
-//                intent.putExtra("portraits", mUserInfoDetailsBean.getPortrait() == null ? "" : mUserInfoDetailsBean.getPortrait());
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
                 break;
         }
     }
@@ -215,5 +211,14 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Override
     public void uidNull(int code) {
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CODE) {
+            setResult(RESULT_CODE);
+            finish();
+        }
     }
 }

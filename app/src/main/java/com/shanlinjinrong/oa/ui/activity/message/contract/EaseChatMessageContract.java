@@ -11,7 +11,7 @@ public interface EaseChatMessageContract {
     interface View extends BaseView {
     }
 
-    interface Presenter extends BasePresenter<EaseChatMessageContract.View> {
+    interface Presenter extends BasePresenter<View> {
 
     }
 }

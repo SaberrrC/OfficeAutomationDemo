@@ -4,7 +4,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hyphenate.chat.EMGroup;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.message.bean.ChatMessageDetailsBean;
 
 import java.util.List;
 
