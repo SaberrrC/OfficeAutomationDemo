@@ -183,9 +183,9 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                     try {
                         if ((mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]") || mAllWorkAttendanceList.get(i).getTbmstatus().equals("")))
                             continue;
-                        if ((mAllWorkAttendanceList.get(i).getTbmstatus().equals("[迟到]") && getIntent().getIntExtra("exception", 0) == 0) ||
-                            (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[早退]") && getIntent().getIntExtra("exception", 0) == 1) ||
-                            (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[旷工]") && getIntent().getIntExtra("exception", 0) == 2)) {
+                        if ((mAllWorkAttendanceList.get(i).getTbmstatus().contains("[迟到]") && getIntent().getIntExtra("exception", 0) == 0) ||
+                                (mAllWorkAttendanceList.get(i).getTbmstatus().contains("[早退]") && getIntent().getIntExtra("exception", 0) == 1) ||
+                                (mAllWorkAttendanceList.get(i).getTbmstatus().contains("[旷工]") && getIntent().getIntExtra("exception", 0) == 2)) {
                             mData.add(mAllWorkAttendanceList.get(i));
                         }
                     } catch (Throwable e) {
@@ -309,14 +309,14 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
             });
             try {
                 if (bean1.getTbmstatus() != null) {
-                    if (bean1.getTbmstatus().contains("[出差]")) {
+                 /*   if (bean1.getTbmstatus().contains("[出差]") && getIntent().getIntExtra("exception", -1) == -1) {
                         baseViewHolder.setText(R.id.tv_state, "[出差]");
                         return;
                     }
-                    if (bean1.getTbmstatus().contains("[外出]")) {
+                    if (bean1.getTbmstatus().contains("[外出]") && getIntent().getIntExtra("exception", -1) == -1) {
                         baseViewHolder.setText(R.id.tv_state, "[出差]");
                         return;
-                    }
+                    }*/
                     if (bean1.getTbmstatus().contains("[加班]")) {
                         baseViewHolder.setText(R.id.tv_state, "[加班]");
                         return;
