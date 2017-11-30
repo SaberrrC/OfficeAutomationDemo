@@ -62,12 +62,8 @@ public class MyJpushReceiver extends BroadcastReceiver {
                 SharedPreferences sp = mContext.getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
                 if (type == TYPE_SEND_TO_ME) {
                     sp.edit().putBoolean("DOT_SEND", true).apply();
-                    int DOT_SEND_INT = sp.getInt("DOT_SEND_INT", 0)+ 1;
-                    sp.edit().putInt("DOT_SEND_INT", DOT_SEND_INT ).apply();
                 } else if (type == TYPE_WAIT_ME_APPROVAL) {
                     sp.edit().putBoolean("DOT_APPORVAL", true).apply();
-                    int DOT_APPORVAL_INT = sp.getInt("DOT_APPORVAL_INT", 1);
-                    sp.edit().putInt("DOT_APPORVAL_INT", DOT_APPORVAL_INT++).apply();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
