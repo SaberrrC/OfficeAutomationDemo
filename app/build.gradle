@@ -107,22 +107,22 @@ def devJavaAddress() {
 }
 
 //测试环境
-def preJavaAddress() {
-    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
-}
-
-def prePHPAddress() {
-    return "\"http://api.testoa.shanlinjinrong.com/\""
-}
-
-//新 内网
 //def preJavaAddress() {
-//    return "\"http://10.5.202.122:9105/\""
+//    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
 //}
 //
 //def prePHPAddress() {
-//    return "\"http://10.5.202.122:81/\""
+//    return "\"http://api.testoa.shanlinjinrong.com/\""
 //}
+
+//新 内网
+def preJavaAddress() {
+    return "\"http://10.5.202.122:9105/\""
+}
+
+def prePHPAddress() {
+    return "\"http://10.5.202.122:81/\""
+}
 
 //新 外网
 //def preJavaAddress() {
