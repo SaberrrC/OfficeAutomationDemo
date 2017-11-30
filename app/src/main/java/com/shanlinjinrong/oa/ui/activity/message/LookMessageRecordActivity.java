@@ -61,7 +61,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
     private SwipeRefreshLayout                      swipeRefreshLayout;
     private EMConversation                          conversation;
     private EMMessage                               mEmMessage;
-    private Intent                                  intent;
+    private Bundle                                  mBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +78,12 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
 
     private void initView() {
         messageList.setShowUserNick(true);
-        intent = getIntent();
-        chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
-        toChatUsername = intent.getStringExtra(EaseConstant.EXTRA_USER_ID);
+        Intent intent = getIntent();
+        Intent parcelableExtra = intent.getParcelableExtra("INTENT");
+        mBundle = parcelableExtra.getBundleExtra("BUNDLE");
+        //mBundle = intent.getBundleExtra("BUNDLE");
+        chatType = mBundle.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
+        toChatUsername = mBundle.getString(EaseConstant.EXTRA_USER_ID);
         chatFragmentHelper = new EaseChatFragment.EaseChatFragmentHelper() {
             @Override
             public void onSetMessageAttributes(EMMessage message) {
@@ -92,7 +95,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
 
             @Override
             public void onAvatarClick(String username) {
-                //                mListener.clickUserInfo(username, mEmMessage);
+                //mListener.clickUserInfo(username, mEmMessage);
             }
 
             @Override
@@ -205,7 +208,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
 
     protected void onMessageListInit() {
         messageList.init(toChatUsername, chatType, chatFragmentHelper != null ? chatFragmentHelper.onSetCustomChatRowProvider() : null);
-//        setListItemClickListener();
+        //        setListItemClickListener();
         isMessageListInited = true;
     }
 
@@ -289,10 +292,10 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         //TODO 新消息扩展
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userHead", intent.getStringExtra("userHeadSelf"));
-            jsonObject.put("userId", intent.getStringExtra("userIdSelf"));
-            jsonObject.put("userCode", intent.getStringExtra("userCodeSelf"));
-            jsonObject.put("userName", intent.getStringExtra("userNameSelf"));
+            jsonObject.put("userHead", mBundle.getString("userHeadSelf"));
+            jsonObject.put("userId", mBundle.getString("userIdSelf"));
+            jsonObject.put("userCode", mBundle.getString("userCodeSelf"));
+            jsonObject.put("userName", mBundle.getString("userNameSelf"));
             message.setAttribute("userInfo", jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -308,14 +311,14 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
             EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
 
             //TODO 存储数据
-            if (!message.getFrom().equals(intent.getStringExtra("toChatUsername"))) {
+            if (!message.getFrom().equals(mBundle.getString("toChatUsername"))) {
                 EMConversation conversationDB = EMClient.getInstance().chatManager().getConversation(toChatUsername);
                 if (conversationDB != null) {
                     JSONObject jsonObject = new JSONObject();
                     try {
-                        jsonObject.put("userName", intent.getStringExtra("userName"));
-                        jsonObject.put("userCode", intent.getStringExtra("toChatUsername"));
-                        jsonObject.put("userHead", intent.getStringExtra("userHead"));
+                        jsonObject.put("userName", mBundle.getString("userName"));
+                        jsonObject.put("userCode", mBundle.getString("toChatUsername"));
+                        jsonObject.put("userHead", mBundle.getString("userHead"));
                         conversationDB.setExtField(jsonObject.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -385,13 +388,21 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         sendMessage(message);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_search})
+    @OnClick({R.id.iv_back, R.id.iv_search,R.id.iv_first, R.id.iv_last, R.id.iv_next, R.id.iv_final})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
             case R.id.iv_search:
+                break;
+            case R.id.iv_first:
+                break;
+            case R.id.iv_last:
+                break;
+            case R.id.iv_next:
+                break;
+            case R.id.iv_final:
                 break;
         }
     }
@@ -400,9 +411,6 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
     public void uidNull(int code) {
     }
 
-    /**
-     * chat row provider
-     */
     public final class CustomChatRowProvider implements EaseCustomChatRowProvider {
         @Override
         public int getCustomChatRowTypeCount() {
@@ -412,14 +420,11 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         @Override
         public int getCustomChatRowType(EMMessage message) {
             if (message.getType() == EMMessage.Type.TXT) {
-                //voice call
                 if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
                     return message.direct() == EMMessage.Direct.RECEIVE ? EaseChatFragment.MESSAGE_TYPE_RECV_VOICE_CALL : EaseChatFragment.MESSAGE_TYPE_SENT_VOICE_CALL;
                 } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)) {
-                    //video call
                     return message.direct() == EMMessage.Direct.RECEIVE ? EaseChatFragment.MESSAGE_TYPE_RECV_VIDEO_CALL : EaseChatFragment.MESSAGE_TYPE_SENT_VIDEO_CALL;
                 }
-                //message recall
                 else if (message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)) {
                     return EaseChatFragment.MESSAGE_TYPE_RECALL;
                 }

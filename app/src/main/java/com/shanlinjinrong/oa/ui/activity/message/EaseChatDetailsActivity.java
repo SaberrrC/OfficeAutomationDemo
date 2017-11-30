@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -162,6 +163,8 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn_look_message_record:
                 //TODO 查看聊天记录
+                Parcelable parcelable = getIntent().getParcelableExtra("INTENT");
+                intent.putExtra("INTENT", parcelable);
                 intent.setClass(this, LookMessageRecordActivity.class);
                 break;
             case R.id.tv_clear_message_record:

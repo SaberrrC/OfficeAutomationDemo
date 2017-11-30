@@ -47,6 +47,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private int mChatType;
     private int CHAT_GROUP = 2;
     private final int REQUEST_CODE = 101, RESULT_CODE = -2;
+    private Bundle mExtras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,11 +128,11 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         }
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
-        Bundle extras = getIntent().getExtras();
-        extras.putString("PAGE_TYPE", "CHAT");
-        extras.putString("PAGE_TYPE", "HISTORY");
-        extras.putInt("CHAT_TYPE", mChatType);
-        chatFragment.setArguments(extras);
+        mExtras = getIntent().getExtras();
+        mExtras.putString("PAGE_TYPE", "CHAT");
+        mExtras.putString("PAGE_TYPE", "HISTORY");
+        mExtras.putInt("CHAT_TYPE", mChatType);
+        chatFragment.setArguments(mExtras);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }
 
@@ -198,6 +199,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                     intent.putExtra("groupId", getIntent().getStringExtra("toChatUsername"));
                 } else {
                     intent.putExtra("chatType", false);
+                    intent.putExtra("INTENT", getIntent());
                 }
                 startActivityForResult(intent, REQUEST_CODE);
                 break;

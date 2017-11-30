@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -26,8 +27,6 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-//import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
 
 /**
  * <h3>Description: 首页通讯列表页面</h3>
@@ -62,7 +61,7 @@ public class TabCommunicationFragment extends BaseFragment {
     }
 
     private EMConversation mConversation;
-    private String mTitle;
+    private String         mTitle;
 
     private void initData() {
         if (myConversationListFragment == null) {
@@ -87,15 +86,15 @@ public class TabCommunicationFragment extends BaseFragment {
                 }
             }
             //TODO 暂做修改 消息透传部分
-//            userInfo = lastMessage.getStringAttribute("userInfo", "");
-//            userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
-//            startActivity(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("userId", conversation.conversationId()).putExtra("userInfo_self", userInfo_self).putExtra("userInfo", userInfo).putExtra("nikename", ""));
-//            Intent intent = new Intent(getActivity(), EaseChatMessageActivity.class);
-//            intent.putExtra("userCode", lastMessage.getStringAttribute("userCode", ""));
-//            intent.putExtra("userName", lastMessage.getStringAttribute("userName", ""));
-//            intent.putExtra("userId", lastMessage.getStringAttribute("userId", ""));
-//            intent.putExtra("userHead", lastMessage.getStringAttribute("userHead", ""));
-//            startActivity(intent);
+            //            userInfo = lastMessage.getStringAttribute("userInfo", "");
+            //            userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
+            //            startActivity(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("userId", conversation.conversationId()).putExtra("userInfo_self", userInfo_self).putExtra("userInfo", userInfo).putExtra("nikename", ""));
+            //            Intent intent = new Intent(getActivity(), EaseChatMessageActivity.class);
+            //            intent.putExtra("userCode", lastMessage.getStringAttribute("userCode", ""));
+            //            intent.putExtra("userName", lastMessage.getStringAttribute("userName", ""));
+            //            intent.putExtra("userId", lastMessage.getStringAttribute("userId", ""));
+            //            intent.putExtra("userHead", lastMessage.getStringAttribute("userHead", ""));
+            //            startActivity(intent);
 
 
             Intent intent = new Intent(getActivity(), EaseChatMessageActivity.class);
@@ -107,6 +106,15 @@ public class TabCommunicationFragment extends BaseFragment {
 
             //TODO 获取携带的消息
             String userInfo = lastMessage.getStringAttribute("userInfo", "");
+            String from = lastMessage.getFrom();
+            String to = lastMessage.getTo();
+            Bundle bundle = new Bundle();
+            if (from.contains(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                bundle.putString(EaseConstant.EXTRA_USER_ID, to);
+            }
+            if (to.contains(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                bundle.putString(EaseConstant.EXTRA_USER_ID, from);
+            }
             if (!userInfo.equals("")) {
                 try {
                     JSONObject jsonObject = new JSONObject(userInfo);
