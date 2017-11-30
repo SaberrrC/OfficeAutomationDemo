@@ -44,8 +44,7 @@ public class TabHomePageFragment extends BaseFragment {
 
     @BindView(R.id.iv_send_to_me_dot)
     ImageView mSendToMeDot;
-    @BindView(R.id.tv_send_to_me_dot)
-    TextView tvsendtomedot;
+
 
     @BindView(R.id.iv_wait_me_approval_dot)
     ImageView mWaitMeApprovalDot;
@@ -102,11 +101,8 @@ public class TabHomePageFragment extends BaseFragment {
         SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
         if (sp.getBoolean(DOT_SEND, false)) {
             mSendToMeDot.setVisibility(View.VISIBLE);
-            tvsendtomedot.setVisibility(View.VISIBLE);
-            tvsendtomedot.setText(sp.getInt(DOT_SEND_INT,0)+"");
         } else {
             mSendToMeDot.setVisibility(View.GONE);
-            tvsendtomedot.setVisibility(View.GONE);
         }
         if (sp.getBoolean(DOT_APPORVAL, false)) {
             mWaitMeApprovalDot.setVisibility(View.VISIBLE);
