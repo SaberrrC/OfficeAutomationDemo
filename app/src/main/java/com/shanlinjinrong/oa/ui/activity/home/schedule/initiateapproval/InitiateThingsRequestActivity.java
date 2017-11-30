@@ -218,14 +218,12 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast("提交失败,请获取" + mTvCommonalityCoder.getText().toString() + "!");
                 return;
             }
-
             if (getIntent().getIntExtra("type", -1) != 3) {
-                if (mQueryDuration.equals("") ||mQueryDuration.equals("0") || mQueryDuration.equals("0小时") || mQueryDuration.equals("0天") || mNextDuration.equals("0") || mNextDuration.equals("0小时") || mNextDuration.equals("0天")) {
+                if (this.mQueryDuration.equals("") || this.mQueryDuration.equals("0") || this.mQueryDuration.equals("0小时") || this.mQueryDuration.equals("0天") || this.mNextDuration.equals("0") || this.mNextDuration.equals("") || this.mNextDuration.equals("0小时") || this.mNextDuration.equals("0天")) {
                     showToast(mTopView.getTitleView().getText().toString() + "时长为0,请重新获取!");
                     return;
                 }
             }
-
 
 
             switch (getIntent().getIntExtra("type", -1)) {
@@ -1072,7 +1070,36 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 mBtnAddDetails.setClickable(true);
                 break;
             case "selectedType": //选择类型
-
+                try {
+                    //TODO 选择类型 申请时长清0
+                    mQueryDuration = "0";
+                    mNextDuration = "0";
+                    if (getIntent().getIntExtra("type", -1) == 1) {
+                        mTv_duration_number.setText(0 + "小时");
+                    } else {
+                        if (mSelectedTypeID.equals("1002Z710000000021ZM1") || mSelectedTypeID.equals("1001A1100000000154IU")) {
+                            mTv_duration_number.setText(0 + "小时");
+                            mBegin_time.setText("请选择开始时间");
+                            mEnd_time.setText("请选择开始时间");
+                            if (mNext_begin_time != null) {
+                                mTv_duration_next_number.setText(0 + "小时");
+                                mNext_begin_time.setText("请选择开始时间");
+                                mNext_end_time.setText("请选择结束时间");
+                            }
+                        } else {
+                            mTv_duration_number.setText(0 + "天");
+                            mBegin_time.setText("请选择开始时间");
+                            mEnd_time.setText("请选择开始时间");
+                            if (mNext_begin_time != null) {
+                                mTv_duration_next_number.setText(0 + "天");
+                                mNext_begin_time.setText("请选择开始时间");
+                                mNext_end_time.setText("请选择结束时间");
+                            }
+                        }
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
                 mSelectedTypeID = bean.getSelectedID();
                 if (getIntent().getIntExtra("type", 0) == 3) {
                     if (!isSeletcedNextType) {
@@ -1112,6 +1139,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     //选择时间规则
+
     private void DateSelectedUtils(SelectedTypeBean bean) {
         if (bean.getIsBegin() == 0) { //TODO 时间优化处理 0点待处理
             if (!TextUtils.isEmpty(mEnd_time.getText().toString().trim()) && !mEnd_time.getText().toString().equals("请选择结束时间")) {
