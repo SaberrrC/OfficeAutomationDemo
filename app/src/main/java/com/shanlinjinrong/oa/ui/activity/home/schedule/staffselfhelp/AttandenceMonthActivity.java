@@ -313,6 +313,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
                 //出差 >加班 >休假> 签卡>旷工>迟到>早退
                 for (int i = 0; i < bean.size(); i++) {
+
                     tv_date.setText(bean.get(i).getCalendar());
                     tv_name.setText(bean.get(i).getPsname());
                     tv_gowork_time.setText(bean.get(i).getOnebegintime());
