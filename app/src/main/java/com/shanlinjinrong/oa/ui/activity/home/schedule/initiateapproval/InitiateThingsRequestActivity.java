@@ -95,7 +95,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     private View mContentView1;
     private CustomDialogUtils mDialog;
-    private SingReasonBean mCommonTypeBean;
+    private CommonTypeBean mCommonTypeBean;
     private int mIndex = 1, mYearPosition = 0;
     private YearDateSelected mYearDateSelected;
     private InitiateThingsTypeAdapter mTypeAdapter;
@@ -930,6 +930,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     public void queryEvectionTypeSuccess(CommonTypeBean bean) {
         if (bean != null) {
             data.clear();
+            mCommonTypeBean = bean;
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
                     mSelectedTypeID = bean.getData().get(i).getId();
@@ -1033,7 +1034,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     public void findSignReasonSuccess(SingReasonBean bean) {
         if (bean != null) {
             data.clear();
-            mCommonTypeBean = bean;
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
                     mSelectedTypeID = bean.getData().get(i).getSIGNCAUSEID();
