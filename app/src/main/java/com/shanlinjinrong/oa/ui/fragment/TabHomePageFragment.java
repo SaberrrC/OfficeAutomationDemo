@@ -50,11 +50,11 @@ public class TabHomePageFragment extends BaseFragment {
 
     private RelativeLayout mRootView;
 
-    private static int    TYPE_SEND_TO_ME       = 0;//发送我的
-    private static int    TYPE_WAIT_ME_APPROVAL = 1;//待我审批
-    private static String DOT_STATUS            = "DOT_STATUS";
-    public static  String DOT_SEND              = "DOT_SEND";
-    public static  String DOT_APPORVAL          = "DOT_APPORVAL";
+    private static int TYPE_SEND_TO_ME = 0;//发送我的
+    private static int TYPE_WAIT_ME_APPROVAL = 1;//待我审批
+    private static String DOT_STATUS = "DOT_STATUS";
+    public static String DOT_SEND = "DOT_SEND";
+    public static String DOT_APPORVAL = "DOT_APPORVAL";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -81,7 +81,11 @@ public class TabHomePageFragment extends BaseFragment {
      * 初始化控件
      */
     private void initWidget() {
-        mTvTitle.setText(AppConfig.getAppConfig(mContext).get(AppConfig.PREF_KEY_COMPANY_NAME));
+        String title = AppConfig.getAppConfig(mContext).get(AppConfig.PREF_KEY_COMPANY_NAME);
+        if (title.equals("null") || title.trim().equals("") || title.equals("false")) {
+            title = "上海善林金融";
+        }
+        mTvTitle.setText(title);
     }
 
     @Override
@@ -120,7 +124,7 @@ public class TabHomePageFragment extends BaseFragment {
             R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch,
             R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
             R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance,
-            R.id.rl_holiday_search,R.id.rl_pay_search
+            R.id.rl_holiday_search, R.id.rl_pay_search
     })
     public void onClick(View view) {
         Intent intent = null;
@@ -180,7 +184,7 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_test:
                 if (BuildConfig.DEBUG) {
-                //intent = new Intent(mContext, UpcomingTasksActivity.class);
+                    //intent = new Intent(mContext, UpcomingTasksActivity.class);
                 }
                 break;
             case R.id.rl_holiday_search:

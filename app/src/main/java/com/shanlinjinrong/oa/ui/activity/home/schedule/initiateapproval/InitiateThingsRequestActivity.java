@@ -447,7 +447,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("endTime", mEnd_time.getText().toString() + ":00");
             jsonObject1.put("startTime", mBegin_time.getText().toString() + ":00");
             jsonObject1.put("handOverPepole", mReceiverId);
-            jsonObject1.put("FurloughRemark", mEt_common_show2.getText().toString());
+            jsonObject1.put("furloughRemark", mEt_common_show2.getText().toString());
             jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
@@ -463,7 +463,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 jsonObject2.put("endTime", mNext_end_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
                 jsonObject2.put("handOverPepole", mNextReceiverId);
-                jsonObject2.put("FurloughRemark", mEt_common_next_show2.getText().toString());
+                jsonObject2.put("furloughRemark", mEt_common_next_show2.getText().toString());
                 jsonObject2.put("timeDifference", mNextDuration);
                 jsonArray.put(jsonObject2);
             }
