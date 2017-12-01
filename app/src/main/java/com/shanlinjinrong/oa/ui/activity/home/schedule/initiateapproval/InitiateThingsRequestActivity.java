@@ -95,7 +95,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     private View mContentView1;
     private CustomDialogUtils mDialog;
-    private CommonTypeBean mCommonTypeBean;
+    private SingReasonBean mCommonTypeBean;
     private int mIndex = 1, mYearPosition = 0;
     private YearDateSelected mYearDateSelected;
     private InitiateThingsTypeAdapter mTypeAdapter;
@@ -669,13 +669,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
         mLl_common_next_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = true;
-            if (mCommonTypeBean != null) {
-                if (mCommonTypeBean.getData().size() == 0) {
+            if (data != null) {
+                if (data.size() == 0) {
                     showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,正在为您重试！");
                     querySelectedTypeData();
                     return;
                 }
-                NonTokenDialog();
+                selectedDialog();
                 return;
             }
             showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,正在为您重试！");
@@ -930,7 +930,6 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     public void queryEvectionTypeSuccess(CommonTypeBean bean) {
         if (bean != null) {
             data.clear();
-            mCommonTypeBean = bean;
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
                     mSelectedTypeID = bean.getData().get(i).getId();
@@ -1034,6 +1033,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     public void findSignReasonSuccess(SingReasonBean bean) {
         if (bean != null) {
             data.clear();
+            mCommonTypeBean = bean;
             for (int i = 0; i < bean.getData().size(); i++) {
                 if (i == 0) {
                     mSelectedTypeID = bean.getData().get(i).getSIGNCAUSEID();

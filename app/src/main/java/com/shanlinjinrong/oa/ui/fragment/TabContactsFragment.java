@@ -249,6 +249,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         if (mSwipeRefreshLayout != null) {
             if (recyclerView.getVisibility() == View.VISIBLE) {
                 mSwipeRefreshLayout.setEnabled(true);
+                mPresenter.loadData("1");
             } else {
                 mSwipeRefreshLayout.setEnabled(false);
             }
