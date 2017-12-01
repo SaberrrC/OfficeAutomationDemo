@@ -87,19 +87,19 @@ import java.util.concurrent.Executors;
  * <br/>
  * you can see ChatActivity in demo for your reference
  */
-public class EaseChatFragment extends EaseBaseFragment implements EMMessageListener{
+public class EaseChatFragment extends EaseBaseFragment implements EMMessageListener {
     protected static final String TAG                          = "EaseChatFragment";
-    public static final int    REQUEST_CODE_MAP             = 1;
-    public static final int    REQUEST_CODE_CAMERA          = 2;
-    public static final int    REQUEST_CODE_LOCAL           = 3;
-    public static final   int    REQUEST_CODE_SELECT_VIDEO    = 11;
-    public static final   int    REQUEST_CODE_SELECT_FILE     = 12;
-    public static final   int    REQUEST_CODE_SELECT_AT_USER  = 15;
-    public static final   int    MESSAGE_TYPE_SENT_VOICE_CALL = 1;
-    public static final   int    MESSAGE_TYPE_RECV_VOICE_CALL = 2;
-    public static final   int    MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
-    public static final   int    MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
-    public static final   int    MESSAGE_TYPE_RECALL          = 9;
+    public static final    int    REQUEST_CODE_MAP             = 1;
+    public static final    int    REQUEST_CODE_CAMERA          = 2;
+    public static final    int    REQUEST_CODE_LOCAL           = 3;
+    public static final    int    REQUEST_CODE_SELECT_VIDEO    = 11;
+    public static final    int    REQUEST_CODE_SELECT_FILE     = 12;
+    public static final    int    REQUEST_CODE_SELECT_AT_USER  = 15;
+    public static final    int    MESSAGE_TYPE_SENT_VOICE_CALL = 1;
+    public static final    int    MESSAGE_TYPE_RECV_VOICE_CALL = 2;
+    public static final    int    MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
+    public static final    int    MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
+    public static final    int    MESSAGE_TYPE_RECALL          = 9;
 
     /**
      * params to fragment
@@ -128,13 +128,16 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected ChatRoomListener chatRoomListener;
     protected EMMessage        contextMenuMessage;
 
-    static final int ITEM_TAKE_PICTURE = 1;
-    static final int ITEM_PICTURE      = 2;
-    static final int ITEM_VOICECALL    = 3;
+    static final         int ITEM_PICTURE      = 1;
+    static final         int ITEM_TAKE_PICTURE = 2;
+    static final         int ITEM_VOICE_CALL   = 3;
+    private static final int ITEM_VIDEO        = 11;
+    private static final int ITEM_FILE         = 12;
+    private static final int ITEM_VIDEO_CALL   = 14;
 
-    protected int[] itemStrings   = {R.string.attach_take_pic, R.string.attach_picture, R.string.attach_voice_call};
-    protected int[] itemdrawables = {R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector, R.drawable.ease_chat_location_selector};
-    protected int[] itemIds       = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICECALL};
+    protected String[] itemStrings   = {"照片", "拍摄", "语音聊天", "语音输入", "位置", "个人名片"};
+    protected int[]    itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.ease_chat_call_normal, R.drawable.voice_input, R.drawable.ease_chat_location_normal, R.drawable.person_info};
+    protected int[]    itemIds       = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, 11, 12, 14};
     private   boolean             isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
     protected boolean isRoaming = false;
@@ -222,6 +225,18 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 }
             }
 
+            protected void selectFileFromLocal() {
+                Intent intent = null;
+                if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                } else {
+                    intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                }
+                startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
+            }
             @Override
             public boolean onExtendMenuItemClick(int itemId, View view) {
                 return false;
@@ -472,10 +487,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 public void run() {
                     try {
                         List<EMMessage> messages = conversation.getAllMessages();
-                        EMClient.getInstance().chatManager()
-                                .fetchHistoryMessages(toChatUsername,
-                                        EaseCommonUtils.getConversationType(chatType),
-                                        pagesize, (messages != null && messages.size() > 0) ? messages.get(0).getMsgId() : "");
+                        EMClient.getInstance().chatManager().fetchHistoryMessages(toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, (messages != null && messages.size() > 0) ? messages.get(0).getMsgId() : "");
                         mEmMessage = (messages != null && messages.size() > 0) ? messages.get(0) : null;
                     } catch (HyphenateException e) {
                         e.printStackTrace();
@@ -629,7 +641,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 case ITEM_PICTURE:
                     selectPicFromLocal();
                     break;
-                case ITEM_VOICECALL:
+                case ITEM_VOICE_CALL:
                     selectFroVoiceCall();
                     break;
             }

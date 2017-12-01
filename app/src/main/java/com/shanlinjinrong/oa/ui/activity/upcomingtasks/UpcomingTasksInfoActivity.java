@@ -105,7 +105,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void uidNull(int code) {
-
     }
 
     @Override
