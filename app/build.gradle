@@ -15,8 +15,8 @@ android {
         multiDexEnabled true
 
         //pwd:13579
-        versionCode 22
-        versionName "v1.5.0.0"
+        versionCode 23
+        versionName "v1.5.5.0"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
@@ -107,13 +107,13 @@ def devJavaAddress() {
 }
 
 //测试环境
-//def preJavaAddress() {
-//    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
-//}
-//
-//def prePHPAddress() {
-//    return "\"http://api.testoa.shanlinjinrong.com/\""
-//}
+def preJavaAddress() {
+    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
+}
+
+def prePHPAddress() {
+    return "\"http://api.testoa.shanlinjinrong.com/\""
+}
 
 //新 内网
 //def preJavaAddress() {
@@ -134,13 +134,13 @@ def devJavaAddress() {
 //}
 
 //TODO 生产环境
-def preJavaAddress(){
-    return  "\"http://oa.shanlinjinrong.com/oa-api/\""
-}
-
-def prePHPAddress(){
-    return  "\"http://api.oa.shanlinjinrong.com/\""
-}
+//def preJavaAddress(){
+//    return  "\"http://oa.shanlinjinrong.com/oa-api/\""
+//}
+//
+//def prePHPAddress(){
+//    return  "\"http://api.oa.shanlinjinrong.com/\""
+//}
 
 def devAppName() {
     return '善林OA-Dev版'
