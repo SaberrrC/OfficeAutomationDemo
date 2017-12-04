@@ -10,10 +10,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class BadgeUtil {
     private BadgeUtil() throws InstantiationException {
@@ -29,7 +33,8 @@ public class BadgeUtil {
         } else {
             count = Math.max(0, Math.min(count, 99));
         }
-
+        LogUtils.e("Build.MANUFACTURER-----"+Build.MANUFACTURER);
+        LogUtils.e("Build.MANUFACTURER.toLowerCase()-----"+Build.MANUFACTURER.toLowerCase());
         if (Build.MANUFACTURER.equalsIgnoreCase("xiaomi")) {
             setBadgeOfMIUI(context, count, iconResId);
         } else if (Build.MANUFACTURER.equalsIgnoreCase("sony")) {
@@ -41,17 +46,18 @@ public class BadgeUtil {
             setBadgeOfHTC(context, count);
         } else if (Build.MANUFACTURER.toLowerCase().contains("nova")) {
             setBadgeOfNova(context, count);
-        } else {
+        } else if (Build.MANUFACTURER.toLowerCase().contains("OPPO")||Build.MANUFACTURER.toLowerCase().contains("oppo")) {//oppo
+            setBadgeOfOPPO(context, count);
+        }else {
             //  Toast.makeText(context, "Not Found Support Launcher", Toast.LENGTH_LONG).show();
         }
     }
-
     /**
      * 设置MIUI的Badge
      */
     private static void setBadgeOfMIUI(Context context, int count, int iconResId) {
         NotificationManager mNotificationManager = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+                .getSystemService(NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle("消息提醒").setContentText("智通OA有未读消息").setSmallIcon(iconResId);
         Notification notification = builder.build();
@@ -135,7 +141,18 @@ public class BadgeUtil {
         intent.putExtra("badge_count_class_name", className);
         context.sendBroadcast(intent);
     }
-
+    /**
+     *设置oppo的Badge :oppo角标提醒目前只针对内部软件还有微信、QQ开放，其他的暂时无法提供
+     */
+    private static void setBadgeOfOPPO(Context context,int count){
+        try {
+            Bundle extras = new Bundle();
+            extras.putInt("app_badge_count", count);
+            context.getContentResolver().call(Uri.parse("content://com.android.badge/badge"), "setAppBadgeCount", String.valueOf(count), extras);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * 重置Badge
      */
