@@ -25,17 +25,11 @@ import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.shanlinjinrong.oa.manager.AppManager.mContext;
-
-//import com.hyphenate.chatuidemo.db.Friends;
-//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
 
 /**
  * 通讯录联系人详情页
@@ -65,12 +59,10 @@ public class Contact_Details_Activity2 extends BaseActivity {
     ImageView send_message;
     @BindView(R.id.send_voice)
     ImageView send_voice;
-
     @BindView(R.id.iv_phone)
     ImageView iv_phone;
 
     private Contacts constants;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +131,6 @@ public class Contact_Details_Activity2 extends BaseActivity {
                                     }
                                     startActivity(intent);
                                 }
-
                                 @Override
                                 public void onDenied() {
                                     showToast("拨打电话权限被拒绝，请手动设置");
@@ -166,9 +157,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
                             showToast("网络不稳定，请重试");
                             return;
                         }
-
-                        addOrUpdateFriendInfo2(constants);
-
+//                        addOrUpdateFriendInfo2(constants);
                         startActivity(new Intent(Contact_Details_Activity2.this, VoiceCallActivity.class)
                                 .putExtra("username", Constants.CID + "_" + constants.getCode())
                                 .putExtra("nike", constants.getUsername())
@@ -189,26 +178,15 @@ public class Contact_Details_Activity2 extends BaseActivity {
                             showToast("网络不稳定，请重试");
                             return;
                         }
-                        addOrUpdateFriendInfo2(constants);
+//                        addOrUpdateFriendInfo2(constants);
                         Intent intent = new Intent(Contact_Details_Activity2.this, EaseChatMessageActivity.class);
                         try {
-                            JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("CODE", constants.getCode());
-                            jsonObject.put("department_name", constants.getDepartmentName());
-                            jsonObject.put("email", constants.getEmail());
-                            jsonObject.put("phone", constants.getPhone());
-                            jsonObject.put("portrait", constants.getPortraits());
-                            jsonObject.put("post_title", constants.getPostTitle());
-                            jsonObject.put("sex", constants.getSex());
-                            jsonObject.put("username", constants.getUsername());
                             intent.putExtra("u_id", Constants.CID + "_" + constants.getCode());
-                            intent.putExtra("userInfo", jsonObject.toString());
+                            intent.putExtra("title", constants.getUsername());
                             startActivity(intent);
-                        } catch (JSONException e) {
+                        } catch (Throwable e) {
                             e.printStackTrace();
                         }
-
-
                     }
                 });
             }
@@ -224,6 +202,5 @@ public class Contact_Details_Activity2 extends BaseActivity {
                 finish();
                 break;
         }
-
     }
 }

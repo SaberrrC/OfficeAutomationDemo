@@ -8,11 +8,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Pair;
 
+import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -79,7 +81,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
         mKjHttp.post(Api.TAB_UN_READ_MSG_COUNT, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
-                LogUtils.e("unread : "+ t);
+                LogUtils.e("unread : " + t);
                 super.onSuccess(t);
                 try {
                     JSONObject jo = new JSONObject(t);
@@ -131,79 +133,41 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
         return list;
     }
 
-//    @Override
-//    public void loginIm(final Context context) {
-//        try {
-//            EMClient.getInstance().login(Constants.CID + "_" +
-//                    AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_CODE), "123456", new EMCallBack() {//回调
-//
-//                @Override
-//                public void onSuccess() {
-//                    EMClient.getInstance().groupManager().loadAllGroups();
-//                    EMClient.getInstance().chatManager().loadAllConversations();
-//                    LogUtils.e("登录聊天服务器成功！");
-//                    String u_id = Constants.CID + "_" + AppConfig.getAppConfig(context).getPrivateCode();
-//                    String u_name = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_USERNAME);
-//                    String u_pic = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_PORTRAITS);
-//                    String sex = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_SEX);
-//                    String phone = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_PHONE);
-//                    String post = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_POST_NAME);
-//                    String department = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
-//                    String email = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_USER_EMAIL);
-//                    String departmentId = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_DEPARTMENT);
-//                    FriendsInfoCacheSvc.getInstance(context)
-//                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic, sex, phone, post, department, email, departmentId));
-//                }
-//
-//                @Override
-//                public void onProgress(int progress, String status) {
-//
-//                }
-//
-//                @Override
-//                public void onError(int code, String message) {
-//                    LogUtils.e("登录聊天服务器失败！" + "code:" + code + "," + message);
-//                }
-//            });
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Override
-//    public void initEase(final AbortableFuture<LoginInfo> loginRequest, final String account, final String token) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                // 登录
-//                LogUtils.e("account:" + account + ",token:" + token);
-//                if (loginRequest == null) {
-//                    final AbortableFuture<LoginInfo> mRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(
-//                            account, token));
-//                    mRequest.setCallback(new RequestCallback<LoginInfo>() {
-//                        @Override
-//                        public void onSuccess(LoginInfo param) {
-//                            LogUtils.e("云信login success。。。");
-//                            //// TODO: 2017/8/19 为啥之前成功也返回空？
-//                            mView.easeInitFinish(mRequest);
-//                        }
-//
-//                        @Override
-//                        public void onFailed(int code) {
-//                            mView.easeInitFinish(null);
-//                            LogUtils.e("云信login Failed。。。" + code);
-//                        }
-//
-//                        @Override
-//                        public void onException(Throwable exception) {
-//                            mView.easeInitFinish(null);
-//                            LogUtils.e("云信login Failed。。。" + exception);
-//                        }
-//                    });
-//                }
-//            }
-//        }
-//        ).start();
-//    }
+    @Override
+    public void searchUserDetails(String code) {
+        mKjHttp.cleanCache();
+        mKjHttp.phpJsonGet(Api.SEARCH_USER_DETAILS + "?code=" + code, new HttpParams(), new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
+                    if (userDetailsBean != null) {
+                        switch (userDetailsBean.getCode()) {
+                            case Api.RESPONSES_CODE_OK:
+                                for (int i = 0; i < userDetailsBean.getData().size(); i++) {
+                                    if (mView != null)
+                                        mView.searchUserDetailsSuccess(userDetailsBean.getData().get(i));
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
 
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
+    }
 }

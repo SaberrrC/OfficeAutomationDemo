@@ -1,6 +1,8 @@
 package com.shanlinjinrong.oa.model;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -233,6 +235,10 @@ public class User implements MultiItemEntity, Serializable {
             isleader = jsonObject.getString("isleader");
             yx_token = jsonObject.getString("yx_token");
             oid = jsonObject.getString("oid");
+
+            //登陆更新自己的信息
+            FriendsInfoCacheSvc.getInstance(AppManager.mContext)
+                    .addOrUpdateFriends(new Friends(uid, username, getPortraits(), sex, phone, postName, departmentName, email, departmentId));
         } catch (JSONException e) {
             e.printStackTrace();
             LogUtils.e("user解析异常-》" + e.toString());

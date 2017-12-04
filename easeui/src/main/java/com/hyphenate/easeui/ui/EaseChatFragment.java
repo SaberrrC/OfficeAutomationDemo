@@ -10,13 +10,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.AudioFormat;
 import android.media.AudioManager;
-import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +23,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,10 +38,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMImageMessageBody;
@@ -80,20 +74,12 @@ import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
-import com.superrtc.call.ThreadUtils;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -176,7 +162,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-
         fragmentArgs = getArguments();
         // check if single chat or group chat
         chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
@@ -187,10 +172,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     private void initData() {
-
         setChatFragmentHelper(new EaseChatFragmentHelper() {
-
-
             @Override
             public void onSetMessageAttributes(EMMessage message) {
             }
@@ -790,12 +772,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     //send message
     protected void sendTextMessage(String content) {
-        readUserInfoDetailsMessage();
+//        readUserInfoDetailsMessage();
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
         } else {
             EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
-            sendUserInfoDetailsMessage(message);
+//            sendUserInfoDetailsMessage(message);
             sendMessage(message);
             mEmMessage = message;
         }
@@ -915,16 +897,16 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected void sendVoiceMessage(String filePath, int length) {
         EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, toChatUsername);
         //TODO 语音携带消息
-        readUserInfoDetailsMessage();
-        sendUserInfoDetailsMessage(message);
+//        readUserInfoDetailsMessage();
+//        sendUserInfoDetailsMessage(message);
         sendMessage(message);
     }
 
     protected void sendImageMessage(String imagePath) {
         EMMessage message = EMMessage.createImageSendMessage(imagePath, false, toChatUsername);
         //TODO 图片携带消息
-        readUserInfoDetailsMessage();
-        sendUserInfoDetailsMessage(message);
+//        readUserInfoDetailsMessage();
+//        sendUserInfoDetailsMessage(message);
         sendMessage(message);
     }
 
@@ -941,8 +923,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected void sendFileMessage(String filePath) {
         EMMessage message = EMMessage.createFileSendMessage(filePath, toChatUsername);
         //TODO 文件携带消息
-        readUserInfoDetailsMessage();
-        sendUserInfoDetailsMessage(message);
+//        readUserInfoDetailsMessage();
+//        sendUserInfoDetailsMessage(message);
         sendMessage(message);
     }
 

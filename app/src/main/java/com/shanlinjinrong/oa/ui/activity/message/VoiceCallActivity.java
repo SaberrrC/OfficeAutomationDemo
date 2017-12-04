@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -43,30 +42,23 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.gson.Gson;
-import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMMessageBody;
-import com.hyphenate.chat.adapter.message.EMACmdMessageBody;
-import com.hyphenate.easeui.adapter.EaseConversationAdapter;
-import com.hyphenate.easeui.model.UserInfoDetailsBean;
-import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.exceptions.EMNoActiveCallException;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.message.bean.CallEventBean;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -95,6 +87,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     private String portrait;
     private String toUsername;
     private EMMessage mMessage;
+    private String mUserCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,12 +97,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
             return;
         }
         setContentView(R.layout.em_activity_voice_call);
-
-//		DemoHelper.getInstance().isVoiceCalling = true;
         callType = 0;
-
         myAccount = AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE);
-
         comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
         refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
         answerBtn = (Button) findViewById(R.id.btn_answer_call);
@@ -124,6 +113,26 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
 
+        if (getIntent().getBooleanExtra("isComingCall", false)) {
+            mUserCode = EMClient.getInstance().callManager().getCurrentCallSession().getRemoteName();
+            if (FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mUserCode).equals("")) {
+                if (!EventBus.getDefault().isRegistered(this)) {
+                    EventBus.getDefault().register(this);
+                }
+                mPresenter.searchUserDetails(mUserCode.substring(3, mUserCode.length()));
+            } else {
+                String nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mUserCode);
+                String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(mUserCode);
+                Glide.with(AppManager.mContext)
+                        .load(portrait)
+                        .error(R.drawable.ease_default_avatar)
+                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(mSwingCard);
+                nickTextView.setText(nickName);
+            }
+        }
+
         refuseBtn.setOnClickListener(this);
         answerBtn.setOnClickListener(this);
         hangupBtn.setOnClickListener(this);
@@ -132,7 +141,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
 
         //TODO 接收上个界面的用户信息
         username = getIntent().getStringExtra("username");
-        send_CODE = getIntent().getStringExtra("CODE");
         send_phone = getIntent().getStringExtra("phone");
         send_sex = getIntent().getStringExtra("sex");
         send_post_title = getIntent().getStringExtra("post_name");
@@ -149,7 +157,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         msgid = UUID.randomUUID().toString();
 
         //readUserInfoDetailsMessage();
-        toUsername = getIntent().getStringExtra("toUsername");
+        toUsername = getIntent().getStringExtra(" ");
         nike = getIntent().getStringExtra("nike");
         portrait = getIntent().getStringExtra("portrait");
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
@@ -237,64 +245,9 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-
-    JSONObject sendUserInfo_self;
-    JSONObject sendUserInfo;
-
-
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            //TODO 语音携带体
-            String callExt = EMClient.getInstance().callManager().getCurrentCallSession().getExt();
-            Log.d("callExt", "实时语音携带的消息：" + callExt);
-            for (int i = 0; i < callExt.length(); i++) {
-                char charAt = callExt.charAt(i);
-                String string = new String(String.valueOf(charAt));
-                if (string.equals("|")) {
-                    userInfo_self = callExt.substring(0, i);
-                    userInfo = callExt.substring(i + 1, callExt.length());
-                    break;
-                }
-            }
-
-            sendUserInfo_self = new JSONObject(userInfo_self);
-            sendUserInfo = new JSONObject(userInfo);
-
-            userInfoSelfBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
-            userInfoBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
-
-            //TODO 消息 展示
-            EaseConversationAdapter.requestNamePic(userInfoSelfBean.username_self, userInfoSelfBean.portrait_self);
-
-            String privateCode = AppConfig.getAppConfig(this).getPrivateCode();
-            if(AppConfig.getAppConfig(this).getPrivateCode().equals(userInfoBean.CODE)){
-                if (!TextUtils.isEmpty(userInfoSelfBean.username_self))
-                    nickTextView.setText(userInfoSelfBean.username_self);
-
-                if (!TextUtils.isEmpty(userInfoSelfBean.portrait_self))
-                    Glide.with(AppManager.mContext)
-                            .load(userInfoSelfBean.portrait_self)
-                            .error(R.drawable.ease_default_avatar)
-                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                            .placeholder(R.drawable.ease_default_avatar)
-                            .into(mSwingCard);
-            }else{
-                if (!TextUtils.isEmpty(userInfoBean.username))
-                    nickTextView.setText(userInfoBean.username);
-
-                if (!TextUtils.isEmpty(userInfoBean.portrait))
-                    Glide.with(AppManager.mContext)
-                            .load(userInfoBean.portrait)
-                            .error(R.drawable.ease_default_avatar)
-                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                            .placeholder(R.drawable.ease_default_avatar)
-                            .into(mSwingCard);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
         mManager.registerListener((SensorEventListener) this, mManager.getDefaultSensor(Sensor.TYPE_PROXIMITY),// 距离感应器
                 SensorManager.SENSOR_DELAY_NORMAL);//注册传感器，第一个参数为距离监听器，第二个是传感器类型，第三个是延迟类型
     }
@@ -526,8 +479,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
 
                 } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
                     mMessage = EMMessage.createTxtSendMessage("通话已拒接", username);
-                    readUserInfoDetailsMessage();
-                    sendUserInfoDetailsMessage(mMessage);
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);
                     isThroughTo = false;
@@ -553,15 +504,11 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 //TODO 挂断
                 if (isThroughTo) {
                     mMessage = EMMessage.createTxtSendMessage("通话时长:" + chronometer.getText().toString(), username);
-                    readUserInfoDetailsMessage();
-                    sendUserInfoDetailsMessage(mMessage);
                     isThroughTo = false;
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);
                 } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
                     mMessage = EMMessage.createTxtSendMessage("通话已取消", username);
-                    readUserInfoDetailsMessage();
-                    sendUserInfoDetailsMessage(mMessage);
                     isThroughTo = false;
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);
@@ -620,6 +567,9 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         } catch (EMNoActiveCallException e) {
             e.printStackTrace();
         }
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Override
@@ -650,89 +600,16 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         }, "CallMonitor").start();
     }
 
-
-    private void readUserInfoDetailsMessage() {
-        try {
-            //TODO TEXT 携带消息
-            JSONObject object_self = new JSONObject();
-            JSONObject object = new JSONObject();
-            if (userInfo_self == null) {
-                userInfo_self = "";
-            }
-
-            if (userInfo == null) {
-                userInfo = "";
-            }
-
-            if (userInfo_self.equals("")) {
-                object_self.put("CODE_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
-                object_self.put("phone_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
-                object_self.put("sex_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
-                object_self.put("post_title_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
-                object_self.put("username_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
-                object_self.put("portrait_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
-                object_self.put("email_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
-                object_self.put("department_name_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
-
-                userInfo_self = object_self.toString();
-            }
-            if (userInfo.equals("")) {
-                object.put("CODE", getIntent().getStringExtra("CODE"));
-                object.put("phone", getIntent().getStringExtra("phone"));
-                object.put("sex", getIntent().getStringExtra("sex"));
-                object.put("post_title", getIntent().getStringExtra("post_name"));
-                object.put("username", getIntent().getStringExtra("nike"));
-                object.put("portrait", getIntent().getStringExtra("portrait"));
-                object.put("email", getIntent().getStringExtra("email"));
-                object.put("department_name", getIntent().getStringExtra("department_name"));
-                userInfo = object.toString();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    JSONObject sendJson_self;
-    JSONObject sendJson;
-
-    private void sendUserInfoDetailsMessage(EMMessage message) {
-        String from = message.getFrom();
-        //  userInfo_self = message.getStringAttribute("userInfo_self", "");
-        //   userInfo = message.getStringAttribute("userInfo", "");
-        //UserInfoSelfDetailsBean btestean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
-        try {
-            String newUserInfo_self = null;
-            String newUserInfo = null;
-            if (userInfoSelfBean == null) {
-                sendJson_self = new JSONObject(userInfo_self);
-                sendJson = new JSONObject(userInfo);
-                mMessage.setAttribute("userInfo_self", sendJson_self);
-                mMessage.setAttribute("userInfo", sendJson);
-                return;
-            }
-            if (!from.equals("sl_" + userInfoSelfBean.CODE_self)) {
-                newUserInfo_self = userInfo_self.replaceAll("_self", "");
-                newUserInfo = userInfo.replace("phone", "phone_self");
-                newUserInfo = newUserInfo.replace("CODE", "CODE_self");
-                newUserInfo = newUserInfo.replace("sex", "sex_self");
-                newUserInfo = newUserInfo.replace("post_title", "post_title_self");
-                newUserInfo = newUserInfo.replace("username", "username_self");
-                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
-                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
-                newUserInfo = newUserInfo.replace("email", "email_self");
-                newUserInfo = newUserInfo.replace("department_name", "department_name_self");
-                sendJson_self = new JSONObject(newUserInfo_self);
-                sendJson = new JSONObject(newUserInfo);
-                mMessage.setAttribute("userInfo_self", sendJson);
-                mMessage.setAttribute("userInfo", sendJson_self);
-            } else {
-                sendJson_self = new JSONObject(userInfo_self);
-                sendJson = new JSONObject(userInfo);
-                mMessage.setAttribute("userInfo_self", sendJson_self);
-                mMessage.setAttribute("userInfo", sendJson);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void CallInfoEvent(CallEventBean bean) {
+        if (bean.getEvent().equals("callSuccess")) {
+            Glide.with(AppManager.mContext)
+                    .load(bean.getPortaits())
+                    .error(R.drawable.ease_default_avatar)
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(mSwingCard);
+            nickTextView.setText(bean.getUserName());
         }
     }
 }

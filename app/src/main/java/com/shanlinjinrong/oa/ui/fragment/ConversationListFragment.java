@@ -167,15 +167,10 @@ public class ConversationListFragment extends EaseConversationListFragment {
             e.printStackTrace();
         }
         refresh();
-
-        // update unread count
-//        ((MainController) getActivity()).updateUnreadLabel();
         return true;
     }
 
     public void connectHuanXin() {
-//        MainController activity = (MainController) getActivity();
-//        activity.LoginIm();
         LoginUtils.loginIm(getContext(), null);
     }
 

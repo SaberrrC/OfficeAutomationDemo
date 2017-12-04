@@ -148,6 +148,7 @@
         <meta-data
             android:name="EASEMOB_APPKEY"
             android:value="1149161031178682#ezhitongoasl"/>
+            <!--android:value="1149161031178682#ezhitongoasltest"/>-->
 
         <!-- 声明SDK所需的service SDK核心功能 -->
         <service

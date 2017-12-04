@@ -507,6 +507,9 @@ public class Api {
     //修改邮箱 users/reemail
     public static final String MODIFICATION_EMAIL = "/users/reemail";
 
+    //查询个人详情 users/search
+    public static final String SEARCH_USER_DETAILS = "/users/search";
+
     //*****************************************************************//
 
     /**

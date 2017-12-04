@@ -28,8 +28,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.listener.PermissionListener;
@@ -41,6 +44,7 @@ import com.shanlinjinrong.oa.ui.activity.my.contract.UserInfoActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.UserInfoActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.FileUtils;
+import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.views.BottomPushPopupWindow;
 
@@ -178,7 +182,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                         ModifyPhoneActivity.class), UPDATE_PHONE);
                 break;
             case R.id.user_date_box://邮箱修改
-                startActivityForResult(new Intent(this, ModificationEmailActivity.class),101);
+                startActivityForResult(new Intent(this, ModificationEmailActivity.class), 101);
                 break;
             case R.id.btn_logout://登出
                 showLogoutTips();
@@ -215,7 +219,15 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         //上传成功，设置用户头像
         String portraitUri = Constants.SLPicBaseUrl + portrait;
         AppConfig.getAppConfig(UserInfoActivity.this).set(AppConfig.PREF_KEY_PORTRAITS, portraitUri);
-        userPortrait.setImageURI(Uri.parse(portraitUri));
+
+        Glide.with(AppManager.mContext)
+                .load(portraitUri)
+                .error(R.drawable.ease_default_avatar)
+                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                .placeholder(R.drawable.ease_default_avatar)
+                .into(userPortrait);
+        //更新数据库
+        FriendsInfoCacheSvc.getInstance(AppManager.mContext).setPortrait("sl_" + portrait, AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
     }
 
     @Override

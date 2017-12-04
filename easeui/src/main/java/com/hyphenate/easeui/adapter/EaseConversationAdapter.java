@@ -13,7 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
-import com.google.gson.Gson;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -21,6 +22,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
@@ -111,7 +113,6 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         // get username or group id
         String username = conversation.conversationId();
 
-
         EaseAvatarOptions avatarOptions = EaseUI.getInstance().getAvatarOptions();
         if (avatarOptions != null && holder.avatar instanceof EaseImageView) {
             EaseImageView avatarView = ((EaseImageView) holder.avatar);
@@ -134,7 +135,6 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         if (conversation.getAllMsgCount() != 0) {
             // show the content of latest message
             lastMessage = conversation.getLastMessage();
-
             String content = null;
             if (cvsListHelper != null) {
                 content = cvsListHelper.onSetItemSecondaryText(lastMessage);
@@ -152,20 +152,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
         }
         try {
-            String user_Info_self = lastMessage.getStringAttribute("userInfo_self", "");
-            String user_Info = lastMessage.getStringAttribute("userInfo", "");
-            userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
-            userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
-
-            String user = EMClient.getInstance().getCurrentUser();
-            //角色转换
-            if (!EMClient.getInstance().getCurrentUser().contains(userInfoDetailsBean.getCODE())){
-                UserInfoDetailsBean userInfoDetailsBeanTemp = userInfoDetailsBean;
-                userInfoDetailsBean = EaseUserUtils.changeSelfToUserInfo(userInfoSelfDetailsBean);
-                userInfoSelfDetailsBean = EaseUserUtils.changeUserInfoToSelf(userInfoDetailsBeanTemp);
-            }
-
-            if (userInfoDetailsBean != null && username.equals("sl_" + userInfoDetailsBean.CODE)) {
+            if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()))) {
                 if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
                     String groupId = conversation.conversationId();
                     if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
@@ -183,25 +170,31 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                     holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
                     holder.motioned.setVisibility(View.GONE);
                 } else {
-//                EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
-//                EaseUserUtils.setUserNick(username, holder.name);
-//                holder.motioned.setVisibility(View.GONE);
-                    EaseUserUtils.setUserAvatarBean(getContext(), userInfoDetailsBean, holder.avatar);
-//                EaseUserUtils.setUserNick(username, holder.name);
-                    EaseUserUtils.setUserNickBean(userInfoDetailsBean, holder.name);
-                    holder.name.setText(userInfoDetailsBean.username);
-                    holder.motioned.setVisibility(View.GONE);
+                    Glide.with(getContext()).load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getFrom()))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.ease_default_avatar)
+                            .into(holder.avatar);
+                    holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getFrom()));
                 }
-            } else if (userInfoSelfDetailsBean != null && username.contains("sl_" + userInfoSelfDetailsBean.CODE_self)) {
+                holder.motioned.setVisibility(View.GONE);
+            } else if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()))) {
                 try {
-                    EaseUserUtils.setUserAvatarBeanSelf(getContext(), userInfoSelfDetailsBean, holder.avatar);
-//                    EaseUserUtils.setUserNick(username, holder.name);
-//                    EaseUserUtils.setUserNickSelfBean(userInfoSelfDetailsBean, holder.name);
-                    holder.name.setText(userInfoSelfDetailsBean.username_self);
+                    Glide.with(getContext()).load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getTo()))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.ease_default_avatar)
+                            .into(holder.avatar);
+                    holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getTo()));
                     holder.motioned.setVisibility(View.GONE);
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
+            }
+            if (lastMessage.getFrom().contains("admin") || lastMessage.getTo().contains("admin")) {
+                holder.name.setText("会议邀请");
+                holder.avatar.setImageResource(R.drawable.meeting_invite_icon);
+            } else if (lastMessage.getFrom().contains("notice") || lastMessage.getTo().contains("notice")) {
+                holder.name.setText("公告通知");
+                holder.avatar.setImageResource(R.drawable.notice_message_icon);
             }
         } catch (Throwable e) {
             e.printStackTrace();

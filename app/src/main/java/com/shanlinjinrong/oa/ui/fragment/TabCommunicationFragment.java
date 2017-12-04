@@ -8,10 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.ui.EaseConversationListFragment;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
@@ -25,12 +25,13 @@ import butterknife.ButterKnife;
  * <h3>Description: 首页通讯列表页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class TabCommunicationFragment extends BaseFragment  {
+public class TabCommunicationFragment extends BaseFragment {
 
-//    private EaseConversationListFragment conversationListFragment;
+    //    private EaseConversationListFragment conversationListFragment;
     public ConversationListFragment myConversationListFragment;
     String userInfo_self;
     String userInfo;
+    private String mNickName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -59,17 +60,21 @@ public class TabCommunicationFragment extends BaseFragment  {
         }
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.easeConversationListFragment, myConversationListFragment).commit();
-        myConversationListFragment
-                .setConversationListItemClickListener(conversation -> {
-                    EMMessage lastMessage = conversation.getLastMessage();
-                    userInfo = lastMessage.getStringAttribute("userInfo", "");
-                    userInfo_self = lastMessage.getStringAttribute("userInfo_self", "");
-                    startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
-                            .putExtra("u_id", conversation.conversationId())
-                            .putExtra("userInfo_self",userInfo_self)
-                            .putExtra("userInfo", userInfo)
-                            .putExtra("nikename", ""));
-                });
+        myConversationListFragment.setConversationListItemClickListener(conversation -> {
+            EMMessage lastMessage = conversation.getLastMessage();
+            //Title 名字
+            mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
+            if (lastMessage.getFrom().contains("admin") || lastMessage.getTo().contains("admin")) {
+                mNickName = "会议邀请";
+            } else if (lastMessage.getFrom().contains("notice") || lastMessage.getTo().contains("notice")) {
+                mNickName = "公告通知";
+            }
+            startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
+                    .putExtra("u_id", conversation.conversationId())
+                    .putExtra("title", mNickName)
+                    .putExtra("message_to", lastMessage.getTo())
+                    .putExtra("message_from", lastMessage.getFrom()));
+        });
     }
 
     @Override

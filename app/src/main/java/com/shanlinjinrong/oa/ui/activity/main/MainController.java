@@ -22,14 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retrofit.net.RetrofitConfig;
-import com.google.gson.Gson;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
-import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.util.NetUtils;
@@ -39,6 +37,7 @@ import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.MainControllerPresenter;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
@@ -519,13 +518,12 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 @Override
                 public void run() {
                     if (tempMsgCount != 0) {
-                        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
+                        BadgeUtil.setBadgeCount(MainController.this, tempMsgCount, R.drawable.ring_red);
                     }
                 }
             }).start();
         }
         super.onStop();
-
     }
 
     @Override
@@ -537,31 +535,59 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
         return super.onKeyDown(keyCode, event);
     }
 
+    private List<EMMessage> mEMMessage = new ArrayList<>();
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(final List<EMMessage> list) {
-            if (tabCommunicationFragment != null) {
-                if (tabCommunicationFragment.myConversationListFragment != null) {
-                    tabCommunicationFragment.myConversationListFragment.refresh();
-                }
-            }
+//            if (tabCommunicationFragment != null) {
+//                if (tabCommunicationFragment.myConversationListFragment != null) {
+//                    tabCommunicationFragment.myConversationListFragment.refresh();
+//                }
+//            }
             /**
              * im通知，具有通知功能
              */
+            String userId = "";
             for (EMMessage message : list) {
-
-                if (!easeUI.hasForegroundActivies()) {
-                    easeUI.getNotifier().onNewMsg(message);
-                }
+//                if (!easeUI.hasForegroundActivies()) {
+//                    easeUI.getNotifier().onNewMsg(message);
+//                }
                 //获取个人信息
-                String userInfo = message.getStringAttribute("userInfo", "");
-                UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
-                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
-                        Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic,
-                        userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost,
-                        userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
+//                String userInfo = message.getStringAttribute("userInfo", "");
+//                UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
+//                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
+//                        Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic,
+//                        userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost,
+//                        userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
+
+                userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(message.getFrom());
+                if (userId.equals("")) {
+                    mEMMessage.clear();
+                    mEMMessage.addAll(list);
+                    //TODO 获取个人信息 存在高并发
+                    try {
+                        mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-            refreshCommCount();
+            if (!userId.equals("")) {
+                {
+                    if (tabCommunicationFragment != null) {
+                        if (tabCommunicationFragment.myConversationListFragment != null) {
+                            tabCommunicationFragment.myConversationListFragment.refresh();
+                        }
+                    }
+                    for (EMMessage message1 : list) {
+                        if (!easeUI.hasForegroundActivies()) {
+                            easeUI.getNotifier().onNewMsg(message1);
+                        }
+                    }
+                    refreshCommCount();
+                }
+            }
+//            refreshCommCount();
         }
 
         @Override
@@ -602,6 +628,35 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     @Override
     public void easeInitFinish(AbortableFuture<LoginInfo> loginRequest) {
         this.loginRequest = loginRequest;
+    }
+
+    @Override //TODO 缓存 联系人消息
+    public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
+        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
+                Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
+                userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
+                userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
+
+        if (tabCommunicationFragment != null) {
+            if (tabCommunicationFragment.myConversationListFragment != null) {
+                tabCommunicationFragment.myConversationListFragment.refresh();
+            }
+        }
+
+        if (mEMMessage != null) {
+            for (EMMessage message : mEMMessage) {
+                if (!easeUI.hasForegroundActivies()) {
+                    easeUI.getNotifier().onNewMsg(message);
+                }
+            }
+        }
+
+        refreshCommCount();
+    }
+
+    @Override
+    public void searchUserDetailsFailed() {
+
     }
 
     //位置权限回调

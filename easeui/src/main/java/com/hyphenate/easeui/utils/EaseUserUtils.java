@@ -1,7 +1,6 @@
 package com.hyphenate.easeui.utils;
 
 import android.content.Context;
-import android.support.v4.content.res.ResourcesCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -71,65 +70,64 @@ public class EaseUserUtils {
     /**
      * set user avatar
      */
-    public static void setUserAvatarBean(Context context, UserInfoDetailsBean bean, ImageView imageView) {
-        if (bean != null) {
+    public static void setUserAvatarBean(Context context, String portrait, ImageView imageView) {
+        if (!portrait.equals("")) {
             try {
-                Glide.with(context).load(bean.portrait)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(R.drawable.ease_default_avatar)
-                        .into(imageView);
-            } catch (Exception e) {
-                //use default avatar
-                Glide.with(context).load(bean.portrait)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(R.drawable.ease_default_avatar)
-                        .into(imageView);
-            }
-        } else {
-            Glide.with(context).load(bean.portrait)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.drawable.ease_default_avatar)
-                    .into(imageView);
-        }
-        nickName = bean.username;
-    }
-
-    /**
-     * set user avatar
-     */
-    public static void setUserAvatarBeanSelf(Context context, UserInfoSelfDetailsBean bean, ImageView imageView) {
-        if (bean != null) {
-            try {
-                if (bean.getCODE_self().contains("admin")) {
-                    imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.meeting_invite_icon, null));
-                    return;
-                }
-                if (bean.getCODE_self().contains("notice")){
-                    imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.notice_message_icon, null));
-                    return;
-                }
-                String portrait = bean.portrait_self.replace("_self", "");
                 Glide.with(context).load(portrait)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
-
             } catch (Exception e) {
                 //use default avatar
-                String portrait = bean.portrait_self.replace("_self", "");
                 Glide.with(context).load(portrait)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
             }
         } else {
-            String portrait = bean.portrait_self.replace("_self", "");
             Glide.with(context).load(portrait)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.ease_default_avatar)
                     .into(imageView);
         }
-        nickName = bean.username_self;
+    }
+
+    /**
+     * set user avatar
+     */
+    public static void setUserAvatarBeanSelf(Context context, String portrait, ImageView imageView) {
+        if (!portrait.equals("")) {
+            try {
+                //TODO  系统公告 待处理优化
+//                if (bean.getCODE_self().contains("admin")) {
+//                    imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.meeting_invite_icon, null));
+//                    return;
+//                }
+//                if (bean.getCODE_self().contains("notice")) {
+//                    imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.notice_message_icon, null));
+//                    return;
+//                }
+//                String portrait = bean.portrait_self.replace("_self", "");
+                Glide.with(context).load(portrait)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(imageView);
+
+            } catch (Exception e) {
+                //use default avatar
+//                String portrait = bean.portrait_self.replace("_self", "");
+                Glide.with(context).load(portrait)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(imageView);
+            }
+        } else {
+//            String portrait = bean.portrait_self.replace("_self", "");
+            Glide.with(context).load(portrait)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(imageView);
+        }
     }
 
     /**
@@ -152,9 +150,9 @@ public class EaseUserUtils {
     /**
      * set user's nickname
      */
-    public static void setUserNickBean(UserInfoDetailsBean bean, TextView textView) {
+    public static void setUserNickBean(String nickName, TextView textView) {
         if (textView != null) {
-            if (bean != null) {
+            if (!nickName.equals("")) {
                 if (textView.getText().equals(""))
                     textView.setText(nickName);
             } else {

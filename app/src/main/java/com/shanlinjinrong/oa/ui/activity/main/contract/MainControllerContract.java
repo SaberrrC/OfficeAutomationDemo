@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.hyphenate.chat.EMConversation;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
@@ -25,6 +26,11 @@ public interface MainControllerContract {
         void startAppSetting();
 
         void easeInitFinish(AbortableFuture<LoginInfo> loginRequest); // 云信初始化结束
+
+        void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean);
+
+        void searchUserDetailsFailed();
+
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -34,6 +40,8 @@ public interface MainControllerContract {
         void loadUnReadMsg(); //获取未读消息数量
 
         List<EMConversation> loadConversationList();
+
+        void searchUserDetails(String code);
 //
 //        void loginIm(Context context);//登录环信
 //

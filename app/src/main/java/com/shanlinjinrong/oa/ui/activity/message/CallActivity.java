@@ -15,6 +15,7 @@ import com.hyphenate.EMError;
 import com.hyphenate.chat.EMCallManager;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.model.UserInfoDetailsBean;
 import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
@@ -22,13 +23,19 @@ import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
+import com.shanlinjinrong.oa.ui.activity.message.bean.CallEventBean;
+import com.shanlinjinrong.oa.ui.activity.message.contract.CallActivityContract;
+import com.shanlinjinrong.oa.ui.activity.message.presenter.CallActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 @SuppressLint("Registered")
-public class CallActivity extends BaseActivity {
+public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implements CallActivityContract.View {
     public final static String TAG = "CallActivity";
     protected final int MSG_CALL_MAKE_VIDEO = 0;
     protected final int MSG_CALL_MAKE_VOICE = 1;
@@ -69,6 +76,11 @@ public class CallActivity extends BaseActivity {
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
     }
 
     @Override
@@ -189,11 +201,11 @@ public class CallActivity extends BaseActivity {
                             json.put("email", send_email);
                             json.put("department_name", send_department_name);
 
-                             userInfo_self = json_self.toString();
-                             userInfo = json.toString();
+                            userInfo_self = json_self.toString();
+                            userInfo = json.toString();
 
                             //发起实时语音通讯
-                            EMClient.getInstance().callManager().makeVoiceCall(username, userInfo_self + "|" + userInfo);
+                            EMClient.getInstance().callManager().makeVoiceCall(username);
                             isMakeVoiceCall = true;
                         }
                     } catch (final EMServiceNotReadyException e) {
@@ -424,6 +436,30 @@ public class CallActivity extends BaseActivity {
 //        } catch (Exception e) {
 //            LogUtils.e(e.toString());
 //        }
+    }
+
+    @Override
+    public void uidNull(int code) {
+
+    }
+
+    @Override
+    public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
+        try {
+            FriendsInfoCacheSvc.getInstance(AppManager.mContext).
+                    addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(),
+                            "http://" + userDetailsBean.getImg(), userDetailsBean.getSex(), userDetailsBean.getPhone(),
+                            userDetailsBean.getPostname(), userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
+
+            EventBus.getDefault().post(new CallEventBean("callSuccess", userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void searchUserDetailsFailed() {
+
     }
 
     enum CallingState {
