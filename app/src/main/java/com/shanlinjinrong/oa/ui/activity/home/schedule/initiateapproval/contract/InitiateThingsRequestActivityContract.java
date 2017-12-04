@@ -65,7 +65,7 @@ public interface InitiateThingsRequestActivityContract {
         void queryEvectionType(int type);
 
         //申请时长
-        void queryDuration(String beginTime, String endTime, int type, String billCode);
+        void queryDuration(String beginTime, String endTime, int type, String billCode,String applyType);
 
         //申请出差
         void submitEvectionApply(HttpParams httpParams);

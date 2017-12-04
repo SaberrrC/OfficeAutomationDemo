@@ -519,7 +519,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 @Override
                 public void run() {
                     if (tempMsgCount != 0) {
-                        BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
+                        BadgeUtil.setBadgeCount(MainController.this, tempMsgCount, R.drawable.ring_red);
                     }
                 }
             }).start();

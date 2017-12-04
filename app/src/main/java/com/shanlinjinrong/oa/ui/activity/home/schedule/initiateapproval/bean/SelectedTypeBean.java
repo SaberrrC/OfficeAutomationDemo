@@ -7,6 +7,15 @@ public class SelectedTypeBean {
     private int position;
     private int isBegin;
     public String tag;
+    private String selectedID;
+
+    public String getSelectedID() {
+        return selectedID;
+    }
+
+    public void setSelectedID(String selectedID) {
+        this.selectedID = selectedID;
+    }
 
     public String getTag() {
         return tag;
@@ -45,6 +54,12 @@ public class SelectedTypeBean {
         this.selectedType = selectedType;
         this.position = position;
         this.isBegin = isBegin;
+    }
+    public SelectedTypeBean(String event, String selectedType, int position,  String selectedID) {
+        this.event = event;
+        this.selectedType = selectedType;
+        this.position = position;
+        this.selectedID = selectedID;
     }
 
     public String getEvent() {

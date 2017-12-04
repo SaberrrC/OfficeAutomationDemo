@@ -105,16 +105,35 @@ public class MyAttendenceActivity extends HttpBaseActivity<MyAttendenceActivityP
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_delay:
+                Intent intent0 = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
+                intent0.putExtra("exception", 0);
+                intent0.putExtra("year", mCurrentYear + "");
+                intent0.putExtra("month", mSendMonth + "");
+                intent0.putExtra("date", tv_time.getText().toString());
+                if (mMyAttandanceResponse1 != null)
+                    intent0.putExtra("attandance", mMyAttandanceResponse1);
+                startActivity(intent0);
+                break;
             case R.id.tv_leave_early:
+                Intent intent1 = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
+                intent1.putExtra("exception", 1);
+                intent1.putExtra("year", mCurrentYear + "");
+                intent1.putExtra("month", mSendMonth + "");
+                intent1.putExtra("date", tv_time.getText().toString());
+                if (mMyAttandanceResponse1 != null)
+                    intent1.putExtra("attandance", mMyAttandanceResponse1);
+                startActivity(intent1);
+                break;
             case R.id.tv_absenteeism:
                 try {
-                    Intent intent = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
-                    intent.putExtra("year", mCurrentYear + "");
-                    intent.putExtra("month", mSendMonth + "");
-                    intent.putExtra("date", tv_time.getText().toString());
+                    Intent intent2 = new Intent(MyAttendenceActivity.this, AttandenceRecorderActivity.class);
+                    intent2.putExtra("exception", 2);
+                    intent2.putExtra("year", mCurrentYear + "");
+                    intent2.putExtra("month", mSendMonth + "");
+                    intent2.putExtra("date", tv_time.getText().toString());
                     if (mMyAttandanceResponse1 != null)
-                        intent.putExtra("attandance", mMyAttandanceResponse1);
-                    startActivity(intent);
+                        intent2.putExtra("attandance", mMyAttandanceResponse1);
+                    startActivity(intent2);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

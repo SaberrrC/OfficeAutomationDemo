@@ -4,12 +4,15 @@ import android.util.Log;
 
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
+import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -121,6 +124,16 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                             contacts.add(userInfo);
                         }
                         mView.loadDataSuccess(contacts);
+                        if (orgId.equals("1")) {
+                            SharedPreferenceUtils.clear(AppManager.mContext, SharedPreferenceUtils.getStringValue(AppManager.mContext, "cacheDate", "dateName", ""));
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, "cacheDate", "dateName", DateUtils.getCurrentDate("yyyy-MM-dd"));
+
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", children.toString());
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
+                        } else {
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children" + orgId, children.toString());
+                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
+                        }
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
