@@ -17,15 +17,15 @@ import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 
-public class EaseChatMessageList extends RelativeLayout{
+public class EaseChatMessageList extends RelativeLayout {
 
     protected static final String TAG = "EaseChatMessageList";
-    protected ListView listView;
+    protected ListView           listView;
     protected SwipeRefreshLayout swipeRefreshLayout;
-    protected Context context;
-    protected EMConversation conversation;
-    protected int chatType;
-    protected String toChatUsername;
+    protected Context            context;
+    protected EMConversation     conversation;
+    protected int                chatType;
+    protected String             toChatUsername;
     protected EaseMessageAdapter messageAdapter;
 
     protected EaseMessageListItemStyle itemStyle;
@@ -35,9 +35,9 @@ public class EaseChatMessageList extends RelativeLayout{
     }
 
     public EaseChatMessageList(Context context, AttributeSet attrs) {
-    	super(context, attrs);
-    	parseStyle(context, attrs);
-    	init(context);
+        super(context, attrs);
+        parseStyle(context, attrs);
+        init(context);
     }
 
     public EaseChatMessageList(Context context) {
@@ -45,15 +45,20 @@ public class EaseChatMessageList extends RelativeLayout{
         init(context);
     }
 
-    private void init(Context context){
+    private void init(Context context) {
         this.context = context;
         LayoutInflater.from(context).inflate(R.layout.ease_chat_message_list, this);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.chat_swipe_layout);
         listView = (ListView) findViewById(R.id.list);
     }
-    
+
+    public int getTotalMessageSize() {
+        return messageAdapter.mTotalSize;
+    }
+
     /**
      * init widget
+     *
      * @param toChatUsername
      * @param chatType
      * @param customChatRowProvider
@@ -61,43 +66,40 @@ public class EaseChatMessageList extends RelativeLayout{
     public void init(String toChatUsername, int chatType, EaseCustomChatRowProvider customChatRowProvider) {
         this.chatType = chatType;
         this.toChatUsername = toChatUsername;
-        
+
         conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
         messageAdapter = new EaseMessageAdapter(context, toChatUsername, chatType, listView);
         messageAdapter.setItemStyle(itemStyle);
         messageAdapter.setCustomChatRowProvider(customChatRowProvider);
         // set message adapter
         listView.setAdapter(messageAdapter);
-        
+
         refreshSelectLast();
     }
-    
+
     protected void parseStyle(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EaseChatMessageList);
         EaseMessageListItemStyle.Builder builder = new EaseMessageListItemStyle.Builder();
-        builder.showAvatar(ta.getBoolean(R.styleable.EaseChatMessageList_msgListShowUserAvatar, true))
-                .showUserNick(ta.getBoolean(R.styleable.EaseChatMessageList_msgListShowUserNick, false))
-                .myBubbleBg(ta.getDrawable(R.styleable.EaseChatMessageList_msgListMyBubbleBackground))
-                .otherBuddleBg(ta.getDrawable(R.styleable.EaseChatMessageList_msgListMyBubbleBackground));
+        builder.showAvatar(ta.getBoolean(R.styleable.EaseChatMessageList_msgListShowUserAvatar, true)).showUserNick(ta.getBoolean(R.styleable.EaseChatMessageList_msgListShowUserNick, false)).myBubbleBg(ta.getDrawable(R.styleable.EaseChatMessageList_msgListMyBubbleBackground)).otherBuddleBg(ta.getDrawable(R.styleable.EaseChatMessageList_msgListMyBubbleBackground));
 
         itemStyle = builder.build();
         ta.recycle();
     }
-    
-    
+
+
     /**
      * refresh
      */
-    public void refresh(){
+    public void refresh() {
         if (messageAdapter != null) {
             messageAdapter.refresh();
         }
     }
-    
+
     /**
      * refresh and jump to the last
      */
-    public void refreshSelectLast(){
+    public void refreshSelectLast() {
         if (messageAdapter != null) {
             messageAdapter.refreshSelectLast();
         }
@@ -106,64 +108,72 @@ public class EaseChatMessageList extends RelativeLayout{
 
     /**
      * refresh and jump to the position
+     *
      * @param position
      */
-    public void refreshSeekTo(int position){
+    public void refreshSeekTo(int position) {
         if (messageAdapter != null) {
             messageAdapter.refreshSeekTo(position);
         }
     }
 
-	public ListView getListView() {
-		return listView;
-	} 
+    public ListView getListView() {
+        return listView;
+    }
 
-	public SwipeRefreshLayout getSwipeRefreshLayout(){
-	    return swipeRefreshLayout;
-	}
-	
-	public EMMessage getItem(int position){
-	    return messageAdapter.getItem(position);
-	}
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeRefreshLayout;
+    }
 
-    public void setShowUserNick(boolean showUserNick){
+    public EMMessage getItem(int position) {
+        return messageAdapter.getItem(position);
+    }
+
+    public void setShowUserNick(boolean showUserNick) {
         itemStyle.setShowUserNick(showUserNick);
     }
 
-    public boolean isShowUserNick(){
+    public boolean isShowUserNick() {
         return itemStyle.isShowUserNick();
     }
 
 
-    public interface MessageListItemClickListener{
-	    void onResendClick(EMMessage message);
-	    /**
-	     * there is default handling when bubble is clicked, if you want handle it, return true
-	     * another way is you implement in onBubbleClick() of chat row
-	     * @param message
-	     * @return
-	     */
-	    boolean onBubbleClick(EMMessage message);
-	    void onBubbleLongClick(EMMessage message);
-	    void onUserAvatarClick(String username);
-	    void onUserAvatarLongClick(String username);
-	}
-	
-	/**
-	 * set click listener
-	 * @param listener
-	 */
-	public void setItemClickListener(MessageListItemClickListener listener){
+    public interface MessageListItemClickListener {
+        void onResendClick(EMMessage message);
+
+        /**
+         * there is default handling when bubble is clicked, if you want handle it, return true
+         * another way is you implement in onBubbleClick() of chat row
+         *
+         * @param message
+         * @return
+         */
+        boolean onBubbleClick(EMMessage message);
+
+        void onBubbleLongClick(EMMessage message);
+
+        void onUserAvatarClick(String username);
+
+        void onUserAvatarLongClick(String username);
+    }
+
+    /**
+     * set click listener
+     *
+     * @param listener
+     */
+    public void setItemClickListener(MessageListItemClickListener listener) {
         if (messageAdapter != null) {
             messageAdapter.setItemClickListener(listener);
         }
-	}
-	
-	/**
-	 * set chat row provider
-	 * @param rowProvider
-	 */
-	public void setCustomChatRowProvider(EaseCustomChatRowProvider rowProvider){
+    }
+
+    /**
+     * set chat row provider
+     *
+     * @param rowProvider
+     */
+    public void setCustomChatRowProvider(EaseCustomChatRowProvider rowProvider) {
         if (messageAdapter != null) {
             messageAdapter.setCustomChatRowProvider(rowProvider);
         }

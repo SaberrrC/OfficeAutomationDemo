@@ -9,8 +9,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -57,7 +57,6 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
     private int                                     chatType;
     private String                                  toChatUsername;
     private EaseChatFragment.EaseChatFragmentHelper chatFragmentHelper;
-    private ListView                                listView;
     private SwipeRefreshLayout                      swipeRefreshLayout;
     private EMConversation                          conversation;
     private EMMessage                               mEmMessage;
@@ -97,7 +96,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
 
             @Override
             public void onAvatarClick(String username) {
-                //mListener.clickUserInfo(username, mEmMessage);
+                //                mListener.clickUserInfo(username, mEmMessage);
             }
 
             @Override
@@ -147,17 +146,16 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 return new CustomChatRowProvider();
             }
         };
-        listView = messageList.getListView();
         swipeRefreshLayout = messageList.getSwipeRefreshLayout();
         swipeRefreshLayout.setEnabled(false);
         if (chatType != EaseConstant.CHATTYPE_CHATROOM) {
             onConversationInit();
             onMessageListInit();
         }
-//        String forward_msg_id = intent.getStringExtra("forward_msg_id");
-//        if (forward_msg_id != null) {
-//            forwardMessage(forward_msg_id);
-//        }
+        //        String forward_msg_id = mBundle.getString("forward_msg_id");
+        //        if (forward_msg_id != null) {
+        //            forwardMessage(forward_msg_id);
+        //        }
     }
 
     protected boolean haveMoreData = true;
@@ -191,7 +189,6 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 return;
             }
         }.start();
-
         final List<EMMessage> msgs = conversation.getAllMessages();
         int msgCount = msgs != null ? msgs.size() : 0;
         if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
@@ -210,6 +207,10 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         messageList.init(toChatUsername, chatType, chatFragmentHelper != null ? chatFragmentHelper.onSetCustomChatRowProvider() : null);
         //        setListItemClickListener();
         isMessageListInited = true;
+        int totalMessageSize = messageList.getTotalMessageSize();
+        mTvTitle.setText("聊天记录(1/" + totalMessageSize + ")");
+
+
     }
 
     public void resendMessage(EMMessage message) {
@@ -388,6 +389,8 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         sendMessage(message);
     }
 
+    private boolean isloading = false;
+
     @OnClick({R.id.iv_back, R.id.iv_search, R.id.iv_first, R.id.iv_last, R.id.iv_next, R.id.iv_final})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -399,6 +402,26 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
             case R.id.iv_first:
                 break;
             case R.id.iv_last:
+                if (!isloading && haveMoreData) {
+                    List<EMMessage> messages;
+                    try {
+                        String id = conversation.getAllMessages().size() == 0 ? "" : conversation.getAllMessages().get(0).getMsgId();
+                        messages = conversation.loadMoreMsgFromDB(id, pagesize);
+                    } catch (Exception e1) {
+                        return;
+                    }
+                    if (messages.size() > 0) {
+                        messageList.refreshSeekTo(messages.size() - 1);
+                        if (messages.size() != pagesize) {
+                            haveMoreData = false;
+                        }
+                    } else {
+                        haveMoreData = false;
+                    }
+                    isloading = false;
+                } else {
+                    Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.iv_next:
                 break;

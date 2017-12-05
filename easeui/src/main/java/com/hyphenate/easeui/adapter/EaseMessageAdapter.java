@@ -44,6 +44,7 @@ import java.util.List;
 public class EaseMessageAdapter extends BaseAdapter {
 
     private final static String TAG = "msg";
+    public int mTotalSize;
 
     private Context context;
 
@@ -70,7 +71,7 @@ public class EaseMessageAdapter extends BaseAdapter {
     public int itemTypeCount;
 
     // reference to conversation object in chatsdk
-    private EMConversation conversation;
+    public EMConversation conversation;
 
     private String toChatUsername;
 
@@ -90,6 +91,7 @@ public class EaseMessageAdapter extends BaseAdapter {
         this.listView = listView;
         toChatUsername = username;
         this.conversation = EMClient.getInstance().chatManager().getConversation(username, EaseCommonUtils.getConversationType(chatType), true);
+        mTotalSize = conversation.getAllMessages().size();
     }
 
     public void refreshRangeList(int start, int stop) {
