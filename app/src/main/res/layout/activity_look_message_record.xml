@@ -74,7 +74,7 @@
 
             <ImageView
                 android:id="@+id/iv_first"
-                android:layout_width="28dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
@@ -88,7 +88,7 @@
 
             <ImageView
                 android:id="@+id/iv_last"
-                android:layout_width="28dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:src="@drawable/last_page"/>
@@ -101,7 +101,7 @@
 
             <ImageView
                 android:id="@+id/iv_next"
-                android:layout_width="28dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:src="@drawable/next_page"/>
@@ -114,7 +114,7 @@
 
             <ImageView
                 android:id="@+id/iv_final"
-                android:layout_width="28dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:src="@drawable/final_page"/>

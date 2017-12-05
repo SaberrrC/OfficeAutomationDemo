@@ -41,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -156,8 +157,15 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         //        if (forward_msg_id != null) {
         //            forwardMessage(forward_msg_id);
         //        }
+        setTtitle();
     }
 
+    private void setTtitle() {
+        mTvTitle.setText("聊天记录(" + currentPage + "/" + totalPage + ")");
+    }
+
+    private   int     currentPage  = 0;
+    private   int     totalPage    = 0;
     protected boolean haveMoreData = true;
     protected int     pagesize     = 5;
 
@@ -207,6 +215,8 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         messageList.init(toChatUsername, chatType, chatFragmentHelper != null ? chatFragmentHelper.onSetCustomChatRowProvider() : null);
         //        setListItemClickListener();
         isMessageListInited = true;
+        List<EMMessage> messages2 = conversation.loadMoreMsgFromDB("", pagesize);
+        messageList.refreshPageSizeItem(messages2);
     }
 
     public void resendMessage(EMMessage message) {
@@ -385,7 +395,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         sendMessage(message);
     }
 
-    private boolean isloading = false;
+    List<String> mMessageIds = new ArrayList<>();
 
     @OnClick({R.id.iv_back, R.id.iv_search, R.id.iv_first, R.id.iv_last, R.id.iv_next, R.id.iv_final})
     public void onViewClicked(View view) {
@@ -398,29 +408,40 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
             case R.id.iv_first:
                 break;
             case R.id.iv_last:
-                if (!isloading && haveMoreData) {
+                if (haveMoreData) {
                     List<EMMessage> messages;
+                    String id = null;
                     try {
-                        String id = conversation.getAllMessages().size() == 0 ? "" : conversation.getAllMessages().get(0).getMsgId();
+                        id = conversation.getAllMessages().size() == 0 ? "" : conversation.getAllMessages().get(0).getMsgId();
                         messages = conversation.loadMoreMsgFromDB(id, pagesize);
-                    } catch (Exception e1) {
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         return;
                     }
                     if (messages.size() > 0) {
                         //                        messageList.refreshSeekTo(messages.size() - 1);
+                        mMessageIds.add(id);
                         messageList.refreshPageSizeItem(messages);
+                        currentPage++;
+                        setTtitle();
                         if (messages.size() != pagesize) {
                             haveMoreData = false;
                         }
-                    } else {
-                        haveMoreData = false;
+                        return;
                     }
-                    isloading = false;
-                } else {
-                    Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
+                    haveMoreData = false;
+                    return;
                 }
+                Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.iv_next:
+                showToast("666");
+                if (currentPage == 0) {
+                    return;
+                }
+                String id = mMessageIds.get(currentPage - 1);
+                List<EMMessage> messages = conversation.loadMoreMsgFromDB(id, pagesize);
+                messageList.refreshPageSizeItem(messages);
                 break;
             case R.id.iv_final:
                 break;

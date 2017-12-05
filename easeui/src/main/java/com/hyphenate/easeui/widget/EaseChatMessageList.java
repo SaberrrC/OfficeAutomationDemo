@@ -77,7 +77,6 @@ public class EaseChatMessageList extends RelativeLayout {
         messageAdapter.setCustomChatRowProvider(customChatRowProvider);
         // set message adapter
         listView.setAdapter(messageAdapter);
-
         refreshSelectLast();
     }
 
