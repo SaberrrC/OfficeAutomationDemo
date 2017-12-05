@@ -12,12 +12,14 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 
 public interface ContactDetailsContract {
     interface View extends BaseView {
+
         void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean);
 
-        void searchUserDetailsFailed();
     }
 
     interface Presenter extends BasePresenter<ContactDetailsContract.View> {
+
         void searchUserDetails(String code);
+
     }
 }

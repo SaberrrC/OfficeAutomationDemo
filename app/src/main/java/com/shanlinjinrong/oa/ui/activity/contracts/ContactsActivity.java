@@ -40,6 +40,7 @@ import butterknife.OnClick;
  * <b>Notes:</b> Created by KevinMeng on 2016/9/22.<br />
  */
 public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPresenter> implements TabContractsFragmentContract.View {
+
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.btn_back)
@@ -48,7 +49,6 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
     TextView title;
     @BindView(R.id.layout_root)
     RelativeLayout mRootView;
-
     @BindView(R.id.rl_top2)
     RelativeLayout mRLSearchView;
 
@@ -60,7 +60,6 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
     RelativeLayout mRlRecyclerViewContainer;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-
 
     /**
      * 页面加载数据所需部门ID
@@ -248,21 +247,13 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
         back();
     }
 
+    //TODO 联系人返回 存在问题
     private void back() {
         if (pageMap.size() == 1) {
-            finish();
+            this.finish();
         } else {
             pageMap.remove(pageMap.size() - 1);
             loadData(pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID));
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (popupWindow != null) {
-            popupWindow.dismiss();
-            popupWindow = null;
         }
     }
 }

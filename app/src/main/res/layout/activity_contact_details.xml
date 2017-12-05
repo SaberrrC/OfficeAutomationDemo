@@ -5,23 +5,22 @@
     android:id="@id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F2"
-   >
+    android:background="#F2F2F2">
 
     <RelativeLayout
         android:id="@+id/rl_top"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/white"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:padding="15dp"
             android:gravity="center_vertical"
+            android:padding="15dp"
             android:src="@drawable/tab_contacts_back"
             android:visibility="visible" />
 
@@ -150,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dp"
                     android:layout_marginTop="10dp"
-                    android:src="@mipmap/ico_phone_disabled" />
+                    android:src="@mipmap/ico_phone" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -166,15 +165,15 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@+id/lin_01"
-        android:background="@color/white"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="部门"
-            android:layout_centerVertical="true"
             android:textSize="16dp" />
 
         <TextView
@@ -182,26 +181,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
             android:textSize="16dp" />
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rel_duties"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/white"
         android:layout_below="@+id/rel_department"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="职务"
-            android:layout_centerVertical="true"
             android:textSize="16dp" />
 
         <TextView
@@ -209,26 +209,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
             android:textSize="16dp" />
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rel_sex"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/white"
         android:layout_below="@+id/rel_duties"
-       android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="性别"
-            android:layout_centerVertical="true"
             android:textSize="16dp" />
 
         <TextView
@@ -236,26 +237,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
             android:textSize="16dp" />
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rel_phone"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@+id/rel_sex"
-        android:background="@color/white"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="电话"
-            android:layout_centerVertical="true"
             android:textSize="16dp" />
 
         <TextView
@@ -263,27 +265,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:text="-"
-            android:layout_centerVertical="true"
             android:textSize="16dp" />
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rel_mail"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@+id/rel_phone"
-        android:background="@color/white"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="邮箱"
-            android:layout_centerVertical="true"
             android:textSize="16dp" />
 
         <TextView
@@ -291,9 +294,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:text="-"
-            android:layout_centerVertical="true"
             android:textSize="16dp" />
 
 
