@@ -65,29 +65,30 @@ import java.util.UUID;
  * 语音通话页面
  */
 public class VoiceCallActivity extends CallActivity implements OnClickListener, SensorEventListener {
-    private LinearLayout comingBtnContainer;
+
+    private String st1;
+    private String nike;
+    public String sideInfo;
+    private String portrait;
     private Button hangupBtn;
     private Button refuseBtn;
     private Button answerBtn;
-    private ImageView muteImage;
-    private ImageView handsFreeImage;
-    private SimpleDraweeView mSwingCard;
-    private boolean isMuteState;
-    private boolean isHandsfreeState;
-    private TextView nickTextView;
-    public String sideInfo;
-    private TextView callStateTextView;
-    private boolean endCallTriggerByMe = false;
-    private Chronometer chronometer;
-    private String st1;
-    private LinearLayout voiceContronlLayout;
-    private TextView netwrokStatusVeiw;
-    private boolean monitor = false;
-    private String nike;
-    private String portrait;
+    private String mUserCode;
     private String toUsername;
     private EMMessage mMessage;
-    private String mUserCode;
+    private boolean isMuteState;
+    private ImageView muteImage;
+    private TextView nickTextView;
+    private boolean monitor = false;
+    private Chronometer chronometer;
+    private boolean isHandsfreeState;
+    private ImageView handsFreeImage;
+    private TextView callStateTextView;
+    private TextView netwrokStatusVeiw;
+    private SimpleDraweeView mSwingCard;
+    private boolean endCallTriggerByMe = false;
+    private LinearLayout voiceContronlLayout;
+    private LinearLayout comingBtnContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -360,7 +361,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                                             @Override
                                             public void run() {
                                                 removeCallStateListener();
-                                                saveCallRecord();
                                                 Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                                 animation.setDuration(800);
                                                 findViewById(R.id.root_layout).startAnimation(animation);

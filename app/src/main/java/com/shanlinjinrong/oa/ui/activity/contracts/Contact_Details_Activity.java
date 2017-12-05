@@ -109,8 +109,9 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
 
     private void initData() {
         mSession = this.getIntent().getBooleanExtra("isSession", false);
-        mUserCode = this.getIntent().getStringExtra("user_code");
+        mUserCode = getIntent().getStringExtra("user_code");
         mUserId = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+
         if (mSession) {
             initSessionInfo();
         } else {
@@ -246,7 +247,6 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
             mPost = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPost(mUserCode);
             mEmail = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getEmail(mUserCode);
             mPhone = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPhone(mUserCode);
-            mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(mUserCode);
             mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mUserCode);
             mPortrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(mUserCode);
             mDepartment = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartment(mUserCode);
@@ -255,11 +255,10 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         } else {
             user = (User) this.getIntent().getSerializableExtra("user");
             mSex = user.getSex();
-            mUserId = user.getCode();
             mEmail = user.getEmail();
             mPhone = user.getPhone();
             mPost = user.getPostName();
-            mUserCode = user.getCode();
+            mUserCode = "sl_" + user.getCode();
             mNickName = user.getUsername();
             mPortrait = user.getPortraits();
             mDepartment = user.getDepartmentName();
@@ -314,6 +313,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
 
     @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
+
         try {//更新个人详情
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
                     addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(),
@@ -321,6 +321,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
                             userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                             userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
             initSessionData();
+            initUserDetails();
             initView();
         } catch (Throwable e) {
             e.printStackTrace();

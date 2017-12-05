@@ -110,10 +110,10 @@ public class Contact_Details_Activity2 extends BaseActivity {
         mSex = constants.getSex();
         mPhone = constants.getPhone();
         mEmail = constants.getEmail();
-        mUserCode = constants.getCode();
         mPost = constants.getPostTitle();
         mNickName = constants.getUsername();
         mPortrait = constants.getPortraits();
+        mUserCode = "sl_" + constants.getCode();
         mDepartmentId = constants.getDepartmentId();
         mDepartment = constants.getDepartmentName();
         mUserDepartment = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
