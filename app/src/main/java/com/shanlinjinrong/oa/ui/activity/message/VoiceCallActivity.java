@@ -64,6 +64,8 @@ import java.util.UUID;
 /**
  * 语音通话页面
  */
+
+//TODO 带优化
 public class VoiceCallActivity extends CallActivity implements OnClickListener, SensorEventListener {
 
     private String st1;
