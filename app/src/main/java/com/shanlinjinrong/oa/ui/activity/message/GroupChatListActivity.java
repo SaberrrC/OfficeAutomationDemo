@@ -73,8 +73,8 @@ public class GroupChatListActivity extends AppCompatActivity {
     private void initView() {
         mTopView.getRightView().setOnClickListener(view -> {
             //TODO 创建群主 选择联系人界面 待优化  加缓存
-            Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
-            intent.putExtra("isCreate", true);
+            Intent intent = new Intent(this, SelectedGroupContactActivity.class);
+//            intent.putExtra("isCreate", true);
             startActivityForResult(intent, REQUESTCODE);
         });
         mAdapter = new GroupChatListAdapter(mGroupList);

@@ -76,7 +76,24 @@ public class Contacts implements MultiItemEntity, Serializable {
     public String isshow;
     public String portraits;
     public String email;
+    private boolean isChecked;
+    private String orgId;
 
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 
     public String getEmail() {
         return email;

@@ -1,11 +1,7 @@
 package com.shanlinjinrong.oa.ui.fragment.presenter;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Base64;
 import android.util.Log;
 
-import com.iflytek.cloud.thirdparty.S;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppManager;
