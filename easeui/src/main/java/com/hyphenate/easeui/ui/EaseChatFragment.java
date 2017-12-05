@@ -136,11 +136,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     static final int ITEM_TAKE_PICTURE = 1;
     static final int ITEM_PICTURE = 2;
     static final int ITEM_VOICECALL = 3;
+     static final int ITEM_FILE = 12;
 
-    protected int[] itemStrings = {R.string.attach_take_pic, R.string.attach_picture, R.string.attach_voice_call};
+    protected int[] itemStrings = {R.string.attach_take_pic, R.string.attach_picture, R.string.attach_voice_call, R.string.attach_file};
     protected int[] itemdrawables = {R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
-            R.drawable.ease_chat_location_selector};
-    protected int[] itemIds = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICECALL};
+            R.drawable.ease_chat_location_selector, R.drawable.ic_launcher};
+    protected int[] itemIds = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICECALL, ITEM_FILE};
     private boolean isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
     protected boolean isRoaming = false;
@@ -195,6 +196,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             @Override
             public boolean onMessageBubbleClick(EMMessage message) {
                 //TODO 震动模式播放语音 待优化 声音小
+
                 try {
                     EMMessageBody body = message.getBody();
                     String body1 = body.toString();
@@ -711,12 +713,32 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 case ITEM_VOICECALL:
                     selectFroVoiceCall();
                     break;
+                case ITEM_FILE:
+                    selectFileFromLocal();
+                    break;
 
                 default:
                     break;
             }
         }
 
+    }
+
+
+    /**
+     * select file
+     */
+    protected void selectFileFromLocal() {
+        Intent intent = null;
+        if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        } else {
+            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
+        startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
     }
 
     /**
@@ -1368,6 +1390,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+
             if (requestCode == REQUEST_CODE_CAMERA) { // capture new image
                 if (cameraFile != null && cameraFile.exists())
                     sendImageMessage(cameraFile.getAbsolutePath());
