@@ -33,8 +33,6 @@ public class BadgeUtil {
         } else {
             count = Math.max(0, Math.min(count, 99));
         }
-        LogUtils.e("Build.MANUFACTURER-----"+Build.MANUFACTURER);
-        LogUtils.e("Build.MANUFACTURER.toLowerCase()-----"+Build.MANUFACTURER.toLowerCase());
         if (Build.MANUFACTURER.equalsIgnoreCase("xiaomi")) {
             setBadgeOfMIUI(context, count, iconResId);
         } else if (Build.MANUFACTURER.equalsIgnoreCase("sony")) {
