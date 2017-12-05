@@ -217,6 +217,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 hideEmptyView();
                 mContactAdapter.setNewData(mContacts);
                 mContactAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
                 reSetSwipRefreash();
                 return;
             }
@@ -251,8 +252,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     public void onRefresh() {
         isPullRefreashing = true;
-        loadData();
-        lazyLoadData();
+        mPresenter.loadData("1");
     }
 
     @Override
@@ -367,7 +367,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             switch (items.get(i).getItemType()) {
                 case Contacts.DEPARTMENT:
-                    Intent intent = new Intent(getContext(),ContactsActivity.class);
+                    Intent intent = new Intent(getContext(), ContactsActivity.class);
                     intent.putExtra(ContactsActivity.PAGE_MAP_DID,
                             items.get(i).getDepartmentId());
                     intent.putExtra(ContactsActivity.PAGE_MAP_TITLE,
