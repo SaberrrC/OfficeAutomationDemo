@@ -48,7 +48,7 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
     protected String myAccount;
     protected boolean isInComingCall;
     protected boolean isRefused = false;
-    protected String username;
+    protected String username = "";
     protected CallingState callingState = CallingState.CANCELLED;
     protected String callDruationText;
     protected String msgid;
@@ -56,7 +56,7 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
     protected SoundPool soundPool;
     protected Ringtone ringtone;
     protected int outgoing;
-    protected EMCallStateChangeListener callStateListener;
+    protected EMCallStateChangeListener mCallStateListener;
     protected boolean isAnswered = false;
     protected int streamID = -1;
     protected String userInfo_self;
@@ -92,8 +92,8 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
         audioManager.setMode(AudioManager.MODE_NORMAL);
         audioManager.setMicrophoneMute(false);
 
-        if (callStateListener != null)
-            EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
+        if (mCallStateListener != null)
+            EMClient.getInstance().callManager().removeCallStateChangeListener(mCallStateListener);
 
         if (pushProvider != null) {
             EMClient.getInstance().callManager().setPushProvider(null);
@@ -217,7 +217,7 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
                 case MSG_CALL_RLEASE_HANDLER:
                     try {
                         EMClient.getInstance().callManager().endCall();
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                     handler.removeCallbacks(timeoutHangup);
                     handler.removeMessages(MSG_CALL_MAKE_VIDEO);
@@ -273,19 +273,12 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
     }
 
     protected void closeSpeakerOn() {
-
         try {
             if (audioManager != null) {
-                // int curVolume =
-                // audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
                 if (audioManager.isSpeakerphoneOn())
                     audioManager.setSpeakerphoneOn(false);
                 audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-                // audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
-                // curVolume, AudioManager.STREAM_VOICE_CALL);
-
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

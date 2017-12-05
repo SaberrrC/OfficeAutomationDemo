@@ -197,9 +197,8 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
                                     .putExtra("phone", mPhone)
                                     .putExtra("email", mEmail)
                                     .putExtra("nike", mNickName)
-                                    .putExtra("CODE", mUserCode)
-                                    .putExtra("post_name", mPost)
                                     .putExtra("username", mUserCode)
+                                    .putExtra("post_name", mPost)
                                     .putExtra("portrait", mPortrait)
                                     .putExtra("isComingCall", false)
                                     .putExtra("department_name", mDepartment));

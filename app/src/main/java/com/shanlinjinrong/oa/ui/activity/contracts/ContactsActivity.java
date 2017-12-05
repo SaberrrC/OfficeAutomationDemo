@@ -247,7 +247,6 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
         back();
     }
 
-    //TODO 联系人返回 存在问题
     private void back() {
         if (pageMap.size() == 1) {
             this.finish();
