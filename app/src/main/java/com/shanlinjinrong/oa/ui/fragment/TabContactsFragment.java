@@ -40,14 +40,11 @@ import com.shanlinjinrong.oa.ui.fragment.presenter.TabContractsFragmentPresenter
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 import com.shanlinjinrong.oa.views.ClearEditText;
-import com.shanlinjinrong.utils.DataUtils;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -158,14 +155,10 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         super.onActivityCreated(savedInstanceState);
         View viewBack = view.findViewById(R.id.btn_back);
         viewBack.setVisibility(View.GONE);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //在初始化是为RecyclerView添加点击事件，这样可以防止重复点击问题
-        recyclerView.addOnItemTouchListener(new ItemClick());
         mContactAdapter = new TabContactsAdapter(items);
         recyclerView.setAdapter(mContactAdapter);
         loadData();
-
 
         //EditText 自动搜索,间隔->输入停止1秒后自动搜索
         RxTextView.textChanges(search_et_input)
@@ -374,10 +367,9 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     class ItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-            Intent intent = new Intent();
             switch (items.get(i).getItemType()) {
                 case Contacts.DEPARTMENT:
-                    intent.setClass(getActivity(), ContactsActivity.class);
+                    Intent intent = new Intent(getContext(),ContactsActivity.class);
                     intent.putExtra(ContactsActivity.PAGE_MAP_DID,
                             items.get(i).getDepartmentId());
                     intent.putExtra(ContactsActivity.PAGE_MAP_TITLE,

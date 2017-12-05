@@ -238,7 +238,7 @@ public class User implements MultiItemEntity, Serializable {
 
             //登陆更新自己的信息
             FriendsInfoCacheSvc.getInstance(AppManager.mContext)
-                    .addOrUpdateFriends(new Friends(uid, username, getPortraits(), sex, phone, postName, departmentName, email, departmentId));
+                    .addOrUpdateFriends(new Friends("sl_"+code, username, getPortraits(), sex, phone, postName, departmentName, email, departmentId));
         } catch (JSONException e) {
             e.printStackTrace();
             LogUtils.e("user解析异常-》" + e.toString());
