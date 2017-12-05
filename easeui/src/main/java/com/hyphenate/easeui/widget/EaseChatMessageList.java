@@ -17,6 +17,8 @@ import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 
+import java.util.List;
+
 public class EaseChatMessageList extends RelativeLayout {
 
     protected static final String TAG = "EaseChatMessageList";
@@ -52,9 +54,11 @@ public class EaseChatMessageList extends RelativeLayout {
         listView = (ListView) findViewById(R.id.list);
     }
 
-    public int getTotalMessageSize() {
-        return messageAdapter.mTotalSize;
+    public void refreshPageSizeItem(List<EMMessage> var) {
+        messageAdapter.refreshList(var);
+        messageAdapter.notifyDataSetChanged();
     }
+
 
     /**
      * init widget

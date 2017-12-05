@@ -159,7 +159,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
     }
 
     protected boolean haveMoreData = true;
-    protected int     pagesize     = 20;
+    protected int     pagesize     = 5;
 
     protected void onConversationInit() {
         //        if (conversation != null) {
@@ -207,10 +207,6 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         messageList.init(toChatUsername, chatType, chatFragmentHelper != null ? chatFragmentHelper.onSetCustomChatRowProvider() : null);
         //        setListItemClickListener();
         isMessageListInited = true;
-        int totalMessageSize = messageList.getTotalMessageSize();
-        mTvTitle.setText("聊天记录(1/" + totalMessageSize + ")");
-
-
     }
 
     public void resendMessage(EMMessage message) {
@@ -411,7 +407,8 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                         return;
                     }
                     if (messages.size() > 0) {
-                        messageList.refreshSeekTo(messages.size() - 1);
+                        //                        messageList.refreshSeekTo(messages.size() - 1);
+                        messageList.refreshPageSizeItem(messages);
                         if (messages.size() != pagesize) {
                             haveMoreData = false;
                         }
