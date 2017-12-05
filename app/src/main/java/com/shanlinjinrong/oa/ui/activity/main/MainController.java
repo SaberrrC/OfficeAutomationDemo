@@ -26,6 +26,7 @@ import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.db.Friends;
@@ -325,17 +326,22 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     @Override
     public void bindBadgeView(int msgCount) {
         tempMsgCount = msgCount;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //绑定小红点
-                if (qBadgeView == null) {
-                    qBadgeView = new QBadgeView(AppManager.mContext);
-                }
-                qBadgeView.setBadgeGravity(Gravity.CENTER);
-                qBadgeView.bindTarget(communicationRedSupport).setBadgeNumber(tempMsgCount);
+        runOnUiThread(() -> {
+            //绑定小红点
+            if (qBadgeView == null) {
+                qBadgeView = new QBadgeView(AppManager.mContext);
             }
+            qBadgeView.setBadgeGravity(Gravity.CENTER);
+            qBadgeView.bindTarget(communicationRedSupport).setBadgeNumber(tempMsgCount);
         });
+        //更新Icon 数量
+        new Thread(() -> {
+            if (tempMsgCount != 0) {
+                BadgeUtil.setBadgeCount(MainController.this, tempMsgCount, R.drawable.ring_red);
+                return;
+            }
+            BadgeUtil.setBadgeCount(MainController.this, 0, R.drawable.ring_red);
+        }).start();
     }
 
 
@@ -512,21 +518,6 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
     }
 
     @Override
-    protected void onStop() {
-        if (!Utils.isRunningForeground(this)) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (tempMsgCount != 0) {
-                        BadgeUtil.setBadgeCount(MainController.this, tempMsgCount, R.drawable.ring_red);
-                    }
-                }
-            }).start();
-        }
-        super.onStop();
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             moveTaskToBack(false);
@@ -573,20 +564,20 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
                 }
             }
             if (!userId.equals("")) {
-                {
-                    if (tabCommunicationFragment != null) {
-                        if (tabCommunicationFragment.myConversationListFragment != null) {
-                            tabCommunicationFragment.myConversationListFragment.refresh();
-                        }
+
+                if (tabCommunicationFragment != null) {
+                    if (tabCommunicationFragment.myConversationListFragment != null) {
+                        tabCommunicationFragment.myConversationListFragment.refresh();
                     }
-                    for (EMMessage message1 : list) {
-                        if (!easeUI.hasForegroundActivies()) {
-                            easeUI.getNotifier().onNewMsg(message1);
-                        }
-                    }
-                    refreshCommCount();
                 }
+                for (EMMessage message1 : list) {
+                    if (!easeUI.hasForegroundActivies()) {
+                        easeUI.getNotifier().onNewMsg(message1);
+                    }
+                }
+                refreshCommCount();
             }
+
 //            refreshCommCount();
         }
 
@@ -661,8 +652,7 @@ public class MainController extends HttpBaseActivity<MainControllerPresenter> im
 
     //位置权限回调
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 100:
