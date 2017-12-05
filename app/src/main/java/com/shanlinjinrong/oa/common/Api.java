@@ -17,7 +17,7 @@ public class Api {
     //TODO会议室管理、找回密码 测试环境
 //    public static final String PHP_URL = "http://testoa.shanlinjinrong.com/webApi/";
     //新 内网
-    public static final String PHP_URL = "http://10.5.202.122:82";
+     public static final String PHP_URL = "http://10.5.202.122:82";
     //新 外网
 //    public static final String PHP_URL = "http://116.62.216.129:82";
 

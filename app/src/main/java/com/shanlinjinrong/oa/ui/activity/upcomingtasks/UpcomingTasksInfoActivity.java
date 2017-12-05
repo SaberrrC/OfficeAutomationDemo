@@ -173,9 +173,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     mRlTackBack.setVisibility(View.VISIBLE);
                     mTvTackBack.setBackgroundResource(R.drawable.shape_upcoming_dialog_ok);
                 }
-                if (TextUtils.equals(mBean.getApproveState(), "0") ||
-                        TextUtils.equals(mBean.getApproveState(), "1") ||
-                        TextUtils.equals(mBean.getApproveState(), "2")) {
+                if (TextUtils.equals(mBean.getApproveState(), "0") || TextUtils.equals(mBean.getApproveState(), "1") || TextUtils.equals(mBean.getApproveState(), "2")) {
                     mRlTackBack.setVisibility(View.GONE);
                 }
                 mTvTitle.setText(mBean.getUserName() + "的" + mBean.getBillTypeName());
@@ -236,10 +234,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             }
             return;
         }
-        if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean ||
-                itemData instanceof TraverResultBean.DataBean.NchrevectionApplyDetailBean ||
-                itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean ||
-                itemData instanceof OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) {
+        if (itemData instanceof CardResultBean.DataBean.NchrSignDetailsBean || itemData instanceof TraverResultBean.DataBean.NchrevectionApplyDetailBean || itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean || itemData instanceof OverTimeResultBean.DataBean.NchroverTimeApplyDetailBean) {
             RelativeLayout rlTop = (RelativeLayout) holder.getViewById(R.id.rl_top);
             ImageView imgDeleteDetail = (ImageView) holder.getViewById(R.id.img_delete_detail);
             imgDeleteDetail.setVisibility(View.GONE);
@@ -339,7 +334,11 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mEtCommonalityBeginTime.setText(bean.getStartTime());
                 mEtCommonalityEndTime.setText(bean.getEndTime());
                 tvCommonalityDuration.setText("申请时长");
-                tvCommonality.setText(bean.getTimeDifference() + "天");
+                if (TextUtils.equals(mTraverResultBean.getData().getType(), "1001A1100000000154IU")) {
+                    tvCommonality.setText(bean.getTimeDifference() + "小时");
+                } else {
+                    tvCommonality.setText(bean.getTimeDifference() + "天");
+                }
                 tvCommonalityShow1.setText("出差地点");
                 tvCommonalityShow2.setText("出差原因");
                 tvCommonalityShow3.setText("工作交接人");
@@ -347,7 +346,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 etCommonalityShow2.setText(TextUtils.isEmpty(bean.getEvectionRemark()) ? "" : bean.getEvectionRemark());
                 etCommonalityShow3.setText(bean.getPsnname());
                 return;
-
             }
             if (itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean) {
                 RestResultBean.DataBean.NchrfurloughApplyDetailBean bean = (RestResultBean.DataBean.NchrfurloughApplyDetailBean) itemData;
@@ -364,7 +362,11 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mEtCommonalityBeginTime.setText(bean.getStartTime());
                 mEtCommonalityEndTime.setText(bean.getEndTime());
                 tvCommonalityDuration.setText("休假时长");
-                tvCommonality.setText(bean.getTimeDifference() + "天");
+                if (TextUtils.equals(mRestResultBean.getData().getType(), "1002Z710000000021ZM1")) {
+                    tvCommonality.setText(bean.getTimeDifference() + "小时");
+                } else {
+                    tvCommonality.setText(bean.getTimeDifference() + "天");
+                }
                 tvCommonalityShow1.setText("休假事由");
                 tvCommonalityShow2.setText("工作交接人");
                 etCommonalityShow1.setText(TextUtils.isEmpty(bean.getFurloughRemark()) ? "" : bean.getFurloughRemark());
@@ -389,10 +391,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
             }
             return;
         }
-        if (itemData instanceof CardResultBean.DataBean.ApplyWorkFlowsBean ||
-                itemData instanceof TraverResultBean.DataBean.NchrapplyWorkFlowBean ||
-                itemData instanceof RestResultBean.DataBean.NchrapplyWorkFlowBean ||
-                itemData instanceof OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) {
+        if (itemData instanceof CardResultBean.DataBean.ApplyWorkFlowsBean || itemData instanceof TraverResultBean.DataBean.NchrapplyWorkFlowBean || itemData instanceof RestResultBean.DataBean.NchrapplyWorkFlowBean || itemData instanceof OverTimeResultBean.DataBean.NchrapplyWorkFlowBean) {
             TextView tvTitle = (TextView) holder.getViewById(R.id.tv_title);
             TextView tvApprover = (TextView) holder.getViewById(R.id.tv_approver);
             TextView tvTime = (TextView) holder.getViewById(R.id.tv_time);

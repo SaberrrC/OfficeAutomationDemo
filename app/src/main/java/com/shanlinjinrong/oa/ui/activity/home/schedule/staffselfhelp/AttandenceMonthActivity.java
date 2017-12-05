@@ -75,6 +75,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     TextView mTvEmptyLayout;
     @BindView(R.id.ll_currentday_state)
     LinearLayout mLlCurrentdayState;
+    @BindView(R.id.tv_sign_in)
+    ImageView tvsignin;
 
     private String mDay;
     private Calendar cal;
@@ -308,13 +310,16 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     mTvEmptyLayout.setText("暂无日考勤记录！");
                     return;
                 }
+
+                //出差 >加班 >休假> 签卡>旷工>迟到>早退
                 for (int i = 0; i < bean.size(); i++) {
+
                     tv_date.setText(bean.get(i).getCalendar());
                     tv_name.setText(bean.get(i).getPsname());
                     tv_gowork_time.setText(bean.get(i).getOnebegintime());
                     tv_off_gowork_time.setText(bean.get(i).getTwoendtime());
                     try {
-                        if (bean.get(i).getTbmstatus() == null){
+                        if (bean.get(i).getTbmstatus() == null) {
                             mTvState.setText("");
                             return;
                         }
@@ -402,6 +407,13 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                             mTvState.setText("[休假]");
                             return;
                         }
+
+                        if (bean.get(i).getSignCause() == null || bean.get(i).getSignCause().equals("")) {
+                            tvsignin.setVisibility(View.GONE);
+                        } else {
+                            tvsignin.setVisibility(View.VISIBLE);
+                        }
+                        //出差 >加班 >休假> 签卡>旷工>迟到>早退
                         if (bean.get(i).getTbmstatus().contains("[签卡]")) {
                             mTvState.setText("[签卡]");
                             return;

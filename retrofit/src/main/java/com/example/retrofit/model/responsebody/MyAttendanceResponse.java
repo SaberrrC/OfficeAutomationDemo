@@ -18,6 +18,15 @@ public class MyAttendanceResponse {
     private String onebegintime;
     private String twoendtime;
     private String tbmstatus;
+    private String signCause;
+
+    public String getSignCause() {
+        return signCause;
+    }
+
+    public void setSignCause(String signCause) {
+        this.signCause = signCause;
+    }
 
     public String getPsname() {
         return psname;

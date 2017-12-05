@@ -149,10 +149,10 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
 
     //申请时长
     @Override
-    public void queryDuration(String beginTime, String endTime, int type, String billCode) {
+    public void queryDuration(String beginTime, String endTime, int type, String billCode,String applyType) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(ApiJava.QUERYDURATION + "?endTime=" + endTime + ":00" + "&startTime=" + beginTime + ":00" + "&type=" + type + "&billCode=" + billCode, httpParams, new HttpCallBack() {
+        mKjHttp.jsonGet(ApiJava.QUERYDURATION + "?endTime=" + endTime + ":00" + "&startTime=" + beginTime + ":00" + "&type=" + type + "&billCode=" + billCode + "&applyType="+applyType, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
