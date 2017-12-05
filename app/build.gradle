@@ -110,22 +110,22 @@ def devJavaAddress() {
 }
 
 //(预生产)测试环境
+//def preJavaAddress() {
+//    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
+//}
+//
+//def prePHPAddress() {
+//    return "\"http://api.testoa.shanlinjinrong.com/\""
+//}
+
+//(新内网) 测试环境
 def preJavaAddress() {
-    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
+    return "\"http://10.5.202.122:9105/\""
 }
 
 def prePHPAddress() {
-    return "\"http://api.testoa.shanlinjinrong.com/\""
+    return "\"http://10.5.202.122:81/\""
 }
-
-//(新内网) 测试环境
-//def preJavaAddress() {
-//    return "\"http://10.5.202.122:9105/\""
-//}
-
-//def prePHPAddress() {
-//    return "\"http://10.5.202.122:81/\""
-//}
 
 //(新外网) 测试环境
 //def preJavaAddress() {
@@ -146,6 +146,7 @@ def prePHPAddress() {
 //}
 
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     compile project(':easeui')
@@ -156,6 +157,7 @@ dependencies {
     compile files('libs/Sunflower.jar')
 
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
@@ -244,4 +246,5 @@ dependencies {
 
     //分包 65536
     compile 'com.android.support:multidex:1.0.2'
+
 }

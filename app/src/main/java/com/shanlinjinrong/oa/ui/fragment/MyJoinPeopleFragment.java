@@ -39,6 +39,7 @@ public class MyJoinPeopleFragment extends BottomSheetFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, container, false);
+
         lin_bottom= (LinearLayout) view.findViewById(R.id.lin_bottom);
         recyclerView = (RecyclerView) view.findViewById(R.id.list_bottomsheet);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
