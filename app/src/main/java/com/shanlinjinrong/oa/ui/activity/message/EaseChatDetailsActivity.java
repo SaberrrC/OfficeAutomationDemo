@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,41 +40,41 @@ import io.reactivex.schedulers.Schedulers;
 public class EaseChatDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.top_view)
-    CommonTopView topView;
+    CommonTopView  topView;
     @BindView(R.id.btn_chat_delete)
-    TextView btnChatDelete;
+    TextView       btnChatDelete;
     @BindView(R.id.img_portrait)
-    ImageView imgPortrait;
+    ImageView      imgPortrait;
     @BindView(R.id.img_group_person)
-    ImageView imgGroupPerson;
+    ImageView      imgGroupPerson;
     @BindView(R.id.rv_person_show)
-    RecyclerView rvPersonShow;
+    RecyclerView   rvPersonShow;
     @BindView(R.id.rl_group_name)
     RelativeLayout rlGroupName;
     @BindView(R.id.tv_modification_name)
-    TextView tvModificationName;
+    TextView       tvModificationName;
     @BindView(R.id.rl_group_person)
     RelativeLayout rlGroupPerson;
     @BindView(R.id.tv_clear_message_record)
-    TextView tvClearMessageRecord;
+    TextView       tvClearMessageRecord;
     @BindView(R.id.btn_look_message_record)
-    TextView btnLookMessageRecord;
+    TextView       btnLookMessageRecord;
     @BindView(R.id.rl_group_portrait)
     RelativeLayout rlGroupPortrait;
     @BindView(R.id.img_modification_portrait)
-    ImageView imgModificationPortrait;
+    ImageView      imgModificationPortrait;
     @BindView(R.id.img_modification_group_name)
-    ImageView imgModificationGroupName;
+    ImageView      imgModificationGroupName;
 
 
-    private String mGroupId;
+    private String  mGroupId;
     private boolean mIsGroup;
     private int RESULTSUCCESS = -2, REQUSET_CODE = 101;
-    private CommonPersonAddAdapter mAdapter;
+    private CommonPersonAddAdapter       mAdapter;
     private List<ChatMessageDetailsBean> mData;
-    private String mGroupOwner;
-    private EMGroup groupFromServer;
-    private EMGroup mGroupServer1;
+    private String                       mGroupOwner;
+    private EMGroup                      groupFromServer;
+    private EMGroup                      mGroupServer1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +94,7 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
     }
 
     EMCursorResult<String> mGroupMemberResult;
-    List<String> mMemberList;
+    List<String>           mMemberList;
 
     private void InitGroupData() {
         try {
@@ -112,13 +111,11 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
                 }
                 while (!TextUtils.isEmpty(mGroupMemberResult.getCursor()) && mGroupMemberResult.getData().size() == pageSize);
                 e.onComplete();
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(o -> {
+            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
 
-                    }, Throwable::printStackTrace, () -> {//TODO 群成团账号
-                        mMemberList.add(0, "sl_" + AppConfig.getAppConfig(this).getPrivateCode());
-                    });
+            }, Throwable::printStackTrace, () -> {//TODO 群成团账号
+                mMemberList.add(0, "sl_" + AppConfig.getAppConfig(this).getPrivateCode());
+            });
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -163,8 +160,8 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn_look_message_record:
                 //TODO 查看聊天记录
-                Parcelable parcelable = getIntent().getParcelableExtra("INTENT");
-                intent.putExtra("INTENT", parcelable);
+                Bundle extras = getIntent().getParcelableExtra("EXTRAS");
+                intent.putExtra("EXTRAS", extras);
                 intent.setClass(this, LookMessageRecordActivity.class);
                 break;
             case R.id.tv_clear_message_record:
@@ -190,20 +187,18 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
                 EMClient.getInstance().groupManager().leaveGroup(mGroupId);//退出群组
             }
             e.onComplete();
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(o -> {
-                }, throwable -> {
-                    throwable.printStackTrace();
-                    if (mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
-                        Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "群组退出失败，请从新尝试！", Toast.LENGTH_SHORT).show();
-                    }
-                }, () -> {
-                    setResult(getIntent().getIntExtra("position", 0));
-                    finish();
-                });
+        }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(o -> {
+        }, throwable -> {
+            throwable.printStackTrace();
+            if (mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "群组退出失败，请从新尝试！", Toast.LENGTH_SHORT).show();
+            }
+        }, () -> {
+            setResult(getIntent().getIntExtra("position", 0));
+            finish();
+        });
     }
 
     @OnClick(R.id.rl_group_name)

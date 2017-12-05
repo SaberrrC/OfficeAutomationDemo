@@ -68,6 +68,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_look_message_record);
         ButterKnife.bind(this);
+        initData();
         initView();
     }
 
@@ -76,14 +77,15 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         getActivityComponent().inject(this);
     }
 
+    private void initData() {
+        Intent intent = getIntent();
+        mBundle = intent.getParcelableExtra("EXTRAS");
+        chatType = mBundle.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
+        toChatUsername = mBundle.getString("toChatUsername");
+    }
+
     private void initView() {
         messageList.setShowUserNick(true);
-        Intent intent = getIntent();
-        Intent parcelableExtra = intent.getParcelableExtra("INTENT");
-        mBundle = parcelableExtra.getBundleExtra("BUNDLE");
-        //mBundle = intent.getBundleExtra("BUNDLE");
-        chatType = mBundle.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
-        toChatUsername = mBundle.getString(EaseConstant.EXTRA_USER_ID);
         chatFragmentHelper = new EaseChatFragment.EaseChatFragmentHelper() {
             @Override
             public void onSetMessageAttributes(EMMessage message) {
@@ -122,7 +124,6 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                             });
                         }
                         if (mode == AudioManager.RINGER_MODE_SILENT) {//静音模式
-
                         }
                     }
                 } catch (Throwable e) {
@@ -153,11 +154,10 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
             onConversationInit();
             onMessageListInit();
         }
-        String forward_msg_id = intent.getStringExtra("forward_msg_id");
-        if (forward_msg_id != null) {
-            forwardMessage(forward_msg_id);
-        }
-
+//        String forward_msg_id = intent.getStringExtra("forward_msg_id");
+//        if (forward_msg_id != null) {
+//            forwardMessage(forward_msg_id);
+//        }
     }
 
     protected boolean haveMoreData = true;
@@ -388,7 +388,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         sendMessage(message);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_search,R.id.iv_first, R.id.iv_last, R.id.iv_next, R.id.iv_final})
+    @OnClick({R.id.iv_back, R.id.iv_search, R.id.iv_first, R.id.iv_last, R.id.iv_next, R.id.iv_final})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -424,8 +424,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                     return message.direct() == EMMessage.Direct.RECEIVE ? EaseChatFragment.MESSAGE_TYPE_RECV_VOICE_CALL : EaseChatFragment.MESSAGE_TYPE_SENT_VOICE_CALL;
                 } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)) {
                     return message.direct() == EMMessage.Direct.RECEIVE ? EaseChatFragment.MESSAGE_TYPE_RECV_VIDEO_CALL : EaseChatFragment.MESSAGE_TYPE_SENT_VIDEO_CALL;
-                }
-                else if (message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)) {
+                } else if (message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)) {
                     return EaseChatFragment.MESSAGE_TYPE_RECALL;
                 }
             }

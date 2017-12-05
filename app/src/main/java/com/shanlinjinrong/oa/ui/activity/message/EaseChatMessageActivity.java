@@ -79,7 +79,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         //TODO 暂做更改
 //        userInfo_self = getIntent().getStringExtra("userInfo_self");
 //        userInfo = getIntent().getStringExtra("userInfo");
-        mTitle = getIntent().getStringExtra("title");
+        mTitle = getIntent().getStringExtra("title");//人名字
 //        mUserInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
 //        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
 
@@ -129,8 +129,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
         mExtras = getIntent().getExtras();
-        mExtras.putString("PAGE_TYPE", "CHAT");
-        mExtras.putString("PAGE_TYPE", "HISTORY");
         mExtras.putInt("CHAT_TYPE", mChatType);
         chatFragment.setArguments(mExtras);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
@@ -199,7 +197,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                     intent.putExtra("groupId", getIntent().getStringExtra("toChatUsername"));
                 } else {
                     intent.putExtra("chatType", false);
-                    intent.putExtra("INTENT", getIntent());
+                    intent.putExtra("EXTRAS", mExtras);
                 }
                 startActivityForResult(intent, REQUEST_CODE);
                 break;
