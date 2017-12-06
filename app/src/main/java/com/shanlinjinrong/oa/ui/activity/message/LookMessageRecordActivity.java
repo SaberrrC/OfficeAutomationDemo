@@ -31,7 +31,6 @@ import com.hyphenate.easeui.utils.MediaPlayerHelper;
 import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
-import com.hyphenate.exceptions.HyphenateException;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.message.contract.LookMessageRecordContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.LookMessageRecordPresenter;
@@ -150,8 +149,8 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         swipeRefreshLayout = messageList.getSwipeRefreshLayout();
         swipeRefreshLayout.setEnabled(false);
         if (chatType != EaseConstant.CHATTYPE_CHATROOM) {
-            onConversationInit();
             onMessageListInit();
+            onConversationInit();
         }
         //        String forward_msg_id = mBundle.getString("forward_msg_id");
         //        if (forward_msg_id != null) {
@@ -170,60 +169,57 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
     protected int     pagesize     = 5;
 
     protected void onConversationInit() {
-        //        if (conversation != null) {
         conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
         conversation.markAllMessagesAsRead();
-        // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
-        // you can change this number
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    EMClient.getInstance().chatManager().fetchHistoryMessages(toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, "");
-                    final List<EMMessage> msgs = conversation.getAllMessages();
-                    int msgCount = msgs != null ? msgs.size() : 0;
-                    if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
-                        String msgId = null;
-                        if (msgs != null && msgs.size() > 0) {
-                            msgId = msgs.get(0).getMsgId();
-                        }
-                        List<EMMessage> emMessages = conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
-                        mEmMessage = emMessages.get(0);
-                    }
-                    messageList.refreshSelectLast();
-                } catch (HyphenateException e) {
-                    e.printStackTrace();
-                }
-                return;
-            }
-        }.start();
+        //        new Thread() {
+        //            @Override
+        //            public void run() {
+        //                try {
+        //                    EMClient.getInstance().chatManager().fetchHistoryMessages(toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, "");
+        //                    final List<EMMessage> msgs = conversation.getAllMessages();
+        //                    int msgCount = msgs != null ? msgs.size() : 0;
+        //                    if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
+        //                        String msgId = null;
+        //                        if (msgs != null && msgs.size() > 0) {
+        //                            msgId = msgs.get(0).getMsgId();
+        //                        }
+        //                        List<EMMessage> emMessages = conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+        //                        mEmMessage = emMessages.get(0);
+        //                    }
+        //                    messageList.refreshSelectLast();
+        //                } catch (HyphenateException e) {
+        //                    e.printStackTrace();
+        //                }
+        //                return;
+        //            }
+        //        }.start();
+
         final List<EMMessage> msgs = conversation.getAllMessages();
         int msgCount = msgs != null ? msgs.size() : 0;
-        if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
-            String msgId = null;
-            if (msgs != null && msgs.size() > 0) {
-                msgId = msgs.get(0).getMsgId();
-                mEmMessage = msgs.get(0);
-            }
-            conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+        //        if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
+        String msgId = null;
+        if (msgs != null && msgs.size() > 0) {
+            msgId = msgs.get(0).getMsgId();//407544980668680256
         }
+        List<EMMessage> messages2 = conversation.loadMoreMsgFromDB(msgId, pagesize);
+        messageList.refreshPageSizeItem(messages2);
+        //        conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+        //        }
     }
 
     private boolean isMessageListInited;
 
     protected void onMessageListInit() {
-        messageList.init(toChatUsername, chatType, chatFragmentHelper != null ? chatFragmentHelper.onSetCustomChatRowProvider() : null);
+        messageList.init(toChatUsername, chatType, chatFragmentHelper != null ? chatFragmentHelper.onSetCustomChatRowProvider() : null, false);
         //        setListItemClickListener();
         isMessageListInited = true;
-        List<EMMessage> messages2 = conversation.loadMoreMsgFromDB("", pagesize);
-        messageList.refreshPageSizeItem(messages2);
     }
 
-    public void resendMessage(EMMessage message) {
-        message.setStatus(EMMessage.Status.CREATE);
-        EMClient.getInstance().chatManager().sendMessage(message);
-        messageList.refresh();
-    }
+    //    public void resendMessage(EMMessage message) {
+    //        message.setStatus(EMMessage.Status.CREATE);
+    //        EMClient.getInstance().chatManager().sendMessage(message);
+    //        messageList.refresh();
+    //    }
 
     protected void forwardMessage(String forward_msg_id) {
         final EMMessage forward_msg = EMClient.getInstance().chatManager().getMessage(forward_msg_id);

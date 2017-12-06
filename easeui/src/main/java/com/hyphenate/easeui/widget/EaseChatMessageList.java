@@ -77,18 +77,29 @@ public class EaseChatMessageList extends RelativeLayout {
         messageAdapter.setCustomChatRowProvider(customChatRowProvider);
         // set message adapter
         listView.setAdapter(messageAdapter);
-        refreshSelectLast();
+
+    }
+
+    public void init(String toChatUsername, int chatType, EaseCustomChatRowProvider customChatRowProvider, boolean loadLast) {
+        this.chatType = chatType;
+        this.toChatUsername = toChatUsername;
+        conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
+        messageAdapter = new EaseMessageAdapter(context, toChatUsername, chatType, listView);
+        messageAdapter.setItemStyle(itemStyle);
+        messageAdapter.setCustomChatRowProvider(customChatRowProvider);
+        listView.setAdapter(messageAdapter);
+        if (loadLast) {
+            refreshSelectLast();
+        }
     }
 
     protected void parseStyle(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EaseChatMessageList);
         EaseMessageListItemStyle.Builder builder = new EaseMessageListItemStyle.Builder();
         builder.showAvatar(ta.getBoolean(R.styleable.EaseChatMessageList_msgListShowUserAvatar, true)).showUserNick(ta.getBoolean(R.styleable.EaseChatMessageList_msgListShowUserNick, false)).myBubbleBg(ta.getDrawable(R.styleable.EaseChatMessageList_msgListMyBubbleBackground)).otherBuddleBg(ta.getDrawable(R.styleable.EaseChatMessageList_msgListMyBubbleBackground));
-
         itemStyle = builder.build();
         ta.recycle();
     }
-
 
     /**
      * refresh
@@ -107,7 +118,6 @@ public class EaseChatMessageList extends RelativeLayout {
             messageAdapter.refreshSelectLast();
         }
     }
-
 
     /**
      * refresh and jump to the position
