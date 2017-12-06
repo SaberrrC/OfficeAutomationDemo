@@ -31,6 +31,7 @@ import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
@@ -139,10 +140,18 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             if (cvsListHelper != null) {
                 content = cvsListHelper.onSetItemSecondaryText(lastMessage);
             }
-            holder.message.setText(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))),
-                    BufferType.SPANNABLE);
+
+
+            //holder.message.setText(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))), BufferType.SPANNABLE);
+            String str = EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "";
+            //  String jiamiStr = EncryptionUtil.getDecryptStr(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "", lastMessage.getMsgId());
+            String jiamiStr = EncryptionUtil.getDecryptStr(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "");
+            holder.message.setText(jiamiStr, BufferType.SPANNABLE);
+
             if (content != null) {
-                holder.message.setText(content);
+                //     holder.message.setText(content);
+                // holder.message.setText(EncryptionUtil.getDecryptStr(content, username));
+                holder.message.setText(EncryptionUtil.getDecryptStr(content));
             }
             holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
             if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {

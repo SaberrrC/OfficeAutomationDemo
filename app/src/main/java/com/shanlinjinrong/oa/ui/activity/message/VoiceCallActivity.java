@@ -47,6 +47,7 @@ import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.exceptions.EMNoActiveCallException;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.exceptions.HyphenateException;
@@ -511,7 +512,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 handler.sendEmptyMessage(MSG_CALL_REJECT);
                 //拒接
                 if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
-                    mMessage = EMMessage.createTxtSendMessage("通话已拒接", username);
+                    //  mMessage = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr("通话已拒接",username), username);
+                    mMessage = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr("通话已拒接"), username);
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);
                     mIsThroughTo = false;
@@ -536,12 +538,14 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 handler.sendEmptyMessage(MSG_CALL_END);
                 //挂断
                 if (mIsThroughTo) {
-                    mMessage = EMMessage.createTxtSendMessage("通话时长:" + mChronometer.getText().toString(), username);
+                    //  mMessage = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr("通话时长:" + mChronometer.getText().toString(), username), username);
+                    mMessage = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr("通话时长:" + mChronometer.getText().toString()), username);
                     mIsThroughTo = false;
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);
                 } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
-                    mMessage = EMMessage.createTxtSendMessage("通话已取消", username);
+                    //   mMessage = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr("通话已取消",username), username);
+                    mMessage = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr("通话已取消"), username);
                     mIsThroughTo = false;
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);

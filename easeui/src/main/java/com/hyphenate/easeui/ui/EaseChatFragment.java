@@ -41,6 +41,7 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMEncryptUtils;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
@@ -60,6 +61,7 @@ import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.requestPermissionsListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.easeui.utils.MediaPlayerHelper;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
@@ -73,7 +75,9 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.util.FileUtils;
 import com.hyphenate.util.PathUtil;
+import com.hyphenate.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -136,7 +140,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     static final int ITEM_TAKE_PICTURE = 1;
     static final int ITEM_PICTURE = 2;
     static final int ITEM_VOICECALL = 3;
-     static final int ITEM_FILE = 12;
+    static final int ITEM_FILE = 12;
 
     protected int[] itemStrings = {R.string.attach_take_pic, R.string.attach_picture, R.string.attach_voice_call, R.string.attach_file};
     protected int[] itemdrawables = {R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
@@ -779,6 +783,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     //send message
     protected void sendTextMessage(String content) {
+        //  content = EncryptionUtil.getEncryptionStr(content,toChatUsername);
+        content = EncryptionUtil.getEncryptionStr(content);
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
         } else {
