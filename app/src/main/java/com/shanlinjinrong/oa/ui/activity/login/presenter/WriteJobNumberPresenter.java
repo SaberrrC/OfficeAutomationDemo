@@ -40,7 +40,7 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                     JSONObject jsonObject = new JSONObject(t);
                     JSONObject data = jsonObject.getJSONObject("data");
                     if (mView != null)
-                        mView.getIdentifyingCodeSuccess(data.getString("img"), data.getString("code"));
+                        mView.getIdentifyingCodeSuccess(data.getString("img"), data.getString("keycode"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -66,8 +66,8 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
     }
 
     @Override
-    public void searchUser(String jobNum) {
-        mKjHttp.phpJsonGet(Api.USERS_SEARCH + jobNum, new HttpParams(), new HttpCallBack() {
+    public void searchUser(String jobNum, String imgCode) {
+        mKjHttp.phpJsonGet(Api.USERS_SEARCH + jobNum + "&imgcode=" + imgCode, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -83,7 +83,7 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                                 email = "";
                             }
                             user.setEmail(email);
-                            user.setCode(data.getJSONObject(0).getString("code"));
+//                            user.setCode(data.getJSONObject(0).getString("code"));
                             if (mView != null)
                                 mView.searchUserSuccess(user);
                             break;
@@ -115,6 +115,55 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                 try {
                     if (mView != null)
                         mView.searchUserFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void verifyCode(String imgCode, String keyCode) {
+        mKjHttp.phpJsonGet(Api.VERIFY_CODE + "?imgcode=" + imgCode + "&keycode=" + keyCode, new HttpParams(), new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(t);
+                    int code = jsonObject.getInt("code");
+                    switch (code) {
+                        case Api.RESPONSES_CODE_OK:
+                            if (mView != null)
+                                mView.verifyCodeSuccess();
+                            break;
+                        default:
+                            if (mView != null)
+                                mView.verifyCodeFailed(code, jsonObject.getString("info"));
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.searchUserFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                try {
+                    if (mView != null)
+                        mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

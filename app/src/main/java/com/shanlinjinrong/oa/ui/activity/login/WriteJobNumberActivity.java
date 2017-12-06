@@ -20,6 +20,7 @@ import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.WriteJobNumberContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.WriteJobNumberPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.ToastManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +41,7 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     @BindView(R.id.btn_sure)
     Button mSureBtn;
 
-    private String mCode;//验证码内容
+    private String mKeyCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,19 +71,19 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
 
         //点击确定按钮
         if (v.getId() == R.id.btn_sure) {
-            if (!mIdentifyingCode.getText().toString().trim().equalsIgnoreCase(mCode)) {
-                showToast("验证码不正确");
-                mPresenter.getIdentifyingCode();
-            } else {
-                //TODO 找回密码 逻辑判断 检测邮箱是否存在
-                mPresenter.searchUser(mJobNumber.getText().toString().trim());
+
+            if (mIdentifyingCode.getText().toString().trim().equals("")){
+                showToast("输入验证码为空！");
+                return;
             }
+
+            mPresenter.verifyCode(mIdentifyingCode.getText().toString().trim(), mKeyCode);
         }
     }
 
     @Override
-    public void getIdentifyingCodeSuccess(String picUrl, String mCode) {
-        this.mCode = mCode;
+    public void getIdentifyingCodeSuccess(String picUrl, String keyCode) {
+        mKeyCode = keyCode;
         picUrl = "data:image/gif;base64," + picUrl;
         mIdentifyingCodeImg.setImageBitmap(base64ToBitmap(picUrl));
     }
@@ -123,6 +124,18 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
 
     @Override
     public void searchUserFailed(int errorCode, String errMsg) {
+        mPresenter.getIdentifyingCode();
+        showToast(errMsg);
+    }
+
+    @Override
+    public void verifyCodeSuccess() {
+        //验证成功
+        mPresenter.searchUser(mJobNumber.getText().toString().trim(), mIdentifyingCode.getText().toString().trim());
+    }
+
+    @Override
+    public void verifyCodeFailed(int errorCode, String errMsg) {
         mPresenter.getIdentifyingCode();
         showToast(errMsg);
     }
