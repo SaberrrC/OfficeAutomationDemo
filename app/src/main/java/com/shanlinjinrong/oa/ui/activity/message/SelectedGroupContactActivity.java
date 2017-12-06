@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -10,8 +11,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
@@ -19,7 +24,6 @@ import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.GroupContactListFragment;
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.SelectedGroupContactFragment;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedContactAdapter;
-import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedUserAdapter;
 import com.shanlinjinrong.oa.ui.activity.message.bean.DeleteContactEvent;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupUsers;
 import com.shanlinjinrong.oa.ui.activity.message.contract.SelectedGroupContactContract;
@@ -47,8 +51,6 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     CommonTopView mTopView;
     @BindView(R.id.search_et_input)
     EditText mSearchContact;
-    @BindView(R.id.fl_container_layout)
-    FrameLayout flContainerLayout;
     @BindView(R.id.tv_selected_contact)
     TextView mTvSelectedContact;
     @BindView(R.id.rv_search_contact)
@@ -58,7 +60,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     @BindView(R.id.bottom_container_layout)
     BottomSheetLayout bottomContainerLayout;
 
-    private List<GroupUsers> mGroupUsers;
+    private List<Contacts> mGroupUsers;
     private InputMethodManager inputManager;
     private SparseArray<Contacts> mCacheContact;
     private List<Contacts> mSearchData;
@@ -99,7 +101,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 .subscribeOn(Schedulers.io())
                 .subscribe(charSequence -> {
                     if (mSearchContact.getText().toString().trim().equals("")) {
-                        mTopView.setAppTitle(mFragments.get(0).getArguments().getString("title","选择成员"));
+                        mTopView.setAppTitle(mFragments.get(0).getArguments().getString("title", "选择成员"));
                         mRvSearchContact.setVisibility(View.GONE);
                         return;
                     }
@@ -115,12 +117,11 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         mFragments.add(fragment);
         getSupportFragmentManager().beginTransaction().add(R.id.fl_container_layout, fragment).commit();
 
-
         mUserAdapter = new SelectedContactAdapter(mSearchData);
         mRvSearchContact.setAdapter(mUserAdapter);
         mRvSearchContact.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRvSearchContact.addOnItemTouchListener(new OnItemClick());
         mUserAdapter.notifyDataSetChanged();
-
 
         inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
@@ -157,7 +158,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     }
 
     @Override
-    public void selectedUsers(List<GroupUsers> groupUsers) {
+    public void selectedUsers(List<Contacts> groupUsers) {
         mTvSelectedContact.setText(String.valueOf(groupUsers.size()));
         mTopView.setRightText(groupUsers.size() != 0 ? "确认" + "(" + groupUsers.size() + ")" : "确认");
     }
@@ -166,21 +167,44 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     //TODO 选择逻辑问题
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDeleteContact(DeleteContactEvent event) {
-        for (int i = 0; i <= mGroupUsers.size(); i++) {
-            Contacts contacts = mCacheContact.get(Integer.parseInt(mGroupUsers.get(i).getOrgId() + i));
-            if (contacts != null) {
-                if (event.getCode().equals(contacts.getCode())) {
-                    contacts.setChecked(!contacts.isChecked());
-                    mCacheContact.put(Integer.parseInt(mGroupUsers.get(i).getOrgId() + i), contacts);
 
-                    SelectedGroupContactFragment fragment = mFragments.get(0);
-                    if (fragment != null)
-                        mFragments.get(0).updateSelected();
+//        for (int i = 0; i <= mGroupUsers.size(); i++) {
+//            Contacts contacts = mCacheContact.get(Integer.parseInt(mGroupUsers.get(i).getOrgId() + i));
+//            if (contacts != null) {
+//                if (event.getCode().equals(contacts.getCode())) {
+//                    contacts.setChecked(!contacts.isChecked());
+//                    mCacheContact.put(Integer.parseInt(mGroupUsers.get(i).getOrgId() + i), contacts);
+//
+//                    SelectedGroupContactFragment fragment = mFragments.get(0);
+//                    if (fragment != null)
+//                        mFragments.get(0).updateSelected();
+//                }
+//            }
+//        }
+
+
+        //搜索人员
+        for (int i = 0; i < mSearchData.size(); i++) {
+            if (mSearchData.get(i).getCode().equals(event.getCode())) {
+                mSearchData.get(i).setChecked(!mSearchData.get(i).isChecked());
+            }
+        }
+
+        mUserAdapter.setNewData(mSearchData);
+        mUserAdapter.notifyDataSetChanged();
+
+        if (event.getSize() == 0) {
+            if (mBottomFragment != null) {
+                if (bottomContainerLayout.isSheetShowing()) {
+                    mBottomFragment.dismiss();
+                    bottomContainerLayout.dismissSheet();
+                    return;
                 }
             }
         }
-        mTvSelectedContact.setText(event.getSize() + "");
-        mTopView.setRightText(event.getSize() != 0 ? "确认" + "(" + event.getSize() + ")" : "确认");
+
+        mTvSelectedContact.setText(mGroupUsers.size() + "");
+        mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
     }
 
     @Override
@@ -241,10 +265,42 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         }
         if (bean != null) {
             mSearchData.clear();
+            mRvSearchContact.setVisibility(View.VISIBLE);
+            //遍历搜索数据 更新选择人员
+            for (int i = 0; i < mGroupUsers.size(); i++) {
+                for (Contacts contacts : bean) {
+                    if (contacts.getCode().equals(mGroupUsers.get(i).getCode())) {
+                        contacts.setChecked(true);
+                    }
+                }
+            }
             mSearchData.addAll(bean);
             mUserAdapter.setNewData(mSearchData);
             mUserAdapter.notifyDataSetChanged();
-            mRvSearchContact.setVisibility(View.VISIBLE);
+        }
+    }
+
+    class OnItemClick extends OnItemClickListener {
+        @Override
+        public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+
+            mSearchData.get(i).setChecked(!mSearchData.get(i).isChecked());
+            if (mSearchData.get(i).isChecked()) {
+                mGroupUsers.add(mSearchData.get(i));
+            } else {
+                mGroupUsers.remove(mSearchData.get(i));
+            }
+
+            //BottomSheet
+            mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
+            mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
+
+            //防止Item点击效果错位问题
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                mUserAdapter.setNewData(mSearchData);
+                mUserAdapter.notifyDataSetChanged();
+            }, 100);
         }
     }
 }

@@ -35,17 +35,17 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
     private View mRootView;
     private List<Contacts> mContact;
     private SparseArray<Contacts> mLoadContact;
-    private List<GroupUsers> mGroupUsers;
+    private List<Contacts> mGroupUsers = new ArrayList<>();
     private onLoadUsersListener mListener;
     public SelectedContactAdapter mAdapter;
     private onSelectedUsersListener mUserListener;
 
 
     @SuppressLint("ValidFragment")
-    public SelectedGroupContactFragment(List<GroupUsers> groupUsers, SparseArray<Contacts> loadContact, onLoadUsersListener listener, onSelectedUsersListener userListener) {
+    public SelectedGroupContactFragment(List<Contacts> groupUsers, SparseArray<Contacts> loadContact, onLoadUsersListener listener, onSelectedUsersListener userListener) {
         mLoadContact = loadContact;
         mListener = listener;
-        mGroupUsers = groupUsers;
+        mGroupUsers.addAll(groupUsers);
         mUserListener = userListener;
     }
 
@@ -140,11 +140,12 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
                     break;
                 case Contacts.EMPLOYEE:
                     mContact.get(i).setChecked(!mContact.get(i).isChecked());
+
                     if (mContact.get(i).isChecked()) {
-                        GroupUsers users = new GroupUsers();
-                        users.setOrgId(getArguments().getString("orgId", "1"));
-                        users.save(mContact.get(i));
-                        mGroupUsers.add(users);
+//                        GroupUsers users = new GroupUsers();
+//                        users.setOrgId(getArguments().getString("orgId", "1"));
+//                        users.save(mContact.get(i));
+                        mGroupUsers.add(mContact.get(i));
                         mUserListener.selectedUsers(mGroupUsers);
                     }
                     mAdapter.setNewData(mContact);
@@ -175,7 +176,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
     }
 
     public interface onSelectedUsersListener {
-        void selectedUsers(List<GroupUsers> groupUsers);
+        void selectedUsers(List<Contacts> groupUsers);
     }
 
     public boolean onBackPressed() {

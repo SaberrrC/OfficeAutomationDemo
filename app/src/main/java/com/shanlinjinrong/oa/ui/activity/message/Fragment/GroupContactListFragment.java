@@ -13,6 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.flipboard.bottomsheet.commons.BottomSheetFragment;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedUserAdapter;
 import com.shanlinjinrong.oa.ui.activity.message.bean.DeleteContactEvent;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupUsers;
@@ -34,9 +35,9 @@ public class GroupContactListFragment extends BottomSheetFragment {
 
     private View mRootView;
     private SelectedUserAdapter mAdapter;
-    private List<GroupUsers> mData = new ArrayList<>();
+    private List<Contacts> mData = new ArrayList<>();
 
-    public GroupContactListFragment(List<GroupUsers> data) {
+    public GroupContactListFragment(List<Contacts> data) {
         mData = data;
     }
 
@@ -68,8 +69,6 @@ public class GroupContactListFragment extends BottomSheetFragment {
             mData.remove(i);
             mAdapter.setNewData(mData);
             mAdapter.notifyDataSetChanged();
-
-
             EventBus.getDefault().post(new DeleteContactEvent("delete", i, code, mData.size()));
         }
     }

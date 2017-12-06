@@ -98,12 +98,10 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
             return;
         }
         setContentView(R.layout.em_activity_voice_call);
-
-//		DemoHelper.getInstance().isVoiceCalling = true;
+        //		DemoHelper.getInstance().isVoiceCalling = true;
         callType = 0;
 
         myAccount = AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE);
-
         comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
         refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
         answerBtn = (Button) findViewById(R.id.btn_answer_call);
@@ -140,7 +138,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         addCallStateListener();
-        msgid = UUID.randomUUID().toString();
 
         //readUserInfoDetailsMessage();
         toUsername = getIntent().getStringExtra("toUsername");

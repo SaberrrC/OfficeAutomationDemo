@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.message.adapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupUsers;
 
 import java.util.List;
@@ -13,14 +14,14 @@ import java.util.List;
  * @Email：Tonnywfx@Gmail.com
  */
 
-public class SelectedUserAdapter extends BaseQuickAdapter<GroupUsers> {
+public class SelectedUserAdapter extends BaseQuickAdapter<Contacts> {
 
-    public SelectedUserAdapter(List<GroupUsers> data) {
+    public SelectedUserAdapter(List<Contacts> data) {
         super(R.layout.item_selected_uers, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder baseViewHolder, GroupUsers groupUsers) {
+    protected void convert(BaseViewHolder baseViewHolder, Contacts groupUsers) {
         if (groupUsers.isChecked()) {
             baseViewHolder.setText(R.id.tv_name, groupUsers.getUsername())
                     .setText(R.id.tv_department, groupUsers.getDepartmentName())
