@@ -146,9 +146,6 @@ public class EaseMessageAdapter extends BaseAdapter {
         handler.sendMessage(msg);
     }
 
-    /**
-     * refresh and select the last
-     */
     public void refreshSelectLast() {
         final int TIME_DELAY_REFRESH_SELECT_LAST = 100;
         handler.removeMessages(HANDLER_MESSAGE_REFRESH_LIST);
