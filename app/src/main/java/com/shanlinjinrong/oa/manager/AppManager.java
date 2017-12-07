@@ -14,11 +14,14 @@ import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
+import com.mmtrix.agent.android.Mmtrix;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
@@ -61,6 +64,8 @@ import cn.jpush.android.api.JPushInterface;
 public class AppManager extends MultiDexApplication {
     // 共享变量
     private SelectJoinPeopleActivity.MyJoinHandler joinhandler = null;
+
+    private WebView mWebView;
 
     // set方法
     public void setJoinhandler(SelectJoinPeopleActivity.MyJoinHandler joinhandler) {
@@ -156,6 +161,9 @@ public class AppManager extends MultiDexApplication {
         //leakCanary
 //        if (!LeakCanary.isInAnalyzerProcess(this)) {
         LeakCanary.install(this);
+
+        //性能魔方
+        Mmtrix.withApplicationToken("b6e5828c2a8defbee75d5b0a9473d115").withCrashReportingEnabled(true).start(this);
 //        }
 
         //blockCanary

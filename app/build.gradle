@@ -1,4 +1,6 @@
+apply from: 'file_uri.gradle';
 apply plugin: 'com.android.application'
+apply plugin: "mmTrix"
 
 android {
     compileSdkVersion 25
@@ -8,12 +10,16 @@ android {
         applicationId "com.shanlinjinrong.oa"
         minSdkVersion 16
         targetSdkVersion 25
+        //pwd:13579
+//        versionCode VERSION_ID as int
+//        versionName VERSION_NAME
+
         //方法数 65536
         multiDexEnabled true
 
         //pwd:13579
-        versionCode 22
-        versionName "v1.5.0.0"
+        versionCode 23
+        versionName "v1.5.5.0"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
@@ -155,6 +161,7 @@ dependencies {
     compile files('libs/Msc.jar')
     compile project(':calendarlibrary')
     compile files('libs/Sunflower.jar')
+    compile files("libs/mmtrix.agent.jar")
 
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:25.3.1'

@@ -10,28 +10,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:gravity="center_vertical"
         android:layout_weight="1"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/img_group_profile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:src="@mipmap/icon_default_group_portraits" />
 
-    <TextView
-        android:id="@+id/tv_group_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        tools:text="产品项目组"
-        android:textColor="@color/black_99333333"
-        android:textSize="16sp" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_group_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:src="@mipmap/icon_default_group_portraits" />
+
+        <TextView
+            android:id="@+id/tv_group_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/black_99333333"
+            android:textSize="16sp"
+            tools:text="产品项目组" />
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:layout_marginLeft="12dp"
-        android:background="#EFEFEF"/>
+        android:background="#EFEFEF" />
 </LinearLayout>

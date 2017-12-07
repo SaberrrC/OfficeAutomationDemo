@@ -37,6 +37,8 @@ public class UsingHelpActivity extends BaseActivity {
     @BindView(R.id.web_view)
     ProgressWebView webView;
 
+    private WebViewClient mWebViewClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,7 @@ public class UsingHelpActivity extends BaseActivity {
         if (webView != null) {
             webView.getSettings().setJavaScriptEnabled(true);
         }
-        webView.setWebViewClient(new WebViewClient() {
+        mWebViewClient = new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
@@ -70,11 +72,13 @@ public class UsingHelpActivity extends BaseActivity {
                 }
                 return true;
             }
-
-        });
+        };
+        webView.setWebViewClient(mWebViewClient);
 
         webView.loadUrl(BuildConfig.BASE_URL + Api.USINGHELP
                 + "?time=" + new Date().getTime());
+
+        webView.setWebViewClient(mWebViewClient);
     }
 
 
