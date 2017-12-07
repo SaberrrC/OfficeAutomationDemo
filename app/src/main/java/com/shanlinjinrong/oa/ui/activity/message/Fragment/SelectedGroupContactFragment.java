@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.message.Fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,13 +10,14 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedContactAdapter;
-import com.shanlinjinrong.oa.ui.activity.message.bean.GroupUsers;
 import com.shanlinjinrong.oa.ui.activity.message.contract.SelectedGroupContactContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.SelectedGroupContactPresenter;
 import com.shanlinjinrong.oa.ui.base.BaseHttpFragment;
@@ -29,23 +31,27 @@ import butterknife.ButterKnife;
 @SuppressLint("ValidFragment")
 public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroupContactPresenter> implements SelectedGroupContactContract.View {
 
+    @BindView(R.id.tv_empty_view)
+    TextView tvEmptyView;
     @BindView(R.id.rv_group_contact)
     RecyclerView rvGroupContact;
 
     private View mRootView;
     private List<Contacts> mContact;
-    private SparseArray<Contacts> mLoadContact;
-    private List<Contacts> mGroupUsers = new ArrayList<>();
+    private List<String> mOrgIdKey;
+    private SparseArray<List<Contacts>> mLoadContact;
+    private List<Contacts> mGroupUsers;
     private onLoadUsersListener mListener;
     public SelectedContactAdapter mAdapter;
     private onSelectedUsersListener mUserListener;
 
 
     @SuppressLint("ValidFragment")
-    public SelectedGroupContactFragment(List<Contacts> groupUsers, SparseArray<Contacts> loadContact, onLoadUsersListener listener, onSelectedUsersListener userListener) {
-        mLoadContact = loadContact;
+    public SelectedGroupContactFragment(List<Contacts> groupUsers, SparseArray<List<Contacts>> loadContact, List<String> orgIdKey, onLoadUsersListener listener, onSelectedUsersListener userListener) {
         mListener = listener;
-        mGroupUsers.addAll(groupUsers);
+        mOrgIdKey = orgIdKey;
+        mGroupUsers = groupUsers;
+        mLoadContact = loadContact;
         mUserListener = userListener;
     }
 
@@ -71,16 +77,10 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
     private void initData() {
         mContact = new ArrayList<>();
         mAdapter = new SelectedContactAdapter(mContact);
-        Contacts users = mLoadContact.get(Integer.parseInt(getArguments().getString("orgId", "1") + "0"));
-        if (users != null) {
+        List<Contacts> contacts1 = mLoadContact.get(Integer.parseInt(getArguments().getString("orgId", "1")));
+        if (contacts1 != null) {
             mContact.clear();
-            for (int i = 0; i < mLoadContact.size(); i++) {
-                Contacts contacts = mLoadContact.get(Integer.parseInt(getArguments().getString("orgId", "1") + i));
-                if (contacts == null) {
-                    continue;
-                }
-                mContact.add(contacts);
-            }
+            mContact.addAll(contacts1);
             mAdapter.setNewData(mContact);
             mAdapter.notifyDataSetChanged();
             return;
@@ -109,17 +109,28 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
     }
 
     @Override
+    public void showLoading() {
+        showLoadingView();
+
+    }
+
+    @Override
+    public void hideLoading() {
+        hideLoadingView();
+    }
+
+    @Override
     public void QueryGroupContactSuccess(List<Contacts> bean) {
         try {
             if (bean != null) {
+                tvEmptyView.setVisibility(View.GONE);
+                mOrgIdKey.add(getArguments().getString("orgId", "1"));
                 mContact.addAll(bean);
                 mAdapter.setNewData(mContact);
                 mAdapter.notifyDataSetChanged();
-                if (!getArguments().getString("orgId", "1").equals("1"))
-                    for (int i = 0; i < bean.size(); i++) {
-                        int orgId = Integer.parseInt(getArguments().getString("orgId", "1") + i);
-                        mLoadContact.put(orgId, bean.get(i));
-                    }
+                if (!getArguments().getString("orgId", "1").equals("1")) {
+                    mLoadContact.put(Integer.parseInt(getArguments().getString("orgId", "1")), bean);
+                }
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -127,8 +138,30 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
     }
 
     @Override
-    public void searchContactSuccess(List<Contacts> bean) {
+    public void QueryGroupContactFailed(int errorCode, String errorStr) {
+        switch (errorCode) {
+            case -1:
+                tvEmptyView.setText(R.string.net_no_connection);
+                tvEmptyView.setVisibility(View.VISIBLE);
+                showToast(getResources().getString(R.string.net_no_connection));
+                break;
+        }
+    }
 
+    @Override
+    public void searchContactSuccess(List<Contacts> bean) {
+        tvEmptyView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void searchContactFailed(int errorCode, String errorStr) {
+        switch (errorCode) {
+            case -1:
+                tvEmptyView.setText(R.string.net_no_connection);
+                tvEmptyView.setVisibility(View.VISIBLE);
+                showToast(getResources().getString(R.string.net_no_connection));
+                break;
+        }
     }
 
     class ItemClick extends OnItemClickListener {
@@ -142,14 +175,17 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
                     mContact.get(i).setChecked(!mContact.get(i).isChecked());
 
                     if (mContact.get(i).isChecked()) {
-//                        GroupUsers users = new GroupUsers();
-//                        users.setOrgId(getArguments().getString("orgId", "1"));
-//                        users.save(mContact.get(i));
                         mGroupUsers.add(mContact.get(i));
-                        mUserListener.selectedUsers(mGroupUsers);
+                    } else {
+                        mGroupUsers.remove(mContact.get(i));
                     }
-                    mAdapter.setNewData(mContact);
-                    mAdapter.notifyDataSetChanged();
+                    mUserListener.selectedUsers(mGroupUsers);
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(() -> {
+                        mAdapter.setNewData(mContact);
+                        mAdapter.notifyDataSetChanged();
+                    }, 100);
                     break;
             }
         }
@@ -157,13 +193,12 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
 
     public void updateSelected() {
         try {
-            for (int i = 0; i < mLoadContact.size(); i++) {
-                Contacts contacts = mLoadContact.get(Integer.parseInt(getArguments().getString("orgId", "1") + i));
-                if (contacts == null) {
-                    continue;
-                }
-                mContact.add(contacts);
+            List<Contacts> contacts = mLoadContact.get(Integer.parseInt(getArguments().getString("orgId", "1")));
+            if (contacts == null) {
+                return;
             }
+            mContact.clear();
+            mContact.addAll(contacts);
             mAdapter.setNewData(mContact);
             mAdapter.notifyDataSetChanged();
         } catch (Throwable e) {

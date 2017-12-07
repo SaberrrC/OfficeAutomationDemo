@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,13 +10,10 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -25,7 +23,6 @@ import com.shanlinjinrong.oa.ui.activity.message.Fragment.GroupContactListFragme
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.SelectedGroupContactFragment;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedContactAdapter;
 import com.shanlinjinrong.oa.ui.activity.message.bean.DeleteContactEvent;
-import com.shanlinjinrong.oa.ui.activity.message.bean.GroupUsers;
 import com.shanlinjinrong.oa.ui.activity.message.contract.SelectedGroupContactContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.SelectedGroupContactPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -45,10 +42,13 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+//群组 选择人员
 public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroupContactPresenter> implements SelectedGroupContactContract.View, SelectedGroupContactFragment.onLoadUsersListener, SelectedGroupContactFragment.onSelectedUsersListener {
 
     @BindView(R.id.top_view)
     CommonTopView mTopView;
+    @BindView(R.id.tv_empty_view)
+    TextView mTvErrorView;
     @BindView(R.id.search_et_input)
     EditText mSearchContact;
     @BindView(R.id.tv_selected_contact)
@@ -60,12 +60,15 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     @BindView(R.id.bottom_container_layout)
     BottomSheetLayout bottomContainerLayout;
 
+
+    private List<String> mOrgIdKey;
+    private final int RESULT_CODE = 102;
     private List<Contacts> mGroupUsers;
     private InputMethodManager inputManager;
-    private SparseArray<Contacts> mCacheContact;
     private List<Contacts> mSearchData;
     private SelectedContactAdapter mUserAdapter;
     private GroupContactListFragment mBottomFragment;
+    private SparseArray<List<Contacts>> mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
 
     @Override
@@ -86,35 +89,45 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     }
 
     private void initData() {
+        mOrgIdKey = new ArrayList<>();
         mFragments = new ArrayList<>();
         mGroupUsers = new ArrayList<>();
-        mCacheContact = new SparseArray<>();
         mSearchData = new ArrayList<>();
+        mCacheContact = new SparseArray<>();
     }
 
     private void initView() {
 
-        //搜索联系人
+        //------------------------------- 监听联系人搜索 -------------------------------
+
         RxTextView.textChanges(mSearchContact)
-                .debounce(1000, TimeUnit.MILLISECONDS)
+                .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(charSequence -> {
                     if (mSearchContact.getText().toString().trim().equals("")) {
-                        mTopView.setAppTitle(mFragments.get(0).getArguments().getString("title", "选择成员"));
+                        if (mFragments.size() > 0) {
+                            mTopView.setAppTitle(mFragments.get(0).getArguments().getString("title", "选择成员"));
+                            mTopView.setLeftText("上一级");
+                            return;
+                        }
+                        mTopView.setAppTitle("选择成员");
+                        mTopView.setLeftText("返回");
                         mRvSearchContact.setVisibility(View.GONE);
                         return;
                     }
                     mTopView.setAppTitle("搜索");
+                    mTopView.setLeftText("上一级");
+                    mTvErrorView.setVisibility(View.VISIBLE);
                     mPresenter.searchContact(mSearchContact.getText().toString().trim());
                 });
 
-        //初始化视图
-        SelectedGroupContactFragment fragment = new SelectedGroupContactFragment(mGroupUsers, mCacheContact, this, this);
+        //-------------------------------   初始化视图   -------------------------------
+
+        SelectedGroupContactFragment fragment = new SelectedGroupContactFragment(mGroupUsers, mCacheContact, mOrgIdKey, this, this);
         Bundle bundle = new Bundle();
         bundle.putBoolean("isBack", false);
         fragment.setArguments(bundle);
-        mFragments.add(fragment);
         getSupportFragmentManager().beginTransaction().add(R.id.fl_container_layout, fragment).commit();
 
         mUserAdapter = new SelectedContactAdapter(mSearchData);
@@ -124,10 +137,30 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         mUserAdapter.notifyDataSetChanged();
 
         inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        mTopView.getRightView().setOnClickListener(view -> {
+
+            //返回 -> 选择人员
+            String[] userNames = new String[mGroupUsers.size()];
+            String[] userCodes = new String[mGroupUsers.size()+1];
+            for (int i = 0; i < mGroupUsers.size(); i++) {
+                userNames[i] = mGroupUsers.get(i).getUsername();
+                userCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
+            }
+
+            Intent intent = new Intent();
+            intent.putExtra("name", userNames);
+            intent.putExtra("code", userCodes);
+            setResult(RESULT_CODE, intent);
+            finish();
+        });
     }
 
     @OnClick(R.id.ll_selected_contact)
     public void onSelectedContact() {
+
+        //-------------------------------  BottomFragment  -------------------------------
+
         if (mGroupUsers.size() > 0) {
             if (mBottomFragment == null) {
                 mBottomFragment = new GroupContactListFragment(mGroupUsers);
@@ -137,6 +170,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 bottomContainerLayout.dismissSheet();
             } else {
                 mBottomFragment.show(getSupportFragmentManager(), R.id.bottom_container_layout);
+                mBottomFragment.updateBottomData();
             }
         }
     }
@@ -145,7 +179,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     @Override
     public void loadUsers(String title, String orgId) {
         mTopView.setAppTitle(title);
-        SelectedGroupContactFragment fragment = new SelectedGroupContactFragment(mGroupUsers, mCacheContact, this, this);
+        SelectedGroupContactFragment fragment = new SelectedGroupContactFragment(mGroupUsers, mCacheContact, mOrgIdKey, this, this);
         Bundle bundle = new Bundle();
         bundle.putString("orgId", orgId);
         bundle.putString("title", title);
@@ -168,54 +202,70 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDeleteContact(DeleteContactEvent event) {
 
-//        for (int i = 0; i <= mGroupUsers.size(); i++) {
-//            Contacts contacts = mCacheContact.get(Integer.parseInt(mGroupUsers.get(i).getOrgId() + i));
-//            if (contacts != null) {
-//                if (event.getCode().equals(contacts.getCode())) {
-//                    contacts.setChecked(!contacts.isChecked());
-//                    mCacheContact.put(Integer.parseInt(mGroupUsers.get(i).getOrgId() + i), contacts);
-//
-//                    SelectedGroupContactFragment fragment = mFragments.get(0);
-//                    if (fragment != null)
-//                        mFragments.get(0).updateSelected();
-//                }
-//            }
-//        }
+        //------------------------------- 更新通讯录 列表 -------------------------------
 
-
-        //搜索人员
-        for (int i = 0; i < mSearchData.size(); i++) {
-            if (mSearchData.get(i).getCode().equals(event.getCode())) {
-                mSearchData.get(i).setChecked(!mSearchData.get(i).isChecked());
-            }
-        }
-
-        mUserAdapter.setNewData(mSearchData);
-        mUserAdapter.notifyDataSetChanged();
-
-        if (event.getSize() == 0) {
-            if (mBottomFragment != null) {
-                if (bottomContainerLayout.isSheetShowing()) {
-                    mBottomFragment.dismiss();
-                    bottomContainerLayout.dismissSheet();
-                    return;
+        try {
+            for (int i = 0; i < mOrgIdKey.size(); i++) {
+                List<Contacts> contacts = mCacheContact.get(Integer.parseInt(mOrgIdKey.get(i)));
+                if (contacts != null) {
+                    for (int j = 0; j < contacts.size(); j++) {
+                        if (event.getCode().equals(contacts.get(j).getCode())) {
+                            contacts.get(j).setChecked(false);
+                            mCacheContact.put(Integer.parseInt(mOrgIdKey.get(i)), contacts);
+                            break;
+                        }
+                    }
                 }
             }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
 
-        mTvSelectedContact.setText(mGroupUsers.size() + "");
+        //-------------------------------  搜索人员 -------------------------------
+
+        try {
+            if (mRvSearchContact.getVisibility() == View.VISIBLE) {
+
+                for (int i = 0; i < mSearchData.size(); i++) {
+                    if (mSearchData.get(i).getCode().equals(event.getCode())) {
+                        mSearchData.get(i).setChecked(!mSearchData.get(i).isChecked());
+                    }
+                }
+
+                mUserAdapter.setNewData(mSearchData);
+                mUserAdapter.notifyDataSetChanged();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        if (event.getSize() == 0)
+            hideBottomView();
+
+        mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
         mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
     }
 
-    @Override
-    public void onBackPressed() {
+    private boolean hideBottomView() {
         if (mBottomFragment != null) {
             if (bottomContainerLayout.isSheetShowing()) {
                 mBottomFragment.dismiss();
                 bottomContainerLayout.dismissSheet();
-                return;
+                return true;
             }
         }
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        //-------------------------------  模拟Activity  -------------------------------
+
+        if (hideBottomView())
+            return;
+
+        //-------------------------------  搜索界面  -------------------------------
 
         if (mRvSearchContact.getVisibility() == View.VISIBLE) {
             mRvSearchContact.setVisibility(View.GONE);
@@ -223,26 +273,27 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             return;
         }
 
+        //-------------------------------  选择人员界面  -------------------------------
+
         for (SelectedGroupContactFragment fragment : mFragments) {
             if (fragment.onBackPressed()) {
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.fragment_animation_pop_enter, R.anim.fragment_animation_pop_exit)
                         .remove(fragment).commit();
                 mFragments.remove(0);
-                mTopView.setAppTitle(mFragments.get(0).getArguments().getString("title", "选择成员"));
+                if (mFragments.size() > 0) {
+                    mTopView.setAppTitle(mFragments.get(0).getArguments().getString("title", "选择成员"));
+                    mTopView.setLeftText("上一级");
+                    return;
+                }
+                mTopView.setAppTitle("选择成员");
+                mTopView.setLeftText("返回");
                 return;
             }
         }
+
         finish();
         super.onBackPressed();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
     }
 
     @Override
@@ -251,18 +302,48 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     }
 
     @Override
+    public void showLoading() {
+        showLoadingView();
+    }
+
+    @Override
+    public void hideLoading() {
+        hideLoadingView();
+    }
+
+    @Override
     public void QueryGroupContactSuccess(List<Contacts> bean) {
+        mTvErrorView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void QueryGroupContactFailed(int errorCode, String errorStr) {
+        switch (errorCode) {
+            case -1:
+                mTvErrorView.setText(R.string.net_no_connection);
+                mTvErrorView.setVisibility(View.VISIBLE);
+                showToast(getResources().getString(R.string.net_no_connection));
+                break;
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public void searchContactSuccess(List<Contacts> bean) {
+
+        mTvErrorView.setVisibility(View.GONE);
+
+        //-------------------------------       键盘隐藏       -------------------------------
+
         try {
             inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //-------------------------------  还原上一次选中的人员  -------------------------------
+
         if (bean != null) {
             mSearchData.clear();
             mRvSearchContact.setVisibility(View.VISIBLE);
@@ -274,24 +355,47 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     }
                 }
             }
+
             mSearchData.addAll(bean);
             mUserAdapter.setNewData(mSearchData);
             mUserAdapter.notifyDataSetChanged();
         }
     }
 
+    @Override
+    public void searchContactFailed(int errorCode, String errorStr) {
+        switch (errorCode) {
+            case -1:
+                mTvErrorView.setText(R.string.net_no_connection);
+                mTvErrorView.setVisibility(View.VISIBLE);
+                showToast(getResources().getString(R.string.net_no_connection));
+                break;
+        }
+    }
+
     class OnItemClick extends OnItemClickListener {
+        @SuppressWarnings("LoopStatementThatDoesntLoop")
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
 
             mSearchData.get(i).setChecked(!mSearchData.get(i).isChecked());
+
             if (mSearchData.get(i).isChecked()) {
+                for (int j = 0; j < mGroupUsers.size(); j++) {
+                    if (mSearchData.get(i).getCode().equals(mGroupUsers.get(j).getCode())) {
+                        mGroupUsers.remove(j);
+                    }
+                }
                 mGroupUsers.add(mSearchData.get(i));
             } else {
-                mGroupUsers.remove(mSearchData.get(i));
+                for (int j = 0; j < mGroupUsers.size(); j++) {
+                    if (mSearchData.get(i).getCode().equals(mGroupUsers.get(j).getCode())) {
+                        mGroupUsers.remove(j);
+                    }
+                }
             }
 
-            //BottomSheet
+            //更新UI
             mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
             mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
 
@@ -301,6 +405,39 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 mUserAdapter.setNewData(mSearchData);
                 mUserAdapter.notifyDataSetChanged();
             }, 100);
+
+            // ---------------------------------- 更新通讯录 ----------------------------------
+
+            try {
+                String orgId = "";
+                List<Contacts> contacts = null;
+                for (int j = 0; j < mOrgIdKey.size(); j++) {
+                    orgId = mOrgIdKey.get(j);
+                    if (!orgId.equals("1")) {
+                        contacts = mCacheContact.get(Integer.parseInt(orgId));
+                        for (int k = 0; k < contacts.size(); k++) {
+                            if (contacts.get(k).getCode() != null) {
+                                if (mSearchData.get(i).getCode().equals(contacts.get(k).getCode())) {
+                                    contacts.get(k).setChecked(mSearchData.get(i).isChecked());
+                                    mCacheContact.remove(Integer.parseInt(orgId));
+                                    mCacheContact.put(Integer.parseInt(orgId), contacts);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
     }
 }

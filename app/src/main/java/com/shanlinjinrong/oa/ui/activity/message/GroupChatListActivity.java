@@ -40,16 +40,16 @@ public class GroupChatListActivity extends AppCompatActivity {
 
     @BindView(R.id.top_view)
     CommonTopView mTopView;
-    @BindView(R.id.ed_search_group)
-    EditText edSearchGroup;
+//    @BindView(R.id.ed_search_group)
+//    EditText edSearchGroup;
     @BindView(R.id.rv_group_show)
     RecyclerView mRvGroupShow;
 
     private GroupChatListAdapter mAdapter;
     private List<EMGroup> mGroupList;
-    @SuppressWarnings("SpellCheckingInspection")
-    private final int REQUESTCODE = 101, RESULTSUCCESS = -2;
     private CompositeSubscription mSubscription;
+    @SuppressWarnings("SpellCheckingInspection")
+    private final int REQUESTCODE = 101, RESULTSUCCESS = -2, RESULTELECTEDCODE = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +72,10 @@ public class GroupChatListActivity extends AppCompatActivity {
 
     private void initView() {
         mTopView.getRightView().setOnClickListener(view -> {
-            //TODO 创建群主 选择联系人界面 待优化  加缓存
             Intent intent = new Intent(this, SelectedGroupContactActivity.class);
-//            intent.putExtra("isCreate", true);
             startActivityForResult(intent, REQUESTCODE);
         });
+
         mAdapter = new GroupChatListAdapter(mGroupList);
         mRvGroupShow.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRvGroupShow.setAdapter(mAdapter);
@@ -85,47 +84,36 @@ public class GroupChatListActivity extends AppCompatActivity {
     }
 
     //创建群组
-    private void createGroup(Intent data) {
-        if (data != null) {
-            ArrayList<Child> contacts = data.getParcelableArrayListExtra("contacts");
-            if (contacts != null) {
-                //邀请账号
-                List<String> account = new ArrayList<>();
-                //群组名字
-                String groupName = AppConfig.getAppConfig(AppManager.mContext).getPrivateName() + ",";
-                account.add("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+    private void createGroup(String[] name, String[] codes) {
+        if (name != null && codes != null) {
 
-                for (int i = 0; i < contacts.size(); i++) {
-                    if (i == contacts.size() - 1) {
-                        groupName = groupName + contacts.get(i).getUsername();
-                        account.add("sl_" + contacts.get(i).getCODE());
-                    } else {
-                        groupName = groupName + contacts.get(i).getUsername() + ",";
-                        account.add("sl_" + contacts.get(i).getCODE());
-                    }
-                }
+            //群组名字
+            StringBuilder groupName = new StringBuilder(AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
+            codes[codes.length-1] = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+            for (String aName : name) {
+                groupName.append(",").append(aName);
+            }
 
-                //群名字上限10字符
-                if (groupName.length() > 10) {
-                    groupName = groupName.substring(0, 10);
-                    groupName = groupName + "...";
-                }
+            //群名字上限10字符
+            if (groupName.length() > 10) {
+                groupName = new StringBuilder(groupName.substring(0, 10));
+                groupName.append("...");
+            }
 
-                //群组默认参数
-                EMGroupOptions option = new EMGroupOptions();
-                option.maxUsers = 200;//上限200人
-                //EMGroupStylePrivateOnlyOwnerInvite——私有群，只有群主可以邀请人；
-                //EMGroupStylePrivateMemberCanInvite——私有群，群成员也能邀请人进群；
-                //EMGroupStylePublicJoinNeedApproval——公开群，加入此群除了群主邀请，只能通过申请加入此群；
-                //EMGroupStylePublicOpenJoin ——公开群，任何人都能加入此群。
+            //群组默认参数
+            EMGroupOptions option = new EMGroupOptions();
+            option.maxUsers = 200;//上限200人
+            //EMGroupStylePrivateOnlyOwnerInvite——私有群，只有群主可以邀请人；
+            //EMGroupStylePrivateMemberCanInvite——私有群，群成员也能邀请人进群；
+            //EMGroupStylePublicJoinNeedApproval——公开群，加入此群除了群主邀请，只能通过申请加入此群；
+            //EMGroupStylePublicOpenJoin ——公开群，任何人都能加入此群。
 
-                option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
-                try {
-                    EMClient.getInstance().groupManager().createGroup(groupName, "", account.toArray(new String[]{String.valueOf(account)}), "邀请加入群", option);
-                } catch (HyphenateException e) {
-                    Toast.makeText(this, "群组创建失败", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
+            option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
+            try {
+                EMClient.getInstance().groupManager().createGroup(groupName.toString(), "", codes, "邀请加入群", option);
+            } catch (HyphenateException e) {
+                Toast.makeText(this, "群组创建失败", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
         }
     }
@@ -136,6 +124,7 @@ public class GroupChatListActivity extends AppCompatActivity {
         Subscription subscribe = Observable.create(subscriber -> {
             try {
                 mGroupList = EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
+
                 subscriber.onCompleted();
             } catch (HyphenateException e) {
                 e.printStackTrace();
@@ -157,9 +146,16 @@ public class GroupChatListActivity extends AppCompatActivity {
 
         switch (resultCode) {
             case RESULT_OK: //返回选择的群组人员
+                break;
+            case RESULTSUCCESS: //刷新界面
+                refreshData(); //TODO 待优化 本地做删除
+
+            case RESULTELECTEDCODE: //返回选择的群组人员
+                String[] names = data.getStringArrayExtra("name");
+                String[] codes = data.getStringArrayExtra("code");
                 Subscription subscribe = Observable
                         .create(subscriber -> {
-                            createGroup(data);
+                            createGroup(names, codes);
                             subscriber.onCompleted();
                         })
                         .subscribeOn(Schedulers.io())
@@ -167,9 +163,7 @@ public class GroupChatListActivity extends AppCompatActivity {
                         .subscribe(o -> {
                         }, Throwable::printStackTrace, this::refreshData);
                 mSubscription.add(subscribe);
-                break;
-            case RESULTSUCCESS: //刷新界面
-                refreshData(); //TODO 待优化 本地做删除
+
                 break;
         }
     }

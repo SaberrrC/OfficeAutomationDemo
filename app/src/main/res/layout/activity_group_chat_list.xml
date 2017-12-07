@@ -15,26 +15,49 @@
         app:leftDrawable="@drawable/toolbar_back"
         app:rightDrawable="@mipmap/icon_add_chat_group"
         app:topTitle="群聊列表" />
-
     <View
+        android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
+        android:layout_below="@+id/top_view"
         android:background="@color/gray_d5d5d5" />
 
-    <EditText
-        android:id="@+id/ed_search_group"
-        style="@null"
+    <RelativeLayout
+        android:id="@+id/rl_top2"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/search_edittext_shape"
-        android:drawableLeft="@mipmap/icon_contacts_search"
-        android:hint="  搜索"
-        android:paddingLeft="10dp"
-        android:textSize="14sp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_line">
+
+        <include
+            android:id="@+id/search_contact_person"
+            layout="@layout/activity_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#30d5d5d5"/>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.1dp"-->
+        <!--android:background="@color/gray_d5d5d5" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/ed_search_group"-->
+        <!--style="@null"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="32dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginEnd="12dp"-->
+        <!--android:layout_marginStart="12dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:background="@drawable/search_edittext_shape"-->
+        <!--android:drawableLeft="@mipmap/icon_contacts_search"-->
+        <!--android:hint="  搜索"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:textSize="14sp" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_group_show"

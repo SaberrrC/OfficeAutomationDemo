@@ -7,6 +7,7 @@ import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.message.CallActivity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.SelectedGroupContactContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -40,32 +41,56 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         mKjHttp.jsonGet(Api.GET_CONTACTS + "?orgId=" + orgId, httpParams, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                try {
+                    if (mView != null) {
+                        mView.showLoading();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
                     JSONObject jsonObject = new JSONObject(t);
-                    if (jsonObject.getString("code").equals(ApiJava.REQUEST_CODE_OK)) {
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                        JSONArray children = jsonObject1.getJSONArray("children");
-                        JSONArray users = jsonObject1.getJSONArray("users");
-                        List<Contacts> contacts = new ArrayList<>();
-                        for (int i = 0; i < children.length(); i++) {
-                            JSONObject department = children.getJSONObject(i);
-                            String number = department.getString("memberCount");
-                            if (number.equals("0")) {
-                                continue;
+                    switch (jsonObject.getString("code")) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                            JSONArray children = jsonObject1.getJSONArray("children");
+                            JSONArray users = jsonObject1.getJSONArray("users");
+                            List<Contacts> contacts = new ArrayList<>();
+                            for (int i = 0; i < children.length(); i++) {
+                                JSONObject department = children.getJSONObject(i);
+                                String number = department.getString("memberCount");
+                                if (number.equals("0")) {
+                                    continue;
+                                }
+                                Contacts contact = new Contacts(department);
+                                contacts.add(contact);
                             }
-                            Contacts contact = new Contacts(department);
-                            contacts.add(contact);
-                        }
 
-                        for (int i = 0; i < users.length(); i++) {
-                            JSONObject user = users.getJSONObject(i);
-                            Contacts userInfo = new Contacts(user);
-                            contacts.add(userInfo);
-                        }
-                        mView.QueryGroupContactSuccess(contacts);
+                            for (int i = 0; i < users.length(); i++) {
+                                JSONObject user = users.getJSONObject(i);
+                                Contacts userInfo = new Contacts(user);
+                                contacts.add(userInfo);
+                            }
+                            if (mView != null)
+                                mView.QueryGroupContactSuccess(contacts);
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
+
+                        default:
+                            mView.QueryGroupContactFailed(Integer.parseInt(jsonObject.getString("code")), jsonObject.getString("message"));
+                            break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -75,11 +100,24 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.QueryGroupContactFailed(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
+                try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -90,6 +128,25 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
             @Override
             public void onFinish() {
                 super.onFinish();
+                try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                try {
+                    if (mView != null) {
+                        mView.showLoading();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -122,7 +179,12 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                             if (mView != null)
                                 mView.searchContactSuccess(contacts);
                             break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(0);
                         default:
+                            mView.searchContactFailed(Integer.parseInt(jsonObject.getString("code")), jsonObject.getString("message"));
                             break;
                     }
                 } catch (JSONException e) {
@@ -133,6 +195,13 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.searchContactFailed(errorNo, strMsg);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
