@@ -431,13 +431,31 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.iv_next:
-                showToast("666");
-                if (currentPage == 0) {
+                List<EMMessage> messages;
+                String id = null;
+                try {
+                    id = conversation.getAllMessages().size() == 0 ? "" : conversation.getAllMessages().get(0).getMsgId();
+                    messages = conversation.loadMoreMsgFromDB(id, pagesize);
+                } catch (Exception e) {
+                    e.printStackTrace();
                     return;
                 }
-                String id = mMessageIds.get(currentPage - 1);
-                List<EMMessage> messages = conversation.loadMoreMsgFromDB(id, pagesize);
-                messageList.refreshPageSizeItem(messages);
+                if (messages.size() > 0) {
+                    //                        messageList.refreshSeekTo(messages.size() - 1);
+                    mMessageIds.add(id);
+                    messageList.refreshPageSizeItem(messages);
+                    currentPage++;
+                    setTtitle();
+                    if (messages.size() != pagesize) {
+                        haveMoreData = false;
+                    }
+                    return;
+                }
+                haveMoreData = false;
+
+                //                String msgid = mMessageIds.get(currentPage - 1);
+                //                List<EMMessage> messages5 = conversation.loadMoreMsgFromDB(msgid, pagesize);
+                //                messageList.refreshPageSizeItem(messages5);
                 break;
             case R.id.iv_final:
                 break;

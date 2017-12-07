@@ -59,7 +59,6 @@ public class EaseChatMessageList extends RelativeLayout {
         messageAdapter.notifyDataSetChanged();
     }
 
-
     /**
      * init widget
      *
