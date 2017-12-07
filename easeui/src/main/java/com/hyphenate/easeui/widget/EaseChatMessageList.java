@@ -57,6 +57,7 @@ public class EaseChatMessageList extends RelativeLayout {
     public void refreshPageSizeItem(List<EMMessage> var) {
         messageAdapter.refreshList(var);
         messageAdapter.notifyDataSetChanged();
+        listView.setSelection(messageAdapter.getCount() - 1);
     }
 
     /**
@@ -115,6 +116,7 @@ public class EaseChatMessageList extends RelativeLayout {
     public void refreshSelectLast() {
         if (messageAdapter != null) {
             messageAdapter.refreshSelectLast();
+            listView.setSelection(listView.getAdapter().getCount() - 1);
         }
     }
 
@@ -126,6 +128,7 @@ public class EaseChatMessageList extends RelativeLayout {
     public void refreshSeekTo(int position) {
         if (messageAdapter != null) {
             messageAdapter.refreshSeekTo(position);
+            listView.setSelection(listView.getAdapter().getCount() - 1);
         }
     }
 

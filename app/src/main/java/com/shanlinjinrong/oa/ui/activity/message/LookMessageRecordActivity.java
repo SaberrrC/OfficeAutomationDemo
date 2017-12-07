@@ -170,7 +170,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
 
     private   int currentPage = 1;
     private   int totalPage   = 0;
-    protected int PAGE_SIZE   = 5;
+    protected int PAGE_SIZE   = 20;
 
     protected void onConversationInit() {
         //        if (conversation != null) {
@@ -225,16 +225,6 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 });
             }
         }.start();
-        //        final List<EMMessage> msgs = conversation.getAllMessages();
-        //        int msgCount = msgs != null ? msgs.size() : 0;
-        //        if (msgCount <= conversation.getAllMsgCount() && msgCount < PAGE_SIZE) {
-        //            String msgId = null;
-        //            if (msgs != null && msgs.size() > 0) {
-        //                msgId = msgs.get(0).getMsgId();
-        //                mEmMessage = msgs.get(0);
-        //            }
-        //            conversation.loadMoreMsgFromDB(msgId, PAGE_SIZE - msgCount);
-        //        }
     }
 
     private boolean isMessageListInited;
@@ -430,6 +420,17 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
             case R.id.iv_search:
                 break;
             case R.id.iv_first:
+                if (currentPage == totalPage) {
+                    Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                List<EMMessage> mdatasFirst = new ArrayList<>();
+                for (int i = 0; i < mAllMessages.size() - (totalPage - 1) * PAGE_SIZE; i++) {
+                    mdatasFirst.add(mAllMessages.get(i));
+                }
+                messageList.refreshPageSizeItem(mdatasFirst);
+                currentPage = totalPage;
+                setTtitle();
                 break;
             case R.id.iv_last:
                 if (currentPage == totalPage) {
@@ -448,12 +449,13 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 setTtitle();
                 break;
             case R.id.iv_next:
-                if (currentPage == 0) {
+                if (currentPage == 1) {
+                    Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 List<EMMessage> mdatasNext = new ArrayList<>();
                 for (int i = mAllMessages.size() - (currentPage - 1) * PAGE_SIZE; i < mAllMessages.size() - (currentPage - 2) * PAGE_SIZE; i++) {
-                    if (i > mAllMessages.size()) {
+                    if (i >= mAllMessages.size()) {
                         break;
                     }
                     mdatasNext.add(mAllMessages.get(i));
@@ -461,10 +463,23 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 messageList.refreshPageSizeItem(mdatasNext);
                 currentPage--;
                 setTtitle();
-                //                    id = conversation.getAllMessages().size() == 0 ? "" : conversation.getAllMessages().get(0).getMsgId();
-                //                    messages = conversation.loadMoreMsgFromDB(id, PAGE_SIZE);
                 break;
             case R.id.iv_final:
+                if (currentPage == 1) {
+                    Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (mAllMessages.size() <= PAGE_SIZE) {
+                    messageList.refreshPageSizeItem(mAllMessages);
+                    return;
+                }
+                List<EMMessage> mdatasFinal = new ArrayList<>();
+                for (int i = mAllMessages.size() - PAGE_SIZE; i < mAllMessages.size(); i++) {
+                    mdatasFinal.add(mAllMessages.get(i));
+                }
+                messageList.refreshPageSizeItem(mdatasFinal);
+                currentPage = 1;
+                setTtitle();
                 break;
         }
     }

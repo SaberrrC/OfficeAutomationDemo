@@ -312,6 +312,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (forward_msg_id != null) {
             forwardMessage(forward_msg_id);
         }
+        listView.setSelection(listView.getAdapter().getCount()-1);
     }
 
     /**
@@ -510,8 +511,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     @Override
     public void onResume() {
         super.onResume();
-        if (isMessageListInited)
+        if (isMessageListInited) {
             messageList.refresh();
+        }
         EaseUI.getInstance().pushActivity(getActivity());
         // register the event listener when enter the foreground
         EMClient.getInstance().chatManager().addMessageListener(this);

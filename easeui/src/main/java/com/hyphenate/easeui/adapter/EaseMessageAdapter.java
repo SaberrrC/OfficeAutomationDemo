@@ -101,7 +101,7 @@ public class EaseMessageAdapter extends BaseAdapter {
     }
 
     private List<EMMessage> messages = new ArrayList<>();
-    private List<EMMessage> mDatas = new ArrayList<>();
+    private List<EMMessage> mDatas   = new ArrayList<>();
 
 
     @SuppressLint("HandlerLeak")
@@ -111,6 +111,7 @@ public class EaseMessageAdapter extends BaseAdapter {
             // otherwise there is problem when refreshing UI and there is new message arrive
             if (conversation != null) {
                 mDatas = conversation.getAllMessages();
+                messages.clear();
                 messages.addAll(mDatas);
                 conversation.markAllMessagesAsRead();
                 notifyDataSetChanged();
