@@ -458,6 +458,9 @@ public class Api {
     // 查询工号信息
     public static final String USERS_SEARCH = "/users/search?code=";
 
+    // 查询工号信息
+    public static final String VERIFY_CODE = "/users/verifycode";
+
 
     /**
      * 新会议室信息

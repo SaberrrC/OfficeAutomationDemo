@@ -35,7 +35,7 @@ public class GroupContactListFragment extends BottomSheetFragment {
 
     private View mRootView;
     private SelectedUserAdapter mAdapter;
-    private List<Contacts> mData = new ArrayList<>();
+    private List<Contacts> mData;
 
     public GroupContactListFragment(List<Contacts> data) {
         mData = data;
@@ -70,6 +70,13 @@ public class GroupContactListFragment extends BottomSheetFragment {
             mAdapter.setNewData(mData);
             mAdapter.notifyDataSetChanged();
             EventBus.getDefault().post(new DeleteContactEvent("delete", i, code, mData.size()));
+        }
+    }
+
+    public void updateBottomData() {
+        if (mAdapter != null) {
+            mAdapter.setNewData(mData);
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

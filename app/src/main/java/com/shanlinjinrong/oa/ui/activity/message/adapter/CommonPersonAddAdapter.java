@@ -40,16 +40,16 @@ public class CommonPersonAddAdapter extends BaseQuickAdapter<ChatMessageDetailsB
                 name.setVisibility(View.INVISIBLE);
                 Glide.with(AppManager.mContext)
                         .load(bean.getPortraist())
-                        .error(R.drawable.ease_default_avatar)
+                        .error(R.mipmap.icon_default_group_portraits)
                         .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                        .placeholder(R.drawable.ease_default_avatar).into(portraits);
+                        .placeholder(R.mipmap.icon_default_group_portraits).into(portraits);
                 return;
             }
             Glide.with(AppManager.mContext)
                     .load(bean.getPortraist())
-                    .error(R.drawable.ease_default_avatar)
+                    .error(R.mipmap.icon_default_group_portraits)
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                    .placeholder(R.drawable.ease_default_avatar).into(portraits);
+                    .placeholder(R.mipmap.icon_default_group_portraits).into(portraits);
         } catch (Throwable e) {
             e.printStackTrace();
         }

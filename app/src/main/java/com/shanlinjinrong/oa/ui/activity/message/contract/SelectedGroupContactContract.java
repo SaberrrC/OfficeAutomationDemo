@@ -1,4 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.message.contract;
+
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -15,9 +16,17 @@ public interface SelectedGroupContactContract {
 
     interface View extends BaseView {
 
+        void showLoading();
+
+        void hideLoading();
+
         void QueryGroupContactSuccess(List<Contacts> bean);
 
+        void QueryGroupContactFailed(int errorCode, String errorStr);
+
         void searchContactSuccess(List<Contacts> bean);
+
+        void searchContactFailed(int errorCode, String errorStr);
 
     }
 
