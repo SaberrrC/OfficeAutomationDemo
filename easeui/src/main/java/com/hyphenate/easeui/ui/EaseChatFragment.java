@@ -454,6 +454,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     private void loadMoreLocalMessage() {
+        if (listView.getAdapter().getCount() == 0) {
+            Toast.makeText(getActivity(), "没有更多的消息了", Toast.LENGTH_SHORT).show();
+            swipeRefreshLayout.setRefreshing(false);
+            return;
+        }
         if (listView.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
             List<EMMessage> messages;
             try {
@@ -479,7 +484,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     private void loadMoreRoamingMessages() {
-        if (!haveMoreData) {
+        if (!haveMoreData || listView.getAdapter().getCount() == 0) {
             Toast.makeText(getActivity(), getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
             swipeRefreshLayout.setRefreshing(false);
             return;

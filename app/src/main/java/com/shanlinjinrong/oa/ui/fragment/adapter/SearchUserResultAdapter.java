@@ -4,11 +4,12 @@ import android.net.Uri;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.model.User;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by lenovo on 2017/6/25.
@@ -27,7 +28,7 @@ public class SearchUserResultAdapter extends BaseMultiItemQuickAdapter<User> {
     protected void convert(BaseViewHolder baseViewHolder, User user) {
         switch (baseViewHolder.getItemViewType()) {
             case 100:
-                SimpleDraweeView portrait = baseViewHolder.getView(R.id.portrait);
+                CircleImageView portrait = baseViewHolder.getView(R.id.portrait);
                 portrait.setImageURI(Uri.parse(user.getPortraits()));
 //                if (user.getPortraits() == null) {
 //                    portrait.setBackgroundResource(R.drawable.tab_me_head_default);
