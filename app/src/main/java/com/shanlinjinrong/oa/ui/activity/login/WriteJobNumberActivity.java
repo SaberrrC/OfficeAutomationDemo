@@ -72,12 +72,12 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
         //点击确定按钮
         if (v.getId() == R.id.btn_sure) {
 
-            if (mIdentifyingCode.getText().toString().trim().equals("")){
+            if (mIdentifyingCode.getText().toString().trim().equals("")) {
                 showToast("输入验证码为空！");
                 return;
             }
 
-            mPresenter.verifyCode(mIdentifyingCode.getText().toString().trim(), mKeyCode);
+            mPresenter.searchUser(mIdentifyingCode.getText().toString().trim(), mKeyCode, mJobNumber.getText().toString().trim());
         }
     }
 
@@ -124,18 +124,6 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
 
     @Override
     public void searchUserFailed(int errorCode, String errMsg) {
-        mPresenter.getIdentifyingCode();
-        showToast(errMsg);
-    }
-
-    @Override
-    public void verifyCodeSuccess() {
-        //验证成功
-        mPresenter.searchUser(mJobNumber.getText().toString().trim(), mIdentifyingCode.getText().toString().trim());
-    }
-
-    @Override
-    public void verifyCodeFailed(int errorCode, String errMsg) {
         mPresenter.getIdentifyingCode();
         showToast(errMsg);
     }
