@@ -25,6 +25,5 @@ public interface LoginActivityContract {
 
     interface Presenter extends BasePresenter<View> {
         void login(String account, String psw); //登录
-
     }
 }

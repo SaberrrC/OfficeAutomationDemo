@@ -66,8 +66,8 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
     }
 
     @Override
-    public void searchUser(String jobNum, String imgCode) {
-        mKjHttp.phpJsonGet(Api.USERS_SEARCH + jobNum + "&imgcode=" + imgCode, new HttpParams(), new HttpCallBack() {
+    public void searchUser(String imgCode, String keyCode,String userCode) {
+        mKjHttp.phpJsonGet(Api.USERS_SEARCH +"?imgcode="+ imgCode + "&keycode=" + keyCode+"&code="+userCode, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -122,52 +122,52 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
         });
     }
 
-    @Override
-    public void verifyCode(String imgCode, String keyCode) {
-        mKjHttp.phpJsonGet(Api.VERIFY_CODE + "?imgcode=" + imgCode + "&keycode=" + keyCode, new HttpParams(), new HttpCallBack() {
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(t);
-                    int code = jsonObject.getInt("code");
-                    switch (code) {
-                        case Api.RESPONSES_CODE_OK:
-                            if (mView != null)
-                                mView.verifyCodeSuccess();
-                            break;
-                        default:
-                            if (mView != null)
-                                mView.verifyCodeFailed(code, jsonObject.getString("info"));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                try {
-                    if (mView != null)
-                        mView.searchUserFailed(errorNo, strMsg);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                try {
-                    if (mView != null)
-                        mView.requestFinish();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+//    @Override
+//    public void verifyCode(String imgCode, String keyCode) {
+//        mKjHttp.phpJsonGet(Api.VERIFY_CODE + "?imgcode=" + imgCode + "&keycode=" + keyCode, new HttpParams(), new HttpCallBack() {
+//            @Override
+//            public void onSuccess(String t) {
+//                super.onSuccess(t);
+//                JSONObject jsonObject = null;
+//                try {
+//                    jsonObject = new JSONObject(t);
+//                    int code = jsonObject.getInt("code");
+//                    switch (code) {
+//                        case Api.RESPONSES_CODE_OK:
+//                            if (mView != null)
+//                                mView.verifyCodeSuccess();
+//                            break;
+//                        default:
+//                            if (mView != null)
+//                                mView.verifyCodeFailed(code, jsonObject.getString("info"));
+//                            break;
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int errorNo, String strMsg) {
+//                super.onFailure(errorNo, strMsg);
+//                try {
+//                    if (mView != null)
+//                        mView.searchUserFailed(errorNo, strMsg);
+//                } catch (Throwable e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                super.onFinish();
+//                try {
+//                    if (mView != null)
+//                        mView.requestFinish();
+//                } catch (Throwable e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
 }

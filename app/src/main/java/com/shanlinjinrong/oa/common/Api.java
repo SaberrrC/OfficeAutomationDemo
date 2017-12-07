@@ -456,7 +456,7 @@ public class Api {
     public static final String SENDS_CAPTCHA = "/users/code";
 
     // 查询工号信息
-    public static final String USERS_SEARCH = "/users/search?code=";
+    public static final String USERS_SEARCH = "/users/verifycode";
 
     // 查询工号信息
     public static final String VERIFY_CODE = "/users/verifycode";
