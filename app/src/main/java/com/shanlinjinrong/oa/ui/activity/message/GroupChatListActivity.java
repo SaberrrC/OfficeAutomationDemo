@@ -1,12 +1,15 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -40,8 +43,6 @@ public class GroupChatListActivity extends AppCompatActivity {
 
     @BindView(R.id.top_view)
     CommonTopView mTopView;
-//    @BindView(R.id.ed_search_group)
-//    EditText edSearchGroup;
     @BindView(R.id.rv_group_show)
     RecyclerView mRvGroupShow;
 
@@ -50,6 +51,7 @@ public class GroupChatListActivity extends AppCompatActivity {
     private CompositeSubscription mSubscription;
     @SuppressWarnings("SpellCheckingInspection")
     private final int REQUESTCODE = 101, RESULTSUCCESS = -2, RESULTELECTEDCODE = 102;
+    private View mFooterView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,22 @@ public class GroupChatListActivity extends AppCompatActivity {
         mRvGroupShow.setAdapter(mAdapter);
         mRvGroupShow.addOnItemTouchListener(new ItemClick());
         mAdapter.notifyDataSetChanged();
+        initFooterView();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void initFooterView() {
+        if (mFooterView == null)
+            mFooterView = getLayoutInflater().inflate(R.layout.group_list_footer_view, (ViewGroup) mRvGroupShow.getParent(), false);
+        TextView mTvFooterGroupCount = (TextView) mFooterView.findViewById(R.id.tv_group_count);
+        if (mGroupList.size() > 0) {
+            mTvFooterGroupCount.setText(mGroupList.size() + "个群聊");
+            mAdapter.addFooterView(mFooterView);
+        } else {
+            if (mAdapter.getFooterLayoutCount() > 0) {
+                mAdapter.removeAllFooterView();
+            }
+        }
     }
 
     //创建群组
@@ -89,7 +107,8 @@ public class GroupChatListActivity extends AppCompatActivity {
 
             //群组名字
             StringBuilder groupName = new StringBuilder(AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
-            codes[codes.length-1] = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+            //默认不加入群组Id
+            //codes[codes.length - 1] = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
             for (String aName : name) {
                 groupName.append(",").append(aName);
             }
@@ -136,6 +155,7 @@ public class GroupChatListActivity extends AppCompatActivity {
                         () -> {
                             mAdapter.setNewData(mGroupList);
                             mAdapter.notifyDataSetChanged();
+                            initFooterView();
                         });
         mSubscription.add(subscribe);
     }

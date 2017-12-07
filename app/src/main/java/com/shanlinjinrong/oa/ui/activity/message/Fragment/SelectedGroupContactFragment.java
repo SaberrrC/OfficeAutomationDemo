@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroupContactPresenter> implements SelectedGroupContactContract.View {
 
     @BindView(R.id.tv_empty_view)
-    TextView tvEmptyView;
+    TextView mTvEmptyView;
     @BindView(R.id.rv_group_contact)
     RecyclerView rvGroupContact;
 
@@ -83,6 +83,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
             mContact.addAll(contacts1);
             mAdapter.setNewData(mContact);
             mAdapter.notifyDataSetChanged();
+            mTvEmptyView.setVisibility(View.GONE);
             return;
         }
         mPresenter.QueryGroupContact(getArguments().getString("orgId", "1"));
@@ -123,7 +124,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
     public void QueryGroupContactSuccess(List<Contacts> bean) {
         try {
             if (bean != null) {
-                tvEmptyView.setVisibility(View.GONE);
+                mTvEmptyView.setVisibility(View.GONE);
                 mOrgIdKey.add(getArguments().getString("orgId", "1"));
                 mContact.addAll(bean);
                 mAdapter.setNewData(mContact);
@@ -141,8 +142,8 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
     public void QueryGroupContactFailed(int errorCode, String errorStr) {
         switch (errorCode) {
             case -1:
-                tvEmptyView.setText(R.string.net_no_connection);
-                tvEmptyView.setVisibility(View.VISIBLE);
+                mTvEmptyView.setText(R.string.net_no_connection);
+                mTvEmptyView.setVisibility(View.VISIBLE);
                 showToast(getResources().getString(R.string.net_no_connection));
                 break;
         }
@@ -150,15 +151,15 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
 
     @Override
     public void searchContactSuccess(List<Contacts> bean) {
-        tvEmptyView.setVisibility(View.GONE);
+        mTvEmptyView.setVisibility(View.GONE);
     }
 
     @Override
     public void searchContactFailed(int errorCode, String errorStr) {
         switch (errorCode) {
             case -1:
-                tvEmptyView.setText(R.string.net_no_connection);
-                tvEmptyView.setVisibility(View.VISIBLE);
+                mTvEmptyView.setText(R.string.net_no_connection);
+                mTvEmptyView.setVisibility(View.VISIBLE);
                 showToast(getResources().getString(R.string.net_no_connection));
                 break;
         }

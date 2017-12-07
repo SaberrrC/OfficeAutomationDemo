@@ -120,6 +120,9 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
 
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
                 mMemberList.add(0, "sl_" + AppConfig.getAppConfig(this).getPrivateCode());
+                mMemberList.add("add");
+                mMemberList.add("remove");
+
             });
         } catch (Throwable e) {
             e.printStackTrace();

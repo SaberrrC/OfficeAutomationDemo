@@ -17,6 +17,8 @@ import com.shanlinjinrong.oa.ui.activity.message.bean.GroupContactBean;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * @Description：
  * @Auther：王凤旭
@@ -41,7 +43,7 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
             case GroupContactBean.EMPLOYEE:
                 CheckBox selectedUser = baseViewHolder.getView(R.id.cb_selected_user);
                 selectedUser.setChecked(contacts.isChecked());
-                SimpleDraweeView portrait = baseViewHolder.getView(R.id.portrait);
+                CircleImageView portrait = baseViewHolder.getView(R.id.portrait);
                 Glide.with(AppManager.mContext)
                         .load(contacts.getPortraits())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)

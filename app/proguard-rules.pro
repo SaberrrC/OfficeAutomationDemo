@@ -247,3 +247,21 @@
 -dontwarn com.pgyersdk.**
 -keep class com.pgyersdk.** { *; }
 
+# ProGuard configurations for mmtrix agent
+-keep class com.mmtrix.** { *; }
+-dontwarn com.mmtrix.**
+#生成mapping.txt
+#apk包内所有class的内部结构
+-dump class_files.txt
+#未混淆的类和成员
+-printseeds seeds.txt
+#打印未被使用的代码
+-printusage unused.txt
+#混淆前后的映射
+-printmapping mapping.txt
+# 如若项目中已添加此项混淆代码，则此代码无需添加
+-keep class okio.** {*;}
+-dontwarn okio.**
+#注意 结束
+-keepattributes Exceptions, Signature, InnerClasses
+# End mmtrix agent
