@@ -123,6 +123,7 @@ public class EaseMessageAdapter extends BaseAdapter {
             switch (message.what) {
                 case HANDLER_MESSAGE_REFRESH_LIST:
                     refreshList();
+                    listView.setSelection(messages.size() - 1);
                     break;
                 case HANDLER_MESSAGE_SELECT_LAST:
                     if (messages != null && messages.size() > 0) {
