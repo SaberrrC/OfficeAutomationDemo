@@ -128,4 +128,6 @@ public class ApiJava {
     //同意和驳回 Approve/allApprove
     public static final String DELETE_APPROVEL = "nchrSign/deleteBillByCode";
 
+    //群组员头像查询
+    public static final String QUERY_USER_LIST_INFO = "user/queryUserByCodes";
 }

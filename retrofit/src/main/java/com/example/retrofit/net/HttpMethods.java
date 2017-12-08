@@ -80,6 +80,12 @@ public class HttpMethods {
         toSubscribe(map1, subscriber);
     }
 
+    //----------------------群组 聊天-----------------------
+
+    public void queryUserListInfo(Map<String,String> code, Subscriber<String> subscriber) {
+        Observable map1 = ApiFactory.getJavaApi().queryUserListInfo(code).map(new HttpResultFuncTypeJava());
+        toSubscribe(map1, subscriber);
+    }
     //    //出差申请
     //    public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {
     //        Observable map1 = ApiFactory.getJavaApi().submitEvectionApply(body).map(new HttpResultFuncTypeJava());
