@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -135,12 +134,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
                 for (int i = 0; i < mMemberList.size(); i++) {
                     String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
-                    searchUserId +=   usercode;
+                    searchUserId += usercode;
                 }
 
                 Log.d("userCode", searchUserId);
 
-//                mPresenter.searchUserListInfo();
+                //                mPresenter.searchUserListInfo();
 
             });
         } catch (Throwable e) {
@@ -199,24 +198,30 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         switch (view.getId()) {
             case R.id.btn_look_message_record:
                 //TODO 查看聊天记录
-                Bundle extras = getIntent().getParcelableExtra("EXTRAS");
-                intent.putExtra("EXTRAS", extras);
+                if (mIsGroup) {
+                    intent.putExtra("chatType", EaseConstant.CHATTYPE_GROUP);
+                    intent.putExtra("groupId", mGroupId);
+                } else {
+                    Bundle extras = getIntent().getParcelableExtra("EXTRAS");
+                    intent.putExtra("chatType", EaseConstant.CHATTYPE_SINGLE);
+                    intent.putExtra("EXTRAS", extras);
+                }
                 intent.setClass(this, LookMessageRecordActivity.class);
                 break;
             case R.id.tv_clear_message_record:
-                //TODO 清空聊天消息
                 new EaseAlertDialog(this, null, "是否清空所有聊天记录", null, new EaseAlertDialog.AlertDialogUser() {
 
                     @Override
                     public void onResult(boolean confirmed, Bundle bundle) {
-                        if (confirmed) {
-                            Bundle extras = getIntent().getParcelableExtra("EXTRAS");
-                            int chatType = extras.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
-                            String toChatUsername = extras.getString("toChatUsername");
-                            EMConversation conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
-                            if (conversation != null) {
-                                conversation.clearAllMessages();
-                            }
+                        if (!confirmed) {
+                            return;
+                        }
+                        Bundle extras = getIntent().getParcelableExtra("EXTRAS");
+                        int chatType = extras.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
+                        String toChatUsername = extras.getString("toChatUsername");
+                        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
+                        if (conversation != null) {
+                            conversation.clearAllMessages();
                         }
                     }
                 }, true).show();
