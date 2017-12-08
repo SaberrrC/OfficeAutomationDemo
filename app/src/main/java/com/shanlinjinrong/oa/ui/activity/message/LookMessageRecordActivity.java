@@ -202,6 +202,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         //            }
         //        }.start();
         //        EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
+        showLoadingView();
         new Thread() {
             @Override
             public void run() {
@@ -220,6 +221,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                         for (int i = mAllMessages.size() - PAGE_SIZE; i < mAllMessages.size(); i++) {
                             mdatas.add(mAllMessages.get(i));
                         }
+                        hideLoadingView();
                         messageList.refreshPageSizeItem(mdatas);
                     }
                 });
@@ -326,14 +328,11 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
     }
 
     protected void sendTextMessage(String content) {
-        //TODO 暂作修改
         //readUserInfoDetailsMessage();
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
         } else {
             EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
-
-            //TODO 存储数据
             if (!message.getFrom().equals(mBundle.getString("toChatUsername"))) {
                 EMConversation conversationDB = EMClient.getInstance().chatManager().getConversation(toChatUsername);
                 if (conversationDB != null) {
@@ -378,7 +377,6 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         if (message == null) {
             return;
         }
-
         if (chatFragmentHelper != null) {
             //set extension
             chatFragmentHelper.onSetMessageAttributes(message);
@@ -388,10 +386,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         } else if (chatType == EaseConstant.CHATTYPE_CHATROOM) {
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
-        //send message
         EMClient.getInstance().chatManager().sendMessage(message);
-
-        //refresh ui
         if (isMessageListInited) {
             messageList.refreshSelectLast();
         }
@@ -418,6 +413,9 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 finish();
                 break;
             case R.id.iv_search:
+                Intent intent = new Intent(this, MessageSearchActivity.class);
+                intent.putExtra("EXTRAS", mBundle);
+                startActivity(intent);
                 break;
             case R.id.iv_first:
                 if (currentPage == totalPage) {

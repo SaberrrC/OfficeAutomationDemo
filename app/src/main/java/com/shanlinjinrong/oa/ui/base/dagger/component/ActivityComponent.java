@@ -32,6 +32,7 @@ import com.shanlinjinrong.oa.ui.activity.login.WriteJobNumberActivity;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.LookMessageRecordActivity;
+import com.shanlinjinrong.oa.ui.activity.message.MessageSearchActivity;
 import com.shanlinjinrong.oa.ui.activity.message.SelectedGroupContactActivity;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModificationEmailActivity;
@@ -143,4 +144,5 @@ public interface ActivityComponent {
 
     void inject(SelectedGroupContactActivity selectedGroupContactActivity);
 
+    void inject(MessageSearchActivity messageSearchActivity);
 }
