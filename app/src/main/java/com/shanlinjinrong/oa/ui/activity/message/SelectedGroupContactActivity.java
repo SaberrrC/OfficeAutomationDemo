@@ -62,7 +62,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
 
     private List<String> mOrgIdKey;
-    private final int RESULT_CODE = 102;
+    private final int RESULT_CODE = -3;
     private List<Contacts> mGroupUsers;
     private InputMethodManager inputManager;
     private List<Contacts> mSearchData;
@@ -139,10 +139,13 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mTopView.getRightView().setOnClickListener(view -> {
-
+            if (mGroupUsers.size() == 0){
+                showToast("请选择人员！");
+                return;
+            }
             //返回 -> 选择人员
             String[] userNames = new String[mGroupUsers.size()];
-            String[] userCodes = new String[mGroupUsers.size()+1];
+            String[] userCodes = new String[mGroupUsers.size()];
             for (int i = 0; i < mGroupUsers.size(); i++) {
                 userNames[i] = mGroupUsers.get(i).getUsername();
                 userCodes[i] = "sl_" + mGroupUsers.get(i).getCode();

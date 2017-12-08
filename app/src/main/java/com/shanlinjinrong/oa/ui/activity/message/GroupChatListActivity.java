@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +21,6 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.model.selectContacts.Child;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.GroupChatListAdapter;
 import com.shanlinjinrong.views.common.CommonTopView;
 
@@ -32,10 +29,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 //聊天群组展示列表
@@ -50,7 +47,7 @@ public class GroupChatListActivity extends AppCompatActivity {
     private List<EMGroup> mGroupList = new ArrayList<>();
     private CompositeSubscription mSubscription;
     @SuppressWarnings("SpellCheckingInspection")
-    private final int REQUESTCODE = 101, RESULTSUCCESS = -2, RESULTELECTEDCODE = 102;
+    private final int REQUESTCODE = 101, DELETESUCCESS = -2, RESULTELECTEDCODE = -3;
     private View mFooterView;
 
     @Override
@@ -107,8 +104,9 @@ public class GroupChatListActivity extends AppCompatActivity {
 
             //群组名字
             StringBuilder groupName = new StringBuilder(AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
-            //默认不加入群组Id
+            //默认不加入群主Id
             //codes[codes.length - 1] = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+
             for (String aName : name) {
                 groupName.append(",").append(aName);
             }
@@ -128,23 +126,27 @@ public class GroupChatListActivity extends AppCompatActivity {
             //EMGroupStylePublicOpenJoin ——公开群，任何人都能加入此群。
 
             option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
-            try {
-                EMClient.getInstance().groupManager().createGroup(groupName.toString(), "", codes, "邀请加入群", option);
-            } catch (HyphenateException e) {
-                Toast.makeText(this, "群组创建失败", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
+            StringBuilder finalGroupName = groupName;
+            io.reactivex.Observable.create(e ->
+                    EMClient.getInstance().groupManager().createGroup(finalGroupName.toString(), "", codes, "邀请加入群", option)).subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                    .subscribe(o -> {
+                        Toast.makeText(this, "群组创建成功！", Toast.LENGTH_SHORT).show();
+                    }, throwable -> {
+                        Toast.makeText(this, "群组创建失败！", Toast.LENGTH_SHORT).show();
+                    });
+
         }
     }
 
     //刷新群组列表
     public void refreshData() {
         //加载群组列表
-        Subscription subscribe = Observable.create(subscriber -> {
+        Observable.create(subscriber -> {
             try {
+                //TODO 服务器异常 异常Code 待处理
                 mGroupList = EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
-
-                subscriber.onCompleted();
+                subscriber.onComplete();
             } catch (HyphenateException e) {
                 e.printStackTrace();
             }
@@ -157,7 +159,6 @@ public class GroupChatListActivity extends AppCompatActivity {
                             mAdapter.notifyDataSetChanged();
                             initFooterView();
                         });
-        mSubscription.add(subscribe);
     }
 
     @Override
@@ -167,23 +168,21 @@ public class GroupChatListActivity extends AppCompatActivity {
         switch (resultCode) {
             case RESULT_OK: //返回选择的群组人员
                 break;
-            case RESULTSUCCESS: //刷新界面
-                refreshData(); //TODO 待优化 本地做删除
-
+            case DELETESUCCESS: //刷新界面
+                refreshData(); //TODO 待优化
+                break;
             case RESULTELECTEDCODE: //返回选择的群组人员
                 String[] names = data.getStringArrayExtra("name");
                 String[] codes = data.getStringArrayExtra("code");
-                Subscription subscribe = Observable
+                Observable
                         .create(subscriber -> {
                             createGroup(names, codes);
-                            subscriber.onCompleted();
+                            subscriber.onComplete();
                         })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(o -> {
                         }, Throwable::printStackTrace, this::refreshData);
-                mSubscription.add(subscribe);
-
                 break;
         }
     }

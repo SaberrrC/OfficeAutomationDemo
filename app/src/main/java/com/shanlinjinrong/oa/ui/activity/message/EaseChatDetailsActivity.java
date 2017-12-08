@@ -41,50 +41,54 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //群组聊天详情界面
 public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
 
     @BindView(R.id.top_view)
-    CommonTopView  topView;
+    CommonTopView topView;
     @BindView(R.id.btn_chat_delete)
-    TextView       btnChatDelete;
+    TextView btnChatDelete;
     @BindView(R.id.img_portrait)
-    ImageView      imgPortrait;
+    ImageView imgPortrait;
     @BindView(R.id.img_group_person)
-    ImageView      imgGroupPerson;
+    ImageView imgGroupPerson;
     @BindView(R.id.rv_person_show)
-    RecyclerView   rvPersonShow;
+    RecyclerView rvPersonShow;
     @BindView(R.id.rl_group_name)
     RelativeLayout rlGroupName;
     @BindView(R.id.tv_modification_name)
-    TextView       tvModificationName;
+    TextView tvModificationName;
     @BindView(R.id.rl_group_person)
     RelativeLayout rlGroupPerson;
     @BindView(R.id.tv_clear_message_record)
-    TextView       tvClearMessageRecord;
+    TextView tvClearMessageRecord;
     @BindView(R.id.btn_look_message_record)
-    TextView       btnLookMessageRecord;
+    TextView btnLookMessageRecord;
     @BindView(R.id.rl_group_portrait)
     RelativeLayout rlGroupPortrait;
     @BindView(R.id.img_modification_portrait)
-    ImageView      imgModificationPortrait;
+    ImageView imgModificationPortrait;
     @BindView(R.id.img_modification_group_name)
-    ImageView      imgModificationGroupName;
+    ImageView imgModificationGroupName;
 
 
-    private String                       mGroupId;
-    private boolean                      mIsGroup;
-    private String                       mGroupOwner;
-    private EMGroup                      mGroupServer1;
-    private EMGroup                      mGroupFromServer;
-    private List<String>                 mMemberList;
-    private CommonPersonAddAdapter       mAdapter;
+    private String mGroupId;
+    private boolean mIsGroup;
+    private String mGroupOwner;
+    private EMGroup mGroupServer1;
+    private EMGroup mGroupFromServer;
+    private List<String> mMemberList;
+    private CommonPersonAddAdapter mAdapter;
     private List<ChatMessageDetailsBean> mData;
-    private EMCursorResult<String>       mGroupMemberResult;
-    private int RESULTSUCCESS = -2, REQUSET_CODE = 101;
+    private EMCursorResult<String> mGroupMemberResult;
+    private int RESULTSUCCESS = -2, REQUSET_CODE = 101, DELETESUCCESS = -2;
 
 
     @Override
@@ -129,17 +133,13 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
 
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
-
                 searchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
-
-
                 for (int i = 0; i < mMemberList.size(); i++) {
                     String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
-                    searchUserId +=   usercode;
+                    searchUserId += usercode;
                 }
 
                 Log.d("userCode", searchUserId);
-
 //                mPresenter.searchUserListInfo();
 
             });
@@ -156,16 +156,17 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         mIsGroup = getIntent().getBooleanExtra("chatType", false);
         mGroupId = getIntent().getStringExtra("groupId");
         if (mGroupId != null) {
-            Observable.just("").subscribeOn(Schedulers.io()).subscribe(s -> {
-                try {
-                    //根据群组ID从本地获取群组基本信息
-                    mGroupServer1 = EMClient.getInstance().groupManager().getGroup(mGroupId);
-                    mGroupServer1 = EMClient.getInstance().groupManager().getGroupFromServer(mGroupId);
-                    mGroupOwner = mGroupServer1.getOwner();
-                } catch (HyphenateException e1) {
-                    e1.printStackTrace();
-                }
-            }, Throwable::printStackTrace);
+            Observable.create(e -> {
+                //根据群组ID从本地获取群组基本信息
+                mGroupServer1 = EMClient.getInstance().groupManager().getGroupFromServer(mGroupId);
+                e.onComplete();
+            }).observeOn(AndroidSchedulers.mainThread())
+             .subscribeOn(Schedulers.io())
+             .subscribe(o -> {
+             }, Throwable::printStackTrace, () -> {
+                 //TODO 完成后显示页面
+                 mGroupOwner = mGroupServer1.getOwner();
+             });
         }
     }
 
@@ -243,16 +244,18 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 EMClient.getInstance().groupManager().leaveGroup(mGroupId);//退出群组
             }
             e.onComplete();
-        }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(o -> {
-        }, throwable -> {
-            if (mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
-                Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "群组退出失败，请从新尝试！", Toast.LENGTH_SHORT).show();
-            }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(o -> {}, throwable -> {
+            if (mGroupOwner != null)
+                if (mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                    Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "群组退出失败，请从新尝试！", Toast.LENGTH_SHORT).show();
+                }
             throwable.printStackTrace();
         }, () -> {
-            setResult(getIntent().getIntExtra("position", 0));
+            setResult(DELETESUCCESS);
             finish();
         });
     }

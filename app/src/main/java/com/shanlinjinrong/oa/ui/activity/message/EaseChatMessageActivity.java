@@ -46,7 +46,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private UserInfoDetailsBean mUserInfoDetailsBean;
     private int mChatType;
     private int CHAT_GROUP = 2;
-    private final int REQUEST_CODE = 101, RESULT_CODE = -2;
+    private final int REQUEST_CODE = 101, DELETESUCCESS = -2;
     private Bundle mExtras;
 
     @Override
@@ -216,8 +216,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_CODE) {
-            setResult(RESULT_CODE);
+        if (resultCode == DELETESUCCESS) {
+            setResult(DELETESUCCESS);
             finish();
         }
     }
