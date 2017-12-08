@@ -33,9 +33,47 @@
             android:textSize="18sp"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <com.shanlinjinrong.oa.views.ClearEditText
+            android:id="@+id/search_et_input"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@id/search_et_cancle"
+            android:background="@drawable/search_edittext_shape"
+            android:drawableLeft="@mipmap/search_user"
+            android:drawablePadding="5dp"
+            android:hint="请输入搜索内容"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:textSize="13sp"/>
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/lv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
         android:cacheColorHint="#00000000"/>
+
+    <TextView
+        android:id="@+id/tv_no_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:text="无结果"
+        android:visibility="invisible"
+        tools:ignore="HardcodedText"/>
 </LinearLayout>

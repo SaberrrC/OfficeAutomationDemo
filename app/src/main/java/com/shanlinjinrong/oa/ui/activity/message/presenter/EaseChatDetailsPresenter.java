@@ -1,24 +1,12 @@
 package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
-import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.net.HttpMethods;
-import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
-import com.shanlinjinrong.oa.net.remote.JavaApi;
-import com.shanlinjinrong.oa.ui.activity.message.EaseChatDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
-
 import java.util.HashMap;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -41,7 +29,6 @@ public class EaseChatDetailsPresenter extends HttpPresenter<EaseChatDetailsConta
     public void searchUserListInfo(String codeList) {
         HashMap<String, String> map = new HashMap<>();
         map.put("codeList", "010110027");
-
         HttpMethods.getInstance().queryUserListInfo(map, new Subscriber<String>() {
             @Override
             public void onCompleted() {

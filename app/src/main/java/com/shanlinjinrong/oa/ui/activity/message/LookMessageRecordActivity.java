@@ -62,6 +62,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
     private EMMessage                               mEmMessage;
     private Bundle                                  mBundle;
     private List<EMMessage> mAllMessages = new ArrayList<>();
+    private String mGroupId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +80,18 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
 
     private void initData() {
         Intent intent = getIntent();
-        mBundle = intent.getParcelableExtra("EXTRAS");
-        chatType = mBundle.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
-        toChatUsername = mBundle.getString("toChatUsername");
+        chatType = intent.getIntExtra("chatType", EaseConstant.CHATTYPE_SINGLE);
+        if (chatType == EaseConstant.CHATTYPE_SINGLE) {//个人聊天
+            mBundle = intent.getParcelableExtra("EXTRAS");
+            toChatUsername = mBundle.getString("toChatUsername");
+            conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
+        } else {//群组
+            mGroupId = intent.getStringExtra("groupId");
+            if (!TextUtils.isEmpty(mGroupId)) {
+                conversation = EMClient.getInstance().chatManager().getConversation(mGroupId);
+            }
+        }
+        //         mBundle.getInt("CHAT_TYPE", 666);
     }
 
     private void initView() {
@@ -174,7 +184,6 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
 
     protected void onConversationInit() {
         //        if (conversation != null) {
-        conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
         //        conversation.markAllMessagesAsRead();
         // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
         // you can change this number
@@ -414,7 +423,14 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 break;
             case R.id.iv_search:
                 Intent intent = new Intent(this, MessageSearchActivity.class);
-                intent.putExtra("EXTRAS", mBundle);
+                if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+                    intent.putExtra("EXTRAS", mBundle);
+                    intent.putExtra("chatType", EaseConstant.CHATTYPE_SINGLE);
+                    startActivity(intent);
+                    return;
+                }
+                intent.putExtra("chatType", EaseConstant.CHATTYPE_GROUP);
+                intent.putExtra("groupId", mGroupId);
                 startActivity(intent);
                 break;
             case R.id.iv_first:

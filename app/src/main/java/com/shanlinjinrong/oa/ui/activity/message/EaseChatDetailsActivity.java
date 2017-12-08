@@ -41,51 +41,47 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //群组聊天详情界面
 public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
 
     @BindView(R.id.top_view)
-    CommonTopView topView;
+    CommonTopView  topView;
     @BindView(R.id.btn_chat_delete)
-    TextView btnChatDelete;
+    TextView       btnChatDelete;
     @BindView(R.id.img_portrait)
-    ImageView imgPortrait;
+    ImageView      imgPortrait;
     @BindView(R.id.img_group_person)
-    ImageView imgGroupPerson;
+    ImageView      imgGroupPerson;
     @BindView(R.id.rv_person_show)
-    RecyclerView rvPersonShow;
+    RecyclerView   rvPersonShow;
     @BindView(R.id.rl_group_name)
     RelativeLayout rlGroupName;
     @BindView(R.id.tv_modification_name)
-    TextView tvModificationName;
+    TextView       tvModificationName;
     @BindView(R.id.rl_group_person)
     RelativeLayout rlGroupPerson;
     @BindView(R.id.tv_clear_message_record)
-    TextView tvClearMessageRecord;
+    TextView       tvClearMessageRecord;
     @BindView(R.id.btn_look_message_record)
-    TextView btnLookMessageRecord;
+    TextView       btnLookMessageRecord;
     @BindView(R.id.rl_group_portrait)
     RelativeLayout rlGroupPortrait;
     @BindView(R.id.img_modification_portrait)
-    ImageView imgModificationPortrait;
+    ImageView      imgModificationPortrait;
     @BindView(R.id.img_modification_group_name)
-    ImageView imgModificationGroupName;
+    ImageView      imgModificationGroupName;
 
 
-    private String mGroupId;
-    private boolean mIsGroup;
-    private String mGroupOwner;
-    private EMGroup mGroupServer1;
-    private EMGroup mGroupFromServer;
-    private List<String> mMemberList;
-    private CommonPersonAddAdapter mAdapter;
+    private String                       mGroupId;
+    private boolean                      mIsGroup;
+    private String                       mGroupOwner;
+    private EMGroup                      mGroupServer1;
+    private EMGroup                      mGroupFromServer;
+    private List<String>                 mMemberList;
+    private CommonPersonAddAdapter       mAdapter;
     private List<ChatMessageDetailsBean> mData;
     private EMCursorResult<String> mGroupMemberResult;
     private int RESULTSUCCESS = -2, REQUSET_CODE = 101, DELETESUCCESS = -2;
@@ -200,24 +196,31 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         switch (view.getId()) {
             case R.id.btn_look_message_record:
                 //TODO 查看聊天记录
-                Bundle extras = getIntent().getParcelableExtra("EXTRAS");
-                intent.putExtra("EXTRAS", extras);
+                if (mIsGroup) {
+                    intent.putExtra("chatType", EaseConstant.CHATTYPE_GROUP);
+                    intent.putExtra("groupId", mGroupId);
+                } else {
+                    Bundle extras = getIntent().getParcelableExtra("EXTRAS");
+                    intent.putExtra("chatType", EaseConstant.CHATTYPE_SINGLE);
+                    intent.putExtra("EXTRAS", extras);
+                }
                 intent.setClass(this, LookMessageRecordActivity.class);
                 break;
             case R.id.tv_clear_message_record:
-                //TODO 清空聊天消息
+                //清空聊天消息
                 new EaseAlertDialog(this, null, "是否清空所有聊天记录", null, new EaseAlertDialog.AlertDialogUser() {
 
                     @Override
                     public void onResult(boolean confirmed, Bundle bundle) {
-                        if (confirmed) {
-                            Bundle extras = getIntent().getParcelableExtra("EXTRAS");
-                            int chatType = extras.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
-                            String toChatUsername = extras.getString("toChatUsername");
-                            EMConversation conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
-                            if (conversation != null) {
-                                conversation.clearAllMessages();
-                            }
+                        if (!confirmed) {
+                            return;
+                        }
+                        Bundle extras = getIntent().getParcelableExtra("EXTRAS");
+                        int chatType = extras.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
+                        String toChatUsername = extras.getString("toChatUsername");
+                        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
+                        if (conversation != null) {
+                            conversation.clearAllMessages();
                         }
                     }
                 }, true).show();
