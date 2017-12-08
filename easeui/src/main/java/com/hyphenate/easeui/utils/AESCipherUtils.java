@@ -9,9 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Base64.Decoder;
-import java.util.Base64.Encoder;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -46,7 +43,7 @@ public class AESCipherUtils {
         byte[] encryptedBytes = aesEncryptBytes(contentBytes, keyBytes);
 
 
-        Encoder encoder = Base64.getEncoder();
+        MyBase64.Encoder encoder = MyBase64.getEncoder();
         return encoder.encodeToString(encryptedBytes);
 
         //  Encoder encoder = Base64.getEncoder();
@@ -68,7 +65,7 @@ public class AESCipherUtils {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String aesDecryptString(String content, String key) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
-        Decoder decoder = Base64.getDecoder();
+        MyBase64.Decoder decoder = MyBase64.getDecoder();
         byte[] encryptedBytes = decoder.decode(content);
         byte[] keyBytes = key.getBytes(charset);
         byte[] decryptedBytes = aesDecryptBytes(encryptedBytes, keyBytes);
