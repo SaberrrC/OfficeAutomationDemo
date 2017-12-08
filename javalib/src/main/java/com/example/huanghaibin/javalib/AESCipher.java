@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.utils;//
+package com.example.huanghaibin.javalib;//
 //  https://github.com/WelkinXie/AESCipher-Java
 //
 
@@ -6,6 +6,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -14,22 +17,31 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class AESCipherUtils {
+public class AESCipher {
 
     private static final String IV_STRING = "_sl_init_vector_";
     private static final String charset = "UTF-8";
 
     /**
      * 加密
+     *
      * @param content
      * @param key
      * @return
+     * @throws InvalidKeyException
+     * @throws NoSuchAlgorithmException
+     * @throws NoSuchPaddingException
+     * @throws InvalidAlgorithmParameterException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     * @throws UnsupportedEncodingException
      */
+
     public static String aesEncryptString(String content, String key) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
         byte[] contentBytes = content.getBytes(charset);
         byte[] keyBytes = key.getBytes(charset);
         byte[] encryptedBytes = aesEncryptBytes(contentBytes, keyBytes);
-        MyBase64.Encoder encoder = MyBase64.getEncoder();
+        Encoder encoder = Base64.getEncoder();
         return encoder.encodeToString(encryptedBytes);
     }
 
@@ -37,9 +49,17 @@ public class AESCipherUtils {
      * 解密
      * @param content
      * @param key
+     * @return
+     * @throws InvalidKeyException
+     * @throws NoSuchAlgorithmException
+     * @throws NoSuchPaddingException
+     * @throws InvalidAlgorithmParameterException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     * @throws UnsupportedEncodingException
      */
     public static String aesDecryptString(String content, String key) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
-        MyBase64.Decoder decoder = MyBase64.getDecoder();
+        Decoder decoder = Base64.getDecoder();
         byte[] encryptedBytes = decoder.decode(content);
         byte[] keyBytes = key.getBytes(charset);
         byte[] decryptedBytes = aesDecryptBytes(encryptedBytes, keyBytes);
