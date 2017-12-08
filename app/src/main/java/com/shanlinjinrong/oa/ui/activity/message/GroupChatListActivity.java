@@ -47,7 +47,7 @@ public class GroupChatListActivity extends AppCompatActivity {
     RecyclerView mRvGroupShow;
 
     private GroupChatListAdapter mAdapter;
-    private List<EMGroup> mGroupList;
+    private List<EMGroup> mGroupList = new ArrayList<>();
     private CompositeSubscription mSubscription;
     @SuppressWarnings("SpellCheckingInspection")
     private final int REQUESTCODE = 101, RESULTSUCCESS = -2, RESULTELECTEDCODE = 102;

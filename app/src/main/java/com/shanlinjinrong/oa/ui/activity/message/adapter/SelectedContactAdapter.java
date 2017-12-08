@@ -30,7 +30,7 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
     public SelectedContactAdapter(List<Contacts> data) {
         super(data);
         addItemType(Contacts.DEPARTMENT, R.layout.item_selected_group_contact);
-        addItemType(Contacts.EMPLOYEE, R.layout.tab_contacts_employee);
+        addItemType(Contacts.EMPLOYEE, R.layout.item_contacts_employee);
     }
 
     @Override

@@ -19,196 +19,207 @@
         android:layout_height="0.1dp"
         android:background="@color/gray_d5d5d5" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_person_show"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="95dp"
-        android:background="@color/white" />
+        android:layout_height="match_parent">
 
-
-    <RelativeLayout
-        android:id="@+id/rl_group_name"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:gravity="center_vertical"
-            android:text="群组名称"
-            android:textColor="@color/black_333333"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_modification_name"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/img_modification_group_name"
-            android:gravity="center_vertical"
-            android:text="OA项目开发"
-            android:textColor="@color/black_99333333"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/img_modification_group_name"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/tab_me_arrow" />
-
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="8dp"
-            android:background="@color/gray_d5d5d5" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_group_person"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/white"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            android:text="群主"
-            android:textColor="@color/black_333333"
-            android:textSize="16sp" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_modification_person"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/img_group_person"
-            android:layout_toStartOf="@+id/img_group_person"
-            android:gravity="center_vertical"
-            android:text="吴方华"
-            android:textColor="@color/black_99333333"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/img_group_person"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/tab_me_arrow" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:background="@color/gray_d5d5d5" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_group_portrait"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/white"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            android:text="群组头像"
-            android:textColor="@color/black_333333"
-            android:textSize="16sp" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_modification_portrait"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerInParent="true"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/img_portrait"
-            android:layout_toStartOf="@+id/img_portrait"
-            android:src="@mipmap/icon_default_group_portraits"/>
-
-        <ImageView
-            android:id="@+id/img_portrait"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/tab_me_arrow" />
-
-    </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_person_show"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
 
 
-    <TextView
-        android:id="@+id/btn_look_message_record"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginTop="25dp"
-        android:background="@color/white"
-        android:drawableEnd="@drawable/tab_me_arrow"
-        android:drawableRight="@drawable/tab_me_arrow"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="查看聊天记录"
-        android:textColor="@color/black_333333"
-        android:textSize="16sp" />
+            <RelativeLayout
+                android:id="@+id/rl_group_name"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:visibility="gone">
 
-    <TextView
-        android:id="@+id/tv_clear_message_record"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginTop="25dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="清空聊天记录"
-        android:textColor="@color/black_333333"
-        android:textSize="16sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="群组名称"
+                    android:textColor="@color/black_333333"
+                    android:textSize="16sp" />
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_modification_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/img_modification_group_name"
+                    android:gravity="center_vertical"
+                    android:text="OA项目开发"
+                    android:textColor="@color/black_99333333"
+                    android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/btn_chat_delete"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:gravity="center"
-        android:background="@drawable/chat_details_btn_enable"
-        android:text="删除并退出"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:visibility="gone" />
+                <ImageView
+                    android:id="@+id/img_modification_group_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/tab_me_arrow" />
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1.5" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="8dp"
+                    android:background="@color/gray_d5d5d5" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_group_person"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@color/white"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="群主"
+                    android:textColor="@color/black_333333"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_modification_person"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/img_group_person"
+                    android:layout_toStartOf="@+id/img_group_person"
+                    android:gravity="center_vertical"
+                    android:text="吴方华"
+                    android:textColor="@color/black_99333333"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/img_group_person"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/tab_me_arrow" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@color/gray_d5d5d5" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_group_portrait"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@color/white"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="群组头像"
+                    android:textColor="@color/black_333333"
+                    android:textSize="16sp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_modification_portrait"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/img_portrait"
+                    android:layout_toStartOf="@+id/img_portrait"
+                    android:src="@mipmap/icon_default_group_portraits" />
+
+                <ImageView
+                    android:id="@+id/img_portrait"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/tab_me_arrow" />
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/btn_look_message_record"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="25dp"
+                android:background="@color/white"
+                android:drawableEnd="@drawable/tab_me_arrow"
+                android:drawableRight="@drawable/tab_me_arrow"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="查看聊天记录"
+                android:textColor="@color/black_333333"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_clear_message_record"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="25dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="清空聊天记录"
+                android:textColor="@color/black_333333"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/btn_chat_delete"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/chat_details_btn_enable"
+                android:gravity="center"
+                android:text="删除并退出"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.5" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

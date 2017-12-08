@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -28,6 +29,9 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.CommonPersonAddAdapter;
 import com.shanlinjinrong.oa.ui.activity.message.bean.ChatMessageDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.chatgroup.ModificationGroupNameActivity;
+import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
+import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatDetailsPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.ArrayList;
@@ -41,7 +45,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 //群组聊天详情界面
-public class EaseChatDetailsActivity extends AppCompatActivity {
+public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
 
     @BindView(R.id.top_view)
     CommonTopView  topView;
@@ -92,6 +96,11 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
     private void initData() {
         initGroup();
         mData = new ArrayList<>();
@@ -99,6 +108,8 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
             InitGroupData();
         }
     }
+
+    String searchUserId;
 
     private void InitGroupData() {
         try {
@@ -118,9 +129,18 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
 
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
-                mMemberList.add(0, "sl_" + AppConfig.getAppConfig(this).getPrivateCode());
-                mMemberList.add("add");
-                mMemberList.add("remove");
+
+                searchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+
+
+                for (int i = 0; i < mMemberList.size(); i++) {
+                    String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
+                    searchUserId +=   usercode;
+                }
+
+                Log.d("userCode", searchUserId);
+
+//                mPresenter.searchUserListInfo();
 
             });
         } catch (Throwable e) {
@@ -243,6 +263,11 @@ public class EaseChatDetailsActivity extends AppCompatActivity {
     public void modificationGroupName() {
         Intent intent = new Intent(this, ModificationGroupNameActivity.class);
         startActivityForResult(intent, REQUSET_CODE);
+    }
+
+    @Override
+    public void uidNull(int code) {
+        catchWarningByCode(code);
     }
 
     // ---------------------------------- 添加群成员跳转 ----------------------------------

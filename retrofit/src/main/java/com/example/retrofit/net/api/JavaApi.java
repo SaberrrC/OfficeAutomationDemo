@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -61,6 +62,15 @@ public interface JavaApi {
 
     @POST("Approve/allApprove")
     Observable<HttpResult> postAgreeDisagree(@Field("approveList[]") List<ApporveBodyItemBean> approveList);
+
+    //----------------------聊天 群组-----------------------
+
+    @POST("user/queryUserByCodes")
+    Observable<HttpResult> queryUserListInfo(@QueryMap Map<String ,String> map);
+
+
+
+
 
     //提交出差申请
     //    @POST("nchrEvection/submitEvectionApply")
