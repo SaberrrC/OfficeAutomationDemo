@@ -83,8 +83,8 @@ android {
     }
 
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 
     packagingOptions {
@@ -148,6 +148,7 @@ def devAppName() {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+
     //    compile 'com.android.support:support-v4:24.2.0'
 
     //混淆需要添加文件
@@ -155,6 +156,7 @@ dependencies {
     //仿微信图片选择
     compile files('libs/Msc.jar')
     compile files('libs/Sunflower.jar')
+
     //数据库
 
     //腾讯bugly
@@ -193,10 +195,10 @@ dependencies {
     compile project(':easeui')
     compile project(':calendarlibrary')
     compile project(':uilibrary')
+
     //分包
     compile 'com.android.support:multidex:1.0.1'
     compile project(':retrofit')
-
     compile 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'

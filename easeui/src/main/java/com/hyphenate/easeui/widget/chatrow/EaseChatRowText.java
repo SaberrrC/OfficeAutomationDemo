@@ -38,6 +38,7 @@ public class EaseChatRowText extends EaseChatRow {
     @Override
     public void onSetUpView() {
         EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
+        String str = message.getFrom();
         //   Spannable span = EaseSmileUtils.getSmiledText(context, txtBody.getMessage());
         Spannable span = EaseSmileUtils.getSmiledText(context, EncryptionUtil.getDecryptStr(txtBody.getMessage() + ""));
         // 设置内容
