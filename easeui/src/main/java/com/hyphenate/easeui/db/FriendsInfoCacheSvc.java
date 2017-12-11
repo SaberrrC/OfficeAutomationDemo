@@ -88,7 +88,6 @@ public class FriendsInfoCacheSvc {
         }
 
         if (queryIfIDExists(friends.getUser_id())) {
-
             mDB.update(TABLE_NAME, contentValues, "user_id=?", new String[]{friends.getUser_id()});
             contentValues.clear();
             return true;
@@ -105,7 +104,16 @@ public class FriendsInfoCacheSvc {
                 return true;
             }
         }
+    }
 
+    public void setPortrait (String portrait,String userId) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Friends.COLUMNNAME_PORTRAIT, portrait);
+        try {
+            mDB.update(TABLE_NAME, contentValues, "user_id=?", new String[]{userId});
+            contentValues.clear();
+        } catch (Exception e) {
+        }
     }
 
     public String getNickName(String userId) {
@@ -119,7 +127,21 @@ public class FriendsInfoCacheSvc {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
+    }
+
+    public String getUserId(String userId) {
+        try {
+            Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userId}, null, null, null);
+            if (cursor.moveToFirst()) {
+                String nickName = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_USERID));
+                cursor.close();
+                return nickName;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public String getDepartment(String userId) {
@@ -129,7 +151,7 @@ public class FriendsInfoCacheSvc {
             cursor.close();
             return portrait;
         }
-        return null;
+        return "";
     }
 
     public String getPost(String userId) {
@@ -139,7 +161,7 @@ public class FriendsInfoCacheSvc {
             cursor.close();
             return portrait;
         }
-        return null;
+        return "";
     }
 
     public String getSex(String userId) {
@@ -149,7 +171,7 @@ public class FriendsInfoCacheSvc {
             cursor.close();
             return portrait;
         }
-        return null;
+        return "";
     }
 
     public String getPortrait(String userId) {
@@ -159,7 +181,7 @@ public class FriendsInfoCacheSvc {
             cursor.close();
             return portrait;
         }
-        return null;
+        return "";
     }
 
     public String getPhone(String userId) {
@@ -169,7 +191,7 @@ public class FriendsInfoCacheSvc {
             cursor.close();
             return portrait;
         }
-        return null;
+        return "";
     }
 
     public String getEmail(String userId) {
@@ -179,7 +201,7 @@ public class FriendsInfoCacheSvc {
             cursor.close();
             return portrait;
         }
-        return null;
+        return "";
     }
 
     public String getDepartmentId(String userId) {
@@ -189,7 +211,7 @@ public class FriendsInfoCacheSvc {
             cursor.close();
             return portrait;
         }
-        return null;
+        return "";
     }
 
 

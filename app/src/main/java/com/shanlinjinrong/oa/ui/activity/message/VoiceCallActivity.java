@@ -26,8 +26,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -43,52 +41,78 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.hyphenate.EMError;
+import com.hyphenate.chat.EMCallSession;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.easeui.adapter.EaseConversationAdapter;
 import com.hyphenate.easeui.model.UserInfoDetailsBean;
 import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.exceptions.EMNoActiveCallException;
+import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.message.bean.CallEventBean;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * 语音通话页面
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class VoiceCallActivity extends CallActivity implements OnClickListener, SensorEventListener {
-    private LinearLayout comingBtnContainer;
-    private Button hangupBtn;
-    private Button refuseBtn;
-    private Button answerBtn;
-    private ImageView muteImage;
-    private ImageView handsFreeImage;
-    private SimpleDraweeView mSwingCard;
-    private boolean isMuteState;
-    private boolean isHandsfreeState;
-    private TextView nickTextView;
-    public String sideInfo;
-    private TextView callStateTextView;
-    private boolean endCallTriggerByMe = false;
-    private Chronometer chronometer;
-    private String st1;
-    private LinearLayout voiceContronlLayout;
-    private TextView netwrokStatusVeiw;
-    private boolean monitor = false;
-    private String nike;
-    private String portrait;
-    private String toUsername;
+
+    private Button mBtnHangup;
+    private Button mBtnRefuse;
+    private Button mBtnAnswer;
     private EMMessage mMessage;
+    private ImageView mMuteImage;
+    private TextView mTvNickName;
+    private Chronometer mChronometer;
+    private TextView mTvCallState;
+    private ImageView mImgHandsFree;
+    private TextView mTvNetworkStatus;
+    private SimpleDraweeView mSwingCard;
+    private TextView mDurationView;
+    private LinearLayout mLlVoiceControl;
+    private LinearLayout mComingBtnContainer;
+
+    private String mNikeName = "", mPortrait = "", mToUsername = "";
+    private boolean mIsThroughTo, mIsMuteState, mIsHandsFreeState, mEndCallTriggerByMe;
+    //调用距离传感器 ->传感器管理对象
+    private SensorManager mManager = null;
+    //电源管理对象 ->屏幕开关
+    protected PowerManager mLocalPowerManager = null;
+    //电源锁
+    private PowerManager.WakeLock localWakeLock = null;
+    private CompositeSubscription mUnSunscribe = new CompositeSubscription();
+    protected final int MAKE_CALL_TIMEOUT = 50 * 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,124 +122,193 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
             return;
         }
         setContentView(R.layout.em_activity_voice_call);
-        //		DemoHelper.getInstance().isVoiceCalling = true;
+
+        initData();
+        initView();
+
+        //发起语音 接收语音 -> 声音处理
+        if (!isInComingCall) { //Local call
+            //本地发起语音
+            initLocalCall();
+        } else { //Remote call
+            //远程语音
+            initRemoteCall();
+        }
+
+        //超时挂断处理
+        initTimeOutHangUp();
+
+        //初始化 电源锁
+        initLocalPower();
+    }
+
+    //初始化数据源
+    private void initData() {
+
         callType = 0;
-
-        myAccount = AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE);
-        comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
-        refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
-        answerBtn = (Button) findViewById(R.id.btn_answer_call);
-        hangupBtn = (Button) findViewById(R.id.btn_hangup_call);
-        muteImage = (ImageView) findViewById(R.id.iv_mute);
-        mSwingCard = (SimpleDraweeView) findViewById(R.id.swing_card);
-        handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
-        callStateTextView = (TextView) findViewById(R.id.tv_call_state);
-        nickTextView = (TextView) findViewById(R.id.tv_nick);
-        TextView durationTextView = (TextView) findViewById(R.id.tv_calling_duration);
-        chronometer = (Chronometer) findViewById(R.id.chronometer);
-        voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
-        netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
-
-        refuseBtn.setOnClickListener(this);
-        answerBtn.setOnClickListener(this);
-        hangupBtn.setOnClickListener(this);
-        muteImage.setOnClickListener(this);
-        handsFreeImage.setOnClickListener(this);
-
-        //TODO 接收上个界面的用户信息
-        username = getIntent().getStringExtra("username");
-        send_CODE = getIntent().getStringExtra("CODE");
         send_phone = getIntent().getStringExtra("phone");
         send_sex = getIntent().getStringExtra("sex");
         send_post_title = getIntent().getStringExtra("post_name");
         send_username = getIntent().getStringExtra("nike");
         send_portrait = getIntent().getStringExtra("portrait");
         send_email = getIntent().getStringExtra("email");
+        myAccount = AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE);
         send_department_name = getIntent().getStringExtra("department_name");
+        EMCallSession currentCallSession = EMClient.getInstance().callManager().getCurrentCallSession();
+        if (currentCallSession != null) {
+            username = currentCallSession.getRemoteName();
+        }
+        if (username.equals(""))
+            username = getIntent().getStringExtra("username");
 
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-        addCallStateListener();
-
-        //readUserInfoDetailsMessage();
-        toUsername = getIntent().getStringExtra("toUsername");
-        nike = getIntent().getStringExtra("nike");
-        portrait = getIntent().getStringExtra("portrait");
+        mToUsername = getIntent().getStringExtra(" ");
+        mNikeName = getIntent().getStringExtra("nike");
+        mPortrait = getIntent().getStringExtra("portrait");
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
+    }
 
-        if (!TextUtils.isEmpty(nike)) {
-            nickTextView.setText(nike);
-        }
+    //初始化视图
+    private void initView() {
 
-        if (!TextUtils.isEmpty(portrait)) {
+        mMuteImage = (ImageView) findViewById(R.id.iv_mute);
+        mTvNickName = (TextView) findViewById(R.id.tv_nick);
+        mBtnRefuse = (Button) findViewById(R.id.btn_refuse_call);
+        mBtnAnswer = (Button) findViewById(R.id.btn_answer_call);
+        mBtnHangup = (Button) findViewById(R.id.btn_hangup_call);
+        mTvCallState = (TextView) findViewById(R.id.tv_call_state);
+        mImgHandsFree = (ImageView) findViewById(R.id.iv_handsfree);
+        mChronometer = (Chronometer) findViewById(R.id.chronometer);
+        mSwingCard = (SimpleDraweeView) findViewById(R.id.swing_card);
+        mDurationView = (TextView) findViewById(R.id.tv_calling_duration);
+        mTvNetworkStatus = (TextView) findViewById(R.id.tv_network_status);
+        mLlVoiceControl = (LinearLayout) findViewById(R.id.ll_voice_control);
+        mComingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
+
+        if (getIntent().getBooleanExtra("isComingCall", false)) {
+            if (FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(username).equals("")) {
+                if (!EventBus.getDefault().isRegistered(this)) { //监听 查询个人信息接口
+                    EventBus.getDefault().register(this);
+                }
+                mPresenter.searchUserDetails(username.substring(3, username.length()));
+            } else {
+                String nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(username);
+                String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(username);
+                Glide.with(AppManager.mContext)
+                        .load(portrait)
+                        .error(R.drawable.ease_default_avatar)
+                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(mSwingCard);
+                mTvNickName.setText(nickName);
+            }
+        } else {
+            String nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(username);
+            String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(username);
             Glide.with(AppManager.mContext)
                     .load(portrait)
                     .error(R.drawable.ease_default_avatar)
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                    .placeholder(R.drawable.ease_default_avatar).into(mSwingCard);
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(mSwingCard);
+            mTvNickName.setText(nickName);
         }
 
-        if (!isInComingCall) {// outgoing call
-            soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
-            outgoing = soundPool.load(this, R.raw.em_outgoing, 1);
-
-            comingBtnContainer.setVisibility(View.INVISIBLE);
-            hangupBtn.setVisibility(View.VISIBLE);
-            st1 = getResources().getString(R.string.Are_connected_to_each_other);
-            callStateTextView.setText(st1);
-
-            handler.sendEmptyMessage(MSG_CALL_MAKE_VOICE);
-
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    streamID = playMakeCallSounds();
-                }
-            }, 300);
-        } else { // incoming call
-            voiceContronlLayout.setVisibility(View.INVISIBLE);
-            Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-            audioManager.setMode(AudioManager.MODE_RINGTONE);
-            audioManager.setSpeakerphoneOn(true);
-            ringtone = RingtoneManager.getRingtone(this, ringUri);
-            ringtone.play();
-        }
-        final int MAKE_CALL_TIMEOUT = 50 * 1000;
-        handler.removeCallbacks(timeoutHangup);
-        handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
-
-        mManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        //获取系统服务POWER_SERVICE，返回一个PowerManager对象
-        localPowerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
-        localWakeLock = this.localPowerManager.newWakeLock(32, "MyPower");//第一个参数为电源锁级别，第二个是日志tag
+        addCallStateListener();
+        mBtnRefuse.setOnClickListener(this);
+        mBtnAnswer.setOnClickListener(this);
+        mBtnHangup.setOnClickListener(this);
+        mMuteImage.setOnClickListener(this);
+        mImgHandsFree.setOnClickListener(this);
     }
 
-    //调用距离传感器，控制屏幕
-    private SensorManager mManager;//传感器管理对象
-    //屏幕开关
-    private PowerManager localPowerManager = null;//电源管理对象
-    private PowerManager.WakeLock localWakeLock = null;//电源锁
+    //接收语音 -> 声音
+    private void initRemoteCall() {
+        mLlVoiceControl.setVisibility(View.INVISIBLE);
+        Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+        audioManager.setMode(AudioManager.MODE_RINGTONE);
+        audioManager.setSpeakerphoneOn(true);
+        ringtone = RingtoneManager.getRingtone(this, ringUri);
+        ringtone.play();
+    }
+
+    //发起语音 -> 声音
+    private void initLocalCall() {
+        mBtnHangup.setVisibility(View.VISIBLE);
+        mComingBtnContainer.setVisibility(View.INVISIBLE);
+        soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
+        outgoing = soundPool.load(VoiceCallActivity.this, R.raw.em_outgoing, 1);
+        mTvCallState.setText(getResources().getString(R.string.Are_connected_to_each_other));
+
+        Observable.just("").observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> {
+                    try {//发起实时语音通讯
+                        EMClient.getInstance().callManager().makeVoiceCall(username);
+                        isMakeVoiceCall = true;
+                    } catch (final EMServiceNotReadyException e) {
+                        e.printStackTrace();
+                        runOnUiThread(() -> {
+                            String message = e.getMessage();
+                            if (e.getErrorCode() == EMError.CALL_REMOTE_OFFLINE) {
+                                message = getResources().getString(R.string.The_other_is_not_online);
+                            } else if (e.getErrorCode() == EMError.USER_NOT_LOGIN) {
+                                message = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+                            } else if (e.getErrorCode() == EMError.INVALID_USER_NAME) {
+                                message = getResources().getString(R.string.illegal_user_name);
+                            } else if (e.getErrorCode() == EMError.CALL_BUSY) {
+                                message = getResources().getString(R.string.The_other_is_on_the_phone);
+                            } else if (e.getErrorCode() == EMError.NETWORK_ERROR) {
+                                message = getResources().getString(R.string.can_not_connect_chat_server_connection);
+                            } else if (e.getMessage().equals("exception isConnected:false")) {
+                                message = getResources().getString(R.string.can_not_connect_chat_server_connection);
+                            }
+                            showToast(message);
+                            finish();
+                        });
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                }, Throwable::printStackTrace);
+
+        Observable.just("")
+                .delay(300, TimeUnit.MILLISECONDS)
+                .subscribe(s -> streamID = playMakeCallSounds(), Throwable::printStackTrace);
+    }
+
+    //初始化 电源锁
+    private void initLocalPower() {
+        //调用距离传感器，控制屏幕
+        mManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        //获取系统服务POWER_SERVICE，返回一个PowerManager对象
+        mLocalPowerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag -> 第一个参数为电源锁级别，第二个是日志tag
+        assert this.mLocalPowerManager != null;
+        localWakeLock = this.mLocalPowerManager.newWakeLock(32, "MyPower");
+    }
+
+    //超时 挂断处理
+    private void initTimeOutHangUp() {
+        handler.removeCallbacks(timeoutHangup);
+        handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         float[] its = event.values;
-        //Log.d(TAG,"its array:"+its+"sensor type :"+event.sensor.getType()+" proximity type:"+Sensor.TYPE_PROXIMITY);
         if (its != null && event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-            //经过测试，当手贴近距离感应器的时候its[0]返回值为0.0，当手离开时返回1.0
+            //贴近距离感应器的时候 its[0] 返回值为0.0，离开时返回1.0
             if (its[0] == 0.0) {
-                // 贴近手机
-                if (localWakeLock.isHeld()) {
-                    return;
-                } else {
-                    localWakeLock.acquire();// 申请设备电源锁
+                // 贴近手机 -> 申请设备电源锁
+                if (!localWakeLock.isHeld()) {
+                    localWakeLock.acquire(100 * 60 * 1000L /*10 minutes*/);
                 }
             } else {
-                // 远离手机
-                if (localWakeLock.isHeld()) {
-                    return;
-                } else {
+                // 远离手机 -> 释放设备电源锁
+                if (!localWakeLock.isHeld()) {
                     localWakeLock.setReferenceCounted(false);
                     // 释放设备电源锁
                     localWakeLock.release();
@@ -228,168 +321,140 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-
-    JSONObject sendUserInfo_self;
-    JSONObject sendUserInfo;
-
-
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            //TODO 语音携带体
-            String callExt = EMClient.getInstance().callManager().getCurrentCallSession().getExt();
-            Log.d("callExt", "实时语音携带的消息：" + callExt);
-            for (int i = 0; i < callExt.length(); i++) {
-                char charAt = callExt.charAt(i);
-                String string = new String(String.valueOf(charAt));
-                if (string.equals("|")) {
-                    userInfo_self = callExt.substring(0, i);
-                    userInfo = callExt.substring(i + 1, callExt.length());
-                    break;
-                }
-            }
-
-            sendUserInfo_self = new JSONObject(userInfo_self);
-            sendUserInfo = new JSONObject(userInfo);
-
-            userInfoSelfBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
-            userInfoBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
-
-            //TODO 消息 展示
-            EaseConversationAdapter.requestNamePic(userInfoSelfBean.username_self, userInfoSelfBean.portrait_self);
-
-            String privateCode = AppConfig.getAppConfig(this).getPrivateCode();
-            if(AppConfig.getAppConfig(this).getPrivateCode().equals(userInfoBean.CODE)){
-                if (!TextUtils.isEmpty(userInfoSelfBean.username_self))
-                    nickTextView.setText(userInfoSelfBean.username_self);
-
-                if (!TextUtils.isEmpty(userInfoSelfBean.portrait_self))
-                    Glide.with(AppManager.mContext)
-                            .load(userInfoSelfBean.portrait_self)
-                            .error(R.drawable.ease_default_avatar)
-                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                            .placeholder(R.drawable.ease_default_avatar)
-                            .into(mSwingCard);
-            }else{
-                if (!TextUtils.isEmpty(userInfoBean.username))
-                    nickTextView.setText(userInfoBean.username);
-
-                if (!TextUtils.isEmpty(userInfoBean.portrait))
-                    Glide.with(AppManager.mContext)
-                            .load(userInfoBean.portrait)
-                            .error(R.drawable.ease_default_avatar)
-                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                            .placeholder(R.drawable.ease_default_avatar)
-                            .into(mSwingCard);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        mManager.registerListener((SensorEventListener) this, mManager.getDefaultSensor(Sensor.TYPE_PROXIMITY),// 距离感应器
-                SensorManager.SENSOR_DELAY_NORMAL);//注册传感器，第一个参数为距离监听器，第二个是传感器类型，第三个是延迟类型
+        //距离感应器 -> 注册传感器，第一个参数为距离监听器，第二个是传感器类型，第三个是延迟类型
+        mManager.registerListener(this, mManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    /**
-     * set call state listener
-     */
+    //通话状态监听
     void addCallStateListener() {
-        callStateListener = new EMCallStateChangeListener() {
+        mCallStateListener = (callState, error) -> {
+            switch (callState) {
+                case CONNECTING:  //正在连接对方
+                    mIsThroughTo = false;
+                    runOnUiThread(() -> mTvCallState.setText(getResources().getString(R.string.Are_connected_to_each_other)));
+                    break;
+                case CONNECTED: // 双方已经建立连接
+                    mIsThroughTo = false;
+                    //获取扩展内容
+                    runOnUiThread(() -> {
+                        mTvCallState.setText(getResources().getString(R.string.have_connected_with));
+                    });
+                    break;
 
-            @Override
-            public void onCallStateChanged(CallState callState, final CallError error) {
-                // Message msg = handler.obtainMessage();
-                EMLog.d("EMCallManager", "onCallStateChanged:" + callState);
-                switch (callState) {
+                case ACCEPTED:// 电话接通成功
+                    mIsThroughTo = true;
+                    handler.removeCallbacks(timeoutHangup);
+                    runOnUiThread(() -> {
+                        if (soundPool != null)
+                            soundPool.stop(streamID);
+                        if (!mIsHandsFreeState)
+                            closeSpeakerOn();
 
-                    case CONNECTING:  // 正在连接对方
-                        isThroughTo = false;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                callStateTextView.setText(st1);
-                            }
-                        });
-                        break;
-                    case CONNECTED: // 双方已经建立连接
-                        isThroughTo = false;
-                        //获取扩展内容
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                String st3 = getResources().getString(R.string.have_connected_with);
-                                callStateTextView.setText(st3);
-                            }
-                        });
-                        break;
-
-                    case ACCEPTED:// 电话接通成功
-                        isThroughTo = true;
-                        handler.removeCallbacks(timeoutHangup);
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                try {
-                                    if (soundPool != null)
-                                        soundPool.stop(streamID);
-                                } catch (Exception e) {
-                                }
-                                if (!isHandsfreeState)
-                                    closeSpeakerOn();
-                                //show relay or direct call, for testing purpose
-                                ((TextView) findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
-                                        ? R.string.direct_call : R.string.relay_call);
-                                chronometer.setVisibility(View.VISIBLE);
-                                chronometer.setBase(SystemClock.elapsedRealtime());
-                                // duration start
-                                chronometer.start();
-                                String str4 = getResources().getString(R.string.In_the_call);
-                                callStateTextView.setText(str4);
-                                callingState = CallingState.NORMAL;
-                                startMonitor();
-                            }
-                        });
-                        break;
-                    case NETWORK_UNSTABLE:
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                netwrokStatusVeiw.setVisibility(View.VISIBLE);
-                                if (error == CallError.ERROR_NO_DATA) {
-                                    netwrokStatusVeiw.setText(R.string.no_call_data);
+                        //通话时长 提示
+                        mChronometer.setVisibility(View.VISIBLE);
+                        mChronometer.setBase(SystemClock.elapsedRealtime());
+                        mDurationView.setText(mChronometer.getText());
+                        // 开启计时
+                        mChronometer.start();
+                        mTvCallState.setText(getResources().getString(R.string.In_the_call));
+                        callingState = CallingState.NORMAL;
+                    });
+                    break;
+                case NETWORK_UNSTABLE: // 网络不稳定
+                    runOnUiThread(() -> {
+                        mTvNetworkStatus.setVisibility(View.VISIBLE);
+                        if (error == EMCallStateChangeListener.CallError.ERROR_NO_DATA) {
+                            mTvNetworkStatus.setText(R.string.no_call_data);
+                        } else {
+                            mTvNetworkStatus.setText(R.string.network_unstable);
+                        }
+                    });
+                    break;
+                case NETWORK_NORMAL: // 网络正常
+                    runOnUiThread(() -> mTvNetworkStatus.setVisibility(View.INVISIBLE));
+                    break;
+                case VOICE_PAUSE: // 关闭声音
+                    runOnUiThread(() -> Toast.makeText(getApplicationContext(), "静音开启", Toast.LENGTH_SHORT).show());
+                    break;
+                case VOICE_RESUME: // 开启声音
+                    runOnUiThread(() -> Toast.makeText(getApplicationContext(), "静音关闭", Toast.LENGTH_SHORT).show());
+                    break;
+                case DISCONNECTED: // 电话断了
+                    mIsThroughTo = false;
+                    handler.removeCallbacks(timeoutHangup);
+                    @SuppressWarnings("UnnecessaryLocalVariable") final EMCallStateChangeListener.CallError fError = error;
+                    Observable.just("")
+                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribe(s -> {
+                                mChronometer.stop();
+                                callDruationText = mChronometer.getText().toString();
+                                String st1 = getResources().getString(R.string.Refused);
+                                String st2 = getResources().getString(R.string.The_other_party_refused_to_accept);
+                                String st3 = getResources().getString(R.string.Connection_failure);
+                                String st4 = getResources().getString(R.string.The_other_party_is_not_online);
+                                String st5 = getResources().getString(R.string.The_other_is_on_the_phone_please);
+                                String st6 = getResources().getString(R.string.The_other_party_did_not_answer_new);
+                                String st7 = getResources().getString(R.string.hang_up);
+                                String st8 = getResources().getString(R.string.The_other_is_hang_up);
+                                String st9 = getResources().getString(R.string.did_not_answer);
+                                String st10 = getResources().getString(R.string.Has_been_cancelled);
+                                String str = null;
+                                if (fError == EMCallStateChangeListener.CallError.REJECTED) {
+                                    callingState = CallingState.BEREFUSED;
+                                    mTvCallState.setText(st2);
+                                    str = st2;
+                                } else if (fError == EMCallStateChangeListener.CallError.ERROR_TRANSPORT) {
+                                    mTvCallState.setText(st3);
+                                    str = st3;
+                                } else if (fError == EMCallStateChangeListener.CallError.ERROR_UNAVAILABLE) {
+                                    callingState = CallingState.OFFLINE;
+                                    mTvCallState.setText(st4);
+                                    str = st4;
+                                } else if (fError == EMCallStateChangeListener.CallError.ERROR_BUSY) {
+                                    callingState = CallingState.BUSY;
+                                    mTvCallState.setText(st5);
+                                    str = st5;
+                                } else if (fError == EMCallStateChangeListener.CallError.ERROR_NORESPONSE) {
+                                    callingState = CallingState.NO_RESPONSE;
+                                    mTvCallState.setText(st6);
+                                    str = st6;
+                                } else if (fError == EMCallStateChangeListener.CallError.ERROR_LOCAL_SDK_VERSION_OUTDATED || fError == EMCallStateChangeListener.CallError.ERROR_REMOTE_SDK_VERSION_OUTDATED) {
+                                    callingState = CallingState.VERSION_NOT_SAME;
+                                    mTvCallState.setText(R.string.call_version_inconsistent);
                                 } else {
-                                    netwrokStatusVeiw.setText(R.string.network_unstable);
+                                    if (isRefused) {
+                                        callingState = CallingState.REFUSED;
+                                        mTvCallState.setText(st1);
+                                        str = st1;
+                                    } else if (isAnswered) {
+                                        callingState = CallingState.NORMAL;
+                                        if (!mEndCallTriggerByMe) {
+                                            mTvCallState.setText(st8);
+                                            str = st8;
+                                        }
+                                    } else {
+                                        if (isInComingCall) {
+                                            callingState = CallingState.UNANSWERED;
+                                            mTvCallState.setText(st9);
+                                            str = st9;
+                                        } else {
+                                            if (callingState != CallingState.NORMAL) {
+                                                callingState = CallingState.CANCELLED;
+                                                mTvCallState.setText(st10);
+                                                str = st10;
+                                            } else {
+                                                mTvCallState.setText(st7);
+                                            }
+                                        }
+                                    }
                                 }
-                            }
-                        });
-                        break;
-                    case NETWORK_NORMAL:
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                netwrokStatusVeiw.setVisibility(View.INVISIBLE);
-                            }
-                        });
-                        break;
-                    case VOICE_PAUSE:
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "VOICE_PAUSE", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        break;
-                    case VOICE_RESUME:
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "VOICE_RESUME", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        break;
-                    case DISCONNECTED: // 电话断了
-                        isThroughTo = false;
-                        handler.removeCallbacks(timeoutHangup);
-                        @SuppressWarnings("UnnecessaryLocalVariable") final CallError fError = error;
-                        runOnUiThread(new Runnable() {
-                            private void postDelayedCloseMsg() {
+                                if (str != null) {
+                                    Toast.makeText(VoiceCallActivity.this, str, Toast.LENGTH_SHORT).show();
+                                }
+
                                 handler.postDelayed(new Runnable() {
 
                                     @Override
@@ -398,7 +463,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                                             @Override
                                             public void run() {
                                                 removeCallStateListener();
-                                                saveCallRecord();
                                                 Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                                 animation.setDuration(800);
                                                 findViewById(R.id.root_layout).startAnimation(animation);
@@ -407,185 +471,93 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                                         });
                                     }
                                 }, 200);
-                            }
-
-                            @Override
-                            public void run() {
-                                chronometer.stop();
-                                callDruationText = chronometer.getText().toString();
-                                String st1 = getResources().getString(R.string.Refused);
-                                String st2 = getResources().getString(R.string.The_other_party_refused_to_accept);
-                                String st3 = getResources().getString(R.string.Connection_failure);
-                                String st4 = getResources().getString(R.string.The_other_party_is_not_online);
-                                String st5 = getResources().getString(R.string.The_other_is_on_the_phone_please);
-
-                                String st6 = getResources().getString(R.string.The_other_party_did_not_answer_new);
-                                String st7 = getResources().getString(R.string.hang_up);
-                                String st8 = getResources().getString(R.string.The_other_is_hang_up);
-
-                                String st9 = getResources().getString(R.string.did_not_answer);
-                                String st10 = getResources().getString(R.string.Has_been_cancelled);
-                                String st11 = getResources().getString(R.string.hang_up);
-
-                                String str = null;
-                                if (fError == CallError.REJECTED) {
-                                    callingState = CallingState.BEREFUSED;
-                                    callStateTextView.setText(st2);
-                                    str = st2;
-                                } else if (fError == CallError.ERROR_TRANSPORT) {
-                                    callStateTextView.setText(st3);
-                                    str = st3;
-                                } else if (fError == CallError.ERROR_UNAVAILABLE) {
-                                    callingState = CallingState.OFFLINE;
-                                    callStateTextView.setText(st4);
-                                    str = st4;
-                                } else if (fError == CallError.ERROR_BUSY) {
-                                    callingState = CallingState.BUSY;
-                                    callStateTextView.setText(st5);
-                                    str = st5;
-                                } else if (fError == CallError.ERROR_NORESPONSE) {
-                                    callingState = CallingState.NO_RESPONSE;
-                                    callStateTextView.setText(st6);
-                                    str = st6;
-                                } else if (fError == CallError.ERROR_LOCAL_SDK_VERSION_OUTDATED || fError == CallError.ERROR_REMOTE_SDK_VERSION_OUTDATED) {
-                                    callingState = CallingState.VERSION_NOT_SAME;
-                                    callStateTextView.setText(R.string.call_version_inconsistent);
-                                } else {
-                                    if (isRefused) {
-                                        callingState = CallingState.REFUSED;
-                                        callStateTextView.setText(st1);
-                                        str = st1;
-                                    } else if (isAnswered) {
-                                        callingState = CallingState.NORMAL;
-                                        if (endCallTriggerByMe) {
-//                                        callStateTextView.setText(st7);
-                                        } else {
-                                            callStateTextView.setText(st8);
-                                            str = st8;
-                                        }
-                                    } else {
-                                        if (isInComingCall) {
-                                            callingState = CallingState.UNANSWERED;
-                                            callStateTextView.setText(st9);
-                                            str = st9;
-                                        } else {
-                                            if (callingState != CallingState.NORMAL) {
-                                                callingState = CallingState.CANCELLED;
-                                                callStateTextView.setText(st10);
-                                                str = st10;
-                                            } else {
-                                                callStateTextView.setText(st11);
-                                            }
-                                        }
-                                    }
-                                }
-                                if (str != null) {
-                                    Toast.makeText(VoiceCallActivity.this, str, Toast.LENGTH_SHORT).show();
-                                }
-                                postDelayedCloseMsg();
-                            }
-
-                        });
-
-                        break;
-
-                    default:
-                        break;
-                }
-
+                            }, Throwable::printStackTrace);
+                    break;
+                default:
+                    break;
             }
         };
-        EMClient.getInstance().callManager().addCallStateChangeListener(callStateListener);
+        EMClient.getInstance().callManager().addCallStateChangeListener(mCallStateListener);
     }
 
     void removeCallStateListener() {
-        EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
+        EMClient.getInstance().callManager().removeCallStateChangeListener(mCallStateListener);
     }
 
-    private boolean isThroughTo;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_refuse_call:
                 isRefused = true;
-                refuseBtn.setEnabled(false);
+                mBtnRefuse.setEnabled(false);
                 handler.sendEmptyMessage(MSG_CALL_REJECT);
-                //TODO 拒接
-                String s = AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE);
-                if (isThroughTo) {
-
-                } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
-                    mMessage = EMMessage.createTxtSendMessage("通话已拒接", username);
-                    readUserInfoDetailsMessage();
-                    sendUserInfoDetailsMessage(mMessage);
+                //拒接
+                if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
+                    mMessage = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr("通话已拒接", EMClient.getInstance().getCurrentUser()), username);
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);
-                    isThroughTo = false;
+                    mIsThroughTo = false;
                 }
                 break;
             case R.id.btn_answer_call:
-                answerBtn.setEnabled(false);
+                mBtnRefuse.setEnabled(false);
                 closeSpeakerOn();
-                callStateTextView.setText("正在接听...");
-                comingBtnContainer.setVisibility(View.INVISIBLE);
-                hangupBtn.setVisibility(View.VISIBLE);
-                voiceContronlLayout.setVisibility(View.VISIBLE);
+                mTvCallState.setText("正在接听...");
+                mComingBtnContainer.setVisibility(View.INVISIBLE);
+                mBtnHangup.setVisibility(View.VISIBLE);
+                mLlVoiceControl.setVisibility(View.VISIBLE);
                 handler.sendEmptyMessage(MSG_CALL_ANSWER);
-                //TODO 接通
-                isThroughTo = true;
+                //接通
+                mIsThroughTo = true;
                 break;
             case R.id.btn_hangup_call:
-                hangupBtn.setEnabled(false);
-                chronometer.stop();
-                endCallTriggerByMe = true;
-                callStateTextView.setText(getResources().getString(R.string.hanging_up));
+                mBtnHangup.setEnabled(false);
+                mChronometer.stop();
+                mEndCallTriggerByMe = true;
+                mTvCallState.setText(getResources().getString(R.string.hanging_up));
                 handler.sendEmptyMessage(MSG_CALL_END);
-                //TODO 挂断
-                if (isThroughTo) {
-                    mMessage = EMMessage.createTxtSendMessage("通话时长:" + chronometer.getText().toString(), username);
-                    readUserInfoDetailsMessage();
-                    sendUserInfoDetailsMessage(mMessage);
-                    isThroughTo = false;
+                //挂断
+                if (mIsThroughTo) {
+                    mMessage = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr("通话时长:" + mChronometer.getText().toString(), EMClient.getInstance().getCurrentUser()), username);
+                    mIsThroughTo = false;
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);
                 } else if (!username.equals("sl_" + AppConfig.getAppConfig(VoiceCallActivity.this).get(AppConfig.PREF_KEY_CODE))) {
-                    mMessage = EMMessage.createTxtSendMessage("通话已取消", username);
-                    readUserInfoDetailsMessage();
-                    sendUserInfoDetailsMessage(mMessage);
-                    isThroughTo = false;
+                    mMessage = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr("通话已取消", EMClient.getInstance().getCurrentUser()), username);
+                    mIsThroughTo = false;
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(mMessage);
                 }
                 break;
             case R.id.iv_mute:
-                if (isMuteState) {
-                    muteImage.setImageResource(R.drawable.em_icon_mute_normal);
+                if (mIsMuteState) {
+                    mMuteImage.setImageResource(R.drawable.em_icon_mute_normal);
                     try {
                         EMClient.getInstance().callManager().resumeVoiceTransfer();
                     } catch (HyphenateException e) {
                         e.printStackTrace();
                     }
-                    isMuteState = false;
+                    mIsMuteState = false;
                 } else {
-                    muteImage.setImageResource(R.drawable.em_icon_mute_on);
+                    mMuteImage.setImageResource(R.drawable.em_icon_mute_on);
                     try {
                         EMClient.getInstance().callManager().pauseVoiceTransfer();
                     } catch (HyphenateException e) {
                         e.printStackTrace();
                     }
-                    isMuteState = true;
+                    mIsMuteState = true;
                 }
                 break;
             case R.id.iv_handsfree:
-                if (isHandsfreeState) {
-                    handsFreeImage.setImageResource(R.drawable.em_icon_speaker_normal);
+                if (mIsHandsFreeState) {
+                    mImgHandsFree.setImageResource(R.drawable.em_icon_speaker_normal);
                     closeSpeakerOn();
-                    isHandsfreeState = false;
+                    mIsHandsFreeState = false;
                 } else {
-                    handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
+                    mImgHandsFree.setImageResource(R.drawable.em_icon_speaker_on);
                     openSpeakerOn();
-                    isHandsfreeState = true;
+                    mIsHandsFreeState = true;
                 }
                 break;
             default:
@@ -594,136 +566,40 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try {
-            if (mManager != null) {
-                //释放电源锁
-                localWakeLock.release();
-                //注销传感器监听
-                mManager.unregisterListener(this);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        try {
-            EMClient.getInstance().callManager().endCall();
-        } catch (EMNoActiveCallException e) {
-            e.printStackTrace();
+    public void onBackPressed() {
+        callDruationText = mChronometer.getText().toString();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void CallInfoEvent(CallEventBean bean) {
+        if (bean.getEvent().equals("callSuccess")) {
+            Glide.with(AppManager.mContext)
+                    .load(bean.getPortaits())
+                    .error(R.drawable.ease_default_avatar)
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(mSwingCard);
+            mTvNickName.setText(bean.getUserName());
         }
     }
 
     @Override
-    public void onBackPressed() {
-        callDruationText = chronometer.getText().toString();
-    }
-
-    /**
-     * for debug & testing, you can remove this when release
-     */
-    void startMonitor() {
-        monitor = true;
-        new Thread(new Runnable() {
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        ((TextView) findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
-                                ? R.string.direct_call : R.string.relay_call);
-                    }
-                });
-                while (monitor) {
-                    try {
-                        Thread.sleep(1500);
-                    } catch (InterruptedException e) {
-                    }
-                }
-            }
-        }, "CallMonitor").start();
-    }
-
-
-    private void readUserInfoDetailsMessage() {
-        try {
-            //TODO TEXT 携带消息
-            JSONObject object_self = new JSONObject();
-            JSONObject object = new JSONObject();
-            if (userInfo_self == null) {
-                userInfo_self = "";
-            }
-
-            if (userInfo == null) {
-                userInfo = "";
-            }
-
-            if (userInfo_self.equals("")) {
-                object_self.put("CODE_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
-                object_self.put("phone_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
-                object_self.put("sex_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
-                object_self.put("post_title_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
-                object_self.put("username_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USERNAME));
-                object_self.put("portrait_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS));
-                object_self.put("email_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_USER_EMAIL));
-                object_self.put("department_name_self", AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
-
-                userInfo_self = object_self.toString();
-            }
-            if (userInfo.equals("")) {
-                object.put("CODE", getIntent().getStringExtra("CODE"));
-                object.put("phone", getIntent().getStringExtra("phone"));
-                object.put("sex", getIntent().getStringExtra("sex"));
-                object.put("post_title", getIntent().getStringExtra("post_name"));
-                object.put("username", getIntent().getStringExtra("nike"));
-                object.put("portrait", getIntent().getStringExtra("portrait"));
-                object.put("email", getIntent().getStringExtra("email"));
-                object.put("department_name", getIntent().getStringExtra("department_name"));
-                userInfo = object.toString();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
-    }
-
-    JSONObject sendJson_self;
-    JSONObject sendJson;
-
-    private void sendUserInfoDetailsMessage(EMMessage message) {
-        String from = message.getFrom();
-        //  userInfo_self = message.getStringAttribute("userInfo_self", "");
-        //   userInfo = message.getStringAttribute("userInfo", "");
-        //UserInfoSelfDetailsBean btestean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
         try {
-            String newUserInfo_self = null;
-            String newUserInfo = null;
-            if (userInfoSelfBean == null) {
-                sendJson_self = new JSONObject(userInfo_self);
-                sendJson = new JSONObject(userInfo);
-                mMessage.setAttribute("userInfo_self", sendJson_self);
-                mMessage.setAttribute("userInfo", sendJson);
-                return;
+            if (mManager != null) {
+                localWakeLock.release();  //释放电源锁
+                mManager.unregisterListener(this);  //注销传感器监听
             }
-            if (!from.equals("sl_" + userInfoSelfBean.CODE_self)) {
-                newUserInfo_self = userInfo_self.replaceAll("_self", "");
-                newUserInfo = userInfo.replace("phone", "phone_self");
-                newUserInfo = newUserInfo.replace("CODE", "CODE_self");
-                newUserInfo = newUserInfo.replace("sex", "sex_self");
-                newUserInfo = newUserInfo.replace("post_title", "post_title_self");
-                newUserInfo = newUserInfo.replace("username", "username_self");
-                newUserInfo = newUserInfo.replace("portrait", "portrait_self");
-                newUserInfo = newUserInfo.replace("/portrait_self", "/portrait/");
-                newUserInfo = newUserInfo.replace("email", "email_self");
-                newUserInfo = newUserInfo.replace("department_name", "department_name_self");
-                sendJson_self = new JSONObject(newUserInfo_self);
-                sendJson = new JSONObject(newUserInfo);
-                mMessage.setAttribute("userInfo_self", sendJson);
-                mMessage.setAttribute("userInfo", sendJson_self);
-            } else {
-                sendJson_self = new JSONObject(userInfo_self);
-                sendJson = new JSONObject(userInfo);
-                mMessage.setAttribute("userInfo_self", sendJson_self);
-                mMessage.setAttribute("userInfo", sendJson);
-            }
-        } catch (Throwable e) {
+            if (mIsThroughTo)
+                EMClient.getInstance().callManager().endCall();
+        } catch (EMNoActiveCallException e) {
             e.printStackTrace();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
     }
 }

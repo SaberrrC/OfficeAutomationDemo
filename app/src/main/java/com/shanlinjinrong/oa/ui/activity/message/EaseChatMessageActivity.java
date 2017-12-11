@@ -1,7 +1,11 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.ImageFormat;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,10 +13,13 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.model.UserInfoDetailsBean;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
 import com.shanlinjinrong.oa.ui.activity.message.event.UpdateMessageCountEvent;
@@ -25,7 +32,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -43,7 +49,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     LinearLayout mIvDetail;
     private String mTitle;
     private EaseChatFragment chatFragment;
-    private UserInfoDetailsBean mUserInfoDetailsBean;
     private int mChatType;
     private int CHAT_GROUP = 2;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
@@ -76,55 +81,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
     private void initData() {
-        //TODO 暂做更改
-//        userInfo_self = getIntent().getStringExtra("userInfo_self");
-//        userInfo = getIntent().getStringExtra("userInfo");
-//        mUserInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
-//        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
-
-//        if (mChatType == CHAT_GROUP) {
-//            mTvTitle.setText(getIntent().getStringExtra("groupName"));
-//        } else {
-        //TODO 暂作修改 消息透传
-//            if (mUserInfoDetailsBean != null && u_id.contains(mUserInfoDetailsBean.getCODE()))
-//                mTvTitle.setText(mUserInfoDetailsBean.getUsername());
-//            else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
-//                mTvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
-//            }
-//            mTvTitle.setText(mTitle);
-//        }
-        try {
-
-            //TODO 消息透传 修改
-//            args.putString(EaseConstant.EXTRA_USER_ID, u_id);
-//            //对方的信息
-//            args.putString("to_user_code", getIntent().getStringExtra("code"));
-//            args.putString("to_user_nike", mUserInfoDetailsBean.getUsername() == null ? "" : mUserInfoDetailsBean.getUsername());
-//            args.putString("to_user_pic", mUserInfoDetailsBean.getPortrait() == null ? "" : mUserInfoDetailsBean.getPortrait());
-//            args.putString("to_user_department", mUserInfoDetailsBean.getDepartment_name());
-//            args.putString("to_user_post", mUserInfoDetailsBean.getPost_title());
-//            args.putString("to_user_sex", mUserInfoDetailsBean.getSex());
-//            args.putString("to_user_phone", mUserInfoDetailsBean.getPhone());
-//            args.putString("to_user_email", mUserInfoDetailsBean.getEmail());
-
-//            args.putString("userInfo", userInfo);
-//            args.putString("userInfo_self", userInfo_self);
-
-//            //自己的信息
-//            args.putString("user_code", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_CODE));
-//            args.putString("meId", Constants.CID + "_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
-//            args.putString("userName", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USERNAME));
-//            args.putString("userPic", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
-//            args.putString("userSex", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_SEX));
-//            args.putString("userPhone", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PHONE));
-//            args.putString("userPost", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_POST_NAME));
-//            args.putString("userDepartment", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
-//            args.putString("userEmail", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_EMAIL));
-//            args.putString("userDepartmentId", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT));
-
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+        //传入参数
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
         mExtras = getIntent().getExtras();
@@ -147,27 +104,44 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Override
     public void voiceCallListener(String toChatUsername, EMMessage mEmMessage) {
         try {
             if (mEmMessage != null) {
-                userInfo = mEmMessage.getStringAttribute("userInfo", "");
-                userInfo_self = mEmMessage.getStringAttribute("userInfo_self", "");
-                final UserInfoDetailsBean userInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
-                startActivity(new Intent(this, VoiceCallActivity.class).putExtra("nike", userInfoDetailsBean.username).putExtra("CODE", userInfoDetailsBean.CODE).putExtra("portrait", userInfoDetailsBean.portrait).putExtra("post_name", userInfoDetailsBean.post_title).putExtra("sex", userInfoDetailsBean.sex).putExtra("phone", userInfoDetailsBean.phone).putExtra("email", userInfoDetailsBean.email).putExtra("department_name", userInfoDetailsBean.department_name).putExtra("username", toChatUsername).putExtra("isomingCall", false));
+                String nike = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(getIntent().getStringExtra("u_id"));
+                String CODE = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(getIntent().getStringExtra("u_id"));
+                String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(getIntent().getStringExtra("u_id"));
+                String post_name = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPost(getIntent().getStringExtra("u_id"));
+                String sex = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getSex(getIntent().getStringExtra("u_id"));
+                String phone = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPhone(getIntent().getStringExtra("u_id"));
+                String email = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getEmail(getIntent().getStringExtra("u_id"));
+                String department_name = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartment(getIntent().getStringExtra("u_id"));
+
+                startActivity(new Intent(this, VoiceCallActivity.class)
+                        .putExtra("nike",nike)
+                        .putExtra("CODE",CODE)
+                        .putExtra("portrait", portrait)
+                        .putExtra("post_name",post_name)
+                        .putExtra("sex",sex)
+                        .putExtra("phone",phone)
+                        .putExtra("email", email)
+                        .putExtra("department_name", department_name)
+                        .putExtra("username", toChatUsername)
+                        .putExtra("isomingCall", false));
             } else {
-                startActivity(new Intent(this, VoiceCallActivity.class).putExtra("username", toChatUsername).putExtra("isomingCall", false));
+                startActivity(new Intent(this, VoiceCallActivity.class)
+                        .putExtra("username", toChatUsername)
+                        .putExtra("isomingCall", false));
             }
         } catch (Throwable e) {
             e.printStackTrace();
         }
     }
-
-    String userInfo_self;
-    String userInfo;
 
     @Override
     public void clickUserInfo(String userinfo, EMMessage emMessage) {
@@ -177,10 +151,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         Intent intent = new Intent(this, Contact_Details_Activity.class);
         intent.putExtra("user_code", userinfo);
         intent.putExtra("isSession", true);
-        userInfo = emMessage.getStringAttribute("userInfo", "");
-        userInfo_self = emMessage.getStringAttribute("userInfo_self", "");
-        intent.putExtra("userInfo_self", userInfo_self);
-        intent.putExtra("userInfo", userInfo);
         startActivity(intent);
     }
 

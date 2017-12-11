@@ -333,7 +333,11 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mEtCommonalityBeginTime.setText(bean.getStartTime());
                 mEtCommonalityEndTime.setText(bean.getEndTime());
                 tvCommonalityDuration.setText("申请时长");
-                tvCommonality.setText(bean.getTimeDifference() + "天");
+                if (TextUtils.equals(mTraverResultBean.getData().getType(), "1001A1100000000154IU")) {
+                    tvCommonality.setText(bean.getTimeDifference() + "小时");
+                } else {
+                    tvCommonality.setText(bean.getTimeDifference() + "天");
+                }
                 tvCommonalityShow1.setText("出差地点");
                 tvCommonalityShow2.setText("出差原因");
                 tvCommonalityShow3.setText("工作交接人");
@@ -341,7 +345,6 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 etCommonalityShow2.setText(TextUtils.isEmpty(bean.getEvectionRemark()) ? "" : bean.getEvectionRemark());
                 etCommonalityShow3.setText(bean.getPsnname());
                 return;
-
             }
             if (itemData instanceof RestResultBean.DataBean.NchrfurloughApplyDetailBean) {
                 RestResultBean.DataBean.NchrfurloughApplyDetailBean bean = (RestResultBean.DataBean.NchrfurloughApplyDetailBean) itemData;
@@ -358,7 +361,11 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mEtCommonalityBeginTime.setText(bean.getStartTime());
                 mEtCommonalityEndTime.setText(bean.getEndTime());
                 tvCommonalityDuration.setText("休假时长");
-                tvCommonality.setText(bean.getTimeDifference() + "天");
+                if (TextUtils.equals(mRestResultBean.getData().getType(), "1002Z710000000021ZM1")) {
+                    tvCommonality.setText(bean.getTimeDifference() + "小时");
+                } else {
+                    tvCommonality.setText(bean.getTimeDifference() + "天");
+                }
                 tvCommonalityShow1.setText("休假事由");
                 tvCommonalityShow2.setText("工作交接人");
                 etCommonalityShow1.setText(TextUtils.isEmpty(bean.getFurloughRemark()) ? "" : bean.getFurloughRemark());

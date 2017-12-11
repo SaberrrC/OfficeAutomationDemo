@@ -6,6 +6,7 @@ import com.hyphenate.chat.EMMessage.ChatType;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
+import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.exceptions.HyphenateException;
 
 import android.content.Context;
@@ -15,29 +16,30 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
-public class EaseChatRowText extends EaseChatRow{
+public class EaseChatRowText extends EaseChatRow {
 
-	private TextView contentView;
+    private TextView contentView;
 
     public EaseChatRowText(Context context, EMMessage message, int position, BaseAdapter adapter) {
-		super(context, message, position, adapter);
-	}
+        super(context, message, position, adapter);
+    }
 
-	@Override
-	protected void onInflateView() {
-		inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
-				R.layout.ease_row_received_message : R.layout.ease_row_sent_message, this);
-	}
+    @Override
+    protected void onInflateView() {
+        inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
+                R.layout.ease_row_received_message : R.layout.ease_row_sent_message, this);
+    }
 
-	@Override
-	protected void onFindViewById() {
-		contentView = (TextView) findViewById(R.id.tv_chatcontent);
-	}
+    @Override
+    protected void onFindViewById() {
+        contentView = (TextView) findViewById(R.id.tv_chatcontent);
+    }
 
     @Override
     public void onSetUpView() {
         EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
-        Spannable span = EaseSmileUtils.getSmiledText(context, txtBody.getMessage());
+
+        Spannable span = EaseSmileUtils.getSmiledText(context, EncryptionUtil.getDecryptStr(txtBody.getMessage() + "", message.getFrom()));
         // 设置内容
         contentView.setText(span, BufferType.SPANNABLE);
 
@@ -48,27 +50,27 @@ public class EaseChatRowText extends EaseChatRow{
         if (message.direct() == EMMessage.Direct.SEND) {
             setMessageSendCallback();
             switch (message.status()) {
-            case CREATE: 
-                progressBar.setVisibility(View.GONE);
-                statusView.setVisibility(View.VISIBLE);
-                break;
-            case SUCCESS:
-                progressBar.setVisibility(View.GONE);
-                statusView.setVisibility(View.GONE);
-                break;
-            case FAIL:
-                progressBar.setVisibility(View.GONE);
-                statusView.setVisibility(View.VISIBLE);
-                break;
-            case INPROGRESS:
-                progressBar.setVisibility(View.VISIBLE);
-                statusView.setVisibility(View.GONE);
-                break;
-            default:
-               break;
+                case CREATE:
+                    progressBar.setVisibility(View.GONE);
+                    statusView.setVisibility(View.VISIBLE);
+                    break;
+                case SUCCESS:
+                    progressBar.setVisibility(View.GONE);
+                    statusView.setVisibility(View.GONE);
+                    break;
+                case FAIL:
+                    progressBar.setVisibility(View.GONE);
+                    statusView.setVisibility(View.VISIBLE);
+                    break;
+                case INPROGRESS:
+                    progressBar.setVisibility(View.VISIBLE);
+                    statusView.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
             }
-        }else{
-            if(!message.isAcked() && message.getChatType() == ChatType.Chat){
+        } else {
+            if (!message.isAcked() && message.getChatType() == ChatType.Chat) {
                 try {
                     EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
                 } catch (HyphenateException e) {
@@ -86,9 +88,8 @@ public class EaseChatRowText extends EaseChatRow{
     @Override
     protected void onBubbleClick() {
         // TODO Auto-generated method stub
-        
-    }
 
+    }
 
 
 }

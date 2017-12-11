@@ -39,6 +39,7 @@ import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
 import com.shanlinjinrong.oa.ui.fragment.presenter.TabContractsFragmentPresenter;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
+import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 import com.shanlinjinrong.oa.views.ClearEditText;
 import com.shanlinjinrong.utils.DataUtils;
 
@@ -55,6 +56,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //import com.hyphenate.chatuidemo.db.Friends;
@@ -121,15 +123,6 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setEnabled(true);
-
-        View viewBack = view.findViewById(R.id.btn_back);
-        viewBack.setVisibility(View.GONE);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //在初始化是为RecyclerView添加点击事件，这样可以防止重复点击问题
-        recyclerView.addOnItemTouchListener(new ItemClick());
-        mContactAdapter = new TabContactsAdapter(items);
-        recyclerView.setAdapter(mContactAdapter);
     }
 
     @OnClick({R.id.search_et_cancle})
@@ -156,9 +149,13 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        View viewBack = view.findViewById(R.id.btn_back);
+        viewBack.setVisibility(View.GONE);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addOnItemTouchListener(new ItemClick());
+        mContactAdapter = new TabContactsAdapter(items);
+        recyclerView.setAdapter(mContactAdapter);
         loadData();
-
 
         //EditText 自动搜索,间隔->输入停止1秒后自动搜索
         RxTextView.textChanges(search_et_input)

@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.base.dagger.component;
 
 import com.shanlinjinrong.oa.ui.activity.calendar.MouthCalenderActivity;
+import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.contracts.ContactsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApplyForOfficeSuppliesActivity;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
@@ -36,6 +37,8 @@ import com.shanlinjinrong.oa.ui.activity.message.GroupCommonControlActivity;
 import com.shanlinjinrong.oa.ui.activity.message.LookMessageRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.message.MessageSearchActivity;
 import com.shanlinjinrong.oa.ui.activity.message.SelectedGroupContactActivity;
+import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.message.CallActivity;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModificationEmailActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPhoneActivity;
@@ -151,4 +154,8 @@ public interface ActivityComponent {
     void inject(EaseChatDetailsActivity easeChatDetailsActivity);
 
     void inject(GroupCommonControlActivity groupCommonControlActivity);
+
+    void inject(Contact_Details_Activity contactDetailsActivity);
+
+    void inject(CallActivity callActivity);
 }

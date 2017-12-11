@@ -13,7 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
-import com.google.gson.Gson;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -21,6 +22,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
@@ -29,11 +31,11 @@ import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
 
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,8 +44,6 @@ import java.util.List;
 /**
  * conversation list adapter
  */
-
-//TODO 最外边列表展示 Adapter
 public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     private static final String TAG = "ChatAllHistoryAdapter";
     private List<EMConversation> conversationList;
@@ -137,15 +137,24 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         if (conversation.getAllMsgCount() != 0) {
             // show the content of latest message
             lastMessage = conversation.getLastMessage();
-
             String content = null;
             if (cvsListHelper != null) {
                 content = cvsListHelper.onSetItemSecondaryText(lastMessage);
             }
-            holder.message.setText(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))),
-                    BufferType.SPANNABLE);
+
+            if (lastMessage.getType() == EMMessage.Type.TXT) {
+                String jiamiStr = EncryptionUtil.getDecryptStr(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "", lastMessage.getFrom());
+                holder.message.setText(jiamiStr, BufferType.SPANNABLE);
+            } else {
+                String jiamiStr = EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "";
+                holder.message.setText(jiamiStr, BufferType.SPANNABLE);
+            }
             if (content != null) {
-                holder.message.setText(content);
+                if (lastMessage.getType() == EMMessage.Type.TXT) {
+                    holder.message.setText(EncryptionUtil.getDecryptStr(content, lastMessage.getFrom()));
+                } else {
+                    holder.message.setText(content);
+                }
             }
             holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
             if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
@@ -155,69 +164,50 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
         }
         try {
-
-            //TODO 暂作修改 消息 透传
-//            String user_Info_self = lastMessage.getStringAttribute("userInfo_self", "");
-//            String user_Info = lastMessage.getStringAttribute("userInfo", "");
-//            userInfoDetailsBean = new Gson().fromJson(user_Info, UserInfoDetailsBean.class);
-//            userInfoSelfDetailsBean = new Gson().fromJson(user_Info_self, UserInfoSelfDetailsBean.class);
-//            String userName = lastMessage.getStringAttribute("userName", "");
-//            String userHead = lastMessage.getStringAttribute("userHead", "");
-
-            String user = EMClient.getInstance().getCurrentUser();
-            //角色转换
-//            if (!EMClient.getInstance().getCurrentUser().contains(userInfoDetailsBean.getCODE())) {
-//                UserInfoDetailsBean userInfoDetailsBeanTemp = userInfoDetailsBean;
-//                userInfoDetailsBean = EaseUserUtils.changeSelfToUserInfo(userInfoSelfDetailsBean);
-//                userInfoSelfDetailsBean = EaseUserUtils.changeUserInfoToSelf(userInfoDetailsBeanTemp);
-//            }
-
-//            if (userInfoDetailsBean != null && username.equals("sl_" + userInfoDetailsBean.CODE)) {
-
-            if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
-                String groupId = conversation.conversationId();
-                if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
-                    holder.motioned.setVisibility(View.VISIBLE);
-                } else {
+            if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()))) {
+                if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
+                    String groupId = conversation.conversationId();
+                    if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
+                        holder.motioned.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.motioned.setVisibility(View.GONE);
+                    }
+                    // group message, show group avatar
+                    holder.avatar.setImageResource(R.drawable.ease_group_icon);
+                    EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
+                    holder.name.setText(group != null ? group.getGroupName() : username);
+                } else if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
+                    holder.avatar.setImageResource(R.drawable.ease_group_icon);
+                    EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
+                    holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
                     holder.motioned.setVisibility(View.GONE);
-                }
-                // group message, show group avatar
-
-                holder.avatar.setImageResource(R.drawable.ease_group_icon);
-                EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
-                holder.name.setText(group != null ? group.getGroupName() : username);
-            } else {
-
-                String toUserCode = "";
-                if (user.equals(lastMessage.getTo())) {
-                    toUserCode = lastMessage.getFrom();
                 } else {
-                    toUserCode = lastMessage.getTo();
+                    Glide.with(getContext()).load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getFrom()))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.ease_default_avatar)
+                            .into(holder.avatar);
+                    holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getFrom()));
                 }
-
-                EMConversation conversation1 = EMClient.getInstance().chatManager().getConversation(toUserCode);
-                if (conversation1 != null) {
-                    String extField = conversation1.getExtField();
-                    JSONObject jsonObject = new JSONObject(extField);
-                    String name = jsonObject.getString("userName");
-                    String portraits = jsonObject.getString("userHead");
-                    EaseUserUtils.setUserAvatar(getContext(), portraits, holder.avatar);
-                    EaseUserUtils.setUserNick(name, holder.name);
-                    holder.motioned.setVisibility(View.GONE);
-                }
-            }
-//            }
-//            else if (userInfoSelfDetailsBean != null && username.contains("sl_" + userInfoSelfDetailsBean.CODE_self)) {
-            try {
-                EaseUserUtils.setUserAvatarBeanSelf(getContext(), userInfoSelfDetailsBean, holder.avatar);
-//                    EaseUserUtils.setUserNick(username, holder.name);
-//                    EaseUserUtils.setUserNickSelfBean(userInfoSelfDetailsBean, holder.name);
-                holder.name.setText(userInfoSelfDetailsBean.username_self);
                 holder.motioned.setVisibility(View.GONE);
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
+            } else if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()))) {
+                try {
+                    Glide.with(getContext()).load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getTo()))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.ease_default_avatar)
+                            .into(holder.avatar);
+                    holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getTo()));
+                    holder.motioned.setVisibility(View.GONE);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
             }
-//            }
+            if (lastMessage.getFrom().contains("admin") || lastMessage.getTo().contains("admin")) {
+                holder.name.setText("会议邀请");
+                holder.avatar.setImageResource(R.drawable.meeting_invite_icon);
+            } else if (lastMessage.getFrom().contains("notice") || lastMessage.getTo().contains("notice")) {
+                holder.name.setText("公告通知");
+                holder.avatar.setImageResource(R.drawable.notice_message_icon);
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }

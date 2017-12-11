@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.main;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -28,12 +27,12 @@ import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.util.NetUtils;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -42,7 +41,6 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.MainControllerPresenter;
-import com.shanlinjinrong.oa.ui.activity.message.event.UpdateMessageCountEvent;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.TabCommunicationFragment;
@@ -290,7 +288,25 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     }
 
     public void refreshCommCount() {
-        mPresenter.setUnreadMessageCount();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //                try {
+                mPresenter.loadConversationList();
+                //                } catch (Exception e) {
+                //                    LogUtils.e("加载环信抛异常了");
+                //                }
+            }
+        }).start();
+    }
+
+    public void refreshUnReadMsgCount() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mPresenter.loadUnReadMsg();
+            }
+        }).start();
     }
 
     @Override
@@ -312,19 +328,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @Override
     public void bindBadgeView(int msgCount) {
         tempMsgCount = msgCount;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //绑定小红点
-                if (qBadgeView == null) {
-                    qBadgeView = new QBadgeView(AppManager.mContext);
-                }
-                qBadgeView.setBadgeGravity(Gravity.CENTER);
-                qBadgeView.bindTarget(communicationRedSupport).setBadgeNumber(tempMsgCount);
+        runOnUiThread(() -> {
+            //绑定小红点
+            if (qBadgeView == null) {
+                qBadgeView = new QBadgeView(AppManager.mContext);
             }
+            qBadgeView.setBadgeGravity(Gravity.CENTER);
+            qBadgeView.bindTarget(communicationRedSupport).setBadgeNumber(tempMsgCount);
         });
+        //更新Icon 数量
+        new Thread(() -> {
+            if (tempMsgCount != 0) {
+                BadgeUtil.setBadgeCount(MainActivity.this, tempMsgCount, R.drawable.ring_red);
+                return;
+            }
+            BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
+        }).start();
     }
-
 
     class PageChangeListener implements ViewPager.OnPageChangeListener {
         @Override
@@ -495,22 +515,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     }
 
     @Override
-    protected void onStop() {
-        if (!Utils.isRunningForeground(this)) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (tempMsgCount != 0) {
-                        BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
-                    }
-                }
-            }).start();
-        }
-        super.onStop();
-
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             moveTaskToBack(false);
@@ -519,45 +523,57 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         return super.onKeyDown(keyCode, event);
     }
 
+    private List<EMMessage> mEMMessage = new ArrayList<>();
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(final List<EMMessage> list) {
-            if (tabCommunicationFragment != null) {
-                if (tabCommunicationFragment.myConversationListFragment != null) {
-                    tabCommunicationFragment.myConversationListFragment.refresh();
-                }
-            }
+//            if (tabCommunicationFragment != null) {
+//                if (tabCommunicationFragment.myConversationListFragment != null) {
+//                    tabCommunicationFragment.myConversationListFragment.refresh();
+//                }
+//            }
             /**
              * im通知，具有通知功能
              */
+            String userId = "";
             for (EMMessage message : list) {
-
-                if (!easeUI.hasForegroundActivies()) {
-                    easeUI.getNotifier().onNewMsg(message);
-                }
+//                if (!easeUI.hasForegroundActivies()) {
+//                    easeUI.getNotifier().onNewMsg(message);
+//                }
                 //获取个人信息
 //                String userInfo = message.getStringAttribute("userInfo", "");
 //                UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
-//                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic, userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost, userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
+//                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
+//                        Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic,
+//                        userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost,
+//                        userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
 
-                String userInfo = message.getStringAttribute("userInfo", "");
-                JSONObject jsonObject1 = null;
-                try {
-                    jsonObject1 = new JSONObject(userInfo);
-//                    String userName = jsonObject1.getString("userName");
-//                    String userHead = jsonObject1.getString("userHead");
-                    String userCode = jsonObject1.getString("userCode");
-//                    String userId = jsonObject1.getString("userId");
-                    EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userCode);
-                    if (conversation != null) {
-                        conversation.setExtField(jsonObject1.toString());
+                userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(message.getFrom());
+                if (userId.equals("")) {
+                    mEMMessage.clear();
+                    mEMMessage.addAll(list);
+                    //TODO 获取个人信息 存在高并发
+                    try {
+                        mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
+                    } catch (Throwable e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
-            EventBus.getDefault().post(new UpdateMessageCountEvent());
-            refreshCommCount();
+            if (!userId.equals("")) {
+
+                if (tabCommunicationFragment != null) {
+                    if (tabCommunicationFragment.myConversationListFragment != null) {
+                        tabCommunicationFragment.myConversationListFragment.refresh();
+                    }
+                }
+                for (EMMessage message1 : list) {
+                    if (!easeUI.hasForegroundActivies()) {
+                        easeUI.getNotifier().onNewMsg(message1);
+                    }
+                }
+                refreshCommCount();
+            }
         }
 
         @Override
@@ -580,12 +596,10 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
         }
 
-
         @Override
         public void onMessageChanged(EMMessage emMessage, Object o) {
 
         }
-    };
 
     //开启权限列表
     public void startAppSetting() {
@@ -598,6 +612,35 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @Override
     public void easeInitFinish(AbortableFuture<LoginInfo> loginRequest) {
         this.loginRequest = loginRequest;
+    }
+
+    @Override //TODO 缓存 联系人消息
+    public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
+        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
+                Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
+                userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
+                userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
+
+        if (tabCommunicationFragment != null) {
+            if (tabCommunicationFragment.myConversationListFragment != null) {
+                tabCommunicationFragment.myConversationListFragment.refresh();
+            }
+        }
+
+        if (mEMMessage != null) {
+            for (EMMessage message : mEMMessage) {
+                if (!easeUI.hasForegroundActivies()) {
+                    easeUI.getNotifier().onNewMsg(message);
+                }
+            }
+        }
+
+        refreshCommCount();
+    }
+
+    @Override
+    public void searchUserDetailsFailed() {
+
     }
 
     //位置权限回调

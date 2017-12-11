@@ -1,6 +1,8 @@
-apply from: 'file_uri.gradle';
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 apply plugin: "mmTrix"
+apply from: 'file_uri.gradle';
+
 
 android {
     compileSdkVersion 25
@@ -10,11 +12,9 @@ android {
         applicationId "com.shanlinjinrong.oa"
         minSdkVersion 16
         targetSdkVersion 25
-        //pwd:13579
-//        versionCode VERSION_ID as int
-//        versionName VERSION_NAME
-
-        //方法数 65536
+        multiDexEnabled true
+        //Error:(com.baidu.mapapi.utils.b) that doesn't come with an 这个是安卓的方法数量不够了，
+        // 只能6w个方法。 我在项目build.gradle这里添加这句就可以了。
         multiDexEnabled true
 
         //pwd:13579
@@ -60,10 +60,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-
         debug {
-            buildConfigField "String", "BASE_URL", prePHPAddress()
-            buildConfigField "String", "BASE_JAVA_URL", preJavaAddress()
+            buildConfigField "String", "BASE_URL", devPHPAddress()
+            buildConfigField "String", "BASE_JAVA_URL", devJavaAddress()
             resValue "string", "app_name", devAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -87,8 +86,8 @@ android {
     }
 
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 
     packagingOptions {

@@ -122,6 +122,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             mTv_common_detail, mTv_common_next_detail, mTv_common_begin_time, mTv_common_next_begin_time, mTv_selected_show, mTv_selected_next_show, mBegin_time,
             mNext_begin_time, mEnd_time, mNext_end_time, mEt_common_show3, mEt_common_next_show3, mTv_duration_next_number, mTv_duration_number, mTv_common_next_show2_dot, mTv_common_show2_dot, mTv_common_show3_dot, mTv_common_next_show3_dot;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,11 +220,18 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             }
 
             if (getIntent().getIntExtra("type", -1) != 3) {
-                if (mQueryDuration.equals("0") || mNextDuration.equals("0")) {
+                if (mNext_begin_time != null) {
+                    if (this.mQueryDuration.equals("") || this.mQueryDuration.equals("0") || this.mQueryDuration.equals("0小时") || this.mQueryDuration.equals("0天") ||
+                            this.mNextDuration.equals("0") || this.mNextDuration.equals("") || this.mNextDuration.equals("0小时") || this.mNextDuration.equals("0天")) {
+                        showToast(mTopView.getTitleView().getText().toString() + "时长为0,请重新获取!");
+                    }
+                }
+                if (this.mQueryDuration.equals("") || this.mQueryDuration.equals("0") || this.mQueryDuration.equals("0小时") || this.mQueryDuration.equals("0天")) {
                     showToast(mTopView.getTitleView().getText().toString() + "时长为0,请重新获取!");
                     return;
                 }
             }
+
 
             switch (getIntent().getIntExtra("type", -1)) {
                 case 0://出差申请
@@ -232,10 +240,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 case 1://加班申请
                     submitAddWorkApply();
                     break;
-                case 2:
+                case 2://休假申请
                     submitFurloughApply();
                     break;
-                case 3:
+                case 3://签卡申请
                     submitRegistrationCard();
                     break;
                 default:
@@ -378,7 +386,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 //            body.setType(mSelectedTypeID);
 //            body.setMonocode(mTvCoderNumber.getText().toString());
 //            mPresenter.addWorkApply(body);
-
+            if (mEt_common_show2.getText().toString().trim().equals("")&& !mEt_common_show2.getHint().toString().equals("")) {
+                showToast("请填写加班原因！");
+                return;
+            }
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject1 = new JSONObject();
@@ -436,7 +447,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             jsonObject1.put("endTime", mEnd_time.getText().toString() + ":00");
             jsonObject1.put("startTime", mBegin_time.getText().toString() + ":00");
             jsonObject1.put("handOverPepole", mReceiverId);
-            jsonObject1.put("FurloughRemark", mEt_common_show2.getText().toString());
+            jsonObject1.put("furloughRemark", mEt_common_show2.getText().toString());
             jsonObject1.put("timeDifference", mQueryDuration);
             jsonArray.put(jsonObject1);
             if (mIndex > 1) {
@@ -452,7 +463,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 jsonObject2.put("endTime", mNext_end_time.getText().toString() + ":00");
                 jsonObject2.put("startTime", mNext_begin_time.getText().toString() + ":00");
                 jsonObject2.put("handOverPepole", mNextReceiverId);
-                jsonObject2.put("FurloughRemark", mEt_common_next_show2.getText().toString());
+                jsonObject2.put("furloughRemark", mEt_common_next_show2.getText().toString());
                 jsonObject2.put("timeDifference", mNextDuration);
                 jsonArray.put(jsonObject2);
             }
@@ -658,13 +669,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
         mLl_common_next_card_detail.setOnClickListener(view -> {
             isSeletcedNextType = true;
-            if (mCommonTypeBean != null) {
-                if (mCommonTypeBean.getData().size() == 0) {
+            if (data != null) {
+                if (data.size() == 0) {
                     showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,正在为您重试！");
                     querySelectedTypeData();
                     return;
                 }
-                NonTokenDialog();
+                selectedDialog();
                 return;
             }
             showToast("获取" + mTv_common_next_show2.getText().toString() + "失败,正在为您重试！");
@@ -945,15 +956,24 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                     mNextDuration = bean.getData();
                     if (getIntent().getIntExtra("type", -1) == 1) {
                         mTv_duration_next_number.setText(bean.getData() + "小时");
+
                     } else {
-                        mTv_duration_next_number.setText(bean.getData() + "天");
+                        if (mSelectedTypeID.equals("1002Z710000000021ZM1") || mSelectedTypeID.equals("1001A1100000000154IU")) {
+                            mTv_duration_next_number.setText(bean.getData() + "小时");
+                        } else {
+                            mTv_duration_next_number.setText(bean.getData() + "天");
+                        }
                     }
                 } else {
                     mQueryDuration = bean.getData();
                     if (getIntent().getIntExtra("type", -1) == 1) {
                         mTv_duration_number.setText(bean.getData() + "小时");
                     } else {
-                        mTv_duration_number.setText(bean.getData() + "天");
+                        if (mSelectedTypeID.equals("1002Z710000000021ZM1") || mSelectedTypeID.equals("1001A1100000000154IU")) {
+                            mTv_duration_number.setText(bean.getData() + "小时");
+                        } else {
+                            mTv_duration_number.setText(bean.getData() + "天");
+                        }
                     }
                 }
             }
@@ -1058,6 +1078,37 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 mBtnAddDetails.setClickable(true);
                 break;
             case "selectedType": //选择类型
+                try {
+                    //TODO 选择类型 申请时长清0
+                    mQueryDuration = "0";
+                    mNextDuration = "0";
+                    if (getIntent().getIntExtra("type", -1) == 1) {
+                        mTv_duration_number.setText(0 + "小时");
+                    } else {
+                        if (bean.getSelectedID().equals("1002Z710000000021ZM1") || bean.getSelectedID().equals("1001A1100000000154IU")) {
+                            mTv_duration_number.setText(0 + "小时");
+                            mBegin_time.setText("请选择开始时间");
+                            mEnd_time.setText("请选择结束时间");
+                            if (mNext_begin_time != null) {
+                                mTv_duration_next_number.setText(0 + "小时");
+                                mNext_begin_time.setText("请选择开始时间");
+                                mNext_end_time.setText("请选择结束时间");
+                            }
+                        } else {
+                            mTv_duration_number.setText(0 + "天");
+                            mBegin_time.setText("请选择开始时间");
+                            mEnd_time.setText("请选择结束时间");
+                            if (mNext_begin_time != null) {
+                                mTv_duration_next_number.setText(0 + "天");
+                                mNext_begin_time.setText("请选择开始时间");
+                                mNext_end_time.setText("请选择结束时间");
+                            }
+                        }
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+                mSelectedTypeID = bean.getSelectedID();
                 if (getIntent().getIntExtra("type", 0) == 3) {
                     if (!isSeletcedNextType) {
                         mTv_selected_show.setText(bean.getSelectedType());
@@ -1097,7 +1148,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     //选择时间规则
     private void DateSelectedUtils(SelectedTypeBean bean) {
-        if (bean.getIsBegin() == 0) { //TODO 时间优化处理 0点待处理
+        if (bean.getIsBegin() == 0) {
             if (!TextUtils.isEmpty(mEnd_time.getText().toString().trim()) && !mEnd_time.getText().toString().equals("请选择结束时间")) {
                 long startTime = DateUtils.getTimestampFromString(bean.getSelectedType(), "yyyy-MM-dd HH:mm");
                 long endTime = DateUtils.getTimestampFromString(mEnd_time.getText().toString(), "yyyy-MM-dd HH:mm");
@@ -1168,13 +1219,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         }
         switch (getIntent().getIntExtra("type", -1)) {
             case 0:
-                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE2, mTvCoderNumber.getText().toString());
+                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE2, mTvCoderNumber.getText().toString(), mSelectedTypeID);
                 break;
             case 1:
-                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE4, mTvCoderNumber.getText().toString());
+                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE4, mTvCoderNumber.getText().toString(), mSelectedTypeID);
                 break;
             case 2:
-                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE3, mTvCoderNumber.getText().toString());
+                mPresenter.queryDuration(mBeginDate, mEndDate, REQUESTCODE3, mTvCoderNumber.getText().toString(), mSelectedTypeID);
                 break;
         }
     }
@@ -1189,13 +1240,13 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         }
         switch (getIntent().getIntExtra("type", -1)) {
             case 0:
-                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE2, mTvCoderNumber.getText().toString());
+                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE2, mTvCoderNumber.getText().toString(), mSelectedTypeID);
                 break;
             case 1:
-                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE4, mTvCoderNumber.getText().toString());
+                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE4, mTvCoderNumber.getText().toString(), mSelectedTypeID);
                 break;
             case 2:
-                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE3, mTvCoderNumber.getText().toString());
+                mPresenter.queryDuration(mNext_begin_date, mNext_end_date, REQUESTCODE3, mTvCoderNumber.getText().toString(), mSelectedTypeID);
                 break;
         }
     }
@@ -1242,7 +1293,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     //初始化Dialog数据
-    private View initTypeData() {
+    private View initTypeData() { //休假类别
         View inflate = LayoutInflater.from(this).inflate(R.layout.dialog_common_selected_type, null);
         RecyclerView rvSelectedType = (RecyclerView) inflate.findViewById(R.id.rv_selected_type);
         TextView tvTitle = (TextView) inflate.findViewById(R.id.tv_common_type_title);

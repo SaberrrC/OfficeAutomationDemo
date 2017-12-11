@@ -188,9 +188,9 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                     try {
                         if ((mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]") || mAllWorkAttendanceList.get(i).getTbmstatus().equals("")))
                             continue;
-                        if ((mAllWorkAttendanceList.get(i).getTbmstatus().equals("[迟到]") && getIntent().getIntExtra("exception", 0) == 0) ||
-                            (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[早退]") && getIntent().getIntExtra("exception", 0) == 1) ||
-                            (mAllWorkAttendanceList.get(i).getTbmstatus().equals("[旷工]") && getIntent().getIntExtra("exception", 0) == 2)) {
+                        if ((mAllWorkAttendanceList.get(i).getTbmstatus().contains("[迟到]") && getIntent().getIntExtra("exception", 0) == 0) ||
+                                (mAllWorkAttendanceList.get(i).getTbmstatus().contains("[早退]") && getIntent().getIntExtra("exception", 0) == 1) ||
+                                (mAllWorkAttendanceList.get(i).getTbmstatus().contains("[旷工]") && getIntent().getIntExtra("exception", 0) == 2)) {
                             mData.add(mAllWorkAttendanceList.get(i));
                         }
                     } catch (Throwable e) {
@@ -219,6 +219,16 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
+        }
+
+        if (getIntent().getIntExtra("exception", -1) == 0) {
+            mTopView.setAppTitle("迟到考勤明细");
+        } else if (getIntent().getIntExtra("exception", -1) == 1) {
+            mTopView.setAppTitle("早退考勤明细");
+        } else if (getIntent().getIntExtra("exception", -1) == 2) {
+            mTopView.setAppTitle("旷工考勤明细");
+        } else {
+            mTopView.setAppTitle("异常考勤明细");
         }
     }
 
@@ -314,14 +324,14 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
             });
             try {
                 if (bean1.getTbmstatus() != null) {
-                    if (bean1.getTbmstatus().contains("[出差]")) {
+                 /*   if (bean1.getTbmstatus().contains("[出差]") && getIntent().getIntExtra("exception", -1) == -1) {
                         baseViewHolder.setText(R.id.tv_state, "[出差]");
                         return;
                     }
-                    if (bean1.getTbmstatus().contains("[外出]")) {
+                    if (bean1.getTbmstatus().contains("[外出]") && getIntent().getIntExtra("exception", -1) == -1) {
                         baseViewHolder.setText(R.id.tv_state, "[出差]");
                         return;
-                    }
+                    }*/
                     if (bean1.getTbmstatus().contains("[加班]")) {
                         baseViewHolder.setText(R.id.tv_state, "[加班]");
                         return;

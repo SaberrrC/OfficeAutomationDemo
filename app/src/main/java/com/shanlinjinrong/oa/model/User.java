@@ -1,6 +1,8 @@
 package com.shanlinjinrong.oa.model;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -214,26 +216,30 @@ public class User implements MultiItemEntity, Serializable {
 
     public User(JSONObject jsonObject) {
         try {
-            code = jsonObject.getString("CODE");
-            uid = jsonObject.getString("uid");
-            token = jsonObject.getString("token");
-            email = jsonObject.getString("email");
-            is_initial_pwd = jsonObject.getString("is_initial_pwd");
-            portraits = jsonObject.getString("portraits");
-            username = jsonObject.getString("username");
-            sex = jsonObject.getString("sex");
-            phone = jsonObject.getString("phone");
-            hiredate = jsonObject.getString("hiredate");
-            companyName = jsonObject.getString("company_name");
-            postId = jsonObject.getString("post_id");
-            postName = jsonObject.getString("post_title");
-            departmentId = jsonObject.getString("department_id");
-            departmentName = jsonObject.getString("department_name");
-            email = jsonObject.getString("email");
-            isleader = jsonObject.getString("isleader");
-            yx_token = jsonObject.getString("yx_token");
-            oid = jsonObject.getString("oid");
-        } catch (JSONException e) {
+            code = jsonObject.optString("CODE");
+            uid = jsonObject.optString("uid");
+            token = jsonObject.optString("token");
+            email = jsonObject.optString("email");
+            is_initial_pwd = jsonObject.optString("is_initial_pwd");
+            portraits = jsonObject.optString("portraits");
+            username = jsonObject.optString("username");
+            sex = jsonObject.optString("sex");
+            phone = jsonObject.optString("phone");
+            hiredate = jsonObject.optString("hiredate");
+            companyName = jsonObject.optString("company_name");
+            postId = jsonObject.optString("post_id");
+            postName = jsonObject.optString("post_title");
+            departmentId = jsonObject.optString("department_id");
+            departmentName = jsonObject.optString("department_name");
+            email = jsonObject.optString("email");
+            isleader = jsonObject.optString("isleader");
+            yx_token = jsonObject.optString("yx_token");
+            oid = jsonObject.optString("oid");
+
+            //登陆更新自己的信息
+            FriendsInfoCacheSvc.getInstance(AppManager.mContext)
+                    .addOrUpdateFriends(new Friends("sl_"+code, username, getPortraits(), sex, phone, postName, departmentName, email, departmentId));
+        } catch (Exception e) {
             e.printStackTrace();
             LogUtils.e("user解析异常-》" + e.toString());
         }
