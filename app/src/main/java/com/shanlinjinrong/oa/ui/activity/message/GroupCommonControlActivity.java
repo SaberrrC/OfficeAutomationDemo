@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -33,9 +35,11 @@ import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
@@ -53,11 +57,13 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     private String mGroupOwner;
     private String searchUserId;
     private List<String> mMemberList;
-    private SelectedContactAdapter mAdapter;
     private ArrayList<Contacts> mData;
+    private ArrayList<Contacts> mDelete;
+    private SelectedContactAdapter mAdapter;
     private EMCursorResult<String> mGroupMemberResult;
-    private int DELETEGROUPUSER = 0, MODIFICATIONONWER = 1, DELETESUCCESS = -3;
+    private int DELETEGROUPUSER = 0, MODIFICATIONONWER = 1, DELETESUCCESS = -2;
     private int type;
+    private String mSearchUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +80,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     }
 
     private void initData() {
+        mDelete = new ArrayList<>();
         mData = new ArrayList<>();
         mGroupId = getIntent().getStringExtra("groupId");
         mGroupOwner = getIntent().getStringExtra("groupOwner");
@@ -101,9 +108,15 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
 
                 //TODO 过滤群主
-              if (mGroupOwner == null) {
+                if (mGroupOwner == null) {
                     searchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
                 }
+                for (int i = 0; i < mMemberList.size(); i++) {
+                    String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
+                    mSearchUserId += "," + usercode;
+                }
+                //查询群用户信息
+                mPresenter.searchUserListInfo(mSearchUserId);
             });
         } catch (Throwable e) {
             e.printStackTrace();
@@ -111,28 +124,61 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     }
 
     private void initView() {
-        if (type == 0) {
-            mTopView.setAppTitle("删除人员");
-            mTopView.getRightView().setOnClickListener(view -> Observable.create(e -> {
-                //删除群组成员
-                for (int i = 0; i < mData.size(); i++) {
-                    if (mData.get(i).isChecked()) {
-                        EMClient.getInstance().groupManager().removeUserFromGroup(mGroupId, "sl_" + mData.get(i).getCode());
-                    }
+//        if (type == 0) {
+//            mTopView.setAppTitle("删除人员");
+//            mTopView.getRightView().setOnClickListener(view -> Observable.create(e -> {
+//                //删除群组成员
+//                for (int i = 0; i < mDelete.size(); i++) {
+//                    EMClient.getInstance().groupManager().removeUserFromGroup(mGroupId, "sl_" + mDelete.get(i).getCode());
+//                }
+//                e.onComplete();
+//            }).observeOn(Schedulers.io())
+//                    .subscribeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(o -> {
+//
+//                    }, throwable -> {
+//                        throwable.printStackTrace();
+//                        showToast("删除成员失败，请重试！");
+//                    }, () -> {
+//                        setResult(DELETESUCCESS);
+//                        finish();
+//                    }));
+//        }
+        mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (type == 0) {
+                    Observable.create(new ObservableOnSubscribe<Contacts>() {
+                        @Override
+                        public void subscribe(ObservableEmitter<Contacts> e) throws Exception {
+                            for (int i = 0; i < mDelete.size(); i++) {
+                                e.onNext(mDelete.get(i));
+                                if (i == mDelete.size()) {
+                                    e.onComplete();
+                                }
+                            }
+                        }
+                    }).map(new Function<Contacts, Contacts>() {
+                        @Override
+                        public Contacts apply(Contacts contacts) throws Exception {
+                            EMClient.getInstance().groupManager().removeUserFromGroup(mGroupId, "sl_" + contacts.getCode());
+                            return contacts;
+                        }
+                    }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(contacts -> {
+                            }, throwable -> {
+                                throwable.printStackTrace();
+                                showToast("删除人员失败！");
+                            }, () -> {
+                                showToast("删除人员成功！");
+                                setResult(DELETESUCCESS);
+                                finish();
+                            });
                 }
-                e.onComplete();
-            }).observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe(o -> {
+            }
+        });
 
-                    }, throwable -> {
-                        throwable.printStackTrace();
-                        showToast("删除成员失败，请重试！");
-                    }, () -> {
-                        setResult(DELETESUCCESS);
-                        finish();
-                    }));
-        }
+
         mAdapter = new SelectedContactAdapter(mData);
         mRvContentLayout.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRvContentLayout.setAdapter(mAdapter);
@@ -181,8 +227,22 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             mData.get(i).setChecked(!mData.get(i).isChecked());
-            mAdapter.setNewData(mData);
-            mAdapter.notifyDataSetChanged();
+            switch (type) {
+                case 0:
+                    mAdapter.setNewData(mData);
+                    mAdapter.notifyDataSetChanged();
+                    for (int j = 0; j < mData.size(); j++) {
+                        if (mData.get(i).isChecked()) {
+                            mDelete.add(mData.get(i));
+                        }
+                    }
+                    break;
+                case 1:
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 }
