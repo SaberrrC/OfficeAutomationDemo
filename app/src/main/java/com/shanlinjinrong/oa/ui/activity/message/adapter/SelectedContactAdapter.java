@@ -47,7 +47,7 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
                 Glide.with(AppManager.mContext)
                         .load(contacts.getPortraits())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar)
+                        .placeholder(R.drawable.icon_homepage_work_report_me_launch)
                         .into(portrait);
                 baseViewHolder.setText(R.id.user_name, contacts.getUsername())
                         .setText(R.id.user_post_name, contacts.getPostTitle());

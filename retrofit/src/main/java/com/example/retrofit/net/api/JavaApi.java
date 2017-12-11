@@ -3,6 +3,7 @@ package com.example.retrofit.net.api;
 import com.example.retrofit.model.HttpResult;
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.example.retrofit.model.responsebody.CountResponse1;
+import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
@@ -66,7 +67,7 @@ public interface JavaApi {
     //----------------------聊天 群组-----------------------
 
     @POST("user/queryUserByCodes")
-    Observable<HttpResult> queryUserListInfo(@QueryMap Map<String ,String> map);
+    Observable<HttpResult<ArrayList<GroupUserInfoResponse>>> queryUserListInfo(@QueryMap Map<String ,String> map);
 
 
 

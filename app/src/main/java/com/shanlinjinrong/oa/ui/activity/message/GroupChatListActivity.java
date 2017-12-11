@@ -32,7 +32,6 @@ import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 //聊天群组展示列表
@@ -85,16 +84,21 @@ public class GroupChatListActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void initFooterView() {
-        if (mFooterView == null)
-            mFooterView = getLayoutInflater().inflate(R.layout.group_list_footer_view, (ViewGroup) mRvGroupShow.getParent(), false);
-        TextView mTvFooterGroupCount = (TextView) mFooterView.findViewById(R.id.tv_group_count);
-        if (mGroupList.size() > 0) {
-            mTvFooterGroupCount.setText(mGroupList.size() + "个群聊");
-            mAdapter.addFooterView(mFooterView);
-        } else {
-            if (mAdapter.getFooterLayoutCount() > 0) {
-                mAdapter.removeAllFooterView();
+        try {
+            if (mFooterView == null) {
+                mFooterView = getLayoutInflater().inflate(R.layout.group_list_footer_view, (ViewGroup) mRvGroupShow.getParent(), false);
+                mAdapter.addFooterView(mFooterView);
             }
+            TextView mTvFooterGroupCount = (TextView) mFooterView.findViewById(R.id.tv_group_count);
+            if (mGroupList.size() > 0) {
+                mTvFooterGroupCount.setText(mGroupList.size() + "个群聊");
+            } else {
+                if (mAdapter.getFooterLayoutCount() > 0) {
+                    mAdapter.removeAllFooterView();
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 

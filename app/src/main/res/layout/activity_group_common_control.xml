@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.shanlinjinrong.oa.ui.activity.message.GroupCommonControlActivity">
+
+    <com.shanlinjinrong.views.common.CommonTopView
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_height_48"
+        app:leftDrawable="@drawable/toolbar_back"
+        app:leftText="返回"
+        app:rightText="确认"
+        app:topTitle="选择新群主" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/gray_d5d5d5" />
+
+    <include
+        android:id="@+id/search_contact_person"
+        layout="@layout/activity_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#30d5d5d5" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/ll_selected_contact"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:visibility="gone">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginStart="15dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:text="已选择"-->
+            <!--android:textSize="16sp" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_selected_contact"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:text="0"-->
+            <!--android:textColor="@color/red"-->
+            <!--android:textSize="16sp"-->
+            <!--android:visibility="gone" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:text="人" />-->
+    <!--</LinearLayout>-->
+</LinearLayout>

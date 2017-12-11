@@ -1,15 +1,21 @@
 package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
+import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.example.retrofit.net.HttpMethods;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
-import com.shanlinjinrong.oa.utils.LogUtils;
 
+
+import java.net.ConnectException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 
 /**
@@ -28,47 +34,60 @@ public class EaseChatDetailsPresenter extends HttpPresenter<EaseChatDetailsConta
     @Override
     public void searchUserListInfo(String codeList) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("codeList", "010110027");
-        HttpMethods.getInstance().queryUserListInfo(map, new Subscriber<String>() {
+        map.put("codeList", codeList);
+        HttpMethods.getInstance().queryUserListInfo(map, new Subscriber<ArrayList<GroupUserInfoResponse>>() {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                try {
+                    if (mView != null)
+                        mView.showLoading();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
             @Override
             public void onCompleted() {
-
+                try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                try {
+                    if (e instanceof HttpException) {
+                        if (((HttpException) e).code() > 400) {
+                            mView.searchUserListInfoFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
+                        }
+                        mView.uidNull(((HttpException) e).code());
+                    } else if (e instanceof SocketTimeoutException) {
+                        mView.searchUserListInfoFailed(-1, "网络不通，请检查网络连接！");
+                    } else if (e instanceof NullPointerException) {
+                        mView.searchUserListInfoFailed(-1, "网络不通，请检查网络连接！");
+                    } else if (e instanceof ConnectException || e instanceof SocketException) {
+                        mView.searchUserListInfoFailed(-1, "网络不通，请检查网络连接！");
+                    }
+                } catch (Throwable e1) {
+                    e1.printStackTrace();
+                }
             }
 
+            @SuppressWarnings("SpellCheckingInspection")
             @Override
-            public void onNext(String s) {
-                LogUtils.e(s);
-                LogUtils.e(s);
+            public void onNext(ArrayList<GroupUserInfoResponse> groupUserInfo) {
+                try {
+                        mView.searchUserListInfoSuccess(groupUserInfo);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
-//
-//        mKjHttp.cleanCache();
-//        HttpParams httpParams = new HttpParams();
-//
-//        httpParams.put("codeList","010110027");
-//
-//        mKjHttp.jsonPost(ApiJava.QUERY_USER_LIST_INFO, httpParams, new HttpCallBack() {
-//            @Override
-//            public void onSuccess(String t) {
-//                super.onSuccess(t);
-//
-//                LogUtils.e(t);
-//            }
-//
-//            @Override
-//            public void onFailure(int errorNo, String strMsg) {
-//                super.onFailure(errorNo, strMsg);
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                super.onFinish();
-//            }
-//        });
     }
 }

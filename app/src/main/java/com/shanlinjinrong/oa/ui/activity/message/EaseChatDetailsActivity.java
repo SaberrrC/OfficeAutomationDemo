@@ -2,19 +2,19 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCursorResult;
@@ -26,8 +26,9 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.ui.activity.message.adapter.CommonPersonAddAdapter;
-import com.shanlinjinrong.oa.ui.activity.message.bean.ChatMessageDetailsBean;
+import com.shanlinjinrong.oa.model.User;
+import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
+import com.shanlinjinrong.oa.ui.activity.message.adapter.CommonGroupControlAdapter;
 import com.shanlinjinrong.oa.ui.activity.message.chatgroup.ModificationGroupNameActivity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatDetailsPresenter;
@@ -48,43 +49,52 @@ import io.reactivex.schedulers.Schedulers;
 public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
 
     @BindView(R.id.top_view)
-    CommonTopView  topView;
+    CommonTopView topView;
     @BindView(R.id.btn_chat_delete)
-    TextView       btnChatDelete;
+    TextView btnChatDelete;
     @BindView(R.id.img_portrait)
-    ImageView      imgPortrait;
+    ImageView imgPortrait;
     @BindView(R.id.img_group_person)
-    ImageView      imgGroupPerson;
+    ImageView imgGroupPerson;
     @BindView(R.id.rv_person_show)
-    RecyclerView   rvPersonShow;
+    RecyclerView rvPersonShow;
     @BindView(R.id.rl_group_name)
     RelativeLayout rlGroupName;
     @BindView(R.id.tv_modification_name)
-    TextView       tvModificationName;
+    TextView tvModificationName;
     @BindView(R.id.rl_group_person)
     RelativeLayout rlGroupPerson;
     @BindView(R.id.tv_clear_message_record)
-    TextView       tvClearMessageRecord;
+    TextView tvClearMessageRecord;
     @BindView(R.id.btn_look_message_record)
-    TextView       btnLookMessageRecord;
+    TextView btnLookMessageRecord;
     @BindView(R.id.rl_group_portrait)
     RelativeLayout rlGroupPortrait;
     @BindView(R.id.img_modification_portrait)
-    ImageView      imgModificationPortrait;
+    ImageView imgModificationPortrait;
     @BindView(R.id.img_modification_group_name)
-    ImageView      imgModificationGroupName;
+    ImageView imgModificationGroupName;
+    @BindView(R.id.tv_error_layout)
+    TextView tvErrorLayout;
+    @BindView(R.id.sv_container_layout)
+    ScrollView svContainerLayout;
+    @BindView(R.id.tv_modification_person)
+    TextView tvModificationPerson;
 
 
-    private String                       mGroupId;
-    private boolean                      mIsGroup;
-    private String                       mGroupOwner;
-    private EMGroup                      mGroupServer1;
-    private EMGroup                      mGroupFromServer;
-    private List<String>                 mMemberList;
-    private CommonPersonAddAdapter       mAdapter;
-    private List<ChatMessageDetailsBean> mData;
+    private String mGroupId;
+    private boolean mIsGroup;
+    private String mGroupOwner;
+    private String mSearchUserId;
+    private EMGroup mGroupServer1;
+    private EMGroup mGroupFromServer;
+    private List<String> mMemberList;
+    private CommonGroupControlAdapter mAdapter;
+    private List<GroupUserInfoResponse> mData;
     private EMCursorResult<String> mGroupMemberResult;
-    private int RESULTSUCCESS = -2, REQUSET_CODE = 101, DELETESUCCESS = -2;
+    private final int REQUSET_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
+    private boolean mIsOwner;
+    private String mGroupName;
 
 
     @Override
@@ -104,12 +114,37 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private void initData() {
         initGroup();
         mData = new ArrayList<>();
-        if (mIsGroup) {
-            InitGroupData();
-        }
     }
 
-    String searchUserId;
+    private void initGroup() {
+        getGroupInfo();
+    }
+
+    private void getGroupInfo() {
+        mIsGroup = getIntent().getBooleanExtra("chatType", false);
+        mGroupId = getIntent().getStringExtra("groupId");
+        if (mGroupId != null) {
+            Observable.create(e -> {
+                //根据群组ID从本地获取群组基本信息
+                mGroupServer1 = EMClient.getInstance().groupManager().getGroupFromServer(mGroupId);
+                e.onComplete();
+            }).observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(o -> {
+                    }, Throwable::printStackTrace, () -> {
+                        //TODO 完成后显示页面
+                        if (mGroupServer1 != null) {
+                            mGroupOwner = mGroupServer1.getOwner();
+                            mGroupName = mGroupServer1.getGroupName();
+                            tvModificationName.setText(mGroupName);
+                            mIsOwner = mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+                        }
+                        if (mIsGroup) {
+                            InitGroupData();
+                        }
+                    });
+        }
+    }
 
     private void InitGroupData() {
         try {
@@ -129,45 +164,25 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
 
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
-                searchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+                if (mIsOwner) {// 由于查询群组列表不包含自己跟群主，需要自己手动添加
+                    mSearchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+                } else {
+                    mSearchUserId = mGroupOwner.substring(3, mGroupOwner.length()) + "," + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+                }
                 for (int i = 0; i < mMemberList.size(); i++) {
                     String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
-                    searchUserId += usercode;
+                    mSearchUserId += "," + usercode;
                 }
-
-                Log.d("userCode", searchUserId);
-//                mPresenter.searchUserListInfo();
-
+                //查询群用户信息
+                mPresenter.searchUserListInfo(mSearchUserId);
             });
         } catch (Throwable e) {
             e.printStackTrace();
         }
     }
 
-    private void initGroup() {
-        getGroupInfo();
-    }
-
-    private void getGroupInfo() {
-        mIsGroup = getIntent().getBooleanExtra("chatType", false);
-        mGroupId = getIntent().getStringExtra("groupId");
-        if (mGroupId != null) {
-            Observable.create(e -> {
-                //根据群组ID从本地获取群组基本信息
-                mGroupServer1 = EMClient.getInstance().groupManager().getGroupFromServer(mGroupId);
-                e.onComplete();
-            }).observeOn(AndroidSchedulers.mainThread())
-             .subscribeOn(Schedulers.io())
-             .subscribe(o -> {
-             }, Throwable::printStackTrace, () -> {
-                 //TODO 完成后显示页面
-                 mGroupOwner = mGroupServer1.getOwner();
-             });
-        }
-    }
-
     private void initView() {
-        mAdapter = new CommonPersonAddAdapter(mData);
+        mAdapter = new CommonGroupControlAdapter(R.layout.item_common_person_add, mData);
         rvPersonShow.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvPersonShow.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -183,19 +198,20 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 rlGroupName.setVisibility(View.VISIBLE);
                 rlGroupPortrait.setVisibility(View.VISIBLE);
                 btnChatDelete.setVisibility(View.VISIBLE);
-                tvModificationName.setText(mGroupServer1.getGroupName());
+                if (mGroupServer1 != null)
+                    tvModificationName.setText(mGroupServer1.getGroupName());
             } catch (Throwable e) {
                 e.printStackTrace();
             }
         }
     }
 
-    @OnClick({R.id.btn_look_message_record, R.id.tv_clear_message_record, R.id.rl_group_name, R.id.rl_group_person, R.id.rl_group_portrait})
+    @OnClick({R.id.btn_look_message_record, R.id.tv_clear_message_record, R.id.rl_group_person, R.id.rl_group_portrait})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.btn_look_message_record:
-                //TODO 查看聊天记录
+                //查看聊天记录
                 if (mIsGroup) {
                     intent.putExtra("chatType", EaseConstant.CHATTYPE_GROUP);
                     intent.putExtra("groupId", mGroupId);
@@ -224,12 +240,9 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         }
                     }
                 }, true).show();
-                return;
-            case R.id.rl_group_name:
-                intent.setClass(this, ModificationGroupNameActivity.class);
                 break;
             case R.id.rl_group_person:
-                intent.setClass(this, SelectedChatAdminActivity.class);
+                intent.setClass(this, GroupCommonControlActivity.class);
                 break;
         }
         startActivity(intent);
@@ -241,7 +254,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         //---------------------------------- 群组删除处理 ----------------------------------
 
         Observable.create(e -> {
-            if (mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+            if (mIsOwner) {
                 EMClient.getInstance().groupManager().destroyGroup(mGroupId);//解散群组
             } else {
                 EMClient.getInstance().groupManager().leaveGroup(mGroupId);//退出群组
@@ -249,18 +262,19 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             e.onComplete();
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(o -> {}, throwable -> {
-            if (mGroupOwner != null)
-                if (mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
-                    Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "群组退出失败，请从新尝试！", Toast.LENGTH_SHORT).show();
-                }
-            throwable.printStackTrace();
-        }, () -> {
-            setResult(DELETESUCCESS);
-            finish();
-        });
+                .subscribe(o -> {
+                }, throwable -> {
+                    if (mGroupOwner != null)
+                        if (mIsOwner) {
+                            Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "群组退出失败，请从新尝试！", Toast.LENGTH_SHORT).show();
+                        }
+                    throwable.printStackTrace();
+                }, () -> {
+                    setResult(DELETESUCCESS);
+                    finish();
+                });
     }
 
     // ---------------------------------- 更新群组名称 ----------------------------------
@@ -268,6 +282,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     @OnClick(R.id.rl_group_name)
     public void modificationGroupName() {
         Intent intent = new Intent(this, ModificationGroupNameActivity.class);
+        intent.putExtra("groupId",mGroupId);
         startActivityForResult(intent, REQUSET_CODE);
     }
 
@@ -276,15 +291,98 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         catchWarningByCode(code);
     }
 
+    @Override
+    public void showLoading() {
+        showLoadingView();
+    }
+
+    @Override
+    public void hideLoading() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void searchUserListInfoSuccess(List<GroupUserInfoResponse> userInfo) {
+        tvErrorLayout.setVisibility(View.GONE);
+        svContainerLayout.setVisibility(View.VISIBLE);
+        try {
+            mData.clear();
+            mData.addAll(userInfo);
+            if (mIsOwner) {
+                mData.add(new GroupUserInfoResponse("add"));
+                mData.add(new GroupUserInfoResponse("delete"));
+            } else {
+                mData.add(new GroupUserInfoResponse("add"));
+            }
+            mAdapter.setNewData(mData);
+            mAdapter.notifyDataSetChanged();
+            if (userInfo.size() > 0)
+                tvModificationPerson.setText(userInfo.get(0).getUsername());
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void searchUserListInfoFailed(int errorCode, String errorMsg) {
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+        //TODO 加载loading 显示
+        hideLoadingView();
+        tvErrorLayout.setVisibility(View.VISIBLE);
+        svContainerLayout.setVisibility(View.GONE);
+        tvErrorLayout.setText(errorMsg);
+    }
+
     // ---------------------------------- 添加群成员跳转 ----------------------------------
 
     class ItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-            if (i == mData.size() - 1) {
-                Intent intent = new Intent(EaseChatDetailsActivity.this, SelectedChatAdminActivity.class);
-                startActivity(intent);
+            Intent intent = new Intent();
+            switch (mData.get(i).getUsername()) {
+                case "add":
+                    intent.setClass(EaseChatDetailsActivity.this, SelectedChatAdminActivity.class);
+                    break;
+                case "delete":
+                    intent.setClass(EaseChatDetailsActivity.this, GroupCommonControlActivity.class);
+                    intent.putExtra("type", 0);
+                    intent.putExtra("groupId", mGroupId);
+                    if (!mIsOwner) {
+                        intent.putExtra("groupOwner", mGroupOwner);
+                    }
+                    break;
+                default:
+                    intent.setClass(EaseChatDetailsActivity.this, Contact_Details_Activity.class);
+                    String username = mData.get(i).getUsername();
+                    String code = mData.get(i).getCode();
+                    String email = mData.get(i).getEmail();
+                    String img = mData.get(i).getImg();
+                    String sex = mData.get(i).getSex();
+                    int uid = mData.get(i).getUid();
+                    final User user = new User(username, "", img, sex, "", code, "", "", "", email);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("user", user);
+                    intent.putExtras(bundle);
+                    break;
             }
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case RESULTMODIFICATIONNAME:
+                mGroupName = data.getStringExtra("groupName");
+                tvModificationName.setText(mGroupName);
+                Intent intent = new Intent();
+                intent.putExtra("groupName", mGroupName);
+                setResult(RESULTMODIFICATIONNAME, intent);
+                break;
+
+            default:
+                break;
         }
     }
 }

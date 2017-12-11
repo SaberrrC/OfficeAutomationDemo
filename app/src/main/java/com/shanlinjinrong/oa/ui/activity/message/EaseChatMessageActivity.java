@@ -46,7 +46,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private UserInfoDetailsBean mUserInfoDetailsBean;
     private int mChatType;
     private int CHAT_GROUP = 2;
-    private final int REQUEST_CODE = 101, DELETESUCCESS = -2;
+    private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
     private Bundle mExtras;
 
     @Override
@@ -56,6 +56,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initCount();
+        initData();
+        initView();
     }
 
 
@@ -74,26 +76,23 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
     private void initData() {
-
-        mChatType = getIntent().getIntExtra("chatType", 0);
         //TODO 暂做更改
 //        userInfo_self = getIntent().getStringExtra("userInfo_self");
 //        userInfo = getIntent().getStringExtra("userInfo");
-        mTitle = getIntent().getStringExtra("title");//人名字
 //        mUserInfoDetailsBean = new Gson().fromJson(userInfo, UserInfoDetailsBean.class);
 //        UserInfoSelfDetailsBean userInfoSelfDetailsBean = new Gson().fromJson(userInfo_self, UserInfoSelfDetailsBean.class);
 
-        if (mChatType == CHAT_GROUP) {
-            mTvTitle.setText(getIntent().getStringExtra("groupName"));
-        } else {
-            //TODO 暂作修改 消息透传
+//        if (mChatType == CHAT_GROUP) {
+//            mTvTitle.setText(getIntent().getStringExtra("groupName"));
+//        } else {
+        //TODO 暂作修改 消息透传
 //            if (mUserInfoDetailsBean != null && u_id.contains(mUserInfoDetailsBean.getCODE()))
 //                mTvTitle.setText(mUserInfoDetailsBean.getUsername());
 //            else if (userInfoSelfDetailsBean != null && u_id.contains(userInfoSelfDetailsBean.getCODE_self())) {
 //                mTvTitle.setText(userInfoSelfDetailsBean.getUsername_self());
 //            }
-            mTvTitle.setText(mTitle);
-        }
+//            mTvTitle.setText(mTitle);
+//        }
         try {
 
             //TODO 消息透传 修改
@@ -132,6 +131,17 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         mExtras.putInt("CHAT_TYPE", mChatType);
         chatFragment.setArguments(mExtras);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
+    }
+
+    private void initView() {
+        mChatType = getIntent().getIntExtra("chatType", 0);
+        mTitle = getIntent().getStringExtra("title");//人名字
+
+        if (mChatType == CHAT_GROUP) {
+            mTvTitle.setText(getIntent().getStringExtra("groupName"));
+        } else {
+            mTvTitle.setText(mTitle);
+        }
     }
 
     @Override
@@ -175,12 +185,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initData();
-    }
-
     @OnClick({R.id.iv_back, R.id.tv_count, R.id.iv_detail})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -216,9 +220,18 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == DELETESUCCESS) {
-            setResult(DELETESUCCESS);
-            finish();
+        switch (resultCode) {
+            case DELETESUCCESS:
+                setResult(DELETESUCCESS);
+                finish();
+                break;
+
+            case RESULTMODIFICATIONNAME:
+                mTitle = data.getStringExtra("groupName");
+                mTvTitle.setText(mTitle);
+                //刷新界面
+                setResult(DELETESUCCESS);
+                break;
         }
     }
 }

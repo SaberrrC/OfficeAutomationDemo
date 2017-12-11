@@ -22,7 +22,7 @@
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
-                android:src="@mipmap/icon_default_group_portraits" />
+                android:src="@drawable/icon_homepage_work_report_me_launch" />
 
 
             <TextView
