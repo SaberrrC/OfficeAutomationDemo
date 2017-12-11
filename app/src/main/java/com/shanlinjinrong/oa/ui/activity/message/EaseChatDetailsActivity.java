@@ -112,17 +112,13 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     }
 
     private void initData() {
-        initGroup();
+        mIsGroup = getIntent().getBooleanExtra("chatType", false);
+        mGroupId = getIntent().getStringExtra("groupId");
         mData = new ArrayList<>();
-    }
-
-    private void initGroup() {
         getGroupInfo();
     }
 
     private void getGroupInfo() {
-        mIsGroup = getIntent().getBooleanExtra("chatType", false);
-        mGroupId = getIntent().getStringExtra("groupId");
         if (mGroupId != null) {
             Observable.create(e -> {
                 //根据群组ID从本地获取群组基本信息
@@ -282,7 +278,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     @OnClick(R.id.rl_group_name)
     public void modificationGroupName() {
         Intent intent = new Intent(this, ModificationGroupNameActivity.class);
-        intent.putExtra("groupId",mGroupId);
+        intent.putExtra("groupId", mGroupId);
         startActivityForResult(intent, REQUSET_CODE);
     }
 
@@ -347,7 +343,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     intent.setClass(EaseChatDetailsActivity.this, GroupCommonControlActivity.class);
                     intent.putExtra("type", 0);
                     intent.putExtra("groupId", mGroupId);
-                    if (!mIsOwner) {
+                    if (mIsOwner) {
                         intent.putExtra("groupOwner", mGroupOwner);
                     }
                     break;
@@ -380,7 +376,9 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 intent.putExtra("groupName", mGroupName);
                 setResult(RESULTMODIFICATIONNAME, intent);
                 break;
-
+            case DELETESUCCESS:
+                getGroupInfo();
+                break;
             default:
                 break;
         }
