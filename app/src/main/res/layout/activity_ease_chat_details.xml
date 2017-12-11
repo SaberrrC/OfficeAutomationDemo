@@ -41,7 +41,9 @@
                 android:id="@+id/rv_person_show"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white" />
+                android:paddingEnd="12dp"
+                android:background="@color/white"
+                android:paddingRight="12dp" />
 
 
             <RelativeLayout
@@ -217,12 +219,14 @@
                 android:layout_height="44dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginBottom="77dp"
+                android:layout_marginTop="49dp"
                 android:background="@drawable/chat_details_btn_enable"
                 android:gravity="center"
                 android:text="删除并退出"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:visibility="gone" />
+                 android:visibility="gone"/>
 
             <View
                 android:layout_width="wrap_content"

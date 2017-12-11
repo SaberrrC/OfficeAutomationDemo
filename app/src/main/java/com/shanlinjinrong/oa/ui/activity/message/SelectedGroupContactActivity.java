@@ -146,6 +146,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             //返回 -> 选择人员
             String[] userNames = new String[mGroupUsers.size()];
             String[] userCodes = new String[mGroupUsers.size()];
+
             for (int i = 0; i < mGroupUsers.size(); i++) {
                 userNames[i] = mGroupUsers.get(i).getUsername();
                 userCodes[i] = "sl_" + mGroupUsers.get(i).getCode();

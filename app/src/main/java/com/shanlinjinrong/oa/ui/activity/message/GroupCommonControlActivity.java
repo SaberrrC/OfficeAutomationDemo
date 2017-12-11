@@ -55,7 +55,6 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
 
     private String mGroupId;
     private String mGroupOwner;
-    private String searchUserId;
     private List<String> mMemberList;
     private ArrayList<Contacts> mData;
     private ArrayList<Contacts> mDelete;
@@ -109,7 +108,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
 
                 //TODO 过滤群主
                 if (mGroupOwner == null) {
-                    searchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+                    mSearchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
                 }
                 for (int i = 0; i < mMemberList.size(); i++) {
                     String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
@@ -124,26 +123,6 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     }
 
     private void initView() {
-//        if (type == 0) {
-//            mTopView.setAppTitle("删除人员");
-//            mTopView.getRightView().setOnClickListener(view -> Observable.create(e -> {
-//                //删除群组成员
-//                for (int i = 0; i < mDelete.size(); i++) {
-//                    EMClient.getInstance().groupManager().removeUserFromGroup(mGroupId, "sl_" + mDelete.get(i).getCode());
-//                }
-//                e.onComplete();
-//            }).observeOn(Schedulers.io())
-//                    .subscribeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(o -> {
-//
-//                    }, throwable -> {
-//                        throwable.printStackTrace();
-//                        showToast("删除成员失败，请重试！");
-//                    }, () -> {
-//                        setResult(DELETESUCCESS);
-//                        finish();
-//                    }));
-//        }
         mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

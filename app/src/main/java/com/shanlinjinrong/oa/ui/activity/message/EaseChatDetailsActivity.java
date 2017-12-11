@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -178,7 +179,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     private void initView() {
         mAdapter = new CommonGroupControlAdapter(R.layout.item_common_person_add, mData);
-        rvPersonShow.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvPersonShow.setLayoutManager(new GridLayoutManager(this, 5,GridLayoutManager.VERTICAL ,false));
         rvPersonShow.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         rvPersonShow.addOnItemTouchListener(new ItemClick());
@@ -235,9 +236,10 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         }
                     }
                 }, true).show();
-               return;
+                return;
             case R.id.rl_group_person:
                 intent.setClass(this, GroupCommonControlActivity.class);
+                intent.putExtra("groupId", mGroupId);
                 break;
         }
         startActivity(intent);
@@ -311,8 +313,16 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             }
             mAdapter.setNewData(mData);
             mAdapter.notifyDataSetChanged();
-            if (userInfo.size() > 0)
-                tvModificationPerson.setText(userInfo.get(0).getUsername());
+            if (userInfo.size() > 0) {
+                String groupOwner = mGroupOwner.substring(3, mGroupOwner.length());
+                for (int i = 0; i < userInfo.size(); i++) {
+                    if (userInfo.get(i).getCode().equals(groupOwner)) {
+                        tvModificationPerson.setText(userInfo.get(i).getUsername());
+                        return;
+                    }
+                }
+            }
+
         } catch (Throwable e) {
             e.printStackTrace();
         }
