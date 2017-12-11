@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -39,6 +40,7 @@ import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.MainControllerPresenter;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
@@ -527,32 +529,12 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(final List<EMMessage> list) {
-//            if (tabCommunicationFragment != null) {
-//                if (tabCommunicationFragment.myConversationListFragment != null) {
-//                    tabCommunicationFragment.myConversationListFragment.refresh();
-//                }
-//            }
-            /**
-             * im通知，具有通知功能
-             */
             String userId = "";
             for (EMMessage message : list) {
-//                if (!easeUI.hasForegroundActivies()) {
-//                    easeUI.getNotifier().onNewMsg(message);
-//                }
-                //获取个人信息
-//                String userInfo = message.getStringAttribute("userInfo", "");
-//                UserInfoBean userInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
-//                FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
-//                        Friends(userInfoBean.userId, userInfoBean.userName, userInfoBean.userPic,
-//                        userInfoBean.userSex, userInfoBean.userPhone, userInfoBean.userPost,
-//                        userInfoBean.userDepartment, userInfoBean.userEmail, userInfoBean.userDepartmentId));
-
                 userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(message.getFrom());
                 if (userId.equals("")) {
                     mEMMessage.clear();
                     mEMMessage.addAll(list);
-                    //TODO 获取个人信息 存在高并发
                     try {
                         mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
                     } catch (Throwable e) {
@@ -598,16 +580,8 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
         @Override
         public void onMessageChanged(EMMessage emMessage, Object o) {
-
         }
-
-    //开启权限列表
-    public void startAppSetting() {
-        Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getPackageName(), null);
-        i.setData(uri);
-        startActivityForResult(i, 100);
-    }
+    };
 
     @Override
     public void easeInitFinish(AbortableFuture<LoginInfo> loginRequest) {
@@ -636,6 +610,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         }
 
         refreshCommCount();
+    }
+    //开启权限列表
+    public void startAppSetting() {
+        Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        i.setData(uri);
+        startActivityForResult(i, 100);
     }
 
     @Override
@@ -685,5 +666,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 }
             });
         }
+
     }
+
 }

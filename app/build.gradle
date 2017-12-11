@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: "mmTrix"
+//apply plugin: "mmTrix"
 apply from: 'file_uri.gradle';
 
 
@@ -61,8 +60,8 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            buildConfigField "String", "BASE_URL", devPHPAddress()
-            buildConfigField "String", "BASE_JAVA_URL", devJavaAddress()
+            buildConfigField "String", "BASE_URL", prePHPAddress()
+            buildConfigField "String", "BASE_JAVA_URL", preJavaAddress()
             resValue "string", "app_name", devAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -86,8 +85,8 @@ android {
     }
 
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 
     packagingOptions {

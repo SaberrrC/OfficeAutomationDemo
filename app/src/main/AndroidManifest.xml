@@ -406,7 +406,7 @@
 
         <!-- 首页控制器 -->
         <activity
-            android:name=".ui.activity.main.MainController"
+            android:name=".ui.activity.main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <!-- 首页名片页面二级一下界面 -->

@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.pgyersdk.update.PgyUpdateManager;
+
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
@@ -26,6 +27,7 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -164,4 +166,6 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
             }
         });
     }
+
+
 }

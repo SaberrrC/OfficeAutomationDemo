@@ -1,21 +1,16 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.ImageFormat;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.hyphenate.easeui.model.UserInfoDetailsBean;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
@@ -32,6 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -59,7 +55,9 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ease_chat_message);
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         initCount();
         initData();
         initView();
@@ -86,6 +84,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         chatFragment.setListener(this);
         mExtras = getIntent().getExtras();
         mExtras.putInt("CHAT_TYPE", mChatType);
+        mExtras.putString(EaseConstant.EXTRA_USER_ID, getIntent().getStringExtra("u_id"));
         chatFragment.setArguments(mExtras);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }
@@ -101,11 +100,26 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
+    @OnClick({R.id.iv_back, R.id.tv_count, R.id.iv_detail})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+            case R.id.tv_count:
+                finish();
+                break;
+            case R.id.iv_detail:
+                Intent intent = new Intent(this, EaseChatDetailsActivity.class);
+                if (mChatType == CHAT_GROUP) {
+                    intent.putExtra("chatType", true);
+                    intent.putExtra("groupId", getIntent().getStringExtra("u_id"));
+                } else {
+                    intent.putExtra("chatType", false);
+                    intent.putExtra("EXTRAS", mExtras);
+                }
+                startActivityForResult(intent, REQUEST_CODE);
+                break;
         }
     }
 
@@ -123,12 +137,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 String department_name = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartment(getIntent().getStringExtra("u_id"));
 
                 startActivity(new Intent(this, VoiceCallActivity.class)
-                        .putExtra("nike",nike)
-                        .putExtra("CODE",CODE)
+                        .putExtra("nike", nike)
+                        .putExtra("CODE", CODE)
                         .putExtra("portrait", portrait)
-                        .putExtra("post_name",post_name)
-                        .putExtra("sex",sex)
-                        .putExtra("phone",phone)
+                        .putExtra("post_name", post_name)
+                        .putExtra("sex", sex)
+                        .putExtra("phone", phone)
                         .putExtra("email", email)
                         .putExtra("department_name", department_name)
                         .putExtra("username", toChatUsername)
@@ -154,30 +168,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         startActivity(intent);
     }
 
-
-    @OnClick({R.id.iv_back, R.id.tv_count, R.id.iv_detail})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
-            case R.id.tv_count:
-                finish();
-                break;
-            case R.id.iv_detail:
-                Intent intent = new Intent(this, EaseChatDetailsActivity.class);
-                if (mChatType == CHAT_GROUP) {
-                    intent.putExtra("chatType", true);
-                    intent.putExtra("groupId", getIntent().getStringExtra("toChatUsername"));
-                } else {
-                    intent.putExtra("chatType", false);
-                    intent.putExtra("EXTRAS", mExtras);
-                }
-                startActivityForResult(intent, REQUEST_CODE);
-                break;
-        }
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCount(UpdateMessageCountEvent event) {
         initCount();
@@ -195,13 +185,20 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 setResult(DELETESUCCESS);
                 finish();
                 break;
-
             case RESULTMODIFICATIONNAME:
                 mTitle = data.getStringExtra("groupName");
                 mTvTitle.setText(mTitle);
                 //刷新界面
                 setResult(DELETESUCCESS);
                 break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
     }
 }

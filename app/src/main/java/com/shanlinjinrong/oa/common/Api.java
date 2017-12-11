@@ -510,6 +510,9 @@ public class Api {
     //修改邮箱 users/reemail
     public static final String MODIFICATION_EMAIL = "/users/reemail";
 
+    public static final String SEARCH_USER_DETAILS = "/user/getinfo/";
+
+
     //*****************************************************************//
 
     /**

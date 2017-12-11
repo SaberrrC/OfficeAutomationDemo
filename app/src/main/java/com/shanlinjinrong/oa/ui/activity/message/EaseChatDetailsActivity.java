@@ -81,7 +81,6 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     @BindView(R.id.tv_modification_person)
     TextView tvModificationPerson;
 
-
     private String mGroupId;
     private boolean mIsGroup;
     private String mGroupOwner;
@@ -236,7 +235,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         }
                     }
                 }, true).show();
-                break;
+               return;
             case R.id.rl_group_person:
                 intent.setClass(this, GroupCommonControlActivity.class);
                 break;

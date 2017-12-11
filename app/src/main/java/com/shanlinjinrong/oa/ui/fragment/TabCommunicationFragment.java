@@ -12,14 +12,15 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
+import com.shanlinjinrong.oa.ui.activity.message.GroupChatListActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.LogUtils;
+import com.shanlinjinrong.views.common.CommonTopView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-
-//import com.hyphenate.chatuidemo.ui.EaseConversationListFragment;
 
 /**
  * <h3>Description: 首页通讯列表页面</h3>
@@ -27,10 +28,9 @@ import butterknife.ButterKnife;
  */
 public class TabCommunicationFragment extends BaseFragment {
 
-    //    private EaseConversationListFragment conversationListFragment;
     public ConversationListFragment myConversationListFragment;
-    String userInfo_self;
-    String userInfo;
+    @BindView(R.id.topView)
+    CommonTopView mTopView;
     private String mNickName;
 
     @Override
@@ -47,6 +47,14 @@ public class TabCommunicationFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initData();
+        initView();
+    }
+
+    private void initView() {
+        mTopView.getRightView().setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), GroupChatListActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -81,14 +89,8 @@ public class TabCommunicationFragment extends BaseFragment {
     public void onResume() {
         LogUtils.e("刷新下主界面消息的数量");
         //刷新下主界面消息的数量
-        MainController mainController = (MainController) getActivity();
+        MainActivity mainController = (MainActivity) getActivity();
         mainController.refreshCommCount();
         super.onResume();
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
 }

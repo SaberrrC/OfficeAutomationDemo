@@ -87,7 +87,6 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
                             mView.uidNull(0);
-
                         default:
                             mView.QueryGroupContactFailed(Integer.parseInt(jsonObject.getString("code")), jsonObject.getString("message"));
                             break;

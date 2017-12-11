@@ -38,6 +38,5 @@ public interface MainControllerContract {
 
         void searchUserDetails(String code);
 
-        void setUnreadMessageCount();
     }
 }

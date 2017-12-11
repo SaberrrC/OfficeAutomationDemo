@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,7 +36,7 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
     @BindView(R.id.rv_launch_approval)
     RecyclerView mLaunchApprovalList;//发起审批列表
     @BindView(R.id.toolbar_image_btn)
-    LinearLayout toolbarImageBtn;
+    ImageView toolbarImageBtn;
 
     private List<LaunchApprovalItem> mListData;
 

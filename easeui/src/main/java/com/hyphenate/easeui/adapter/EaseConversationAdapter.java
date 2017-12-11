@@ -26,8 +26,6 @@ import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
-import com.hyphenate.easeui.model.UserInfoDetailsBean;
-import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
@@ -36,6 +34,7 @@ import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelp
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
 
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +43,8 @@ import java.util.List;
 /**
  * conversation list adapter
  */
+
+//TODO 最外边列表展示 Adapter
 public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     private static final String TAG = "ChatAllHistoryAdapter";
     private List<EMConversation> conversationList;
@@ -58,8 +59,6 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     protected int secondarySize;
     protected float timeSize;
     protected Context mContext;
-    UserInfoDetailsBean userInfoDetailsBean;
-    UserInfoSelfDetailsBean userInfoSelfDetailsBean;
     EMMessage lastMessage;
 
     public EaseConversationAdapter(Context context, int resource, List<EMConversation> objects) {
@@ -137,6 +136,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         if (conversation.getAllMsgCount() != 0) {
             // show the content of latest message
             lastMessage = conversation.getLastMessage();
+
             String content = null;
             if (cvsListHelper != null) {
                 content = cvsListHelper.onSetItemSecondaryText(lastMessage);
@@ -164,6 +164,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
         }
         try {
+            String userId = FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo());
             if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()))) {
                 if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
                     String groupId = conversation.conversationId();

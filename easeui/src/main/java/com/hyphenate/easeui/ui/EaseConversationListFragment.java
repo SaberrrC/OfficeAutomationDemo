@@ -122,7 +122,6 @@ public class EaseConversationListFragment extends EaseBaseFragment {
     };
     private EaseConversationListItemClickListener listItemClickListener;
 
-    @SuppressLint("HandlerLeak")
     protected Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {

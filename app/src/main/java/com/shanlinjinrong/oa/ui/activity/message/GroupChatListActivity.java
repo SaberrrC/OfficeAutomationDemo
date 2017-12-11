@@ -203,7 +203,7 @@ public class GroupChatListActivity extends AppCompatActivity {
             Intent intent = new Intent(GroupChatListActivity.this, EaseChatMessageActivity.class);
             intent.putExtra("groupName", mGroupList.get(i).getGroupName());
             intent.putExtra("chatType", 2);
-            intent.putExtra("toChatUsername", mGroupList.get(i).getGroupId());
+            intent.putExtra("u_id", mGroupList.get(i).getGroupId());
             intent.putExtra("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
             intent.putExtra("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
             startActivityForResult(intent, REQUESTCODE);

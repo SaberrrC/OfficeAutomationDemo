@@ -35,8 +35,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hyphenate.EMMessageListener;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
@@ -71,9 +69,7 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
-import com.hyphenate.util.FileUtils;
 import com.hyphenate.util.PathUtil;
-import com.hyphenate.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -142,7 +138,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     protected String[] itemStrings   = {"照片", "拍摄", "语音聊天", "语音输入", "位置", "个人名片"};
     protected int[]    itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.ease_chat_call_normal, R.drawable.voice_input, R.drawable.ease_chat_location_normal, R.drawable.person_info};
-    protected int[]    itemIds       = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, 11, 12, 14};
+    protected int[]    itemIds       = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, ITEM_VIDEO, ITEM_FILE, ITEM_VIDEO_CALL};
     private   boolean             isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
     protected boolean isRoaming = false;

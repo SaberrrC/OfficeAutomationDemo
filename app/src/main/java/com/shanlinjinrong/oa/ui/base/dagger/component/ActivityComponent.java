@@ -37,7 +37,6 @@ import com.shanlinjinrong.oa.ui.activity.message.GroupCommonControlActivity;
 import com.shanlinjinrong.oa.ui.activity.message.LookMessageRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.message.MessageSearchActivity;
 import com.shanlinjinrong.oa.ui.activity.message.SelectedGroupContactActivity;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
 import com.shanlinjinrong.oa.ui.activity.message.CallActivity;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModificationEmailActivity;
