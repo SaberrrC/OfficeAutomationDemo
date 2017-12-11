@@ -784,7 +784,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     //send message
     protected void sendTextMessage(String content) {
         //  content = EncryptionUtil.getEncryptionStr(content,toChatUsername);
-        content = EncryptionUtil.getEncryptionStr(content);
+        content = EncryptionUtil.getEncryptionStr(content,EMClient.getInstance().getCurrentUser());
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
         } else {
@@ -896,7 +896,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     EaseAtMessageHelper.get().atListToJsonArray(EaseAtMessageHelper.get().getAtMessageUsernames(content)));
         }
         sendMessage(message);
-
     }
 
 

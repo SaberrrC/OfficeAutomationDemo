@@ -20,6 +20,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -140,18 +141,23 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             if (cvsListHelper != null) {
                 content = cvsListHelper.onSetItemSecondaryText(lastMessage);
             }
+            if (lastMessage.getType() == EMMessage.Type.TXT) {
 
+            }
 
-            //holder.message.setText(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))), BufferType.SPANNABLE);
-            String str = EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "";
-            //  String jiamiStr = EncryptionUtil.getDecryptStr(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "", lastMessage.getMsgId());
-            String jiamiStr = EncryptionUtil.getDecryptStr(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "");
-            holder.message.setText(jiamiStr, BufferType.SPANNABLE);
-
+            if (lastMessage.getType() == EMMessage.Type.TXT) {
+                String jiamiStr = EncryptionUtil.getDecryptStr(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "", lastMessage.getFrom());
+                holder.message.setText(jiamiStr, BufferType.SPANNABLE);
+            } else {
+                String jiamiStr = EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "";
+                holder.message.setText(jiamiStr, BufferType.SPANNABLE);
+            }
             if (content != null) {
-                //     holder.message.setText(content);
-                // holder.message.setText(EncryptionUtil.getDecryptStr(content, username));
-                holder.message.setText(EncryptionUtil.getDecryptStr(content));
+                if (lastMessage.getType() == EMMessage.Type.TXT) {
+                    holder.message.setText(EncryptionUtil.getDecryptStr(content, lastMessage.getFrom()));
+                } else {
+                    holder.message.setText(content);
+                }
             }
             holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
             if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
