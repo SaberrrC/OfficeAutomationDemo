@@ -78,7 +78,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/first_page"/>
+                android:src="@drawable/select_bt_history_first"/>
         </FrameLayout>
 
         <FrameLayout
@@ -91,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:src="@drawable/last_page"/>
+                android:src="@drawable/select_bt_history_last"/>
         </FrameLayout>
 
         <FrameLayout
@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:src="@drawable/next_page"/>
+                android:src="@drawable/select_bt_history_next"/>
         </FrameLayout>
 
         <FrameLayout
@@ -117,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:src="@drawable/final_page"/>
+                android:src="@drawable/select_bt_history_final"/>
         </FrameLayout>
     </LinearLayout>
 
