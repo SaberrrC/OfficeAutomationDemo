@@ -41,8 +41,9 @@ public class EaseChatDetailsPresenter extends HttpPresenter<EaseChatDetailsConta
             public void onStart() {
                 super.onStart();
                 try {
-                    if (mView != null)
+                    if (mView != null) {
                         mView.showLoading();
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -83,7 +84,7 @@ public class EaseChatDetailsPresenter extends HttpPresenter<EaseChatDetailsConta
             @Override
             public void onNext(ArrayList<GroupUserInfoResponse> groupUserInfo) {
                 try {
-                        mView.searchUserListInfoSuccess(groupUserInfo);
+                    mView.searchUserListInfoSuccess(groupUserInfo);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

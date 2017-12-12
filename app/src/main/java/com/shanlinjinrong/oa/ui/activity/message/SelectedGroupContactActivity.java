@@ -18,8 +18,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMGroupOptions;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -82,6 +85,9 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     private SparseArray<List<Contacts>> mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
     private ArrayList<String> mSelectedAccount;
+    private EMGroup mGroup;
+    private String[] mUserNames;
+    private String[] mUserCodes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,21 +166,35 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 showToast("请选择人员！");
                 return;
             }
-            //返回 -> 选择人员
-            String[] userNames = new String[mGroupUsers.size()];
-            String[] userCodes = new String[mGroupUsers.size()];
 
-            for (int i = 0; i < mGroupUsers.size(); i++) {
-                userNames[i] = mGroupUsers.get(i).getUsername();
-                userCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
-            }
 
-            showLoadingView();
-
-            if (getIntent().getBooleanExtra("isAddMember", false)) {
-                addMember(userCodes);
+            if (getIntent().getIntExtra("type", -1) == 0) {
+                String userCode = getIntent().getStringExtra("userCode");
+                String userName = getIntent().getStringExtra("userName");
+                //返回 -> 选择人员
+                mUserNames = new String[mGroupUsers.size() + 1];
+                mUserCodes = new String[mGroupUsers.size() + 1];
+                mUserNames[0] = userName;
+                mUserCodes[0] = userCode;
+                for (int i = 1; i < mGroupUsers.size(); i++) {
+                    mUserNames[i] = mGroupUsers.get(i).getUsername();
+                    mUserCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
+                }
             } else {
-                createGroup(userNames, userCodes);
+                //返回 -> 选择人员
+                mUserNames = new String[mGroupUsers.size()];
+                mUserCodes = new String[mGroupUsers.size()];
+
+                for (int i = 0; i < mGroupUsers.size(); i++) {
+                    mUserNames[i] = mGroupUsers.get(i).getUsername();
+                    mUserCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
+                }
+            }
+            showLoadingView();
+            if (getIntent().getBooleanExtra("isAddMember", false)) {
+                addMember(mUserCodes);
+            } else {
+                createGroup(mUserNames, mUserCodes);
             }
         });
     }
@@ -229,7 +249,8 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
             StringBuilder finalGroupName = groupName;
             Observable.create(e -> {
-                        EMClient.getInstance().groupManager().createGroup(finalGroupName.toString(), "", codes, "邀请加入群", option);
+                        mGroup = EMClient.getInstance().groupManager().createGroup(finalGroupName.toString(), "", codes, "邀请加入群", option);
+
                         e.onComplete();
                     }
             ).subscribeOn(io.reactivex.schedulers.Schedulers.io())
@@ -242,6 +263,8 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                         hideLoadingView();
                         Toast.makeText(this, "群组创建成功！", Toast.LENGTH_SHORT).show();
                         setResult(REFRESHSUCCESS);
+                        if (mGroup != null)
+                            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroup.getGroupId(), mGroup.getGroupName(), "", "", "", "", "", "", ""));
                         finish();
                     });
         }

@@ -35,11 +35,11 @@ public class CommonGroupControlAdapter extends BaseQuickAdapter<GroupUserInfoRes
         switch (bean.getUsername()) {
             case "add":
                 portraits.setImageResource(R.mipmap.add_chat_contacts);
-                name.setVisibility(View.GONE);
+                name.setVisibility(View.INVISIBLE);
                 break;
             case "delete":
                 portraits.setImageResource(R.mipmap.delete_chat_contacts);
-                name.setVisibility(View.GONE);
+                name.setVisibility(View.INVISIBLE);
                 break;
             default:
                 try {
