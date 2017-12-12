@@ -102,46 +102,50 @@ public class GroupChatListActivity extends AppCompatActivity {
         }
     }
 
-    //创建群组
-    private void createGroup(String[] name, String[] codes) {
-        if (name != null && codes != null) {
-
-            //群组名字
-            StringBuilder groupName = new StringBuilder(AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
-            //默认不加入群主Id
-            //codes[codes.length - 1] = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
-
-            for (String aName : name) {
-                groupName.append(",").append(aName);
-            }
-
-            //群名字上限10字符
-            if (groupName.length() > 10) {
-                groupName = new StringBuilder(groupName.substring(0, 10));
-                groupName.append("...");
-            }
-
-            //群组默认参数
-            EMGroupOptions option = new EMGroupOptions();
-            option.maxUsers = 200;//上限200人
-            //EMGroupStylePrivateOnlyOwnerInvite——私有群，只有群主可以邀请人；
-            //EMGroupStylePrivateMemberCanInvite——私有群，群成员也能邀请人进群；
-            //EMGroupStylePublicJoinNeedApproval——公开群，加入此群除了群主邀请，只能通过申请加入此群；
-            //EMGroupStylePublicOpenJoin ——公开群，任何人都能加入此群。
-
-            option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
-            StringBuilder finalGroupName = groupName;
-            io.reactivex.Observable.create(e ->
-                    EMClient.getInstance().groupManager().createGroup(finalGroupName.toString(), "", codes, "邀请加入群", option)).subscribeOn(io.reactivex.schedulers.Schedulers.io())
-                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                    .subscribe(o -> {
-                        Toast.makeText(this, "群组创建成功！", Toast.LENGTH_SHORT).show();
-                    }, throwable -> {
-                        Toast.makeText(this, "群组创建失败！", Toast.LENGTH_SHORT).show();
-                    });
-
-        }
-    }
+//    //创建群组
+//    private void createGroup(String[] name, String[] codes) {
+//        if (name != null && codes != null) {
+//
+//            //群组名字
+//            StringBuilder groupName = new StringBuilder(AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
+//            //默认不加入群主Id
+//            //codes[codes.length - 1] = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+//
+//            for (String aName : name) {
+//                groupName.append(",").append(aName);
+//            }
+//
+//            //群名字上限10字符
+//            if (groupName.length() > 10) {
+//                groupName = new StringBuilder(groupName.substring(0, 10));
+//                groupName.append("...");
+//            }
+//
+//            //群组默认参数
+//            EMGroupOptions option = new EMGroupOptions();
+//            option.maxUsers = 200;//上限200人
+//            //EMGroupStylePrivateOnlyOwnerInvite——私有群，只有群主可以邀请人；
+//            //EMGroupStylePrivateMemberCanInvite——私有群，群成员也能邀请人进群；
+//            //EMGroupStylePublicJoinNeedApproval——公开群，加入此群除了群主邀请，只能通过申请加入此群；
+//            //EMGroupStylePublicOpenJoin ——公开群，任何人都能加入此群。
+//
+//            option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
+//            StringBuilder finalGroupName = groupName;
+//            Observable.create(e -> {
+//                        EMClient.getInstance().groupManager().createGroup(finalGroupName.toString(), "", codes, "邀请加入群", option);
+//                        e.onComplete();
+//                    }
+//            ).subscribeOn(io.reactivex.schedulers.Schedulers.io())
+//                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+//                    .subscribe(o -> {
+//                    }, throwable -> {
+//                        Toast.makeText(this, "群组创建失败！", Toast.LENGTH_SHORT).show();
+//                    }, () -> {
+//                        Toast.makeText(this, "群组创建成功！", Toast.LENGTH_SHORT).show();
+//                        refreshData();
+//                    });
+//        }
+//    }
 
     //刷新群组列表
     public void refreshData() {
@@ -176,17 +180,17 @@ public class GroupChatListActivity extends AppCompatActivity {
                 refreshData(); //TODO 待优化
                 break;
             case RESULTELECTEDCODE: //返回选择的群组人员
-                String[] names = data.getStringArrayExtra("name");
-                String[] codes = data.getStringArrayExtra("code");
-                Observable
-                        .create(subscriber -> {
-                            createGroup(names, codes);
-                            subscriber.onComplete();
-                        })
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(o -> {
-                        }, Throwable::printStackTrace, this::refreshData);
+//                String[] names = data.getStringArrayExtra("name");
+//                String[] codes = data.getStringArrayExtra("code");
+//                Observable
+//                        .create(subscriber -> {
+//                            createGroup(names, codes);
+//                            subscriber.onComplete();
+//                        })
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(o -> {
+//                        }, Throwable::printStackTrace, this::refreshData);
                 break;
         }
     }

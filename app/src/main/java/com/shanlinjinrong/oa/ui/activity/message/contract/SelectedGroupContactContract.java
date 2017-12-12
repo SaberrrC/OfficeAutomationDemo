@@ -4,6 +4,7 @@ import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,8 +33,14 @@ public interface SelectedGroupContactContract {
 
     interface Presenter extends BasePresenter<SelectedGroupContactContract.View> {
 
+        void QueryGroupContact(String orgId, ArrayList<String> account);
+
+        void searchContact(String name, ArrayList<String> account);
+
         void QueryGroupContact(String orgId);
 
         void searchContact(String name);
+
+
     }
 }

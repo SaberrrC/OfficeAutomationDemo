@@ -12,12 +12,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroupManager;
+import com.hyphenate.chat.EMGroupOptions;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.GroupContactListFragment;
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.SelectedGroupContactFragment;
@@ -39,7 +45,12 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //群组 选择人员
@@ -62,7 +73,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
 
     private List<String> mOrgIdKey;
-    private final int RESULT_CODE = -3;
+    private final int RESULT_CODE = -3, REFRESHSUCCESS = -2;
     private List<Contacts> mGroupUsers;
     private InputMethodManager inputManager;
     private List<Contacts> mSearchData;
@@ -70,6 +81,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     private GroupContactListFragment mBottomFragment;
     private SparseArray<List<Contacts>> mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
+    private ArrayList<String> mSelectedAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +106,8 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         mGroupUsers = new ArrayList<>();
         mSearchData = new ArrayList<>();
         mCacheContact = new SparseArray<>();
+        mSelectedAccount = new ArrayList<>();
+        mSelectedAccount = getIntent().getStringArrayListExtra("selectedMember");
     }
 
     private void initView() {
@@ -119,7 +133,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     mTopView.setAppTitle("搜索");
                     mTopView.setLeftText("上一级");
                     mTvErrorView.setVisibility(View.VISIBLE);
-                    mPresenter.searchContact(mSearchContact.getText().toString().trim());
+                    mPresenter.searchContact(mSearchContact.getText().toString().trim(), mSelectedAccount);
                 });
 
         //-------------------------------   初始化视图   -------------------------------
@@ -127,6 +141,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         SelectedGroupContactFragment fragment = new SelectedGroupContactFragment(mGroupUsers, mCacheContact, mOrgIdKey, this, this);
         Bundle bundle = new Bundle();
         bundle.putBoolean("isBack", false);
+        bundle.putStringArrayList("selectedAccount", mSelectedAccount);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.fl_container_layout, fragment).commit();
 
@@ -139,7 +154,9 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mTopView.getRightView().setOnClickListener(view -> {
-            if (mGroupUsers.size() == 0){
+
+
+            if (mGroupUsers.size() == 0) {
                 showToast("请选择人员！");
                 return;
             }
@@ -152,12 +169,82 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 userCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
             }
 
-            Intent intent = new Intent();
-            intent.putExtra("name", userNames);
-            intent.putExtra("code", userCodes);
-            setResult(RESULT_CODE, intent);
-            finish();
+            showLoadingView();
+
+            if (getIntent().getBooleanExtra("isAddMember", false)) {
+                addMember(userCodes);
+            } else {
+                createGroup(userNames, userCodes);
+            }
         });
+    }
+
+    private void addMember(String[] member) {
+        String groupId = getIntent().getStringExtra("groupId");
+        Observable.create(e -> {
+            EMClient.getInstance().groupManager().inviteUser(groupId, member, null);
+            e.onComplete();
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(o -> {
+                }, throwable -> {
+                    hideLoadingView();
+                    throwable.printStackTrace();
+                    showToast("邀请成员失败，请稍后重试！");
+                }, () -> {
+                    hideLoadingView();
+                    showToast("邀请成员成功！");
+                    setResult(REFRESHSUCCESS);
+                    finish();
+                });
+    }
+
+    //创建群组
+    private void createGroup(String[] name, String[] codes) {
+        if (name != null && codes != null) {
+
+            //群组名字
+            StringBuilder groupName = new StringBuilder(AppConfig.getAppConfig(AppManager.mContext).getPrivateName());
+            //默认不加入群主Id
+            //codes[codes.length - 1] = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+
+            for (String aName : name) {
+                groupName.append(",").append(aName);
+            }
+
+            //群名字上限10字符
+            if (groupName.length() > 10) {
+                groupName = new StringBuilder(groupName.substring(0, 10));
+                groupName.append("...");
+            }
+
+            //群组默认参数
+            EMGroupOptions option = new EMGroupOptions();
+            option.maxUsers = 200;//上限200人
+            //EMGroupStylePrivateOnlyOwnerInvite——私有群，只有群主可以邀请人；
+            //EMGroupStylePrivateMemberCanInvite——私有群，群成员也能邀请人进群；
+            //EMGroupStylePublicJoinNeedApproval——公开群，加入此群除了群主邀请，只能通过申请加入此群；
+            //EMGroupStylePublicOpenJoin ——公开群，任何人都能加入此群。
+
+            option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
+            StringBuilder finalGroupName = groupName;
+            Observable.create(e -> {
+                        EMClient.getInstance().groupManager().createGroup(finalGroupName.toString(), "", codes, "邀请加入群", option);
+                        e.onComplete();
+                    }
+            ).subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                    .subscribe(o -> {
+                    }, throwable -> {
+                        hideLoadingView();
+//                        Toast.makeText(this, "群组创建失败！", Toast.LENGTH_SHORT).show();
+                    }, () -> {
+                        hideLoadingView();
+                        Toast.makeText(this, "群组创建成功！", Toast.LENGTH_SHORT).show();
+                        setResult(REFRESHSUCCESS);
+                        finish();
+                    });
+        }
     }
 
     @OnClick(R.id.ll_selected_contact)
@@ -188,6 +275,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         bundle.putString("orgId", orgId);
         bundle.putString("title", title);
         bundle.putBoolean("isBack", true);
+        bundle.putStringArrayList("selectedAccount", mSelectedAccount);
         fragment.setArguments(bundle);
         mFragments.add(0, fragment);
         getSupportFragmentManager().beginTransaction()

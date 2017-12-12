@@ -89,6 +89,7 @@ public class HttpMethods {
         Observable<ArrayList<GroupUserInfoResponse>> map1 = ApiFactory.getJavaApi().queryUserListInfo(map).map(new HttpResultFuncTypeJava<ArrayList<GroupUserInfoResponse>>());
         toSubscribe(map1, subscriber);
     }
+
     //    //出差申请
     //    public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {
     //        Observable map1 = ApiFactory.getJavaApi().submitEvectionApply(body).map(new HttpResultFuncTypeJava());

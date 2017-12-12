@@ -136,6 +136,9 @@ public class Contacts implements MultiItemEntity, Serializable {
 
 
     public String getCode() {
+        if (code == null) {
+            return "";
+        }
         return code;
     }
 
