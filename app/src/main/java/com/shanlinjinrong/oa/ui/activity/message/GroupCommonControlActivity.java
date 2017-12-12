@@ -90,7 +90,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
 
     private void initGroupList() {
         try {
-            final int pageSize = 20;
+            final int pageSize = 500;
             Observable.create(e -> {
                 do {
                     try {//如果群成员较多，需要多次从服务器获取完成

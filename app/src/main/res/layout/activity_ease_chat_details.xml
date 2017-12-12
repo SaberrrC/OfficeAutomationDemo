@@ -41,10 +41,34 @@
                 android:id="@+id/rv_person_show"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingEnd="12dp"
                 android:background="@color/white"
+                android:paddingEnd="12dp"
                 android:paddingRight="12dp" />
 
+            <LinearLayout
+                android:id="@+id/ll_look_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="查看更多群成员"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_look_group_more" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_group_name"
@@ -116,9 +140,9 @@
                     android:layout_toLeftOf="@+id/img_group_person"
                     android:layout_toStartOf="@+id/img_group_person"
                     android:gravity="center_vertical"
-                    tools:text="吴方华"
                     android:textColor="@color/black_99333333"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="吴方华" />
 
                 <ImageView
                     android:id="@+id/img_group_person"
@@ -217,16 +241,16 @@
                 android:id="@+id/btn_chat_delete"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
+                android:layout_marginBottom="77dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="77dp"
                 android:layout_marginTop="49dp"
                 android:background="@drawable/chat_details_btn_enable"
                 android:gravity="center"
                 android:text="删除并退出"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                 android:visibility="gone"/>
+                android:visibility="gone" />
 
             <View
                 android:layout_width="wrap_content"

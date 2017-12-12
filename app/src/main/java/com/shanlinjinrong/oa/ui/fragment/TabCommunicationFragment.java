@@ -12,6 +12,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -84,7 +85,7 @@ public class TabCommunicationFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
                         .putExtra("u_id", conversation.conversationId())
                         .putExtra("groupTitle", groupName)
-                        .putExtra("chatType", 1));
+                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP));
             } else {
                 EMMessage lastMessage = conversation.getLastMessage();
                 //Title 名字
@@ -99,7 +100,7 @@ public class TabCommunicationFragment extends BaseFragment {
                         .putExtra("title", mNickName)
                         .putExtra("message_to", lastMessage.getTo())
                         .putExtra("message_from", lastMessage.getFrom())
-                        .putExtra("chatType", 0));
+                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE, 0));
             }
         });
     }

@@ -80,7 +80,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
 
     private void initData() {
         Intent intent = getIntent();
-        chatType = intent.getIntExtra("chatType", EaseConstant.CHATTYPE_SINGLE);
+        chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         if (chatType == EaseConstant.CHATTYPE_SINGLE) {//个人聊天
             mBundle = intent.getParcelableExtra("EXTRAS");
             toChatUsername = mBundle.getString("toChatUsername");

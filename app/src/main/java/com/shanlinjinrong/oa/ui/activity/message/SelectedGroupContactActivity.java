@@ -252,7 +252,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     .subscribe(o -> {
                     }, throwable -> {
                         hideLoadingView();
-//                        Toast.makeText(this, "群组创建失败！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "群组创建失败！", Toast.LENGTH_SHORT).show();
                     }, () -> {
                         hideLoadingView();
                         Toast.makeText(this, "群组创建成功！", Toast.LENGTH_SHORT).show();
