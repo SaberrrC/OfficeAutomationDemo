@@ -44,6 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //群组聊天详情界面
@@ -88,14 +89,13 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private String mSearchUserId;
     private EMGroup mGroupServer1;
     private EMGroup mGroupFromServer;
-    private List<String> mMemberList;
+    private ArrayList<String> mMemberList;
     private CommonGroupControlAdapter mAdapter;
     private List<GroupUserInfoResponse> mData;
     private EMCursorResult<String> mGroupMemberResult;
-    private final int REQUSET_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
+    private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3;
     private boolean mIsOwner;
     private String mGroupName;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +120,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     private void getGroupInfo() {
         if (mGroupId != null) {
+            showLoadingView();
             Observable.create(e -> {
                 //根据群组ID从本地获取群组基本信息
                 mGroupServer1 = EMClient.getInstance().groupManager().getGroupFromServer(mGroupId);
@@ -127,7 +128,10 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             }).observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(o -> {
-                    }, Throwable::printStackTrace, () -> {
+                    }, throwable -> {
+                        throwable.printStackTrace();
+                        hideLoadingView();
+                    }, () -> {
                         //TODO 完成后显示页面
                         if (mGroupServer1 != null) {
                             mGroupOwner = mGroupServer1.getOwner();
@@ -179,7 +183,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     private void initView() {
         mAdapter = new CommonGroupControlAdapter(R.layout.item_common_person_add, mData);
-        rvPersonShow.setLayoutManager(new GridLayoutManager(this, 5,GridLayoutManager.VERTICAL ,false));
+        rvPersonShow.setLayoutManager(new GridLayoutManager(this, 5, GridLayoutManager.VERTICAL, false));
         rvPersonShow.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         rvPersonShow.addOnItemTouchListener(new ItemClick());
@@ -202,7 +206,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         }
     }
 
-    @OnClick({R.id.btn_look_message_record, R.id.tv_clear_message_record, R.id.rl_group_person, R.id.rl_group_portrait})
+    @OnClick({R.id.btn_look_message_record, R.id.tv_clear_message_record, R.id.rl_group_person})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -238,6 +242,9 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 }, true).show();
                 return;
             case R.id.rl_group_person:
+                if (!mIsOwner) {
+                    return;
+                }
                 intent.setClass(this, GroupCommonControlActivity.class);
                 intent.putExtra("groupId", mGroupId);
                 break;
@@ -269,7 +276,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         }
                     throwable.printStackTrace();
                 }, () -> {
-                    setResult(DELETESUCCESS);
+                    setResult(REFRESHSUCCESS);
                     finish();
                 });
     }
@@ -278,6 +285,9 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     @OnClick(R.id.rl_group_name)
     public void modificationGroupName() {
+        if (!mIsOwner) {
+            return;
+        }
         Intent intent = new Intent(this, ModificationGroupNameActivity.class);
         intent.putExtra("groupId", mGroupId);
         startActivityForResult(intent, REQUSET_CODE);
@@ -346,7 +356,13 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             Intent intent = new Intent();
             switch (mData.get(i).getUsername()) {
                 case "add":
-                    intent.setClass(EaseChatDetailsActivity.this, SelectedChatAdminActivity.class);
+                    ArrayList<String> selectedAccount = new ArrayList<>();
+                    selectedAccount.addAll(mMemberList);
+                    selectedAccount.add(mGroupOwner);
+                    intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
+                    intent.putStringArrayListExtra("selectedMember", selectedAccount);
+                    intent.putExtra("isAddMember", true);
+                    intent.putExtra("groupId", mGroupId);
                     break;
                 case "delete":
                     intent.setClass(EaseChatDetailsActivity.this, GroupCommonControlActivity.class);
@@ -358,19 +374,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     break;
                 default:
                     intent.setClass(EaseChatDetailsActivity.this, Contact_Details_Activity.class);
-                    String username = mData.get(i).getUsername();
-                    String code = mData.get(i).getCode();
-                    String email = mData.get(i).getEmail();
-                    String img = mData.get(i).getImg();
-                    String sex = mData.get(i).getSex();
-                    int uid = mData.get(i).getUid();
-                    final User user = new User(username, "", img, sex, "", code, "", "", "", email);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("user", user);
-                    intent.putExtras(bundle);
+                    intent.putExtra("user_code", "sl_" + mData.get(i).getCode());
+                    intent.putExtra("isSession", true);
+                    startActivity(intent);
                     break;
             }
-            startActivity(intent);
+            startActivityForResult(intent, REQUSET_CODE);
         }
     }
 
@@ -385,7 +394,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 intent.putExtra("groupName", mGroupName);
                 setResult(RESULTMODIFICATIONNAME, intent);
                 break;
-            case DELETESUCCESS:
+            case REFRESHSUCCESS:
                 getGroupInfo();
                 break;
             default:

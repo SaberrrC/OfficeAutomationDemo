@@ -164,31 +164,30 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
         }
         try {
-            String userId = FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo());
-            if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()))) {
-                if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
-                    String groupId = conversation.conversationId();
-                    if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
-                        holder.motioned.setVisibility(View.VISIBLE);
-                    } else {
-                        holder.motioned.setVisibility(View.GONE);
-                    }
-                    // group message, show group avatar
-                    holder.avatar.setImageResource(R.drawable.ease_group_icon);
-                    EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
-                    holder.name.setText(group != null ? group.getGroupName() : username);
-                } else if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
-                    holder.avatar.setImageResource(R.drawable.ease_group_icon);
-                    EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
-                    holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
-                    holder.motioned.setVisibility(View.GONE);
+            if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
+                String groupId = conversation.conversationId();
+                if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
+                    holder.motioned.setVisibility(View.VISIBLE);
                 } else {
-                    Glide.with(getContext()).load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getFrom()))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .placeholder(R.drawable.ease_default_avatar)
-                            .into(holder.avatar);
-                    holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getFrom()));
+                    holder.motioned.setVisibility(View.GONE);
                 }
+                // group message, show group avatar
+                holder.avatar.setImageResource(R.drawable.icon_default_group_portraits);
+                EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
+                holder.name.setText(group != null ? group.getGroupName() : username);
+            } else if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
+                holder.avatar.setImageResource(R.drawable.icon_default_group_portraits);
+                EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
+                holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
+                holder.motioned.setVisibility(View.GONE);
+            } else if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()))) {
+
+                Glide.with(getContext()).load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getFrom()))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(holder.avatar);
+                holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getFrom()));
+
                 holder.motioned.setVisibility(View.GONE);
             } else if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()))) {
                 try {

@@ -12,6 +12,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.retrofit.net.HttpMethods;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -43,9 +46,13 @@ import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.DemoDBManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.UserDao;
@@ -56,7 +63,13 @@ import com.shanlinjinrong.oa.thirdParty.huanxin.manager.PreferenceManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.manager.UserProfileManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.receiver.CallReceiver;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
+import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+
+import org.kymjs.kjframe.KJHttp;
+import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +83,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DemoHelper {
+
+    private String mToChatMessage;
+
     /**
      * data sync listener
      */
@@ -721,23 +737,12 @@ public class DemoHelper {
             showToast("request to join declined, groupId:" + groupId);
         }
 
+        //TODO 群聊提醒
         @Override
         public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
             // got an invitation
-            String st3 = appContext.getString(R.string.Invite_you_to_join_a_group_chat);
-            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
-            msg.setChatType(ChatType.GroupChat);
-            msg.setFrom(inviter);
-            msg.setTo(groupId);
-            msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new EMTextMessageBody(inviter + " " + st3));
-            msg.setStatus(EMMessage.Status.SUCCESS);
-            // save invitation as messages
-            EMClient.getInstance().chatManager().saveMessage(msg);
-            // notify invitation message
-            getNotifier().vibrateAndPlayTone(msg);
-            showToast("auto accept invitation from groupId:" + groupId);
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+            mToChatMessage = inviter;
+            groupNotifier(groupId,mToChatMessage);
         }
 
         // ============================= group_reform new add api begin
@@ -801,6 +806,58 @@ public class DemoHelper {
             showToast("onSharedFileDeleted, groupId" + groupId);
         }
         // ============================= group_reform new add api end
+    }
+
+    private void groupNotifier(String groupId,String userId) {
+        KJHttp kjHttp = new KJHttp();
+        HttpParams params = new HttpParams();
+        params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
+        String code = userId.substring(3, userId.length());
+        kjHttp.get(Api.PHP_URL + Api.SEARCH_USER_DETAILS + "?code=" + code, params, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
+                    if (userDetailsBean != null) {
+                        switch (userDetailsBean.getCode()) {
+                            case Api.RESPONSES_CODE_OK:
+                                if (userDetailsBean.getData() != null) {
+                                    String st3 = appContext.getString(R.string.Invite_you_to_join_a_group_chat);
+                                    EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
+                                    msg.setChatType(ChatType.GroupChat);
+                                    msg.setFrom(userId);
+                                    msg.setTo(groupId);
+                                    msg.setMsgId(UUID.randomUUID().toString());
+                                    String message = EncryptionUtil.getEncryptionStr(userDetailsBean.getData().get(0).getUsername() + " " + st3, EMClient.getInstance().getCurrentUser());
+                                    msg.addBody(new EMTextMessageBody(message));
+                                    msg.setStatus(EMMessage.Status.SUCCESS);
+                                    // save invitation as messages
+                                    EMClient.getInstance().chatManager().saveMessage(msg);
+                                    // notify invitation message
+                                    getNotifier().vibrateAndPlayTone(msg);
+                                    broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
     }
 
     void showToast(final String message) {

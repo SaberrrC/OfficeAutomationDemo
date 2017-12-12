@@ -72,7 +72,6 @@ public interface JavaApi {
 
 
 
-
     //提交出差申请
     //    @POST("nchrEvection/submitEvectionApply")
     //    Observable<HttpResult> submitEvectionApply(@Body EvectionBody data);

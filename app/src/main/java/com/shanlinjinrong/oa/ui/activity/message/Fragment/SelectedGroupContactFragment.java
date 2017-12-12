@@ -44,6 +44,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
     private onLoadUsersListener mListener;
     public SelectedContactAdapter mAdapter;
     private onSelectedUsersListener mUserListener;
+    private ArrayList<String> mSelectedAccount;
 
 
     @SuppressLint("ValidFragment")
@@ -76,7 +77,9 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
 
     private void initData() {
         mContact = new ArrayList<>();
+        mSelectedAccount = new ArrayList<>();
         mAdapter = new SelectedContactAdapter(mContact);
+        mSelectedAccount = getArguments().getStringArrayList("selectedAccount");
         List<Contacts> contacts1 = mLoadContact.get(Integer.parseInt(getArguments().getString("orgId", "1")));
         if (contacts1 != null) {
             mContact.clear();
@@ -86,7 +89,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
             mTvEmptyView.setVisibility(View.GONE);
             return;
         }
-        mPresenter.QueryGroupContact(getArguments().getString("orgId", "1"));
+        mPresenter.QueryGroupContact(getArguments().getString("orgId", "1"), mSelectedAccount);
     }
 
     private void initView() {
