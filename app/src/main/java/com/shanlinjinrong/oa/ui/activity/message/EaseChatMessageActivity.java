@@ -82,7 +82,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
         mExtras = getIntent().getExtras();
-        mExtras.putInt("CHAT_TYPE", getIntent().getIntExtra("CHAT_TYPE", 0));
+        mExtras.putInt("CHAT_TYPE", getIntent().getIntExtra("CHAT_TYPE", 1));
         mExtras.putString(EaseConstant.EXTRA_USER_ID, getIntent().getStringExtra("u_id"));
         chatFragment.setArguments(mExtras);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
@@ -90,7 +90,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
 
     private void initView() {
-        mChatType = getIntent().getIntExtra("chatType", 0);
+        mChatType = getIntent().getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, 1);
         mTitle = getIntent().getStringExtra("title");//人名字
         if (mChatType == CHAT_GROUP) {
             mTvTitle.setText(getIntent().getStringExtra("groupTitle"));

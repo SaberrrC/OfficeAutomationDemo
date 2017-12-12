@@ -77,7 +77,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
     private void initView() {
         Intent intent = getIntent();
         mBundle = intent.getParcelableExtra("EXTRAS");
-        chatType = intent.getIntExtra("chatType", EaseConstant.CHATTYPE_SINGLE);
+        chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         mLvList.setEmptyView(mTvNoResult);
         mTvNoResult.setVisibility(View.GONE);
         mSearchEtInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {

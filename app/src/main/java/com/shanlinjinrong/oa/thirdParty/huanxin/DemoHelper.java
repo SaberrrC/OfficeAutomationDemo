@@ -32,6 +32,7 @@ import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.Constant;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.EaseUI.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.EaseUI.EaseSettingsProvider;
@@ -504,9 +505,9 @@ public class DemoHelper {
                         // message.getTo() is the group id
                         intent.putExtra("userId", message.getTo());
                         if (chatType == ChatType.GroupChat) {
-                            intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
+                            intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
                         } else {
-                            intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
+                            intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
                         }
 
                     }

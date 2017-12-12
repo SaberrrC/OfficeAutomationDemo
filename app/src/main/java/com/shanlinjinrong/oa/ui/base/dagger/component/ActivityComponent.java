@@ -34,6 +34,7 @@ import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.GroupCommonControlActivity;
+import com.shanlinjinrong.oa.ui.activity.message.LookGroupMemberActivity;
 import com.shanlinjinrong.oa.ui.activity.message.LookMessageRecordActivity;
 import com.shanlinjinrong.oa.ui.activity.message.MessageSearchActivity;
 import com.shanlinjinrong.oa.ui.activity.message.SelectedGroupContactActivity;
@@ -157,4 +158,5 @@ public interface ActivityComponent {
     void inject(Contact_Details_Activity contactDetailsActivity);
 
     void inject(CallActivity callActivity);
+    void inject(LookGroupMemberActivity lookGroupMemberActivity);
 }
