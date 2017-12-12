@@ -36,6 +36,8 @@ import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.EaseUI.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.EaseUI.EaseSettingsProvider;
 import com.hyphenate.easeui.EaseUI.EaseUserProfileProvider;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
@@ -79,9 +81,18 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 public class DemoHelper {
 
     private String mToChatMessage;
+    private EMGroup mGroup;
 
     /**
      * data sync listener
@@ -738,7 +749,17 @@ public class DemoHelper {
         public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
             // got an invitation
             mToChatMessage = inviter;
-            groupNotifier(groupId,mToChatMessage);
+            Observable.create(e -> {
+                mGroup = EMClient.getInstance().groupManager().getGroup(groupId);
+                e.onComplete();
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(o -> {
+                    }, Throwable::printStackTrace, () -> {
+                        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroup.getGroupId(), mGroup.getGroupName(), "", "", "", "", "", "", ""));
+                        groupNotifier(groupId, mToChatMessage);
+                    });
+
         }
 
         // ============================= group_reform new add api begin
@@ -804,7 +825,7 @@ public class DemoHelper {
         // ============================= group_reform new add api end
     }
 
-    private void groupNotifier(String groupId,String userId) {
+    private void groupNotifier(String groupId, String userId) {
         KJHttp kjHttp = new KJHttp();
         HttpParams params = new HttpParams();
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
@@ -844,6 +865,7 @@ public class DemoHelper {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
