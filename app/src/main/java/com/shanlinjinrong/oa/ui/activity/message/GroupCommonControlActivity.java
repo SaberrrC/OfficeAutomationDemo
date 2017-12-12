@@ -42,6 +42,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
+//更换群主  删除群成员
 public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
 
     @BindView(R.id.top_view)
@@ -110,10 +111,12 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
                 if (mGroupOwner == null) {
                     mSearchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
                 }
+
                 for (int i = 0; i < mMemberList.size(); i++) {
                     String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
                     mSearchUserId += "," + usercode;
                 }
+
                 //查询群用户信息
                 mPresenter.searchUserListInfo(mSearchUserId);
             });
@@ -123,37 +126,60 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     }
 
     private void initView() {
-        mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (type == 0) {
-                    Observable.create(new ObservableOnSubscribe<Contacts>() {
-                        @Override
-                        public void subscribe(ObservableEmitter<Contacts> e) throws Exception {
-                            for (int i = 0; i < mDelete.size(); i++) {
-                                e.onNext(mDelete.get(i));
-                                if (i == mDelete.size()) {
-                                    e.onComplete();
-                                }
-                            }
-                        }
-                    }).map(new Function<Contacts, Contacts>() {
-                        @Override
-                        public Contacts apply(Contacts contacts) throws Exception {
-                            EMClient.getInstance().groupManager().removeUserFromGroup(mGroupId, "sl_" + contacts.getCode());
-                            return contacts;
-                        }
-                    }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(contacts -> {
-                            }, throwable -> {
-                                throwable.printStackTrace();
-                                showToast("删除人员失败！");
-                            }, () -> {
-                                showToast("删除人员成功！");
-                                setResult(DELETESUCCESS);
-                                finish();
-                            });
+        if (type == 0) {
+            mTopView.setAppTitle("删除人员");
+        }
+        mTopView.getRightView().setOnClickListener(view -> {
+            if (type == 0) {
+                showLoadingView();
+                Observable.create((ObservableOnSubscribe<Contacts>) e -> {
+                    if (mDelete.size() == 0) {
+                        showToast("请选择要删除的人员！");
+                    }
+                    for (int i = 0; i < mDelete.size(); i++) {
+                        EMClient.getInstance().groupManager().removeUserFromGroup(mGroupId, "sl_" + mDelete.get(i).getCode());
+                    }
+                    e.onComplete();
+                }).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(contacts -> {
+                        }, throwable -> {
+                            throwable.printStackTrace();
+                            hideLoadingView();
+                            showToast("删除人员失败！");
+                        }, () -> {
+                            hideLoadingView();
+                            showToast("删除人员成功！");
+                            setResult(DELETESUCCESS);
+                            finish();
+                        });
+            } else if (type == 1) {
+                if (mDelete == null) {
+                    return;
                 }
+                if (mDelete.size() == 0) {
+                    showToast("请选择要更换的群主！");
+                    return;
+                }
+                showLoadingView();
+                Observable.create(e -> {
+                    EMClient.getInstance().groupManager().changeOwner(mGroupId, "sl_" + mDelete.get(0).code);
+                    e.onComplete();
+                }).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(o -> {
+                        }, throwable -> {
+                            hideLoadingView();
+                            throwable.printStackTrace();
+                            showToast("更换群主失败！");
+                        }, () -> {
+                            hideLoadingView();
+                            showToast("更换群主成功");
+                            Intent intent = new Intent();
+                            intent.putExtra("groupOwner", mDelete.get(0).getUsername());
+                            setResult(DELETESUCCESS,intent);
+                            finish();
+                        });
             }
         });
 
@@ -208,15 +234,26 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
             mData.get(i).setChecked(!mData.get(i).isChecked());
             switch (type) {
                 case 0:
-                    mAdapter.setNewData(mData);
-                    mAdapter.notifyDataSetChanged();
+                    mDelete.clear();
                     for (int j = 0; j < mData.size(); j++) {
-                        if (mData.get(i).isChecked()) {
-                            mDelete.add(mData.get(i));
+                        if (mData.get(j).isChecked()) {
+                            mDelete.add(mData.get(j));
                         }
                     }
+                    mAdapter.setNewData(mData);
+                    mAdapter.notifyDataSetChanged();
                     break;
                 case 1:
+                    mDelete.clear();
+                    for (int j = 0; j < mData.size(); j++) {
+                        if (j != i) {
+                            mData.get(j).setChecked(false);
+                        } else {
+                            mDelete.add(mData.get(j));
+                        }
+                    }
+                    mAdapter.setNewData(mData);
+                    mAdapter.notifyDataSetChanged();
                     break;
                 default:
                     break;
