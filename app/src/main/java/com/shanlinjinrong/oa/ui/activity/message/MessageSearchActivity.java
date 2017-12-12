@@ -76,7 +76,6 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
         Intent intent = getIntent();
         mBundle = intent.getParcelableExtra("EXTRAS");
         chatType = intent.getIntExtra("chatType", EaseConstant.CHATTYPE_SINGLE);
-        toChatUsername = mBundle.getString("toChatUsername");
         mLvList.setEmptyView(mTvNoResult);
         mTvNoResult.setVisibility(View.GONE);
         mSearchEtInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -112,6 +111,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             }
         });
         if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+            toChatUsername = mBundle.getString(EaseConstant.EXTRA_USER_ID);
             mConversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
         } else {
             String groupId = intent.getStringExtra("groupId");
@@ -179,7 +179,6 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
                 holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
                 convertView.setTag(holder);
             }
-
             EMMessage message = getItem(position);
             EaseUserUtils.setUserNick(message.getFrom(), holder.name);
             EaseUserUtils.setUserAvatar(getContext(), message.getFrom(), holder.avatar);
