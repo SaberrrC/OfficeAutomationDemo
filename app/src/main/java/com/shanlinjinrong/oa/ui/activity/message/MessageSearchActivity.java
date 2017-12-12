@@ -17,11 +17,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.util.DateUtils;
@@ -47,11 +49,11 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
     ClearEditText mSearchEtInput;
     @BindView(R.id.tv_no_result)
     TextView      mTvNoResult;
-    private Bundle         mBundle;
-    private int            chatType;
-    private String         toChatUsername;
-    private ProgressDialog pd;
-    private EMConversation mConversation;
+    private Bundle                 mBundle;
+    private int                    chatType;
+    private String                 toChatUsername;
+    private ProgressDialog         pd;
+    private EMConversation         mConversation;
     private SearchedMessageAdapter messageaAdapter;
 
     @Override
@@ -183,16 +185,18 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             EaseUserUtils.setUserNick(message.getFrom(), holder.name);
             EaseUserUtils.setUserAvatar(getContext(), message.getFrom(), holder.avatar);
             holder.time.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
-            holder.message.setText(((EMTextMessageBody)message.getBody()).getMessage());
+            holder.message.setText(((EMTextMessageBody) message.getBody()).getMessage());
+            String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());
+            Glide.with(parent.getContext()).load(portrait).into(holder.avatar);
             return convertView;
         }
     }
 
 
     private static class ViewHolder {
-        TextView name;
-        TextView message;
-        TextView time;
+        TextView  name;
+        TextView  message;
+        TextView  time;
         ImageView avatar;
     }
 }
