@@ -24,6 +24,7 @@ import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.EaseChatMessageList.MessageListItemClickListener;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -35,20 +36,20 @@ public abstract class EaseChatRow extends LinearLayout {
     protected static final String TAG = EaseChatRow.class.getSimpleName();
 
     protected LayoutInflater inflater;
-    protected Context context;
-    protected BaseAdapter adapter;
-    protected EMMessage message;
-    protected int position;
+    protected Context        context;
+    protected BaseAdapter    adapter;
+    protected EMMessage      message;
+    protected int            position;
 
-    protected TextView timeStampView;
+    protected TextView  timeStampView;
     protected ImageView userAvatarView;
-    protected View bubbleLayout;
-    protected TextView usernickView;
+    protected View      bubbleLayout;
+    protected TextView  usernickView;
 
-    protected TextView percentageView;
+    protected TextView    percentageView;
     protected ProgressBar progressBar;
-    protected ImageView statusView;
-    protected Activity activity;
+    protected ImageView   statusView;
+    protected Activity    activity;
 
     protected TextView ackedView;
     protected TextView deliveredView;
@@ -57,7 +58,7 @@ public abstract class EaseChatRow extends LinearLayout {
     protected EMCallBack messageReceiveCallback;
 
     protected MessageListItemClickListener itemClickListener;
-    protected EaseMessageListItemStyle itemStyle;
+    protected EaseMessageListItemStyle     itemStyle;
 
     public EaseChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context);
@@ -89,14 +90,12 @@ public abstract class EaseChatRow extends LinearLayout {
      * @param message
      * @param position
      */
-    public void setUpView(EMMessage message, int position,
-                          EaseChatMessageList.MessageListItemClickListener itemClickListener,
-                          EaseMessageListItemStyle itemStyle) {
+    public void setUpView(EMMessage message, int position, EaseChatMessageList.MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
         this.message = message;
         this.position = position;
         this.itemClickListener = itemClickListener;
         this.itemStyle = itemStyle;
-
+        boolean showUserNick = itemStyle.isShowUserNick();
         setUpBaseView();
         onSetUpView();
         setClickListener();
@@ -137,33 +136,18 @@ public abstract class EaseChatRow extends LinearLayout {
                 }
                 if (message.direct() == Direct.SEND) {
                     if (message.getUserName().equals(FriendsInfoCacheSvc.getInstance(context).getUserId(message.getTo()))) {
-                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom()))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .placeholder(R.drawable.ease_default_avatar)
-                                .into(userAvatarView);
+                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
                     } else if ((message.getUserName().contains("admin") || message.getUserName().contains("notice"))) {
                         if (!message.getUserName().equals(message.getFrom())) {
-                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom()))
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .placeholder(R.drawable.ease_default_avatar)
-                                    .into(userAvatarView);
-                        }else {
-                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo()))
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .placeholder(R.drawable.ease_default_avatar)
-                                    .into(userAvatarView);
+                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                        } else {
+                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
                         }
                     } else {
-                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo()))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .placeholder(R.drawable.ease_default_avatar)
-                                .into(userAvatarView);
+                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
                     }
                 } else if (message.direct() == Direct.RECEIVE && !FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName()).equals("")) {
-                    Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName()))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .placeholder(R.drawable.ease_default_avatar)
-                            .into(userAvatarView);
+                    Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
                 }
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
@@ -187,7 +171,16 @@ public abstract class EaseChatRow extends LinearLayout {
                 ackedView.setVisibility(View.INVISIBLE);
             }
         }
-
+        if (usernickView != null && userAvatarView != null) {
+            if (itemStyle.isShowUserNick()) {
+                usernickView.setVisibility(View.VISIBLE);
+            } else {
+                usernickView.setVisibility(View.GONE);
+            }
+            if (message.direct() == Direct.RECEIVE) {
+                EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+            }
+        }
         if (itemStyle != null) {
             if (userAvatarView != null) {
                 if (itemStyle.isShowAvatar()) {
@@ -207,12 +200,6 @@ public abstract class EaseChatRow extends LinearLayout {
                 } else {
                     userAvatarView.setVisibility(View.GONE);
                 }
-            }
-            if (usernickView != null) {
-                if (itemStyle.isShowUserNick())
-                    usernickView.setVisibility(View.VISIBLE);
-                else
-                    usernickView.setVisibility(View.GONE);
             }
             if (bubbleLayout != null) {
                 if (message.direct() == Direct.SEND) {

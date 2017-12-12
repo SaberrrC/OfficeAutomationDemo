@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -161,11 +162,20 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         fragmentArgs = getArguments();
-        chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+        chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, 666);
         toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
         initData();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+//        fragmentArgs = getArguments();
+//        chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+//        toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
+//        initData();
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -260,8 +270,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected void initView() {
         voiceRecorderView = (EaseVoiceRecorderView) getView().findViewById(R.id.voice_recorder);
         messageList = (EaseChatMessageList) getView().findViewById(R.id.message_list);
-        if (chatType != EaseConstant.CHATTYPE_SINGLE)
-            messageList.setShowUserNick(true);
         listView = messageList.getListView();
         inputMenu = (EaseChatInputMenu) getView().findViewById(R.id.input_menu);
         extendMenuItemClickListener = new MyItemClickListener();
@@ -315,6 +323,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             onConversationInit();
             onMessageListInit();
             EventBus.getDefault().post(new OnConversationFinishEvent());
+        }
+        if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+            messageList.setShowUserNick(true);
+        } else {
+            messageList.setShowUserNick(false);
         }
         setRefreshLayoutListener();
         // show forward message if the message is not null

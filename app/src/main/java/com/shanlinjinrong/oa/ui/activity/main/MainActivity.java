@@ -23,17 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retrofit.net.RetrofitConfig;
-import com.google.gson.Gson;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
-import com.hyphenate.easeui.UserInfoBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.hyphenate.util.NetUtils;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -52,11 +49,6 @@ import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.BadgeUtil;
 import com.shanlinjinrong.oa.utils.LoginUtils;
-import com.shanlinjinrong.oa.utils.Utils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -510,7 +502,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @Override
     protected void onResume() {
         judeIsInitPwd();
-        //添加环信监听
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
         refreshCommCount();
         super.onResume();
@@ -543,7 +534,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 }
             }
             if (!userId.equals("")) {
-
                 if (tabCommunicationFragment != null) {
                     if (tabCommunicationFragment.myConversationListFragment != null) {
                         tabCommunicationFragment.myConversationListFragment.refresh();

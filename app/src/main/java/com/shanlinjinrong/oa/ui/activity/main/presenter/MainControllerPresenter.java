@@ -103,7 +103,6 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
         // get all conversations
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         if (conversations.isEmpty()) {
-
         }
         List<Pair<Long, EMConversation>> sortList = new ArrayList<>();
         synchronized (conversations) {
