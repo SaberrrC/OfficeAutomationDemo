@@ -1,8 +1,5 @@
 package com.hyphenate.easeui.utils;
 
-import android.util.Base64;
-import android.util.Log;
-
 public class EncryptionUtil {
 
     /***
@@ -12,7 +9,7 @@ public class EncryptionUtil {
      * @return
      */
     public static String getEncryptionStr(String content, String key) {
-        String result = "";
+      /*  String result = "";
         try {
             key = AESCipherUtils.getkeyLength16(key);
             String base64 = Base64.encodeToString(content.getBytes(), Base64.NO_WRAP);
@@ -22,7 +19,9 @@ public class EncryptionUtil {
         } catch (Exception e) {
             result = "";
         }
-        return result;
+        return result;*/
+        return content;
+
     }
 
     /***
@@ -32,7 +31,7 @@ public class EncryptionUtil {
      * @return
      */
     public static String getDecryptStr(String content, String key) {
-        String result;
+       /* String result;
         try {
             key = AESCipherUtils.getkeyLength16(key);
             String jm1 = AESCipherUtils.aesDecryptString(content, "_ease_oa_#$%^&*(");
@@ -42,6 +41,7 @@ public class EncryptionUtil {
         } catch (Exception e) {
             result = "";
         }
-        return result;
+        return result;*/
+        return content;
     }
 }
