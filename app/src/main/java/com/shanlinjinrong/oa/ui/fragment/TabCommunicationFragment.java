@@ -8,9 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -25,13 +22,6 @@ import com.shanlinjinrong.views.common.CommonTopView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * <h3>Description: 首页通讯列表页面</h3>
@@ -100,7 +90,7 @@ public class TabCommunicationFragment extends BaseFragment {
                         .putExtra("title", mNickName)
                         .putExtra("message_to", lastMessage.getTo())
                         .putExtra("message_from", lastMessage.getFrom())
-                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE, 0));
+                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE));
             }
         });
     }

@@ -171,6 +171,9 @@ public abstract class EaseChatRow extends LinearLayout {
                 ackedView.setVisibility(View.INVISIBLE);
             }
         }
+        if (usernickView != null) {
+            usernickView.setVisibility(View.GONE);
+        }
         if (usernickView != null && userAvatarView != null) {
             if (itemStyle.isShowUserNick()) {
                 usernickView.setVisibility(View.VISIBLE);
@@ -178,7 +181,8 @@ public abstract class EaseChatRow extends LinearLayout {
                 usernickView.setVisibility(View.GONE);
             }
             if (message.direct() == Direct.RECEIVE) {
-                EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+                String nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(message.getFrom());
+                EaseUserUtils.setUserNick(nickName, usernickView);
             }
         }
         if (itemStyle != null) {

@@ -90,7 +90,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
 
     private void initView() {
-        mChatType = getIntent().getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, 1);
+        mChatType = getIntent().getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         mTitle = getIntent().getStringExtra("title");//人名字
         if (mChatType == CHAT_GROUP) {
             mTvTitle.setText(getIntent().getStringExtra("groupTitle"));

@@ -165,7 +165,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         fragmentArgs = getArguments();
-        chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, 666);
+        chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
         initData();
     }
@@ -325,9 +325,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             EventBus.getDefault().post(new OnConversationFinishEvent());
         }
         if (chatType == EaseConstant.CHATTYPE_SINGLE) {
-            messageList.setShowUserNick(true);
-        } else {
             messageList.setShowUserNick(false);
+        } else {
+            messageList.setShowUserNick(true);
         }
         setRefreshLayoutListener();
         // show forward message if the message is not null
