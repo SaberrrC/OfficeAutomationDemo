@@ -183,7 +183,8 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
                     mSearchUserId += "," + usercode;
                 }
-                for (int i = 0; i < 23; i++) {
+                int memberCount = mIsOwner ? 23 : 24;
+                for (int i = 0; i < memberCount; i++) {
                     String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
                     mQueryUserInfo += "," + usercode;
                 }
@@ -219,7 +220,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         }
     }
 
-    @OnClick({R.id.btn_look_message_record, R.id.tv_clear_message_record, R.id.rl_group_person,R.id.ll_look_more})
+    @OnClick({R.id.btn_look_message_record, R.id.tv_clear_message_record, R.id.rl_group_person, R.id.ll_look_more})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -266,8 +267,11 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 }
                 break;
             case R.id.ll_look_more:
-                intent.setClass(this,LookGroupMemberActivity.class);
-                intent.putExtra("userCode",mSearchUserId);
+                intent.setClass(this, LookGroupMemberActivity.class);
+                intent.putExtra("userCode", mSearchUserId);
+                intent.putExtra("groupId", mGroupId);
+                intent.putExtra("groupOwner", mGroupOwner);
+                intent.putStringArrayListExtra("memberList",mMemberList);
                 break;
         }
         startActivityForResult(intent, REQUSET_CODE);
@@ -365,7 +369,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             mAdapter.setNewData(mData);
             if (userInfo.size() > 0) {
                 String groupOwner = mGroupOwner.substring(3, mGroupOwner.length());
-                for (int i = 0; i < userInfo.size(); i++) {
+                for (int i = 0; i < mMemberList.size(); i++) {
                     if (userInfo.get(i).getCode().equals(groupOwner)) {
                         tvModificationPerson.setText(userInfo.get(i).getUsername());
                         return;
@@ -407,6 +411,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     } else {
                         intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
                         intent.putExtra("type", 0);
+                        intent.putExtra("isOwner", mIsOwner);
                         String from = message_from.substring(3, message_from.length());
                         String to = message_to.substring(3, message_to.length());
                         if (from.equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
@@ -424,9 +429,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     intent.setClass(EaseChatDetailsActivity.this, GroupCommonControlActivity.class);
                     intent.putExtra("type", 0);
                     intent.putExtra("groupId", mGroupId);
-                    if (mIsOwner) {
-                        intent.putExtra("groupOwner", mGroupOwner);
-                    }
+                    intent.putExtra("isOwner", mIsOwner);
                     break;
                 default:
                     intent.setClass(EaseChatDetailsActivity.this, Contact_Details_Activity.class);

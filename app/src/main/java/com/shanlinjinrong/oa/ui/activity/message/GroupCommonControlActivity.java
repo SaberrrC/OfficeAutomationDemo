@@ -55,7 +55,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     RecyclerView mRvContentLayout;
 
     private String mGroupId;
-    private String mGroupOwner;
+    private boolean mIsOwner;
     private List<String> mMemberList;
     private ArrayList<Contacts> mData;
     private ArrayList<Contacts> mDelete;
@@ -83,7 +83,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
         mDelete = new ArrayList<>();
         mData = new ArrayList<>();
         mGroupId = getIntent().getStringExtra("groupId");
-        mGroupOwner = getIntent().getStringExtra("groupOwner");
+        mIsOwner = getIntent().getBooleanExtra("isOwner",false);
         type = getIntent().getIntExtra("type", -1);
         initGroupList();
     }
@@ -108,7 +108,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
 
                 //TODO 过滤群主
-                if (mGroupOwner == null) {
+                if (!mIsOwner) {
                     mSearchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
                 }
 
