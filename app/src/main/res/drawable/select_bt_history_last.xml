@@ -2,6 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@mipmap/last_page_click" android:state_selected="true"/>
     <item android:drawable="@mipmap/last_page_click" android:state_checkable="true"/>
-    <!--<item android:drawable="#69B0F2" android:state_pressed="true"/>-->
+    <item android:drawable="@mipmap/last_page_click" android:state_pressed="true"/>
     <item android:drawable="@mipmap/last_page_normal"/>
 </selector>
