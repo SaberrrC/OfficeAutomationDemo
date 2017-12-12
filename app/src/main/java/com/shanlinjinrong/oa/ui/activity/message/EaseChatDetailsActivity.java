@@ -424,6 +424,11 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 setResult(RESULTMODIFICATIONNAME, intent);
                 break;
             case REFRESHSUCCESS:
+                if (mGroupId == null){
+                    setResult(REFRESHSUCCESS);
+                    finish();
+                    return;
+                }
                 getGroupInfo();
                 break;
             case MODIFICATIONOWNER:

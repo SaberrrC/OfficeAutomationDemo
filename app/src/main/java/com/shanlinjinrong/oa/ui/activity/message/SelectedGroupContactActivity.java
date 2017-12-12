@@ -114,6 +114,16 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         mCacheContact = new SparseArray<>();
         mSelectedAccount = new ArrayList<>();
         mSelectedAccount = getIntent().getStringArrayListExtra("selectedMember");
+        if (getIntent().getIntExtra("type", -1) == 0) {
+            Contacts contacts1 = new Contacts();
+            contacts1.setChecked(true);
+            contacts1.setItemType(1);
+            contacts1.setUsername(getIntent().getStringExtra("userName"));
+            contacts1.setCode(getIntent().getStringExtra("userCode"));
+            mGroupUsers.add(contacts1);
+            mTopView.setRightText("确认(1)");
+            mTvSelectedContact.setText("1");
+        }
     }
 
     private void initView() {
@@ -161,34 +171,18 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
         mTopView.getRightView().setOnClickListener(view -> {
 
-
             if (mGroupUsers.size() == 0) {
                 showToast("请选择人员！");
                 return;
             }
 
+            //返回 -> 选择人员
+            mUserNames = new String[mGroupUsers.size()];
+            mUserCodes = new String[mGroupUsers.size()];
 
-            if (getIntent().getIntExtra("type", -1) == 0) {
-                String userCode = getIntent().getStringExtra("userCode");
-                String userName = getIntent().getStringExtra("userName");
-                //返回 -> 选择人员
-                mUserNames = new String[mGroupUsers.size() + 1];
-                mUserCodes = new String[mGroupUsers.size() + 1];
-                mUserNames[0] = userName;
-                mUserCodes[0] = userCode;
-                for (int i = 1; i < mGroupUsers.size(); i++) {
-                    mUserNames[i] = mGroupUsers.get(i).getUsername();
-                    mUserCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
-                }
-            } else {
-                //返回 -> 选择人员
-                mUserNames = new String[mGroupUsers.size()];
-                mUserCodes = new String[mGroupUsers.size()];
-
-                for (int i = 0; i < mGroupUsers.size(); i++) {
-                    mUserNames[i] = mGroupUsers.get(i).getUsername();
-                    mUserCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
-                }
+            for (int i = 0; i < mGroupUsers.size(); i++) {
+                mUserNames[i] = mGroupUsers.get(i).getUsername();
+                mUserCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
             }
             showLoadingView();
             if (getIntent().getBooleanExtra("isAddMember", false)) {

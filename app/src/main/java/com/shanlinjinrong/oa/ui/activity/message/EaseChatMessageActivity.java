@@ -188,8 +188,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case DELETESUCCESS:
-                setResult(DELETESUCCESS);
-                finish();
+                    setResult(DELETESUCCESS);
+                    finish();
                 break;
             case RESULTMODIFICATIONNAME:
                 mTitle = data.getStringExtra("groupName");
