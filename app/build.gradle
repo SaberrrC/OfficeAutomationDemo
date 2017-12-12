@@ -15,6 +15,7 @@ android {
         //Error:(com.baidu.mapapi.utils.b) that doesn't come with an 这个是安卓的方法数量不够了，
         // 只能6w个方法。 我在项目build.gradle这里添加这句就可以了。
         multiDexEnabled true
+        resConfigs "en", "zh-rCN"
 
         //pwd:13579
         versionCode 23
@@ -252,4 +253,6 @@ dependencies {
     //分包 65536
     compile 'com.android.support:multidex:1.0.2'
 
+    //华为推送
+    compile 'com.huawei.android.hms:push:2.5.2.300'
 }
