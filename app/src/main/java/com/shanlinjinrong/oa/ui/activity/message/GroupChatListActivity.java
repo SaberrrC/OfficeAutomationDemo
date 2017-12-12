@@ -180,6 +180,7 @@ public class GroupChatListActivity extends AppCompatActivity {
             case RESULT_OK: //返回选择的群组人员
                 break;
             case DELETESUCCESS: //刷新界面
+//                finish();
                 refreshData(); //TODO 待优化
                 break;
             case RESULTELECTEDCODE: //返回选择的群组人员
@@ -208,7 +209,7 @@ public class GroupChatListActivity extends AppCompatActivity {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             Intent intent = new Intent(GroupChatListActivity.this, EaseChatMessageActivity.class);
-            intent.putExtra("groupName", mGroupList.get(i).getGroupName());
+            intent.putExtra("groupTitle", mGroupList.get(i).getGroupName());
             intent.putExtra("chatType", 1);
             intent.putExtra("u_id", mGroupList.get(i).getGroupId());
             intent.putExtra("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
