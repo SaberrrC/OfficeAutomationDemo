@@ -61,7 +61,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     private ArrayList<Contacts> mDelete;
     private SelectedContactAdapter mAdapter;
     private EMCursorResult<String> mGroupMemberResult;
-    private int DELETEGROUPUSER = 0, MODIFICATIONONWER = 1, DELETESUCCESS = -2;
+    private int DELETEGROUPUSER = 0, MODIFICATIONONWER = 1, DELETESUCCESS = -2,MODIFICATIONOWNER = -4;
     private int type;
     private String mSearchUserId;
 
@@ -177,7 +177,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
                             showToast("更换群主成功");
                             Intent intent = new Intent();
                             intent.putExtra("groupOwner", mDelete.get(0).getUsername());
-                            setResult(DELETESUCCESS,intent);
+                            setResult(MODIFICATIONOWNER,intent);
                             finish();
                         });
             }

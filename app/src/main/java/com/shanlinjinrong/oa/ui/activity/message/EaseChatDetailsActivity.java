@@ -93,7 +93,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private CommonGroupControlAdapter mAdapter;
     private List<GroupUserInfoResponse> mData;
     private EMCursorResult<String> mGroupMemberResult;
-    private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3;
+    private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3, MODIFICATIONOWNER = -4;
     private boolean mIsOwner;
     private String mGroupName;
 
@@ -252,7 +252,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 }
                 break;
         }
-        startActivity(intent);
+        startActivityForResult(intent,REQUSET_CODE);
     }
 
     @OnClick(R.id.btn_chat_delete)
@@ -396,12 +396,10 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 setResult(RESULTMODIFICATIONNAME, intent);
                 break;
             case REFRESHSUCCESS:
-                try {
-                    getGroupInfo();
-                    tvModificationName.setText(data.getStringExtra("groupOwner"));
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
+                getGroupInfo();
+                break;
+            case MODIFICATIONOWNER:
+                getGroupInfo();
                 break;
             default:
                 break;
