@@ -162,7 +162,6 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 while (!TextUtils.isEmpty(mGroupMemberResult.getCursor()) && mGroupMemberResult.getData().size() == pageSize);
                 e.onComplete();
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
                 if (mIsOwner) {// 由于查询群组列表不包含自己跟群主，需要自己手动添加
                     mSearchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
@@ -246,7 +245,11 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     return;
                 }
                 intent.setClass(this, GroupCommonControlActivity.class);
+                intent.putExtra("type", 1);
                 intent.putExtra("groupId", mGroupId);
+                if (mIsOwner) {
+                    intent.putExtra("groupOwner", mGroupOwner);
+                }
                 break;
         }
         startActivity(intent);
@@ -300,7 +303,6 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     @Override
     public void showLoading() {
-        showLoadingView();
     }
 
     @Override
@@ -322,7 +324,6 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 mData.add(new GroupUserInfoResponse("add"));
             }
             mAdapter.setNewData(mData);
-            mAdapter.notifyDataSetChanged();
             if (userInfo.size() > 0) {
                 String groupOwner = mGroupOwner.substring(3, mGroupOwner.length());
                 for (int i = 0; i < userInfo.size(); i++) {
@@ -332,10 +333,10 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     }
                 }
             }
-
         } catch (Throwable e) {
             e.printStackTrace();
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -395,7 +396,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 setResult(RESULTMODIFICATIONNAME, intent);
                 break;
             case REFRESHSUCCESS:
-                getGroupInfo();
+                try {
+                    getGroupInfo();
+                    tvModificationName.setText(data.getStringExtra("groupOwner"));
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
                 break;
             default:
                 break;
