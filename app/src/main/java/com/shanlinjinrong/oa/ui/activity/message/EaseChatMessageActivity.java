@@ -3,7 +3,6 @@ package com.shanlinjinrong.oa.ui.activity.message;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -58,9 +57,9 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        initCount();
         initData();
         initView();
+        initCount();
     }
 
 

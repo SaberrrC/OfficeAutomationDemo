@@ -22,6 +22,7 @@ allprojects {
         maven { url "https://jitpack.io" }
         maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
         maven { url "https://maven.google.com" }
+        maven { url 'http://developer.huawei.com/repo/' }
         google()
     }
 }
