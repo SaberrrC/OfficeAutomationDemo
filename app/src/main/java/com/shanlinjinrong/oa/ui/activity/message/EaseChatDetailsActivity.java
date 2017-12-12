@@ -21,6 +21,8 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.exceptions.HyphenateException;
@@ -96,6 +98,8 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3, MODIFICATIONOWNER = -4;
     private boolean mIsOwner;
     private String mGroupName;
+    private String message_to;
+    private String message_from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +147,13 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                             InitGroupData();
                         }
                     });
+        } else {
+            //单聊 查询群用户信息
+            message_to = getIntent().getStringExtra("message_to");
+            message_from = getIntent().getStringExtra("message_from");
+            mSearchUserId = message_from.substring(3, message_from.length()) + "," + message_to.substring(3, message_to.length());
+            showLoadingView();
+            mPresenter.searchUserListInfo(mSearchUserId);
         }
     }
 
@@ -252,7 +263,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 }
                 break;
         }
-        startActivityForResult(intent,REQUSET_CODE);
+        startActivityForResult(intent, REQUSET_CODE);
     }
 
     @OnClick(R.id.btn_chat_delete)
@@ -303,6 +314,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     @Override
     public void showLoading() {
+
     }
 
     @Override
@@ -357,13 +369,29 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             Intent intent = new Intent();
             switch (mData.get(i).getUsername()) {
                 case "add":
-                    ArrayList<String> selectedAccount = new ArrayList<>();
-                    selectedAccount.addAll(mMemberList);
-                    selectedAccount.add(mGroupOwner);
-                    intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
-                    intent.putStringArrayListExtra("selectedMember", selectedAccount);
-                    intent.putExtra("isAddMember", true);
-                    intent.putExtra("groupId", mGroupId);
+                    if (mGroupId != null) {
+                        ArrayList<String> selectedAccount = new ArrayList<>();
+                        selectedAccount.addAll(mMemberList);
+                        selectedAccount.add(mGroupOwner);
+                        intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
+                        intent.putStringArrayListExtra("selectedMember", selectedAccount);
+                        intent.putExtra("isAddMember", true);
+                        intent.putExtra("groupId", mGroupId);
+                    } else {
+                        intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
+                        intent.putExtra("type", 0);
+                        String from = message_from.substring(3, message_from.length());
+                        String to = message_to.substring(3, message_to.length());
+                        if (from.equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                            intent.putExtra("userCode", to);
+                            String nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(message_to);
+                            intent.putExtra("userName",nickName);
+                        } else {
+                            intent.putExtra("userCode", from);
+                            String nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(message_from);
+                            intent.putExtra("userName",nickName);
+                        }
+                    }
                     break;
                 case "delete":
                     intent.setClass(EaseChatDetailsActivity.this, GroupCommonControlActivity.class);

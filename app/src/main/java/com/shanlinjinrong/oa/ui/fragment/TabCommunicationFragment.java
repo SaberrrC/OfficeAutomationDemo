@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.R;
@@ -21,6 +24,13 @@ import com.shanlinjinrong.views.common.CommonTopView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * <h3>Description: 首页通讯列表页面</h3>
@@ -69,19 +79,28 @@ public class TabCommunicationFragment extends BaseFragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.easeConversationListFragment, myConversationListFragment).commit();
         myConversationListFragment.setConversationListItemClickListener(conversation -> {
-            EMMessage lastMessage = conversation.getLastMessage();
-            //Title 名字
-            mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
-            if (lastMessage.getFrom().contains("admin") || lastMessage.getTo().contains("admin")) {
-                mNickName = "会议邀请";
-            } else if (lastMessage.getFrom().contains("notice") || lastMessage.getTo().contains("notice")) {
-                mNickName = "公告通知";
+            if (conversation.isGroup()) {
+                String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
+                startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
+                        .putExtra("u_id", conversation.conversationId())
+                        .putExtra("groupTitle", groupName)
+                        .putExtra("chatType", 1));
+            } else {
+                EMMessage lastMessage = conversation.getLastMessage();
+                //Title 名字
+                mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
+                if (lastMessage.getFrom().contains("admin") || lastMessage.getTo().contains("admin")) {
+                    mNickName = "会议邀请";
+                } else if (lastMessage.getFrom().contains("notice") || lastMessage.getTo().contains("notice")) {
+                    mNickName = "公告通知";
+                }
+                startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
+                        .putExtra("u_id", conversation.conversationId())
+                        .putExtra("title", mNickName)
+                        .putExtra("message_to", lastMessage.getTo())
+                        .putExtra("message_from", lastMessage.getFrom())
+                        .putExtra("chatType", 0));
             }
-            startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
-                    .putExtra("u_id", conversation.conversationId())
-                    .putExtra("title", mNickName)
-                    .putExtra("message_to", lastMessage.getTo())
-                    .putExtra("message_from", lastMessage.getFrom()));
         });
     }
 

@@ -46,7 +46,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private String mTitle;
     private EaseChatFragment chatFragment;
     private int mChatType;
-    private int CHAT_GROUP = 2;
+    private int CHAT_GROUP = 1;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
     private Bundle mExtras;
 
@@ -82,7 +82,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         chatFragment = new EaseChatFragment();
         chatFragment.setListener(this);
         mExtras = getIntent().getExtras();
-        mExtras.putInt("CHAT_TYPE", mChatType);
+        mExtras.putInt("CHAT_TYPE", getIntent().getIntExtra("CHAT_TYPE", 0));
         mExtras.putString(EaseConstant.EXTRA_USER_ID, getIntent().getStringExtra("u_id"));
         chatFragment.setArguments(mExtras);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
@@ -93,7 +93,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         mChatType = getIntent().getIntExtra("chatType", 0);
         mTitle = getIntent().getStringExtra("title");//人名字
         if (mChatType == CHAT_GROUP) {
-            mTvTitle.setText(getIntent().getStringExtra("groupName"));
+            mTvTitle.setText(getIntent().getStringExtra("groupTitle"));
         } else {
             mTvTitle.setText(mTitle);
         }
@@ -116,6 +116,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 } else {
                     intent.putExtra("chatType", false);
                     intent.putExtra("EXTRAS", mExtras);
+                    intent.putExtra("message_to", getIntent().getStringExtra("message_to"));
+                    intent.putExtra("message_from", getIntent().getStringExtra("message_from"));
                 }
                 startActivityForResult(intent, REQUEST_CODE);
                 break;
