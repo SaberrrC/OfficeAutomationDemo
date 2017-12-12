@@ -12,9 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.retrofit.net.HttpMethods;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -65,7 +63,6 @@ import com.shanlinjinrong.oa.thirdParty.huanxin.receiver.CallReceiver;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
-import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpCallBack;
@@ -278,7 +275,6 @@ public class DemoHelper {
         options.setGCMNumber("324169311137");
         //you need apply & set your own id if you want to use Mi push notification
         options.setMipushConfig("2882303761517608752", "5511760882752");
-
         //set custom servers, commonly used in private deployment
         if (demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
             options.setRestServer(demoModel.getRestServer());

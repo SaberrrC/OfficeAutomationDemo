@@ -10,6 +10,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.event.OnConversationFinishEvent;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
@@ -59,7 +60,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         }
         initData();
         initView();
-        initCount();
     }
 
 
@@ -88,10 +88,10 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         getSupportFragmentManager().beginTransaction().replace(R.id.message_list, chatFragment).commit();
     }
 
+
     private void initView() {
         mChatType = getIntent().getIntExtra("chatType", 0);
         mTitle = getIntent().getStringExtra("title");//人名字
-
         if (mChatType == CHAT_GROUP) {
             mTvTitle.setText(getIntent().getStringExtra("groupName"));
         } else {
@@ -169,6 +169,11 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCount(UpdateMessageCountEvent event) {
+        initCount();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setCountFirst(OnConversationFinishEvent event) {
         initCount();
     }
 

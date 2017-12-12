@@ -50,6 +50,7 @@ import com.hyphenate.easeui.PermissionListener;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.event.OnConversationFinishEvent;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.requestPermissionsListener;
@@ -71,6 +72,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -312,6 +314,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (chatType != EaseConstant.CHATTYPE_CHATROOM) {
             onConversationInit();
             onMessageListInit();
+            EventBus.getDefault().post(new OnConversationFinishEvent());
         }
         setRefreshLayoutListener();
         // show forward message if the message is not null

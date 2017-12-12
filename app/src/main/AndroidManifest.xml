@@ -227,22 +227,27 @@
         <!-- 华为推送 start -->
         <receiver android:name="com.hyphenate.chat.EMHWPushReceiver">
             <intent-filter>
-
                 <!-- 必须,用于接收 TOKEN -->
                 <action android:name="com.huawei.android.push.intent.REGISTRATION"/>
                 <!-- 必须，用于接收消息 -->
                 <action android:name="com.huawei.android.push.intent.RECEIVE"/>
                 <!-- 可选，用于点击通知栏或通知栏上的按钮后触发 onEvent 回调 -->
                 <action android:name="com.huawei.android.push.intent.CLICK"/>
-                <!-- 可选，查看 PUSH 通道是否连接，不查看则不需要 -->
-                <action android:name="com.huawei.intent.action.PUSH_STATE"/>
             </intent-filter>
+            <meta-data
+                android:name="CS_cloud_ablitity"
+                android:value="successRateAnalytics"/>
         </receiver>
-        <receiver android:name="com.huawei.hms.support.api.push.PushEventReceiver">
+        <receiver
+            android:name="com.huawei.hms.support.api.push.PushEventReceiver"
+            android:process=":pushservice">
             <intent-filter>
 
                 <!-- 接收通道发来的通知栏消息，兼容老版本 PUSH -->
+                <action android:name="com.huawei.android.push.intent.REFRESH_PUSH_CHANNEL"/>
                 <action android:name="com.huawei.intent.action.PUSH"/>
+                <action android:name="com.huawei.intent.action.PUSH_ON"/>
+                <action android:name="com.huawei.android.push.PLUGIN"/>
             </intent-filter>
         </receiver>
 
@@ -263,6 +268,11 @@
             android:exported="false"
             android:grantUriPermissions="true">
         </provider>
+        <!-- PushSDK:Push服务 -->
+        <service
+            android:name="com.huawei.android.pushagent.PushService"
+            android:process=":pushservice">
+        </service>
         <!-- huawei push end -->
 
 
