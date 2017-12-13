@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,7 +51,6 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
     private Bundle                 mBundle;
     private int                    chatType;
     private String                 toChatUsername;
-    private ProgressDialog         pd;
     private EMConversation         mConversation;
     private SearchedMessageAdapter messageaAdapter;
 
@@ -100,7 +98,6 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -116,7 +113,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             toChatUsername = mBundle.getString(EaseConstant.EXTRA_USER_ID);
             mConversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
         } else {
-            String groupId = intent.getStringExtra("groupId");
+            String groupId = intent.getStringExtra(EaseConstant.GROUPID);
             mConversation = EMClient.getInstance().chatManager().getConversation(groupId);
         }
     }
@@ -124,10 +121,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
     private List<EMMessage> messageList;
 
     private void searchMessages() {
-        pd = new ProgressDialog(this);
-        pd.setMessage(getString(R.string.searching));
-        pd.setCanceledOnTouchOutside(false);
-        pd.show();
+        showLoadingView();
         new Thread(new Runnable() {
             public void run() {
                 List<EMMessage> resultList = mConversation.searchMsgFromDB(mSearchEtInput.getText().toString().trim(), System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
@@ -145,7 +139,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
     private void onSearchResulted() {
         runOnUiThread(new Runnable() {
             public void run() {
-                pd.dismiss();
+                hideLoadingView();
                 if (messageaAdapter == null) {
                     messageaAdapter = new SearchedMessageAdapter(MessageSearchActivity.this, 1, messageList);
                     mLvList.setAdapter(messageaAdapter);

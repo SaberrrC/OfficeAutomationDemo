@@ -31,4 +31,5 @@ public class EaseConstant {
 
     public static final String EXTRA_CHAT_TYPE = "chatType";
     public static final String EXTRA_USER_ID = "toChatUsername";//toChatUsername  userId
+    public static String GROUPID = "groupId";
 }

@@ -63,6 +63,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
     private Bundle                                  mBundle;
     private List<EMMessage> mAllMessages = new ArrayList<>();
     private String mGroupId;
+    private boolean isLoadOver = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,10 +160,8 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
         };
         swipeRefreshLayout = messageList.getSwipeRefreshLayout();
         swipeRefreshLayout.setEnabled(false);
-        if (chatType != EaseConstant.CHATTYPE_CHATROOM) {
-            onMessageListInit();
-            onConversationInit();
-        }
+        onMessageListInit();
+        onConversationInit();
         //        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername);
         //获取此会话在本地的所有的消息数量
         int allMsgCount = conversation.getAllMsgCount();
@@ -220,16 +219,21 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                     @Override
                     public void run() {
                         if (mAllMessages.size() == 0) {
+                            isLoadOver = true;
+                            hideLoadingView();
                             return;
                         }
                         List<EMMessage> mdatas = new ArrayList<>();
                         if (mAllMessages.size() <= PAGE_SIZE) {
                             messageList.refreshPageSizeItem(mAllMessages);
+                            isLoadOver = true;
+                            hideLoadingView();
                             return;
                         }
                         for (int i = mAllMessages.size() - PAGE_SIZE; i < mAllMessages.size(); i++) {
                             mdatas.add(mAllMessages.get(i));
                         }
+                        isLoadOver = true;
                         hideLoadingView();
                         messageList.refreshPageSizeItem(mdatas);
                     }
@@ -422,6 +426,9 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 finish();
                 break;
             case R.id.iv_search:
+                if (!isLoadOver) {
+                    return;
+                }
                 Intent intent = new Intent(this, MessageSearchActivity.class);
                 if (chatType == EaseConstant.CHATTYPE_SINGLE) {
                     intent.putExtra("EXTRAS", mBundle);
@@ -434,12 +441,18 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 startActivity(intent);
                 break;
             case R.id.iv_first:
+                if (!isLoadOver) {
+                    return;
+                }
                 if (currentPage == totalPage) {
                     Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 List<EMMessage> mdatasFirst = new ArrayList<>();
                 for (int i = 0; i < mAllMessages.size() - (totalPage - 1) * PAGE_SIZE; i++) {
+                    if (i < 0) {
+                        continue;
+                    }
                     mdatasFirst.add(mAllMessages.get(i));
                 }
                 messageList.refreshPageSizeItem(mdatasFirst);
@@ -447,6 +460,9 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 setTtitle();
                 break;
             case R.id.iv_last:
+                if (!isLoadOver) {
+                    return;
+                }
                 if (currentPage == totalPage) {
                     Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
                     return;
@@ -463,12 +479,18 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 setTtitle();
                 break;
             case R.id.iv_next:
+                if (!isLoadOver) {
+                    return;
+                }
                 if (currentPage == 1) {
                     Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 List<EMMessage> mdatasNext = new ArrayList<>();
                 for (int i = mAllMessages.size() - (currentPage - 1) * PAGE_SIZE; i < mAllMessages.size() - (currentPage - 2) * PAGE_SIZE; i++) {
+                    if (i < 0) {
+                        continue;
+                    }
                     if (i >= mAllMessages.size()) {
                         break;
                     }
@@ -479,6 +501,9 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 setTtitle();
                 break;
             case R.id.iv_final:
+                if (!isLoadOver) {
+                    return;
+                }
                 if (currentPage == 1) {
                     Toast.makeText(this, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
                     return;
@@ -489,6 +514,9 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                 }
                 List<EMMessage> mdatasFinal = new ArrayList<>();
                 for (int i = mAllMessages.size() - PAGE_SIZE; i < mAllMessages.size(); i++) {
+                    if (i < 0) {
+                        continue;
+                    }
                     mdatasFinal.add(mAllMessages.get(i));
                 }
                 messageList.refreshPageSizeItem(mdatasFinal);

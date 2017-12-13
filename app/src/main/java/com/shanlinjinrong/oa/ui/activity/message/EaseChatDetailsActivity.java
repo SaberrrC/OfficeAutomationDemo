@@ -113,7 +113,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     private void initData() {
         mIsGroup = getIntent().getBooleanExtra("chatType", false);
-        mGroupId = getIntent().getStringExtra("groupId");
+        mGroupId = getIntent().getStringExtra(EaseConstant.GROUPID);
         mData = new ArrayList<>();
         getGroupInfo();
     }
@@ -250,7 +250,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 //查看聊天记录
                 if (mIsGroup) {
                     intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP);
-                    intent.putExtra("groupId", mGroupId);
+                    intent.putExtra(EaseConstant.GROUPID,mGroupId);
                 } else {
                     Bundle extras = getIntent().getParcelableExtra("EXTRAS");
                     intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
@@ -283,7 +283,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 }
                 intent.setClass(this, GroupCommonControlActivity.class);
                 intent.putExtra("type", 1);
-                intent.putExtra("groupId", mGroupId);
+                intent.putExtra(EaseConstant.GROUPID, mGroupId);
                 if (mIsOwner) {
                     intent.putExtra("groupOwner", mGroupOwner);
                 }
@@ -291,7 +291,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             case R.id.ll_look_more:
                 intent.setClass(this, LookGroupMemberActivity.class);
                 intent.putExtra("userCode", mSearchUserId);
-                intent.putExtra("groupId", mGroupId);
+                intent.putExtra(EaseConstant.GROUPID, mGroupId);
                 intent.putExtra("groupOwner", mGroupOwner);
                 intent.putStringArrayListExtra("memberList", mMemberList);
                 break;
@@ -336,7 +336,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             return;
         }
         Intent intent = new Intent(this, ModificationGroupNameActivity.class);
-        intent.putExtra("groupId", mGroupId);
+        intent.putExtra(EaseConstant.GROUPID, mGroupId);
         startActivityForResult(intent, REQUSET_CODE);
     }
 
@@ -438,7 +438,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
                         intent.putStringArrayListExtra("selectedMember", selectedAccount);
                         intent.putExtra("isAddMember", true);
-                        intent.putExtra("groupId", mGroupId);
+                        intent.putExtra(EaseConstant.GROUPID, mGroupId);
                     } else {
                         intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
                         intent.putExtra("type", 0);
@@ -459,7 +459,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 case "delete":
                     intent.setClass(EaseChatDetailsActivity.this, GroupCommonControlActivity.class);
                     intent.putExtra("type", 0);
-                    intent.putExtra("groupId", mGroupId);
+                    intent.putExtra(EaseConstant.GROUPID, mGroupId);
                     intent.putExtra("isOwner", mIsOwner);
                     break;
                 default:
