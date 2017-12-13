@@ -140,7 +140,15 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                     conversationList.clear();
                     conversationList.addAll(loadConversationList());
                     conversationListView.refresh();
-
+                    try {
+                        if (conversationList != null && conversationList.size() == 0) {
+                            tvErrorView.setVisibility(View.VISIBLE);
+                        } else {
+                            tvErrorView.setVisibility(View.GONE);
+                        }
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
                     break;
                 }
                 default:
