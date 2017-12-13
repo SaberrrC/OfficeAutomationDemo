@@ -104,8 +104,11 @@ public class AppConfig {
      * @return 参数值
      */
     public String get(String key) {
-        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE)
-                .getString(key, DEFAULT_ARGUMENTS_VALUE);
+        String string = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString(key, DEFAULT_ARGUMENTS_VALUE);
+        if (string.equals("null")) {
+            return "";
+        }
+        return string;
     }
 
     /**
