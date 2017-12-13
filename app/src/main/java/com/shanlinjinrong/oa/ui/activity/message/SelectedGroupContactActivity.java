@@ -415,7 +415,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         finish();
         super.onBackPressed();
     }
- 
+
     @Override
     public void uidNull(int code) {
         catchWarningByCode(code);

@@ -1,4 +1,3 @@
-
 package com.shanlinjinrong.oa.ui.fragment;
 
 import android.annotation.SuppressLint;
@@ -39,16 +38,12 @@ import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
 import com.shanlinjinrong.oa.ui.fragment.presenter.TabContractsFragmentPresenter;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
-import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 import com.shanlinjinrong.oa.views.ClearEditText;
-import com.shanlinjinrong.utils.DataUtils;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +51,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //import com.hyphenate.chatuidemo.db.Friends;
@@ -84,6 +78,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     TextView tvCacle;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.tv_error_layout)
+    TextView mTvErrorLayout;
 
 
     private Dialog dialog;
@@ -134,6 +130,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 recyclerViewSearchResult.setVisibility(View.GONE);
                 reSetSwipRefreash();
                 search_et_input.setText("");
+                mTvErrorLayout.setVisibility(View.GONE);
                 try {
                     inputManager.hideSoftInputFromWindow(
                             getActivity().getCurrentFocus().getWindowToken(),
@@ -175,6 +172,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                     } else {
                         recyclerView.setVisibility(View.VISIBLE);
                         recyclerViewSearchResult.setVisibility(View.GONE);
+                        mTvErrorLayout.setVisibility(View.GONE);
                     }
                 });
     }
@@ -265,6 +263,12 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
             userList.clear();
         }
         userList = users;
+        if (userList.size() == 0) {
+            mTvErrorLayout.setVisibility(View.VISIBLE);
+            mTvErrorLayout.setText("暂无该联系人！");
+        }else {
+            mTvErrorLayout.setVisibility(View.GONE);
+        }
         mSearchUserResultAdapter.setNewData(userList);
         try {
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),

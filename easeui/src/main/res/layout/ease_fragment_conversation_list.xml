@@ -17,8 +17,16 @@
         android:id="@+id/fl_error_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/tv_error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF"
+        android:gravity="center"
+        android:text="暂无会话消息"
+        android:visibility="gone" />
 
     <com.hyphenate.easeui.widget.EaseConversationList
         android:id="@+id/list"

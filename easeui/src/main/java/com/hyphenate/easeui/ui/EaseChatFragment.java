@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.EMMessageListener;
@@ -139,7 +140,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     private static final int ITEM_FILE = 12;
     private static final int ITEM_VIDEO_CALL = 14;
 
-//    protected String[] itemStrings = {"照片", "拍摄", "语音输入", "传输文件"};
+    //    protected String[] itemStrings = {"照片", "拍摄", "语音输入", "传输文件"};
     protected String[] itemStrings = {"照片", "拍摄", "语音输入"};
     protected int[] itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.voice_input,};
     protected int[] itemIds = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, ITEM_FILE};
@@ -151,6 +152,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     private onEaseUIFragmentListener mListener;
     //麦克风权限请求码
     private static final int REQUEST_RECORD_AUDIO = 100;
+    private TextView tverrorLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

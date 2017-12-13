@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,42 +10,37 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_search_result_view"
         android:layout_width="match_parent"
-        android:layout_below="@+id/toolbar_shadow"
         android:layout_height="match_parent"
-        />
+        android:layout_below="@+id/toolbar_shadow" />
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_below="@id/toolbar_shadow"
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:layout_below="@id/toolbar_shadow">
+
         <RelativeLayout
             android:id="@+id/rl_recycler_view_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar_shadow"
-            >
+            android:layout_below="@+id/toolbar_shadow">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/recycler_view"
                 android:layout_marginTop="-1dp"
-                android:background="#e3e3e3"
-                />
+                android:background="#e3e3e3" />
         </RelativeLayout>
 
 
-
     </android.support.v4.widget.SwipeRefreshLayout>
-
 
 
     <RelativeLayout
@@ -53,8 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentTop="true"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/btn_back"
@@ -64,7 +58,7 @@
             android:layout_marginLeft="15dp"
             android:gravity="center_vertical"
             android:src="@drawable/tab_contacts_back"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/title"
@@ -75,8 +69,9 @@
             android:gravity="center_vertical"
             android:text="通讯录"
             android:textColor="#333333"
-            android:textSize="18dp"/>
+            android:textSize="18dp" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl_top2"
         android:layout_width="match_parent"
@@ -91,11 +86,21 @@
 
             />
     </RelativeLayout>
+
     <include
         android:id="@+id/toolbar_shadow"
         layout="@layout/toolbar_shadow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_top2"
-        />
+        android:layout_below="@+id/rl_top2" />
+
+    <TextView
+        android:id="@+id/tv_error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_shadow"
+        android:background="@color/white"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:text="搜索联系人不存在！" />
 </RelativeLayout>
