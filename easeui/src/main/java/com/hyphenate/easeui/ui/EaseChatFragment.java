@@ -92,61 +92,62 @@ import java.util.concurrent.Executors;
  * you can see ChatActivity in demo for your reference
  */
 public class EaseChatFragment extends EaseBaseFragment implements EMMessageListener {
-    protected static final String TAG                          = "EaseChatFragment";
-    public static final    int    REQUEST_CODE_MAP             = 1;
-    public static final    int    REQUEST_CODE_CAMERA          = 2;
-    public static final    int    REQUEST_CODE_LOCAL           = 3;
-    public static final    int    REQUEST_CODE_SELECT_VIDEO    = 11;
-    public static final    int    REQUEST_CODE_SELECT_FILE     = 12;
-    public static final    int    REQUEST_CODE_SELECT_AT_USER  = 15;
-    public static final    int    MESSAGE_TYPE_SENT_VOICE_CALL = 1;
-    public static final    int    MESSAGE_TYPE_RECV_VOICE_CALL = 2;
-    public static final    int    MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
-    public static final    int    MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
-    public static final    int    MESSAGE_TYPE_RECALL          = 9;
+    protected static final String TAG = "EaseChatFragment";
+    public static final int REQUEST_CODE_MAP = 1;
+    public static final int REQUEST_CODE_CAMERA = 2;
+    public static final int REQUEST_CODE_LOCAL = 3;
+    public static final int REQUEST_CODE_SELECT_VIDEO = 11;
+    public static final int REQUEST_CODE_SELECT_FILE = 12;
+    public static final int REQUEST_CODE_SELECT_AT_USER = 15;
+    public static final int MESSAGE_TYPE_SENT_VOICE_CALL = 1;
+    public static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
+    public static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
+    public static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
+    public static final int MESSAGE_TYPE_RECALL = 9;
 
     /**
      * params to fragment
      */
-    protected Bundle              fragmentArgs;
-    protected int                 chatType;
-    protected String              toChatUsername;
+    protected Bundle fragmentArgs;
+    protected int chatType;
+    protected String toChatUsername;
     protected EaseChatMessageList messageList;
-    protected EaseChatInputMenu   inputMenu;
+    protected EaseChatInputMenu inputMenu;
 
     protected EMConversation conversation;
 
     protected InputMethodManager inputManager;
-    protected ClipboardManager   clipboard;
+    protected ClipboardManager clipboard;
 
     protected Handler handler = new Handler();
-    protected File                  cameraFile;
+    protected File cameraFile;
     protected EaseVoiceRecorderView voiceRecorderView;
-    protected SwipeRefreshLayout    swipeRefreshLayout;
-    protected ListView              listView;
+    protected SwipeRefreshLayout swipeRefreshLayout;
+    protected ListView listView;
 
     protected boolean isloading;
     protected boolean haveMoreData = true;
-    protected int     pagesize     = 20;
-    protected GroupListener    groupListener;
+    protected int pagesize = 20;
+    protected GroupListener groupListener;
     protected ChatRoomListener chatRoomListener;
-    protected EMMessage        contextMenuMessage;
+    protected EMMessage contextMenuMessage;
 
-    static final         int ITEM_PICTURE      = 1;
-    static final         int ITEM_TAKE_PICTURE = 2;
-    static final         int ITEM_VOICE_CALL   = 3;
-    private static final int ITEM_VIDEO        = 11;
-    private static final int ITEM_FILE         = 12;
-    private static final int ITEM_VIDEO_CALL   = 14;
+    static final int ITEM_PICTURE = 1;
+    static final int ITEM_TAKE_PICTURE = 2;
+    static final int ITEM_VOICE_CALL = 3;
+    private static final int ITEM_VIDEO = 11;
+    private static final int ITEM_FILE = 12;
+    private static final int ITEM_VIDEO_CALL = 14;
 
-    protected String[] itemStrings   = {"照片", "拍摄", "语音聊天", "语音输入", "位置", "个人名片"};
-    protected int[]    itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.ease_chat_call_normal, R.drawable.voice_input, R.drawable.ease_chat_location_normal, R.drawable.person_info};
-    protected int[]    itemIds       = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, ITEM_VIDEO, ITEM_FILE, ITEM_VIDEO_CALL};
-    private   boolean             isMessageListInited;
+//    protected String[] itemStrings = {"照片", "拍摄", "语音输入", "传输文件"};
+    protected String[] itemStrings = {"照片", "拍摄", "语音输入"};
+    protected int[] itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.voice_input,};
+    protected int[] itemIds = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, ITEM_FILE};
+    private boolean isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
     protected boolean isRoaming = false;
-    private ExecutorService          fetchQueue;
-    private String                   userName;
+    private ExecutorService fetchQueue;
+    private String userName;
     private onEaseUIFragmentListener mListener;
     //麦克风权限请求码
     private static final int REQUEST_RECORD_AUDIO = 100;
@@ -602,6 +603,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     EMMessage mEmMessage;
+
     // implement methods in EMMessageListener
     @Override
     public void onMessageReceived(List<EMMessage> messages) {
@@ -740,7 +742,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     //send message
     protected void sendTextMessage(String content) {
-        content = EncryptionUtil.getEncryptionStr(content,EMClient.getInstance().getCurrentUser());
+        content = EncryptionUtil.getEncryptionStr(content, EMClient.getInstance().getCurrentUser());
         if (EaseAtMessageHelper.get().containsAtUsername(content)) {
             sendAtMessage(content);
         } else {
@@ -781,7 +783,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             e.printStackTrace();
         }
     }
-
 
 
     /**

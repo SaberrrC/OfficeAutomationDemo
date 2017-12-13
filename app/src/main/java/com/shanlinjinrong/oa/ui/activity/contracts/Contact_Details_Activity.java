@@ -42,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.shanlinjinrong.oa.manager.AppManager.mContext;
 
@@ -61,7 +62,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
     @BindView(R.id.iv_phone)
     ImageView iv_phone;
     @BindView(R.id.iv_img_user)
-    ImageView ivImgUser;
+    CircleImageView ivImgUser;
     @BindView(R.id.send_voice)
     ImageView send_voice;
     @BindView(R.id.send_message)

@@ -856,6 +856,9 @@ public class DemoHelper {
                                     // notify invitation message
                                     getNotifier().vibrateAndPlayTone(msg);
                                     broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+                                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername()
+                                            , userDetailsBean.getData().get(0).getImg(), userDetailsBean.getData().get(0).getSex(), userDetailsBean.getData().get(0).getPhone(), userDetailsBean.getData().get(0).getPostname()
+                                            , userDetailsBean.getData().get(0).getOrgan(), userDetailsBean.getData().get(0).getEmail(), userDetailsBean.getData().get(0).getOid()));
                                 }
                                 break;
                             default:
