@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_root"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/page_bg">
+    android:background="@color/page_bg"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
@@ -13,10 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <com.shanlinjinrong.oa.views.ProgressWebView
             android:id="@+id/web_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/net_no_connection"
+            android:visibility="gone" />
 
         <include layout="@layout/toolbar_shadow" />
 

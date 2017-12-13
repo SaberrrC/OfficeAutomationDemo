@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -167,6 +168,9 @@ public class Contact_Details_Activity2 extends BaseActivity {
                                     .putExtra("department_name", mDepartment)
                                     .putExtra("post_name", mPost)
                                     .putExtra("sex", mSex)
+                                    .putExtra("message_to",  mUserCode)
+                                    .putExtra("message_from", "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())
+                                    .putExtra(EaseConstant.EXTRA_CHAT_TYPE,EaseConstant.CHATTYPE_SINGLE)
                                     .putExtra("phone", mPhone)
                                     .putExtra("email", mEmail));
                         } catch (Throwable e) {

@@ -43,7 +43,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     TextView mTvTitle;
     @BindView(R.id.iv_detail)
     LinearLayout mIvDetail;
-
     private String mTitle;
     private int mChatType;
     private Bundle mExtras;
