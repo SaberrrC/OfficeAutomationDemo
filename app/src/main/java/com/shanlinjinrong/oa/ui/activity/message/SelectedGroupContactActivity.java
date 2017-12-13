@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMEncryptUtils;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMGroupOptions;
@@ -335,6 +336,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     }
                 }
             }
+            mFragments.get(0).updateSelected();
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -413,7 +415,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         finish();
         super.onBackPressed();
     }
-
+ 
     @Override
     public void uidNull(int code) {
         catchWarningByCode(code);
