@@ -1,6 +1,6 @@
+apply plugin: "mmTrix"
 apply plugin: 'com.android.application'
-//apply plugin: "mmTrix"
-apply from: 'file_uri.gradle';
+apply from: 'file_uri.gradle'
 
 
 android {
@@ -18,8 +18,8 @@ android {
         resConfigs "en", "zh-rCN"
 
         //pwd:13579
-        versionCode 23
-        versionName "v1.5.5.0"
+        versionCode 24
+        versionName "v1.6.0.0"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
@@ -254,6 +254,5 @@ dependencies {
     compile 'com.android.support:multidex:1.0.2'
 
     //华为推送
- //
-    // compile 'com.huawei.android.hms:push:2.5.2.300'
+//    compile 'com.huawei.android.hms:push:2.5.2.300'
 }

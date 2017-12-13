@@ -18,6 +18,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.exceptions.HyphenateException;
+import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -31,9 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 //聊天群组展示列表
 public class GroupChatListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -44,6 +43,8 @@ public class GroupChatListActivity extends AppCompatActivity implements SwipeRef
     RecyclerView mRvGroupShow;
     @BindView(R.id.sr_refresh)
     SwipeRefreshLayout mSrRefresh;
+    @BindView(R.id.tv_error_layout)
+    TextView tvErrorLayout;
 
     private View mFooterView;
     private GroupChatListAdapter mAdapter;
@@ -123,7 +124,20 @@ public class GroupChatListActivity extends AppCompatActivity implements SwipeRef
                             mAdapter.notifyDataSetChanged();
                             mSrRefresh.setRefreshing(false);
                             initFooterView();
+                            updateLayout();
                         });
+    }
+
+    private void updateLayout() {
+        try {
+            if (mGroupList != null && mGroupList.size() == 0) {
+                tvErrorLayout.setVisibility(View.VISIBLE);
+            } else {
+                tvErrorLayout.setVisibility(View.GONE);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -149,6 +163,7 @@ public class GroupChatListActivity extends AppCompatActivity implements SwipeRef
     @Override
     public void onRefresh() {
         initData();
+        updateLayout();
     }
 
     public class ItemClick extends OnItemClickListener {

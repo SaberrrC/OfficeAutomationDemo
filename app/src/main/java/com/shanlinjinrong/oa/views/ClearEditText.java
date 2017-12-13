@@ -83,9 +83,8 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
 
     @Override
     public final void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        if (isFocused()) {
+        if (text != null)
             setClearIconVisible(text.length() > 0);
-        }
     }
 
     @Override
@@ -99,13 +98,15 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
     }
 
     private void setClearIconVisible(final boolean visible) {
-        mClearTextIcon.setVisible(visible, false);
-        final Drawable[] compoundDrawables = getCompoundDrawables();
-        setCompoundDrawables(
-                compoundDrawables[0],
-                compoundDrawables[1],
-                visible ? mClearTextIcon : null,
-                compoundDrawables[3]);
+        if (mClearTextIcon != null) {
+            mClearTextIcon.setVisible(visible, false);
+            final Drawable[] compoundDrawables = getCompoundDrawables();
+            setCompoundDrawables(
+                    compoundDrawables[0],
+                    compoundDrawables[1],
+                    visible ? mClearTextIcon : null,
+                    compoundDrawables[3]);
+        }
     }
 
 }

@@ -13,8 +13,8 @@ task upload {
         license_key = properties.getProperty("com.mmtrix.application_token");
 //        version_id = VERSION_ID;
 //        version_code = VERSION_CODE;
-        version_id = 23;
-        version_code = 23;
+        version_id = 24;
+        version_code = 24;
         mapping_file = new File(projectDir.getAbsolutePath() + "/build/outputs/mapping/release/mapping.txt");
         textMap = new HashMap<String, String>();
         textMap.put(VERSIONID, version_id);
