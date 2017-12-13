@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -181,7 +182,8 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             holder.time.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
             holder.message.setText(((EMTextMessageBody) message.getBody()).getMessage());
             String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());
-            Glide.with(parent.getContext()).load(portrait).into(holder.avatar);
+            //            Glide.with(parent.getContext()).load(portrait).into(holder.avatar);
+            Glide.with(parent.getContext()).load(portrait).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar).into(holder.avatar);
             return convertView;
         }
     }

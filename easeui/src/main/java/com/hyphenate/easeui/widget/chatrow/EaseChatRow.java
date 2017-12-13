@@ -136,18 +136,18 @@ public abstract class EaseChatRow extends LinearLayout {
                 }
                 if (message.direct() == Direct.SEND) {
                     if (message.getUserName().equals(FriendsInfoCacheSvc.getInstance(context).getUserId(message.getTo()))) {
-                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
                     } else if ((message.getUserName().contains("admin") || message.getUserName().contains("notice"))) {
                         if (!message.getUserName().equals(message.getFrom())) {
-                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
                         } else {
-                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
                         }
                     } else {
-                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
                     }
                 } else if (message.direct() == Direct.RECEIVE && !FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName()).equals("")) {
-                    Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                    Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
                 }
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
