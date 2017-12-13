@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,6 +24,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -59,6 +61,7 @@ import com.hyphenate.easeui.requestPermissionsListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.utils.EncryptionUtil;
+import com.hyphenate.easeui.utils.GetPathFromUri4kitkat;
 import com.hyphenate.easeui.utils.MediaPlayerHelper;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
@@ -140,9 +143,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     private static final int ITEM_FILE = 12;
     private static final int ITEM_VIDEO_CALL = 14;
 
-    //    protected String[] itemStrings = {"照片", "拍摄", "语音输入", "传输文件"};
-    protected String[] itemStrings = {"照片", "拍摄", "语音输入", "文件"};
-    protected int[] itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.voice_input, R.drawable.file_input};
+    protected String[] itemStrings = {"照片", "拍摄", "语音聊天", "文件"};
+    protected int[] itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.ease_chat_call_normal, R.drawable.file_input};
     protected int[] itemIds = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, ITEM_FILE};
     private boolean isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
@@ -677,10 +679,10 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             }
             switch (itemId) {
                 case ITEM_TAKE_PICTURE:
-                    selectPicFromCamera();
+                    selectPicFromLocal();
                     break;
                 case ITEM_PICTURE:
-                    selectPicFromLocal();
+                    selectPicFromCamera();
                     break;
                 case ITEM_VOICE_CALL:
                     selectFroVoiceCall();
@@ -700,18 +702,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
      */
     protected void selectFileFromLocal() {
         Intent intent = null;
-        if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
-            intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        } else {
-         //   intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-            intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-        }
+        intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
     }
 
@@ -951,6 +944,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             return;
         }
         sendFileMessage(filePath);
+
+
     }
 
     /**
@@ -1379,7 +1374,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     if (data != null) {
                         Uri uri = data.getData();
                         if (uri != null) {
-                            sendFileByUri(uri);
+                            if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
+                                sendFileByUri(uri);
+                            } else {
+                                String path = GetPathFromUri4kitkat.getPath(getActivity(), uri);
+                                sendFileMessage(path);
+                            }
                         }
                     }
                     break;
