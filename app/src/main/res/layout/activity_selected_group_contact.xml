@@ -105,10 +105,11 @@
         android:id="@+id/tv_empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/view_line"
+        android:layout_below="@+id/rl_top2"
+        android:layout_above="@+id/ll_selected_contact"
         android:background="@color/white"
         android:gravity="center"
-        android:visibility="gone"
-        tools:text="网络不通，请检查网络连接！" />
+        tools:text="网络不通，请检查网络连接！"
+        android:visibility="gone"/>
 
 </RelativeLayout>

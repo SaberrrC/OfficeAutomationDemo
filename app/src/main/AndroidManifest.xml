@@ -835,7 +835,8 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.activity.message.SelectedGroupContactActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".ui.activity.message.GroupCommonControlActivity"
             android:screenOrientation="portrait" />
@@ -849,7 +850,7 @@
             android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
-        <activity android:name=".ui.activity.message.LookGroupMemberActivity"></activity>
+        <activity android:name=".ui.activity.message.LookGroupMemberActivity"/>
     </application>
 
 </manifest>

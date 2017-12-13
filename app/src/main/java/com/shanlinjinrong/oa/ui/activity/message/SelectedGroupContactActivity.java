@@ -150,6 +150,15 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     mTopView.setLeftText("上一级");
                     mTvErrorView.setVisibility(View.VISIBLE);
                     mPresenter.searchContact(mSearchContact.getText().toString().trim(), mSelectedAccount);
+
+                    //-------------------------------       键盘隐藏       -------------------------------
+
+                    try {
+                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 });
 
         //-------------------------------   初始化视图   -------------------------------
@@ -441,15 +450,6 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     public void searchContactSuccess(List<Contacts> bean) {
 
         mTvErrorView.setVisibility(View.GONE);
-
-        //-------------------------------       键盘隐藏       -------------------------------
-
-        try {
-            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         //-------------------------------  还原上一次选中的人员  -------------------------------
 
