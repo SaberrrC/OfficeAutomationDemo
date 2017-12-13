@@ -167,7 +167,8 @@ public class EaseVoiceRecorderView extends RelativeLayout {
         try {
             wakeLock.acquire();
             this.setVisibility(View.VISIBLE);
-            recordingHint.setText(context.getString(R.string.move_up_to_cancel));
+            //    recordingHint.setText(context.getString(R.string.move_up_to_cancel));
+            recordingHint.setText("正在说话");
             recordingHint.setBackgroundColor(Color.TRANSPARENT);
             voiceRecorder.startRecording(context);
         } catch (Exception e) {
@@ -184,11 +185,14 @@ public class EaseVoiceRecorderView extends RelativeLayout {
 
     public void showReleaseToCancelHint() {
         recordingHint.setText(context.getString(R.string.release_to_cancel));
+//        recordingHint.setText("正在说话");
+
         recordingHint.setBackgroundResource(R.drawable.ease_recording_text_hint_bg);
     }
 
     public void showMoveUpToCancelHint() {
-        recordingHint.setText(context.getString(R.string.move_up_to_cancel));
+        // recordingHint.setText(context.getString(R.string.move_up_to_cancel));
+        recordingHint.setText("正在说话");
         recordingHint.setBackgroundColor(Color.TRANSPARENT);
     }
 

@@ -7,12 +7,14 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseEmojicon;
@@ -159,7 +161,6 @@ public class EaseChatInputMenu extends LinearLayout {
     /**
      * register menu item
      *
-     * @param name        resource id of item name
      * @param drawableRes background of item
      * @param itemId      id
      * @param listener    on click event of item
