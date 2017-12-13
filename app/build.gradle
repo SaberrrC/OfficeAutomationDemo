@@ -254,5 +254,5 @@ dependencies {
     compile 'com.android.support:multidex:1.0.2'
 
     //华为推送
-    compile 'com.huawei.android.hms:push:2.5.2.300'
+ //   compile 'com.huawei.android.hms:push:2.5.2.300'
 }
