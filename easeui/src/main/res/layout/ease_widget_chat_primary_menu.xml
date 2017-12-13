@@ -10,10 +10,10 @@
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#aaffffff"
+        android:background="#EFEFEF"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="4dp">
+        android:paddingTop="8dp">
 
         <Button
             android:id="@+id/btn_set_mode_voice"
@@ -34,7 +34,7 @@
         <LinearLayout
             android:id="@+id/btn_press_to_speak"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginBottom="6dp"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
@@ -57,12 +57,14 @@
         <RelativeLayout
             android:id="@+id/edittext_layout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:background="@color/btn_white_normal"
+            android:layout_height="35dp"
+            android:layout_marginBottom="6dp"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+
             android:layout_weight="1"
+            android:background="#FFFFFF"
             android:gravity="bottom">
 
             <!--android:layout_marginRight="35dip"-->
@@ -70,6 +72,7 @@
                 android:id="@+id/et_sendmessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:background="@null"
                 android:imeOptions="actionSend"
                 android:maxLines="3"
@@ -79,6 +82,34 @@
                 android:paddingRight="1dp"
                 android:paddingTop="3dp"
                 android:textSize="18sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_face"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingRight="9dp">
+
+                <ImageView
+                    android:id="@+id/iv_face_normal"
+                    android:layout_width="24dip"
+                    android:layout_height="24dip"
+                    android:layout_margin="1dip"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ease_chatting_biaoqing_btn_normal"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/iv_face_checked"
+                    android:layout_width="24dip"
+                    android:layout_height="24dip"
+                    android:layout_margin="1dip"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ease_chatting_biaoqing_btn_enable"
+                    android:visibility="invisible" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
