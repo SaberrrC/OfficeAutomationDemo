@@ -247,7 +247,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     public void onRefresh() {
         isPullRefreashing = true;
         loadData();
-        lazyLoadData();
+        mPresenter.loadData("1");
     }
 
     @Override
@@ -257,6 +257,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void autoSearchSuccess(List<User> users) {
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
         if (userList == null) {
             userList = new ArrayList<>();
         } else {
@@ -266,7 +268,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         if (userList.size() == 0) {
             mTvErrorLayout.setVisibility(View.VISIBLE);
             mTvErrorLayout.setText("暂无该联系人！");
-        }else {
+        } else {
             mTvErrorLayout.setVisibility(View.GONE);
         }
         mSearchUserResultAdapter.setNewData(userList);
@@ -316,6 +318,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void loadDataSuccess(List<Contacts> contacts) {
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
         try {
             if (items.size() > 0 || items != null) {
                 items.clear();
