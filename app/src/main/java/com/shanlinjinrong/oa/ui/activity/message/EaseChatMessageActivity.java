@@ -43,12 +43,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     TextView mTvTitle;
     @BindView(R.id.iv_detail)
     LinearLayout mIvDetail;
+
     private String mTitle;
-    private EaseChatFragment chatFragment;
     private int mChatType;
-    private int CHAT_GROUP = 1;
-    private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
     private Bundle mExtras;
+    private EaseChatFragment chatFragment;
+    private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private void initView() {
         mChatType = getIntent().getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         mTitle = getIntent().getStringExtra("title");//人名字
-        if (mChatType == CHAT_GROUP) {
+        if (mChatType == EaseConstant.CHATTYPE_GROUP) {
             mTvTitle.setText(getIntent().getStringExtra("groupTitle"));
         } else {
             mTvTitle.setText(mTitle);
@@ -110,7 +110,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 break;
             case R.id.iv_detail:
                 Intent intent = new Intent(this, EaseChatDetailsActivity.class);
-                if (mChatType == CHAT_GROUP) {
+                if (mChatType == EaseConstant.CHATTYPE_GROUP) {
                     intent.putExtra("chatType", true);
                     intent.putExtra("groupId", getIntent().getStringExtra("u_id"));
                 } else {

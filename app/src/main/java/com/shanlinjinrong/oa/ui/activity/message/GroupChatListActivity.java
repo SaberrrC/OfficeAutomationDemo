@@ -17,6 +17,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMGroupOptions;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.exceptions.HyphenateException;
@@ -210,7 +211,7 @@ public class GroupChatListActivity extends AppCompatActivity {
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             Intent intent = new Intent(GroupChatListActivity.this, EaseChatMessageActivity.class);
             intent.putExtra("groupTitle", mGroupList.get(i).getGroupName());
-            intent.putExtra("chatType", 1);
+            intent.putExtra("chatType", EaseConstant.CHATTYPE_GROUP);
             intent.putExtra("u_id", mGroupList.get(i).getGroupId());
             intent.putExtra("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
             intent.putExtra("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());

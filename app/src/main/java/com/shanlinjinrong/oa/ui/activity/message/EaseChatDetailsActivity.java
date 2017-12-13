@@ -84,22 +84,18 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     @BindView(R.id.ll_look_more)
     LinearLayout llLookMore;
 
+    private int memberCount;
     private String mGroupId;
-    private boolean mIsGroup;
-    private String mGroupOwner;
-    private String mSearchUserId;
     private EMGroup mGroupServer1;
     private EMGroup mGroupFromServer;
+    private boolean mIsGroup, mIsOwner;
     private ArrayList<String> mMemberList;
-    private CommonGroupControlAdapter mAdapter;
     private List<GroupUserInfoResponse> mData;
+    private CommonGroupControlAdapter mAdapter;
     private EMCursorResult<String> mGroupMemberResult;
+    private String mSearchUserId = "", mQueryUserInfo = "";
+    private String mGroupOwner, mGroupName, message_to, message_from;
     private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3, MODIFICATIONOWNER = -4;
-    private boolean mIsOwner;
-    private String mGroupName;
-    private String message_to;
-    private String message_from;
-    private String mQueryUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,20 +170,46 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 e.onComplete();
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
+
                 if (mIsOwner) {// 由于查询群组列表不包含自己跟群主，需要自己手动添加
-                    mSearchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+                    mMemberList.add(0, "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
                 } else {
-                    mSearchUserId = mGroupOwner.substring(3, mGroupOwner.length()) + "," + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
+                    mMemberList.add(0, mGroupOwner);
                 }
+
                 for (int i = 0; i < mMemberList.size(); i++) {
                     String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
-                    mSearchUserId += "," + usercode;
+                    mSearchUserId += usercode + ",";
                 }
-                int memberCount = mIsOwner ? 23 : 24;
+
+                for (int i = 0; i < mMemberList.size(); i++) {
+                    if (mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                        mMemberList.add(0, mMemberList.get(i));
+                        mMemberList.remove(i + 1);
+                    }
+                    if (!mIsOwner) {
+                        if (mMemberList.get(i).equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                            mMemberList.add(1, mMemberList.get(i));
+                            mMemberList.remove(i + 1);
+                        }
+                    }
+                }
+
+                if (mMemberList.size() > 24) {
+                    memberCount = mIsOwner ? 23 : 24;
+                } else {
+                    memberCount = mMemberList.size();
+                }
+
                 for (int i = 0; i < memberCount; i++) {
                     String usercode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
-                    mQueryUserInfo += "," + usercode;
+                    if (i == memberCount - 1) {
+                        mQueryUserInfo += usercode;
+                        continue;
+                    }
+                    mQueryUserInfo += usercode + ",";
                 }
+
                 //查询群用户信息
                 mPresenter.searchUserListInfo(mQueryUserInfo);
             });
@@ -271,7 +293,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 intent.putExtra("userCode", mSearchUserId);
                 intent.putExtra("groupId", mGroupId);
                 intent.putExtra("groupOwner", mGroupOwner);
-                intent.putStringArrayListExtra("memberList",mMemberList);
+                intent.putStringArrayListExtra("memberList", mMemberList);
                 break;
         }
         startActivityForResult(intent, REQUSET_CODE);
@@ -339,25 +361,42 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         svContainerLayout.setVisibility(View.VISIBLE);
         try {
             mData.clear();
-            if (mMemberList.size() > 23) {
-                llLookMore.setVisibility(View.VISIBLE);
-            }
-            for (int i = 0; i < userInfo.size(); i++) {
-                if (mIsOwner) {
-                    if (mGroupOwner.equals("sl_" + userInfo.get(i).getCode())) {
-                        mData.add(0, userInfo.get(i));
-                        continue;
-                    }
-                } else {
-                    if (mGroupOwner.equals("sl_" + userInfo.get(i).getCode())) {
-                        mData.add(0, userInfo.get(i));
-                        continue;
-                    } else if (userInfo.get(i).getCode().equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
-                        mData.add(1, userInfo.get(i));
-                        continue;
-                    }
+            if (mGroupId != null) {
+                if (mMemberList.size() > 23) {
+                    llLookMore.setVisibility(View.VISIBLE);
                 }
-                mData.add(userInfo.get(i));
+                for (int i = 0; i < userInfo.size(); i++) {
+                    if (userInfo.get(i).getCode().equals(mGroupOwner.substring(3, mGroupOwner.length()))) {
+                        if (mData.size() > 1) {
+                            mData.add(mData.size() - 1, mData.get(0));
+                            mData.remove(0);
+                        }
+                        mData.add(0, userInfo.get(i));
+                        continue;
+                    }
+                    if (!mIsOwner) {
+                        if (userInfo.get(i).getCode().equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                            if (mData.size() > 0) {
+                                mData.add(1, userInfo.get(i));
+                            } else {
+                                mData.add(userInfo.get(i));
+                            }
+                            continue;
+                        }
+                    }
+                    mData.add(userInfo.get(i));
+                }
+
+                String groupOwner = mGroupOwner.substring(3, mGroupOwner.length());
+                for (int i = 0; i < mMemberList.size(); i++) {
+                    if (userInfo.get(i) != null)
+                        if (userInfo.get(i).getCode().equals(groupOwner)) {
+                            tvModificationPerson.setText(userInfo.get(i).getUsername());
+                            break;
+                        }
+                }
+            } else {
+                mData.addAll(userInfo);
             }
 
             if (mIsOwner) {
@@ -366,16 +405,8 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             } else {
                 mData.add(new GroupUserInfoResponse("add"));
             }
+
             mAdapter.setNewData(mData);
-            if (userInfo.size() > 0) {
-                String groupOwner = mGroupOwner.substring(3, mGroupOwner.length());
-                for (int i = 0; i < mMemberList.size(); i++) {
-                    if (userInfo.get(i).getCode().equals(groupOwner)) {
-                        tvModificationPerson.setText(userInfo.get(i).getUsername());
-                        return;
-                    }
-                }
-            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -392,7 +423,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         tvErrorLayout.setText(errorMsg);
     }
 
-    // ---------------------------------- 添加群成员跳转 ----------------------------------
+// ---------------------------------- 添加群成员跳转 ----------------------------------
 
     class ItemClick extends OnItemClickListener {
         @Override
@@ -440,6 +471,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             }
             startActivityForResult(intent, REQUSET_CODE);
         }
+
     }
 
     @Override
