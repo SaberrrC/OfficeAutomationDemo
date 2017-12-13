@@ -178,9 +178,9 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
                                         .putExtra("post_name", mPost)
                                         .putExtra("sex", mSex)
                                         .putExtra("phone", mPhone)
-                                        .putExtra("message_to",  mUserCode)
+                                        .putExtra("message_to", mUserCode)
                                         .putExtra("message_from", "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())
-                                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE,EaseConstant.CHATTYPE_SINGLE)
+                                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE)
                                         .putExtra("email", mEmail));
                             } catch (Throwable e) {
                                 e.printStackTrace();
@@ -213,7 +213,9 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
 
                 RxView.clicks(rel_phone_call).throttleFirst(1, TimeUnit.SECONDS).
                         subscribe(o -> {
-                            if (mPhone.equals("-") || mPhone.equals("") || mDepartment.equals(mUserDepartment)) {
+
+                            String phone = tv_phone_number.getText().toString().trim();
+                            if (phone.equals("-") || phone.equals("") || !mDepartment.equals(mUserDepartment)) {
                                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
                                 showToast("电话为空,无法拨打！");
                             } else {
@@ -270,7 +272,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
             mUserDepartment = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
 
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
-                    addOrUpdateFriends(new Friends("sl_" + mUserCode,
+                    addOrUpdateFriends(new Friends(mUserCode,
                             mNickName, mPortrait, mSex, mPhone, mPost, mDepartment, mEmail, mDepartmentId));
         }
     }

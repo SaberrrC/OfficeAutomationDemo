@@ -122,7 +122,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
 
 
         FriendsInfoCacheSvc.getInstance(AppManager.mContext)
-                .addOrUpdateFriends(new Friends("sl_" + mUserCode, mNickName, mPortrait, mSex, mPhone, mPost, mDepartment, mEmail, mDepartmentId));
+                .addOrUpdateFriends(new Friends( mUserCode, mNickName, mPortrait, mSex, mPhone, mPost, mDepartment, mEmail, mDepartmentId));
 
         //---------------------------------聊天 语音 拨打电话 逻辑处理---------------------------------
 
@@ -204,7 +204,9 @@ public class Contact_Details_Activity2 extends BaseActivity {
 
             RxView.clicks(rel_phone_call).throttleFirst(1, TimeUnit.SECONDS).
                     subscribe(o -> {
-                        if (constants.getPhone().equals("-") || constants.getPhone().equals("") || !constants.getIsshow().equals("1") || mDepartment.equals(mUserDepartment)) {
+                        String phone = tv_phone_number.getText().toString().trim();
+                        if (phone.equals("-") || phone.equals("") || !constants.getIsshow().equals("1") || !mDepartment.equals(mUserDepartment)) {
+                            iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
                             showToast("电话为空,无法拨打！");
                         } else {
                             iv_phone.setImageResource(R.mipmap.ico_phone);
