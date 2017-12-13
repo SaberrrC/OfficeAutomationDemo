@@ -2,11 +2,17 @@ package com.shanlinjinrong.oa.ui.fragment.adapter;
 
 import android.net.Uri;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
+import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
 import java.util.List;
 
@@ -35,14 +41,18 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
                 break;
             case Contacts.EMPLOYEE:
                 SimpleDraweeView portrait = helper.getView(R.id.portrait);
-                portrait.setImageURI(Uri.parse(contacts.getPortraits()));
+                Glide.with(AppManager.mContext)
+                        .load(Constants.SLPicBaseUrl + contacts.getPortraits())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .error(R.drawable.ease_default_avatar)
+                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                        .placeholder(R.drawable.ease_default_avatar).into(portrait);
+
                 helper.setText(R.id.user_name, contacts.getUsername())
                         .setText(R.id.user_post_name, contacts.getPostTitle());
                 break;
         }
     }
-
-
 
 
 }

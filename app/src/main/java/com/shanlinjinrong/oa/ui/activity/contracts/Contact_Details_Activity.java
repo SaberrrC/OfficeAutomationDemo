@@ -7,14 +7,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
@@ -34,9 +33,6 @@ import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 
@@ -266,7 +262,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
             mPost = user.getPostName();
             mUserCode = "sl_" + user.getCode();
             mNickName = user.getUsername();
-            mPortrait = user.getPortraits();
+            mPortrait = Constants.SLPicBaseUrl + user.getPortraits();
             mDepartment = user.getDepartmentName();
             mDepartmentId = user.getDepartmentId();
             mUserDepartment = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
@@ -289,12 +285,11 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
                 tv_phone_number.setText("-");
             }
 
-            if (mPortrait.contains("http:///")) {
-                mPortrait = mPortrait.replace("http:///", "http://");
-            }
+
             Glide.with(AppManager.mContext)
                     .load(mPortrait)
                     .error(R.drawable.ease_default_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
             tv_mails.setText(mEmail.equals("") || mEmail == null || mEmail.equals("null") ? "-" : mEmail);
@@ -323,7 +318,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         try {//更新个人详情
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
                     addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(),
-                            userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
+                            userDetailsBean.getUsername(), Constants.PHPSLPicBaseUrl + userDetailsBean.getImg(),
                             userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                             userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
             initSessionData();

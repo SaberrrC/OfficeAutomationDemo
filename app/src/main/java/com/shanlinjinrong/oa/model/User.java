@@ -83,7 +83,7 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getPortraits() {
-        return "http://" + portraits;
+        return portraits;
     }
 
     public String getUsername() {

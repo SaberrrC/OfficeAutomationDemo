@@ -14,12 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -114,7 +116,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
         mEmail = constants.getEmail();
         mPost = constants.getPostTitle();
         mNickName = constants.getUsername();
-        mPortrait = constants.getPortraits();
+        mPortrait = Constants.SLPicBaseUrl + constants.getPortraits();
         mUserCode = "sl_" + constants.getCode();
         mDepartmentId = constants.getDepartmentId();
         mDepartment = constants.getDepartmentName();
@@ -122,7 +124,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
 
 
         FriendsInfoCacheSvc.getInstance(AppManager.mContext)
-                .addOrUpdateFriends(new Friends( mUserCode, mNickName, mPortrait, mSex, mPhone, mPost, mDepartment, mEmail, mDepartmentId));
+                .addOrUpdateFriends(new Friends(mUserCode, mNickName, mPortrait, mSex, mPhone, mPost, mDepartment, mEmail, mDepartmentId));
 
         //---------------------------------聊天 语音 拨打电话 逻辑处理---------------------------------
 
@@ -168,9 +170,9 @@ public class Contact_Details_Activity2 extends BaseActivity {
                                     .putExtra("department_name", mDepartment)
                                     .putExtra("post_name", mPost)
                                     .putExtra("sex", mSex)
-                                    .putExtra("message_to",  mUserCode)
+                                    .putExtra("message_to", mUserCode)
                                     .putExtra("message_from", "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())
-                                    .putExtra(EaseConstant.EXTRA_CHAT_TYPE,EaseConstant.CHATTYPE_SINGLE)
+                                    .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE)
                                     .putExtra("phone", mPhone)
                                     .putExtra("email", mEmail));
                         } catch (Throwable e) {
@@ -250,12 +252,9 @@ public class Contact_Details_Activity2 extends BaseActivity {
             tv_mails.setText(mEmail);
         }
 
-        if (mPortrait.contains("http:///")) {
-            mPortrait = mPortrait.replace("http:///", "http://");
-        }
-
         Glide.with(AppManager.mContext)
                 .load(mPortrait)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.drawable.ease_default_avatar)
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                 .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);

@@ -5,11 +5,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
@@ -43,12 +45,12 @@ public class CommonGroupControlAdapter extends BaseQuickAdapter<GroupUserInfoRes
                 break;
             default:
                 try {
-                    String portaits = "http://" + bean.getImg();
-                    portaits = portaits.replace("http:///", "http://");
+                    String portaits = bean.getImg();
                     name.setVisibility(View.VISIBLE);
                     name.setText(bean.getUsername());
                     Glide.with(AppManager.mContext)
                             .load(portaits)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .error(R.drawable.icon_homepage_work_report_me_launch)
                             .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                             .placeholder(R.drawable.icon_homepage_work_report_me_launch)

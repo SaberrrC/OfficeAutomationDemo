@@ -17,7 +17,9 @@ public class Constants {
     public final static String CID = "sl";//公司ID
 
     //TODO 打包时候更改 善林图片前缀:public.sl.s1.zhitongoa.com
-    public final static String SLPicBaseUrl = "http://";
+    public final static String SLPicBaseUrl = "http://public.testoa.shanlinjinrong.com";
+
+    public final static String PHPSLPicBaseUrl = "http://";
 
 
     /**
@@ -37,7 +39,7 @@ public class Constants {
     public final static String WORK_REPORT_TEMP_DATA = "work_report_temp_data";
 
     //周报临时数据
-    public final static String WORK_WEEKLY_TEMP_DATA ="work_weekly_temp_data";
+    public final static String WORK_WEEKLY_TEMP_DATA = "work_weekly_temp_data";
 
 
     /**

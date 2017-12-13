@@ -1,5 +1,7 @@
 package com.example.retrofit.model.responsebody;
 
+import com.example.retrofit.constants.Constants;
+
 /**
  * @Description：
  * @Auther：王凤旭
@@ -91,7 +93,7 @@ public class GroupUserInfoResponse {
     public String getImg() {
         if (img == null)
             return "";
-        return img;
+        return Constants.SLPicBaseUrl + img;
     }
 
     public void setImg(String img) {
