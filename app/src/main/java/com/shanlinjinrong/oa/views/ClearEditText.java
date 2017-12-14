@@ -40,7 +40,11 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
         DrawableCompat.setTint(wrappedDrawable, getCurrentHintTextColor());
         mClearTextIcon = wrappedDrawable;
         mClearTextIcon.setBounds(0, 0, mClearTextIcon.getIntrinsicHeight(), mClearTextIcon.getIntrinsicHeight());
-        setClearIconVisible(false);
+        try {
+            setClearIconVisible(getText().length() > 0);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         super.setOnTouchListener(this);
         super.setOnFocusChangeListener(this);
         addTextChangedListener(this);
@@ -58,10 +62,10 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus) {
+        try {
             setClearIconVisible(getText().length() > 0);
-        } else {
-            setClearIconVisible(false);
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
         if (mOnFocusChangeListener != null) {
             mOnFocusChangeListener.onFocusChange(v, hasFocus);
@@ -83,8 +87,12 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
 
     @Override
     public final void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        if (text != null)
-            setClearIconVisible(text.length() > 0);
+        try {
+            if (text != null)
+                setClearIconVisible(text.length() > 0);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
