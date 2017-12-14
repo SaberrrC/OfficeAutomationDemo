@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -45,7 +46,7 @@ import static com.shanlinjinrong.oa.common.Api.RESPONSES_CODE_ACCOUNT_PASSWORD_E
  * <h3>Description: 登录界面 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/30.<br />
  */
-public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View {
+public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View, View.OnKeyListener {
     @BindView(R.id.user_email)
     EditText userEmail;
     @BindView(R.id.user_pwd)
@@ -91,6 +92,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     private void initView() {
         LogUtils.e("LoginActivity:initView");
+        userPwd.setOnKeyListener(this);
         mCbAutoLogin.setChecked(AppConfig.getAppConfig(LoginActivity.this).get(AppConfig.PREF_KEY_PASSWORD_FLAG, false));
         AppConfig.getAppConfig(LoginActivity.this).setAutoLogin(true);
         userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
@@ -151,6 +153,10 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @OnClick(R.id.btn_login)
     public void onClick() {
+        SubmitLogin();
+    }
+
+    private void SubmitLogin() {
         if (mCbAutoLogin.isChecked()) {
             AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_LOGIN_PASSWORD, userPwd.getText().toString());
         } else {
@@ -263,5 +269,15 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         Intent intent = new Intent(context, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(intent);
+    }
+
+    //监听 回车登陆
+    @Override
+    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+            SubmitLogin();
+            return true;
+        }
+        return false;
     }
 }
