@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,7 @@ import io.reactivex.schedulers.Schedulers;
  * <h3>Description: 名片页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabContractsFragmentContract.View {
+public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabContractsFragmentContract.View, View.OnKeyListener {
 
     @BindView(R.id.title)
     TextView title;
@@ -154,9 +155,11 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         recyclerView.setAdapter(mContactAdapter);
         loadData();
 
+        search_et_input.setOnKeyListener(this);
+
         //EditText 自动搜索,间隔->输入停止1秒后自动搜索
         RxTextView.textChanges(search_et_input)
-                .debounce(1000, TimeUnit.MILLISECONDS)
+                .debounce(10, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(charSequence -> {
@@ -186,6 +189,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     protected void lazyLoadData() {
         try {
+
             if (search_et_input != null) {
                 String trim = search_et_input.getText().toString().trim();
                 if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())) {
@@ -222,6 +226,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 reSetSwipRefreash();
                 return;
             }
+            showLoadingView();
             mPresenter.loadData("1");
         } catch (Throwable e) {
             e.printStackTrace();
@@ -280,12 +285,13 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
             mTvErrorLayout.setVisibility(View.GONE);
         }
         mSearchUserResultAdapter.setNewData(userList);
-        try {
-            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+//        try {
+//            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+//                    InputMethodManager.HIDE_NOT_ALWAYS);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         hideEmptyView();
         if (recyclerViewSearchResult != null) {
@@ -328,6 +334,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void loadDataSuccess(List<Contacts> contacts) {
+        hideLoadingView();
         if (mSwipeRefreshLayout != null)
             mSwipeRefreshLayout.setRefreshing(false);
         try {
@@ -362,6 +369,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void loadDataEmpty() {
+        hideLoadingView();
         showEmptyView(mRlRecyclerViewContainer, " ", 0, false);
     }
 
@@ -375,7 +383,27 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void loadDataTokenNoMatch(int code) {
+        hideLoadingView();
         catchWarningByCode(code);
+    }
+
+    @Override
+    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+            showLoadingView();
+            mPresenter.autoSearch(search_et_input.getText().toString().trim());
+
+            // ------------------------------  隐藏键盘  ------------------------------
+
+            try {
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        return false;
     }
 
     class ItemClick extends OnItemClickListener {

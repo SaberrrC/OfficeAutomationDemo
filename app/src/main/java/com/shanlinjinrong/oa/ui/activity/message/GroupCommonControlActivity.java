@@ -84,6 +84,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
 
     private void initGroupList() {
         try {
+            showLoadingView();
             final int pageSize = 500;
             Observable.create(e -> {
                 do {
@@ -100,7 +101,6 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
 
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
-
                 //TODO 过滤群主
                 if (!mIsOwner) {
                     mSearchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
@@ -203,6 +203,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     @Override
     public void searchUserListInfoSuccess(List<GroupUserInfoResponse> userInfo) {
         try {
+            hideLoadingView();
             mData.clear();
             for (GroupUserInfoResponse user : userInfo) {
                 Contacts contacts = new Contacts();
@@ -220,6 +221,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
 
     @Override
     public void searchUserListInfoFailed(int errorCode, String errorMsg) {
+        hideLoadingView();
     }
 
     public class ItemClick extends OnItemClickListener {

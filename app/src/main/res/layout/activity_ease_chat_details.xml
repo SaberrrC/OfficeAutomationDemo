@@ -247,7 +247,7 @@
                 android:layout_marginTop="49dp"
                 android:background="@drawable/chat_details_btn_enable"
                 android:gravity="center"
-                android:text="删除并退出"
+                android:text="解散并退出"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:visibility="gone" />
