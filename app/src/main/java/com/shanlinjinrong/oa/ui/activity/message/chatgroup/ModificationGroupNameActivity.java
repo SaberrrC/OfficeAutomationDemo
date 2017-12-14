@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.message.chatgroup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -83,6 +84,7 @@ public class ModificationGroupNameActivity extends BaseActivity implements TextW
             mEdModificationGroupName.setText(mGroupName);
             mEdModificationGroupName.setSelection(mGroupName.length());
             mEdModificationGroupName.addTextChangedListener(this);
+            mEdModificationGroupName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
         } catch (Throwable e) {
             e.printStackTrace();
         }

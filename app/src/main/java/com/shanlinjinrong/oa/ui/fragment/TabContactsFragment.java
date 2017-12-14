@@ -186,6 +186,12 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     protected void lazyLoadData() {
         try {
+            if (search_et_input != null) {
+                String trim = search_et_input.getText().toString().trim();
+                if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())) {
+                    return;
+                }
+            }
             //TODO 缓存当天的数据
             if (!SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", "").equals("")) {
                 String childrens = SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", "");
@@ -297,7 +303,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void autoSearchOther(String msg) {
-        
+
     }
 
     @Override
