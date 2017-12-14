@@ -26,6 +26,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.exceptions.HyphenateException;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
@@ -250,7 +251,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 //查看聊天记录
                 if (mIsGroup) {
                     intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP);
-                    intent.putExtra(EaseConstant.GROUPID,mGroupId);
+                    intent.putExtra(EaseConstant.GROUPID, mGroupId);
                 } else {
                     Bundle extras = getIntent().getParcelableExtra("EXTRAS");
                     intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
@@ -337,6 +338,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         }
         Intent intent = new Intent(this, ModificationGroupNameActivity.class);
         intent.putExtra(EaseConstant.GROUPID, mGroupId);
+        intent.putExtra(Constants.GroupName, tvModificationName.getText().toString().trim());
         startActivityForResult(intent, REQUSET_CODE);
     }
 
