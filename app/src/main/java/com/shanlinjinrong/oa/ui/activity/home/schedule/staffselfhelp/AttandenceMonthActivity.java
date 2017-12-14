@@ -28,8 +28,6 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -307,7 +305,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 } else {
                     mTvEmptyLayout.setVisibility(View.VISIBLE);
                     mLlCurrentdayState.setVisibility(View.GONE);
-                    mTvEmptyLayout.setText("暂无日考勤记录！");
+//                    mTvEmptyLayout.setText("暂无日考勤记录！");
                     return;
                 }
 
@@ -448,7 +446,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     }
                 }
             } else {
-                mTvEmptyLayout.setText("暂无日考勤信息！");
+//                mTvEmptyLayout.setText("暂无日考勤信息！");
                 mTvEmptyLayout.setVisibility(View.VISIBLE);
                 mLlCurrentdayState.setVisibility(View.GONE);
             }

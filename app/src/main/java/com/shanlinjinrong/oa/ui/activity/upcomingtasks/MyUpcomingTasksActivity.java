@@ -754,6 +754,21 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             if (mDatas.size() > 0) {
                 mDatas.clear();
             }
+            if (bean.getData() == null) {
+                mRvList.setVisibility(View.GONE);
+                mTvErrorShow.setVisibility(View.VISIBLE);
+                mTvErrorShow.setText("暂无内容");
+                return;
+            }
+            if (bean.getData().getDataList() == null || bean.getData().getDataList().size() == 0) {
+                mRvList.setVisibility(View.GONE);
+                mTvErrorShow.setVisibility(View.VISIBLE);
+                mTvErrorShow.setText("暂无内容");
+                return;
+            }
+            if (mDatas.size() > 0) {
+                mDatas.clear();
+            }
         }
         if (bean.getData() == null) {
             mRvList.setVisibility(View.VISIBLE);
@@ -838,6 +853,18 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         hideLoadingView();
         mSrRefresh.setRefreshing(false);
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
+            if (bean.getData() == null) {
+                mRvList.setVisibility(View.GONE);
+                mTvErrorShow.setVisibility(View.VISIBLE);
+                mTvErrorShow.setText("暂无内容");
+                return;
+            }
+            if (bean.getData().getData() == null || bean.getData().getData().size() == 0) {
+                mRvList.setVisibility(View.GONE);
+                mTvErrorShow.setVisibility(View.VISIBLE);
+                mTvErrorShow.setText("暂无内容");
+                return;
+            }
             if (mDatas.size() > 0) {
                 mDatas.clear();
             }
@@ -990,7 +1017,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         if (errorNo == 20000) {
             mDatas.clear();
-            mRvList.setVisibility(View.VISIBLE);
+            mRvList.setVisibility(View.GONE);
+            mTvErrorShow.setVisibility(View.VISIBLE);
+            mTvErrorShow.setText(strMsg);
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }

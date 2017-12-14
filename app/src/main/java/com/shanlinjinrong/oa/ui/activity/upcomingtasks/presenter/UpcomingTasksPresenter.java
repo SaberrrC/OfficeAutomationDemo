@@ -148,7 +148,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     e.printStackTrace();
                     if (t.contains("\"code\":\"020000\"")) {
                         if (mView != null) {
-                            mView.onSearchFailure(020000, "查询无结果");
+                            mView.onSearchFailure(020000, "暂无内容");
                         }
                         return;
                     }
