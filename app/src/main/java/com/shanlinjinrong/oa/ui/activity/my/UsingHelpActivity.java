@@ -116,7 +116,7 @@ public class UsingHelpActivity extends BaseActivity {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
                 hideLoadingView();
-                tvErrorLayout.setVisibility(View.GONE);
+                tvErrorLayout.setText(getString(R.string.net_no_connection));
             }
         };
 
