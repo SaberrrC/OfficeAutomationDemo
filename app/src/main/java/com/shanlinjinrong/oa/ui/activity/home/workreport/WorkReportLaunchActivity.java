@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,9 +63,6 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
     @BindView(R.id.work_report_list)
     AllRecyclerView mWorkReportList;
-
-    @BindView(R.id.ll_select_date)
-    RelativeLayout mSelectDate; // 选择日期
 
     @BindView(R.id.tv_date)
     TextView mDate; // 日期
