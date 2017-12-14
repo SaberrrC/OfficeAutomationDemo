@@ -79,6 +79,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getEmail() {
+        if (email.equals("null")){
+            return "-";
+        }
         return email;
     }
 
@@ -87,6 +90,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getUsername() {
+        if (username.equals("null")){
+            return "-";
+        }
         return username;
     }
 
@@ -103,6 +109,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getSex() {
+        if (sex.equals("null")){
+            return "-";
+        }
         return sex;
     }
 
@@ -111,6 +120,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getPhone() {
+        if (phone.equals("null")){
+            return "-";
+        }
         return phone;
     }
 
@@ -167,6 +179,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getPostName() {
+        if (postName.equals("null")){
+            return "-";
+        }
         return postName;
     }
 
@@ -183,6 +198,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getDepartmentName() {
+        if (departmentName.equals("null")){
+            return "-";
+        }
         return departmentName;
     }
 
@@ -207,6 +225,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getOid() {
+        if (oid.equals("null")){
+            return "-";
+        }
         return oid;
     }
 

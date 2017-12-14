@@ -49,6 +49,9 @@ public class Constants {
     public static final String MESSAGE_ATTR_IS_VOICE_CALL = "voice";
     public static final String MESSAGE_ATTR_IS_VIDEO_CALL = "video";
 
+    // ---------------------------------- 群组 ----------------------------------
+
+    public static final  String GroupName = "group_name";
 
     /****************6.0权限*********************/
     /**

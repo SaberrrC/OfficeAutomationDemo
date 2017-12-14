@@ -22,6 +22,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.pgyersdk.update.UpdateManagerListener;
 import com.shanlinjinrong.oa.R;
@@ -140,7 +145,14 @@ public class TabMeFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), AboutUsActivity.class));
                 break;
             case R.id.btn_clear_cache://清除缓存
-                showToast("缓存已清理");
+                //清空聊天消息
+                new EaseAlertDialog(getContext(), null, "是否清空缓存", null, (confirmed, bundle) -> {
+                    if (!confirmed) {
+                        return;
+                    }
+                    //TODO 暂时没做处理
+                    showToast("缓存已清理");
+                }, true).show();
                 break;
         }
     }
@@ -178,7 +190,7 @@ public class TabMeFragment extends BaseFragment {
             PgyUpdateManager.register(getActivity(), "com.shanlinjinrong.oa.fileprovider", new UpdateManagerListener() {
                 @Override
                 public void onNoUpdateAvailable() {
-                   Toast.makeText(getContext(),"当前已是最新版本！",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "当前已是最新版本！", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
