@@ -33,6 +33,7 @@ public class TabCommunicationFragment extends BaseFragment {
     @BindView(R.id.topView)
     CommonTopView mTopView;
     private String mNickName;
+    private final int REQUESTCODE = 101, RESULTSUCCESS = -2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -85,12 +86,12 @@ public class TabCommunicationFragment extends BaseFragment {
                 } else if (lastMessage.getFrom().contains("notice") || lastMessage.getTo().contains("notice")) {
                     mNickName = "公告通知";
                 }
-                startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
+                startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
                         .putExtra("u_id", conversation.conversationId())
                         .putExtra("title", mNickName)
                         .putExtra("message_to", lastMessage.getTo())
                         .putExtra("message_from", lastMessage.getFrom())
-                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE));
+                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE), REQUESTCODE);
             }
         });
     }
@@ -102,5 +103,16 @@ public class TabCommunicationFragment extends BaseFragment {
         MainActivity mainController = (MainActivity) getActivity();
         mainController.refreshCommCount();
         super.onResume();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case RESULTSUCCESS:
+                Intent intent = new Intent(getContext(), GroupChatListActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }
