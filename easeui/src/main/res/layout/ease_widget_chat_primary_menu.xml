@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="2dip"
-    android:paddingTop="2dip">
+    android:paddingBottom="2dip">
 
     <LinearLayout
         android:id="@+id/rl_bottom"
@@ -13,7 +12,7 @@
         android:background="#EFEFEF"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="8dp">
+        android:paddingTop="5dp">
 
         <Button
             android:id="@+id/btn_set_mode_voice"

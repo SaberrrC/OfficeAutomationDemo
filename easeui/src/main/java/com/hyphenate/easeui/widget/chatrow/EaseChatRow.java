@@ -36,20 +36,20 @@ public abstract class EaseChatRow extends LinearLayout {
     protected static final String TAG = EaseChatRow.class.getSimpleName();
 
     protected LayoutInflater inflater;
-    protected Context context;
-    protected BaseAdapter adapter;
-    protected EMMessage message;
-    protected int position;
+    protected Context        context;
+    protected BaseAdapter    adapter;
+    protected EMMessage      message;
+    protected int            position;
 
-    protected TextView timeStampView;
+    protected TextView  timeStampView;
     protected ImageView userAvatarView;
-    protected View bubbleLayout;
-    protected TextView usernickView;
+    protected View      bubbleLayout;
+    protected TextView  usernickView;
 
-    protected TextView percentageView;
+    protected TextView    percentageView;
     protected ProgressBar progressBar;
-    protected ImageView statusView;
-    protected Activity activity;
+    protected ImageView   statusView;
+    protected Activity    activity;
 
     protected TextView ackedView;
     protected TextView deliveredView;
@@ -58,7 +58,7 @@ public abstract class EaseChatRow extends LinearLayout {
     protected EMCallBack messageReceiveCallback;
 
     protected MessageListItemClickListener itemClickListener;
-    protected EaseMessageListItemStyle itemStyle;
+    protected EaseMessageListItemStyle     itemStyle;
 
     public EaseChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context);
@@ -162,14 +162,16 @@ public abstract class EaseChatRow extends LinearLayout {
         }
 
         if (ackedView != null) {
-            if (message.isAcked()) {
-                if (deliveredView != null) {
-                    deliveredView.setVisibility(View.INVISIBLE);
-                }
-                ackedView.setVisibility(View.VISIBLE);
-            } else {
-                ackedView.setVisibility(View.INVISIBLE);
-            }
+            //隐藏已读状态
+            ackedView.setVisibility(View.INVISIBLE);
+            //            if (message.isAcked()) {
+            //                if (deliveredView != null) {
+            //                    deliveredView.setVisibility(View.INVISIBLE);
+            //                }
+            //                ackedView.setVisibility(View.VISIBLE);
+            //            } else {
+            //                ackedView.setVisibility(View.INVISIBLE);
+            //            }
         }
         if (usernickView != null) {
             usernickView.setVisibility(View.GONE);
