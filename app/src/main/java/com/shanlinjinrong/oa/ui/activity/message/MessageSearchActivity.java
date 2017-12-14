@@ -177,7 +177,8 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
                 convertView.setTag(holder);
             }
             EMMessage message = getItem(position);
-            EaseUserUtils.setUserNick(message.getFrom(), holder.name);
+            String nickName = FriendsInfoCacheSvc.getInstance(parent.getContext()).getNickName(message.getFrom());
+            EaseUserUtils.setUserNick(nickName, holder.name);
             EaseUserUtils.setUserAvatar(getContext(), message.getFrom(), holder.avatar);
             holder.time.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
             holder.message.setText(((EMTextMessageBody) message.getBody()).getMessage());
