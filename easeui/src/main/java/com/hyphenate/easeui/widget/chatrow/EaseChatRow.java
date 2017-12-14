@@ -24,6 +24,7 @@ import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
+import com.hyphenate.easeui.utils.DataFormatUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.EaseChatMessageList.MessageListItemClickListener;
@@ -105,11 +106,11 @@ public abstract class EaseChatRow extends LinearLayout {
 
     private void setUpBaseView() {
         // set nickname, avatar and background of bubble
-        TextView timestamp = (TextView) findViewById(R.id.timestamp);
-        if (timestamp != null) {
+        if (timeStampView != null) {
             if (position == 0) {
-                timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
-                timestamp.setVisibility(View.VISIBLE);
+                message.getMsgTime();
+                timeStampView.setText(DataFormatUtils.getTimestampString(new Date(message.getMsgTime())));
+                timeStampView.setVisibility(View.VISIBLE);
                 try {
                     mPrevMessage = (EMMessage) adapter.getItem(position);
                 } catch (Throwable e) {
@@ -120,10 +121,10 @@ public abstract class EaseChatRow extends LinearLayout {
                 // show time stamp if interval with last message is > 30 seconds
                 EMMessage prevMessage = (EMMessage) adapter.getItem(position - 1);
                 if (prevMessage != null && DateUtils.isCloseEnough(message.getMsgTime(), prevMessage.getMsgTime())) {
-                    timestamp.setVisibility(View.GONE);
+                    timeStampView.setVisibility(View.GONE);
                 } else {
-                    timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
-                    timestamp.setVisibility(View.VISIBLE);
+                    timeStampView.setText(DataFormatUtils.getTimestampString(new Date(message.getMsgTime())));
+                    timeStampView.setVisibility(View.VISIBLE);
                 }
             }
         }
