@@ -189,6 +189,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     protected void lazyLoadData() {
         try {
+
             if (search_et_input != null) {
                 String trim = search_et_input.getText().toString().trim();
                 if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())) {
@@ -225,6 +226,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 reSetSwipRefreash();
                 return;
             }
+            showLoadingView();
             mPresenter.loadData("1");
         } catch (Throwable e) {
             e.printStackTrace();
@@ -332,6 +334,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void loadDataSuccess(List<Contacts> contacts) {
+        hideLoadingView();
         if (mSwipeRefreshLayout != null)
             mSwipeRefreshLayout.setRefreshing(false);
         try {
@@ -366,6 +369,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void loadDataEmpty() {
+        hideLoadingView();
         showEmptyView(mRlRecyclerViewContainer, " ", 0, false);
     }
 
@@ -379,6 +383,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void loadDataTokenNoMatch(int code) {
+        hideLoadingView();
         catchWarningByCode(code);
     }
 
