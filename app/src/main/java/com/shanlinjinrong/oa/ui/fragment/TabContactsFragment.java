@@ -168,6 +168,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                                 .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
                         String isleader = AppConfig.getAppConfig(AppManager.mContext)
                                 .get(AppConfig.PREF_KEY_IS_LEADER);
+                        showLoadingView();
                         mPresenter.autoSearch(search_et_input.getText().toString().trim());
                     } else {
                         recyclerView.setVisibility(View.VISIBLE);
@@ -185,6 +186,12 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     protected void lazyLoadData() {
         try {
+            if (search_et_input != null) {
+                String trim = search_et_input.getText().toString().trim();
+                if (!TextUtils.isEmpty(search_et_input.getText().toString().trim())) {
+                    return;
+                }
+            }
             //TODO 缓存当天的数据
             if (!SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", "").equals("")) {
                 String childrens = SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", "");
@@ -257,6 +264,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void autoSearchSuccess(List<User> users) {
+        hideLoadingView();
         if (mSwipeRefreshLayout != null)
             mSwipeRefreshLayout.setRefreshing(false);
         if (userList == null) {
@@ -290,10 +298,12 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void autoSearchFailed(int errCode, String errMsg) {
+        hideLoadingView();
     }
 
     @Override
     public void autoSearchOther(String msg) {
+
     }
 
     @Override
