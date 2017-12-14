@@ -406,7 +406,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         return Color.argb(255, red, green, blue);
     }
 
-    @OnClick({R.id.tab_message_icon, R.id.tab_message_text, R.id.tab_message_box, R.id.tab_contacts_icon, R.id.tab_contacts_text, R.id.tab_contacts_box, R.id.tab_group_icon, R.id.tab_group_text, R.id.tab_group_box, R.id.tab_me_icon, R.id.tab_me_text, R.id.tab_me_box, R.id.tab_home_box, R.id.tab_home_icon})
+    @OnClick({R.id.tab_message_icon, R.id.tab_message_text, R.id.tab_message_box, R.id.tab_contacts_icon, R.id.tab_contacts_text, R.id.tab_contacts_box, R.id.tab_group_icon, R.id.tab_group_text, R.id.tab_group_box, R.id.tab_me_icon, R.id.tab_me_text, R.id.tab_me_box, R.id.tab_home_box, R.id.tab_home_icon, R.id.view_home_box})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tab_message_icon:
@@ -435,6 +435,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 break;
             case R.id.tab_home_icon:
             case R.id.tab_home_box:
+            case R.id.view_home_box:
                 setSelection(TAB_HOME);
                 mController.setCurrentItem(TAB_HOME, false);
                 break;
@@ -601,6 +602,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
         refreshCommCount();
     }
+
     //开启权限列表
     public void startAppSetting() {
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
