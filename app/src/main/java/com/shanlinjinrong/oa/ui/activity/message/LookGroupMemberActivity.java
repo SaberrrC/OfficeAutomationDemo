@@ -11,6 +11,8 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.hyphenate.easeui.EaseConstant;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.CommonGroupControlAdapter;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
@@ -93,7 +95,25 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
             if (userInfo != null) {
                 topView.setAppTitle("群成员" + "（" + userInfo.size() + "）");
                 mData.clear();
-                mData.addAll(userInfo);
+
+                int Index = 0;
+                for (int i = 0; i < userInfo.size(); i++) {
+                    String groupOwner = mGroupOwner.substring(3, mGroupOwner.length());
+                    if (groupOwner.equals(userInfo.get(i).getCode())) {
+                        mData.add(0, userInfo.get(i));
+                        Index = 1;
+                        continue;
+                    }
+
+                    if (!mIsOwner) {
+                        if (userInfo.get(i).getCode().equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                            mData.add(Index, userInfo.get(i));
+                            continue;
+                        }
+                    }
+                    mData.add(userInfo.get(i));
+                }
+
                 if (mIsOwner) {
                     mData.add(new GroupUserInfoResponse("add"));
                     mData.add(new GroupUserInfoResponse("delete"));

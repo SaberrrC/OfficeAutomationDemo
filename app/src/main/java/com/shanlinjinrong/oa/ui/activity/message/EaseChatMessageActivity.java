@@ -177,11 +177,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCountFirst(OnConversationFinishEvent event) {
-        switch (event.getEvent()) {
-            default:
                 initCount();
-                break;
-        }
     }
 
     @Override

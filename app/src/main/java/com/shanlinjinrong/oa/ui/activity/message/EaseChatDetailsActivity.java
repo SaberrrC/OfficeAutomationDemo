@@ -185,14 +185,11 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 }
 
                 for (int i = 0; i < mMemberList.size(); i++) {
-                    if (mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
-                        mMemberList.add(0, mMemberList.get(i));
-                        mMemberList.remove(i + 1);
-                    }
                     if (!mIsOwner) {
                         if (mMemberList.get(i).equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
-                            mMemberList.add(1, mMemberList.get(i));
-                            mMemberList.remove(i + 1);
+                            mMemberList.remove(i);
+                            mMemberList.add(1, "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+                            break;
                         }
                     }
                 }
@@ -301,6 +298,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 intent.putExtra("userCode", mSearchUserId);
                 intent.putExtra(EaseConstant.GROUPID, mGroupId);
                 intent.putExtra("groupOwner", mGroupOwner);
+                intent.putExtra("isOwner",mIsOwner);
                 intent.putStringArrayListExtra("memberList", mMemberList);
                 break;
         }
@@ -425,13 +423,18 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 }
 
                 String groupOwner = mGroupOwner.substring(3, mGroupOwner.length());
-                for (int i = 0; i < mMemberList.size(); i++) {
-                    if (userInfo.get(i) != null)
-                        if (userInfo.get(i).getCode().equals(groupOwner)) {
-                            tvModificationPerson.setText(userInfo.get(i).getUsername());
-                            break;
-                        }
+                try {
+                    for (int i = 0; i < mMemberList.size(); i++) {
+                        if (userInfo.size() > i)
+                            if (userInfo.get(i).getCode().equals(groupOwner)) {
+                                tvModificationPerson.setText(userInfo.get(i).getUsername());
+                                break;
+                            }
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
+
             } else {
                 mData.addAll(userInfo);
             }
