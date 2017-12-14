@@ -305,6 +305,22 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
         //---------------------------------- 群组删除处理 ----------------------------------
 
+        if (mGroupOwner != null)
+            if (mIsOwner) {
+                new EaseAlertDialog(this, null, "是否解散群组", null, (confirmed, bundle) -> {
+                    if (!confirmed) {
+                        return;
+                    }
+                    showLoadingView();
+                    deleteGroup();
+                }, true).show();
+                return;
+            }
+        showLoadingView();
+        deleteGroup();
+    }
+
+    private void deleteGroup() {
         Observable.create(e -> {
             if (mIsOwner) {
                 EMClient.getInstance().groupManager().destroyGroup(mGroupId);//解散群组
@@ -316,6 +332,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 .subscribeOn(Schedulers.io())
                 .subscribe(o -> {
                 }, throwable -> {
+                    hideLoadingView();
                     if (mGroupOwner != null)
                         if (mIsOwner) {
                             Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
@@ -324,6 +341,17 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         }
                     throwable.printStackTrace();
                 }, () -> {
+                    try {
+                        hideLoadingView();
+                        if (mGroupOwner != null)
+                            if (mIsOwner) {
+                                Toast.makeText(this, "解散成功！", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(this, "退出成功！", Toast.LENGTH_SHORT).show();
+                            }
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
                     setResult(REFRESHSUCCESS);
                     finish();
                 });

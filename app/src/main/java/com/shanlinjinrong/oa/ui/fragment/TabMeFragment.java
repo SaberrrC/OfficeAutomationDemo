@@ -145,7 +145,6 @@ public class TabMeFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), AboutUsActivity.class));
                 break;
             case R.id.btn_clear_cache://清除缓存
-                //清空聊天消息
                 new EaseAlertDialog(getContext(), null, "是否清空缓存", null, (confirmed, bundle) -> {
                     if (!confirmed) {
                         return;

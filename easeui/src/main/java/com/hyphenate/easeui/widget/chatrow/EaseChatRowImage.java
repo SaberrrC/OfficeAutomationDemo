@@ -126,7 +126,7 @@ public class EaseChatRowImage extends EaseChatRowFile{
             // thumbnail image is already loaded, reuse the drawable
             imageView.setImageBitmap(bitmap);
         } else {
-            AsyncTaskCompat.executeParallel( new AsyncTask<Object, Void, Bitmap>() {
+            AsyncTaskCompat.executeParallel(new AsyncTask<Object, Void, Bitmap>() {
 
                 @Override
                 protected Bitmap doInBackground(Object... args) {
