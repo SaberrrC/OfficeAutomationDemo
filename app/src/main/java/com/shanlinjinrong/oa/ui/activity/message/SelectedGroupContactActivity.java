@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,10 +17,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMEncryptUtils;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMGroupOptions;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -50,11 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //群组 选择人员
@@ -204,7 +199,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     }
 
     private void addMember(String[] member) {
-        String groupId = getIntent().getStringExtra("groupId");
+        String groupId = getIntent().getStringExtra(EaseConstant.GROUPID);
         Observable.create(e -> {
             EMClient.getInstance().groupManager().inviteUser(groupId, member, null);
             e.onComplete();

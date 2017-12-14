@@ -9,6 +9,7 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
+import com.hyphenate.easeui.EaseConstant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.CommonGroupControlAdapter;
@@ -56,7 +57,7 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
         mData = new ArrayList<>();
         mMemberList = new ArrayList<>();
         mIsOwner = getIntent().getBooleanExtra("isOwner", false);
-        mGroupId = getIntent().getStringExtra("groupId");
+        mGroupId = getIntent().getStringExtra(EaseConstant.GROUPID);
         mGroupOwner = getIntent().getStringExtra("groupOwner");
         mMemberList = getIntent().getStringArrayListExtra("memberList");
         mPresenter.searchUserListInfo(getIntent().getStringExtra("userCode"));
@@ -124,13 +125,13 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
                         intent.setClass(LookGroupMemberActivity.this, SelectedGroupContactActivity.class);
                         intent.putStringArrayListExtra("selectedMember", selectedAccount);
                         intent.putExtra("isAddMember", true);
-                        intent.putExtra("groupId", mGroupId);
+                        intent.putExtra(EaseConstant.GROUPID, mGroupId);
                     }
                     break;
                 case "delete":
                     intent.setClass(LookGroupMemberActivity.this, GroupCommonControlActivity.class);
                     intent.putExtra("type", 0);
-                    intent.putExtra("groupId", mGroupId);
+                    intent.putExtra(EaseConstant.GROUPID, mGroupId);
                     intent.putExtra("isOwner", mIsOwner);
                     break;
                 default:

@@ -188,7 +188,6 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
         }
     }
 
-
     private static class ViewHolder {
         TextView  name;
         TextView  message;

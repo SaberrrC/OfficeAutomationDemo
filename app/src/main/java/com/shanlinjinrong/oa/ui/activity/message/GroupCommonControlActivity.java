@@ -6,15 +6,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.exceptions.HyphenateException;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -33,13 +32,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 //更换群主  删除群成员
@@ -82,7 +76,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     private void initData() {
         mDelete = new ArrayList<>();
         mData = new ArrayList<>();
-        mGroupId = getIntent().getStringExtra("groupId");
+        mGroupId = getIntent().getStringExtra(EaseConstant.GROUPID);
         mIsOwner = getIntent().getBooleanExtra("isOwner",false);
         type = getIntent().getIntExtra("type", -1);
         initGroupList();

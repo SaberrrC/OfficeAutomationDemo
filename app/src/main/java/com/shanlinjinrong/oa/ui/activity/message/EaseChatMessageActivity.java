@@ -111,7 +111,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 Intent intent = new Intent(this, EaseChatDetailsActivity.class);
                 if (mChatType == EaseConstant.CHATTYPE_GROUP) {
                     intent.putExtra("chatType", true);
-                    intent.putExtra("groupId", getIntent().getStringExtra("u_id"));
+                    intent.putExtra(EaseConstant.GROUPID, getIntent().getStringExtra("u_id"));
                 } else {
                     intent.putExtra("chatType", false);
                     intent.putExtra("EXTRAS", mExtras);

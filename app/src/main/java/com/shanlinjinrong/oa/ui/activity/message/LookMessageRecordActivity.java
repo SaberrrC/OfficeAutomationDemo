@@ -87,7 +87,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
             toChatUsername = mBundle.getString("toChatUsername");
             conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
         } else {//群组
-            mGroupId = intent.getStringExtra("groupId");
+            mGroupId = intent.getStringExtra(EaseConstant.GROUPID);
             if (!TextUtils.isEmpty(mGroupId)) {
                 conversation = EMClient.getInstance().chatManager().getConversation(mGroupId);
             }
@@ -437,7 +437,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
                     return;
                 }
                 intent.putExtra("chatType", EaseConstant.CHATTYPE_GROUP);
-                intent.putExtra("groupId", mGroupId);
+                intent.putExtra(EaseConstant.GROUPID, mGroupId);
                 startActivity(intent);
                 break;
             case R.id.iv_first:

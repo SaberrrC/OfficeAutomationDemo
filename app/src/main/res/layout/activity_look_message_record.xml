@@ -120,6 +120,4 @@
                 android:src="@drawable/select_bt_history_final"/>
         </FrameLayout>
     </LinearLayout>
-
-
 </LinearLayout>
