@@ -34,10 +34,17 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
     @Override
     public void autoSearch(String name) {
         mKjHttp.jsonGet(Api.PHONEBOOK_SEARCHPHONEBOOK + "?name=" + name, new HttpParams(), new HttpCallBack() {
+
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.autoSearchFinish();
+                try {
+                    if (mView != null) {
+                        mView.autoSearchFinish();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -64,13 +71,16 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                                     jsonObject.getString("email"));
                             users.add(user);
                         }
-                        mView.autoSearchSuccess(users);
+                        if (mView != null)
+                            mView.autoSearchSuccess(users);
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        mView.uidNull(Api.getCode(jo));
+                        if (mView != null)
+                            mView.uidNull(Api.getCode(jo));
                     } else {
-                        mView.autoSearchOther(Api.getInfo(jo));
+                        if (mView != null)
+                            mView.autoSearchOther(Api.getInfo(jo));
                     }
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }

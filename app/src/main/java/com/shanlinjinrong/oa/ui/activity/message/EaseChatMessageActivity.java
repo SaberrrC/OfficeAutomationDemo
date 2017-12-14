@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.message;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -43,6 +44,9 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     TextView mTvTitle;
     @BindView(R.id.iv_detail)
     LinearLayout mIvDetail;
+    @BindView(R.id.img_details_icon)
+    ImageView imgDetailsIcon;
+
     private String mTitle;
     private int mChatType;
     private Bundle mExtras;
@@ -93,8 +97,10 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         mTitle = getIntent().getStringExtra("title");//人名字
         if (mChatType == EaseConstant.CHATTYPE_GROUP) {
             mTvTitle.setText(getIntent().getStringExtra("groupTitle"));
+            imgDetailsIcon.setImageResource(R.mipmap.icon_chat_group_list);
         } else {
             mTvTitle.setText(mTitle);
+            imgDetailsIcon.setImageResource(R.mipmap.icon_contacts_details);
         }
     }
 
@@ -187,8 +193,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case DELETESUCCESS:
-                    setResult(DELETESUCCESS);
-                    finish();
+                setResult(DELETESUCCESS);
+                finish();
                 break;
             case RESULTMODIFICATIONNAME:
                 mTitle = data.getStringExtra("groupName");
