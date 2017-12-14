@@ -15,6 +15,7 @@ import com.hyphenate.easeui.event.OnConversationFinishEvent;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
@@ -175,13 +176,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setCount(UpdateMessageCountEvent event) {
-        initCount();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCountFirst(OnConversationFinishEvent event) {
-        initCount();
+        switch (event.getEvent()) {
+            default:
+                initCount();
+                break;
+        }
     }
 
     @Override

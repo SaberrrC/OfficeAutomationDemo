@@ -156,6 +156,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     private void InitGroupData() {
         try {
+            mQueryUserInfo = "";
             final int pageSize = 500;
             Observable.create(e -> {
                 do {
@@ -220,6 +221,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     }
 
     private void initView() {
+        if (mIsGroup) {
+            topView.setAppTitle("群聊天详情");
+        } else {
+            topView.setAppTitle("详细资料");
+        }
+
         mAdapter = new CommonGroupControlAdapter(R.layout.item_common_person_add, mData);
         rvPersonShow.setLayoutManager(new GridLayoutManager(this, 5, GridLayoutManager.VERTICAL, false));
         rvPersonShow.setAdapter(mAdapter);
