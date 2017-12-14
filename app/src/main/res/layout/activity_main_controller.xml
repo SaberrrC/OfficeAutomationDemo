@@ -39,8 +39,7 @@
                     <ImageView
                         android:id="@+id/tab_group_icon_light"
                         style="@style/TabBar_icon"
-                        android:src="@drawable/tab_communcation_light"
-                        />
+                        android:src="@drawable/tab_communcation_light" />
 
 
                     <ImageView
@@ -206,6 +205,12 @@
         android:layout_centerHorizontal="true"
         />
 
+    <View
+        android:id="@+id/view_home_box"
+        android:layout_width="65dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
     <View
         android:layout_width="53dp"
         android:layout_height="53dp"
