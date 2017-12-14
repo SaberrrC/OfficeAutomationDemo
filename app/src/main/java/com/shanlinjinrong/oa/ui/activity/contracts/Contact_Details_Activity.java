@@ -90,6 +90,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
     private String mDepartment;
     private String mDepartmentId;
     private String mUserDepartment;
+    private final int RESULTGROUP = -2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -337,5 +338,16 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode){
+            case RESULTGROUP:
+                //TODO 暂时不做处理
+
+                break;
+        }
     }
 }

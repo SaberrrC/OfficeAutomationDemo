@@ -34,8 +34,12 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
         switch (helper.getItemViewType()) {
             case Contacts.DEPARTMENT:
                 if (contacts.getItemType() == Contacts.DEPARTMENT) {
+                    String departmentPersons = contacts.getDepartmentPersons();
+                    if (departmentPersons.equals("-")) {
+                        departmentPersons = "";
+                    }
                     helper.setText(R.id.name, contacts.getDepartmentName())
-                            .setText(R.id.qty, "（" + contacts.getDepartmentPersons() + "）");
+                            .setText(R.id.qty, "（" + departmentPersons + "）");
 
                 }
                 break;
