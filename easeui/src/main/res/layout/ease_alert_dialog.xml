@@ -21,19 +21,19 @@
             android:text="@string/prompt"
             android:textColor="#333"
             android:visibility="visible"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
        
  
         <TextView
             android:id="@+id/alert_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center_horizontal"
             android:padding="5dp"
             android:textColor="#333"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -47,8 +47,8 @@
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:layout_margin="10dp"
+            android:layout_height="37dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/ease_btn_cancel_bj"
             android:gravity="center"
@@ -60,8 +60,8 @@
         <Button
             android:id="@+id/btn_ok"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:layout_margin="10dp"
+            android:layout_height="37dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/ease_btn_blue_selector"
             android:gravity="center"
