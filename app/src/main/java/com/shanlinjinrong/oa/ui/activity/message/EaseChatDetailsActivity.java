@@ -221,7 +221,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         if (mIsGroup) {
             topView.setAppTitle("群聊天详情");
         } else {
-            topView.setAppTitle("详细资料");
+            topView.setAppTitle("聊天详情");
         }
 
         mAdapter = new CommonGroupControlAdapter(R.layout.item_common_person_add, mData);
