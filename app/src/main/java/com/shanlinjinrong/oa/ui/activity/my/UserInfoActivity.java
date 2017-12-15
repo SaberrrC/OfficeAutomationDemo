@@ -153,8 +153,13 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     }
 
     private void initData() {
-        userPortrait.setImageURI(Uri.parse(AppConfig.getAppConfig(this).get(
-                AppConfig.PREF_KEY_PORTRAITS)));
+        Glide.with(AppManager.mContext)
+                .load(AppConfig.getAppConfig(this).get(
+                        AppConfig.PREF_KEY_PORTRAITS))
+                .error(R.drawable.ease_default_avatar)
+                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                .placeholder(R.drawable.ease_default_avatar)
+                .into(userPortrait);
         userSex.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
         userPost.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
         userDepartment.setText(AppConfig.getAppConfig(this).get(
@@ -217,7 +222,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     public void upLoadSuccess(String portrait) {
         showToast("修改成功");
         //上传成功，设置用户头像
-        String portraitUri = Constants.SLPicBaseUrl + portrait;
+        String portraitUri = Constants.PHPSLPicBaseUrl + portrait;
         AppConfig.getAppConfig(UserInfoActivity.this).set(AppConfig.PREF_KEY_PORTRAITS, portraitUri);
 
         Glide.with(AppManager.mContext)
