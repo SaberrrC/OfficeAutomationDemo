@@ -4,7 +4,7 @@ apply from: 'file_uri.gradle'
 
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 25
     buildToolsVersion '26.0.2'
 
     defaultConfig {
@@ -163,10 +163,10 @@ dependencies {
     compile files("libs/mmtrix.agent.jar")
 
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.android.support:support-v4:27.0.2'
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.android.support:recyclerview-v7:27.0.2'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
 
     //dagger
     compile 'com.google.dagger:dagger:2.11'

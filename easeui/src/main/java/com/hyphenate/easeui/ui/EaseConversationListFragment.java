@@ -71,7 +71,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
     protected void initView() {
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         conversationListView = (EaseConversationList) getView().findViewById(R.id.list);
-        tvErrorView = getView().findViewById(R.id.tv_error_layout);
+        tvErrorView = (TextView) getView().findViewById(R.id.tv_error_layout);
         query = (EditText) getView().findViewById(R.id.query);
         // button to clear content in search bar
         clearSearch = (ImageButton) getView().findViewById(R.id.search_clear);

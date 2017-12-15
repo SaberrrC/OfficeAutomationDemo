@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 25
     buildToolsVersion '26.0.2'
 
     defaultConfig {
@@ -36,7 +36,8 @@ dependencies {
     })
     implementation files('libs/HMSSdkBase_2.5.1.300.jar')
     implementation files('libs/HMSSdkPush_2.5.1.300.jar')
-    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+
 
     testCompile 'junit:junit:4.12'
     compile 'org.greenrobot:eventbus:3.0.0'
@@ -44,14 +45,14 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
 
     //解决com.android.support依赖问题
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            def requested = details.requested
-            if (requested.group == 'com.android.support') {
-                if (!requested.name.startsWith("multidex")) {
-                    details.useVersion '25.3.1'
-                }
-            }
-        }
-    }
+//    configurations.all {
+//        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//            def requested = details.requested
+//            if (requested.group == 'com.android.support') {
+//                if (!requested.name.startsWith("multidex")) {
+//                    details.useVersion '25.3.1'
+//                }
+//            }
+//        }
+//    }
 }
