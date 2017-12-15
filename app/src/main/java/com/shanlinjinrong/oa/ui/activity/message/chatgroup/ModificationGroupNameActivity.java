@@ -84,7 +84,7 @@ public class ModificationGroupNameActivity extends BaseActivity implements TextW
             mEdModificationGroupName.setText(mGroupName);
             mEdModificationGroupName.setSelection(mGroupName.length());
             mEdModificationGroupName.addTextChangedListener(this);
-            mEdModificationGroupName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+            mEdModificationGroupName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
         } catch (Throwable e) {
             e.printStackTrace();
         }
