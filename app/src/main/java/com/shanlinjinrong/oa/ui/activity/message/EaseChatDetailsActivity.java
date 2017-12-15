@@ -216,7 +216,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             e.printStackTrace();
         }
     }
-
+    
     private void initView() {
         if (mIsGroup) {
             topView.setAppTitle("群聊天详情");
