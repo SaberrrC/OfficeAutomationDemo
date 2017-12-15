@@ -26,6 +26,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRecordInfo;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingInfoFillOutActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingInfoFillOutActivityPresenter;
+import com.shanlinjinrong.oa.ui.activity.message.SelectedGroupContactActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
@@ -291,9 +292,11 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_add_contacts:
-                Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
+                Intent intent = new Intent(this, SelectedGroupContactActivity.class);
                 intent.putParcelableArrayListExtra("selectedContacts", contactsList);
                 startActivityForResult(intent, ADD_JOIN_PEOPLE);
+
+
                 break;
             case R.id.tv_rb_is_meeting_invite:
                 mRbIsMeetingInvite.setChecked(false);
