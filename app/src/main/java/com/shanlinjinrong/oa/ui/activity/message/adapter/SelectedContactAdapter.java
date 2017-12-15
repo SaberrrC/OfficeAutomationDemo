@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.message.adapter;
 import android.net.Uri;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -41,16 +42,30 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
                         + "    " + "(" + contacts.getDepartmentPersons() + ")");
                 break;
             case GroupContactBean.EMPLOYEE:
+
+                TextView userName = baseViewHolder.getView(R.id.user_name);
+                TextView postName = baseViewHolder.getView(R.id.user_post_name);
                 CheckBox selectedUser = baseViewHolder.getView(R.id.cb_selected_user);
                 selectedUser.setChecked(contacts.isChecked());
+
+                if (contacts.isModificationColor()) {
+                    if (baseViewHolder.getPosition() == 0) {
+                        baseViewHolder.setVisible(R.id.cb_selected_user, false);
+                        userName.setTextColor(AppManager.mContext.getResources().getColor(R.color.text_gray));
+                    } else {
+                        baseViewHolder.setVisible(R.id.cb_selected_user, true);
+                        userName.setTextColor(AppManager.mContext.getResources().getColor(R.color.black_333333));
+                    }
+                }
+
                 CircleImageView portrait = baseViewHolder.getView(R.id.portrait);
                 Glide.with(AppManager.mContext)
                         .load(contacts.getPortraits())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.icon_homepage_work_report_me_launch)
                         .into(portrait);
-                baseViewHolder.setText(R.id.user_name, contacts.getUsername())
-                        .setText(R.id.user_post_name, contacts.getPostTitle());
+                userName.setText(contacts.getUsername());
+                postName.setText(contacts.getPostTitle());
                 break;
         }
     }

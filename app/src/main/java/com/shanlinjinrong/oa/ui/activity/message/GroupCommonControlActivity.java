@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,6 +16,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.exceptions.HyphenateException;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -28,6 +30,7 @@ import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,10 +55,11 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     private boolean mIsOwner;
     private List<String> mMemberList;
     private ArrayList<Contacts> mData;
+    private ArrayList<Contacts> mSearchData;
     private ArrayList<Contacts> mDelete;
     private SelectedContactAdapter mAdapter;
     private EMCursorResult<String> mGroupMemberResult;
-    private int DELETEGROUPUSER = 0, MODIFICATIONONWER = 1, DELETESUCCESS = -2,MODIFICATIONOWNER = -4;
+    private int DELETEGROUPUSER = 0, MODIFICATIONONWER = 1, DELETESUCCESS = -2, MODIFICATIONOWNER = -4;
     private int type;
     private String mSearchUserId;
 
@@ -74,10 +78,11 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     }
 
     private void initData() {
-        mDelete = new ArrayList<>();
         mData = new ArrayList<>();
+        mDelete = new ArrayList<>();
+        mSearchData = new ArrayList<>();
         mGroupId = getIntent().getStringExtra(EaseConstant.GROUPID);
-        mIsOwner = getIntent().getBooleanExtra("isOwner",false);
+        mIsOwner = getIntent().getBooleanExtra("isOwner", false);
         type = getIntent().getIntExtra("type", -1);
         initGroupList();
     }
@@ -102,7 +107,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
 
             }, Throwable::printStackTrace, () -> {//TODO 群成团账号
                 //TODO 过滤群主
-                if (!mIsOwner) {
+                if (mIsOwner) {
                     mSearchUserId = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
                 }
 
@@ -120,9 +125,12 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     }
 
     private void initView() {
+        initSearch();
+
         if (type == 0) {
             mTopView.setAppTitle("删除人员");
         }
+
         mTopView.getRightView().setOnClickListener(view -> {
             if (type == 0) {
                 showLoadingView();
@@ -171,7 +179,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
                             showToast("更换群主成功");
                             Intent intent = new Intent();
                             intent.putExtra("groupOwner", mDelete.get(0).getUsername());
-                            setResult(MODIFICATIONOWNER,intent);
+                            setResult(MODIFICATIONOWNER, intent);
                             finish();
                         });
             }
@@ -183,6 +191,33 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
         mRvContentLayout.setAdapter(mAdapter);
         mRvContentLayout.addOnItemTouchListener(new ItemClick());
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void initSearch() {
+        //EditText 自动搜索,间隔->输入停止500毫秒后自动搜索
+        RxTextView.textChanges(searchEtInput)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(charSequence -> {
+                    if (charSequence.toString().trim().equals("")) {
+                        showLoadingView();
+                        mAdapter.setNewData(mData);
+                        mAdapter.notifyDataSetChanged();
+                        hideLoadingView();
+                    } else {
+                        showLoadingView();
+                        mSearchData.clear();
+                        for (int i = 0; i < mData.size(); i++) {
+                            if (mData.get(i).getUsername().contains(charSequence.toString().trim())) {
+                                mSearchData.add(mData.get(i));
+                            }
+                        }
+                        mAdapter.setNewData(mSearchData);
+                        mAdapter.notifyDataSetChanged();
+                        hideLoadingView();
+                    }
+                });
     }
 
     @Override
@@ -203,13 +238,17 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     @Override
     public void searchUserListInfoSuccess(List<GroupUserInfoResponse> userInfo) {
         try {
-            hideLoadingView();
             mData.clear();
             for (GroupUserInfoResponse user : userInfo) {
                 Contacts contacts = new Contacts();
                 contacts.setCode(user.getCode());
                 contacts.setUsername(user.getUsername());
                 contacts.setItemType(1);
+                contacts.setModificationColor(true);
+                if (contacts.getCode().equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                    mData.add(0, contacts);
+                    continue;
+                }
                 mData.add(contacts);
             }
             mAdapter.setNewData(mData);

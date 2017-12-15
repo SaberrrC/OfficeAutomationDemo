@@ -77,7 +77,16 @@ public class Contacts implements MultiItemEntity, Serializable {
     public String portraits;
     public String email;
     private boolean isChecked;
+    private boolean isModificationColor;
     private String orgId;
+
+    public boolean isModificationColor() {
+        return isModificationColor;
+    }
+
+    public void setModificationColor(boolean modificationColor) {
+        isModificationColor = modificationColor;
+    }
 
     public String getOrgId() {
         return orgId;

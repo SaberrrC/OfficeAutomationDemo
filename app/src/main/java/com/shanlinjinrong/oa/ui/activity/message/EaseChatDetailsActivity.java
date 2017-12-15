@@ -291,6 +291,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 intent.putExtra(EaseConstant.GROUPID, mGroupId);
                 if (mIsOwner) {
                     intent.putExtra("groupOwner", mGroupOwner);
+                    intent.putExtra(Constants.ISGROUPOWNER, mIsOwner);
                 }
                 break;
             case R.id.ll_look_more:
@@ -298,7 +299,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 intent.putExtra("userCode", mSearchUserId);
                 intent.putExtra(EaseConstant.GROUPID, mGroupId);
                 intent.putExtra("groupOwner", mGroupOwner);
-                intent.putExtra("isOwner",mIsOwner);
+                intent.putExtra("isOwner", mIsOwner);
                 intent.putStringArrayListExtra("memberList", mMemberList);
                 break;
         }
@@ -371,6 +372,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         }
         Intent intent = new Intent(this, ModificationGroupNameActivity.class);
         intent.putExtra(EaseConstant.GROUPID, mGroupId);
+        intent.putExtra(Constants.ISGROUPOWNER, mIsOwner);
         intent.putExtra(Constants.GroupName, tvModificationName.getText().toString().trim());
         startActivityForResult(intent, REQUSET_CODE);
     }
