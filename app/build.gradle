@@ -252,7 +252,7 @@ dependencies {
 
     //分包 65536
     compile 'com.android.support:multidex:1.0.2'
-
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
     //华为推送
 
     //    compile 'com.huawei.android.hms:push:2.5.2.300'
