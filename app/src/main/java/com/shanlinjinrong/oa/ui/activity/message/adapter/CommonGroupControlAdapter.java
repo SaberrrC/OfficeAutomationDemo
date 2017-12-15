@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
+import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
@@ -48,13 +49,23 @@ public class CommonGroupControlAdapter extends BaseQuickAdapter<GroupUserInfoRes
                     String portaits = bean.getImg();
                     name.setVisibility(View.VISIBLE);
                     name.setText(bean.getUsername());
+
                     Glide.with(AppManager.mContext)
+                            .load(portaits)
+                            .error(R.drawable.icon_homepage_work_report_me_launch)
+                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                            .placeholder(R.drawable.icon_homepage_work_report_me_launch)
+                            .into(portraits);
+
+
+
+                 /*   Glide.with(AppManager.mContext)
                             .load(portaits)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .error(R.drawable.icon_homepage_work_report_me_launch)
                             .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                             .placeholder(R.drawable.icon_homepage_work_report_me_launch)
-                            .into(portraits);
+                            .into(portraits);*/
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
