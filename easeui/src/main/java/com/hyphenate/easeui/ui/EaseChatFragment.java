@@ -49,6 +49,8 @@ import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.PermissionListener;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.event.OnConversationFinishEvent;
@@ -848,6 +850,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         }
         if (chatType == EaseConstant.CHATTYPE_GROUP) {
             message.setChatType(ChatType.GroupChat);
+            String groupId = message.conversationId();
+            if (FriendsInfoCacheSvc.getInstance(getContext()).getNickName(groupId).equals("")){
+                String groupTitle = getArguments().getString("groupTitle");
+                FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(groupId,groupTitle,"","","","","","",""));
+            }
         } else if (chatType == EaseConstant.CHATTYPE_CHATROOM) {
             message.setChatType(ChatType.ChatRoom);
         }
