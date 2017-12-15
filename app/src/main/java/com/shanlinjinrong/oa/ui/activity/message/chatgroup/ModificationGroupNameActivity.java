@@ -59,6 +59,12 @@ public class ModificationGroupNameActivity extends BaseActivity implements TextW
             //TODO 修改群名称
             String group_name = mEdModificationGroupName.getText().toString();
             String groupId = getIntent().getStringExtra(EaseConstant.GROUPID);
+
+            if (group_name.length() == 0) {
+                showToast("请输入群组名称！");
+                return;
+            }
+            
             showLoadingView();
             Observable.create(e -> {
                 EMClient.getInstance().groupManager().changeGroupName(groupId, group_name);
