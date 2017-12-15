@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.baidu.platform.comapi.map.E;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.hyphenate.chat.EMClient;
@@ -26,9 +27,14 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.GroupChatListAdapter;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupNameModification;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.views.ClearEditText;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +74,9 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat_list);
         ButterKnife.bind(this);
+        if (!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
         initData();
         initView();
     }
@@ -203,11 +212,6 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onRefresh() {
         initData();
         updateLayout();
@@ -256,6 +260,19 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
             intent.putExtra("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
             intent.putExtra("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
             startActivityForResult(intent, REQUESTCODE);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void modificationGroupName(GroupNameModification name){
+        refreshData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
         }
     }
 }

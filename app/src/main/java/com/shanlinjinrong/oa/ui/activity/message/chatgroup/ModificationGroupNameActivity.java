@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
@@ -76,6 +78,20 @@ public class ModificationGroupNameActivity extends BaseActivity implements TextW
                         throwable.printStackTrace();
                         hideLoadingView();
                     }, () -> {
+
+                        //提醒群名称 更改
+                        EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
+                        cmdMsg.setChatType(EMMessage.ChatType.GroupChat);
+                        String action = "UPDATE_GROUP_INFO";
+                        EMCmdMessageBody cmdBody = new EMCmdMessageBody(action);
+                        String toUsername = getIntent().getStringExtra(EaseConstant.GROUPID);
+                        cmdMsg.setTo(toUsername);
+                        cmdMsg.setAttribute("groupName", group_name);
+                        cmdMsg.setAttribute("groupId", groupId);
+                        cmdMsg.setAttribute("groupIcon", "");
+                        cmdMsg.addBody(cmdBody);
+                        EMClient.getInstance().chatManager().sendMessage(cmdMsg);
+
                         hideLoadingView();
                         Intent intent = new Intent();
                         intent.putExtra("groupName", group_name);

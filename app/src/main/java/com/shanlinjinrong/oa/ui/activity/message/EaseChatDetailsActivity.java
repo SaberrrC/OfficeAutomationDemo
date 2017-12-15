@@ -31,11 +31,16 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.CommonGroupControlAdapter;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupNameModification;
 import com.shanlinjinrong.oa.ui.activity.message.chatgroup.ModificationGroupNameActivity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatDetailsPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +108,9 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ease_chat_details);
         ButterKnife.bind(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         initData();
         initView();
     }
@@ -216,7 +224,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             e.printStackTrace();
         }
     }
-    
+
     private void initView() {
         if (mIsGroup) {
             topView.setAppTitle("群聊天详情");
@@ -515,6 +523,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void modificationGroupName(GroupNameModification name) {
+        String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mGroupId);
+        tvModificationName.setText(groupName);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -539,6 +553,14 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
     }
 }

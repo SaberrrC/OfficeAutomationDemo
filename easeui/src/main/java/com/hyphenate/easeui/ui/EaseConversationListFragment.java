@@ -187,7 +187,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
      *
      * @return +
      */
-    protected List<EMConversation> loadConversationList() {
+    protected List<EMConversation>  loadConversationList() {
         // get all conversations
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         List<Pair<Long, EMConversation>> sortList = new ArrayList<Pair<Long, EMConversation>>();

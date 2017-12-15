@@ -171,8 +171,11 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 }
                 // group message, show group avatar
                 holder.avatar.setImageResource(R.drawable.icon_default_group_portraits);
-                EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
-                holder.name.setText(group != null ? group.getGroupName() : username);
+//                EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
+//                holder.name.setText(group != null ? group.getGroupName() : username);
+                //获取群组名称
+                String groupName = FriendsInfoCacheSvc.getInstance(mContext).getNickName(username);
+                holder.name.setText(groupName);
             } else if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
                 holder.avatar.setImageResource(R.drawable.icon_default_group_portraits);
                 EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);

@@ -18,6 +18,7 @@ import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupNameModification;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatMessagePresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -34,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -120,14 +122,13 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
     private void remoteGroupName() {
-        String u_id = getIntent().getStringExtra("u_id");
-        Observable.create(e -> {
-            mGroup = EMClient.getInstance().groupManager().getGroup(u_id);
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {
-                }, throwable -> mTvTitle.setText("匿名群组"), () -> mTvTitle.setText(mGroup.getGroupName()));
+        try {
+            String u_id = getIntent().getStringExtra("u_id");
+            String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(u_id);
+            mTvTitle.setText(groupName);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @OnClick({R.id.iv_back, R.id.tv_count, R.id.iv_detail})
@@ -230,6 +231,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 break;
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void modificationGroupName(GroupNameModification name) {
+        remoteGroupName();
+    }
+
 
     @Override
     protected void onDestroy() {

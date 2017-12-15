@@ -27,10 +27,14 @@ import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.exceptions.HyphenateException;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -40,6 +44,7 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.MainControllerPresenter;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupNameModification;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.TabCommunicationFragment;
@@ -49,6 +54,10 @@ import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.BadgeUtil;
 import com.shanlinjinrong.oa.utils.LoginUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -551,7 +560,16 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
         @Override
         public void onCmdMessageReceived(List<EMMessage> list) {
-
+            for (EMMessage msg : list) {
+                EMCmdMessageBody cmdMessage = (EMCmdMessageBody) msg.getBody();
+                String action = cmdMessage.action();
+                if (action.equals("UPDATE_GROUP_INFO")) {
+                    String groupName = msg.getStringAttribute("groupName", "");
+                    String groupId = msg.getStringAttribute("groupId", "");
+                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(groupId, groupName, "", "", "", "", "", "", ""));
+                    EventBus.getDefault().post(new GroupNameModification());
+                }
+            }
         }
 
         @Override

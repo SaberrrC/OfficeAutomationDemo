@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baidu.platform.comapi.map.E;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -16,9 +17,14 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.GroupChatListActivity;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupNameModification;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 
@@ -39,8 +45,7 @@ public class TabCommunicationFragment extends BaseFragment {
     private long lastClickTime = 0;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_communication_fragment, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -51,6 +56,9 @@ public class TabCommunicationFragment extends BaseFragment {
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
         initData();
         initView();
     }
@@ -113,6 +121,13 @@ public class TabCommunicationFragment extends BaseFragment {
         super.onResume();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void modificationGroupName(GroupNameModification name) {
+        if (myConversationListFragment != null) {
+            myConversationListFragment.refresh();
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -121,6 +136,14 @@ public class TabCommunicationFragment extends BaseFragment {
                 Intent intent = new Intent(getContext(), GroupChatListActivity.class);
                 startActivity(intent);
                 break;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
         }
     }
 }
