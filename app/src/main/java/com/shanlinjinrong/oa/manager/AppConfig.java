@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.retrofit.net.RetrofitConfig;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.model.User;
 
 
@@ -181,7 +182,7 @@ public class AppConfig {
         editor.putString(PREF_KEY_HIREDATE, user.getHiredate());
         editor.putString(PREF_KEY_COMPANY_NAME, user.getCompanyName());
         editor.putString(PREF_KEY_DEPARTMENT_NAME, user.getDepartmentName());
-        editor.putString(PREF_KEY_PORTRAITS, user.getPortraits());
+        editor.putString(PREF_KEY_PORTRAITS, Constants.PHPSLPicBaseUrl + user.getPortraits());
         editor.putString(PREF_KEY_POST_NAME, user.getPostName());
         editor.putString(PREF_KEY_IS_LEADER, user.getIsleader());
         editor.putBoolean(IS_AUTO_LOGIN, isAutoLogin);
