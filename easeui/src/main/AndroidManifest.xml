@@ -1,8 +1,9 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.hyphenate.easeui">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hyphenate.easeui">
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="25"/>
+        android:targetSdkVersion="25" />
     <application>
         <!-- 自定义的contextmenu -->
         <activity
@@ -11,3 +12,9 @@
             android:theme="@style/MyDialogStyle" />
     </application>
 </manifest>
+
+
+
+
+
+
