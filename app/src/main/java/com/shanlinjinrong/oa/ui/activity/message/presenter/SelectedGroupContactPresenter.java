@@ -192,16 +192,22 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
 
                             }
 
-                            if (account != null) {
-                                for (int i = 0; i < contacts.size(); i++) {
-                                    for (int j = 0; j < account.size(); j++) {
-                                        String remoteAccount = "sl_" + contacts.get(i).getCode();
-                                        if (remoteAccount.equals(account.get(j))) {
-                                            contacts.remove(i);
+                            try {
+                                if (account != null) {
+                                    for (int i = 0; i < contacts.size(); i++) {
+                                        for (int j = 0; j < account.size(); j++) {
+                                            String remoteAccount = "sl_" + contacts.get(i).getCode();
+                                            if (remoteAccount.equals(account.get(j))) {
+                                                contacts.remove(i);
+                                                break;
+                                            }
                                         }
                                     }
                                 }
+                            } catch (Throwable e) {
+                                e.printStackTrace();
                             }
+
                             if (mView != null)
                                 mView.searchContactSuccess(contacts);
                             break;
@@ -213,7 +219,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                             mView.searchContactFailed(Integer.parseInt(jsonObject.getString("code")), jsonObject.getString("message"));
                             break;
                     }
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }

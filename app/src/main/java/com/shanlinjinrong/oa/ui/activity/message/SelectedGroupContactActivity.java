@@ -131,6 +131,9 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(charSequence -> {
+
+
+
                     if (mSearchContact.getText().toString().trim().equals("")) {
                         if (mFragments.size() > 0) {
                             mTopView.setAppTitle(mFragments.get(0).getArguments().getString("title", "选择成员"));

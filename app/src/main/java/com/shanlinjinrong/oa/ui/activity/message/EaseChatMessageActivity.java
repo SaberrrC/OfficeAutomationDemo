@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -15,11 +16,9 @@ import com.hyphenate.easeui.event.OnConversationFinishEvent;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
-import com.shanlinjinrong.oa.ui.activity.message.event.UpdateMessageCountEvent;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatMessagePresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
@@ -27,9 +26,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -53,6 +60,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private Bundle mExtras;
     private EaseChatFragment chatFragment;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
+    private EMGroup mGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,12 +105,31 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         mChatType = getIntent().getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         mTitle = getIntent().getStringExtra("title");//人名字
         if (mChatType == EaseConstant.CHATTYPE_GROUP) {
-            mTvTitle.setText(getIntent().getStringExtra("groupTitle"));
+            if (getIntent().getStringExtra("groupTitle") != null) {
+                if (!getIntent().getStringExtra("groupTitle").equals("")) {
+                    mTvTitle.setText(getIntent().getStringExtra("groupTitle"));
+                } else {
+                    remoteGroupName();
+                }
+            } else {
+                remoteGroupName();
+            }
             imgDetailsIcon.setImageResource(R.mipmap.icon_chat_group_list);
         } else {
             mTvTitle.setText(mTitle);
             imgDetailsIcon.setImageResource(R.mipmap.icon_contacts_details);
         }
+    }
+
+    private void remoteGroupName() {
+        String u_id = getIntent().getStringExtra("u_id");
+        Observable.create(e -> {
+            mGroup = EMClient.getInstance().groupManager().getGroup(u_id);
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(o -> {
+                }, throwable -> mTvTitle.setText("匿名群组"), () -> mTvTitle.setText(mGroup.getGroupName()));
     }
 
     @OnClick({R.id.iv_back, R.id.tv_count, R.id.iv_detail})
@@ -177,7 +204,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCountFirst(OnConversationFinishEvent event) {
-                initCount();
+        initCount();
     }
 
     @Override
