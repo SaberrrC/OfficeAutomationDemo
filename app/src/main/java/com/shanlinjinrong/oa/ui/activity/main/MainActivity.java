@@ -70,6 +70,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import q.rorbin.badgeview.QBadgeView;
 
 /**
@@ -165,16 +172,21 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private int mBlueGreen;
     private int mBlueBlue;
 
+    private TextView[] mTextViews;
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
-    private TextView[] mTextViews;
 
     int tempMsgCount = 0;
-    private QBadgeView qBadgeView;
+    private EaseUI easeUI;
     private AlertDialog dialog;
+    private QBadgeView qBadgeView;
     private TabCommunicationFragment tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
-    private EaseUI easeUI;
+    private List<EMMessage> mEMMessage = new ArrayList<>();
+    private EMGroup mGroup;
+    private String mGroupName;
+    private EMMessage.ChatType chatType;
+    private String userId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -526,36 +538,41 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         return super.onKeyDown(keyCode, event);
     }
 
-    private List<EMMessage> mEMMessage = new ArrayList<>();
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(final List<EMMessage> list) {
-            String userId = "";
             for (EMMessage message : list) {
-                userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(message.getFrom());
-                if (userId.equals("")) {
-                    mEMMessage.clear();
-                    mEMMessage.addAll(list);
-                    try {
-                        mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
-                    } catch (Throwable e) {
-                        e.printStackTrace();
+                String conversationId = message.conversationId();
+                chatType = message.getChatType();
+                if (chatType == EMMessage.ChatType.GroupChat) {
+                    mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
+                    if (mGroupName.equals("")) {
+                        Observable.create(e -> {
+                            mGroup = EMClient.getInstance().groupManager().getGroup(conversationId);
+                            e.onComplete();
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(o -> {
+                                }, Throwable::printStackTrace, () -> {
+                                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(conversationId, mGroup.getGroupName(), "", "", "", "", "", "", ""));
+                                    refreshChat(list, userId);
+                                });
+                    }
+                } else {
+                    userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(message.conversationId());
+                    if (userId.equals("")) {
+                        mEMMessage.clear();
+                        mEMMessage.addAll(list);
+                        try {
+                            mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
+                refreshChat(list, userId);
             }
-            if (!userId.equals("")) {
-                if (tabCommunicationFragment != null) {
-                    if (tabCommunicationFragment.myConversationListFragment != null) {
-                        tabCommunicationFragment.myConversationListFragment.refresh();
-                    }
-                }
-                for (EMMessage message1 : list) {
-                    if (!easeUI.hasForegroundActivies()) {
-                        easeUI.getNotifier().onNewMsg(message1);
-                    }
-                }
-                refreshCommCount();
-            }
+
         }
 
         @Override
@@ -591,6 +608,22 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         public void onMessageChanged(EMMessage emMessage, Object o) {
         }
     };
+
+    private void refreshChat(List<EMMessage> list, String userId) {
+        if (!userId.equals("") || chatType == EMMessage.ChatType.GroupChat) {
+            if (tabCommunicationFragment != null) {
+                if (tabCommunicationFragment.myConversationListFragment != null) {
+                    tabCommunicationFragment.myConversationListFragment.refresh();
+                }
+            }
+            for (EMMessage message1 : list) {
+                if (!easeUI.hasForegroundActivies()) {
+                    easeUI.getNotifier().onNewMsg(message1);
+                }
+            }
+            refreshCommCount();
+        }
+    }
 
     @Override
     public void easeInitFinish(AbortableFuture<LoginInfo> loginRequest) {

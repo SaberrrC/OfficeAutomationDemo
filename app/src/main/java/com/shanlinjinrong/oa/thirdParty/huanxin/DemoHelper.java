@@ -612,20 +612,22 @@ public class DemoHelper {
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
 
-            new InviteMessgeDao(appContext).deleteMessage(groupId);
+//            new InviteMessgeDao(appContext).deleteMessage(groupId);
+//            // user invite you to join group
+//            InviteMessage msg = new InviteMessage();
+//            msg.setFrom(groupId);
+//            msg.setTime(System.currentTimeMillis());
+//            msg.setGroupId(groupId);
+//            msg.setGroupName(groupName);
+//            msg.setReason(reason);
+//            msg.setGroupInviter(inviter);
+//            showToast("receive invitation to join the group：" + groupName);
+//            msg.setStatus(InviteMessage.InviteMessageStatus.GROUPINVITATION);
+//            notifyNewInviteMessage(msg);
+//            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
 
-            // user invite you to join group
-            InviteMessage msg = new InviteMessage();
-            msg.setFrom(groupId);
-            msg.setTime(System.currentTimeMillis());
-            msg.setGroupId(groupId);
-            msg.setGroupName(groupName);
-            msg.setReason(reason);
-            msg.setGroupInviter(inviter);
-            showToast("receive invitation to join the group：" + groupName);
-            msg.setStatus(InviteMessage.InviteMessageStatus.GROUPINVITATION);
-            notifyNewInviteMessage(msg);
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(groupId,groupName,"","","","","","",""));
+
         }
 
         @Override
@@ -749,17 +751,17 @@ public class DemoHelper {
         @Override
         public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
             // got an invitation
-            mToChatMessage = inviter;
-            Observable.create(e -> {
-                mGroup = EMClient.getInstance().groupManager().getGroup(groupId);
-                e.onComplete();
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(o -> {
-                    }, Throwable::printStackTrace, () -> {
-                        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroup.getGroupId(), mGroup.getGroupName(), "", "", "", "", "", "", ""));
-                        groupNotifier(groupId, mToChatMessage);
-                    });
+//            mToChatMessage = inviter;
+//            Observable.create(e -> {
+//                mGroup = EMClient.getInstance().groupManager().getGroup(groupId);
+//                e.onComplete();
+//            }).subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(o -> {
+//                    }, Throwable::printStackTrace, () -> {
+//                        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroup.getGroupId(), mGroup.getGroupName(), "", "", "", "", "", "", ""));
+//                        groupNotifier(groupId, mToChatMessage);
+//                    });
 
         }
 

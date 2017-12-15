@@ -20,6 +20,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMGroupOptions;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -131,7 +132,6 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(charSequence -> {
-
 
 
                     if (mSearchContact.getText().toString().trim().equals("")) {
@@ -264,6 +264,24 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                         hideLoadingView();
                         Toast.makeText(this, "群组创建成功！", Toast.LENGTH_SHORT).show();
                         setResult(REFRESHSUCCESS);
+
+                        //建群后 全体通知
+                        StringBuilder content = new StringBuilder("邀请");
+                        for (int i = 0; i < mGroupUsers.size(); i++) {
+                            if (i == 0) {
+                                content.append(mGroupUsers.get(i).getUsername());
+                                continue;
+                            }
+                            content.append(",").append(mGroupUsers.get(i).getUsername());
+                        }
+                        content.append("加入群组");
+                        //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
+                        EMMessage message = EMMessage.createTxtSendMessage(content.toString(), mGroup.getGroupId());
+                        //如果是群聊，设置chattype，默认是单聊
+                        message.setChatType(EMMessage.ChatType.GroupChat);
+                        //发送消息
+                        EMClient.getInstance().chatManager().sendMessage(message);
+
                         if (mGroup != null)
                             FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroup.getGroupId(), mGroup.getGroupName(), "", "", "", "", "", "", ""));
                         finish();
