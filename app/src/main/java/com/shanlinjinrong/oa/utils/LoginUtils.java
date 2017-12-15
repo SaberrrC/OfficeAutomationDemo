@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -39,7 +40,7 @@ public class LoginUtils {
                     String email = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_USER_EMAIL);
                     String departmentId = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_DEPARTMENT);
                     FriendsInfoCacheSvc.getInstance(context)
-                            .addOrUpdateFriends(new Friends(u_id, u_name, u_pic, sex, phone, post, department, email, departmentId));
+                            .addOrUpdateFriends(new Friends(u_id, u_name, Constants.PHPSLPicBaseUrl + u_pic, sex, phone, post, department, email, departmentId));
                     if (imLoginListener != null) {
                         imLoginListener.loginImSuccess();
                     }

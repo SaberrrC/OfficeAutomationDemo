@@ -64,7 +64,7 @@ public class ModificationGroupNameActivity extends BaseActivity implements TextW
                 showToast("请输入群组名称！");
                 return;
             }
-            
+
             showLoadingView();
             Observable.create(e -> {
                 EMClient.getInstance().groupManager().changeGroupName(groupId, group_name);

@@ -135,6 +135,7 @@ public abstract class EaseChatRow extends LinearLayout {
                 } else if (message.getFrom().contains("notice") || message.getTo().contains("notice")) {
                     userAvatarView.setImageResource(R.drawable.notice_message_icon);
                 }
+
                 if (message.direct() == Direct.SEND) {
                     if (message.getUserName().equals(FriendsInfoCacheSvc.getInstance(context).getUserId(message.getTo()))) {
                         Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
@@ -154,6 +155,7 @@ public abstract class EaseChatRow extends LinearLayout {
                 throwable.printStackTrace();
             }
         }
+
         if (deliveredView != null) {
             if (message.isDelivered()) {
                 deliveredView.setVisibility(View.VISIBLE);

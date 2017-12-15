@@ -1,8 +1,10 @@
 package com.shanlinjinrong.oa.model;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -79,7 +81,7 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getEmail() {
-        if (email.equals("null")){
+        if (email.equals("null")) {
             return "-";
         }
         return email;
@@ -90,7 +92,7 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getUsername() {
-        if (username.equals("null")){
+        if (username.equals("null")) {
             return "-";
         }
         return username;
@@ -109,7 +111,7 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getSex() {
-        if (sex.equals("null")){
+        if (sex.equals("null")) {
             return "-";
         }
         return sex;
@@ -120,7 +122,7 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getPhone() {
-        if (phone.equals("null")){
+        if (phone.equals("null")) {
             return "-";
         }
         return phone;
@@ -179,7 +181,7 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getPostName() {
-        if (postName.equals("null")){
+        if (postName.equals("null")) {
             return "-";
         }
         return postName;
@@ -198,7 +200,7 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getDepartmentName() {
-        if (departmentName.equals("null")){
+        if (departmentName.equals("null")) {
             return "-";
         }
         return departmentName;
@@ -225,7 +227,7 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getOid() {
-        if (oid.equals("null")){
+        if (oid.equals("null")) {
             return "-";
         }
         return oid;
@@ -257,9 +259,6 @@ public class User implements MultiItemEntity, Serializable {
             yx_token = jsonObject.optString("yx_token");
             oid = jsonObject.optString("oid");
 
-            //登陆更新自己的信息
-            FriendsInfoCacheSvc.getInstance(AppManager.mContext)
-                    .addOrUpdateFriends(new Friends("sl_"+code, username, getPortraits(), sex, phone, postName, departmentName, email, departmentId));
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.e("user解析异常-》" + e.toString());
