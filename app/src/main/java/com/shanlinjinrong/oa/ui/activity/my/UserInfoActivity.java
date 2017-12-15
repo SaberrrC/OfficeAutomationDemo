@@ -106,7 +106,8 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
      */
     private Uri icon_path;
     private Uri camera_path;
-//    public static final int PHOTO_REQUEST_CUT = 3;// 裁剪结果
+    private long lastClickTime = 0;
+    //    public static final int PHOTO_REQUEST_CUT = 3;// 裁剪结果
 //    private String mtyb;//手机品牌
 
     @Override
@@ -172,6 +173,11 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     @OnClick({R.id.user_portrait_box, R.id.user_sex_box, R.id.user_department_box,
             R.id.user_post_box, R.id.user_phone_box, R.id.user_date_box, R.id.btn_logout})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             case R.id.user_portrait_box:
                 selectPortrait();

@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.hyphenate.chat.EMEncryptUtils;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -53,6 +52,7 @@ public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOff
     @BindView(R.id.ll_approval_container)
     LinearLayout mLlContainer;
     private DatePicker picker;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +157,11 @@ public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOff
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 500) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 if ((!(mEtContent.getText().toString().equals("")))) {
                     showBackTip("是否放弃编辑", "确定", "取消");
                 } else {
@@ -182,6 +187,11 @@ public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOff
 
     @OnClick({R.id.btn_voice_input, R.id.btn_submit})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             case R.id.btn_voice_input:
                 showDialog();

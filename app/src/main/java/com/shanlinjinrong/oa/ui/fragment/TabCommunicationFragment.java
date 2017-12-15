@@ -20,6 +20,8 @@ import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -34,6 +36,7 @@ public class TabCommunicationFragment extends BaseFragment {
     CommonTopView mTopView;
     private String mNickName;
     private final int REQUESTCODE = 101, RESULTSUCCESS = -2;
+    private long lastClickTime = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -71,6 +74,11 @@ public class TabCommunicationFragment extends BaseFragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.easeConversationListFragment, myConversationListFragment).commit();
         myConversationListFragment.setConversationListItemClickListener(conversation -> {
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (currentTime - lastClickTime < 1000) {
+                lastClickTime = currentTime;
+                return;
+            }
             if (conversation.isGroup()) {
                 String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
                 startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)

@@ -44,6 +44,7 @@ import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -138,6 +139,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
             return false;
         }
     });
+    private long lastClickTime = 0;
 
 
     @Override
@@ -706,7 +708,11 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
 
     @OnClick({R.id.toolbar_text_btn})
     public void onClick(View view) {
-
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             case R.id.toolbar_text_btn:
                 startActivity(new Intent(this, LaunchApprovalActivity.class));

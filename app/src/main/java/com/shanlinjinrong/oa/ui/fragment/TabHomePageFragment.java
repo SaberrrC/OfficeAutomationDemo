@@ -20,14 +20,14 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.PayQueryActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.PayQueryContract;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +55,7 @@ public class TabHomePageFragment extends BaseFragment {
     private static String DOT_STATUS = "DOT_STATUS";
     public static String DOT_SEND = "DOT_SEND";
     public static String DOT_APPORVAL = "DOT_APPORVAL";
+    private long lastClickTime = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -127,6 +128,11 @@ public class TabHomePageFragment extends BaseFragment {
             R.id.rl_holiday_search, R.id.rl_pay_search
     })
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         Intent intent = null;
         switch (view.getId()) {
             case R.id.rl_schedule_my_mail:

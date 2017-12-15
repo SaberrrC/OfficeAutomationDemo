@@ -85,6 +85,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
     private String begintime;//开始时间
     private String endtime;//结束时间
     private String meetingType;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,7 +215,11 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 500) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim())
                         || !tvOridinyMeetDate.getText().toString().trim().equals("点击选择会议日期")
                         ) {
@@ -330,6 +335,11 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
     @OnClick({R.id.report_iv_add_person, R.id.btn_create_meeting,
             R.id.tv_ordiny_meet_date, R.id.tv_meet_time})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 1000) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             //点击选择会议日期
             case R.id.tv_ordiny_meet_date:

@@ -21,6 +21,8 @@ import com.shanlinjinrong.oa.ui.activity.my.presenter.FeedbackActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.StringUtils;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -39,6 +41,7 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
     TextView toolbarTextBtn;
     @BindView(R.id.feedback_text)
     EditText feedbackText;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +95,11 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 500) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 if (feedbackText.getText().toString().equals("")) {
                     finish();
                 } else {

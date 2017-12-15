@@ -22,10 +22,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.easeui.EaseConstant;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.pgyersdk.update.UpdateManagerListener;
@@ -52,6 +48,8 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -69,7 +67,7 @@ public class TabMeFragment extends BaseFragment {
     TextView userName;
     @BindView(R.id.position)
     TextView position;
-
+    private long lastClickTime = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -118,6 +116,11 @@ public class TabMeFragment extends BaseFragment {
     @OnClick({R.id.user_info, R.id.btn_modify_pwd, R.id.btn_usinghelp,
             R.id.btn_feedback, R.id.btn_update, R.id.btn_about_us, R.id.btn_clear_cache})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             case R.id.user_info://用户信息
                 startActivity(new Intent(getActivity(), UserInfoActivity.class));

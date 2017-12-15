@@ -45,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -96,6 +97,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     private SearchUserResultAdapter mSearchUserResultAdapter;
     private TabContactsAdapter mContactAdapter;
     private List<Contacts> mContacts;
+    private long lastClickTime = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -124,6 +126,11 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @OnClick({R.id.search_et_cancle})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             case R.id.search_et_cancle:
                 recyclerView.setVisibility(View.VISIBLE);

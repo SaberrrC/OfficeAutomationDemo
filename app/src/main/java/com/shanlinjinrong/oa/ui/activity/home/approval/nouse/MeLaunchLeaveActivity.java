@@ -30,6 +30,8 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -76,6 +78,7 @@ public class MeLaunchLeaveActivity extends BaseActivity {
     private String titleName;
     private PopupWindow popupWindow;
     private String oa_id;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -394,6 +397,11 @@ public class MeLaunchLeaveActivity extends BaseActivity {
 
     @OnClick({R.id.iv_approval_pass, R.id.iv_approval_reject})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             case R.id.iv_approval_pass:
                 Intent i = new Intent(this, WaitApprovalReplyActivity.class);

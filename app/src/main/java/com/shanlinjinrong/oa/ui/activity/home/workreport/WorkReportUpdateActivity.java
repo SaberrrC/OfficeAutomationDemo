@@ -37,6 +37,7 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -88,6 +89,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     private String mReceiverPost; //接收人ID
 
     private int mDailyId; //日报ID
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -483,6 +485,11 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @OnClick({R.id.ll_select_date, R.id.ll_select_receiver})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             case R.id.ll_select_date:
                 showDoneDatePicker(mDate);

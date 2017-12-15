@@ -75,7 +75,7 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case com.shanlinjinrong.uilibrary.R.id.topview_right_view:
+            case R.id.topview_right_view:
                 Intent intent = new Intent(this, MeetingReservationRecordActivity.class);
                 startActivity(intent);
                 break;

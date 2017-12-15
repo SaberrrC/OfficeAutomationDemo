@@ -58,6 +58,7 @@ public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> im
     private String mode = "";
     private String noteContent;
     private String noteDate;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,6 +263,11 @@ public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> im
 
     @OnClick({R.id.tv_note_date, R.id.btn_voice_input})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             case R.id.tv_note_date:
                 showDoneDatePicker(mTvNoteDate);

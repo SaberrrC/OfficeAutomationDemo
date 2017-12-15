@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.hyphenate.easeui.R;
 import com.hyphenate.util.EMLog;
 
+import java.util.Calendar;
+
 /**
  * primary menu
  */
@@ -34,6 +36,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
     private ImageView faceChecked;
     private Button buttonMore;
     private boolean ctrlPress = false;
+    private long lastClickTime = 0;
 
     public EaseChatPrimaryMenu(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -191,6 +194,11 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
      */
     @Override
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
         int id = view.getId();
         if (id == R.id.btn_send) {
             if (listener != null) {

@@ -15,17 +15,17 @@ import com.hyphenate.easeui.event.OnConversationFinishEvent;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
-import com.shanlinjinrong.oa.ui.activity.message.event.UpdateMessageCountEvent;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatMessagePresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +53,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private Bundle mExtras;
     private EaseChatFragment chatFragment;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +116,11 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 finish();
                 break;
             case R.id.iv_detail:
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 Intent intent = new Intent(this, EaseChatDetailsActivity.class);
                 if (mChatType == EaseConstant.CHATTYPE_GROUP) {
                     intent.putExtra("chatType", true);
