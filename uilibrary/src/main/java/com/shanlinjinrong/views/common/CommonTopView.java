@@ -31,20 +31,20 @@ import java.lang.annotation.RetentionPolicy;
 public class CommonTopView extends RelativeLayout {
 
     private String mTitle;
-    private int mTitleColor;
+    private int    mTitleColor;
     private int mTitleSize = 18;
 
     private String mRightText;
-    private int mRightTextColor;
+    private int    mRightTextColor;
     private int mRightTextSize = 16;
-    private int mRightMargin; //右View与右边界的间距
+    private int      mRightMargin; //右View与右边界的间距
     private Drawable mRightDrawable;
 
     private String mLeftText;
-    private int mLeftTextColor;
+    private int    mLeftTextColor;
     private int mLeftTextSize = 16;
     private Drawable mLeftDrawable;
-    private int mLeftMargin;//左View与左侧边界的距离
+    private int      mLeftMargin;//左View与左侧边界的距离
 
     private Context mContext;
 
@@ -114,10 +114,13 @@ public class CommonTopView extends RelativeLayout {
         a.recycle();
     }
 
-    /** @hide */
+    /**
+     * @hide
+     */
     @IntDef({VISIBLE, INVISIBLE, GONE})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Visibility {}
+    public @interface Visibility {
+    }
 
     private void initTopView() {
         Drawable background = getBackground();
@@ -166,8 +169,7 @@ public class CommonTopView extends RelativeLayout {
             removeView(leftView);
         }
 
-        LayoutParams lp = new LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         view.setOnClickListener(mClickListener);
         view.setId(R.id.topview_left_view);
@@ -255,8 +257,7 @@ public class CommonTopView extends RelativeLayout {
             removeView(rightView);
         }
 
-        LayoutParams lp = new LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         view.setLayoutParams(lp);
         view.setId(R.id.topview_right_view);
@@ -317,6 +318,7 @@ public class CommonTopView extends RelativeLayout {
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             params.setMargins(0, 0, mRightMargin, 0);
             textView.setId(R.id.topview_right_view);
+            textView.setPadding(10, 0, 10, 0);
             textView.setTextColor(mRightTextColor);
             textView.setTextSize(mRightTextSize);
             textView.setGravity(Gravity.CENTER);
@@ -335,7 +337,7 @@ public class CommonTopView extends RelativeLayout {
         setAppTitle(content);
     }
 
-    public TextView getTitleView(){
+    public TextView getTitleView() {
         View view = findViewById(R.id.topview_app_title);
         TextView titleView;
         if (view != null && !(view instanceof TextView)) {
@@ -350,9 +352,8 @@ public class CommonTopView extends RelativeLayout {
             titleView.setId(R.id.topview_app_title);
             titleView.setSingleLine();
             titleView.setEllipsize(TextUtils.TruncateAt.END);
-            LayoutParams lp = new LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//            lp.setMargins(DeviceUtil.dip2px(mContext, 70), 0, DeviceUtil.dip2px(mContext, 70), 0);
+            LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            //            lp.setMargins(DeviceUtil.dip2px(mContext, 70), 0, DeviceUtil.dip2px(mContext, 70), 0);
             lp.addRule(RelativeLayout.CENTER_IN_PARENT);
             addView(titleView, lp);
         } else {
@@ -379,9 +380,8 @@ public class CommonTopView extends RelativeLayout {
             titleView.setId(R.id.topview_app_title);
             titleView.setSingleLine();
             titleView.setEllipsize(TextUtils.TruncateAt.END);
-            LayoutParams lp = new LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//            lp.setMargins(DeviceUtil.dip2px(mContext, 70), 0, DeviceUtil.dip2px(mContext, 70), 0);
+            LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            //            lp.setMargins(DeviceUtil.dip2px(mContext, 70), 0, DeviceUtil.dip2px(mContext, 70), 0);
             lp.addRule(RelativeLayout.CENTER_IN_PARENT);
             addView(titleView, lp);
         } else {
