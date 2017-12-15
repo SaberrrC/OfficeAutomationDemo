@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
@@ -36,13 +37,12 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
 
     @BindView(R.id.all_report_list)
     SwipeMenuRecyclerView mAllReportList;
-
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
-
     @BindView(R.id.top_view)
     CommonTopView mTopView;
-
+    @BindView(R.id.tv_empty)
+    TextView      mTvEmpty;
 
     private AllReportAdapter mAllReportAdapter;
     private List<MyLaunchReportItem> mItemList = new ArrayList<>();
@@ -63,7 +63,6 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         initListView();
         mRefreshLayout.setRefreshing(true);
         loadData(false);
-
     }
 
     /**
@@ -164,6 +163,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
 
     @Override
     public void loadDataSuccess(List<MyLaunchReportItem> reports, int pageNum, int pageSize, boolean hasNextPage, boolean isLoadMore) {
+        mRefreshLayout.setVisibility(View.VISIBLE);
         if (!isLoadMore) {
             mItemList.clear();
             mAllReportList.setVisibility(View.VISIBLE);
@@ -172,29 +172,52 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         mAllReportList.loadMoreFinish(false, hasNextPage);
         this.pageNum = pageNum + 1;
         mAllReportAdapter.notifyDataSetChanged();
+        if (mItemList.size() == 0) {
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mRefreshLayout.setVisibility(View.GONE);
+            return;
+        }
     }
 
     @Override
     public void loadDataFailed(String errCode, String errMsg) {
+        mRefreshLayout.setVisibility(View.VISIBLE);
         if (errCode.equals("-1")) {
-            if (errMsg.equals("auth error")){
+            if (errMsg.equals("auth error")) {
                 catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
-            }else {
+            } else {
                 showToast(getString(R.string.net_no_connection));
             }
         } else {
             showToast("数据加载失败，请稍后重试！");
         }
+        if (mItemList.size() == 0) {
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mRefreshLayout.setVisibility(View.GONE);
+            return;
+        }
     }
 
     @Override
     public void loadDataFinish() {
+        mRefreshLayout.setVisibility(View.VISIBLE);
         mRefreshLayout.setRefreshing(false);
+        if (mItemList.size() == 0) {
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mRefreshLayout.setVisibility(View.GONE);
+            return;
+        }
     }
 
     @Override
     public void loadDataEmpty() {
+        mRefreshLayout.setVisibility(View.VISIBLE);
         mAllReportList.loadMoreFinish(true, false);
+        if (mItemList.size() == 0) {
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mRefreshLayout.setVisibility(View.GONE);
+            return;
+        }
     }
 
     @Override
@@ -207,7 +230,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == RESULT_OK) {
-            if (data.getBooleanExtra("refresh_data", false)){
+            if (data.getBooleanExtra("refresh_data", false)) {
                 onRefresh();
             }
         }
