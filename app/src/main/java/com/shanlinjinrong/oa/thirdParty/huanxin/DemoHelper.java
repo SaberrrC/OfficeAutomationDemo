@@ -794,9 +794,11 @@ public class DemoHelper {
             showToast("onAdminRemoved: " + administrator);
         }
 
-        @Override
+
+
+        @Override //群主 变更
         public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
-            showToast("onOwnerChanged new:" + newOwner + " old:" + oldOwner);
+
         }
 
         @Override

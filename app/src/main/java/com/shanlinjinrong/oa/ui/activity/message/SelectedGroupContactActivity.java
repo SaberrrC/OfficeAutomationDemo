@@ -244,7 +244,6 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             //EMGroupStylePrivateMemberCanInvite——私有群，群成员也能邀请人进群；
             //EMGroupStylePublicJoinNeedApproval——公开群，加入此群除了群主邀请，只能通过申请加入此群；
             //EMGroupStylePublicOpenJoin ——公开群，任何人都能加入此群。
-
             option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
             StringBuilder finalGroupName = groupName;
             Observable.create(e -> {

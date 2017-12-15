@@ -18,7 +18,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.hyphenate.easeui.event.OnConversationFinishEvent;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
@@ -35,14 +34,13 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.functions.Consumer;
 
 import static com.shanlinjinrong.oa.manager.AppManager.mContext;
 
@@ -79,6 +77,8 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
     RelativeLayout rel_voice_call;
     @BindView(R.id.rel_phone_call)
     RelativeLayout rel_phone_call;
+    @BindView(R.id.tv_error_layout)
+    TextView tvErrorLayout;
 
     private User user;
     private String mSex;
@@ -115,6 +115,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         mUserId = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
 
         if (mSession) {
+            tvErrorLayout.setVisibility(View.VISIBLE);
             initSessionInfo();
         } else {
             initUserDetails();
@@ -317,8 +318,18 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
     }
 
     @Override
-    public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
+    public void showLoading() {
+        showLoadingView();
+    }
 
+    @Override
+    public void hideLoading() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
+        tvErrorLayout.setVisibility(View.GONE);
         try {//更新个人详情
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
                     addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(),
@@ -331,6 +342,26 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         } catch (Throwable e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void searchUserDetailsFailed(int errorCode, String errorMsg) {
+        hideLoadingView();
+        switch (errorCode) {
+            case -1:
+                tvErrorLayout.setText(getString(R.string.net_no_connection));
+                break;
+            default:
+                tvErrorLayout.setText(getString(R.string.data_load_error));
+                break;
+        }
+
+        RxView.clicks(tvErrorLayout).
+                throttleFirst(2, TimeUnit.SECONDS).
+                subscribe(o -> initSessionInfo(), throwable -> {
+                    throwable.printStackTrace();
+                    tvErrorLayout.setText("服务器异常,请稍后重试");
+                });
     }
 
     @Override
@@ -349,7 +380,6 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         switch (resultCode) {
             case RESULTGROUP:
                 //TODO 暂时不做处理
-
                 break;
         }
     }
