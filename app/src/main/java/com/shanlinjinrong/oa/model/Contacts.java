@@ -77,6 +77,7 @@ public class Contacts implements MultiItemEntity, Serializable {
     public String portraits;
     public String email;
     private boolean isChecked;
+    private boolean isGroupOwner;
     private boolean isModificationColor;
     private String orgId;
 
@@ -86,6 +87,14 @@ public class Contacts implements MultiItemEntity, Serializable {
 
     public void setModificationColor(boolean modificationColor) {
         isModificationColor = modificationColor;
+    }
+
+    public boolean isGroupOwner() {
+        return isGroupOwner;
+    }
+
+    public void setGroupOwner(boolean groupOwner) {
+        isGroupOwner = groupOwner;
     }
 
     public String getOrgId() {

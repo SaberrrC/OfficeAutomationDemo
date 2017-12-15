@@ -245,7 +245,9 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
                 contacts.setUsername(user.getUsername());
                 contacts.setItemType(1);
                 contacts.setModificationColor(true);
+                contacts.setGroupOwner(false);
                 if (contacts.getCode().equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                    contacts.setGroupOwner(true);
                     mData.add(0, contacts);
                     continue;
                 }
@@ -266,34 +268,63 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     public class ItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-            mData.get(i).setChecked(!mData.get(i).isChecked());
-            switch (type) {
-                case 0:
-                    mDelete.clear();
-                    for (int j = 0; j < mData.size(); j++) {
-                        if (mData.get(j).isChecked()) {
-                            mDelete.add(mData.get(j));
+            if (searchEtInput.getText().toString().trim().equals("")) {
+                mData.get(i).setChecked(!mData.get(i).isChecked());
+                switch (type) {
+                    case 0:
+                        mDelete.clear();
+                        for (int j = 0; j < mData.size(); j++) {
+                            if (mData.get(j).isChecked()) {
+                                mDelete.add(mData.get(j));
+                            }
                         }
-                    }
-                    mAdapter.setNewData(mData);
-                    mAdapter.notifyDataSetChanged();
-                    break;
-                case 1:
-                    mDelete.clear();
-                    for (int j = 0; j < mData.size(); j++) {
-                        if (j != i) {
-                            mData.get(j).setChecked(false);
-                        } else {
-                            mDelete.add(mData.get(j));
+                        mAdapter.setNewData(mData);
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        mDelete.clear();
+                        for (int j = 0; j < mData.size(); j++) {
+                            if (j != i) {
+                                mData.get(j).setChecked(false);
+                            } else {
+                                mDelete.add(mData.get(j));
+                            }
                         }
-                    }
-                    mAdapter.setNewData(mData);
-                    mAdapter.notifyDataSetChanged();
-                    break;
-                default:
-                    break;
+                        mAdapter.setNewData(mData);
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                mSearchData.get(i).setChecked(!mSearchData.get(i).isChecked());
+                switch (type) {
+                    case 0:
+                        mDelete.clear();
+                        for (int j = 0; j < mSearchData.size(); j++) {
+                            if (mSearchData.get(j).isChecked()) {
+                                mDelete.add(mSearchData.get(j));
+                            }
+                        }
+                        mAdapter.setNewData(mSearchData);
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        mDelete.clear();
+                        for (int j = 0; j < mSearchData.size(); j++) {
+                            if (j != i) {
+                                mSearchData.get(j).setChecked(false);
+                            } else {
+                                mDelete.add(mSearchData.get(j));
+                            }
+                        }
+                        mAdapter.setNewData(mSearchData);
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                    default:
+                        break;
+                }
             }
-
         }
     }
 }

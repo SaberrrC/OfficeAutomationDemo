@@ -13,7 +13,13 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 public interface ContactDetailsContract {
     interface View extends BaseView {
 
+        void showLoading();
+
+        void hideLoading();
+
         void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean);
+
+        void searchUserDetailsFailed(int errorCode,String errorMsh);
 
     }
 

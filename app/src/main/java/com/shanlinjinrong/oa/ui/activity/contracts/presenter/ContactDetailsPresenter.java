@@ -29,6 +29,17 @@ public class ContactDetailsPresenter extends HttpPresenter<ContactDetailsContrac
         mKjHttp.cleanCache();
         mKjHttp.phpJsonGet(Api.SEARCH_USER_DETAILS + "?code=" + code, new HttpParams(), new HttpCallBack() {
             @Override
+            public void onPreStart() {
+                super.onPreStart();
+                try {
+                    if (mView != null)
+                        mView.showLoading();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
@@ -42,6 +53,10 @@ public class ContactDetailsPresenter extends HttpPresenter<ContactDetailsContrac
                                 }
                                 break;
                             default:
+                                if (mView != null) {
+                                    mView.searchUserDetailsFailed(userDetailsBean.getCode(), userDetailsBean.getInfo());
+                                    mView.hideLoading();
+                                }
                                 break;
                         }
                     }
@@ -53,11 +68,25 @@ public class ContactDetailsPresenter extends HttpPresenter<ContactDetailsContrac
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                        mView.searchUserDetailsFailed(errorNo, strMsg);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
+                try {
+                    if (mView != null)
+                        mView.hideLoading();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

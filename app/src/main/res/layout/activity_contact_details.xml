@@ -39,6 +39,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@+id/rl_top"
         android:layout_marginTop="-1dp"
         android:background="#e3e3e3" />
 
@@ -327,7 +328,15 @@
             android:text="-"
             android:textColor="#333"
             android:textSize="16sp" />
-
-
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_top"
+        android:background="@color/white"
+        tools:text="@string/net_no_connection"
+        android:gravity="center"
+        android:visibility="gone"/>
 </RelativeLayout>

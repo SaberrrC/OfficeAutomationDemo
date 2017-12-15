@@ -49,7 +49,7 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
                 selectedUser.setChecked(contacts.isChecked());
 
                 if (contacts.isModificationColor()) {
-                    if (baseViewHolder.getPosition() == 0) {
+                    if (contacts.isGroupOwner()) {
                         baseViewHolder.setVisible(R.id.cb_selected_user, false);
                         userName.setTextColor(AppManager.mContext.getResources().getColor(R.color.text_gray));
                     } else {
