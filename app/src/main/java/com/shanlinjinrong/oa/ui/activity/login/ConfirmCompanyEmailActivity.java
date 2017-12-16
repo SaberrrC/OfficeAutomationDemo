@@ -125,6 +125,16 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
 
 
     @Override
+    public void showLoading() {
+        showLoadingView();
+    }
+
+    @Override
+    public void hideLoading() {
+        hideLoadingView();
+    }
+
+    @Override
     public void sendEmailSuccess() {
         startActivity(new Intent(ConfirmCompanyEmailActivity.this, EmailConfirmFinishActivity.class));
     }

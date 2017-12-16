@@ -12,6 +12,10 @@ public interface WriteJobNumberContract {
 
     interface View extends BaseView {
 
+        void showLoading();
+
+        void hideLoading();
+
         void getIdentifyingCodeSuccess(String picUrl,String keyCode); // 成功
 
         void getIdentifyingCodeFailed(int errorCode); // 失败

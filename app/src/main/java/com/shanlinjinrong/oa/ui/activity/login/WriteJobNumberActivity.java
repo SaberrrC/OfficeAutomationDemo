@@ -82,6 +82,16 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     }
 
     @Override
+    public void showLoading() {
+        showLoadingView();
+    }
+
+    @Override
+    public void hideLoading() {
+        hideLoadingView();
+    }
+
+    @Override
     public void getIdentifyingCodeSuccess(String picUrl, String keyCode) {
         mKeyCode = keyCode;
         picUrl = "data:image/gif;base64," + picUrl;

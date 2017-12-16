@@ -66,19 +66,35 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
     }
 
     @Override
-    public void searchUser(String imgCode, String keyCode,String userCode) {
-        mKjHttp.phpJsonGet(Api.USERS_SEARCH +"?imgcode="+ imgCode + "&keycode=" + keyCode+"&code="+userCode, new HttpParams(), new HttpCallBack() {
+    public void searchUser(String imgCode, String keyCode, String userCode) {
+        mKjHttp.phpJsonGet(Api.USERS_SEARCH + "?imgcode=" + imgCode + "&keycode=" + keyCode + "&code=" + userCode, new HttpParams(), new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                try {
+                    if (mView != null) {
+                        mView.showLoading();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                    }
                     JSONObject jsonObject = new JSONObject(t);
                     int code = jsonObject.getInt("code");
                     switch (code) {
                         case Api.RESPONSES_CODE_OK:
                             JSONArray data = jsonObject.getJSONArray("data");
                             User user = new User();
-                            String email = data.getJSONObject(0).getString("email");
+                            String email = data.getJSONObject(0).optString("email");
                             if (TextUtils.isEmpty(email) || "null".equalsIgnoreCase(email)) {
                                 email = "";
                             }
@@ -103,7 +119,8 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                 super.onFinish();
                 try {
                     if (mView != null)
-                        mView.requestFinish();
+                        mView.hideLoading();
+                    mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -114,7 +131,8 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null)
-                        mView.searchUserFailed(errorNo, strMsg);
+                        mView.hideLoading();
+                    mView.searchUserFailed(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

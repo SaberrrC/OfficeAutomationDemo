@@ -10,6 +10,11 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 public interface ConfirmEmailContract {
 
     interface View extends BaseView {
+
+        void showLoading();
+
+        void hideLoading();
+
         void sendEmailSuccess(); // 成功
 
         void sendEmailFailed(int errorCode, String errMsg); // 失败

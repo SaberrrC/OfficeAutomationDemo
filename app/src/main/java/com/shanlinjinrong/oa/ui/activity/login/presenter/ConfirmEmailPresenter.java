@@ -29,11 +29,27 @@ public class ConfirmEmailPresenter extends HttpPresenter<ConfirmEmailContract.Vi
         HttpParams params = new HttpParams();
         params.put("email", emailAddress);
         params.put("code", code);
-        mKjHttp.phpJsonPost(Api.USERS_REPWD, params, false, new HttpCallBack() {
+        mKjHttp.phpJsonPost(Api.USERS_REPWD, params, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                try {
+                    if (mView != null) {
+                        mView.showLoading();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                    }
                     JSONObject jsonObject = new JSONObject(t);
                     int code = jsonObject.getInt("code");
                     if (code == Api.RESPONSES_CODE_OK) {
@@ -50,12 +66,27 @@ public class ConfirmEmailPresenter extends HttpPresenter<ConfirmEmailContract.Vi
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.sendEmailFailed(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                        mView.sendEmailFailed(errorNo, strMsg);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
+                try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
