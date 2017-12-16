@@ -97,11 +97,11 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private ArrayList<String> mMemberList;
     private List<GroupUserInfoResponse> mData;
     private CommonGroupControlAdapter mAdapter;
-    private boolean mIsGroup, mIsOwner,mIsResume;
+    private boolean mIsGroup, mIsOwner, mIsResume;
     private EMCursorResult<String> mGroupMemberResult;
     private String mSearchUserId = "", mQueryUserInfo = "";
     private String mGroupOwner, mGroupName, message_to, message_from;
-    private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3, MODIFICATIONOWNER = -4,FINISHRESULT = -5, DISSOLVEGROUP = 600;
+    private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3, MODIFICATIONOWNER = -4, FINISHRESULT = -5, DISSOLVEGROUP = 600;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +158,9 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                             mGroupName = mGroupServer1.getGroupName();
                             tvModificationName.setText(mGroupName);
                             mIsOwner = mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+                            if (!mIsOwner) {
+                                btnChatDelete.setText("退出群聊");
+                            }
                         }
                         if (mIsGroup) {
                             InitGroupData();
@@ -237,12 +240,6 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     }
 
     private void initView() {
-        if (mIsGroup) {
-            topView.setAppTitle("群聊天详情");
-        } else {
-            topView.setAppTitle("聊天详情");
-        }
-
         mAdapter = new CommonGroupControlAdapter(R.layout.item_common_person_add, mData);
         rvPersonShow.setLayoutManager(new GridLayoutManager(this, 5, GridLayoutManager.VERTICAL, false));
         rvPersonShow.setAdapter(mAdapter);
@@ -254,6 +251,11 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private void initGroupView() {
         if (mIsGroup) {
             try {
+                if (mIsGroup) {
+                    topView.setAppTitle("群聊天详情");
+                } else {
+                    topView.setAppTitle("聊天详情");
+                }
                 rlGroupPerson.setVisibility(View.VISIBLE);
                 rlGroupName.setVisibility(View.VISIBLE);
                 rlGroupPortrait.setVisibility(View.VISIBLE);
