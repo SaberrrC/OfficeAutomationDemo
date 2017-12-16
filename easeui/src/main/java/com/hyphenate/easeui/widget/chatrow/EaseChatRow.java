@@ -2,6 +2,7 @@ package com.hyphenate.easeui.widget.chatrow;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -30,6 +31,10 @@ import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.EaseChatMessageList.MessageListItemClickListener;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.Date;
 
@@ -37,20 +42,20 @@ public abstract class EaseChatRow extends LinearLayout {
     protected static final String TAG = EaseChatRow.class.getSimpleName();
 
     protected LayoutInflater inflater;
-    protected Context        context;
-    protected BaseAdapter    adapter;
-    protected EMMessage      message;
-    protected int            position;
+    protected Context context;
+    protected BaseAdapter adapter;
+    protected EMMessage message;
+    protected int position;
 
-    protected TextView  timeStampView;
+    protected TextView timeStampView;
     protected ImageView userAvatarView;
-    protected View      bubbleLayout;
-    protected TextView  usernickView;
+    protected View bubbleLayout;
+    protected TextView usernickView;
 
-    protected TextView    percentageView;
+    protected TextView percentageView;
     protected ProgressBar progressBar;
-    protected ImageView   statusView;
-    protected Activity    activity;
+    protected ImageView statusView;
+    protected Activity activity;
 
     protected TextView ackedView;
     protected TextView deliveredView;
@@ -59,7 +64,17 @@ public abstract class EaseChatRow extends LinearLayout {
     protected EMCallBack messageReceiveCallback;
 
     protected MessageListItemClickListener itemClickListener;
-    protected EaseMessageListItemStyle     itemStyle;
+    protected EaseMessageListItemStyle itemStyle;
+    DisplayImageOptions options = new DisplayImageOptions.Builder()
+            .showImageForEmptyUri(R.drawable.ease_default_avatar)
+            .showImageOnFail(R.drawable.ease_default_avatar)
+            .resetViewBeforeLoading(true)
+            .cacheOnDisk(true)
+            .imageScaleType(ImageScaleType.EXACTLY)
+            .bitmapConfig(Bitmap.Config.RGB_565)
+            .considerExifParams(true)
+            .displayer(new FadeInBitmapDisplayer(300))
+            .build();
 
     public EaseChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context);
@@ -73,6 +88,8 @@ public abstract class EaseChatRow extends LinearLayout {
     }
 
     private void initView() {
+
+
         onInflateView();
         timeStampView = (TextView) findViewById(R.id.timestamp);
         userAvatarView = (ImageView) findViewById(R.id.iv_userhead);
@@ -138,18 +155,27 @@ public abstract class EaseChatRow extends LinearLayout {
 
                 if (message.direct() == Direct.SEND) {
                     if (message.getUserName().equals(FriendsInfoCacheSvc.getInstance(context).getUserId(message.getTo()))) {
-                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                        //     Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                        ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom()), userAvatarView, options);
                     } else if ((message.getUserName().contains("admin") || message.getUserName().contains("notice"))) {
                         if (!message.getUserName().equals(message.getFrom())) {
-                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                            //         Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                            ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom()), userAvatarView, options);
+
                         } else {
-                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                            //  Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                            ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo()), userAvatarView, options);
+
                         }
                     } else {
-                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                        //      Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                        ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo()), userAvatarView, options);
+
                     }
                 } else if (message.direct() == Direct.RECEIVE && !FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName()).equals("")) {
-                    Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                    //    Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                    ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName()), userAvatarView, options);
+
                 }
             } catch (Throwable throwable) {
                 throwable.printStackTrace();

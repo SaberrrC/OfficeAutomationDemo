@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:padding="10dp"
+            android:padding="8dp"
             android:src="@drawable/toolbar_back" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:gravity="center"
             android:text="未读消息"
             android:textColor="@color/black_333333"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -37,10 +37,11 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
+            android:lines="1"
             android:text="标题"
             android:textAllCaps="false"
             android:textColor="@color/black_333333"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:id="@+id/iv_detail"
@@ -53,10 +54,10 @@
 
             <ImageView
                 android:id="@+id/img_details_icon"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="16dp"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="12dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_marginStart="15dp"
                 android:src="@mipmap/icon_contacts_details" />
