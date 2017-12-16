@@ -99,6 +99,8 @@ public abstract class EaseChatRow extends LinearLayout {
         statusView = (ImageView) findViewById(R.id.msg_status);
         ackedView = (TextView) findViewById(R.id.tv_ack);
         deliveredView = (TextView) findViewById(R.id.tv_delivered);
+        ackedView.setVisibility(GONE);
+        deliveredView.setVisibility(GONE);
         onFindViewById();
     }
 
