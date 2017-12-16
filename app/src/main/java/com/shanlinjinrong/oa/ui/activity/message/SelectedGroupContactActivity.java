@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -73,7 +74,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
 
     private List<String> mOrgIdKey;
-    private final int RESULT_CODE = -3, REFRESHSUCCESS = -2;
+    private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101;
     private List<Contacts> mGroupUsers;
     private InputMethodManager inputManager;
     private List<Contacts> mSearchData;
@@ -284,6 +285,10 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
                         if (mGroup != null)
                             FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroup.getGroupId(), mGroup.getGroupName(), "", "", "", "", "", "", ""));
+                        startActivityForResult(new Intent(SelectedGroupContactActivity.this, EaseChatMessageActivity.class)
+                                .putExtra("u_id", mGroup.getGroupId())
+                                .putExtra("groupTitle", mGroup.getGroupName())
+                                .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP), REQUESTCODE);
                         finish();
                     });
         }
@@ -556,6 +561,17 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             } catch (Throwable e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode){
+            case REFRESHSUCCESS://创建群组 返回
+                setResult(REFRESHSUCCESS);
+                finish();
+            break;
         }
     }
 

@@ -133,8 +133,8 @@ public class TabCommunicationFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case RESULTSUCCESS:
-                Intent intent = new Intent(getContext(), GroupChatListActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getContext(), GroupChatListActivity.class);
+//                startActivity(intent);
                 break;
         }
     }
