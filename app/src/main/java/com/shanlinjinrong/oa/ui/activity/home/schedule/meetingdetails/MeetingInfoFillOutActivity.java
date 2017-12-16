@@ -292,7 +292,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_add_contacts:
-                Intent intent = new Intent(this, SelectedGroupContactActivity.class);
+                Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
                 intent.putParcelableArrayListExtra("selectedContacts", contactsList);
                 startActivityForResult(intent, ADD_JOIN_PEOPLE);
 

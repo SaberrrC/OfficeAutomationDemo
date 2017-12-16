@@ -59,7 +59,7 @@ public class Constants {
     public static final  int GROUPDISSOLVE = 1;  //群解散
     public static final  int GROUPMEMBERQUIT= 2; //成员退出
     public static final  int GROUPMEMBERADD= 3; //成员加入
-    public static final  int GROUPOWNERCHANGE= 4; //成员加入
+    public static final  int GROUPOWNERCHANGE= 4; //群主更改
 
     /****************6.0权限*********************/
     /**

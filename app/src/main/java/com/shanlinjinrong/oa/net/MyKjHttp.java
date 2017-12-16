@@ -29,7 +29,7 @@ public class MyKjHttp extends KJHttp {
         //baseUrl = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.BASE_URL);
         baseUrl = BuildConfig.BASE_URL;
         baseJavaUrl = BuildConfig.BASE_JAVA_URL;
-        HttpConfig.TIMEOUT = 10000;
+        HttpConfig.TIMEOUT = 30000;
         if (BuildConfig.DEBUG) {
             phpNewUrl = Api.PHP_URL;
         } else {

@@ -229,7 +229,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                             content.append(mGroupUsers.get(i).getUsername());
                             continue;
                         }
-                        content.append(",").append(mGroupUsers.get(i).getUsername());
+                        content.append("、").append(mGroupUsers.get(i).getUsername());
                     }
                     content.append("加入群组");
                     //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
@@ -296,7 +296,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                                 content.append(mGroupUsers.get(i).getUsername());
                                 continue;
                             }
-                            content.append(",").append(mGroupUsers.get(i).getUsername());
+                            content.append("、").append(mGroupUsers.get(i).getUsername());
                         }
                         content.append("加入群组");
                         //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此

@@ -137,6 +137,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
                 Observable.create((ObservableOnSubscribe<Contacts>) e -> {
                     if (mDelete.size() == 0) {
                         showToast("请选择要删除的人员！");
+                        return;
                     }
                     for (int i = 0; i < mDelete.size(); i++) {
                         EMClient.getInstance().groupManager().removeUserFromGroup(mGroupId, "sl_" + mDelete.get(i).getCode());

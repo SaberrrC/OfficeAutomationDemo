@@ -150,7 +150,6 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
         switch (event.getEvent()) {
             case Constants.GROUPMEMBERQUIT:
             case Constants.GROUPMEMBERADD:
-            case Constants.GROUPOWNERCHANGE:
                 String member = event.getMemberCode().substring(3, event.getMemberCode().length());
                 String userCode = getIntent().getStringExtra("userCode");
                 String user = userCode.replace("," + member, "");

@@ -50,6 +50,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //群组聊天详情界面
@@ -138,6 +139,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     .subscribeOn(Schedulers.io())
                     .subscribe(o -> {
                     }, throwable -> {
+                        hideLoadingView();
                         if (throwable instanceof HyphenateException) {
                             switch (((HyphenateException) throwable).getErrorCode()) {
                                 case DISSOLVEGROUP://群组解散
@@ -150,7 +152,6 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                                     break;
                             }
                         }
-                        hideLoadingView();
                     }, () -> {
                         //TODO 完成后显示页面
                         if (mGroupServer1 != null) {
@@ -193,7 +194,10 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 while (!TextUtils.isEmpty(mGroupMemberResult.getCursor()) && mGroupMemberResult.getData().size() == pageSize);
                 e.onComplete();
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-            }, Throwable::printStackTrace, () -> {//TODO 群成团账号
+            }, throwable -> {
+                throwable.printStackTrace();
+                hideLoadingView();
+            }, () -> {//TODO 群成团账号
 
                 if (mIsOwner) {// 由于查询群组列表不包含自己跟群主，需要自己手动添加
                     mMemberList.add(0, "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
@@ -416,6 +420,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
     @Override
     public void searchUserListInfoSuccess(List<GroupUserInfoResponse> userInfo) {
+        hideLoadingView();
         tvErrorLayout.setVisibility(View.GONE);
         svContainerLayout.setVisibility(View.VISIBLE);
         try {
