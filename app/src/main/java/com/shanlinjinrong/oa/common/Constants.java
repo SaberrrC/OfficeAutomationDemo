@@ -54,6 +54,8 @@ public class Constants {
     public static final  String GroupName = "group_name";
     public static final  String FINISH_GROUP = "finish_group";
     public static final  String ISGROUPOWNER = "isOwner";
+    public static final  int MODIFICATIONNAME = 0;
+    public static final  int GROUPDISSOLVE = 1;
 
     /****************6.0权限*********************/
     /**

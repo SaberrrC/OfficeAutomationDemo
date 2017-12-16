@@ -15,10 +15,12 @@ import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnConversationFinishEvent;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
-import com.shanlinjinrong.oa.ui.activity.message.bean.GroupNameModification;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatMessagePresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -33,10 +35,6 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -62,6 +60,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
     private long lastClickTime = 0;
     private EMGroup mGroup;
+    private boolean mIsResume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,11 +231,37 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void modificationGroupName(GroupNameModification name) {
-        remoteGroupName();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mIsResume = true;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mIsResume = false;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshGroup(GroupEventListener event) {
+        switch (event.getEvent()) {
+            case Constants.MODIFICATIONNAME:
+                remoteGroupName();
+                break;
+            case Constants.GROUPDISSOLVE:
+                if (!event.isEvent() && mIsResume) {
+                    EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                        event.setEvent(true);
+                        setResult(DELETESUCCESS);
+                        finish();
+                    }, false);
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
+                }
+                break;
+        }
+    }
 
     @Override
     protected void onDestroy() {

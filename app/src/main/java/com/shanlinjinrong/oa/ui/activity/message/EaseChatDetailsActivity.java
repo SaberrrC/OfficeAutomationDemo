@@ -31,7 +31,7 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.CommonGroupControlAdapter;
-import com.shanlinjinrong.oa.ui.activity.message.bean.GroupNameModification;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.chatgroup.ModificationGroupNameActivity;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatDetailsPresenter;
@@ -94,14 +94,14 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private String mGroupId;
     private EMGroup mGroupServer1;
     private EMGroup mGroupFromServer;
-    private boolean mIsGroup, mIsOwner;
     private ArrayList<String> mMemberList;
     private List<GroupUserInfoResponse> mData;
     private CommonGroupControlAdapter mAdapter;
+    private boolean mIsGroup, mIsOwner,mIsResume;
     private EMCursorResult<String> mGroupMemberResult;
     private String mSearchUserId = "", mQueryUserInfo = "";
     private String mGroupOwner, mGroupName, message_to, message_from;
-    private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3, MODIFICATIONOWNER = -4;
+    private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3, MODIFICATIONOWNER = -4,FINISHRESULT = -5, DISSOLVEGROUP = 600;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +138,18 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     .subscribeOn(Schedulers.io())
                     .subscribe(o -> {
                     }, throwable -> {
-                        throwable.printStackTrace();
+                        if (throwable instanceof HyphenateException) {
+                            switch (((HyphenateException) throwable).getErrorCode()) {
+                                case DISSOLVEGROUP://群组解散
+                                    EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                        setResult(REFRESHSUCCESS);
+                                        finish();
+                                    }, false);
+                                    alertDialog.setCancelable(false);
+                                    alertDialog.show();
+                                    break;
+                            }
+                        }
                         hideLoadingView();
                     }, () -> {
                         //TODO 完成后显示页面
@@ -326,15 +337,16 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         return;
                     }
                     showLoadingView();
-                    deleteGroup();
+                    dissolveGroup();
                 }, true).show();
                 return;
             }
         showLoadingView();
-        deleteGroup();
+        dissolveGroup();
     }
 
-    private void deleteGroup() {
+    //退出或解散群组
+    private void dissolveGroup() {
         Observable.create(e -> {
             if (mIsOwner) {
                 EMClient.getInstance().groupManager().destroyGroup(mGroupId);//解散群组
@@ -520,13 +532,39 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             }
             startActivityForResult(intent, REQUSET_CODE);
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mIsResume = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mIsResume = false;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void modificationGroupName(GroupNameModification name) {
-        String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mGroupId);
-        tvModificationName.setText(groupName);
+    public void refreshGroup(GroupEventListener event) {
+        switch (event.getEvent()) {
+            case Constants.MODIFICATIONNAME:
+                String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mGroupId);
+                tvModificationName.setText(groupName);
+                break;
+            case Constants.GROUPDISSOLVE:
+                if (!event.isEvent() && mIsResume) {
+                    EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                        event.setEvent(true);
+                        setResult(REFRESHSUCCESS);
+                        finish();
+                    }, false);
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
+                }
+                break;
+        }
     }
 
     @Override
@@ -550,6 +588,10 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 break;
             case MODIFICATIONOWNER:
                 getGroupInfo();
+                break;
+            case FINISHRESULT:
+                setResult(REFRESHSUCCESS);
+                finish();
                 break;
             default:
                 break;

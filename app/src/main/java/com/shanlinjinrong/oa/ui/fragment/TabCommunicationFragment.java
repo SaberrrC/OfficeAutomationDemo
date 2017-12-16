@@ -8,16 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.baidu.platform.comapi.map.E;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.GroupChatListActivity;
-import com.shanlinjinrong.oa.ui.activity.message.bean.GroupNameModification;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
@@ -56,7 +56,7 @@ public class TabCommunicationFragment extends BaseFragment {
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (!EventBus.getDefault().isRegistered(this)){
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
         initData();
@@ -122,9 +122,18 @@ public class TabCommunicationFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void modificationGroupName(GroupNameModification name) {
-        if (myConversationListFragment != null) {
-            myConversationListFragment.refresh();
+    public void refreshGroup(GroupEventListener event) {
+        switch (event.getEvent()) {
+            case Constants.MODIFICATIONNAME:
+                if (myConversationListFragment != null) {
+                    myConversationListFragment.refresh();
+                }
+                break;
+            case Constants.GROUPDISSOLVE:
+                if (myConversationListFragment != null) {
+                    myConversationListFragment.refresh();
+                }
+                break;
         }
     }
 
@@ -133,8 +142,8 @@ public class TabCommunicationFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case RESULTSUCCESS:
-//                Intent intent = new Intent(getContext(), GroupChatListActivity.class);
-//                startActivity(intent);
+                //Intent intent = new Intent(getContext(), GroupChatListActivity.class);
+                //startActivity(intent);
                 break;
         }
     }
@@ -142,7 +151,7 @@ public class TabCommunicationFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (EventBus.getDefault().isRegistered(this)){
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }

@@ -52,6 +52,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.DemoDBManager;
@@ -66,7 +67,9 @@ import com.shanlinjinrong.oa.thirdParty.huanxin.receiver.CallReceiver;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 
+import org.greenrobot.eventbus.EventBus;
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
@@ -81,14 +84,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class DemoHelper {
 
@@ -626,7 +621,7 @@ public class DemoHelper {
 //            notifyNewInviteMessage(msg);
 //            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
 
-            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(groupId,groupName,"","","","","","",""));
+            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(groupId, groupName, "", "", "", "", "", "", ""));
 
         }
 
@@ -697,11 +692,10 @@ public class DemoHelper {
             showToast("current user removed, groupId:" + groupId);
         }
 
-        @Override
+
+        @Override //群组解散
         public void onGroupDestroyed(String groupId, String groupName) {
-            // group is dismissed,
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-            showToast("group destroyed, groupId:" + groupId);
+            EventBus.getDefault().post(new GroupEventListener(Constants.GROUPDISSOLVE));
         }
 
         @Override
@@ -762,7 +756,7 @@ public class DemoHelper {
 //                        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroup.getGroupId(), mGroup.getGroupName(), "", "", "", "", "", "", ""));
 //                        groupNotifier(groupId, mToChatMessage);
 //                    });
-
+            String groupId1 = groupId;
         }
 
         // ============================= group_reform new add api begin
@@ -795,7 +789,6 @@ public class DemoHelper {
         public void onAdminRemoved(String groupId, String administrator) {
             showToast("onAdminRemoved: " + administrator);
         }
-
 
 
         @Override //群主 变更

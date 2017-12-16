@@ -150,17 +150,17 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
                 send_voice.setImageResource(R.mipmap.ico_vedio_disabled);
                 send_message.setImageResource(R.mipmap.ico_message_disabled);
 
-                RxView.clicks(rel_send_message).
-                        throttleFirst(1, TimeUnit.SECONDS).
-                        subscribe(o -> showToast("不能给自己发送消息！"), Throwable::printStackTrace);
-
-                RxView.clicks(rel_voice_call).
-                        throttleFirst(1, TimeUnit.SECONDS).
-                        subscribe(o -> showToast("不能跟自己语音通话！"), Throwable::printStackTrace);
-
-                RxView.clicks(rel_phone_call).
-                        throttleFirst(1, TimeUnit.SECONDS).
-                        subscribe(o -> showToast("不能给自己拨打电话！"), Throwable::printStackTrace);
+//                RxView.clicks(rel_send_message).
+//                        throttleFirst(1, TimeUnit.SECONDS).
+//                        subscribe(o -> showToast("不能给自己发送消息！"), Throwable::printStackTrace);
+//
+//                RxView.clicks(rel_voice_call).
+//                        throttleFirst(1, TimeUnit.SECONDS).
+//                        subscribe(o -> showToast("不能跟自己语音通话！"), Throwable::printStackTrace);
+//
+//                RxView.clicks(rel_phone_call).
+//                        throttleFirst(1, TimeUnit.SECONDS).
+//                        subscribe(o -> showToast("不能给自己拨打电话！"), Throwable::printStackTrace);
 
             } else {
 
@@ -223,7 +223,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
                             String phone = tv_phone_number.getText().toString().trim();
                             if (phone.equals("-") || phone.equals("") || !mDepartment.equals(mUserDepartment)) {
                                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
-                                showToast("电话为空,无法拨打！");
+//                                showToast("电话为空,无法拨打！");
                             } else {
                                 requestRunTimePermission(new String[]{Manifest.permission.CALL_PHONE}, new PermissionListener() {
                                     @Override

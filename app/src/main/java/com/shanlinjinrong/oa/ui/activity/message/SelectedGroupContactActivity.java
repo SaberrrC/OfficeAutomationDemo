@@ -25,8 +25,10 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
@@ -34,6 +36,7 @@ import com.shanlinjinrong.oa.ui.activity.message.Fragment.GroupContactListFragme
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.SelectedGroupContactFragment;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedContactAdapter;
 import com.shanlinjinrong.oa.ui.activity.message.bean.DeleteContactEvent;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.SelectedGroupContactContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.SelectedGroupContactPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -72,20 +75,19 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     @BindView(R.id.bottom_container_layout)
     BottomSheetLayout bottomContainerLayout;
 
-
+    private EMGroup mGroup;
+    private String[] mUserNames;
+    private String[] mUserCodes;
     private List<String> mOrgIdKey;
-    private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101;
     private List<Contacts> mGroupUsers;
-    private InputMethodManager inputManager;
     private List<Contacts> mSearchData;
+    private InputMethodManager inputManager;
+    private ArrayList<String> mSelectedAccount;
     private SelectedContactAdapter mUserAdapter;
     private GroupContactListFragment mBottomFragment;
     private SparseArray<List<Contacts>> mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
-    private ArrayList<String> mSelectedAccount;
-    private EMGroup mGroup;
-    private String[] mUserNames;
-    private String[] mUserCodes;
+    private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101,FINISHRESULT = -5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -567,11 +569,29 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode){
+        switch (resultCode) {
             case REFRESHSUCCESS://创建群组 返回
                 setResult(REFRESHSUCCESS);
                 finish();
-            break;
+                break;
+        }
+    }
+
+    //刷新群组
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshGroup(GroupEventListener event) {
+        switch (event.getEvent()) {
+            case Constants.MODIFICATIONNAME:
+                break;
+            case Constants.GROUPDISSOLVE:
+                EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                    event.setEvent(true);
+                    setResult(FINISHRESULT);
+                    finish();
+                }, false);
+                alertDialog.setCancelable(false);
+                alertDialog.show();
+                break;
         }
     }
 

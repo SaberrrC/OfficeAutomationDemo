@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import com.baidu.platform.comapi.map.E;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.hyphenate.chat.EMClient;
@@ -24,10 +22,11 @@ import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.exceptions.HyphenateException;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.GroupChatListAdapter;
-import com.shanlinjinrong.oa.ui.activity.message.bean.GroupNameModification;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.views.ClearEditText;
 import com.shanlinjinrong.views.common.CommonTopView;
@@ -44,7 +43,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //聊天群组展示列表
@@ -74,7 +72,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat_list);
         ButterKnife.bind(this);
-        if (!EventBus.getDefault().isRegistered(this)){
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
         initData();
@@ -127,13 +125,13 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                         mAdapter.setNewData(mSearchGroupList);
                         mAdapter.notifyDataSetChanged();
                         hideLoadingView();
-                        //-------------------------------       键盘隐藏       -------------------------------
-                        try {
-                            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                                    InputMethodManager.HIDE_NOT_ALWAYS);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+//                        //-------------------------------       键盘隐藏       -------------------------------
+//                        try {
+//                            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+//                                    InputMethodManager.HIDE_NOT_ALWAYS);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
                     }
                 });
     }
@@ -264,14 +262,21 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void modificationGroupName(GroupNameModification name){
-        refreshData();
+    public void refreshGroup(GroupEventListener event) {
+        switch (event.getEvent()) {
+            case Constants.MODIFICATIONNAME:
+                refreshData();
+                break;
+            case Constants.GROUPDISSOLVE:
+                refreshData();
+                break;
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)){
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }
