@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,13 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         app:leftDrawable="@drawable/toolbar_back"
-        app:topTitle="预定记录"/>
+        app:topTitle="预定记录" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:layout_below="@+id/top_view"
-        android:background="@color/gray_9b9b9b"/>
+        android:background="@color/gray_9b9b9b" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
@@ -38,7 +37,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:visibility="gone"
-                tools:text="暂无预订记录"/>
+                tools:text="暂无预订记录" />
 
             <TextView
                 android:id="@+id/tv_meeting_Reservation_Record"
@@ -46,13 +45,13 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="34.5dp"
                 android:background="@color/gray_E5E5E5"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_meeting_Reservation_Record"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp" />
 
         </FrameLayout>
 

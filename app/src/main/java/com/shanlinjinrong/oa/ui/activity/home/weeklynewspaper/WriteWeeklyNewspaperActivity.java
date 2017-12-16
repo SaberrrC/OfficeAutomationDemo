@@ -37,6 +37,7 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.AllRecyclerView;
+import com.shanlinjinrong.oa.views.AutoResizeTextView;
 import com.shanlinjinrong.pickerview.OptionsPickerView;
 import com.shanlinjinrong.views.common.CommonTopView;
 
@@ -71,12 +72,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_date)
-    TextView mTvDate;
+    AutoResizeTextView mTvDate;
+    //  TextView mTvDate;
     @BindView(R.id.rv_work_content)
     AllRecyclerView mRvWorkContent;
     @BindView(R.id.ll_next_work_content)
     LinearLayout mLlNextWorkContent;
-    @BindView(R.id. rv_next_work_content)
+    @BindView(R.id.rv_next_work_content)
     AllRecyclerView mRvNextWorkContent;
     @BindView(R.id.tv_receiver)
     TextView mTvReceiver;

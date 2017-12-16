@@ -162,7 +162,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         if (str.equals("meetingDeleteSuccess")) {
             mRefresh.setRefreshing(true);
         }
-        if (str.equals("finish")){
+        if (str.equals("finish")) {
             finish();
         }
     }
