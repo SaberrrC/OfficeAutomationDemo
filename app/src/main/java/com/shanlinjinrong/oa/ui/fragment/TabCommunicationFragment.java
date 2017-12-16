@@ -41,7 +41,7 @@ public class TabCommunicationFragment extends BaseFragment {
     @BindView(R.id.topView)
     CommonTopView mTopView;
     private String mNickName;
-    private final int REQUESTCODE = 101, RESULTSUCCESS = -2;
+    private final int REQUESTCODE = 101, RESULTSUCCESS = -2,GROUPNAMEMODIFICATION = -3;
     private long lastClickTime = 0;
 
     @Override
@@ -144,6 +144,11 @@ public class TabCommunicationFragment extends BaseFragment {
             case RESULTSUCCESS:
                 //Intent intent = new Intent(getContext(), GroupChatListActivity.class);
                 //startActivity(intent);
+                break;
+            case GROUPNAMEMODIFICATION: //更改名称 刷新
+                if (myConversationListFragment != null) {
+                    myConversationListFragment.refresh();
+                }
                 break;
         }
     }

@@ -12,8 +12,11 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.views.common.CommonTopView;
 
@@ -91,6 +94,8 @@ public class ModificationGroupNameActivity extends BaseActivity implements TextW
                         cmdMsg.setAttribute("groupIcon", "");
                         cmdMsg.addBody(cmdBody);
                         EMClient.getInstance().chatManager().sendMessage(cmdMsg);
+
+                        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(groupId, group_name, "", "", "", "", "", "", ""));
 
                         hideLoadingView();
                         Intent intent = new Intent();
