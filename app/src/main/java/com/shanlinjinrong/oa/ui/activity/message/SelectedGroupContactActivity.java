@@ -87,7 +87,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     private GroupContactListFragment mBottomFragment;
     private SparseArray<List<Contacts>> mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
-    private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101,FINISHRESULT = -5;
+    private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101, FINISHRESULT = -5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +112,11 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         mGroupUsers = new ArrayList<>();
         mSearchData = new ArrayList<>();
         mCacheContact = new SparseArray<>();
-        mSelectedAccount = new ArrayList<>();
         mSelectedAccount = getIntent().getStringArrayListExtra("selectedMember");
+        if (mSelectedAccount == null) {
+            mSelectedAccount = new ArrayList<>();
+            mSelectedAccount.add("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+        }
         if (getIntent().getIntExtra("type", -1) == 0) {
             Contacts contacts1 = new Contacts();
             contacts1.setChecked(true);
