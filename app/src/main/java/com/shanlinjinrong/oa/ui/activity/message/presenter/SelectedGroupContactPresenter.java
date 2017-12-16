@@ -83,15 +83,18 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                                 contacts.add(userInfo);
                             }
 
-                            if (account != null) {
-                                for (int i = 0; i < contacts.size(); i++) {
-                                    String code = "sl_" + contacts.get(i).getCode();
-                                    for (int j = 0; j < account.size(); j++) {
-                                        if (code.equals(account.get(j))) {
-                                            contacts.remove(i);
+                            try {
+                                for (int i = 0; i < account.size(); i++) {
+                                    for (int j = 0; j < contacts.size(); j++) {
+                                        String remoteAccount = "sl_" + contacts.get(j).getCode();
+                                        if (account.get(i).equals(remoteAccount)) {
+                                            contacts.remove(j);
+                                            break;
                                         }
                                     }
                                 }
+                            } catch (Throwable e) {
+                                e.printStackTrace();
                             }
 
                             if (mView != null)
@@ -189,18 +192,15 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                                 contact.setChecked(false);
                                 contact.setItemType(1);
                                 contacts.add(contact);
-
                             }
 
                             try {
-                                if (account != null) {
-                                    for (int i = 0; i < contacts.size(); i++) {
-                                        for (int j = 0; j < account.size(); j++) {
-                                            String remoteAccount = "sl_" + contacts.get(i).getCode();
-                                            if (remoteAccount.equals(account.get(j))) {
-                                                contacts.remove(i);
-                                                break;
-                                            }
+                                for (int i = 0; i < account.size(); i++) {
+                                    for (int j = 0; j < contacts.size(); j++) {
+                                        String remoteAccount = "sl_" + contacts.get(j).getCode();
+                                        if (account.get(i).equals(remoteAccount)) {
+                                            contacts.remove(j);
+                                            break;
                                         }
                                     }
                                 }

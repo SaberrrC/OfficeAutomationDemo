@@ -145,6 +145,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected String[] itemStrings = {"照片", "拍摄", "语音聊天", "文件"};
     protected int[] itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.ease_chat_call_normal, R.drawable.file_input};
     protected int[] itemIds = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, ITEM_FILE};
+
     private boolean isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
     protected boolean isRoaming = false;
@@ -175,10 +176,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-//        fragmentArgs = getArguments();
-//        chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
-//        toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
-//        initData();
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -346,6 +343,14 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
      */
     protected void registerExtendMenuItem() {
         for (int i = 0; i < itemStrings.length; i++) {
+            int type = getArguments().getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+            if (type == 2) {
+                if (i == 2) {
+                    continue;
+                }
+                inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], extendMenuItemClickListener);
+                continue;
+            }
             inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], extendMenuItemClickListener);
         }
     }
@@ -851,9 +856,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (chatType == EaseConstant.CHATTYPE_GROUP) {
             message.setChatType(ChatType.GroupChat);
             String groupId = message.conversationId();
-            if (FriendsInfoCacheSvc.getInstance(getContext()).getNickName(groupId).equals("")){
+            if (FriendsInfoCacheSvc.getInstance(getContext()).getNickName(groupId).equals("")) {
                 String groupTitle = getArguments().getString("groupTitle");
-                FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(groupId,groupTitle,"","","","","","",""));
+                FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(groupId, groupTitle, "", "", "", "", "", "", ""));
             }
         } else if (chatType == EaseConstant.CHATTYPE_CHATROOM) {
             message.setChatType(ChatType.ChatRoom);
