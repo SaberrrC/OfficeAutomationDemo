@@ -11,6 +11,8 @@ public class GroupEventListener {
 
     private boolean isEvent;
 
+    private String memberCode;
+
     public GroupEventListener(int event) {
         this.event = event;
     }
@@ -29,5 +31,13 @@ public class GroupEventListener {
 
     public void setEvent(int event) {
         this.event = event;
+    }
+
+    public String getMemberCode() {
+        return memberCode;
+    }
+
+    public void setMemberCode(String memberCode) {
+        this.memberCode = memberCode;
     }
 }

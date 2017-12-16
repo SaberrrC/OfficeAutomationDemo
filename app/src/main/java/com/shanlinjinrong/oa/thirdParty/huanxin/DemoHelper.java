@@ -744,19 +744,6 @@ public class DemoHelper {
         //TODO 群聊提醒
         @Override
         public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
-            // got an invitation
-//            mToChatMessage = inviter;
-//            Observable.create(e -> {
-//                mGroup = EMClient.getInstance().groupManager().getGroup(groupId);
-//                e.onComplete();
-//            }).subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(o -> {
-//                    }, Throwable::printStackTrace, () -> {
-//                        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroup.getGroupId(), mGroup.getGroupName(), "", "", "", "", "", "", ""));
-//                        groupNotifier(groupId, mToChatMessage);
-//                    });
-            String groupId1 = groupId;
         }
 
         // ============================= group_reform new add api begin
@@ -793,17 +780,19 @@ public class DemoHelper {
 
         @Override //群主 变更
         public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
-
+            EventBus.getDefault().post(new GroupEventListener(Constants.GROUPOWNERCHANGE));
         }
 
         @Override
         public void onMemberJoined(String groupId, String member) {
-            showToast("onMemberJoined: " + member);
+            EventBus.getDefault().post(new GroupEventListener(Constants.GROUPMEMBERADD));
         }
 
         @Override
         public void onMemberExited(String groupId, String member) {
-            showToast("onMemberExited: " + member);
+            GroupEventListener groupEventListener = new GroupEventListener(Constants.GROUPMEMBERQUIT);
+            groupEventListener.setMemberCode(member);
+            EventBus.getDefault().post(groupEventListener);
         }
 
         @Override
@@ -821,62 +810,6 @@ public class DemoHelper {
             showToast("onSharedFileDeleted, groupId" + groupId);
         }
         // ============================= group_reform new add api end
-    }
-
-    private void groupNotifier(String groupId, String userId) {
-        KJHttp kjHttp = new KJHttp();
-        HttpParams params = new HttpParams();
-        params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-        params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
-        String code = userId.substring(3, userId.length());
-        kjHttp.get(Api.PHP_URL + Api.SEARCH_USER_DETAILS + "?code=" + code, params, new HttpCallBack() {
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                try {
-                    UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
-                    if (userDetailsBean != null) {
-                        switch (userDetailsBean.getCode()) {
-                            case Api.RESPONSES_CODE_OK:
-                                if (userDetailsBean.getData() != null) {
-                                    String st3 = appContext.getString(R.string.Invite_you_to_join_a_group_chat);
-                                    EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
-                                    msg.setChatType(ChatType.GroupChat);
-                                    msg.setFrom(userId);
-                                    msg.setTo(groupId);
-                                    msg.setMsgId(UUID.randomUUID().toString());
-                                    String message = EncryptionUtil.getEncryptionStr(userDetailsBean.getData().get(0).getUsername() + " " + st3, EMClient.getInstance().getCurrentUser());
-                                    msg.addBody(new EMTextMessageBody(message));
-                                    msg.setStatus(EMMessage.Status.SUCCESS);
-                                    // save invitation as messages
-                                    EMClient.getInstance().chatManager().saveMessage(msg);
-                                    // notify invitation message
-                                    getNotifier().vibrateAndPlayTone(msg);
-                                    broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-                                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername()
-                                            , userDetailsBean.getData().get(0).getImg(), userDetailsBean.getData().get(0).getSex(), userDetailsBean.getData().get(0).getPhone(), userDetailsBean.getData().get(0).getPostname()
-                                            , userDetailsBean.getData().get(0).getOrgan(), userDetailsBean.getData().get(0).getEmail(), userDetailsBean.getData().get(0).getOid()));
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
-        });
     }
 
     void showToast(final String message) {

@@ -54,8 +54,12 @@ public class Constants {
     public static final  String GroupName = "group_name";
     public static final  String FINISH_GROUP = "finish_group";
     public static final  String ISGROUPOWNER = "isOwner";
-    public static final  int MODIFICATIONNAME = 0;
-    public static final  int GROUPDISSOLVE = 1;
+
+    public static final  int MODIFICATIONNAME = 0; //群名称更改
+    public static final  int GROUPDISSOLVE = 1;  //群解散
+    public static final  int GROUPMEMBERQUIT= 2; //成员退出
+    public static final  int GROUPMEMBERADD= 3; //成员加入
+    public static final  int GROUPOWNERCHANGE= 4; //成员加入
 
     /****************6.0权限*********************/
     /**

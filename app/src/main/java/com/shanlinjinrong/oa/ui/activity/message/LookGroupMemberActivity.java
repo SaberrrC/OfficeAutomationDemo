@@ -6,19 +6,28 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.baidu.platform.comapi.map.E;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.CommonGroupControlAdapter;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatDetailsPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +55,9 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_look_group_member);
         ButterKnife.bind(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         initData();
         initView();
     }
@@ -132,6 +144,21 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
     public void searchUserListInfoFailed(int errorCode, String errorMsg) {
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshGroup(GroupEventListener event) {
+        switch (event.getEvent()) {
+            case Constants.GROUPMEMBERQUIT:
+            case Constants.GROUPMEMBERADD:
+            case Constants.GROUPOWNERCHANGE:
+                String member = event.getMemberCode().substring(3, event.getMemberCode().length());
+                String userCode = getIntent().getStringExtra("userCode");
+                String user = userCode.replace("," + member, "");
+                mPresenter.searchUserListInfo(user);
+                break;
+        }
+    }
+
     class ItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
@@ -162,6 +189,14 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
                     break;
             }
             startActivityForResult(intent, REQUSET_CODE);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
     }
 }

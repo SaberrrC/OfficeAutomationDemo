@@ -221,6 +221,24 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     showToast("邀请成员失败，请稍后重试！");
                 }, () -> {
                     hideLoadingView();
+
+                    //邀请成员成功后 提醒
+                    StringBuilder content = new StringBuilder("邀请");
+                    for (int i = 0; i < mGroupUsers.size(); i++) {
+                        if (i == 0) {
+                            content.append(mGroupUsers.get(i).getUsername());
+                            continue;
+                        }
+                        content.append(",").append(mGroupUsers.get(i).getUsername());
+                    }
+                    content.append("加入群组");
+                    //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
+                    EMMessage message = EMMessage.createTxtSendMessage(content.toString(),groupId);
+                    //如果是群聊，设置chattype，默认是单聊
+                    message.setChatType(EMMessage.ChatType.GroupChat);
+                    //发送消息
+                    EMClient.getInstance().chatManager().sendMessage(message);
+
                     showToast("邀请成员成功！");
                     setResult(REFRESHSUCCESS);
                     finish();

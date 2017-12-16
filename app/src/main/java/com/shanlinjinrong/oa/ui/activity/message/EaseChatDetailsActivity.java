@@ -566,6 +566,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     alertDialog.show();
                 }
                 break;
+            case Constants.GROUPMEMBERQUIT:
+            case Constants.GROUPMEMBERADD:
+            case Constants.GROUPOWNERCHANGE:
+                mSearchUserId = "";
+                initData();
+                break;
         }
     }
 
