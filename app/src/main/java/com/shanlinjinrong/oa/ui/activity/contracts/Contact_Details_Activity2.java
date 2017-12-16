@@ -5,6 +5,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -20,6 +21,10 @@ import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.listener.PermissionListener;
@@ -252,12 +257,23 @@ public class Contact_Details_Activity2 extends BaseActivity {
             tv_mails.setText(mEmail);
         }
 
-        Glide.with(AppManager.mContext)
-                .load(mPortrait)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.drawable.ease_default_avatar)
-                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+//        Glide.with(AppManager.mContext)
+//                .load(mPortrait)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .error(R.drawable.ease_default_avatar)
+//                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+//                .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+
+        ImageLoader.getInstance().displayImage(mPortrait, ivImgUser, new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.icon_homepage_work_report_me_launch)
+                .showImageOnFail(R.drawable.icon_homepage_work_report_me_launch)
+                .resetViewBeforeLoading(true)
+                .cacheOnDisk(true)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .considerExifParams(true)
+                .displayer(new FadeInBitmapDisplayer(300))
+                .build());
     }
 
     @OnClick(R.id.btn_back)

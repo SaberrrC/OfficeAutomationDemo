@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.fragment.adapter;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.bumptech.glide.Glide;
@@ -8,6 +9,11 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -16,12 +22,13 @@ import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * <h3>Description: 通讯录适配器 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/9/1.<br />
  */
 public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
-
 
     public TabContactsAdapter(List<Contacts> data) {
         super(data);
@@ -44,13 +51,26 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
                 }
                 break;
             case Contacts.EMPLOYEE:
-                SimpleDraweeView portrait = helper.getView(R.id.portrait);
-                Glide.with(AppManager.mContext)
-                        .load(Constants.SLPicBaseUrl + contacts.getPortraits())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .error(R.drawable.ease_default_avatar)
-                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                        .placeholder(R.drawable.ease_default_avatar).into(portrait);
+                CircleImageView portrait = helper.getView(R.id.portrait);
+                String portraits = Constants.SLPicBaseUrl + contacts.getPortraits();
+
+                ImageLoader.getInstance().displayImage(portraits, portrait, new DisplayImageOptions.Builder()
+                        .showImageForEmptyUri(R.drawable.icon_homepage_work_report_me_launch)
+                        .showImageOnFail(R.drawable.icon_homepage_work_report_me_launch)
+                        .resetViewBeforeLoading(true)
+                        .cacheOnDisk(true)
+                        .imageScaleType(ImageScaleType.EXACTLY)
+                        .bitmapConfig(Bitmap.Config.RGB_565)
+                        .considerExifParams(true)
+                        .displayer(new FadeInBitmapDisplayer(300))
+                        .build());
+
+//                Glide.with(AppManager.mContext)
+//                        .load(Constants.SLPicBaseUrl + contacts.getPortraits())
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                        .error(R.drawable.ease_default_avatar)
+//                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+//                        .placeholder(R.drawable.ease_default_avatar).into(portrait);
 
                 helper.setText(R.id.user_name, contacts.getUsername())
                         .setText(R.id.user_post_name, contacts.getPostTitle());
