@@ -34,10 +34,26 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
     public void addMeetingRooms(HttpParams httpParams) {
         mKjHttp.cleanCache();
         mKjHttp.phpJsonPost(Api.ADD_NEW_MEETING, httpParams, new HttpCallBack() {
+
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                try {
+                    if (mView != null)
+                        mView.showLoading();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
+                    if (mView != null)
+                        mView.requestFinish();
                     JSONObject jsonObject = new JSONObject(t);
                     switch (jsonObject.getInt("code")) {
                         case Api.RESPONSES_CODE_OK:
@@ -62,13 +78,27 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.addMeetingRoomsFailed(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.requestFinish();
+                        mView.addMeetingRoomsFailed(errorNo, strMsg);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.addMeetingRoomsFailed(-2, "");
+                try {
+                    if (mView != null) {
+                        mView.requestFinish();
+                        mView.addMeetingRoomsFailed(-2, "");
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -85,14 +115,21 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onPreStart() {
                 super.onPreStart();
-                mView.showLoading();
+                try {
+                    if (mView != null)
+                        mView.showLoading();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                mView.requestFinish();
                 try {
+                    if (mView != null) {
+                        mView.requestFinish();
+                    }
                     MeetingRecordInfo meetingRecordInfo = new Gson().fromJson(t, MeetingRecordInfo.class);
                     switch (meetingRecordInfo.getCode()) {
                         case Api.RESPONSES_CODE_OK:
@@ -117,14 +154,25 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.lookMeetingRoomsFailed(errorNo, strMsg);
-                mView.requestFinish();
+                try {
+                    if (mView != null) {
+                        mView.lookMeetingRoomsFailed(errorNo, strMsg);
+                        mView.requestFinish();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    if (mView != null)
+                        mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -137,14 +185,21 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onPreStart() {
                 super.onPreStart();
-                mView.showLoading();
+                try {
+                    if (mView != null)
+                        mView.showLoading();
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
             }
 
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                mView.requestFinish();
+
                 try {
+                    if (mView != null)
+                        mView.requestFinish();
                     JSONObject jsonObject = new JSONObject(t);
                     switch (jsonObject.getInt("code")) {
                         case Api.RESPONSES_CODE_OK:
@@ -169,14 +224,25 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.deleteMeetingRoomsFailed(errorNo, strMsg);
-                mView.requestFinish();
+                try {
+                    if (mView != null) {
+                        mView.deleteMeetingRoomsFailed(errorNo, strMsg);
+                        mView.requestFinish();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    if (mView != null)
+                        mView.requestFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

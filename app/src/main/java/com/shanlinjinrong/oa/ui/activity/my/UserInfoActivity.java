@@ -33,6 +33,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.listener.PermissionListener;
@@ -44,7 +45,6 @@ import com.shanlinjinrong.oa.ui.activity.my.contract.UserInfoActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.UserInfoActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.FileUtils;
-import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.views.BottomPushPopupWindow;
 

@@ -43,43 +43,29 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMCallSession;
-import com.google.gson.Gson;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.EncryptionUtil;
-import com.hyphenate.easeui.adapter.EaseConversationAdapter;
-import com.hyphenate.easeui.model.UserInfoDetailsBean;
-import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
+import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.hyphenate.exceptions.EMNoActiveCallException;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.message.bean.CallEventBean;
-import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
-import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 /**

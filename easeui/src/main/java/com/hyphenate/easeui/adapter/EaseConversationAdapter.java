@@ -16,6 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.google.gson.Gson;
 import com.huawei.hms.api.Api;
 import com.hyphenate.chat.EMChatRoom;
@@ -35,6 +38,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.utils.EncryptionUtil;
+import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -238,17 +242,15 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
 //            }
             else if (!FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId).equals("")) {
                 try {
-                    ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(conversationId),
-                            holder.avatar, new DisplayImageOptions.Builder()
-                                    .showImageForEmptyUri(R.drawable.ease_user_portraits)
-                                    .showImageOnFail(R.drawable.ease_user_portraits)
-                                    .resetViewBeforeLoading(true)
-                                    .cacheOnDisk(true)
-                                    .imageScaleType(ImageScaleType.EXACTLY)
-                                    .bitmapConfig(Bitmap.Config.RGB_565)
-                                    .considerExifParams(true)
-                                    .displayer(new FadeInBitmapDisplayer(0))
-                                    .build());
+
+                    Glide.with(mContext)
+                            .load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(conversationId))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.ease_user_portraits)
+                            .error(R.drawable.ease_user_portraits)
+                            .transform(new CenterCrop(mContext), new GlideRoundTransformUtils(mContext, 5))
+                            .into(holder.avatar);
+
                     holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId));
                     holder.motioned.setVisibility(View.GONE);
                 } catch (Throwable throwable) {

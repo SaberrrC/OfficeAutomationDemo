@@ -22,6 +22,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -33,7 +34,6 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.GroupContactListFragment;
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.SelectedGroupContactFragment;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedContactAdapter;
@@ -42,7 +42,6 @@ import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.SelectedGroupContactContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.SelectedGroupContactPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
-import com.shanlinjinrong.oa.ui.fragment.MyJoinPeopleFragment;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -64,37 +63,33 @@ import io.reactivex.schedulers.Schedulers;
 public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroupContactPresenter> implements SelectedGroupContactContract.View, SelectedGroupContactFragment.onLoadUsersListener, SelectedGroupContactFragment.onSelectedUsersListener {
 
     @BindView(R.id.top_view)
-    CommonTopView mTopView;
+    CommonTopView     mTopView;
     @BindView(R.id.tv_empty_view)
-    TextView mTvErrorView;
+    TextView          mTvErrorView;
     @BindView(R.id.search_et_input)
-    EditText mSearchContact;
+    EditText          mSearchContact;
     @BindView(R.id.tv_selected_contact)
-    TextView mTvSelectedContact;
+    TextView          mTvSelectedContact;
     @BindView(R.id.rv_search_contact)
-    RecyclerView mRvSearchContact;
+    RecyclerView      mRvSearchContact;
     @BindView(R.id.ll_selected_contact)
-    LinearLayout mLlSelectedContact;
+    LinearLayout      mLlSelectedContact;
     @BindView(R.id.bottom_container_layout)
     BottomSheetLayout bottomContainerLayout;
 
-    private EMGroup mGroup;
-    private String[] mUserNames;
-    private String[] mUserCodes;
-    private List<String> mOrgIdKey;
-    private List<Contacts> mGroupUsers;
-    private ArrayList<Child> selectedContacts;//已经选择的联系人
-    private AppManager appManager = null;
-    private SelectJoinPeopleActivity.MyJoinHandler mJoinHandler = null;
-    private List<Contacts> mSearchData;
-    private InputMethodManager inputManager;
-    private ArrayList<String> mSelectedAccount;
-    private SelectedContactAdapter mUserAdapter;
-    private GroupContactListFragment mBottomFragment;
-    private SparseArray<List<Contacts>> mCacheContact;
+    private EMGroup                            mGroup;
+    private String[]                           mUserNames;
+    private String[]                           mUserCodes;
+    private List<String>                       mOrgIdKey;
+    private List<Contacts>                     mGroupUsers;
+    private List<Contacts>                     mSearchData;
+    private InputMethodManager                 inputManager;
+    private ArrayList<String>                  mSelectedAccount;
+    private SelectedContactAdapter             mUserAdapter;
+    private GroupContactListFragment           mBottomFragment;
+    private SparseArray<List<Contacts>>        mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
-    private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101, FINISHRESULT = -5;
-    private boolean isFromSelectedGroupContactActivity;
+    private final        int RESULT_CODE     = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101, FINISHRESULT = -5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,36 +109,16 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     }
 
     private void initData() {
-
         mOrgIdKey = new ArrayList<>();
         mFragments = new ArrayList<>();
         mGroupUsers = new ArrayList<>();
         mSearchData = new ArrayList<>();
-
-        isFromSelectedGroupContactActivity = getIntent().getExtras().getBoolean("isFromSelectedGroupContactActivity", false);
-        if (isFromSelectedGroupContactActivity) {
-            selectedContacts = getIntent().getParcelableArrayListExtra("selectedContacts");
-            if (selectedContacts == null) {
-                selectedContacts = new ArrayList<>();
-            } else {
-                mTopView.setRightText(selectedContacts.size() != 0 ? "确认" + "(" + selectedContacts.size() + ")" : "确认");
-                mTvSelectedContact.setText(selectedContacts.size() + "");
-                for (int i = 0; i < selectedContacts.size(); i++) {
-                    if (mSelectedAccount == null) {
-                        mSelectedAccount = new ArrayList<>();
-                    }
-                    mSelectedAccount.add(selectedContacts.get(i).getCODE());
-                }
-            }
-        } else {
-            mSelectedAccount = getIntent().getStringArrayListExtra("selectedMember");
-            if (mSelectedAccount == null) {
-                mSelectedAccount = new ArrayList<>();
-                mSelectedAccount.add("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
-            }
-        }
         mCacheContact = new SparseArray<>();
-
+        mSelectedAccount = getIntent().getStringArrayListExtra("selectedMember");
+        if (mSelectedAccount == null) {
+            mSelectedAccount = new ArrayList<>();
+            mSelectedAccount.add("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+        }
         if (getIntent().getIntExtra("type", -1) == 0) {
             Contacts contacts1 = new Contacts();
             contacts1.setChecked(true);
@@ -217,26 +192,30 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 return;
             }
 
+            //会议室 选中的人员
+            if (getIntent().getIntExtra(Constants.SELECTEDTYEPE, 0) == 0) {
+                ArrayList<Child> contacts = new ArrayList<>();
+                for (int i = 0; i < mGroupUsers.size(); i++) {
+                    Child child = new Child(mGroupUsers.get(i).getUsername(), mGroupUsers.get(i).getUid());
+                    contacts.add(child);
+                }
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra("contacts", contacts);
+                setResult(RESULT_OK, intent);
+                finish();
+                return;
+            }
+
             //返回 -> 选择人员
             mUserNames = new String[mGroupUsers.size()];
             mUserCodes = new String[mGroupUsers.size()];
 
             for (int i = 0; i < mGroupUsers.size(); i++) {
-                Child child;
                 mUserNames[i] = mGroupUsers.get(i).getUsername();
                 mUserCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
-                child = new Child(mGroupUsers.get(i).getUsername(), mGroupUsers.get(i).getUid());
-                child.setCODE("sl_" + mGroupUsers.get(i).getCode());
-                selectedContacts.add(child);
             }
             showLoadingView();
-            if (isFromSelectedGroupContactActivity) {
-                hideLoadingView();
-                Intent intent = new Intent();
-                intent.putParcelableArrayListExtra("contacts", selectedContacts);
-                setResult(RESULT_OK, intent);
-                finish();
-            } else if (getIntent().getBooleanExtra("isAddMember", false)) {
+            if (getIntent().getBooleanExtra("isAddMember", false)) {
                 addMember(mUserCodes);
             } else {
                 createGroup(mUserNames, mUserCodes);
@@ -359,26 +338,16 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
         //-------------------------------  BottomFragment  -------------------------------
 
-        if (isFromSelectedGroupContactActivity) {
-            if (selectedContacts.size() > 0) {
-                //-------------
-                appManager.setJoinhandler(mJoinHandler);
-                //--------------
-                new MyJoinPeopleFragment(selectedContacts).show(getSupportFragmentManager(), R.id.bottomsheet);
+        if (mGroupUsers.size() > 0) {
+            if (mBottomFragment == null) {
+                mBottomFragment = new GroupContactListFragment(mGroupUsers);
             }
-
-        } else {
-            if (mGroupUsers.size() > 0) {
-                if (mBottomFragment == null) {
-                    mBottomFragment = new GroupContactListFragment(mGroupUsers);
-                }
-                if (bottomContainerLayout.isSheetShowing()) {
-                    mBottomFragment.dismiss();
-                    bottomContainerLayout.dismissSheet();
-                } else {
-                    mBottomFragment.show(getSupportFragmentManager(), R.id.bottom_container_layout);
-                    mBottomFragment.updateBottomData();
-                }
+            if (bottomContainerLayout.isSheetShowing()) {
+                mBottomFragment.dismiss();
+                bottomContainerLayout.dismissSheet();
+            } else {
+                mBottomFragment.show(getSupportFragmentManager(), R.id.bottom_container_layout);
+                mBottomFragment.updateBottomData();
             }
         }
     }
@@ -402,16 +371,8 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
     @Override
     public void selectedUsers(List<Contacts> groupUsers) {
-
-
-        if (isFromSelectedGroupContactActivity) {
-            int number = selectedContacts.size() + groupUsers.size();
-            mTopView.setRightText(number != 0 ? "确认" + "(" + number + ")" : "确认");
-            mTvSelectedContact.setText(number + "");
-        } else {
-            mTopView.setRightText(groupUsers.size() != 0 ? "确认" + "(" + groupUsers.size() + ")" : "确认");
-            mTvSelectedContact.setText(String.valueOf(groupUsers.size()));
-        }
+        mTvSelectedContact.setText(String.valueOf(groupUsers.size()));
+        mTopView.setRightText(groupUsers.size() != 0 ? "确认" + "(" + groupUsers.size() + ")" : "确认");
     }
 
 
@@ -460,15 +421,8 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         if (event.getSize() == 0)
             hideBottomView();
 
-
-        if (isFromSelectedGroupContactActivity) {
-            int number = selectedContacts.size() + mGroupUsers.size();
-            mTopView.setRightText(number != 0 ? "确认" + "(" + number + ")" : "确认");
-            mTvSelectedContact.setText(number + "");
-        } else {
-            mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
-            mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
-        }
+        mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
+        mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
     }
 
     private boolean hideBottomView() {
@@ -611,17 +565,9 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 }
             }
 
-
-            if (isFromSelectedGroupContactActivity) {
-                int number = selectedContacts.size() + mGroupUsers.size();
-                mTopView.setRightText(number != 0 ? "确认" + "(" + number + ")" : "确认");
-                //更新UI
-                mTvSelectedContact.setText(number + "");
-            } else {
-                mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
-                //更新UI
-                mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
-            }
+            //更新UI
+            mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
+            mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
 
             //防止Item点击效果错位问题
             Handler handler = new Handler();

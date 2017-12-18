@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.pgyersdk.update.UpdateManagerListener;
@@ -39,7 +40,6 @@ import com.shanlinjinrong.oa.ui.activity.my.UserInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UsingHelpActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.utils.FileUtils;
-import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 

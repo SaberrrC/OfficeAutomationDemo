@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
@@ -56,73 +57,73 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_meeting_date)
-    TextView mTvMeetingDate;
+    TextView      mTvMeetingDate;
     @BindView(R.id.tv_meeting_name)
-    TextView mTvMeetingName;
+    TextView      mTvMeetingName;
     @BindView(R.id.tv_meeting_person_number)
-    TextView mTvMeetingPersonNumber;
+    TextView      mTvMeetingPersonNumber;
     @BindView(R.id.tv_meeting_receive_person)
-    TextView mTvMeetingReceivePerson;
+    TextView      mTvMeetingReceivePerson;
     @BindView(R.id.tv_meeting_device)
-    TextView mTvMeetingDevice;
+    TextView      mTvMeetingDevice;
     @BindView(R.id.rb_is_meeting_invite)
-    RadioButton mRbIsMeetingInvite;
+    RadioButton   mRbIsMeetingInvite;
     @BindView(R.id.ed_meeting_content)
-    EditText mEdMeetingContent;
+    EditText      mEdMeetingContent;
     @BindView(R.id.ed_meeting_theme)
-    EditText mEdMeetingTheme;
+    EditText      mEdMeetingTheme;
     @BindView(R.id.ed_meeting_person)
-    EditText mEdMeetingPerson;
+    EditText      mEdMeetingPerson;
     @BindView(R.id.cb_email)
-    CheckBox mCbEmail;
+    CheckBox      mCbEmail;
     @BindView(R.id.cb_messages)
-    CheckBox mCbMessages;
+    CheckBox      mCbMessages;
     @BindView(R.id.btn_meeting_info_complete)
-    TextView mBtnMeetingInfoComplete;
+    TextView      mBtnMeetingInfoComplete;
     @BindView(R.id.tv_receive_person)
-    TextView mTvReceivePerson;
+    TextView      mTvReceivePerson;
     @BindView(R.id.tv_meeting_invite)
-    TextView mTvMeetingInvite;
+    TextView      mTvMeetingInvite;
     @BindView(R.id.tv_is_meeting_invite)
-    TextView mTvIsMeetingInvite;
+    TextView      mTvIsMeetingInvite;
     @BindView(R.id.tv_meeting_theme)
-    TextView mTvMeetingTheme;
+    TextView      mTvMeetingTheme;
     @BindView(R.id.tv_meeting_person)
-    TextView mTvMeetingPerson;
+    TextView      mTvMeetingPerson;
     @BindView(R.id.ll_meeting_person)
-    LinearLayout mLlMeetingPerson;
+    LinearLayout  mLlMeetingPerson;
     @BindView(R.id.ll_meeting_theme)
-    LinearLayout mLlMeetingTheme;
+    LinearLayout  mLlMeetingTheme;
     @BindView(R.id.tv_red_dot1)
-    TextView mTvRedDot1;
+    TextView      mTvRedDot1;
     @BindView(R.id.tv_red_dot2)
-    TextView mTvRedDot2;
+    TextView      mTvRedDot2;
     @BindView(R.id.tv_red_dot3)
-    TextView mTvRedDot3;
+    TextView      mTvRedDot3;
     @BindView(R.id.iv_add_contacts)
-    ImageView mAddContacts;
+    ImageView     mAddContacts;
     @BindView(R.id.ll_meeting_title)
-    LinearLayout mLlMeetingTitle;
+    LinearLayout  mLlMeetingTitle;
     @BindView(R.id.ll_invite_mode)
-    LinearLayout mLlInviteMode;
+    LinearLayout  mLlInviteMode;
     @BindView(R.id.ll_meeting_personnel)
-    LinearLayout mLlMeetingPersonnel;
+    LinearLayout  mLlMeetingPersonnel;
     @BindView(R.id.ll_is_launch_meeting)
-    LinearLayout mLlIsLaunchMeeting;
+    LinearLayout  mLlIsLaunchMeeting;
     @BindView(R.id.tv_rb_is_meeting_invite)
-    TextView mTvRbIsMeetingInvite;
+    TextView      mTvRbIsMeetingInvite;
 
-    private String mEndDate;
-    private String mBeginDate;
-    private String mMeetingName;
-    private String mSendType;
-    private int mRoomId;
-    private String mHoursOfUse;
+    private String  mEndDate;
+    private String  mBeginDate;
+    private String  mMeetingName;
+    private String  mSendType;
+    private int     mRoomId;
+    private String  mHoursOfUse;
     private boolean isWriteMeetingInfo;
     private ArrayList<Child> contactsList = new ArrayList<>(); //邀请人参会人
     private String mStartTime;
     private String mEndTime;
-    private int mId;
+    private int    mId;
     private String mUid = "";
     private boolean mModifyMeeting;
 
@@ -295,7 +296,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 //  Intent intent = new Intent(this, SelectJoinPeopleActivity.class);   //old
                 Intent intent = new Intent(this, SelectedGroupContactActivity.class);
                 intent.putParcelableArrayListExtra("selectedContacts", contactsList);
-                intent.putExtra("isFromSelectedGroupContactActivity", true);
+                intent.putExtra(Constants.SELECTEDTYEPE, 0);
                 startActivityForResult(intent, ADD_JOIN_PEOPLE);
 
 

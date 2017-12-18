@@ -11,6 +11,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnConversationFinishEvent;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
@@ -20,6 +21,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
+import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatMessagePresenter;
@@ -45,17 +47,17 @@ import butterknife.OnClick;
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
     @BindView(R.id.tv_count)
-    TextView mTvCount;
+    TextView     mTvCount;
     @BindView(R.id.tv_title)
-    TextView mTvTitle;
+    TextView     mTvTitle;
     @BindView(R.id.iv_detail)
     LinearLayout mIvDetail;
     @BindView(R.id.img_details_icon)
-    ImageView imgDetailsIcon;
+    ImageView    imgDetailsIcon;
 
-    private String mTitle;
-    private int mChatType;
-    private Bundle mExtras;
+    private String           mTitle;
+    private int              mChatType;
+    private Bundle           mExtras;
     private EaseChatFragment chatFragment;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
     private long lastClickTime = 0;
@@ -115,6 +117,9 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             }
             imgDetailsIcon.setImageResource(R.mipmap.icon_chat_group_list);
         } else {
+            if (mTitle.equals("")) {
+                mPresenter.searchUserDetails(getIntent().getStringExtra("u_id").substring(3, getIntent().getStringExtra("u_id").length()));
+            }
             mTvTitle.setText(mTitle);
             imgDetailsIcon.setImageResource(R.mipmap.icon_contacts_details);
         }
@@ -269,5 +274,19 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    @Override
+    public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
+        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
+                Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
+                userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
+                userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
+        mTvTitle.setText(userDetailsBean.getUsername());
+    }
+
+    @Override
+    public void searchUserDetailsFailed() {
+
     }
 }

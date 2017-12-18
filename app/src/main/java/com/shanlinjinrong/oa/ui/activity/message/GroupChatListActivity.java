@@ -86,6 +86,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
     private void initView() {
         mTopView.getRightView().setOnClickListener(view -> {
             Intent intent = new Intent(this, SelectedGroupContactActivity.class);
+            intent.putExtra(Constants.SELECTEDTYEPE, 1);
             startActivityForResult(intent, REQUESTCODE);
         });
         initSearchView();

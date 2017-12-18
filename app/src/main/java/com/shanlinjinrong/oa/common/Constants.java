@@ -25,11 +25,11 @@ public class Constants {
     /**
      * 日程安排的会议安排标识
      */
-    public final static String MEETING_PLAN = "meeting_plan";
+    public final static String MEETING_PLAN         = "meeting_plan";
     /**
      * 日程安排的我发起的会议标识
      */
-    public final static String ME_LAUNCH_MEETING = "me_launch_meeting";
+    public final static String ME_LAUNCH_MEETING    = "me_launch_meeting";
     /**
      * 推送消息进入会议详情的标识
      */
@@ -45,27 +45,31 @@ public class Constants {
     /**
      * 记事本编辑标识
      */
-    public static final String EDIT_NOTE = "edit_note";
+    public static final String EDIT_NOTE                  = "edit_note";
     public static final String MESSAGE_ATTR_IS_VOICE_CALL = "voice";
     public static final String MESSAGE_ATTR_IS_VIDEO_CALL = "video";
 
+    // ---------------------------------- 选择通讯录 ----------------------------------
+
+    public static final String SELECTEDTYEPE = "selected_type";
+
     // ---------------------------------- 群组 ----------------------------------
 
-    public static final  String GroupName = "group_name";
-    public static final  String FINISH_GROUP = "finish_group";
-    public static final  String ISGROUPOWNER = "isOwner";
+    public static final String GroupName    = "group_name";
+    public static final String FINISH_GROUP = "finish_group";
+    public static final String ISGROUPOWNER = "isOwner";
 
-    public static final  int MODIFICATIONNAME = 0; //群名称更改
-    public static final  int GROUPDISSOLVE = 1;  //群解散
-    public static final  int GROUPMEMBERQUIT= 2; //成员退出
-    public static final  int GROUPMEMBERADD= 3; //成员加入
-    public static final  int GROUPOWNERCHANGE= 4; //群主更改
+    public static final int MODIFICATIONNAME = 0; //群名称更改
+    public static final int GROUPDISSOLVE    = 1;  //群解散
+    public static final int GROUPMEMBERQUIT  = 2; //成员退出
+    public static final int GROUPMEMBERADD   = 3; //成员加入
+    public static final int GROUPOWNERCHANGE = 4; //群主更改
 
     /****************6.0权限*********************/
     /**
      * 拨打电话权限码
      */
-    public static final int PERMISSIONS_REQUECT_CODE_CALL = 1;
+    public static final int PERMISSIONS_REQUECT_CODE_CALL    = 1;
     /**
      * 录音权限码
      */
@@ -111,7 +115,7 @@ public class Constants {
         /**
          * 登录工号
          */
-        public static final String REGEX_CODE = "^[a-zA-Z0-9]{6,10}";
+        public static final String REGEX_CODE     = "^[a-zA-Z0-9]{6,10}";
 
         /**
          * 手机号码

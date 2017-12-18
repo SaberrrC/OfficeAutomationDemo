@@ -14,9 +14,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -34,7 +31,6 @@ import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
 import java.util.concurrent.TimeUnit;

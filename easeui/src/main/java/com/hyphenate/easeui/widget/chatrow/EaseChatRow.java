@@ -42,20 +42,20 @@ public abstract class EaseChatRow extends LinearLayout {
     protected static final String TAG = EaseChatRow.class.getSimpleName();
 
     protected LayoutInflater inflater;
-    protected Context context;
-    protected BaseAdapter adapter;
-    protected EMMessage message;
-    protected int position;
+    protected Context        context;
+    protected BaseAdapter    adapter;
+    protected EMMessage      message;
+    protected int            position;
 
-    protected TextView timeStampView;
+    protected TextView  timeStampView;
     protected ImageView userAvatarView;
-    protected View bubbleLayout;
-    protected TextView usernickView;
+    protected View      bubbleLayout;
+    protected TextView  usernickView;
 
-    protected TextView percentageView;
+    protected TextView    percentageView;
     protected ProgressBar progressBar;
-    protected ImageView statusView;
-    protected Activity activity;
+    protected ImageView   statusView;
+    protected Activity    activity;
 
     protected TextView ackedView;
     protected TextView deliveredView;
@@ -64,17 +64,17 @@ public abstract class EaseChatRow extends LinearLayout {
     protected EMCallBack messageReceiveCallback;
 
     protected MessageListItemClickListener itemClickListener;
-    protected EaseMessageListItemStyle itemStyle;
-    DisplayImageOptions options = new DisplayImageOptions.Builder()
-            .showImageForEmptyUri(R.drawable.ease_user_portraits)
-            .showImageOnFail(R.drawable.ease_user_portraits)
-            .resetViewBeforeLoading(true)
-            .cacheOnDisk(true)
-            .imageScaleType(ImageScaleType.EXACTLY)
-            .bitmapConfig(Bitmap.Config.RGB_565)
-            .considerExifParams(true)
-            .displayer(new FadeInBitmapDisplayer(0))
-            .build();
+    protected EaseMessageListItemStyle     itemStyle;
+//    DisplayImageOptions options = new DisplayImageOptions.Builder()
+//            .showImageForEmptyUri(R.drawable.ease_user_portraits)
+//            .showImageOnFail(R.drawable.ease_user_portraits)
+//            .resetViewBeforeLoading(true)
+//            .cacheOnDisk(true)
+//            .imageScaleType(ImageScaleType.EXACTLY)
+//            .bitmapConfig(Bitmap.Config.RGB_565)
+//            .considerExifParams(true)
+//            .displayer(new FadeInBitmapDisplayer(0))
+//            .build();
 
     public EaseChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context);
@@ -155,26 +155,28 @@ public abstract class EaseChatRow extends LinearLayout {
 
                 if (message.direct() == Direct.SEND) {
                     if (message.getUserName().equals(FriendsInfoCacheSvc.getInstance(context).getUserId(message.getTo()))) {
-                        //     Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
-                        ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom()), userAvatarView, options);
+                        //Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_user_portraits).error(R.drawable.ease_user_portraits).into(userAvatarView);
                     } else if ((message.getUserName().contains("admin") || message.getUserName().contains("notice"))) {
                         if (!message.getUserName().equals(message.getFrom())) {
-                            //         Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
-                            ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom()), userAvatarView, options);
-
+                            //Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.ease_default_avatar).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                            //ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom()), userAvatarView, options);
+                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_user_portraits).error(R.drawable.ease_user_portraits).into(userAvatarView);
                         } else {
-                            //  Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
-                            ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo()), userAvatarView, options);
-
+                            //Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                            //ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo()), userAvatarView, options);
+                            Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_user_portraits).placeholder(R.drawable.ease_user_portraits).diskCacheStrategy(DiskCacheStrategy.ALL).into(userAvatarView);
                         }
                     } else {
-                        //      Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
-                        ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo()), userAvatarView, options);
+                        //Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                        //ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo()), userAvatarView, options);
+                        Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getTo())).error(R.drawable.ease_user_portraits).placeholder(R.drawable.ease_user_portraits).diskCacheStrategy(DiskCacheStrategy.ALL).into(userAvatarView);
 
                     }
                 } else if (message.direct() == Direct.RECEIVE && !FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName()).equals("")) {
-                    //    Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
-                    ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName()), userAvatarView, options);
+                    //Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName())).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(userAvatarView);
+                    //ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName()), userAvatarView, options);
+                    Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getUserName())).error(R.drawable.ease_user_portraits).placeholder(R.drawable.ease_user_portraits).diskCacheStrategy(DiskCacheStrategy.ALL).into(userAvatarView);
 
                 }
             } catch (Throwable throwable) {

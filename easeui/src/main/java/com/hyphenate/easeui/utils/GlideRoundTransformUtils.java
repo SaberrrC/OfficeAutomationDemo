@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.utils;
+package com.hyphenate.easeui.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
