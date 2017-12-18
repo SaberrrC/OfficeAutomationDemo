@@ -26,6 +26,7 @@ import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
@@ -34,6 +35,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
 
     private TextView errorText;
     private LinearLayout ll_error;
+    private long lastClickTime = 0;
 
     @Override
     protected void initView() {
@@ -70,13 +72,18 @@ public class ConversationListFragment extends EaseConversationListFragment {
 
     @Override
     protected void setUpView() {
-        super.setUpView();
+
         // register context menu
         registerForContextMenu(conversationListView);
         conversationListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 EMConversation conversation = conversationListView.getItem(position);
                 String username = conversation.conversationId();
                 if (username.equals(EMClient.getInstance().getCurrentUser()))

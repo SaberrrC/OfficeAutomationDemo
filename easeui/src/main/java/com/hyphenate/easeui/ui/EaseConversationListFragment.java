@@ -54,6 +54,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
         }
     };
     private TextView tvErrorView;
+    private long lastClickTime = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,6 +89,11 @@ public class EaseConversationListFragment extends EaseBaseFragment {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    long currentTime = Calendar.getInstance().getTimeInMillis();
+                    if (currentTime - lastClickTime < 1000) {
+                        lastClickTime = currentTime;
+                        return;
+                    }
                     EMConversation conversation = conversationListView.getItem(position);
                     listItemClickListener.onListItemClicked(conversation);
                 }
