@@ -66,8 +66,8 @@ public abstract class EaseChatRow extends LinearLayout {
     protected MessageListItemClickListener itemClickListener;
     protected EaseMessageListItemStyle itemStyle;
     DisplayImageOptions options = new DisplayImageOptions.Builder()
-            .showImageForEmptyUri(R.drawable.ease_default_avatar)
-            .showImageOnFail(R.drawable.ease_default_avatar)
+            .showImageForEmptyUri(R.drawable.ease_user_portraits)
+            .showImageOnFail(R.drawable.ease_user_portraits)
             .resetViewBeforeLoading(true)
             .cacheOnDisk(true)
             .imageScaleType(ImageScaleType.EXACTLY)
