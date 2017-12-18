@@ -105,23 +105,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView tabMessageText;
+    TextView  tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView tabContactsText;
+    TextView  tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView tabGroupText;
+    TextView  tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView tabMeText;
+    TextView  tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView tabHomeText;
+    TextView  tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView tvMsgUnRead;
+    TextView  tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -146,13 +146,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment> mTabs;
+    private List<Fragment>       mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE = 0;
+    private static final int TAB_MESSAGE  = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME = 2;
-    private static final int TAB_GROUP = 3;
-    private static final int TAB_ME = 4;
+    private static final int TAB_HOME     = 2;
+    private static final int TAB_GROUP    = 3;
+    private static final int TAB_ME       = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -165,19 +165,19 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private int mBlueGreen;
     private int mBlueBlue;
 
-    private TextView[] mTextViews;
+    private TextView[]  mTextViews;
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
 
     int tempMsgCount = 0;
-    private EaseUI easeUI;
-    private AlertDialog dialog;
-    private QBadgeView qBadgeView;
-    private TabCommunicationFragment tabCommunicationFragment;
+    private EaseUI                     easeUI;
+    private AlertDialog                dialog;
+    private QBadgeView                 qBadgeView;
+    private TabCommunicationFragment   tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
     private List<EMMessage> mEMMessage = new ArrayList<>();
-    private EMGroup mGroup;
-    private String mGroupName;
+    private EMGroup            mGroup;
+    private String             mGroupName;
     private EMMessage.ChatType chatType;
     private String userId = "";
 
@@ -552,12 +552,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                                 });
                     }
                 } else {
-                    userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(message.conversationId());
+                    String conversationId1 = conversationId.substring(0, 12);
+                    userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(conversationId1);
                     if (userId.equals("")) {
                         mEMMessage.clear();
                         mEMMessage.addAll(list);
                         try {
-                            mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
+                            mPresenter.searchUserDetails(conversationId1.substring(3, conversationId1.length()));
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }

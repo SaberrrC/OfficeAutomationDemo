@@ -41,7 +41,7 @@ public class TabCommunicationFragment extends BaseFragment {
     @BindView(R.id.topView)
     CommonTopView mTopView;
     private String mNickName;
-    private final int REQUESTCODE = 101, RESULTSUCCESS = -2,GROUPNAMEMODIFICATION = -3;
+    private final int REQUESTCODE = 101, RESULTSUCCESS = -2, GROUPNAMEMODIFICATION = -3;
     private long lastClickTime = 0;
 
     @Override
@@ -87,6 +87,7 @@ public class TabCommunicationFragment extends BaseFragment {
                 lastClickTime = currentTime;
                 return;
             }
+            String conversationId = conversation.conversationId().substring(0, 12);
             if (conversation.isGroup()) {
                 String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
                 startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
@@ -95,15 +96,14 @@ public class TabCommunicationFragment extends BaseFragment {
                         .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP));
             } else {
                 EMMessage lastMessage = conversation.getLastMessage();
-                //Title 名字
-                mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
-                if (lastMessage.getFrom().contains("admin") || lastMessage.getTo().contains("admin")) {
+                mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
+                if (lastMessage.getFrom().contains("admin") || conversationId.contains("admin")) {
                     mNickName = "会议邀请";
-                } else if (lastMessage.getFrom().contains("notice") || lastMessage.getTo().contains("notice")) {
+                } else if (lastMessage.getFrom().contains("notice") || conversationId.contains("notice")) {
                     mNickName = "公告通知";
                 }
                 startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
-                        .putExtra("u_id", conversation.conversationId())
+                        .putExtra("u_id", conversationId)
                         .putExtra("title", mNickName)
                         .putExtra("message_to", lastMessage.getTo())
                         .putExtra("message_from", lastMessage.getFrom())
