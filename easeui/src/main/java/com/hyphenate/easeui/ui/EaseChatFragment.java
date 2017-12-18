@@ -54,6 +54,7 @@ import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.event.OnConversationFinishEvent;
+import com.hyphenate.easeui.event.OnMessagesClearEvent;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.requestPermissionsListener;
@@ -77,6 +78,8 @@ import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -95,62 +98,62 @@ import java.util.concurrent.Executors;
  * you can see ChatActivity in demo for your reference
  */
 public class EaseChatFragment extends EaseBaseFragment implements EMMessageListener {
-    protected static final String TAG = "EaseChatFragment";
-    public static final int REQUEST_CODE_MAP = 1;
-    public static final int REQUEST_CODE_CAMERA = 2;
-    public static final int REQUEST_CODE_LOCAL = 3;
-    public static final int REQUEST_CODE_SELECT_VIDEO = 11;
-    public static final int REQUEST_CODE_SELECT_FILE = 12;
-    public static final int REQUEST_CODE_SELECT_AT_USER = 15;
-    public static final int MESSAGE_TYPE_SENT_VOICE_CALL = 1;
-    public static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
-    public static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
-    public static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
-    public static final int MESSAGE_TYPE_RECALL = 9;
+    protected static final String TAG                          = "EaseChatFragment";
+    public static final    int    REQUEST_CODE_MAP             = 1;
+    public static final    int    REQUEST_CODE_CAMERA          = 2;
+    public static final    int    REQUEST_CODE_LOCAL           = 3;
+    public static final    int    REQUEST_CODE_SELECT_VIDEO    = 11;
+    public static final    int    REQUEST_CODE_SELECT_FILE     = 12;
+    public static final    int    REQUEST_CODE_SELECT_AT_USER  = 15;
+    public static final    int    MESSAGE_TYPE_SENT_VOICE_CALL = 1;
+    public static final    int    MESSAGE_TYPE_RECV_VOICE_CALL = 2;
+    public static final    int    MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
+    public static final    int    MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
+    public static final    int    MESSAGE_TYPE_RECALL          = 9;
 
     /**
      * params to fragment
      */
-    protected Bundle fragmentArgs;
-    protected int chatType;
-    protected String toChatUsername;
+    protected Bundle              fragmentArgs;
+    protected int                 chatType;
+    protected String              toChatUsername;
     protected EaseChatMessageList messageList;
-    protected EaseChatInputMenu inputMenu;
+    protected EaseChatInputMenu   inputMenu;
 
     protected EMConversation conversation;
 
     protected InputMethodManager inputManager;
-    protected ClipboardManager clipboard;
+    protected ClipboardManager   clipboard;
 
     protected Handler handler = new Handler();
-    protected File cameraFile;
+    protected File                  cameraFile;
     protected EaseVoiceRecorderView voiceRecorderView;
-    protected SwipeRefreshLayout swipeRefreshLayout;
-    protected ListView listView;
+    protected SwipeRefreshLayout    swipeRefreshLayout;
+    protected ListView              listView;
 
     protected boolean isloading;
     protected boolean haveMoreData = true;
-    protected int pagesize = 20;
-    protected GroupListener groupListener;
+    protected int     pagesize     = 20;
+    protected GroupListener    groupListener;
     protected ChatRoomListener chatRoomListener;
-    protected EMMessage contextMenuMessage;
+    protected EMMessage        contextMenuMessage;
 
-    static final int ITEM_PICTURE = 1;
-    static final int ITEM_TAKE_PICTURE = 2;
-    static final int ITEM_VOICE_CALL = 3;
-    private static final int ITEM_VIDEO = 11;
-    private static final int ITEM_FILE = 12;
-    private static final int ITEM_VIDEO_CALL = 14;
+    static final         int ITEM_PICTURE      = 1;
+    static final         int ITEM_TAKE_PICTURE = 2;
+    static final         int ITEM_VOICE_CALL   = 3;
+    private static final int ITEM_VIDEO        = 11;
+    private static final int ITEM_FILE         = 12;
+    private static final int ITEM_VIDEO_CALL   = 14;
 
-    protected String[] itemStrings = {"照片", "拍摄", "语音聊天", "文件"};
-    protected int[] itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.ease_chat_call_normal, R.drawable.file_input};
-    protected int[] itemIds = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, ITEM_FILE};
+    protected String[] itemStrings   = {"照片", "拍摄", "语音聊天", "文件"};
+    protected int[]    itemdrawables = {R.drawable.ease_chat_image_normal, R.drawable.ease_chat_takepic_pressed, R.drawable.ease_chat_call_normal, R.drawable.file_input};
+    protected int[]    itemIds       = {ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_VOICE_CALL, ITEM_FILE};
 
-    private boolean isMessageListInited;
+    private   boolean             isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
     protected boolean isRoaming = false;
-    private ExecutorService fetchQueue;
-    private String userName;
+    private ExecutorService          fetchQueue;
+    private String                   userName;
     private onEaseUIFragmentListener mListener;
     //麦克风权限请求码
     private static final int REQUEST_RECORD_AUDIO = 100;
@@ -172,6 +175,18 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
         initData();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -307,8 +322,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         });
 
         swipeRefreshLayout = messageList.getSwipeRefreshLayout();
-        swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light,
-                R.color.holo_orange_light, R.color.holo_red_light);
+        swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light, R.color.holo_orange_light, R.color.holo_red_light);
 
         inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -336,6 +350,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             forwardMessage(forward_msg_id);
         }
         listView.setSelection(listView.getAdapter().getCount() - 1);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageClear(OnMessagesClearEvent event) {
+        messageList.refresh();
     }
 
     /**
@@ -1096,8 +1115,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         switch (type) {
             case TXT:
                 if (forward_msg.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
-                    sendBigExpressionMessage(((EMTextMessageBody) forward_msg.getBody()).getMessage(),
-                            forward_msg.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, null));
+                    sendBigExpressionMessage(((EMTextMessageBody) forward_msg.getBody()).getMessage(), forward_msg.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, null));
                 } else {
                     // get the content and send it
                     String content = ((EMTextMessageBody) forward_msg.getBody()).getMessage();

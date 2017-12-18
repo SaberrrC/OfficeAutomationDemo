@@ -22,6 +22,7 @@ import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.event.OnMessagesClearEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.exceptions.HyphenateException;
@@ -50,59 +51,59 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 //群组聊天详情界面
 public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
 
     @BindView(R.id.top_view)
-    CommonTopView topView;
+    CommonTopView  topView;
     @BindView(R.id.btn_chat_delete)
-    TextView btnChatDelete;
+    TextView       btnChatDelete;
     @BindView(R.id.img_portrait)
-    ImageView imgPortrait;
+    ImageView      imgPortrait;
     @BindView(R.id.img_group_person)
-    ImageView imgGroupPerson;
+    ImageView      imgGroupPerson;
     @BindView(R.id.rv_person_show)
-    RecyclerView rvPersonShow;
+    RecyclerView   rvPersonShow;
     @BindView(R.id.rl_group_name)
     RelativeLayout rlGroupName;
     @BindView(R.id.tv_modification_name)
-    TextView tvModificationName;
+    TextView       tvModificationName;
     @BindView(R.id.rl_group_person)
     RelativeLayout rlGroupPerson;
     @BindView(R.id.tv_clear_message_record)
-    TextView tvClearMessageRecord;
+    TextView       tvClearMessageRecord;
     @BindView(R.id.btn_look_message_record)
-    TextView btnLookMessageRecord;
+    TextView       btnLookMessageRecord;
     @BindView(R.id.rl_group_portrait)
     RelativeLayout rlGroupPortrait;
     @BindView(R.id.img_modification_portrait)
-    ImageView imgModificationPortrait;
+    ImageView      imgModificationPortrait;
     @BindView(R.id.img_modification_group_name)
-    ImageView imgModificationGroupName;
+    ImageView      imgModificationGroupName;
     @BindView(R.id.tv_error_layout)
-    TextView tvErrorLayout;
+    TextView       tvErrorLayout;
     @BindView(R.id.sv_container_layout)
-    ScrollView svContainerLayout;
+    ScrollView     svContainerLayout;
     @BindView(R.id.tv_modification_person)
-    TextView tvModificationPerson;
+    TextView       tvModificationPerson;
     @BindView(R.id.ll_look_more)
-    LinearLayout llLookMore;
+    LinearLayout   llLookMore;
 
-    private int memberCount;
-    private String mGroupId;
-    private EMGroup mGroupServer1;
-    private EMGroup mGroupFromServer;
-    private ArrayList<String> mMemberList;
+    private int                         memberCount;
+    private String                      mGroupId;
+    private EMGroup                     mGroupServer1;
+    private EMGroup                     mGroupFromServer;
+    private ArrayList<String>           mMemberList;
     private List<GroupUserInfoResponse> mData;
-    private CommonGroupControlAdapter mAdapter;
-    private boolean mIsGroup, mIsOwner, mIsResume;
+    private CommonGroupControlAdapter   mAdapter;
+    private boolean                     mIsGroup, mIsOwner, mIsResume;
     private EMCursorResult<String> mGroupMemberResult;
     private String mSearchUserId = "", mQueryUserInfo = "";
     private String mGroupOwner, mGroupName, message_to, message_from;
     private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3, MODIFICATIONOWNER = -4, FINISHRESULT = -5, DISSOLVEGROUP = 600;
+    private EMConversation mConversation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,38 +136,36 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 //根据群组ID从本地获取群组基本信息
                 mGroupServer1 = EMClient.getInstance().groupManager().getGroupFromServer(mGroupId);
                 e.onComplete();
-            }).observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(o -> {
-                    }, throwable -> {
-                        hideLoadingView();
-                        if (throwable instanceof HyphenateException) {
-                            switch (((HyphenateException) throwable).getErrorCode()) {
-                                case DISSOLVEGROUP://群组解散
-                                    EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
-                                        setResult(REFRESHSUCCESS);
-                                        finish();
-                                    }, false);
-                                    alertDialog.setCancelable(false);
-                                    alertDialog.show();
-                                    break;
-                            }
-                        }
-                    }, () -> {
-                        //TODO 完成后显示页面
-                        if (mGroupServer1 != null) {
-                            mGroupOwner = mGroupServer1.getOwner();
-                            mGroupName = mGroupServer1.getGroupName();
-                            tvModificationName.setText(mGroupName);
-                            mIsOwner = mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
-                            if (!mIsOwner) {
-                                btnChatDelete.setText("退出群聊");
-                            }
-                        }
-                        if (mIsGroup) {
-                            InitGroupData();
-                        }
-                    });
+            }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(o -> {
+            }, throwable -> {
+                hideLoadingView();
+                if (throwable instanceof HyphenateException) {
+                    switch (((HyphenateException) throwable).getErrorCode()) {
+                        case DISSOLVEGROUP://群组解散
+                            EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                setResult(REFRESHSUCCESS);
+                                finish();
+                            }, false);
+                            alertDialog.setCancelable(false);
+                            alertDialog.show();
+                            break;
+                    }
+                }
+            }, () -> {
+                //TODO 完成后显示页面
+                if (mGroupServer1 != null) {
+                    mGroupOwner = mGroupServer1.getOwner();
+                    mGroupName = mGroupServer1.getGroupName();
+                    tvModificationName.setText(mGroupName);
+                    mIsOwner = mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+                    if (!mIsOwner) {
+                        btnChatDelete.setText("退出群聊");
+                    }
+                }
+                if (mIsGroup) {
+                    InitGroupData();
+                }
+            });
         } else {
             //单聊 查询群用户信息
             message_to = getIntent().getStringExtra("message_to");
@@ -174,6 +173,16 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             mSearchUserId = message_from.substring(3, message_from.length()) + "," + message_to.substring(3, message_to.length());
             showLoadingView();
             mPresenter.searchUserListInfo(mSearchUserId);
+        }
+        if (mIsGroup) {
+            if (!TextUtils.isEmpty(mGroupId)) {
+                mConversation = EMClient.getInstance().chatManager().getConversation(mGroupId);
+            }
+        } else {
+            Bundle extras = getIntent().getParcelableExtra("EXTRAS");
+            String toChatUsername = extras.getString("toChatUsername");
+            int chatType = extras.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
+            mConversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
         }
     }
 
@@ -278,6 +287,13 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         switch (view.getId()) {
             case R.id.btn_look_message_record:
                 //查看聊天记录
+                if (mConversation == null) {
+                    return;
+                }
+                if (mConversation.getAllMessages().size() == 0) {
+                    showToast("当前没有聊天记录");
+                    return;
+                }
                 if (mIsGroup) {
                     intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP);
                     intent.putExtra(EaseConstant.GROUPID, mGroupId);
@@ -297,13 +313,13 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         if (!confirmed) {
                             return;
                         }
-                        Bundle extras = getIntent().getParcelableExtra("EXTRAS");
-                        int chatType = extras.getInt("CHAT_TYPE", EaseConstant.CHATTYPE_SINGLE);
-                        String toChatUsername = extras.getString("toChatUsername");
-                        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
-                        if (conversation != null) {
-                            conversation.clearAllMessages();
+                        if (mConversation != null) {
+                            mConversation.clearAllMessages();
+                            EventBus.getDefault().post(new OnMessagesClearEvent());
+                            showToast("聊天记录清除成功");
+                            return;
                         }
+                        showToast("聊天记录清除失败");
                     }
                 }, true).show();
                 return;
@@ -360,33 +376,31 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 EMClient.getInstance().groupManager().leaveGroup(mGroupId);//退出群组
             }
             e.onComplete();
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(o -> {
-                }, throwable -> {
-                    hideLoadingView();
-                    if (mGroupOwner != null)
-                        if (mIsOwner) {
-                            Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(this, "群组退出失败，请从新尝试！", Toast.LENGTH_SHORT).show();
-                        }
-                    throwable.printStackTrace();
-                }, () -> {
-                    try {
-                        hideLoadingView();
-                        if (mGroupOwner != null)
-                            if (mIsOwner) {
-                                Toast.makeText(this, "解散成功！", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(this, "退出成功！", Toast.LENGTH_SHORT).show();
-                            }
-                    } catch (Throwable e) {
-                        e.printStackTrace();
+        }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(o -> {
+        }, throwable -> {
+            hideLoadingView();
+            if (mGroupOwner != null)
+                if (mIsOwner) {
+                    Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "群组退出失败，请从新尝试！", Toast.LENGTH_SHORT).show();
+                }
+            throwable.printStackTrace();
+        }, () -> {
+            try {
+                hideLoadingView();
+                if (mGroupOwner != null)
+                    if (mIsOwner) {
+                        Toast.makeText(this, "解散成功！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "退出成功！", Toast.LENGTH_SHORT).show();
                     }
-                    setResult(REFRESHSUCCESS);
-                    finish();
-                });
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+            setResult(REFRESHSUCCESS);
+            finish();
+        });
     }
 
     // ---------------------------------- 更新群组名称 ----------------------------------
@@ -492,7 +506,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         tvErrorLayout.setText(errorMsg);
     }
 
-// ---------------------------------- 添加群成员跳转 ----------------------------------
+    // ---------------------------------- 添加群成员跳转 ----------------------------------
 
     class ItemClick extends OnItemClickListener {
         @Override
