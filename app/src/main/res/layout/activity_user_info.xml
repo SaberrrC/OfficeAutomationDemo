@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
@@ -8,13 +7,12 @@
     android:background="@color/page_bg"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
 
 
         <ScrollView
@@ -39,7 +37,7 @@
                         android:layout_marginLeft="20dp"
                         android:text="修改头像 :"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"/>
+                        android:textSize="@dimen/text_common_dp" />
 
                     <ImageView
                         android:id="@+id/arrow"
@@ -48,7 +46,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
-                        android:src="@drawable/tab_me_arrow"/>
+                        android:src="@drawable/tab_me_arrow" />
 
                     <com.facebook.drawee.view.SimpleDraweeView
                         android:id="@+id/user_portrait"
@@ -64,11 +62,10 @@
                         fresco:roundBottomRight="true"
                         fresco:roundTopLeft="true"
                         fresco:roundTopRight="true"
-                        fresco:roundedCornerRadius="5dp"
-                        />
+                        fresco:roundedCornerRadius="5dp" />
                 </RelativeLayout>
 
-                <include layout="@layout/toolbar_shadow"/>
+                <include layout="@layout/toolbar_shadow" />
 
                 <RelativeLayout
                     android:id="@+id/user_jopnumber_box"
@@ -84,7 +81,7 @@
                         android:layout_centerVertical="true"
                         android:text="工号： "
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"/>
+                        android:textSize="@dimen/text_common_dp" />
 
                     <TextView
                         android:id="@+id/user_jopnumber"
@@ -93,11 +90,10 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/user_jopnumber_tips"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"
-                        />
+                        android:textSize="@dimen/text_common_dp" />
                 </RelativeLayout>
 
-                <include layout="@layout/toolbar_shadow"/>
+                <include layout="@layout/toolbar_shadow" />
 
                 <RelativeLayout
                     android:id="@+id/user_sex_box"
@@ -113,7 +109,7 @@
                         android:layout_centerVertical="true"
                         android:text="性别 : "
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"/>
+                        android:textSize="@dimen/text_common_dp" />
 
                     <TextView
                         android:id="@+id/user_sex"
@@ -122,8 +118,7 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/user_sex_tips"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"
-                        />
+                        android:textSize="@dimen/text_common_dp" />
                 </RelativeLayout>
 
                 <View
@@ -131,7 +126,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:background="@color/part_lint_color"/>
+                    android:background="@color/part_lint_color" />
 
                 <RelativeLayout
                     android:id="@+id/user_department_box"
@@ -147,8 +142,7 @@
                         android:layout_marginLeft="20dp"
                         android:text="部门 : "
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"
-                        />
+                        android:textSize="@dimen/text_common_dp" />
 
                     <TextView
                         android:id="@+id/user_department"
@@ -156,9 +150,10 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/user_department_tips"
+                        android:maxLines="1"
+                        android:singleLine="true"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"
-                        />
+                        android:textSize="@dimen/text_common_dp" />
                 </RelativeLayout>
 
                 <View
@@ -166,7 +161,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:background="@color/part_lint_color"/>
+                    android:background="@color/part_lint_color" />
 
                 <RelativeLayout
                     android:id="@+id/user_post_box"
@@ -182,7 +177,7 @@
                         android:layout_marginLeft="20dp"
                         android:text="职位 : "
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"/>
+                        android:textSize="@dimen/text_common_dp" />
 
                     <TextView
                         android:id="@+id/user_post"
@@ -190,9 +185,10 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/user_post_tips"
+                        android:maxLines="1"
+                        android:singleLine="true"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"
-                        />
+                        android:textSize="@dimen/text_common_dp" />
                 </RelativeLayout>
 
                 <View
@@ -200,7 +196,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:background="@color/part_lint_color"/>
+                    android:background="@color/part_lint_color" />
 
                 <RelativeLayout
                     android:id="@+id/user_phone_box"
@@ -216,7 +212,7 @@
                         android:layout_marginLeft="20dp"
                         android:text="电话 : "
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"/>
+                        android:textSize="@dimen/text_common_dp" />
 
                     <TextView
                         android:id="@+id/user_phone"
@@ -225,8 +221,7 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/user_phone_tips"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"
-                        />
+                        android:textSize="@dimen/text_common_dp" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -234,7 +229,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
-                        android:src="@drawable/tab_me_arrow"/>
+                        android:src="@drawable/tab_me_arrow" />
                 </RelativeLayout>
 
                 <View
@@ -242,7 +237,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:background="@color/part_lint_color"/>
+                    android:background="@color/part_lint_color" />
 
                 <RelativeLayout
                     android:id="@+id/user_date_box"
@@ -258,7 +253,7 @@
                         android:layout_marginLeft="20dp"
                         android:text="邮箱："
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"/>
+                        android:textSize="@dimen/text_common_dp" />
 
                     <TextView
                         android:id="@+id/user_mails"
@@ -267,7 +262,7 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/user_mails_message"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"/>
+                        android:textSize="@dimen/text_common_dp" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -275,10 +270,10 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
-                        android:src="@drawable/tab_me_arrow"/>
+                        android:src="@drawable/tab_me_arrow" />
                 </RelativeLayout>
 
-                <include layout="@layout/toolbar_shadow"/>
+                <include layout="@layout/toolbar_shadow" />
 
                 <RelativeLayout
                     android:id="@+id/btn_logout"
@@ -294,7 +289,7 @@
                         android:layout_marginLeft="20dp"
                         android:text="退出帐号"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp"/>
+                        android:textSize="@dimen/text_common_dp" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -302,18 +297,18 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
-                        android:src="@drawable/tab_me_arrow"/>
+                        android:src="@drawable/tab_me_arrow" />
                 </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/part_lint_color"/>
+                    android:background="@color/part_lint_color" />
 
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
 
-    <include layout="@layout/toolbar_shadow"/>
+    <include layout="@layout/toolbar_shadow" />
 
 </LinearLayout>
