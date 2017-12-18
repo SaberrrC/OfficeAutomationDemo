@@ -614,16 +614,16 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                         mDatas.add(mSearchBean);
                         billType = mSearchBean.getPkBillType();
                     }
-                    if (TextUtils.equals(billType, "6402")) {//签卡申请
+                    if (TextUtils.equals(billType, "6402") && mCardResultBean.getData() != null) {//签卡申请
                         mDatas.addAll(mCardResultBean.getData().getNchrSignDetails());
                     }
-                    if (TextUtils.equals(billType, "6403")) {//出差申请
+                    if (TextUtils.equals(billType, "6403") && mTraverResultBean.getData() != null) {//出差申请
                         mDatas.addAll(mTraverResultBean.getData().getNchrevectionApplyDetail());
                     }
-                    if (TextUtils.equals(billType, "6404")) {//休假申请
+                    if (TextUtils.equals(billType, "6404") && mRestResultBean.getData() != null) {//休假申请
                         mDatas.addAll(mRestResultBean.getData().getNchrfurloughApplyDetail());
                     }
-                    if (TextUtils.equals(billType, "6405")) {//加班申请
+                    if (TextUtils.equals(billType, "6405") && mOverTimeResultBean.getData() != null) {//加班申请
                         mDatas.addAll(mOverTimeResultBean.getData().getNchroverTimeApplyDetail());
                     }
                     mFinalRecycleAdapter.notifyDataSetChanged();
