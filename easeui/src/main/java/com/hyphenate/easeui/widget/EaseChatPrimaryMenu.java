@@ -35,6 +35,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
     private ImageView faceNormal;
     private ImageView faceChecked;
     private Button buttonMore;
+    private TextView tv_holdtotalk;
     private boolean ctrlPress = false;
     private long lastClickTime = 0;
 
@@ -65,6 +66,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
         faceChecked = (ImageView) findViewById(R.id.iv_face_checked);
         RelativeLayout faceLayout = (RelativeLayout) findViewById(R.id.rl_face);
         buttonMore = (Button) findViewById(R.id.btn_more);
+        tv_holdtotalk = (TextView) findViewById(R.id.tv_holdtotalk);
 //        edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_normal);
 
         buttonSend.setOnClickListener(this);
@@ -151,6 +153,15 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        tv_holdtotalk.setText("松开结束");
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        tv_holdtotalk.setText("按住说话");
+                        break;
+                }
                 if (listener != null) {
                     return listener.onPressToSpeakBtnTouch(v, event);
                 }
