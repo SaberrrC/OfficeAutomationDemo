@@ -187,7 +187,11 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             holder.message.setText(((EMTextMessageBody) message.getBody()).getMessage());
             String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());
             //            Glide.with(parent.getContext()).load(portrait).into(holder.avatar);
-            Glide.with(parent.getContext()).load(portrait).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar).into(holder.avatar);
+            Glide.with(parent.getContext())
+                    .load(portrait).error(R.drawable.ease_default_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar)
+                    .into(holder.avatar);
             return convertView;
         }
     }
