@@ -32,6 +32,8 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
+import com.shanlinjinrong.oa.model.selectContacts.Child;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.GroupContactListFragment;
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.SelectedGroupContactFragment;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedContactAdapter;
@@ -40,6 +42,7 @@ import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.SelectedGroupContactContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.SelectedGroupContactPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.ui.fragment.MyJoinPeopleFragment;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,6 +83,9 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     private String[] mUserCodes;
     private List<String> mOrgIdKey;
     private List<Contacts> mGroupUsers;
+    private ArrayList<Child> selectedContacts;//已经选择的联系人
+    private AppManager appManager = null;
+    private SelectJoinPeopleActivity.MyJoinHandler mJoinHandler = null;
     private List<Contacts> mSearchData;
     private InputMethodManager inputManager;
     private ArrayList<String> mSelectedAccount;
@@ -88,6 +94,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     private SparseArray<List<Contacts>> mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
     private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101, FINISHRESULT = -5;
+    private boolean isFromSelectedGroupContactActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,16 +114,36 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     }
 
     private void initData() {
+
         mOrgIdKey = new ArrayList<>();
         mFragments = new ArrayList<>();
         mGroupUsers = new ArrayList<>();
         mSearchData = new ArrayList<>();
-        mCacheContact = new SparseArray<>();
-        mSelectedAccount = getIntent().getStringArrayListExtra("selectedMember");
-        if (mSelectedAccount == null) {
-            mSelectedAccount = new ArrayList<>();
-            mSelectedAccount.add("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+
+        isFromSelectedGroupContactActivity = getIntent().getExtras().getBoolean("isFromSelectedGroupContactActivity", false);
+        if (isFromSelectedGroupContactActivity) {
+            selectedContacts = getIntent().getParcelableArrayListExtra("selectedContacts");
+            if (selectedContacts == null) {
+                selectedContacts = new ArrayList<>();
+            } else {
+                mTopView.setRightText(selectedContacts.size() != 0 ? "确认" + "(" + selectedContacts.size() + ")" : "确认");
+                mTvSelectedContact.setText(selectedContacts.size() + "");
+                for (int i = 0; i < selectedContacts.size(); i++) {
+                    if (mSelectedAccount == null) {
+                        mSelectedAccount = new ArrayList<>();
+                    }
+                    mSelectedAccount.add(selectedContacts.get(i).getCODE());
+                }
+            }
+        } else {
+            mSelectedAccount = getIntent().getStringArrayListExtra("selectedMember");
+            if (mSelectedAccount == null) {
+                mSelectedAccount = new ArrayList<>();
+                mSelectedAccount.add("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+            }
         }
+        mCacheContact = new SparseArray<>();
+
         if (getIntent().getIntExtra("type", -1) == 0) {
             Contacts contacts1 = new Contacts();
             contacts1.setChecked(true);
@@ -195,11 +222,21 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             mUserCodes = new String[mGroupUsers.size()];
 
             for (int i = 0; i < mGroupUsers.size(); i++) {
+                Child child;
                 mUserNames[i] = mGroupUsers.get(i).getUsername();
                 mUserCodes[i] = "sl_" + mGroupUsers.get(i).getCode();
+                child = new Child(mGroupUsers.get(i).getUsername(), mGroupUsers.get(i).getUid());
+                child.setCODE("sl_" + mGroupUsers.get(i).getCode());
+                selectedContacts.add(child);
             }
             showLoadingView();
-            if (getIntent().getBooleanExtra("isAddMember", false)) {
+            if (isFromSelectedGroupContactActivity) {
+                hideLoadingView();
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra("contacts", selectedContacts);
+                setResult(RESULT_OK, intent);
+                finish();
+            } else if (getIntent().getBooleanExtra("isAddMember", false)) {
                 addMember(mUserCodes);
             } else {
                 createGroup(mUserNames, mUserCodes);
@@ -233,7 +270,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     }
                     content.append("加入群组");
                     //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
-                    EMMessage message = EMMessage.createTxtSendMessage(content.toString(),groupId);
+                    EMMessage message = EMMessage.createTxtSendMessage(content.toString(), groupId);
                     //如果是群聊，设置chattype，默认是单聊
                     message.setChatType(EMMessage.ChatType.GroupChat);
                     //发送消息
@@ -322,16 +359,26 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
         //-------------------------------  BottomFragment  -------------------------------
 
-        if (mGroupUsers.size() > 0) {
-            if (mBottomFragment == null) {
-                mBottomFragment = new GroupContactListFragment(mGroupUsers);
+        if (isFromSelectedGroupContactActivity) {
+            if (selectedContacts.size() > 0) {
+                //-------------
+                appManager.setJoinhandler(mJoinHandler);
+                //--------------
+                new MyJoinPeopleFragment(selectedContacts).show(getSupportFragmentManager(), R.id.bottomsheet);
             }
-            if (bottomContainerLayout.isSheetShowing()) {
-                mBottomFragment.dismiss();
-                bottomContainerLayout.dismissSheet();
-            } else {
-                mBottomFragment.show(getSupportFragmentManager(), R.id.bottom_container_layout);
-                mBottomFragment.updateBottomData();
+
+        } else {
+            if (mGroupUsers.size() > 0) {
+                if (mBottomFragment == null) {
+                    mBottomFragment = new GroupContactListFragment(mGroupUsers);
+                }
+                if (bottomContainerLayout.isSheetShowing()) {
+                    mBottomFragment.dismiss();
+                    bottomContainerLayout.dismissSheet();
+                } else {
+                    mBottomFragment.show(getSupportFragmentManager(), R.id.bottom_container_layout);
+                    mBottomFragment.updateBottomData();
+                }
             }
         }
     }
@@ -355,8 +402,16 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
     @Override
     public void selectedUsers(List<Contacts> groupUsers) {
-        mTvSelectedContact.setText(String.valueOf(groupUsers.size()));
-        mTopView.setRightText(groupUsers.size() != 0 ? "确认" + "(" + groupUsers.size() + ")" : "确认");
+
+
+        if (isFromSelectedGroupContactActivity) {
+            int number = selectedContacts.size() + groupUsers.size();
+            mTopView.setRightText(number != 0 ? "确认" + "(" + number + ")" : "确认");
+            mTvSelectedContact.setText(number + "");
+        } else {
+            mTopView.setRightText(groupUsers.size() != 0 ? "确认" + "(" + groupUsers.size() + ")" : "确认");
+            mTvSelectedContact.setText(String.valueOf(groupUsers.size()));
+        }
     }
 
 
@@ -405,8 +460,15 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         if (event.getSize() == 0)
             hideBottomView();
 
-        mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
-        mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
+
+        if (isFromSelectedGroupContactActivity) {
+            int number = selectedContacts.size() + mGroupUsers.size();
+            mTopView.setRightText(number != 0 ? "确认" + "(" + number + ")" : "确认");
+            mTvSelectedContact.setText(number + "");
+        } else {
+            mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
+            mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
+        }
     }
 
     private boolean hideBottomView() {
@@ -549,9 +611,17 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 }
             }
 
-            //更新UI
-            mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
-            mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
+
+            if (isFromSelectedGroupContactActivity) {
+                int number = selectedContacts.size() + mGroupUsers.size();
+                mTopView.setRightText(number != 0 ? "确认" + "(" + number + ")" : "确认");
+                //更新UI
+                mTvSelectedContact.setText(number + "");
+            } else {
+                mTopView.setRightText(mGroupUsers.size() != 0 ? "确认" + "(" + mGroupUsers.size() + ")" : "确认");
+                //更新UI
+                mTvSelectedContact.setText(String.valueOf(mGroupUsers.size()));
+            }
 
             //防止Item点击效果错位问题
             Handler handler = new Handler();

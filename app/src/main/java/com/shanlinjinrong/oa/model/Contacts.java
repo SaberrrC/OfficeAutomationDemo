@@ -125,6 +125,11 @@ public class Contacts implements MultiItemEntity, Serializable {
     public Contacts() {
     }
 
+    public Contacts( String username, String uid) {
+        this.username=username;
+        this.uid=uid;
+    }
+
     public Contacts(JSONObject jsonObject) {
         try {
             departmentId = jsonObject.getString("id");

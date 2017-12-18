@@ -14,9 +14,11 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
+            android:singleLine="true"
+            android:maxLines="1"
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
@@ -26,8 +28,9 @@
             android:id="@+id/tv_department"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginStart="30dp"
+
+            android:singleLine="true"
+            android:maxLines="1"
             android:textSize="16sp"
             tools:text="市场部" />
 
@@ -41,6 +44,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:singleLine="true"
+            android:maxLines="1"
             android:textSize="16sp"
             tools:text="销售经理" />
 

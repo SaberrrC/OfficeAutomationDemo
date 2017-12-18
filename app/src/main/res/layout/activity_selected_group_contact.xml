@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         app:leftDrawable="@drawable/toolbar_back"
-        app:rightText="确认"
         app:leftText="返回"
+        app:rightText="确认"
         app:topTitle="选择成员" />
 
     <View
@@ -105,11 +105,11 @@
         android:id="@+id/tv_empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_top2"
         android:layout_above="@+id/ll_selected_contact"
+        android:layout_below="@+id/rl_top2"
         android:background="@color/white"
         android:gravity="center"
-        tools:text="网络不通，请检查网络连接！"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:text="网络不通，请检查网络连接！" />
 
 </RelativeLayout>

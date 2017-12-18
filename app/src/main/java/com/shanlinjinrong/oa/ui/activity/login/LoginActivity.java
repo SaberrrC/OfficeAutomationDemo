@@ -175,7 +175,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     private boolean check() {
         if (userEmail.getText().toString().equals("")) {
-            showToast("请输入您的邮箱帐号或者工号");
+            showToast("请输入您的邮箱帐号或员工号");
             return false;
         }
         if (!Utils.isRegex(Constants.Regex.REGEX_EMAIL, userEmail.getText().toString())) {

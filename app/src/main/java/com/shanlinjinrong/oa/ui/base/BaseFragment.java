@@ -266,7 +266,7 @@ public abstract class BaseFragment extends Fragment {
     public KJHttp initKjHttp() {
         if (kjHttp == null) {
             kjHttp = new MyKjHttp();
-            HttpConfig.TIMEOUT = 10000;
+            HttpConfig.TIMEOUT = 30000;
         } else {
             kjHttp.cancelAll();
             kjHttp.cleanCache();
