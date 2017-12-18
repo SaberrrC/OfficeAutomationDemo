@@ -40,7 +40,7 @@ public class LoginUtils {
                     String email = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_USER_EMAIL);
                     String departmentId = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_DEPARTMENT);
                     FriendsInfoCacheSvc.getInstance(context)
-                            .addOrUpdateFriends(new Friends(u_id, u_name, Constants.PHPSLPicBaseUrl + u_pic, sex, phone, post, department, email, departmentId));
+                            .addOrUpdateFriends(new Friends(u_id, u_name,  u_pic, sex, phone, post, department, email, departmentId));
                     if (imLoginListener != null) {
                         imLoginListener.loginImSuccess();
                     }

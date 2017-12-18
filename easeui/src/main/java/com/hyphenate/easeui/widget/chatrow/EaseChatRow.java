@@ -73,7 +73,7 @@ public abstract class EaseChatRow extends LinearLayout {
             .imageScaleType(ImageScaleType.EXACTLY)
             .bitmapConfig(Bitmap.Config.RGB_565)
             .considerExifParams(true)
-            .displayer(new FadeInBitmapDisplayer(300))
+            .displayer(new FadeInBitmapDisplayer(0))
             .build();
 
     public EaseChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {

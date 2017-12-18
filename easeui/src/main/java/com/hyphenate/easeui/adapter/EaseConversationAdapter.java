@@ -103,7 +103,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             holder.unreadLabel = (TextView) convertView.findViewById(R.id.unread_msg_number);
             holder.message = (TextView) convertView.findViewById(R.id.message);
             holder.time = (TextView) convertView.findViewById(R.id.time);
-            holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
+            holder.avatar = (EaseImageView) convertView.findViewById(R.id.avatar);
             holder.msgState = convertView.findViewById(R.id.msg_state);
             holder.list_itease_layout = (RelativeLayout) convertView.findViewById(R.id.list_itease_layout);
             holder.motioned = (TextView) convertView.findViewById(R.id.mentioned);
@@ -206,7 +206,8 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 holder.motioned.setVisibility(View.GONE);
             } else if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()))) {
                 try {
-                    ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getTo()),
+                    String portrait = FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getTo());
+                    ImageLoader.getInstance().displayImage(portrait,
                             holder.avatar, new DisplayImageOptions.Builder()
                                     .showImageForEmptyUri(R.drawable.ease_user_portraits)
                                     .showImageOnFail(R.drawable.ease_user_portraits)
@@ -215,7 +216,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                                     .imageScaleType(ImageScaleType.EXACTLY)
                                     .bitmapConfig(Bitmap.Config.RGB_565)
                                     .considerExifParams(true)
-                                    .displayer(new FadeInBitmapDisplayer(300))
+                                    .displayer(new FadeInBitmapDisplayer(0))
                                     .build());
                     holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getTo()));
                     holder.motioned.setVisibility(View.GONE);
