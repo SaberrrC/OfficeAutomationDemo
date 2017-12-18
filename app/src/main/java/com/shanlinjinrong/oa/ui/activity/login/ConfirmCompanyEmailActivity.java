@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.login.contract.ConfirmEmailContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.ConfirmEmailPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 
 public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPresenter> implements ConfirmEmailContract.View {
 
-    public static String EMAIL_STATUS = "email_status";
+    public static String EMAIL_STATUS  = "email_status";
     public static String EMAIL_ADDRESS = "email_address";
 
 
@@ -40,11 +41,11 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
     @BindView(R.id.iv_icon)
     ImageView mIcon;
 
-    @BindView(R.id.et_email)
-    EditText mEmail;
+//    @BindView(R.id.et_email)
+//    EditText mEmail;
 
-    @BindView(R.id.tv_email_suffix)
-    AutoCompleteTextView mEmailSuffix;
+//    @BindView(R.id.tv_email_suffix)
+//    AutoCompleteTextView mEmailSuffix;
 
     @BindView(R.id.tv_email_address)
     TextView mUserEmail;
@@ -52,12 +53,12 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
     @BindView(R.id.btn_sure)
     Button mSureBtn;
 
-    @BindView(R.id.iv_email_select_arrow)
-    LinearLayout mEmailSelectIcon;
+//    @BindView(R.id.iv_email_select_arrow)
+//    LinearLayout mEmailSelectIcon;
 
     private boolean mStatus; //是否查找到邮箱的状态
-    private String mEmailAddress;
-    private String userCode;
+    private String  mEmailAddress;
+    private String  userCode;
 
 
     @Override
@@ -79,21 +80,21 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
         mData.add("@shanlinbao.com");
         mData.add("@shanlincaifu.com");
 
-        mEmailSuffix.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mData));
+        //mEmailSuffix.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mData));
 
-        mSureBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mStatus) {
-                    if ((TextUtils.isEmpty(mEmail.getText().toString().trim()) || TextUtils.isEmpty(mEmailSuffix.getText().toString().trim()))) {
-                        Toast.makeText(ConfirmCompanyEmailActivity.this, "请输入完整的邮箱格式！", Toast.LENGTH_SHORT).show();
-                        return;
-                    } else {
-                        mEmailAddress = mEmail.getText().toString().trim() + mEmailSuffix.getText().toString().trim();
-                    }
-                }
-                mPresenter.sendEmail(userCode, mEmailAddress);
+        mSureBtn.setOnClickListener(v -> {
+            if (!mStatus) {
+                startActivity(new Intent(ConfirmCompanyEmailActivity.this, LoginActivity.class));
+                AppManager.sharedInstance().finishAllActivity();
+                return;
+//                    if ((TextUtils.isEmpty(mEmail.getText().toString().trim()) || TextUtils.isEmpty(mEmailSuffix.getText().toString().trim()))) {
+//                        Toast.makeText(ConfirmCompanyEmailActivity.this, "请输入完整的邮箱格式！", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    } else {
+//                        mEmailAddress = mEmail.getText().toString().trim() + mEmailSuffix.getText().toString().trim();
+//                    }
             }
+            mPresenter.sendEmail(userCode, mEmailAddress);
         });
 
         mStatus = getIntent().getBooleanExtra(EMAIL_STATUS, true);
@@ -105,22 +106,24 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
             mFindEmailLayout.setVisibility(View.VISIBLE);
             mUserEmail.setText(mEmailAddress);
         } else {
-            mIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.not_find_email, null));
+            //没有邮箱
+            mIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.find_email, null));
+            //mIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.not_find_email, null));
             mConfirmEmailLayout.setVisibility(View.VISIBLE);
             mFindEmailLayout.setVisibility(View.GONE);
         }
 
-        mEmailSelectIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mEmailSuffix.isPopupShowing()) {
-                    mEmailSuffix.dismissDropDown();
-                } else {
-                    // 进入这表示图片被选中，可以处理相应的逻辑了
-                    mEmailSuffix.showDropDown();
-                }
-            }
-        });
+//        mEmailSelectIcon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mEmailSuffix.isPopupShowing()) {
+//                    mEmailSuffix.dismissDropDown();
+//                } else {
+//                    // 进入这表示图片被选中，可以处理相应的逻辑了
+//                    mEmailSuffix.showDropDown();
+//                }
+//            }
+//        });
     }
 
 

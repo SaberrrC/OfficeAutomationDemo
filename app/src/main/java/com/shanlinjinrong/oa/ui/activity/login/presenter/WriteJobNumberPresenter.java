@@ -94,12 +94,15 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                         case Api.RESPONSES_CODE_OK:
                             JSONArray data = jsonObject.getJSONArray("data");
                             User user = new User();
-                            String email = data.getJSONObject(0).optString("email");
+                            JSONObject jsonObject1 = data.optJSONObject(0);
+                            String email = "";
+                            if (jsonObject1 != null) {
+                                email = jsonObject1.optString("email");
+                            }
                             if (TextUtils.isEmpty(email) || "null".equalsIgnoreCase(email)) {
                                 email = "";
                             }
                             user.setEmail(email);
-//                            user.setCode(data.getJSONObject(0).getString("code"));
                             if (mView != null)
                                 mView.searchUserSuccess(user);
                             break;

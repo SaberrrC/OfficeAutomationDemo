@@ -48,20 +48,20 @@ import static com.shanlinjinrong.oa.common.Api.RESPONSES_CODE_ACCOUNT_PASSWORD_E
  */
 public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View, View.OnKeyListener {
     @BindView(R.id.user_email)
-    EditText userEmail;
+    EditText       userEmail;
     @BindView(R.id.user_pwd)
-    EditText userPwd;
+    EditText       userPwd;
     @BindView(R.id.layout_root)
     KeyboardLayout mRootView;
     @BindView(R.id.login_scroll_view)
-    ScrollView mScrollView;
+    ScrollView     mScrollView;
     @BindView(R.id.cb_auto_login)
-    CheckBox mCbAutoLogin;
+    CheckBox       mCbAutoLogin;
     @BindView(R.id.tv_find_pwd)
-    TextView mTvFindPwd;
+    TextView       mTvFindPwd;
     private DoubleClickExitHelper doubleClickExitHelper;
-    private int UPDATE_RECYCLERVIEW_POSITION = 11;
-    private Handler mHandler = new Handler() {
+    private int     UPDATE_RECYCLERVIEW_POSITION = 11;
+    private Handler mHandler                     = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -70,7 +70,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             }
         }
     };
-    private boolean isAutoLogin = true;
+    private boolean isAutoLogin                  = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

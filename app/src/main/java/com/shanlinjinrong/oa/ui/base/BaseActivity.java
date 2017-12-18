@@ -89,7 +89,7 @@ public class BaseActivity extends AppCompatActivity {
         if (kjHttp == null) {
             kjHttp = new MyKjHttp();
             HttpConfig config = new HttpConfig();
-            HttpConfig.TIMEOUT = 10000;
+            HttpConfig.TIMEOUT = 30000;
             kjHttp.setConfig(config);
         } else {
             kjHttp.cleanCache();
