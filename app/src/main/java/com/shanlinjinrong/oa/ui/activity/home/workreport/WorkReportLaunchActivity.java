@@ -58,7 +58,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     public static final int REQUEST_CODE_MULTIPLE = 1;//多选，接收人
 
     public static final int WRITE_REPORT_OK = 100;//填写日报
-    public static final int SELECT_OK = 101;//选择成功，requestcode
+    public static final int SELECT_OK       = 101;//选择成功，requestcode
 
 
     @BindView(R.id.work_report_list)
@@ -89,11 +89,11 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
     private DatePicker picker;
 
-    private String currentDate;//当前年月日
+    private String                      currentDate;//当前年月日
     private WorkReportLaunchListAdapter mWorkReportListAdapter;
-    private String mReceiverId; //接收人ID
-    private String mReceiverName; //接收人名称
-    private String mReceiverPost; //接收人ID
+    private String                      mReceiverId; //接收人ID
+    private String                      mReceiverName; //接收人名称
+    private String                      mReceiverPost; //接收人ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +110,13 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     }
 
     private void initView(Bundle savedInstanceState) {
-        mWorkReportList.setLayoutManager(new LinearLayoutManager(this));
+        mWorkReportList.setLayoutManager(new LinearLayoutManager(this) {
+                                             @Override
+                                             public boolean canScrollVertically() {
+                                                 return false;
+                                             }
+                                         }
+        );
         if (savedInstanceState != null) {
             mHourReportData = savedInstanceState.getParcelableArrayList("hour_report_list");
             mWorkReportListData = savedInstanceState.getParcelableArrayList("work_report_list");

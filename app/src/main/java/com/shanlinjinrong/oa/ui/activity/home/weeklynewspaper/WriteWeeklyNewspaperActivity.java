@@ -66,22 +66,22 @@ import static com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunch
  */
 public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNewspaperActivityPresenter> implements WriteWeeklyNewspaperActivityContract.View {
     //标题栏右侧按键的功能  0：提交周报  1：编辑更新周报 2：审核周报
-    public static int FUNCTION_COMMIT = 0;
-    public static int FUNCTION_EDIT = 1;
+    public static int FUNCTION_COMMIT     = 0;
+    public static int FUNCTION_EDIT       = 1;
     public static int FUNCTION_EVALUATION = 2;
     @BindView(R.id.top_view)
-    CommonTopView mTopView;
+    CommonTopView      mTopView;
     @BindView(R.id.tv_date)
     AutoResizeTextView mTvDate;
     //  TextView mTvDate;
     @BindView(R.id.rv_work_content)
-    AllRecyclerView mRvWorkContent;
+    AllRecyclerView    mRvWorkContent;
     @BindView(R.id.ll_next_work_content)
-    LinearLayout mLlNextWorkContent;
+    LinearLayout       mLlNextWorkContent;
     @BindView(R.id.rv_next_work_content)
-    AllRecyclerView mRvNextWorkContent;
+    AllRecyclerView    mRvNextWorkContent;
     @BindView(R.id.tv_receiver)
-    TextView mTvReceiver;
+    TextView           mTvReceiver;
 
     @BindView(R.id.btn_add_this_week_work)
     TextView mAddThisWeekWorkBtn;
@@ -110,15 +110,15 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @BindView(R.id.report_scroll_view)
     ScrollView mScroll;
 
-    private DatePicker picker;
-    private int workPlanIndex;
-    private int workContentIndex;
-    private String mCurrentDate;//当前年月日
-    private List<String> beginTimeList;
+    private DatePicker                 picker;
+    private int                        workPlanIndex;
+    private int                        workContentIndex;
+    private String                     mCurrentDate;//当前年月日
+    private List<String>               beginTimeList;
     private ThisWeekWorkContentAdapter mAdapter;
     private NextWeekWorkContentAdapter mNextAdapter;
-    private WorkContentBean mWorkContentBean;
-    private List<WorkContentBean> mData = new ArrayList<>();
+    private WorkContentBean            mWorkContentBean;
+    private List<WorkContentBean> mData     = new ArrayList<>();
     private List<WorkContentBean> mNextData = new ArrayList<>();
     private SharedPreferences mSharedPreferences; //记录每个账号的填写情况
     private OptionsPickerView beginTimeView;
@@ -262,7 +262,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
         mTvDate.setText(DateUtils.getCurrentWeek("至", "yyyy-MM-dd"));
         mAdapter = new ThisWeekWorkContentAdapter(mData);
-        mRvWorkContent.setLayoutManager(new LinearLayoutManager(this));
+        mRvWorkContent.setLayoutManager(new LinearLayoutManager(this) {
+                                            @Override
+                                            public boolean canScrollVertically() {
+                                                return false;
+                                            }
+                                        }
+        );
         mRvWorkContent.setAdapter(mAdapter);
         mRvWorkContent.addItemDecoration(new WeekReportDecorationLine(this, mData));
         mAdapter.notifyDataSetChanged();
@@ -289,7 +295,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 mNextData.get(i).setState("未填写");
             }
         }
-        mRvNextWorkContent.setLayoutManager(new LinearLayoutManager(this));
+        mRvNextWorkContent.setLayoutManager(new LinearLayoutManager(this) {
+                                                @Override
+                                                public boolean canScrollVertically() {
+                                                    return false;
+                                                }
+                                            }
+        );
         mNextAdapter = new NextWeekWorkContentAdapter(mNextData);
         mRvNextWorkContent.setAdapter(mNextAdapter);
         mRvNextWorkContent.addItemDecoration(new WeekReportDecorationLine(this, mNextData));
@@ -340,7 +352,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         mEtWorkReportEvaluation.setText(weekReportItem.getCheckmainRating() == null ? "" : weekReportItem.getCheckmainRating());
 
         mAdapter = new ThisWeekWorkContentAdapter(mData);
-        mRvWorkContent.setLayoutManager(new LinearLayoutManager(this));
+        mRvWorkContent.setLayoutManager(new LinearLayoutManager(this) {
+                                            @Override
+                                            public boolean canScrollVertically() {
+                                                return false;
+                                            }
+                                        }
+        );
         mRvWorkContent.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -371,7 +389,13 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             putString(mNextData.get(i).getTitle() + "personLiable", weekReportItem.getWeekPlane().get(i).getPersonLiable());
             putString(mNextData.get(i).getTitle() + "remark", weekReportItem.getWeekPlane().get(i).getRemark());
         }
-        mRvNextWorkContent.setLayoutManager(new LinearLayoutManager(this));
+        mRvNextWorkContent.setLayoutManager(new LinearLayoutManager(this) {
+                                                @Override
+                                                public boolean canScrollVertically() {
+                                                    return false;
+                                                }
+                                            }
+        );
         mNextAdapter = new NextWeekWorkContentAdapter(mNextData);
         mRvNextWorkContent.setAdapter(mNextAdapter);
         mNextAdapter.notifyDataSetChanged();
