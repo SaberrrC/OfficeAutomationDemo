@@ -1,6 +1,8 @@
 package com.hyphenate.easeui.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -33,6 +35,10 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.easeui.widget.EaseImageView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -141,10 +147,11 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
 
             if (lastMessage.getType() == EMMessage.Type.TXT) {
-                String jiamiStr = EncryptionUtil.getDecryptStr(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "", lastMessage.getFrom());
+                Spannable jiamiStr = EaseSmileUtils.getSmiledText(getContext(), EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))));
                 holder.message.setText(jiamiStr, BufferType.SPANNABLE);
             } else {
-                String jiamiStr = EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))) + "";
+                Spannable jiamiStr = EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext())));
+
                 holder.message.setText(jiamiStr, BufferType.SPANNABLE);
             }
             if (content != null) {
@@ -182,20 +189,34 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
                 holder.motioned.setVisibility(View.GONE);
             } else if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()))) {
+                ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getFrom()),
+                        holder.avatar, new DisplayImageOptions.Builder()
+                                .showImageForEmptyUri(R.drawable.ease_user_portraits)
+                                .showImageOnFail(R.drawable.ease_user_portraits)
+                                .resetViewBeforeLoading(true)
+                                .cacheOnDisk(true)
+                                .imageScaleType(ImageScaleType.EXACTLY)
+                                .bitmapConfig(Bitmap.Config.RGB_565)
+                                .considerExifParams(true)
+                                .displayer(new FadeInBitmapDisplayer(300))
+                                .build());
 
-                Glide.with(getContext()).load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getFrom()))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(R.drawable.ease_default_avatar)
-                        .into(holder.avatar);
                 holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getFrom()));
 
                 holder.motioned.setVisibility(View.GONE);
             } else if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()))) {
                 try {
-                    Glide.with(getContext()).load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getTo()))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .placeholder(R.drawable.ease_default_avatar)
-                            .into(holder.avatar);
+                    ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getTo()),
+                            holder.avatar, new DisplayImageOptions.Builder()
+                                    .showImageForEmptyUri(R.drawable.ease_user_portraits)
+                                    .showImageOnFail(R.drawable.ease_user_portraits)
+                                    .resetViewBeforeLoading(true)
+                                    .cacheOnDisk(true)
+                                    .imageScaleType(ImageScaleType.EXACTLY)
+                                    .bitmapConfig(Bitmap.Config.RGB_565)
+                                    .considerExifParams(true)
+                                    .displayer(new FadeInBitmapDisplayer(300))
+                                    .build());
                     holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getTo()));
                     holder.motioned.setVisibility(View.GONE);
                 } catch (Throwable throwable) {
