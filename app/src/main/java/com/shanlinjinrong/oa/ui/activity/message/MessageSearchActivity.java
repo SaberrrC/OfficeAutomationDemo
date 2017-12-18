@@ -104,6 +104,9 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.length() == 0) {
+                    if (messageList == null) {
+                        return;
+                    }
                     messageList.clear();
                     messageaAdapter.notifyDataSetChanged();
                     mTvNoResult.setVisibility(View.GONE);
