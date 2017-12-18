@@ -174,7 +174,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
             R.id.user_post_box, R.id.user_phone_box, R.id.user_date_box, R.id.btn_logout})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
+        if (currentTime - lastClickTime < 1000) {
             lastClickTime = currentTime;
             return;
         }

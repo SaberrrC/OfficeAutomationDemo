@@ -129,7 +129,7 @@ public class TabHomePageFragment extends BaseFragment {
     })
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
+        if (currentTime - lastClickTime < 1000) {
             lastClickTime = currentTime;
             return;
         }

@@ -87,6 +87,7 @@ public class CreateVedioMeetingActivity extends BaseActivity {
     private String begintime;//开始时间
     private String endtime;//结束时间
     private String meetingType;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,6 +333,11 @@ public class CreateVedioMeetingActivity extends BaseActivity {
     @OnClick({R.id.report_iv_add_person, R.id.btn_create_meeting,
             R.id.tv_ordiny_meet_date, R.id.tv_meet_time})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 1000) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             //点击选择会议日期
             case R.id.tv_ordiny_meet_date:

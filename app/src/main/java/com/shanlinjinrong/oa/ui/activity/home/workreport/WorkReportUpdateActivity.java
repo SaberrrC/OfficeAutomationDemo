@@ -487,7 +487,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     @OnClick({R.id.ll_select_date, R.id.ll_select_receiver})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
+        if (currentTime - lastClickTime < 1000) {
             lastClickTime = currentTime;
             return;
         }

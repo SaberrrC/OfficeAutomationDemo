@@ -127,7 +127,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @OnClick({R.id.search_et_cancle})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
+        if (currentTime - lastClickTime < 1000) {
             lastClickTime = currentTime;
             return;
         }

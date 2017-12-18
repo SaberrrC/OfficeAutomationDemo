@@ -264,7 +264,7 @@ public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> im
     @OnClick({R.id.tv_note_date, R.id.btn_voice_input})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
+        if (currentTime - lastClickTime < 1000) {
             lastClickTime = currentTime;
             return;
         }

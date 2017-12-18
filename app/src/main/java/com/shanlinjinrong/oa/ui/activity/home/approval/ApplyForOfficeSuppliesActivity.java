@@ -158,7 +158,7 @@ public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOff
             @Override
             public void onClick(View view) {
                 long currentTime = Calendar.getInstance().getTimeInMillis();
-                if (currentTime - lastClickTime < 500) {
+                if (currentTime - lastClickTime < 1000) {
                     lastClickTime = currentTime;
                     return;
                 }
@@ -188,7 +188,7 @@ public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOff
     @OnClick({R.id.btn_voice_input, R.id.btn_submit})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
+        if (currentTime - lastClickTime < 1000) {
             lastClickTime = currentTime;
             return;
         }

@@ -398,7 +398,7 @@ public class MeLaunchLeaveActivity extends BaseActivity {
     @OnClick({R.id.iv_approval_pass, R.id.iv_approval_reject})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
+        if (currentTime - lastClickTime < 1000) {
             lastClickTime = currentTime;
             return;
         }

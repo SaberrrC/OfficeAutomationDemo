@@ -709,7 +709,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
     @OnClick({R.id.toolbar_text_btn})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
+        if (currentTime - lastClickTime < 1000) {
             lastClickTime = currentTime;
             return;
         }

@@ -60,6 +60,7 @@ import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -111,6 +112,7 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
     private boolean isCanHand = true;//判断当前是否能举手
     private String myAccount;//当前自己的账号
     private String currentCreateAccount;//当前创建者的账号
+    private long   lastClickTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -833,6 +835,11 @@ public class MeetingVideoActivity extends BaseActivity implements AVChatStateObs
 
     @OnClick({R.id.rl_handler, R.id.rl_leave_meeting})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 1000) {
+            lastClickTime = currentTime;
+            return;
+        }
         switch (view.getId()) {
             case R.id.rl_handler://举手layout
 

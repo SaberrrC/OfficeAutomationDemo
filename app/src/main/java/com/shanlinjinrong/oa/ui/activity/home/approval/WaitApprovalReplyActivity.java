@@ -23,10 +23,9 @@ import com.shanlinjinrong.oa.ui.activity.home.approval.contract.WaitApprovalRepl
 import com.shanlinjinrong.oa.ui.activity.home.approval.presenter.WaitApprovalReplyPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
-import org.json.JSONObject;
+import java.util.Calendar;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -51,6 +50,7 @@ public class WaitApprovalReplyActivity extends HttpBaseActivity<WaitApprovalRepl
     private String appr_id;
     private String oa_id;
     private boolean isReject;//是否是驳回
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +106,11 @@ public class WaitApprovalReplyActivity extends HttpBaseActivity<WaitApprovalRepl
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 if ((!(mEtReply.getText().toString().equals("")))) {
                     showTip("是否放弃编辑", "确定", "取消");
                 } else {
