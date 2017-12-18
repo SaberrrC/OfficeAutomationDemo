@@ -14,6 +14,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
         fresco:placeholderImage="@drawable/tab_me_head_default"
+        android:src="@drawable/icon_homepage_work_report_me_launch"
         fresco:placeholderImageScaleType="fitXY"
         fresco:roundBottomLeft="true"
         fresco:roundBottomRight="true"

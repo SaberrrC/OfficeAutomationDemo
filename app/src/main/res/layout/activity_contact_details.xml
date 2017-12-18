@@ -50,7 +50,7 @@
         android:layout_below="@id/rl_top"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:src="@mipmap/img_user" />
+        android:src="@drawable/icon_homepage_work_report_me_launch" />
 
     <TextView
         android:id="@+id/tv_user_name"
