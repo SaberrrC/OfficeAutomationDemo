@@ -194,6 +194,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
             //会议室 选中的人员
             if (getIntent().getIntExtra(Constants.SELECTEDTYEPE, 0) == 0) {
+                mTopView.setAppTitle("选择与会人员");
                 ArrayList<Child> contacts = new ArrayList<>();
                 for (int i = 0; i < mGroupUsers.size(); i++) {
                     Child child = new Child(mGroupUsers.get(i).getUsername(), mGroupUsers.get(i).getUid());
