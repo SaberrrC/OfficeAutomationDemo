@@ -386,7 +386,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 //            body.setType(mSelectedTypeID);
 //            body.setMonocode(mTvCoderNumber.getText().toString());
 //            mPresenter.addWorkApply(body);
-            if (mEt_common_show2.getText().toString().trim().equals("")&& !mEt_common_show2.getHint().toString().equals("")) {
+            if (mEt_common_show2.getText().toString().trim().equals("") && !mEt_common_show2.getHint().toString().equals("")) {
                 showToast("请填写加班原因！");
                 return;
             }
@@ -710,6 +710,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLl_common_show1.setVisibility(View.GONE);
         mLlCommonalityAnnualLeave.setVisibility(View.VISIBLE);
         mTopView.setAppTitle("休假申请");
+        mTv_common_detail.setText("休假明细");
         mTvCommonalityType.setText("休假假别");
         mTvCommonalityCoder.setText("休假编码");
         mTv_common_show3.setText("工作交接人");
@@ -766,6 +767,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_next_show2.setText("休假事由");
         mTv_common_next_duration.setText("休假时长");
         mEt_common_next_show2.setHint("请填写休假事由");
+        mTv_common_next_detail.setText("休假明细");
         mEt_common_next_show3.setHint("请填写工作交接人");
         mEt_common_next_show3.setFocusable(false);
     }

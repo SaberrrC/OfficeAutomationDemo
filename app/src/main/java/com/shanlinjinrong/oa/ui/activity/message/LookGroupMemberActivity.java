@@ -6,13 +6,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.baidu.platform.comapi.map.E;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.hyphenate.easeui.EaseConstant;
-import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -58,8 +55,8 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        initData();
         initView();
+        initData();
     }
 
     @Override
@@ -82,7 +79,6 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
         rvLookGroupMember.setAdapter(mAdapter);
         rvLookGroupMember.setLayoutManager(new GridLayoutManager(this, 5, GridLayoutManager.VERTICAL, false));
         rvLookGroupMember.addOnItemTouchListener(new ItemClick());
-        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -108,18 +104,18 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
                 topView.setAppTitle("群成员" + "（" + userInfo.size() + "）");
                 mData.clear();
 
-                int Index = 0;
+                int groupIndex = 0;
                 for (int i = 0; i < userInfo.size(); i++) {
                     String groupOwner = mGroupOwner.substring(3, mGroupOwner.length());
                     if (groupOwner.equals(userInfo.get(i).getCode())) {
                         mData.add(0, userInfo.get(i));
-                        Index = 1;
+                        groupIndex = 1;
                         continue;
                     }
 
                     if (!mIsOwner) {
                         if (userInfo.get(i).getCode().equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
-                            mData.add(Index, userInfo.get(i));
+                            mData.add(groupIndex, userInfo.get(i));
                             continue;
                         }
                     }

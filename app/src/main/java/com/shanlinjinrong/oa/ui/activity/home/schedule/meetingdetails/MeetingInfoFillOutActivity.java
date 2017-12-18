@@ -292,8 +292,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_add_contacts:
-                Intent intent = new Intent(this, SelectJoinPeopleActivity.class);
+                //  Intent intent = new Intent(this, SelectJoinPeopleActivity.class);   //old
+                Intent intent = new Intent(this, SelectedGroupContactActivity.class);
                 intent.putParcelableArrayListExtra("selectedContacts", contactsList);
+                intent.putExtra("isFromSelectedGroupContactActivity", true);
                 startActivityForResult(intent, ADD_JOIN_PEOPLE);
 
 
@@ -408,7 +410,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         }
         mEdMeetingPerson.setText(person);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
