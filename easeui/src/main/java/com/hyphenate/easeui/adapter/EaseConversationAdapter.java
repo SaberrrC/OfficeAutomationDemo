@@ -209,43 +209,6 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
                 holder.motioned.setVisibility(View.GONE);
             }
-
-//            else if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getFrom()))) {
-//                ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getFrom()),
-//                        holder.avatar, new DisplayImageOptions.Builder()
-//                                .showImageForEmptyUri(R.drawable.ease_user_portraits)
-//                                .showImageOnFail(R.drawable.ease_user_portraits)
-//                                .resetViewBeforeLoading(true)
-//                                .cacheOnDisk(true)
-//                                .imageScaleType(ImageScaleType.EXACTLY)
-//                                .bitmapConfig(Bitmap.Config.RGB_565)
-//                                .considerExifParams(true)
-//                                .displayer(new FadeInBitmapDisplayer(300))
-//                                .build());
-//
-//                holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getFrom()));
-//
-//                holder.motioned.setVisibility(View.GONE);
-//            } else if (!FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()).equals("") && username.equals(FriendsInfoCacheSvc.getInstance(mContext).getUserId(lastMessage.getTo()))) {
-//                try {
-//                    ImageLoader.getInstance().displayImage(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(lastMessage.getTo()),
-//                            holder.avatar, new DisplayImageOptions.Builder()
-//                                    .showImageForEmptyUri(R.drawable.ease_user_portraits)
-//                                    .showImageOnFail(R.drawable.ease_user_portraits)
-//                                    .resetViewBeforeLoading(true)
-//                                    .cacheOnDisk(true)
-//                                    .imageScaleType(ImageScaleType.EXACTLY)
-//                                    .bitmapConfig(Bitmap.Config.RGB_565)
-//                                    .considerExifParams(true)
-//                                    .displayer(new FadeInBitmapDisplayer(0))
-//                                    .build());
-//                    String nickName = FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getTo());
-//                    holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.getTo()));
-//                    holder.motioned.setVisibility(View.GONE);
-//                } catch (Throwable throwable) {
-//                    throwable.printStackTrace();
-//                }
-//            }
             else if (lastMessage.conversationId().contains("admin")) {
                 holder.name.setText("会议邀请");
                 holder.avatar.setImageResource(R.drawable.meeting_invite_icon);
@@ -261,7 +224,6 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                             .error(R.drawable.ease_user_portraits)
                             .transform(new CenterCrop(mContext), new GlideRoundTransformUtils(mContext, 5))
                             .into(holder.avatar);
-
                     holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId));
                     holder.motioned.setVisibility(View.GONE);
                 } catch (Throwable throwable) {
@@ -272,7 +234,6 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             } else {
                 holder.rv_conversation.setVisibility(View.VISIBLE);
             }
-
         } catch (Throwable e) {
             e.printStackTrace();
         }
