@@ -52,7 +52,6 @@ import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
-import com.shanlinjinrong.oa.utils.BadgeUtil;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -71,6 +70,7 @@ import cn.jpush.android.api.TagAliasCallback;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.leolin.shortcutbadger.ShortcutBadger;
 import q.rorbin.badgeview.QBadgeView;
 
 /**
@@ -106,23 +106,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView  tabMessageText;
+    TextView tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView  tabContactsText;
+    TextView tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView  tabGroupText;
+    TextView tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView  tabMeText;
+    TextView tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView  tabHomeText;
+    TextView tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView  tvMsgUnRead;
+    TextView tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -147,13 +147,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment>       mTabs;
+    private List<Fragment> mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE  = 0;
+    private static final int TAB_MESSAGE = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME     = 2;
-    private static final int TAB_GROUP    = 3;
-    private static final int TAB_ME       = 4;
+    private static final int TAB_HOME = 2;
+    private static final int TAB_GROUP = 3;
+    private static final int TAB_ME = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -166,19 +166,19 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private int mBlueGreen;
     private int mBlueBlue;
 
-    private TextView[]  mTextViews;
+    private TextView[] mTextViews;
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
 
     int tempMsgCount = 0;
-    private EaseUI                     easeUI;
-    private AlertDialog                dialog;
-    private QBadgeView                 qBadgeView;
-    private TabCommunicationFragment   tabCommunicationFragment;
+    private EaseUI easeUI;
+    private AlertDialog dialog;
+    private QBadgeView qBadgeView;
+    private TabCommunicationFragment tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
     private List<EMMessage> mEMMessage = new ArrayList<>();
-    private EMGroup            mGroup;
-    private String             mGroupName;
+    private EMGroup mGroup;
+    private String mGroupName;
     private EMMessage.ChatType chatType;
     private String userId = "";
 
@@ -195,7 +195,8 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
-        BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
+        //    BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
+        ShortcutBadger.removeCount(MainActivity.this);
     }
 
     @Override
@@ -350,10 +351,12 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         //更新Icon 数量
         new Thread(() -> {
             if (tempMsgCount != 0) {
-                BadgeUtil.setBadgeCount(MainActivity.this, tempMsgCount, R.drawable.ring_red);
+                //  BadgeUtil.setBadgeCount(MainActivity.this, tempMsgCount, R.drawable.ring_red);
+                ShortcutBadger.applyCount(MainActivity.this, tempMsgCount);
                 return;
             }
-            BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
+            // BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
+            ShortcutBadger.removeCount(MainActivity.this);
         }).start();
         EventBus.getDefault().post(new UnReadMessageEvent(tempMsgCount));
     }
@@ -693,7 +696,8 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @Override
     protected void onDestroy() {
         EMClient.getInstance().chatManager().removeMessageListener(messageListener);
-        BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
+        //   BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
+        ShortcutBadger.removeCount(MainActivity.this);
         super.onDestroy();
     }
 

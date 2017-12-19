@@ -149,7 +149,9 @@ def prePHPAddress() {
 //def prePHPAddress(){
 //    return  "\"http://api.oa.shanlinjinrong.com/\""
 //}
-
+repositories {
+    mavenCentral()
+}
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -250,8 +252,9 @@ dependencies {
     //分包 65536
     compile 'com.android.support:multidex:1.0.2'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
-    //华为推送
+    compile "me.leolin:ShortcutBadger:1.1.19@aar"
 
+    //华为推送
     //    compile 'com.huawei.android.hms:push:2.5.2.300'
     //implementation files('libs/hyphenatechat_3.3.7.jar')
 }
