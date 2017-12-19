@@ -79,8 +79,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     private void initCount() {
         int tempCount = EMClient.getInstance().chatManager().getUnreadMsgsCount();
-        if (tempCount == 0) {
+        if (tempCount <= 0) {
             mTvCount.setText("");
+            return;
+        }
+        if (tempCount > 99) {
+            mTvCount.setText("消息(99+)");
             return;
         }
         mTvCount.setText("消息(" + tempCount + ")");
@@ -88,8 +92,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setTitle(UnReadMessageEvent event) {
-        if (event.unReadCount == 0) {
+        if (event.unReadCount <= 0) {
             mTvCount.setText("");
+            return;
+        }
+        if (event.unReadCount > 99) {
+            mTvCount.setText("消息(99+)");
             return;
         }
         mTvCount.setText("消息(" + event.unReadCount + ")");

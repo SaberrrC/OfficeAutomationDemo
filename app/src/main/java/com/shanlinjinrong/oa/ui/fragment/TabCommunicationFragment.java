@@ -87,6 +87,10 @@ public class TabCommunicationFragment extends BaseFragment {
             titleView.setText("消息");
             return;
         }
+        if (event.unReadCount > 99) {
+            titleView.setText("消息(99+)");
+            return;
+        }
         titleView.setText("消息(" +  event.unReadCount + ")");
 //        EventBus.getDefault().removeStickyEvent(event);
     }
