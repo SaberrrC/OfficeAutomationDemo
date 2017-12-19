@@ -1,7 +1,6 @@
 package com.hyphenate.easeui.widget;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Message;
@@ -11,7 +10,6 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.adapter.EaseConversationAdapter;
@@ -82,16 +80,56 @@ public class EaseConversationList extends ListView {
         if (helper != null) {
             this.conversationListHelper = helper;
         }
+        RefreshConversation();
+        adapter = new EaseConversationAdapter(context, 0, existConversation);
+        adapter.setCvsListHelper(conversationListHelper);
+        adapter.setPrimaryColor(primaryColor);
+        adapter.setPrimarySize(primarySize);
+        adapter.setSecondaryColor(secondaryColor);
+        adapter.setSecondarySize(secondarySize);
+        adapter.setTimeColor(timeColor);
+        adapter.setTimeSize(timeSize);
+        setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
 
-        for (int i = 0; i < conversationList.size(); i++) {
-            if (conversationList.get(i).conversationId().length() > 11) {
-                conversationId = conversationList.get(i).conversationId().substring(0, 12);
-            } else {
-                conversationId = conversationList.get(i).conversationId();
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message message) {
+            switch (message.what) {
+                case MSG_REFRESH_ADAPTER_DATA:
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
+                    break;
+                default:
+                    break;
             }
+        }
+    };
 
-            if (FriendsInfoCacheSvc.getInstance(getContext()).getNickName(conversationId).equals("") && conversationList.get(i).getType() != EMConversation.EMConversationType.GroupChat) {
-                String userCode = conversationList.get(i).conversationId().substring(3, conversationList.get(i).conversationId().length());
+    public EMConversation getItem(int position) {
+        return (EMConversation) adapter.getItem(position);
+    }
+
+
+    public void refresh() {
+        RefreshConversation();
+        if (!handler.hasMessages(MSG_REFRESH_ADAPTER_DATA)) {
+            handler.sendEmptyMessage(MSG_REFRESH_ADAPTER_DATA);
+        }
+    }
+
+    private void RefreshConversation() {
+        existConversation.clear();
+        for (int i = 0; i < conversations.size(); i++) {
+            if (conversations.get(i).conversationId().length() > 11) {
+                conversationId = conversations.get(i).conversationId().substring(0, 12);
+            } else {
+                conversationId = conversations.get(i).conversationId();
+            }
+            if (FriendsInfoCacheSvc.getInstance(getContext()).getNickName(conversationId).equals("") && conversations.get(i).getType() != EMConversation.EMConversationType.GroupChat) {
+                String userCode = conversations.get(i).conversationId().substring(3, conversations.get(i).conversationId().length());
                 String token = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_private_token", DEFAULT_ARGUMENTS_VALUE);
                 String uid = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_user_uid", DEFAULT_ARGUMENTS_VALUE);
                 KJHttp kjHttp = new KJHttp();
@@ -102,6 +140,7 @@ public class EaseConversationList extends ListView {
                 HttpParams httpParams = new HttpParams();
                 httpParams.putHeaders("token", token);
                 httpParams.putHeaders("uid", uid);
+                //TODO 生产
                 kjHttp.get("http://testoa.shanlinjinrong.com/webApi/user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
                     @Override
                     public void onSuccess(String t) {
@@ -136,45 +175,8 @@ public class EaseConversationList extends ListView {
                     }
                 });
             } else {
-                existConversation.add(conversationList.get(i));
+                existConversation.add(conversations.get(i));
             }
-        }
-
-        adapter = new EaseConversationAdapter(context, 0, existConversation);
-        adapter.setCvsListHelper(conversationListHelper);
-        adapter.setPrimaryColor(primaryColor);
-        adapter.setPrimarySize(primarySize);
-        adapter.setSecondaryColor(secondaryColor);
-        adapter.setSecondarySize(secondarySize);
-        adapter.setTimeColor(timeColor);
-        adapter.setTimeSize(timeSize);
-        setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message message) {
-            switch (message.what) {
-                case MSG_REFRESH_ADAPTER_DATA:
-                    if (adapter != null) {
-                        adapter.notifyDataSetChanged();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
-    public EMConversation getItem(int position) {
-        return (EMConversation) adapter.getItem(position);
-    }
-
-
-    public void refresh() {
-        if (!handler.hasMessages(MSG_REFRESH_ADAPTER_DATA)) {
-            handler.sendEmptyMessage(MSG_REFRESH_ADAPTER_DATA);
         }
     }
 

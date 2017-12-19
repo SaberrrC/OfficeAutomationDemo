@@ -621,6 +621,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
             if (tabCommunicationFragment != null) {
                 if (tabCommunicationFragment.myConversationListFragment != null) {
                     tabCommunicationFragment.myConversationListFragment.refresh();
+                    tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
                 }
             }
             for (EMMessage message1 : list) {
@@ -647,6 +648,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         if (tabCommunicationFragment != null) {
             if (tabCommunicationFragment.myConversationListFragment != null) {
                 tabCommunicationFragment.myConversationListFragment.refresh();
+                tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
             }
         }
 
