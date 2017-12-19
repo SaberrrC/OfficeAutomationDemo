@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.adapter.EaseConversationAdapter;
@@ -82,54 +83,56 @@ public class EaseConversationList extends ListView {
         }
 
         for (int i = 0; i < conversationList.size(); i++) {
-            String conversationId = conversationList.get(i).conversationId().substring(0, 12);
-            if (FriendsInfoCacheSvc.getInstance(getContext()).getNickName(conversationId).equals("")) {
-                String userCode = conversationList.get(i).conversationId().substring(3, conversationList.get(i).conversationId().length());
-                String token = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_private_token", DEFAULT_ARGUMENTS_VALUE);
-                String uid = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_user_uid", DEFAULT_ARGUMENTS_VALUE);
-                KJHttp kjHttp = new KJHttp();
-                HttpConfig config = new HttpConfig();
-                HttpConfig.TIMEOUT = 30000;
-                kjHttp.setConfig(config);
-                kjHttp.cleanCache();
-                HttpParams httpParams = new HttpParams();
-                httpParams.putHeaders("token", token);
-                httpParams.putHeaders("uid", uid);
-                kjHttp.get("http://testoa.shanlinjinrong.com/webApi/user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
-                    @Override
-                    public void onSuccess(String t) {
-                        super.onSuccess(t);
-                        UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
-                        if (userDetailsBean != null) {
-                            try {
-                                switch (userDetailsBean.getCode()) {
-                                    case 200:
-                                        FriendsInfoCacheSvc.
-                                                getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(),
-                                                userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg(), "", "", "", "", "", ""));
-                                        if (adapter != null) {
-                                            adapter.notifyDataSetChanged();
-                                        }
-                                        break;
+            if (conversationList.get(i).conversationId().length() > 11) {
+                String conversationId = conversationList.get(i).conversationId().substring(0, 12);
+                if (FriendsInfoCacheSvc.getInstance(getContext()).getNickName(conversationId).equals("")) {
+                    String userCode = conversationList.get(i).conversationId().substring(3, conversationList.get(i).conversationId().length());
+                    String token = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_private_token", DEFAULT_ARGUMENTS_VALUE);
+                    String uid = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_user_uid", DEFAULT_ARGUMENTS_VALUE);
+                    KJHttp kjHttp = new KJHttp();
+                    HttpConfig config = new HttpConfig();
+                    HttpConfig.TIMEOUT = 30000;
+                    kjHttp.setConfig(config);
+                    kjHttp.cleanCache();
+                    HttpParams httpParams = new HttpParams();
+                    httpParams.putHeaders("token", token);
+                    httpParams.putHeaders("uid", uid);
+                    kjHttp.get("http://testoa.shanlinjinrong.com/webApi/user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
+                        @Override
+                        public void onSuccess(String t) {
+                            super.onSuccess(t);
+                            UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
+                            if (userDetailsBean != null) {
+                                try {
+                                    switch (userDetailsBean.getCode()) {
+                                        case 200:
+                                            FriendsInfoCacheSvc.
+                                                    getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(),
+                                                    userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg(), "", "", "", "", "", ""));
+                                            if (adapter != null) {
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                            break;
+                                    }
+                                } catch (Throwable e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Throwable e) {
-                                e.printStackTrace();
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(int errorNo, String strMsg) {
-                        super.onFailure(errorNo, strMsg);
-                    }
+                        @Override
+                        public void onFailure(int errorNo, String strMsg) {
+                            super.onFailure(errorNo, strMsg);
+                        }
 
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
-                    }
-                });
-            } else {
-                existConversation.add(conversationList.get(i));
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                        }
+                    });
+                } else {
+                    existConversation.add(conversationList.get(i));
+                }
             }
         }
 

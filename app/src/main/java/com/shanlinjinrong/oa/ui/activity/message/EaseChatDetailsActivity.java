@@ -522,10 +522,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         intent.putStringArrayListExtra("selectedMember", selectedAccount);
                         intent.putExtra("isAddMember", true);
                         intent.putExtra(EaseConstant.GROUPID, mGroupId);
+                        intent.putExtra(Constants.SELECTEDTYEPE, 1);
                     } else {
                         intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
                         intent.putExtra("type", 0);
                         intent.putExtra("isOwner", mIsOwner);
+                        intent.putExtra(Constants.SELECTEDTYEPE, 1);
                         String from = message_from.substring(3, message_from.length());
                         String to = message_to.substring(3, message_to.length());
                         if (from.equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
