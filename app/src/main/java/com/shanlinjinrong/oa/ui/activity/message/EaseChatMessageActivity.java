@@ -22,6 +22,7 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
+import com.shanlinjinrong.oa.ui.activity.main.event.UnReadMessageEvent;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatMessagePresenter;
@@ -32,7 +33,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
-
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,6 +84,16 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             return;
         }
         mTvCount.setText("消息(" + tempCount + ")");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setTitle(UnReadMessageEvent event) {
+        if (event.unReadCount == 0) {
+            mTvCount.setText("");
+            return;
+        }
+        mTvCount.setText("消息(" + event.unReadCount + ")");
+        //        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Override
