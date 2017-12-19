@@ -541,6 +541,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
             for (EMMessage message : list) {
                 String conversationId = message.conversationId();
                 chatType = message.getChatType();
+
                 if (chatType == EMMessage.ChatType.GroupChat) {
                     mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
                     if (mGroupName.equals("")) {
@@ -556,7 +557,12 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                                 });
                     }
                 } else {
-                    String conversationId1 = conversationId.substring(0, 12);
+                    String conversationId1 = "";
+                    if (conversationId.length() > 11) {
+                        conversationId1 = conversationId.substring(0, 12);
+                    } else {
+                        conversationId1 = conversationId;
+                    }
                     userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(conversationId1);
                     if (userId.equals("")) {
                         mEMMessage.clear();

@@ -213,9 +213,14 @@ public abstract class EaseChatRow extends LinearLayout {
             } else {
                 usernickView.setVisibility(View.GONE);
             }
-            if (message.direct() == Direct.RECEIVE) {
-                String nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(message.getFrom());
-                EaseUserUtils.setUserNick(nickName, usernickView);
+
+            //单聊 群聊 展示处理
+            if (message.getChatType() == EMMessage.ChatType.GroupChat) {
+                if (message.direct() == Direct.RECEIVE) {
+                    String nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(message.getFrom());
+                    usernickView.setText(nickName);
+                    //EaseUserUtils.setUserNick(nickName, usernickView);
+                }
             }
         }
         if (itemStyle != null) {
@@ -256,6 +261,7 @@ public abstract class EaseChatRow extends LinearLayout {
     /**
      * set callback for sending message
      */
+
     protected void setMessageSendCallback() {
         if (messageSendCallback == null) {
             messageSendCallback = new EMCallBack() {
