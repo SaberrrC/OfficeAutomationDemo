@@ -36,6 +36,8 @@ import com.shanlinjinrong.oa.views.KeyboardLayout;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -71,6 +73,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         }
     };
     private boolean isAutoLogin                  = true;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,7 +99,17 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         mCbAutoLogin.setChecked(AppConfig.getAppConfig(LoginActivity.this).get(AppConfig.PREF_KEY_PASSWORD_FLAG, false));
         AppConfig.getAppConfig(LoginActivity.this).setAutoLogin(true);
         userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
-        mTvFindPwd.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class)));
+        mTvFindPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
+                startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class));
+            }
+        });
     }
 
     @Override

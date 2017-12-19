@@ -30,6 +30,8 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -70,6 +72,7 @@ public class MeLaunchNoticeActivity extends BaseActivity {
     private String status = "0";
     private String titleName;
     private String oa_id;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +192,11 @@ public class MeLaunchNoticeActivity extends BaseActivity {
         mLlApprovalLaunchInfoContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 showDetailDialog("0", al.getInfo().getTime_before(), al.getInfo().getTime_after(),
                         al.getInfo().getUsername(), "");
             }
@@ -258,6 +266,11 @@ public class MeLaunchNoticeActivity extends BaseActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 showDetailDialog(approvers.getApprovalStatus(), approvers.getTime_before(), approvers.getTime_after(), approvers.getUser(), approvers.getReply());
             }
         });

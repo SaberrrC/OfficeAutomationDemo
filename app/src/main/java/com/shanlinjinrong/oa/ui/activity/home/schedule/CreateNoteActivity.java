@@ -116,6 +116,11 @@ public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> im
         toolbarTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 if (mTvNoteDate.getText().toString().trim().equals("点击选择日期")) {
                     showToast("请选择日期");
                 } else {

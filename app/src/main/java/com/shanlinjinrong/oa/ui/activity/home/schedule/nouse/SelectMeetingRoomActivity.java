@@ -77,6 +77,7 @@ public class SelectMeetingRoomActivity extends BaseActivity {
     private boolean noMeetingRoom = true;//是否有会议室？
     private PopupWindow popupWindow;
     private View mRootView;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,11 @@ public class SelectMeetingRoomActivity extends BaseActivity {
         mTvSelectMeetingRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 showDoneDatePicker(mTvSelectMeetingRoom);
             }
         });
@@ -213,6 +219,11 @@ public class SelectMeetingRoomActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         //显示会议详细地址 detailLocation
+                        long currentTime = Calendar.getInstance().getTimeInMillis();
+                        if (currentTime - lastClickTime < 1000) {
+                            lastClickTime = currentTime;
+                            return;
+                        }
                         showLocation(detailLocation);
                     }
                 });
@@ -274,6 +285,11 @@ public class SelectMeetingRoomActivity extends BaseActivity {
         mToolBarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 checkMRAndGoCR();
             }
         });

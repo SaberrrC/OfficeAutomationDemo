@@ -68,6 +68,7 @@ public class ApplyForTravelActivity extends BaseActivity {
     private int totalDays = 0;//总共的天数
     List<TravalSingle> tsList = new ArrayList<>();
     private String tempStartDate;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -274,6 +275,11 @@ public class ApplyForTravelActivity extends BaseActivity {
         tvStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 showDoneDatePicker(tvStart, false);
             }
         });

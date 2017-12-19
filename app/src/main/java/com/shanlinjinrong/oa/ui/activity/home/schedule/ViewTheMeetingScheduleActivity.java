@@ -54,6 +54,8 @@ public class ViewTheMeetingScheduleActivity extends BaseActivity {
     private  ViewTheMeetingScheduleAdapter viewTheMeetingScheduleAdapter;
     @BindView(R.id.no_meeting)
     TextView noMeeting;
+    private long lastClickTime = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +90,11 @@ public class ViewTheMeetingScheduleActivity extends BaseActivity {
         dayArrangement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 showDoneDatePicker(dayArrangement);
             }
         });

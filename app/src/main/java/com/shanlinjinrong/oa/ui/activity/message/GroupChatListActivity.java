@@ -36,6 +36,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -66,6 +67,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
     private List<EMGroup> mSearchGroupList = new ArrayList<>();
     @SuppressWarnings("SpellCheckingInspection")
     private final int REQUESTCODE = 101, DELETESUCCESS = -2, RESULTELECTEDCODE = -3;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,11 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
 
     private void initView() {
         mTopView.getRightView().setOnClickListener(view -> {
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (currentTime - lastClickTime < 1000) {
+                lastClickTime = currentTime;
+                return;
+            }
             Intent intent = new Intent(this, SelectedGroupContactActivity.class);
             intent.putExtra(Constants.SELECTEDTYEPE, 1);
             startActivityForResult(intent, REQUESTCODE);

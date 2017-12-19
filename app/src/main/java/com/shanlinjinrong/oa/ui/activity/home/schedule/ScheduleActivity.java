@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -83,6 +84,7 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
     private ArrayList<CalendarInfo> CalendarInfoList;
     private LinearLayoutManager linearLayoutManager;
     int TempAddDate = 0;
+    private long lastClickTime = 0;
 
 
     @Override
@@ -418,6 +420,11 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
         mToolbarTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 showDetailDialog();
             }
         });
@@ -445,6 +452,11 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
             tvMeeting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    long currentTime = Calendar.getInstance().getTimeInMillis();
+                    if (currentTime - lastClickTime < 1000) {
+                        lastClickTime = currentTime;
+                        return;
+                    }
                     Intent intent = new Intent(ScheduleActivity.this, SelectOrdinaryMeetingRoomActivity.class);
                     intent.putExtra("meetingType", "1");
                     startActivity(intent);
@@ -454,6 +466,11 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
             tvVideoMeeting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    long currentTime = Calendar.getInstance().getTimeInMillis();
+                    if (currentTime - lastClickTime < 1000) {
+                        lastClickTime = currentTime;
+                        return;
+                    }
                     Intent intent = new Intent(ScheduleActivity.this, SelectVedioMeetingRoomActivity.class);
                     intent.putExtra("meetingType", "2");
                     startActivity(intent);
@@ -463,6 +480,11 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
             tvNote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    long currentTime = Calendar.getInstance().getTimeInMillis();
+                    if (currentTime - lastClickTime < 1000) {
+                        lastClickTime = currentTime;
+                        return;
+                    }
                     startActivity(new Intent(ScheduleActivity.this, CreateNoteActivity.class));
                     popupWindow.dismiss();
                 }

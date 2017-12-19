@@ -31,6 +31,8 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -96,6 +98,7 @@ public class MeetingInfoActivity extends BaseActivity {
     private String joinPeopleStr;//要加入会议的人员
     private String currentUid;//当前用户uid
     private boolean isCreateMeetingMen = false;//是否是会议创建人
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -408,7 +411,11 @@ public class MeetingInfoActivity extends BaseActivity {
         toolbarTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 if (toolbarTextBtn.getText().toString().trim().equals("加入会议")) {
                     Intent intent = new Intent(MeetingInfoActivity.this, MeetingVideoActivity.class);
                     intent.putExtra("isCreate", false);
@@ -468,12 +475,22 @@ public class MeetingInfoActivity extends BaseActivity {
             btnSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    long currentTime = Calendar.getInstance().getTimeInMillis();
+                    if (currentTime - lastClickTime < 1000) {
+                        lastClickTime = currentTime;
+                        return;
+                    }
                     cancleMetting();
                 }
             });
             btnCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    long currentTime = Calendar.getInstance().getTimeInMillis();
+                    if (currentTime - lastClickTime < 1000) {
+                        lastClickTime = currentTime;
+                        return;
+                    }
                     popupWindow.dismiss();
                 }
             });

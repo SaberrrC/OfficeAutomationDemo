@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -73,6 +75,7 @@ public class WaitApprovalNoticeActivity extends BaseActivity {
     private String oal_id;
     private String titleName;
     private boolean isCanReply;
+    private long lastClickTime = 0;
 
 
     @Override
@@ -169,6 +172,11 @@ public class WaitApprovalNoticeActivity extends BaseActivity {
         mLlApprovalLaunchInfoContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 showDetailDialog("0", an.getCreate_date(), an.getCreate_time(),
                         an.getUsername(), an.getTitle());
             }

@@ -38,6 +38,7 @@ import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -81,6 +82,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
     //    //----------------------
     private AppManager appManager = null;
     private MyJoinHandler mJoinHandler = null;
+    private long lastClickTime = 0;
     //    //----------------------
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,11 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         //底部弹出框
         bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomsheet);
         findViewById(R.id.rel_choose_people_num).setOnClickListener(v -> {
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (currentTime - lastClickTime < 1000) {
+                lastClickTime = currentTime;
+                return;
+            }
             if (selectedContacts.size() > 0) {
                 //-------------
                 appManager.setJoinhandler(mJoinHandler);
@@ -326,6 +333,11 @@ public class SelectJoinPeopleActivity extends BaseActivity {
         mToolBarText.setVisibility(View.VISIBLE);
         mToolBarText.setOnClickListener(v -> {
             //ArrayList<Child> selectedContacts = getSelectedContacts();
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (currentTime - lastClickTime < 1000) {
+                lastClickTime = currentTime;
+                return;
+            }
             Intent intent = new Intent();
             intent.putParcelableArrayListExtra("contacts", selectedContacts);
             setResult(RESULT_OK, intent);

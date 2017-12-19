@@ -26,6 +26,8 @@ import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,6 +56,7 @@ public class NoteDetailActivity extends BaseActivity {
     Button mBtnNoteDelete;
 
     private String note_id;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +172,11 @@ LogUtils.e("200-->"+jo.getString("time"));
         mTolbarTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
                 Intent intent = new Intent();
                 intent.setClass(NoteDetailActivity.this, CreateNoteActivity.class);
                 intent.putExtra("note_id", note_id);
