@@ -208,6 +208,8 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
      * 初始化viewPager控制器并设置适配器
      */
     private void initControllerAndSetAdapter() {
+        //设置缓存页数
+        mController.setOffscreenPageLimit(4);
         mController.setAdapter(mAdapter);
         mController.addOnPageChangeListener(new PageChangeListener());
         setSelection(TAB_HOME);

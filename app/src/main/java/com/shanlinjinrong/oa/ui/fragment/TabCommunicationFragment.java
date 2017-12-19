@@ -112,7 +112,6 @@ public class TabCommunicationFragment extends BaseFragment {
                 lastClickTime = currentTime;
                 return;
             }
-            String conversationId = conversation.conversationId().substring(0, 12);
             if (conversation.isGroup()) {
                 String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
                 startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
@@ -121,18 +120,29 @@ public class TabCommunicationFragment extends BaseFragment {
                         .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP));
             } else {
                 EMMessage lastMessage = conversation.getLastMessage();
-                mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
-                if (lastMessage.getFrom().contains("admin") || conversationId.contains("admin")) {
-                    mNickName = "会议邀请";
-                } else if (lastMessage.getFrom().contains("notice") || conversationId.contains("notice")) {
-                    mNickName = "公告通知";
+                if (conversation.conversationId().length() > 11) {
+                    String conversationId = conversation.conversationId().substring(0, 12);
+                    mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
+                    startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
+                            .putExtra("u_id", conversationId)
+                            .putExtra("title", mNickName)
+                            .putExtra("message_to", lastMessage.getTo())
+                            .putExtra("message_from", lastMessage.getFrom())
+                            .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE), REQUESTCODE);
+                } else {
+                    // 公告特殊处理
+                    if (lastMessage.getFrom().contains("admin") || conversation.conversationId().contains("admin")) {
+                        mNickName = "会议邀请";
+                    } else if (lastMessage.getFrom().contains("notice") || conversation.conversationId().contains("notice")) {
+                        mNickName = "公告通知";
+                    }
+                    startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
+                            .putExtra("u_id", conversation.conversationId())
+                            .putExtra("title", mNickName)
+                            .putExtra("message_to", lastMessage.getTo())
+                            .putExtra("message_from", lastMessage.getFrom())
+                            .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE), REQUESTCODE);
                 }
-                startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
-                        .putExtra("u_id", conversationId)
-                        .putExtra("title", mNickName)
-                        .putExtra("message_to", lastMessage.getTo())
-                        .putExtra("message_from", lastMessage.getFrom())
-                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE), REQUESTCODE);
             }
         });
     }

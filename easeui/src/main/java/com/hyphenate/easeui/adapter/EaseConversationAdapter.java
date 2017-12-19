@@ -74,6 +74,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     protected float   timeSize;
     protected Context mContext;
     EMMessage lastMessage;
+    private String conversationId;
 
     public EaseConversationAdapter(Context context, int resource, List<EMConversation> objects) {
         super(context, resource, objects);
@@ -182,7 +183,12 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
         }
         try {
-            String conversationId = lastMessage.conversationId().substring(0, 12);
+            if (lastMessage.conversationId().length() > 11) {
+                conversationId = lastMessage.conversationId().substring(0, 12);
+            } else {
+                conversationId = lastMessage.conversationId();
+            }
+
             if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
                 String groupId = conversation.conversationId();
                 if (EaseAtMessageHelper.get().hasAtMeMsg(groupId)) {
@@ -240,9 +246,14 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
 //                    throwable.printStackTrace();
 //                }
 //            }
-            else if (!FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId).equals("")) {
+            else if (lastMessage.conversationId().contains("admin")) {
+                holder.name.setText("会议邀请");
+                holder.avatar.setImageResource(R.drawable.meeting_invite_icon);
+            } else if (lastMessage.conversationId().contains("notice")) {
+                holder.name.setText("公告通知");
+                holder.avatar.setImageResource(R.drawable.notice_message_icon);
+            } else if (!FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId).equals("")) {
                 try {
-
                     Glide.with(mContext)
                             .load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(conversationId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -262,13 +273,6 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 holder.rv_conversation.setVisibility(View.VISIBLE);
             }
 
-            if (lastMessage.getFrom().contains("admin") || conversationId.contains("admin")) {
-                holder.name.setText("会议邀请");
-                holder.avatar.setImageResource(R.drawable.meeting_invite_icon);
-            } else if (lastMessage.getFrom().contains("notice") || conversationId.contains("notice")) {
-                holder.name.setText("公告通知");
-                holder.avatar.setImageResource(R.drawable.notice_message_icon);
-            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -426,34 +430,19 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         LinearLayout ll_conversation;
 
         RelativeLayout rv_conversation;
-        /**
-         * who you chat with
-         */
+
         TextView       name;
-        /**
-         * unread message count
-         */
+
         TextView       unreadLabel;
-        /**
-         * content of last message
-         */
+
         TextView       message;
-        /**
-         * time of last message
-         */
+
         TextView       time;
-        /**
-         * avatar
-         */
+
         ImageView      avatar;
-        /**
-         * status of last message
-         */
+
         View           msgState;
-        /**
-         * layout
-         */
-        RelativeLayout list_itease_layout;
+
         TextView       motioned;
     }
 }
