@@ -25,6 +25,7 @@
             android:layout_weight="1"
             android:background="#f9f9f9"
             android:orientation="horizontal">
+
             <RelativeLayout
                 android:id="@+id/tab_group_box"
                 style="@style/TabBar_box">
@@ -39,7 +40,7 @@
                     <ImageView
                         android:id="@+id/tab_group_icon_light"
                         style="@style/TabBar_icon"
-                        android:src="@drawable/tab_communcation_light" />
+                        android:src="@drawable/tab_communcation_light"/>
 
 
                     <ImageView
@@ -58,12 +59,13 @@
 
                 <View
                     android:id="@+id/view_message_remind"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_alignParentTop="true"
                     android:layout_toRightOf="@+id/fl_group_container"
                     />
             </RelativeLayout>
-
 
 
             <RelativeLayout
@@ -138,10 +140,10 @@
                     android:layout_height="16dp"
                     android:layout_toRightOf="@+id/fl_message_container"
                     android:background="@drawable/ring_red"
-                    android:textSize="12dp"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:textColor="@color/white"
+                    android:textSize="12dp"
+                    android:visibility="gone"
                     />
 
                 <TextView
@@ -210,7 +212,8 @@
         android:layout_width="65dp"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"/>
+
     <View
         android:layout_width="53dp"
         android:layout_height="53dp"
