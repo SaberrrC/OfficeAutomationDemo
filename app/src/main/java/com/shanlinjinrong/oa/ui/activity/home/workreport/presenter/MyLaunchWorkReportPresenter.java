@@ -53,27 +53,26 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                             JSONArray array = data.getJSONArray("data");
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject item = new JSONObject(array.get(i).toString());
-                                items.add(new MyLaunchReportItem(
-                                        item.getInt("id"),
-                                        item.getString("userName"),
-                                        item.getInt("type"),
-                                        item.getString("reportingDate"),
-                                        item.getString("releaseDate"),
-                                        item.getInt("speedOfProgress")));
+                                items.add(new MyLaunchReportItem(item.getInt("id"), item.getString("userName"), item.getInt("type"), item.getString("reportingDate"), item.getString("releaseDate"), item.getInt("speedOfProgress")));
                             }
-                            mView.loadDataSuccess(items, pageNum, pageSize, hasNextPage, isLoadMore);
+                            if (mView != null) {
+                                mView.loadDataSuccess(items, pageNum, pageSize, hasNextPage, isLoadMore);
+                            }
                             break;
 
                         case ApiJava.REQUEST_NO_RESULT:
-                            mView.loadDataEmpty();
+                            if (mView != null)
+                                mView.loadDataEmpty();
                             break;
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
                         default:
-                            mView.loadDataFailed(code, message);
+                            if (mView != null)
+                                mView.loadDataFailed(code, message);
                             break;
                     }
 
@@ -87,7 +86,8 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.loadDataFailed("" + errorNo, strMsg);
+                    if (mView != null)
+                        mView.loadDataFailed("" + errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -97,7 +97,8 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
             public void onFinish() {
                 super.onFinish();
                 try {
-                    mView.loadDataFinish();
+                    if (mView != null)
+                        mView.loadDataFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -133,27 +134,25 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                                 if (reportDate.contains("--")) {
                                     reportDate = reportDate.replaceAll("--", "至");
                                 }
-                                items.add(new MyLaunchReportItem(
-                                        item.getInt("id"),
-                                        "",
-                                        item.getInt("reportType"),
-                                        reportDate,
-                                        item.getString("createdAt"),
-                                        item.getInt("ratingStatus")));
+                                items.add(new MyLaunchReportItem(item.getInt("id"), "", item.getInt("reportType"), reportDate, item.getString("createdAt"), item.getInt("ratingStatus")));
                             }
-                            mView.loadDataSuccess(items, pageNum, pageSize, hasNextPage, isLoadMore);
+                            if (mView != null)
+                                mView.loadDataSuccess(items, pageNum, pageSize, hasNextPage, isLoadMore);
                             break;
 
                         case ApiJava.REQUEST_NO_RESULT:
-                            mView.loadDataEmpty();
+                            if (mView != null)
+                                mView.loadDataEmpty();
                             break;
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
                         default:
-                            mView.loadDataFailed(code, message);
+                            if (mView != null)
+                                mView.loadDataFailed(code, message);
                             break;
                     }
 
@@ -167,7 +166,8 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.loadDataFailed("" + errorNo, strMsg);
+                    if (mView != null)
+                        mView.loadDataFailed("" + errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -177,7 +177,8 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
             public void onFinish() {
                 super.onFinish();
                 try {
-                    mView.loadDataFinish();
+                    if (mView != null)
+                        mView.loadDataFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

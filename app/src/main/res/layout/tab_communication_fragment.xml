@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         app:rightDrawable="@mipmap/icon_chat_group_list"
-        app:topTitle="消息列表" />
+        app:topTitle="消息" />
 
     <include
         layout="@layout/toolbar_shadow"

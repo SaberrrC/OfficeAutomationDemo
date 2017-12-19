@@ -42,6 +42,7 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
+import com.shanlinjinrong.oa.ui.activity.main.event.UnReadMessageEvent;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.MainControllerPresenter;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
@@ -352,6 +353,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
             }
             BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
         }).start();
+        EventBus.getDefault().post(new UnReadMessageEvent(tempMsgCount));
     }
 
     class PageChangeListener implements ViewPager.OnPageChangeListener {

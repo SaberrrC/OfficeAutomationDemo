@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
@@ -15,6 +17,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
+import com.shanlinjinrong.oa.ui.activity.main.event.UnReadMessageEvent;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.GroupChatListActivity;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
@@ -51,14 +54,21 @@ public class TabCommunicationFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
+    }
 
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
         initData();
         initView();
     }
@@ -68,6 +78,17 @@ public class TabCommunicationFragment extends BaseFragment {
             Intent intent = new Intent(getContext(), GroupChatListActivity.class);
             startActivity(intent);
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setTitle(UnReadMessageEvent event) {
+        TextView titleView = mTopView.getTitleView();
+        if (event.unReadCount == 0) {
+            titleView.setText("消息");
+            return;
+        }
+        titleView.setText("消息(" +  event.unReadCount + ")");
+//        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Override
@@ -150,14 +171,6 @@ public class TabCommunicationFragment extends BaseFragment {
                     myConversationListFragment.refresh();
                 }
                 break;
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
         }
     }
 }
