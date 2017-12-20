@@ -46,6 +46,7 @@ public class TabCommunicationFragment extends BaseFragment {
     private String mNickName;
     private final int REQUESTCODE = 101, RESULTSUCCESS = -2, GROUPNAMEMODIFICATION = -3;
     private long lastClickTime = 0;
+    private boolean isAdmin;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class TabCommunicationFragment extends BaseFragment {
             titleView.setText("消息(99+)");
             return;
         }
-        titleView.setText("消息(" +  event.unReadCount + ")");
+        titleView.setText("消息(" + event.unReadCount + ")");
 //        EventBus.getDefault().removeStickyEvent(event);
     }
 
@@ -133,12 +134,15 @@ public class TabCommunicationFragment extends BaseFragment {
                     // 公告特殊处理
                     if (lastMessage.getFrom().contains("admin") || conversation.conversationId().contains("admin")) {
                         mNickName = "会议邀请";
+                        isAdmin = true;
                     } else if (lastMessage.getFrom().contains("notice") || conversation.conversationId().contains("notice")) {
                         mNickName = "公告通知";
+                        isAdmin = true;
                     }
                     startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
                             .putExtra("u_id", conversation.conversationId())
                             .putExtra("title", mNickName)
+                            .putExtra("admin", isAdmin)
                             .putExtra("message_to", lastMessage.getTo())
                             .putExtra("message_from", lastMessage.getFrom())
                             .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE), REQUESTCODE);

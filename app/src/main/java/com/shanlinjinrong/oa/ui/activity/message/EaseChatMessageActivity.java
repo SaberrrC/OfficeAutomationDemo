@@ -47,17 +47,17 @@ import butterknife.OnClick;
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
     @BindView(R.id.tv_count)
-    TextView     mTvCount;
+    TextView mTvCount;
     @BindView(R.id.tv_title)
-    TextView     mTvTitle;
+    TextView mTvTitle;
     @BindView(R.id.iv_detail)
     LinearLayout mIvDetail;
     @BindView(R.id.img_details_icon)
-    ImageView    imgDetailsIcon;
+    ImageView imgDetailsIcon;
 
-    private String           mTitle;
-    private int              mChatType;
-    private Bundle           mExtras;
+    private String mTitle;
+    private int mChatType;
+    private Bundle mExtras;
     private EaseChatFragment chatFragment;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
     private long lastClickTime = 0;
@@ -163,6 +163,9 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 finish();
                 break;
             case R.id.iv_detail:
+                if (getIntent().getBooleanExtra("admin", false)) {
+                    return;
+                }
                 long currentTime = Calendar.getInstance().getTimeInMillis();
                 if (currentTime - lastClickTime < 1000) {
                     lastClickTime = currentTime;
