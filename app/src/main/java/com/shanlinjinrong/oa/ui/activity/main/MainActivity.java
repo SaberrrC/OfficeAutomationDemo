@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.main;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,8 +10,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -53,6 +57,7 @@ import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.LoginUtils;
+import com.squareup.haha.perflib.Main;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -111,23 +116,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView  tabMessageText;
+    TextView tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView  tabContactsText;
+    TextView tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView  tabGroupText;
+    TextView tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView  tabMeText;
+    TextView tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView  tabHomeText;
+    TextView tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView  tvMsgUnRead;
+    TextView tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -152,13 +157,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment>       mTabs;
+    private List<Fragment> mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE  = 0;
+    private static final int TAB_MESSAGE = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME     = 2;
-    private static final int TAB_GROUP    = 3;
-    private static final int TAB_ME       = 4;
+    private static final int TAB_HOME = 2;
+    private static final int TAB_GROUP = 3;
+    private static final int TAB_ME = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -171,19 +176,19 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private int mBlueGreen;
     private int mBlueBlue;
 
-    private TextView[]  mTextViews;
+    private TextView[] mTextViews;
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
 
     int tempMsgCount = 0;
-    private EaseUI                     easeUI;
-    private AlertDialog                dialog;
-    private QBadgeView                 qBadgeView;
-    private TabCommunicationFragment   tabCommunicationFragment;
+    private EaseUI easeUI;
+    private AlertDialog dialog;
+    private QBadgeView qBadgeView;
+    private TabCommunicationFragment tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
     private List<EMMessage> mEMMessage = new ArrayList<>();
-    private EMGroup            mGroup;
-    private String             mGroupName;
+    private EMGroup mGroup;
+    private String mGroupName;
     private EMMessage.ChatType chatType;
     private String userId = "";
     private String mQueryInfo;
@@ -203,6 +208,11 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         mPresenter.applyPermission(this);//判断是否有更新
         //    BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
         ShortcutBadger.removeCount(MainActivity.this);
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
+        }
+
+
     }
 
     @Override
@@ -667,6 +677,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
     //开启权限列表
     public void startAppSetting() {
+
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         i.setData(uri);

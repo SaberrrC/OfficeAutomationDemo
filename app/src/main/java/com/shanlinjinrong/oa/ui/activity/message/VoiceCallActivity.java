@@ -14,7 +14,9 @@
 
 package com.shanlinjinrong.oa.ui.activity.message;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,6 +28,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -55,6 +59,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.bean.CallEventBean;
 
 import org.greenrobot.eventbus.EventBus;
@@ -317,8 +322,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     //通话状态监听
     void addCallStateListener() {
         mCallStateListener = (callState, error) -> {
+
             switch (callState) {
                 case CONNECTING:  //正在连接对方
+
+                    ActivityCompat.requestPermissions(VoiceCallActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
+
                     mIsThroughTo = false;
                     runOnUiThread(() -> mTvCallState.setText(getResources().getString(R.string.Are_connected_to_each_other)));
                     break;
@@ -487,6 +496,10 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 }
                 break;
             case R.id.btn_answer_call:
+
+                if (ContextCompat.checkSelfPermission(VoiceCallActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(VoiceCallActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
+                }
                 mBtnRefuse.setEnabled(false);
                 closeSpeakerOn();
                 mTvCallState.setText("正在接听...");

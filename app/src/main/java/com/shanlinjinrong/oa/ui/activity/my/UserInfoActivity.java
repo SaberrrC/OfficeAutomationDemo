@@ -63,6 +63,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
  * <h3>Description: 用户信息 </h3>
@@ -496,6 +497,8 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     }
 
     private void exitToLogin() {
+
+        ShortcutBadger.removeCount(UserInfoActivity.this);
         AppConfig.getAppConfig(UserInfoActivity.this).clearLoginInfo();
         startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
         AppManager.sharedInstance().finishAllActivity();
