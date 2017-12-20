@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:text="聊天记录(1/1)"
+            android:text="聊天记录"
             android:textAllCaps="false"
             android:textColor="@color/black_333333"
             android:textSize="18sp"/>

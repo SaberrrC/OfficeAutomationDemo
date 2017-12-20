@@ -87,6 +87,9 @@ public class EaseConversationListFragment extends EaseBaseFragment {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (position >= conversationList.size()) {
+                        return;
+                    }
                     long currentTime = Calendar.getInstance().getTimeInMillis();
                     if (currentTime - lastClickTime < 1000) {
                         lastClickTime = currentTime;

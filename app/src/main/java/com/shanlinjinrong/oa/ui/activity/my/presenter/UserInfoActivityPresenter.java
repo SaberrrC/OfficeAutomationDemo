@@ -33,8 +33,8 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
         params.put("department_id", departmentId);
         params.put("file", file);
 
-//        params.put("file", portrait);
-//        params.put("portrait", file);
+        //        params.put("file", portrait);
+        //        params.put("portrait", file);
         mKjHttp.post(Api.PERSON_UPLOAD, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
@@ -43,11 +43,13 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
                     JSONObject jo = new JSONObject(t);
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_OK:
-                            mView.upLoadSuccess(Api.getDataToJSONObject(jo).get("portrait") + "");
+                            if (mView != null)
+                                mView.upLoadSuccess(Api.getDataToJSONObject(jo).get("portrait") + "");
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(Api.getCode(jo));
+                            if (mView != null)
+                                mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {
@@ -60,13 +62,15 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 LogUtils.e("上传图片失败" + errorNo + strMsg);
-                mView.upLoadFailed(errorNo, strMsg);
+                if (mView != null)
+                    mView.upLoadFailed(errorNo, strMsg);
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.upLoadFinish();
+                if (mView != null)
+                    mView.upLoadFinish();
             }
         });
     }
