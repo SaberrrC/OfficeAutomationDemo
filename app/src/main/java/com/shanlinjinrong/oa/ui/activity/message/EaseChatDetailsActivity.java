@@ -95,7 +95,6 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private int                         memberCount;
     private String                      mGroupId;
     private EMGroup                     mGroupServer1;
-    private EMGroup                     mGroupFromServer;
     private ArrayList<String>           mMemberList;
     private List<GroupUserInfoResponse> mData;
     private CommonGroupControlAdapter   mAdapter;
