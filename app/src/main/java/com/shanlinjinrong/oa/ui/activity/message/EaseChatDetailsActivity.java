@@ -23,7 +23,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.hyphenate.easeui.event.OnMessagesClearEvent;
+import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.exceptions.HyphenateException;
@@ -316,7 +316,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         }
                         if (mConversation != null) {
                             mConversation.clearAllMessages();
-                            EventBus.getDefault().post(new OnMessagesClearEvent());
+                            EventBus.getDefault().post(new OnMessagesRefreshEvent());
                             showToast("聊天记录清除成功");
                             return;
                         }

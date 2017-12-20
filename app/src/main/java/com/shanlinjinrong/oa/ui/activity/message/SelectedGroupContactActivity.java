@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.message;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,10 +20,10 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
@@ -242,7 +240,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     message.setChatType(EMMessage.ChatType.GroupChat);
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(message);
-
+                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
                     showToast("邀请成员成功！");
                     setResult(REFRESHSUCCESS);
                     finish();

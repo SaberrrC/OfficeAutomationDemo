@@ -54,7 +54,7 @@ import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.event.OnConversationFinishEvent;
-import com.hyphenate.easeui.event.OnMessagesClearEvent;
+import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.onEaseUIFragmentListener;
 import com.hyphenate.easeui.requestPermissionsListener;
@@ -353,7 +353,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageClear(OnMessagesClearEvent event) {
+    public void onMessageClear(OnMessagesRefreshEvent event) {
         messageList.refresh();
     }
 
