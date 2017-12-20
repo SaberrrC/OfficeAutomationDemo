@@ -19,7 +19,7 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/portrait"
-                android:layout_width="30dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/icon_homepage_work_report_me_launch" />
@@ -32,7 +32,7 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
                 android:textColor="#333"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 tools:text="阿呆" />
 
         </LinearLayout>
@@ -47,7 +47,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:textColor="#999999"
-            android:textSize="12sp"
+            android:textSize="16sp"
             tools:text="区域经理" />
 
         <CheckBox
