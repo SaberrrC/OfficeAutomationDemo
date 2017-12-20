@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +38,14 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -58,11 +67,19 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private String mTitle;
     private int mChatType;
     private Bundle mExtras;
+    private String mNike;
+    private String mCode;
+    private String mSex;
+    private String mPhone;
+    private String mEmail;
+    private String mPortrait;
+    private boolean mIsResume;
+    private String mGroupName;
+    private String mPost_name;
+    private long lastClickTime = 0;
+    private String mDepartment_name;
     private EaseChatFragment chatFragment;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
-    private long lastClickTime = 0;
-    private EMGroup mGroup;
-    private boolean mIsResume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +92,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         initData();
         initView();
     }
-
 
     private void initCount() {
         int tempCount = EMClient.getInstance().chatManager().getUnreadMsgsCount();
@@ -101,7 +117,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             return;
         }
         mTvCount.setText("消息(" + event.unReadCount + ")");
-        //        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Override
@@ -146,8 +161,18 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private void remoteGroupName() {
         try {
             String u_id = getIntent().getStringExtra("u_id");
-            String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(u_id);
-            mTvTitle.setText(groupName);
+            Observable.create((ObservableOnSubscribe<String>) e -> {
+                mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(u_id);
+                if (TextUtils.isEmpty(mGroupName)) {
+                    EMGroup group = EMClient.getInstance().groupManager().getGroupFromServer(u_id);
+                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(u_id, group.getGroupName(), ""));
+                    mGroupName = group.getGroupName();
+                }
+                e.onComplete();
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                    .subscribe(s -> {
+                    }, throwable -> throwable.printStackTrace(), () -> mTvTitle.setText(mGroupName));
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -190,26 +215,30 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     public void voiceCallListener(String toChatUsername, EMMessage mEmMessage) {
         try {
             if (mEmMessage != null) {
-                String nike = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(getIntent().getStringExtra("u_id"));
-                String CODE = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(getIntent().getStringExtra("u_id"));
-                String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(getIntent().getStringExtra("u_id"));
-                String post_name = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPost(getIntent().getStringExtra("u_id"));
-                String sex = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getSex(getIntent().getStringExtra("u_id"));
-                String phone = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPhone(getIntent().getStringExtra("u_id"));
-                String email = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getEmail(getIntent().getStringExtra("u_id"));
-                String department_name = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartment(getIntent().getStringExtra("u_id"));
-
-                startActivity(new Intent(this, VoiceCallActivity.class)
-                        .putExtra("nike", nike)
-                        .putExtra("CODE", CODE)
-                        .putExtra("portrait", portrait)
-                        .putExtra("post_name", post_name)
-                        .putExtra("sex", sex)
-                        .putExtra("phone", phone)
-                        .putExtra("email", email)
-                        .putExtra("department_name", department_name)
-                        .putExtra("username", toChatUsername)
-                        .putExtra("isomingCall", false));
+                Observable.create(e -> {
+                    mNike = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(getIntent().getStringExtra("u_id"));
+                    mCode = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(getIntent().getStringExtra("u_id"));
+                    mPortrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(getIntent().getStringExtra("u_id"));
+                    mPost_name = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPost(getIntent().getStringExtra("u_id"));
+                    mSex = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getSex(getIntent().getStringExtra("u_id"));
+                    mPhone = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPhone(getIntent().getStringExtra("u_id"));
+                    mEmail = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getEmail(getIntent().getStringExtra("u_id"));
+                    mDepartment_name = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartment(getIntent().getStringExtra("u_id"));
+                    e.onComplete();
+                }).subscribeOn(Schedulers.io())
+                        .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                        .subscribe(o -> {
+                        }, throwable -> throwable.printStackTrace(), () -> startActivity(new Intent(EaseChatMessageActivity.this, VoiceCallActivity.class)
+                                .putExtra("nike", mNike)
+                                .putExtra("CODE", mCode)
+                                .putExtra("portrait", mPortrait)
+                                .putExtra("post_name", mPost_name)
+                                .putExtra("sex", mSex)
+                                .putExtra("phone", mPhone)
+                                .putExtra("email", mEmail)
+                                .putExtra("department_name", mDepartment_name)
+                                .putExtra("username", toChatUsername)
+                                .putExtra("isomingCall", false)));
             } else {
                 startActivity(new Intent(this, VoiceCallActivity.class)
                         .putExtra("username", toChatUsername)
@@ -299,10 +328,10 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
-        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
+        Observable.create(e -> FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
                 Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
                 userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
-                userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
+                userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()))).subscribeOn(Schedulers.io());
         mTvTitle.setText(userDetailsBean.getUsername());
     }
 

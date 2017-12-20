@@ -83,7 +83,6 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
     private List<String>                       mOrgIdKey;
     private List<Contacts>                     mGroupUsers;
     private List<Contacts>                     mSearchData;
-    private InputMethodManager                 inputManager;
     private ArrayList<String>                  mSelectedAccount;
     private SelectedContactAdapter             mUserAdapter;
     private GroupContactListFragment           mBottomFragment;
@@ -157,15 +156,6 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     mTopView.setLeftText("上一级");
                     mTvErrorView.setVisibility(View.VISIBLE);
                     mPresenter.searchContact(mSearchContact.getText().toString().trim(), mSelectedAccount);
-
-                    //-------------------------------       键盘隐藏       -------------------------------
-
-                    try {
-                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                                InputMethodManager.HIDE_NOT_ALWAYS);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 });
 
         //-------------------------------   初始化视图   -------------------------------
@@ -182,9 +172,6 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         mRvSearchContact.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRvSearchContact.addOnItemTouchListener(new OnItemClick());
         mUserAdapter.notifyDataSetChanged();
-
-        inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
         mTopView.getRightView().setOnClickListener(view -> {
 
             if (mGroupUsers.size() == 0) {

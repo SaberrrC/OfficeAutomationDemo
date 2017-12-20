@@ -62,7 +62,6 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
 
     private View mFooterView;
     private GroupChatListAdapter mAdapter;
-    private InputMethodManager inputManager;
     private List<EMGroup> mGroupList = new ArrayList<>();
     private List<EMGroup> mSearchGroupList = new ArrayList<>();
     @SuppressWarnings("SpellCheckingInspection")
@@ -99,7 +98,6 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
         initSearchView();
         mSearchEtInput.setOnKeyListener(this);
         mSrRefresh.setOnRefreshListener(this);
-        inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mSrRefresh.setColorSchemeColors(Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
         mSrRefresh.post(() -> mSrRefresh.setRefreshing(true));
         mAdapter = new GroupChatListAdapter(mGroupList);
@@ -133,13 +131,6 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                         mAdapter.setNewData(mSearchGroupList);
                         mAdapter.notifyDataSetChanged();
                         hideLoadingView();
-//                        //-------------------------------       键盘隐藏       -------------------------------
-//                        try {
-//                            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-//                                    InputMethodManager.HIDE_NOT_ALWAYS);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
                     }
                 });
     }
@@ -226,13 +217,6 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
     @Override
     public boolean onKey(View view, int j, KeyEvent keyEvent) {
         if (j == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-            //-------------------------------       键盘隐藏       -------------------------------
-            try {
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
             if (mSearchEtInput.getText().toString().trim().equals("")) {
                 showLoadingView();
