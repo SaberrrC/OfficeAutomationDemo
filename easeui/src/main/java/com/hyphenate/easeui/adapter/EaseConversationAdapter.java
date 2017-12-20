@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.icu.text.UFormat;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -64,15 +65,15 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     private static final String TAG = "ChatAllHistoryAdapter";
     private List<EMConversation> conversationList;
     private List<EMConversation> copyConversationList;
-    private ConversationFilter   conversationFilter;
-    private boolean              notiyfyByFilter;
+    private ConversationFilter conversationFilter;
+    private boolean notiyfyByFilter;
 
-    protected int     primaryColor;
-    protected int     secondaryColor;
-    protected int     timeColor;
-    protected int     primarySize;
-    protected int     secondarySize;
-    protected float   timeSize;
+    protected int primaryColor;
+    protected int secondaryColor;
+    protected int timeColor;
+    protected int primarySize;
+    protected int secondarySize;
+    protected float timeSize;
     protected Context mContext;
     EMMessage lastMessage;
     private String conversationId;
@@ -165,7 +166,8 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
 
             if (lastMessage.getType() == EMMessage.Type.TXT) {
-                Spannable jiamiStr = EaseSmileUtils.getSmiledText(getContext(), EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))));
+                Spannable span = EaseSmileUtils.getSmiledText(getContext(), EncryptionUtil.getDecryptStr(EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext())), ""));
+                Spannable jiamiStr = EaseSmileUtils.getSmiledText(getContext(), span);
                 holder.message.setText(jiamiStr, BufferType.SPANNABLE);
             } else {
                 Spannable jiamiStr = EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext())));
@@ -212,8 +214,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
                 holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
                 holder.motioned.setVisibility(View.GONE);
-            }
-            else if (lastMessage.conversationId().contains("admin")) {
+            } else if (lastMessage.conversationId().contains("admin")) {
                 holder.name.setText("会议邀请");
                 holder.avatar.setImageResource(R.drawable.meeting_invite_icon);
             } else if (lastMessage.conversationId().contains("notice")) {
@@ -396,19 +397,19 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
 
         RelativeLayout rv_conversation;
 
-        TextView       name;
+        TextView name;
 
-        TextView       unreadLabel;
+        TextView unreadLabel;
 
-        TextView       message;
+        TextView message;
 
-        TextView       time;
+        TextView time;
 
-        ImageView      avatar;
+        ImageView avatar;
 
-        View           msgState;
+        View msgState;
 
-        TextView       motioned;
+        TextView motioned;
     }
 }
 
