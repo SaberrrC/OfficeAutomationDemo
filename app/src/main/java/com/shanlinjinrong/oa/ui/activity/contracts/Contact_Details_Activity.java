@@ -13,9 +13,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -291,23 +295,23 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
             }
 
 
-        /*    Glide.with(AppManager.mContext)
+            Glide.with(AppManager.mContext)
                     .load(mPortrait)
-                    .error(R.drawable.ease_default_avatar)
+                    .error(R.drawable.ease_user_portraits)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                    .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);  */
+                    .placeholder(R.drawable.ease_user_portraits).into(ivImgUser);
 
-            ImageLoader.getInstance().displayImage(mPortrait, ivImgUser, new DisplayImageOptions.Builder()
-                    .showImageForEmptyUri(R.drawable.ease_default_avatar)
-                    .showImageOnFail(R.drawable.ease_default_avatar)
-                    .resetViewBeforeLoading(true)
-                    .cacheOnDisk(true)
-                    .imageScaleType(ImageScaleType.EXACTLY)
-                    .bitmapConfig(Bitmap.Config.RGB_565)
-                    .considerExifParams(true)
-                    .displayer(new FadeInBitmapDisplayer(300))
-                    .build());
+//            ImageLoader.getInstance().displayImage(mPortrait, ivImgUser, new DisplayImageOptions.Builder()
+//                    .showImageForEmptyUri(R.drawable.ease_default_avatar)
+//                    .showImageOnFail(R.drawable.ease_default_avatar)
+//                    .resetViewBeforeLoading(true)
+//                    .cacheOnDisk(true)
+//                    .imageScaleType(ImageScaleType.EXACTLY)
+//                    .bitmapConfig(Bitmap.Config.RGB_565)
+//                    .considerExifParams(true)
+//                    .displayer(new FadeInBitmapDisplayer(300))
+//                    .build());
             tv_mails.setText(mEmail.equals("") || mEmail == null || mEmail.equals("null") ? "-" : mEmail);
         } catch (Throwable e) {
             e.printStackTrace();

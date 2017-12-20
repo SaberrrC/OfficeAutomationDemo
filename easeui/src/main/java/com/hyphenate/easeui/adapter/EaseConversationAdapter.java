@@ -21,8 +21,6 @@ import android.widget.TextView.BufferType;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.google.gson.Gson;
-import com.huawei.hms.api.Api;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -30,7 +28,6 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -43,7 +40,6 @@ import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.easeui.widget.EaseImageView;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
@@ -55,6 +51,9 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * conversation list adapter
@@ -77,6 +76,9 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     protected Context mContext;
     EMMessage lastMessage;
     private String conversationId;
+    private String mGroupName;
+    private String mUsername;
+    private String mPortrait;
 
     public EaseConversationAdapter(Context context, int resource, List<EMConversation> objects) {
         super(context, resource, objects);
@@ -131,7 +133,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         // get conversation
         EMConversation conversation = getItem(position);
         // get username or group id
-        if (conversation == null){
+        if (conversation == null) {
             return convertView;
         }
         String username = conversation.conversationId();
@@ -189,8 +191,12 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
         }
         try {
-            if (lastMessage.conversationId().length() > 11) {
+            if (lastMessage.getChatType() == EMMessage.ChatType.Chat && (!lastMessage.conversationId().contains("admin") || !lastMessage.conversationId().contains("notice"))) {
                 conversationId = lastMessage.conversationId().substring(0, 12);
+                mUsername = FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId);
+                mPortrait = FriendsInfoCacheSvc.getInstance(mContext).getPortrait(conversationId);
+            } else if (lastMessage.getChatType() == EMMessage.ChatType.GroupChat) {
+                mGroupName = FriendsInfoCacheSvc.getInstance(mContext).getNickName(lastMessage.conversationId());
             } else {
                 conversationId = lastMessage.conversationId();
             }
@@ -204,11 +210,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 }
                 // group message, show group avatar
                 holder.avatar.setImageResource(R.drawable.icon_default_group_portraits);
-//                EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
-//                holder.name.setText(group != null ? group.getGroupName() : username);
-                //获取群组名称
-                String groupName = FriendsInfoCacheSvc.getInstance(mContext).getNickName(username);
-                holder.name.setText(groupName);
+                holder.name.setText(mGroupName);
             } else if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
                 holder.avatar.setImageResource(R.drawable.icon_default_group_portraits);
                 EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
@@ -220,24 +222,20 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             } else if (lastMessage.conversationId().contains("notice")) {
                 holder.name.setText("公告通知");
                 holder.avatar.setImageResource(R.drawable.notice_message_icon);
-            } else if (!FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId).equals("")) {
+            } else if (!TextUtils.isEmpty(mUsername)) {
                 try {
                     Glide.with(mContext)
-                            .load(FriendsInfoCacheSvc.getInstance(mContext).getPortrait(conversationId))
+                            .load(mPortrait)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .placeholder(R.drawable.ease_user_portraits)
                             .error(R.drawable.ease_user_portraits)
                             .transform(new CenterCrop(mContext), new GlideRoundTransformUtils(mContext, 5))
                             .into(holder.avatar);
-                    holder.name.setText(FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId));
+                    holder.name.setText(mUsername);
                     holder.motioned.setVisibility(View.GONE);
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
-            } else if (FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId).equals("")) {
-                holder.rv_conversation.setVisibility(View.GONE);
-            } else {
-                holder.rv_conversation.setVisibility(View.VISIBLE);
             }
         } catch (Throwable e) {
             e.printStackTrace();

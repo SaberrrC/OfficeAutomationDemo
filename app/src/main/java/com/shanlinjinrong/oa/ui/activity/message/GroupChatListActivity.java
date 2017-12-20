@@ -50,22 +50,22 @@ import io.reactivex.schedulers.Schedulers;
 public class GroupChatListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnKeyListener {
 
     @BindView(R.id.top_view)
-    CommonTopView mTopView;
+    CommonTopView      mTopView;
     @BindView(R.id.rv_group_show)
-    RecyclerView mRvGroupShow;
+    RecyclerView       mRvGroupShow;
     @BindView(R.id.sr_refresh)
     SwipeRefreshLayout mSrRefresh;
     @BindView(R.id.search_et_input)
-    ClearEditText mSearchEtInput;
+    ClearEditText      mSearchEtInput;
     @BindView(R.id.tv_error_layout)
-    TextView tvErrorLayout;
+    TextView           tvErrorLayout;
 
-    private View mFooterView;
+    private View                 mFooterView;
     private GroupChatListAdapter mAdapter;
-    private List<EMGroup> mGroupList = new ArrayList<>();
-    private List<EMGroup> mSearchGroupList = new ArrayList<>();
+    private       List<EMGroup> mGroupList       = new ArrayList<>();
+    private       List<EMGroup> mSearchGroupList = new ArrayList<>();
     @SuppressWarnings("SpellCheckingInspection")
-    private final int REQUESTCODE = 101, DELETESUCCESS = -2, RESULTELECTEDCODE = -3;
+    private final int           REQUESTCODE      = 101, DELETESUCCESS = -2, RESULTELECTEDCODE = -3;
     private long lastClickTime = 0;
 
     @Override
@@ -99,7 +99,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
         mSearchEtInput.setOnKeyListener(this);
         mSrRefresh.setOnRefreshListener(this);
         mSrRefresh.setColorSchemeColors(Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
-        mSrRefresh.post(() -> mSrRefresh.setRefreshing(true));
+        mSrRefresh.setRefreshing(true);
         mAdapter = new GroupChatListAdapter(mGroupList);
         mRvGroupShow.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRvGroupShow.setAdapter(mAdapter);
@@ -111,7 +111,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
     private void initSearchView() {
         //EditText 自动搜索,间隔->输入停止500毫秒后自动搜索
         RxTextView.textChanges(mSearchEtInput)
-                .debounce(1000, TimeUnit.MILLISECONDS)
+                .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(charSequence -> {
@@ -161,10 +161,10 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
         Observable.create(subscriber -> {
             try {
                 mGroupList = EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
-                subscriber.onComplete();
             } catch (HyphenateException e) {
                 e.printStackTrace();
             }
+            subscriber.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
@@ -196,7 +196,6 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (resultCode) {
             case RESULT_OK: //返回选择的群组人员
                 break;
@@ -217,7 +216,6 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
     @Override
     public boolean onKey(View view, int j, KeyEvent keyEvent) {
         if (j == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-
             if (mSearchEtInput.getText().toString().trim().equals("")) {
                 showLoadingView();
                 mAdapter.setNewData(mGroupList);

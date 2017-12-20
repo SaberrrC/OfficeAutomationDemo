@@ -96,6 +96,7 @@ public class TabMeFragment extends BaseFragment {
                 .error(R.drawable.ease_default_avatar)
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                 .into(userPortrait);
+
         userName.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_USERNAME));
         position.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_POST_NAME));
 

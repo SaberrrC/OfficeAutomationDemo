@@ -68,7 +68,12 @@ import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import q.rorbin.badgeview.QBadgeView;
@@ -106,23 +111,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView tabMessageText;
+    TextView  tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView tabContactsText;
+    TextView  tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView tabGroupText;
+    TextView  tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView tabMeText;
+    TextView  tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView tabHomeText;
+    TextView  tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView tvMsgUnRead;
+    TextView  tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -147,13 +152,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment> mTabs;
+    private List<Fragment>       mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE = 0;
+    private static final int TAB_MESSAGE  = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME = 2;
-    private static final int TAB_GROUP = 3;
-    private static final int TAB_ME = 4;
+    private static final int TAB_HOME     = 2;
+    private static final int TAB_GROUP    = 3;
+    private static final int TAB_ME       = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -166,21 +171,22 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private int mBlueGreen;
     private int mBlueBlue;
 
-    private TextView[] mTextViews;
+    private TextView[]  mTextViews;
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
 
     int tempMsgCount = 0;
-    private EaseUI easeUI;
-    private AlertDialog dialog;
-    private QBadgeView qBadgeView;
-    private TabCommunicationFragment tabCommunicationFragment;
+    private EaseUI                     easeUI;
+    private AlertDialog                dialog;
+    private QBadgeView                 qBadgeView;
+    private TabCommunicationFragment   tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
     private List<EMMessage> mEMMessage = new ArrayList<>();
-    private EMGroup mGroup;
-    private String mGroupName;
+    private EMGroup            mGroup;
+    private String             mGroupName;
     private EMMessage.ChatType chatType;
     private String userId = "";
+    private String mQueryInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -300,25 +306,17 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     }
 
     public void refreshCommCount() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //                try {
-                mPresenter.loadConversationList();
-                //                } catch (Exception e) {
-                //                    LogUtils.e("加载环信抛异常了");
-                //                }
-            }
+        new Thread(() -> {
+            //                try {
+            mPresenter.loadConversationList();
+            //                } catch (Exception e) {
+            //                    LogUtils.e("加载环信抛异常了");
+            //                }
         }).start();
     }
 
     public void refreshUnReadMsgCount() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mPresenter.loadUnReadMsg();
-            }
-        }).start();
+        new Thread(() -> mPresenter.loadUnReadMsg()).start();
     }
 
     @Override
@@ -544,42 +542,43 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
             for (EMMessage message : list) {
                 String conversationId = message.conversationId();
                 chatType = message.getChatType();
-
                 if (chatType == EMMessage.ChatType.GroupChat) {
                     mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
                     if (mGroupName.equals("")) {
                         Observable.create(e -> {
                             mGroup = EMClient.getInstance().groupManager().getGroup(conversationId);
+                            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(conversationId, mGroup.getGroupName(), ""));
                             e.onComplete();
                         }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(o -> {
                                 }, Throwable::printStackTrace, () -> {
-                                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(conversationId, mGroup.getGroupName(), "", "", "", "", "", "", ""));
                                     refreshChat(list, userId);
                                 });
                     }
                 } else {
-                    String conversationId1 = "";
-                    if (conversationId.length() > 11) {
-                        conversationId1 = conversationId.substring(0, 12);
-                    } else {
-                        conversationId1 = conversationId;
-                    }
-                    userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(conversationId1);
-                    if (userId.equals("")) {
-                        mEMMessage.clear();
-                        mEMMessage.addAll(list);
+                    if (!conversationId.contains("admin") || !conversationId.contains("notice")) {
                         try {
-                            mPresenter.searchUserDetails(conversationId1.substring(3, conversationId1.length()));
+                            mQueryInfo = conversationId.substring(0, 12);
                         } catch (Throwable e) {
+                            mQueryInfo = "";
                             e.printStackTrace();
+                        }
+                        userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(mQueryInfo);
+                        if (userId.equals("")) {
+                            mEMMessage.clear();
+                            mEMMessage.addAll(list);
+                            try {
+                                mPresenter.searchUserDetails(mQueryInfo.substring(3, mQueryInfo.length()));
+                                return;
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
                 refreshChat(list, userId);
             }
-
         }
 
         @Override
@@ -640,27 +639,30 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
     @Override //TODO 缓存 联系人消息
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
-        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
-                Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
-                userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
-                userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
-
-        if (tabCommunicationFragment != null) {
-            if (tabCommunicationFragment.myConversationListFragment != null) {
-                tabCommunicationFragment.myConversationListFragment.refresh();
-                tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
-            }
-        }
-
-        if (mEMMessage != null) {
-            for (EMMessage message : mEMMessage) {
-                if (!easeUI.hasForegroundActivies()) {
-                    easeUI.getNotifier().onNewMsg(message);
-                }
-            }
-        }
-
-        refreshCommCount();
+        Observable.create(e -> {
+            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
+                    Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
+                    userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(), userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(o -> {
+                }, Throwable::printStackTrace, () -> {
+                    if (tabCommunicationFragment != null) {
+                        if (tabCommunicationFragment.myConversationListFragment != null) {
+                            tabCommunicationFragment.myConversationListFragment.refresh();
+                            tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
+                        }
+                    }
+                    if (mEMMessage != null) {
+                        for (EMMessage message : mEMMessage) {
+                            if (!easeUI.hasForegroundActivies()) {
+                                easeUI.getNotifier().onNewMsg(message);
+                            }
+                        }
+                    }
+                    refreshCommCount();
+                });
     }
 
     //开启权限列表

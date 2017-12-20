@@ -14,9 +14,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -48,45 +52,45 @@ import static com.shanlinjinrong.oa.manager.AppManager.mContext;
 public class Contact_Details_Activity2 extends BaseActivity {
 
     @BindView(R.id.tv_sex)
-    TextView tv_sex;
+    TextView        tv_sex;
     @BindView(R.id.btn_back)
-    ImageView btn_back;
+    ImageView       btn_back;
     @BindView(R.id.tv_duties)
-    TextView tv_duties;
+    TextView        tv_duties;
     @BindView(R.id.tv_mails)
-    TextView tv_mails;
+    TextView        tv_mails;
     @BindView(R.id.iv_phone)
-    ImageView iv_phone;
+    ImageView       iv_phone;
     @BindView(R.id.iv_img_user)
     CircleImageView ivImgUser;
     @BindView(R.id.send_voice)
-    ImageView send_voice;
+    ImageView       send_voice;
     @BindView(R.id.tv_user_name)
-    TextView tv_user_name;
+    TextView        tv_user_name;
     @BindView(R.id.send_message)
-    ImageView send_message;
+    ImageView       send_message;
     @BindView(R.id.tv_department)
-    TextView tv_department;
+    TextView        tv_department;
     @BindView(R.id.tv_phone_number)
-    TextView tv_phone_number;
+    TextView        tv_phone_number;
     @BindView(R.id.rel_voice_call)
-    RelativeLayout rel_voice_call;
+    RelativeLayout  rel_voice_call;
     @BindView(R.id.rel_phone_call)
-    RelativeLayout rel_phone_call;
+    RelativeLayout  rel_phone_call;
     @BindView(R.id.rel_send_message)
-    RelativeLayout rel_send_message;
+    RelativeLayout  rel_send_message;
 
-    private String mSex;
-    private String mPost;
-    private String mPhone;
-    private String mEmail;
-    private String mNickName;
-    private String mPortrait;
-    private String mUserCode;
-    private String mDepartment;
+    private String   mSex;
+    private String   mPost;
+    private String   mPhone;
+    private String   mEmail;
+    private String   mNickName;
+    private String   mPortrait;
+    private String   mUserCode;
+    private String   mDepartment;
     private Contacts constants;
-    private String mDepartmentId;
-    private String mUserDepartment;
+    private String   mDepartmentId;
+    private String   mUserDepartment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,23 +257,23 @@ public class Contact_Details_Activity2 extends BaseActivity {
             tv_mails.setText(mEmail);
         }
 
-//        Glide.with(AppManager.mContext)
-//                .load(mPortrait)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .error(R.drawable.ease_default_avatar)
-//                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-//                .placeholder(R.drawable.ease_default_avatar).into(ivImgUser);
+        Glide.with(AppManager.mContext)
+                .load(mPortrait)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(R.drawable.ease_user_portraits)
+                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                .placeholder(R.drawable.ease_user_portraits).into(ivImgUser);
 
-        ImageLoader.getInstance().displayImage(mPortrait, ivImgUser, new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.icon_homepage_work_report_me_launch)
-                .showImageOnFail(R.drawable.icon_homepage_work_report_me_launch)
-                .resetViewBeforeLoading(true)
-                .cacheOnDisk(true)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .considerExifParams(true)
-                .displayer(new FadeInBitmapDisplayer(300))
-                .build());
+//        ImageLoader.getInstance().displayImage(mPortrait, ivImgUser, new DisplayImageOptions.Builder()
+//                .showImageForEmptyUri(R.drawable.icon_homepage_work_report_me_launch)
+//                .showImageOnFail(R.drawable.icon_homepage_work_report_me_launch)
+//                .resetViewBeforeLoading(true)
+//                .cacheOnDisk(true)
+//                .imageScaleType(ImageScaleType.EXACTLY)
+//                .bitmapConfig(Bitmap.Config.RGB_565)
+//                .considerExifParams(true)
+//                .displayer(new FadeInBitmapDisplayer(300))
+//                .build());
     }
 
     @OnClick(R.id.btn_back)
