@@ -38,15 +38,18 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
                     JSONObject jo = new JSONObject(t);
                     switch (jo.getString("code")) {
                         case ApiJava.REQUEST_CODE_OK:
-                            mView.reportSuccess(jo.getString("message"));
+                            if (mView != null)
+                                mView.reportSuccess(jo.getString("message"));
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
                         default:
-                            mView.reportFailed(jo.getString("code"), jo.getString("message"));
+                            if (mView != null)
+                                mView.reportFailed(jo.getString("code"), jo.getString("message"));
                     }
 
                 } catch (JSONException e) {
@@ -59,7 +62,8 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.reportFailed("" + errorNo, strMsg);
+                    if (mView != null)
+                        mView.reportFailed("" + errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -69,7 +73,8 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             public void onFinish() {
                 super.onFinish();
                 try {
-                    mView.requestFinish();
+                    if (mView != null)
+                        mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -88,15 +93,18 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
                     switch (jo.getString("code")) {
                         case ApiJava.REQUEST_CODE_OK:
                             JSONObject data = jo.getJSONObject("data");
-                            mView.getDefaultReceiverSuccess(data.getString("id"), data.getString("username"), data.getString("post"));
+                            if (mView != null)
+                                mView.getDefaultReceiverSuccess(data.getString("id"), data.getString("username"), data.getString("post"));
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            if (mView != null)
+                                mView.uidNull(0);
                             break;
                         default:
-                            mView.getDefaultReceiverFailed(jo.getString("message"));
+                            if (mView != null)
+                                mView.getDefaultReceiverFailed(jo.getString("message"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -107,7 +115,8 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    mView.getDefaultReceiverFailed(strMsg);
+                    if (mView != null)
+                        mView.getDefaultReceiverFailed(strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -117,7 +126,8 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             public void onFinish() {
                 super.onFinish();
                 try {
-                    mView.requestFinish();
+                    if (mView != null)
+                        mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
