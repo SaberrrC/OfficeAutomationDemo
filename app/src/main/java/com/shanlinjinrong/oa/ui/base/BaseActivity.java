@@ -104,8 +104,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showLoadingView() {
-        if (loadingDialog != null && !loadingDialog.isShowing())
-            loadingDialog.show();
+        try {
+            if (loadingDialog != null && !loadingDialog.isShowing())
+                loadingDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void showLoadingView(String text) {

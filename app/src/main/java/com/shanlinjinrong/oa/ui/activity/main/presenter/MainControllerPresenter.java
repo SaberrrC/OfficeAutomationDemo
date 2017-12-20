@@ -63,11 +63,11 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
                 }).show();
             } else {//
                 SharedPreferenceUtils.setShouldAskPermission(context, "firstshould", ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.WRITE_EXTERNAL_STORAGE));
-                ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SYSTEM_ALERT_WINDOW}, 100);
             }
 
         } else {
-//            PgyUpdateManager.setIsForced(true);
+            //            PgyUpdateManager.setIsForced(true);
             PgyUpdateManager.register(context, "com.shanlinjinrong.oa.fileprovider");
         }
     }
@@ -128,7 +128,6 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
     }
 
 
-
     @Override
     public void searchUserDetails(String code) {
         mKjHttp.cleanCache();
@@ -154,6 +153,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
