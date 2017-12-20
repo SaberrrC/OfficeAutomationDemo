@@ -12,7 +12,7 @@
         android:layout_weight="2.3"
         android:gravity="center"
         android:padding="10dp"
-        android:text="该账户已经下线、请重新登陆，如不不是本人操作，请前往修改密码。"
+        android:text="该账户已经下线，请重新登陆，如不不是本人操作，请前往修改密码。"
         android:textColor="@color/black"
         android:textSize="14sp"/>
 

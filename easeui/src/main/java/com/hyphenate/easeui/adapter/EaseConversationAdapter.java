@@ -2,6 +2,7 @@ package com.hyphenate.easeui.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.icu.text.UFormat;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -129,6 +130,9 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
         // get conversation
         EMConversation conversation = getItem(position);
         // get username or group id
+        if (conversation == null){
+            return convertView;
+        }
         String username = conversation.conversationId();
 
 

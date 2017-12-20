@@ -21,6 +21,7 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnMessagesClearEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -523,6 +524,10 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         intent.putExtra("isAddMember", true);
                         intent.putExtra(EaseConstant.GROUPID, mGroupId);
                         intent.putExtra(Constants.SELECTEDTYEPE, 1);
+                        //增加群人员 更新数据库
+                        if (FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mGroupId).equals("")){
+                            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroupId,mGroupName,""));
+                        }
                     } else {
                         intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
                         intent.putExtra("type", 0);
