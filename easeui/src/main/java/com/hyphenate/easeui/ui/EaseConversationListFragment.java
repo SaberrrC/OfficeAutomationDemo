@@ -17,13 +17,14 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import com.hyphenate.EMConnectionListener;
-import com.hyphenate.EMConversationListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.widget.EaseConversationList;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -45,12 +46,6 @@ public class EaseConversationListFragment extends EaseBaseFragment {
 
     protected boolean isConflict;
 
-    protected EMConversationListener convListener = new EMConversationListener() {
-        @Override
-        public void onCoversationUpdate() {
-            refresh();
-        }
-    };
     private TextView tvErrorView;
     private long lastClickTime = 0;
 

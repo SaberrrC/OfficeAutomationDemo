@@ -29,6 +29,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.EMCallBack;
@@ -158,6 +159,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 .load(AppConfig.getAppConfig(this).get(
                         AppConfig.PREF_KEY_PORTRAITS))
                 .error(R.drawable.ease_default_avatar)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                 .placeholder(R.drawable.ease_default_avatar)
                 .into(userPortrait);
