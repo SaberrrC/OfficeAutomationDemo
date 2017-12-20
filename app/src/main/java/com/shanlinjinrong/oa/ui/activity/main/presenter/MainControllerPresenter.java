@@ -63,7 +63,8 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
                 }).show();
             } else {//
                 SharedPreferenceUtils.setShouldAskPermission(context, "firstshould", ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.WRITE_EXTERNAL_STORAGE));
-                ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SYSTEM_ALERT_WINDOW}, 100);
+                ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.SYSTEM_ALERT_WINDOW}, 100);
             }
 
         } else {
