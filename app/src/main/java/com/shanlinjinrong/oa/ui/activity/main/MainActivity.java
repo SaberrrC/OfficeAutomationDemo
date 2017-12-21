@@ -614,7 +614,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 if (action.equals("UPDATE_GROUP_INFO")) {
                     String groupName = msg.getStringAttribute("groupName", "");
                     String groupId = msg.getStringAttribute("groupId", "");
-                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(groupId, groupName, "", "", "", "", "", "", ""));
+                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(groupId, groupName, ""));
                     EventBus.getDefault().post(new GroupEventListener(Constants.MODIFICATIONNAME));
                 }
             }
@@ -662,7 +662,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         this.loginRequest = loginRequest;
     }
 
-    @Override //TODO 缓存 联系人消息
+    @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
         Observable.create(e -> {
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
@@ -748,7 +748,5 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 }
             });
         }
-
     }
-
 }
