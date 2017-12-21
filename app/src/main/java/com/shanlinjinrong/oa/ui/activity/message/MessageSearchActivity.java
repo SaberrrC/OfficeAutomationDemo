@@ -197,7 +197,6 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             holder.message.setText(span, TextView.BufferType.SPANNABLE);
 
             String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());
-            //            Glide.with(parent.getContext()).load(portrait).into(holder.avatar);
             Glide.with(parent.getContext())
                     .load(portrait).error(R.drawable.ease_default_avatar)
                     .dontAnimate()
