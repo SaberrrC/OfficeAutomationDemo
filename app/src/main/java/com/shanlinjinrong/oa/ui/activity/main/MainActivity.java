@@ -36,6 +36,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -581,6 +582,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                     }
                 }
                 refreshChat(list, userId);
+                EventBus.getDefault().post(new OnMessagesRefreshEvent());
             }
         }
 

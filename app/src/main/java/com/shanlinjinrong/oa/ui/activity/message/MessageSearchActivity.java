@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Spannable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.util.DateUtils;
@@ -129,8 +131,9 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
         showLoadingView();
         new Thread(new Runnable() {
             public void run() {
-                List<EMMessage> resultList = mConversation.searchMsgFromDB(mSearchEtInput.getText().toString().trim(), System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
-                //   List<EMMessage> resultList = mConversation.searchMsgFromDB(EncryptionUtil.getDecryptStr(mSearchEtInput.getText().toString().trim(), ""), System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
+//                List<EMMessage> resultList = mConversation.searchMsgFromDB(mSearchEtInput.getText().toString().trim(), System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
+                String decryptStr = EncryptionUtil.getEncryptionStr(mSearchEtInput.getText().toString().trim(), "");
+                List<EMMessage> resultList = mConversation.searchMsgFromDB(decryptStr, System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
                 if (messageList == null) {
                     messageList = resultList;
                 } else {
@@ -186,7 +189,13 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             EaseUserUtils.setUserNick(nickName, holder.name);
             EaseUserUtils.setUserAvatar(getContext(), message.getFrom(), holder.avatar);
             holder.time.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
-            holder.message.setText(((EMTextMessageBody) message.getBody()).getMessage());
+            String msg = ((EMTextMessageBody) message.getBody()).getMessage();
+//            String decryptStr = EncryptionUtil.getDecryptStr(msg, "");
+
+            Spannable span = EaseSmileUtils.getSmiledText(parent.getContext(), msg);
+//            Spannable jiamiStr = EaseSmileUtils.getSmiledText(getContext(), span);
+            holder.message.setText(span, TextView.BufferType.SPANNABLE);
+
             String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());
             //            Glide.with(parent.getContext()).load(portrait).into(holder.avatar);
             Glide.with(parent.getContext())
