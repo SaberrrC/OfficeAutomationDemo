@@ -1,10 +1,7 @@
 package com.hyphenate.easeui.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.icu.text.UFormat;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -40,20 +37,11 @@ import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.easeui.widget.EaseImageView;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-
-import org.kymjs.kjframe.KJHttp;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  * conversation list adapter
@@ -64,15 +52,15 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     private static final String TAG = "ChatAllHistoryAdapter";
     private List<EMConversation> conversationList;
     private List<EMConversation> copyConversationList;
-    private ConversationFilter conversationFilter;
-    private boolean notiyfyByFilter;
+    private ConversationFilter   conversationFilter;
+    private boolean              notiyfyByFilter;
 
-    protected int primaryColor;
-    protected int secondaryColor;
-    protected int timeColor;
-    protected int primarySize;
-    protected int secondarySize;
-    protected float timeSize;
+    protected int     primaryColor;
+    protected int     secondaryColor;
+    protected int     timeColor;
+    protected int     primarySize;
+    protected int     secondarySize;
+    protected float   timeSize;
     protected Context mContext;
     EMMessage lastMessage;
     private String conversationId;
@@ -191,7 +179,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
         }
         try {
-            if (lastMessage.getChatType() == EMMessage.ChatType.Chat && (!lastMessage.conversationId().contains("admin") || !lastMessage.conversationId().contains("notice"))) {
+            if (lastMessage.getChatType() == EMMessage.ChatType.Chat && !lastMessage.getFrom().equals("sl_admin") && !lastMessage.getFrom().equals("sl_notice")) {
                 conversationId = lastMessage.conversationId().substring(0, 12);
                 mUsername = FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId);
                 mPortrait = FriendsInfoCacheSvc.getInstance(mContext).getPortrait(conversationId);
@@ -216,10 +204,10 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
                 holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
                 holder.motioned.setVisibility(View.GONE);
-            } else if (lastMessage.conversationId().contains("admin")) {
+            } else if (lastMessage.getFrom().contains("admin")) {
                 holder.name.setText("会议邀请");
                 holder.avatar.setImageResource(R.drawable.meeting_invite_icon);
-            } else if (lastMessage.conversationId().contains("notice")) {
+            } else if (lastMessage.getFrom().contains("notice")) {
                 holder.name.setText("公告通知");
                 holder.avatar.setImageResource(R.drawable.notice_message_icon);
             } else if (!TextUtils.isEmpty(mUsername)) {

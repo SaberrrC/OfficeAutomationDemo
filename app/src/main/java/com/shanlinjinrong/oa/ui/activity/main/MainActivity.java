@@ -558,6 +558,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                                 .subscribe(o -> {
                                 }, Throwable::printStackTrace, () -> {
                                     refreshChat(list, userId);
+                                    return;
                                 });
                     }
                 } else {
