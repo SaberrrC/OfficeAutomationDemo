@@ -32,12 +32,14 @@ import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -550,6 +552,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(final List<EMMessage> list) {
+
             for (EMMessage message : list) {
                 String conversationId = message.conversationId();
                 chatType = message.getChatType();
@@ -580,13 +583,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                             });
                     return;
                 } else {
-                    if (!conversationId.contains("admin") &&  !conversationId.contains("notice")) {
+                    if (!conversationId.contains("admin") && !conversationId.contains("notice")) {
                         Observable.create(e -> {
                             mQueryInfo = conversationId.substring(0, 12);
                             mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(mQueryInfo);
                             mUserName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mQueryInfo);
 
-                            if (TextUtils.isEmpty(mUserName)) {
+                            if (TextUtils.isEmpty(mUserName) || mUserName.equals("匿名用户")) {
                                 mEMMessage.clear();
                                 mEMMessage.addAll(list);
                                 mPresenter.searchUserDetails(mQueryInfo.substring(3, mQueryInfo.length()));
@@ -705,8 +708,30 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     }
 
     @Override
-    public void searchUserDetailsFailed() {
-
+    public void searchUserDetailsFailed(String userCode) {
+        Observable.create(e -> {
+            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends("sl_" + userCode, "匿名用户", ""));
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(o -> {
+                }, Throwable::printStackTrace, () -> {
+                    if (tabCommunicationFragment != null) {
+                        if (tabCommunicationFragment.myConversationListFragment != null) {
+                            tabCommunicationFragment.myConversationListFragment.refresh();
+                            tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
+                        }
+                    }
+                    if (mEMMessage != null) {
+                        for (EMMessage message : mEMMessage) {
+                            if (!easeUI.hasForegroundActivies()) {
+                                easeUI.getNotifier().onNewMsg(message);
+                            }
+                        }
+                    }
+                    refreshCommCount();
+                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
+                });
     }
 
     //位置权限回调

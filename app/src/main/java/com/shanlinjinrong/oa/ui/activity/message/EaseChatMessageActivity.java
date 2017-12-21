@@ -107,17 +107,16 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                     .subscribe(o -> {
                     }, throwable -> {
                         if (throwable instanceof HyphenateException) {
-                            switch (((HyphenateException) throwable).getErrorCode()) {
-                                case DISSOLVEGROUP://群组解散
-                                    if (mIsResume) {
-                                        EaseAlertDialog alertDialog = new EaseAlertDialog(EaseChatMessageActivity.this, null, "群组已经解散", null, (confirmed, bundle) -> {
-                                            EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
-                                            finish();
-                                        }, false);
-                                        alertDialog.setCancelable(false);
-                                        alertDialog.show();
-                                    }
-                                    break;
+                            int errorCode = ((HyphenateException) throwable).getErrorCode();
+                            if (errorCode >= 600 && errorCode <= 700) {
+                                if (mIsResume) {
+                                    EaseAlertDialog alertDialog = new EaseAlertDialog(EaseChatMessageActivity.this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                        EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
+                                        finish();
+                                    }, false);
+                                    alertDialog.setCancelable(false);
+                                    alertDialog.show();
+                                }
                             }
                         }
                     });

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.util.Pair;
 
@@ -158,6 +159,13 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.searchUserDetailsFailed(code);
+                    }
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
             }
 
             @Override

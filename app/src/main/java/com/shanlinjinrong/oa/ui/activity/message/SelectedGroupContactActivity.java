@@ -257,7 +257,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             //codes[codes.length - 1] = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
 
             for (String aName : name) {
-                groupName.append(",").append(aName);
+                groupName.append("、").append(aName);
             }
 
             //群名字上限10字符

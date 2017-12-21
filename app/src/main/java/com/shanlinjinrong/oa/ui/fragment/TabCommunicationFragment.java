@@ -125,7 +125,7 @@ public class TabCommunicationFragment extends BaseFragment {
                     String conversationId = conversation.conversationId().substring(0, 12);
                     mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
                     startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
-                            .putExtra("u_id", conversationId)
+                            .putExtra("u_id",  conversation.conversationId())
                             .putExtra("title", mNickName)
                             .putExtra("message_to", lastMessage.getTo())
                             .putExtra("message_from", lastMessage.getFrom())

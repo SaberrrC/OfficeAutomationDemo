@@ -29,7 +29,7 @@ public interface MainControllerContract {
 
         void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean);
 
-        void searchUserDetailsFailed();
+        void searchUserDetailsFailed(String UserCode);
     }
 
     interface Presenter extends BasePresenter<View> {

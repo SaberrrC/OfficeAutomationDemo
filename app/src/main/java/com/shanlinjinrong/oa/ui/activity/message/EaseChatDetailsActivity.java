@@ -140,15 +140,14 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             }, throwable -> {
                 hideLoadingView();
                 if (throwable instanceof HyphenateException) {
-                    switch (((HyphenateException) throwable).getErrorCode()) {
-                        case DISSOLVEGROUP://群组解散
-                            EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
-                                setResult(REFRESHSUCCESS);
-                                finish();
-                            }, false);
-                            alertDialog.setCancelable(false);
-                            alertDialog.show();
-                            break;
+                    int errorCode = ((HyphenateException) throwable).getErrorCode();
+                    if (errorCode >= 600 && errorCode <= 700) {
+                        EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                            setResult(REFRESHSUCCESS);
+                            finish();
+                        }, false);
+                        alertDialog.setCancelable(false);
+                        alertDialog.show();
                     }
                 }
             }, () -> {
@@ -524,8 +523,8 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                         intent.putExtra(EaseConstant.GROUPID, mGroupId);
                         intent.putExtra(Constants.SELECTEDTYEPE, 1);
                         //增加群人员 更新数据库
-                        if (FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mGroupId).equals("")){
-                            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroupId,mGroupName,""));
+                        if (FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mGroupId).equals("")) {
+                            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(mGroupId, mGroupName, ""));
                         }
                     } else {
                         intent.setClass(EaseChatDetailsActivity.this, SelectedGroupContactActivity.class);
