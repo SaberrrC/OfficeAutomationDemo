@@ -10,7 +10,7 @@ public class EncryptionUtil {
      */
     public static String getEncryptionStr(String content, String key) {
 
-        StringBuffer sb = new StringBuffer();
+      /*  StringBuffer sb = new StringBuffer();
         try {
             content = EncryptionStringUtils.encryptionStr(content);
             sb.append("<0-");
@@ -19,7 +19,9 @@ public class EncryptionUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        return sb.toString();
+        return sb.toString();
+      */
+
         return content;
 
     }
@@ -32,7 +34,7 @@ public class EncryptionUtil {
      */
     public static String getDecryptStr(String content, String key) {
 
-        try {
+       /* try {
             if (content.startsWith("<0-") && content.endsWith("->")) {//<0-95s3->
                 content = content.substring(3, content.length() - 2);
                 content = EncryptionStringUtils.DecryptStr(content);
@@ -42,7 +44,7 @@ public class EncryptionUtil {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         return content;
     }
 }
