@@ -48,6 +48,7 @@ import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -57,6 +58,7 @@ import java.util.Stack;
 
 import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
+import ren.yale.android.cachewebviewlib.CacheWebView;
 
 /**
  * 概述：
@@ -176,6 +178,9 @@ public class AppManager extends MultiDexApplication {
         initAppComponent();
 
         initImageLoader(this);
+        File cacheFile = new File(this.getCacheDir(), "cache_path_name");
+        CacheWebView.getCacheConfig().init(this, cacheFile.getAbsolutePath(), 1024 * 1024 * 20, 1024 * 1024 * 5)
+                .enableDebug(true);//20M 磁盘缓存空间,5M 内存缓存空间
     }
 
 

@@ -1,17 +1,23 @@
 package com.shanlinjinrong.oa.ui.activity.my;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hyphenate.util.NetUtils;
@@ -23,18 +29,21 @@ import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.views.ProgressWebView;
 
+import java.io.File;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ren.yale.android.cachewebviewlib.CacheWebView;
+import ren.yale.android.cachewebviewlib.WebViewCache;
 import rx.functions.Action1;
 
 /**
  * <h3>Description: 使用帮助 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/9/20.<br />
  */
-public class UsingHelpActivity extends BaseActivity {
+public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
 
     private static final String APP_CACAHE_DIRNAME = "/webcache";
 
@@ -43,9 +52,14 @@ public class UsingHelpActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.web_view)
-    ProgressWebView webView;
+    CacheWebView webView;
     @BindView(R.id.tv_error_layout)
     TextView tvErrorLayout;
+
+    @BindView(R.id.rl_loadding)
+    RelativeLayout rlloadding;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     private WebViewClient mWebViewClient;
 
@@ -57,14 +71,8 @@ public class UsingHelpActivity extends BaseActivity {
         initToolBar();
         setTranslucentStatus(this);
 
-        if (NetUtils.hasNetwork(this)) {
-            tvErrorLayout.setVisibility(View.GONE);
-            initWebView();
-        } else {
-            showToast(getString(R.string.net_no_connection));
-            tvErrorLayout.setVisibility(View.VISIBLE);
-        }
 
+        initWebView();
         tvErrorLayout.setOnClickListener(view -> {
             if (NetUtils.hasNetwork(UsingHelpActivity.this)) {
                 RxView.clicks(tvErrorLayout).throttleFirst(1, TimeUnit.SECONDS).subscribe(new Action1<Void>() {
@@ -79,17 +87,20 @@ public class UsingHelpActivity extends BaseActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
-
         if (webView != null) {
             webView.getSettings().setJavaScriptEnabled(true);
+            webView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
+            webView.setEnableCache(true);
+            webView.setUserAgent("Android");
         }
-
         mWebViewClient = new WebViewClient() {
-
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                showLoadingView();
+                rlloadding.setVisibility(View.VISIBLE);
+                tvErrorLayout.setVisibility(View.VISIBLE);
+                tvErrorLayout.setText(getString(R.string.loadding));
+                progress_bar.setVisibility(View.VISIBLE);
             }
 
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -108,16 +119,17 @@ public class UsingHelpActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                hideLoadingView();
-                tvErrorLayout.setVisibility(View.GONE);
+                rlloadding.setVisibility(View.GONE);
+
             }
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-
-                //int errorCode = error.getErrorCode();
                 super.onReceivedError(view, request, error);
-                hideLoadingView();
+                // hideLoadingView();
+                rlloadding.setVisibility(View.VISIBLE);
+                progress_bar.setVisibility(View.GONE);
+                tvErrorLayout.setVisibility(View.VISIBLE);
                 tvErrorLayout.setText(getString(R.string.net_no_connection));
             }
         };
