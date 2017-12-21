@@ -377,7 +377,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     protected void onConversationInit() {
         conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
-        List<EMMessage> allMessages = conversation.getAllMessages();
         conversation.markAllMessagesAsRead();
         // the number of messages loaded into conversation is getChatOptions().getNumberOfMessagesLoaded
         // you can change this number
