@@ -43,6 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.EMError;
@@ -190,6 +191,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(username);
                 Glide.with(AppManager.mContext)
                         .load(portrait)
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .error(R.drawable.ease_default_avatar)
                         .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                         .placeholder(R.drawable.ease_default_avatar)
@@ -201,6 +204,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
             String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(username);
             Glide.with(AppManager.mContext)
                     .load(portrait)
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(R.drawable.ease_default_avatar)
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .placeholder(R.drawable.ease_default_avatar)
@@ -574,6 +579,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
         if (bean.getEvent().equals("callSuccess")) {
             Glide.with(AppManager.mContext)
                     .load(bean.getPortaits())
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(R.drawable.ease_default_avatar)
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .placeholder(R.drawable.ease_default_avatar)

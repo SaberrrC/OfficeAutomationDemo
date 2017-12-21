@@ -297,6 +297,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
 
             Glide.with(AppManager.mContext)
                     .load(mPortrait)
+                    .dontAnimate()
                     .error(R.drawable.ease_user_portraits)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))

@@ -1,16 +1,12 @@
 package com.shanlinjinrong.oa.ui.activity.message.adapter;
 
-import android.net.Uri;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
@@ -61,6 +57,7 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
                 CircleImageView portrait = baseViewHolder.getView(R.id.portrait);
                 Glide.with(AppManager.mContext)
                         .load(contacts.getPortraits())
+                        .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.icon_homepage_work_report_me_launch)
                         .into(portrait);

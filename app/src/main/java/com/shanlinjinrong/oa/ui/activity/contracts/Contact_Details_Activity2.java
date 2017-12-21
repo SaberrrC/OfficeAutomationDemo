@@ -259,6 +259,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
 
         Glide.with(AppManager.mContext)
                 .load(mPortrait)
+                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.drawable.ease_user_portraits)
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))

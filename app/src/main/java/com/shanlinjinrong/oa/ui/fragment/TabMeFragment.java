@@ -94,6 +94,8 @@ public class TabMeFragment extends BaseFragment {
         Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
                 .placeholder(R.drawable.ease_default_avatar)
                 .error(R.drawable.ease_default_avatar)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                 .into(userPortrait);
 
@@ -112,6 +114,7 @@ public class TabMeFragment extends BaseFragment {
                 .placeholder(R.drawable.ease_default_avatar)
                 .error(R.drawable.ease_default_avatar)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontAnimate()
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                 .into(userPortrait);
     }

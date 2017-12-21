@@ -200,6 +200,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             //            Glide.with(parent.getContext()).load(portrait).into(holder.avatar);
             Glide.with(parent.getContext())
                     .load(portrait).error(R.drawable.ease_default_avatar)
+                    .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar)
                     .into(holder.avatar);

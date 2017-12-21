@@ -64,6 +64,7 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
 
                 Glide.with(AppManager.mContext)
                         .load(portraits)
+                        .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .error(R.drawable.ease_user_portraits)
                         .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))

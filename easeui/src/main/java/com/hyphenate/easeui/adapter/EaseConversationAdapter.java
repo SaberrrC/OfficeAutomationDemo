@@ -214,6 +214,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 try {
                     Glide.with(mContext)
                             .load(mPortrait)
+                            .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .placeholder(R.drawable.ease_user_portraits)
                             .error(R.drawable.ease_user_portraits)

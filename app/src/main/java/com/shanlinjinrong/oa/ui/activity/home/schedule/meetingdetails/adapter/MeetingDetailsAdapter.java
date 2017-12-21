@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shanlinjinrong.oa.R;
@@ -47,6 +48,8 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
         try {
             Glide.with(AppManager.mContext)
                     .load("http://"+roomimgX)
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(R.drawable.video_image_1)
                     .into((ImageView) baseViewHolder.getView(R.id.iv_meeting_details));
         } catch (Throwable e) {

@@ -48,18 +48,21 @@ public class EaseUserUtils {
             try {
                 int avatarResId = Integer.parseInt(user.getAvatar());
                 Glide.with(context).load(portrait)
+                        .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
             } catch (Exception e) {
                 //use default avatar
                 Glide.with(context).load(portrait)
+                        .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
             }
         } else {
             Glide.with(context).load(portrait)
+                    .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.ease_default_avatar)
                     .into(imageView);
@@ -73,18 +76,21 @@ public class EaseUserUtils {
         if (!portrait.equals("")) {
             try {
                 Glide.with(context).load(portrait)
+                        .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
             } catch (Exception e) {
                 //use default avatar
                 Glide.with(context).load(portrait)
+                        .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
             }
         } else {
             Glide.with(context).load(portrait)
+                    .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.ease_default_avatar)
                     .into(imageView);
@@ -98,18 +104,21 @@ public class EaseUserUtils {
         if (!portrait.equals("")) {
             try {
                 Glide.with(context).load(portrait)
+                        .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
 
             } catch (Exception e) {
                 Glide.with(context).load(portrait)
+                        .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(imageView);
             }
         } else {
             Glide.with(context).load(portrait)
+                    .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.ease_default_avatar)
                     .into(imageView);

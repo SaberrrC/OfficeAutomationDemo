@@ -159,6 +159,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         Glide.with(AppManager.mContext)
                 .load(AppConfig.getAppConfig(this).get(
                         AppConfig.PREF_KEY_PORTRAITS))
+                .dontAnimate()
                 .error(R.drawable.ease_default_avatar)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
@@ -236,6 +237,8 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
 
         Glide.with(AppManager.mContext)
                 .load(portraitUri)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.drawable.ease_default_avatar)
                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                 .placeholder(R.drawable.ease_default_avatar)
