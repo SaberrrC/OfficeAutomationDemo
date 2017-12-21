@@ -170,6 +170,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         mRvSearchContact.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRvSearchContact.addOnItemTouchListener(new OnItemClick());
         mUserAdapter.notifyDataSetChanged();
+
         mTopView.getRightView().setOnClickListener(view -> {
 
             if (mGroupUsers.size() == 0) {
@@ -207,6 +208,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 createGroup(mUserNames, mUserCodes);
             }
         });
+
     }
 
     private void addMember(String[] member) {

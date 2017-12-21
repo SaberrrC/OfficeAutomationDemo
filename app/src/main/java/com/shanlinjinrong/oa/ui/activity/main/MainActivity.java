@@ -700,7 +700,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
     //开启权限列表
     public void startAppSetting() {
-
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         i.setData(uri);

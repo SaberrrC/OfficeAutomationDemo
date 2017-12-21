@@ -20,6 +20,7 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ren.yale.android.cachewebviewlib.CacheWebView;
 
 /**
  * <h3>Description: 使用帮助 </h3>
@@ -28,11 +29,11 @@ import butterknife.ButterKnife;
 public class MyMailActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TextView     tvTitle;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar      toolbar;
     @BindView(R.id.web_view)
-    ProgressWebView webView;
+    CacheWebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

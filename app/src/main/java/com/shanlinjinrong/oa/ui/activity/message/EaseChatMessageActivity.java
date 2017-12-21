@@ -112,6 +112,9 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                                 if (mIsResume) {
                                     EaseAlertDialog alertDialog = new EaseAlertDialog(EaseChatMessageActivity.this, null, "群组已经解散", null, (confirmed, bundle) -> {
                                         EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
+                                        if (mChatType == EaseConstant.CHATTYPE_GROUP) {
+                                            setResult(DELETESUCCESS);
+                                        }
                                         finish();
                                     }, false);
                                     alertDialog.setCancelable(false);
