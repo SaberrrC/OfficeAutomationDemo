@@ -113,7 +113,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-
     public void showLoadingView(String text) {
         msg.setText(text);
         showLoadingView();

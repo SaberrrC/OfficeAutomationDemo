@@ -558,4 +558,5 @@ public class Api {
     public static JSONArray getDataToJSONArray(JSONObject jsonObject) throws JSONException {
         return jsonObject.getJSONArray(RESPONSES_KEY_DATA);
     }
+
 }
