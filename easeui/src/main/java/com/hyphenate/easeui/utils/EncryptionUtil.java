@@ -10,15 +10,15 @@ public class EncryptionUtil {
      */
     public static String getEncryptionStr(String content, String key) {
 
-//        StringBuffer sb = new StringBuffer();
-//        try {
-//            content = EncryptionStringUtils.encryptionStr(content);
-//            sb.append("<0-");
-//            sb.append(content);
-//            sb.append("->");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        StringBuffer sb = new StringBuffer();
+        try {
+            content = EncryptionStringUtils.encryptionStr(content);
+            sb.append("<0-");
+            sb.append(content);
+            sb.append("->");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 //        return sb.toString();
         return content;
 
