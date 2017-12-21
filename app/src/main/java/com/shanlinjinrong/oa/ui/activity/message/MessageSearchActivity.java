@@ -131,7 +131,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
         showLoadingView();
         new Thread(new Runnable() {
             public void run() {
-//                List<EMMessage> resultList = mConversation.searchMsgFromDB(mSearchEtInput.getText().toString().trim(), System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
+                //                List<EMMessage> resultList = mConversation.searchMsgFromDB(mSearchEtInput.getText().toString().trim(), System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
                 String decryptStr = EncryptionUtil.getEncryptionStr(mSearchEtInput.getText().toString().trim(), "");
                 List<EMMessage> resultList = mConversation.searchMsgFromDB(decryptStr, System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
                 if (messageList == null) {
@@ -190,10 +190,10 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             EaseUserUtils.setUserAvatar(getContext(), message.getFrom(), holder.avatar);
             holder.time.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
             String msg = ((EMTextMessageBody) message.getBody()).getMessage();
-//            String decryptStr = EncryptionUtil.getDecryptStr(msg, "");
+            //            String decryptStr = EncryptionUtil.getDecryptStr(msg, "");
 
             Spannable span = EaseSmileUtils.getSmiledText(parent.getContext(), msg);
-//            Spannable jiamiStr = EaseSmileUtils.getSmiledText(getContext(), span);
+            //            Spannable jiamiStr = EaseSmileUtils.getSmiledText(getContext(), span);
             holder.message.setText(span, TextView.BufferType.SPANNABLE);
 
             String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());

@@ -133,10 +133,10 @@ public class ConversationListFragment extends EaseConversationListFragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         boolean deleteMessage = false;
-//        if (item.getItemId() == R.id.delete_message) {
-//            deleteMessage = true;
-//        } else
-            if (item.getItemId() == R.id.delete_conversation) {
+        //        if (item.getItemId() == R.id.delete_message) {
+        //            deleteMessage = true;
+        //        } else
+        if (item.getItemId() == R.id.delete_conversation) {
             deleteMessage = false;
         }
         EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
