@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -59,6 +60,7 @@ import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -72,7 +74,12 @@ import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import q.rorbin.badgeview.QBadgeView;
@@ -110,23 +117,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView tabMessageText;
+    TextView  tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView tabContactsText;
+    TextView  tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView tabGroupText;
+    TextView  tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView tabMeText;
+    TextView  tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView tabHomeText;
+    TextView  tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView tvMsgUnRead;
+    TextView  tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -151,13 +158,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment> mTabs;
+    private List<Fragment>       mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE = 0;
+    private static final int TAB_MESSAGE  = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME = 2;
-    private static final int TAB_GROUP = 3;
-    private static final int TAB_ME = 4;
+    private static final int TAB_HOME     = 2;
+    private static final int TAB_GROUP    = 3;
+    private static final int TAB_ME       = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -170,22 +177,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private int mBlueGreen;
     private int mBlueBlue;
 
-    private TextView[] mTextViews;
+    private TextView[]  mTextViews;
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
 
     int tempMsgCount = 0;
-    private EaseUI easeUI;
-    private AlertDialog dialog;
-    private QBadgeView qBadgeView;
-    private TabCommunicationFragment tabCommunicationFragment;
+    private EaseUI                     easeUI;
+    private AlertDialog                dialog;
+    private QBadgeView                 qBadgeView;
+    private TabCommunicationFragment   tabCommunicationFragment;
     private AbortableFuture<LoginInfo> loginRequest;
     private List<EMMessage> mEMMessage = new ArrayList<>();
-    private EMGroup mGroup;
-    private String mGroupName;
+    private EMGroup            mGroup;
+    private String             mGroupName;
     private EMMessage.ChatType chatType;
     private String userId = "";
     private String mQueryInfo;
+    private String mNickName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -547,20 +555,35 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 String conversationId = message.conversationId();
                 chatType = message.getChatType();
                 if (chatType == EMMessage.ChatType.GroupChat) {
-                    mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
-                    if (mGroupName.equals("")) {
-                        Observable.create(e -> {
+                    Observable.create(e -> {
+
+                        mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
+                        mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(message.getFrom());
+
+                        if (TextUtils.isEmpty(mGroupName)) {
                             mGroup = EMClient.getInstance().groupManager().getGroup(conversationId);
                             FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(conversationId, mGroup.getGroupName(), ""));
                             e.onComplete();
-                        }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(o -> {
-                                }, Throwable::printStackTrace, () -> {
-                                    refreshChat(list, userId);
-                                    return;
-                                });
-                    }
+
+                        }
+
+                        if (TextUtils.isEmpty(mNickName)) {
+                            mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
+                            e.onComplete();
+
+                        }
+
+                        if (!TextUtils.isEmpty(mNickName) && !TextUtils.isEmpty(mGroupName)) {
+                            e.onComplete();
+                        }
+                    }).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(o -> {
+                            }, Throwable::printStackTrace, () -> {
+                                refreshChat(list, userId);
+                                EventBus.getDefault().post(new OnMessagesRefreshEvent());
+                            });
+                    return;
                 } else {
                     if (!conversationId.contains("admin") || !conversationId.contains("notice")) {
                         try {
@@ -575,7 +598,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                             mEMMessage.addAll(list);
                             try {
                                 mPresenter.searchUserDetails(mQueryInfo.substring(3, mQueryInfo.length()));
-                                return;
+                                continue;
                             } catch (Throwable e) {
                                 e.printStackTrace();
                             }

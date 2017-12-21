@@ -80,7 +80,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private long lastClickTime = 0;
     private String           mDepartment_name;
     private EaseChatFragment chatFragment;
-    private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3;
+    private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3, DISSOLVEGROUP = 600;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,24 +97,28 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     private void checkGroupState() {
         if (mChatType == EaseConstant.CHATTYPE_GROUP) {
+            //TODO 存在bug
             Observable.create(e -> {
-                try {
-                    EMClient.getInstance().groupManager().getGroupFromServer(getIntent().getStringExtra("u_id"));
-                } catch (HyphenateException e1) {
-                    e.onComplete();
-                    e1.printStackTrace();
-                }
+
+                EMClient.getInstance().groupManager().getGroupFromServer(getIntent().getStringExtra("u_id"));
+
             }).subscribeOn(Schedulers.io())
                     .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                     .subscribe(o -> {
-                    }, Throwable::printStackTrace, () -> {
-                        if (mIsResume) {
-                            EaseAlertDialog alertDialog = new EaseAlertDialog(EaseChatMessageActivity.this, null, "群组已经解散", null, (confirmed, bundle) -> {
-                                EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
-                                finish();
-                            }, false);
-                            alertDialog.setCancelable(false);
-                            alertDialog.show();
+                    }, throwable -> {
+                        if (throwable instanceof HyphenateException) {
+                            switch (((HyphenateException) throwable).getErrorCode()) {
+                                case DISSOLVEGROUP://群组解散
+                                    if (mIsResume) {
+                                        EaseAlertDialog alertDialog = new EaseAlertDialog(EaseChatMessageActivity.this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                            EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
+                                            finish();
+                                        }, false);
+                                        alertDialog.setCancelable(false);
+                                        alertDialog.show();
+                                    }
+                                    break;
+                            }
                         }
                     });
         }
