@@ -576,7 +576,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                             });
                     return;
                 } else {
-                    if (!conversationId.contains("admin") || !conversationId.contains("notice")) {
+                    if (!conversationId.contains("admin") &&  !conversationId.contains("notice")) {
                         Observable.create(e -> {
                             mQueryInfo = conversationId.substring(0, 12);
                             mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(mQueryInfo);
