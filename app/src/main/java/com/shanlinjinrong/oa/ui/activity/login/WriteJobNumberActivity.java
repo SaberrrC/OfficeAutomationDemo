@@ -128,7 +128,8 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
         } else {
             intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_ADDRESS, email);
         }
-        intent.putExtra("code", user.getCode());
+        //  intent.putExtra("code", user.getCode());
+        intent.putExtra("code", mJobNumber.getText().toString().trim());
         startActivity(intent);
     }
 
