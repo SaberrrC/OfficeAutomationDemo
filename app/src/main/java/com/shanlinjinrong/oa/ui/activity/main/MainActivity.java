@@ -60,7 +60,6 @@ import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -74,12 +73,7 @@ import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import q.rorbin.badgeview.QBadgeView;
@@ -191,9 +185,9 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private EMGroup            mGroup;
     private String             mGroupName;
     private EMMessage.ChatType chatType;
-    private String userId = "";
-    private String mQueryInfo;
-    private String mNickName;
+    private String             mUserName;
+    private String             mQueryInfo;
+    private String             mNickName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -548,6 +542,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         return super.onKeyDown(keyCode, event);
     }
 
+    private String mUserId;
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(final List<EMMessage> list) {
@@ -556,21 +551,17 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 chatType = message.getChatType();
                 if (chatType == EMMessage.ChatType.GroupChat) {
                     Observable.create(e -> {
-
                         mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
                         mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(message.getFrom());
+                        mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(conversationId);
 
                         if (TextUtils.isEmpty(mGroupName)) {
                             mGroup = EMClient.getInstance().groupManager().getGroup(conversationId);
                             FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(conversationId, mGroup.getGroupName(), ""));
-                            e.onComplete();
-
                         }
 
                         if (TextUtils.isEmpty(mNickName)) {
                             mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
-                            e.onComplete();
-
                         }
 
                         if (!TextUtils.isEmpty(mNickName) && !TextUtils.isEmpty(mGroupName)) {
@@ -580,33 +571,38 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(o -> {
                             }, Throwable::printStackTrace, () -> {
-                                refreshChat(list, userId);
+                                refreshChat(list, mUserId);
                                 EventBus.getDefault().post(new OnMessagesRefreshEvent());
                             });
                     return;
                 } else {
                     if (!conversationId.contains("admin") || !conversationId.contains("notice")) {
-                        try {
+                        Observable.create(e -> {
                             mQueryInfo = conversationId.substring(0, 12);
-                        } catch (Throwable e) {
-                            mQueryInfo = "";
-                            e.printStackTrace();
-                        }
-                        userId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(mQueryInfo);
-                        if (userId.equals("")) {
-                            mEMMessage.clear();
-                            mEMMessage.addAll(list);
-                            try {
+                            mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(mQueryInfo);
+                            mUserName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mQueryInfo);
+
+                            if (TextUtils.isEmpty(mUserName)) {
+                                mEMMessage.clear();
+                                mEMMessage.addAll(list);
                                 mPresenter.searchUserDetails(mQueryInfo.substring(3, mQueryInfo.length()));
-                                continue;
-                            } catch (Throwable e) {
-                                e.printStackTrace();
                             }
-                        }
+
+                            if (!TextUtils.isEmpty(mUserName)) {
+                                e.onComplete();
+                            }
+                        }).observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(o -> {
+                                }, Throwable::printStackTrace, () -> {
+                                    refreshChat(list, conversationId);
+                                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
+                                });
+                        return;
                     }
+                    refreshChat(list, conversationId);
+                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
                 }
-                refreshChat(list, userId);
-                EventBus.getDefault().post(new OnMessagesRefreshEvent());
             }
         }
 
@@ -691,6 +687,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                         }
                     }
                     refreshCommCount();
+                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
                 });
     }
 
