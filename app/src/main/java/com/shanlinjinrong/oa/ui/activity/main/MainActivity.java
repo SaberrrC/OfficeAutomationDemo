@@ -57,9 +57,12 @@ import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
+import com.shanlinjinrong.oa.ui.fragment.event.OnCountRefreshEvent;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -193,6 +196,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_controller);
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         setTranslucentStatus(this);
         initWidget();
@@ -730,6 +734,12 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         //   BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
         ShortcutBadger.removeCount(MainActivity.this);
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshCount(OnCountRefreshEvent event) {
+        refreshCommCount();
     }
 
     //实现ConnectionListener接口

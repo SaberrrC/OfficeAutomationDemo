@@ -24,7 +24,10 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
+import com.shanlinjinrong.oa.ui.fragment.event.OnCountRefreshEvent;
 import com.shanlinjinrong.oa.utils.LoginUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -145,9 +148,10 @@ public class ConversationListFragment extends EaseConversationListFragment {
         }
         try {
             // delete conversation
-            EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.conversationId(), deleteMessage);
+            EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.conversationId(), true);
             InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
             inviteMessgeDao.deleteMessage(tobeDeleteCons.conversationId());
+            EventBus.getDefault().post(new OnCountRefreshEvent());
         } catch (Exception e) {
             e.printStackTrace();
         }
