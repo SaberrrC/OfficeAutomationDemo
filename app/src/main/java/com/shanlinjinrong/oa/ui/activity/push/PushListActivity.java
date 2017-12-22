@@ -21,7 +21,6 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.PushMsg;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.notice.NoticeListActivity;
@@ -135,15 +134,12 @@ public class PushListActivity extends HttpBaseActivity<PushListPresenter> implem
                         intent = new Intent(PushListActivity.this,
                                 ApprovalListActivity.class);
                         break;
-                    case 8:
-                        intent = new Intent(PushListActivity.this,
-                                MeetingInfoActivity.class);
-                        intent.putExtra("meeting_mode", Constants.PUSH_CONFORM_MEETING);
-                        intent.putExtra("cf_id", list.get(i).getPid());
-                        break;
+
                     case 10://工作汇报：发送我的
                         intent = new Intent(PushListActivity.this,
                                 WorkReportCheckActivity.class);
+                        break;
+                    default:
                         break;
 
                 }

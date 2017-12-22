@@ -32,16 +32,12 @@ import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
@@ -116,23 +112,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView  tabMessageText;
+    TextView tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView  tabContactsText;
+    TextView tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView  tabGroupText;
+    TextView tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView  tabMeText;
+    TextView tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView  tabHomeText;
+    TextView tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView  tvMsgUnRead;
+    TextView tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -157,13 +153,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment>       mTabs;
+    private List<Fragment> mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE  = 0;
+    private static final int TAB_MESSAGE = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME     = 2;
-    private static final int TAB_GROUP    = 3;
-    private static final int TAB_ME       = 4;
+    private static final int TAB_HOME = 2;
+    private static final int TAB_GROUP = 3;
+    private static final int TAB_ME = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -176,23 +172,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private int mBlueGreen;
     private int mBlueBlue;
 
-    private TextView[]  mTextViews;
+    private TextView[] mTextViews;
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
 
     int tempMsgCount = 0;
-    private EaseUI                     easeUI;
-    private AlertDialog                dialog;
-    private QBadgeView                 qBadgeView;
-    private TabCommunicationFragment   tabCommunicationFragment;
-    private AbortableFuture<LoginInfo> loginRequest;
+    private EaseUI easeUI;
+    private AlertDialog dialog;
+    private QBadgeView qBadgeView;
+    private TabCommunicationFragment tabCommunicationFragment;
+//    private AbortableFuture<LoginInfo> loginRequest;
     private List<EMMessage> mEMMessage = new ArrayList<>();
-    private EMGroup            mGroup;
-    private String             mGroupName;
+    private EMGroup mGroup;
+    private String mGroupName;
     private EMMessage.ChatType chatType;
-    private String             mUserName;
-    private String             mQueryInfo;
-    private String             mNickName;
+    private String mUserName;
+    private String mQueryInfo;
+    private String mNickName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,7 +200,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         initWidget();
         initData();
         LoginIm();//登录环信
-        initEaseData();//初始化登录云信
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
@@ -310,12 +305,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         LoginUtils.loginIm(AppManager.mContext, null);
     }
 
-    /**
-     * 初始化云信视频的相关数据
-     */
-    private void initEaseData() {
-        LoginUtils.initEase(MainActivity.this, null);
-    }
 
     public void refreshCommCount() {
         new Thread(() -> {
@@ -664,10 +653,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         }
     }
 
-    @Override
-    public void easeInitFinish(AbortableFuture<LoginInfo> loginRequest) {
-        this.loginRequest = loginRequest;
-    }
+
 
     @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {

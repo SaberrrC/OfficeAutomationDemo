@@ -2,14 +2,10 @@ package com.shanlinjinrong.oa.ui.activity.main.contract;
 
 import android.app.Activity;
 
-import com.hyphenate.chat.EMConversation;
-import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
-import java.util.List;
 
 /**
  * Created by 丁 on 2017/8/19.
@@ -24,8 +20,6 @@ public interface MainControllerContract {
         void bindBadgeView(int msgCount);
 
         void startAppSetting();
-
-        void easeInitFinish(AbortableFuture<LoginInfo> loginRequest); // 云信初始化结束
 
         void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean);
 

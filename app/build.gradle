@@ -210,12 +210,6 @@ dependencies {
     compile 'com.flipboard:bottomsheet-core:1.5.3'
     compile 'com.flipboard:bottomsheet-commons:1.5.3'
 
-    // 网易云信start:基础 (必需)
-    compile 'com.netease.nimlib:basesdk:4.0.0'
-    compile 'com.netease.nimlib:avchat:4.0.0'
-    compile 'com.netease.nimlib:chatroom:4.0.0'
-    compile 'com.netease.nimlib:rts:4.0.0'
-
     //环信管理信息的云
     compile 'com.parse:parse-android:1.13.1'
 
