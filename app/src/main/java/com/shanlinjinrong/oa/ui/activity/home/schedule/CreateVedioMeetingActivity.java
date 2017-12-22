@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -299,9 +300,11 @@ public class CreateVedioMeetingActivity extends BaseActivity {
                 String username = contactsList.get(i).getUsername();
 
                 if (i != contactsList.size() - 1) {
-                    copy.append(contactsList.get(i).getUid() + ",");
+                    if (!TextUtils.isEmpty(contactsList.get(i).getUid()))
+                        copy.append(contactsList.get(i).getUid() + ",");
                 } else if (i == contactsList.size() - 1) {
-                    copy.append(contactsList.get(i).getUid());
+                    if (!TextUtils.isEmpty(contactsList.get(i).getUid()))
+                        copy.append(contactsList.get(i).getUid());
                 }
 
 

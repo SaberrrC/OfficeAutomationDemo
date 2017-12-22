@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -191,7 +192,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
             } else {
                 boolean isExist = false;
                 for (int i = 0; i < selectedContacts.size(); i++) {
-                    if (selectedContacts.get(i).getUid().equals(groups.get(groupPosition).getChildItem(childPosition).getUid())) {
+                    if (TextUtils.equals(selectedContacts.get(i).getUid(),groups.get(groupPosition).getChildItem(childPosition).getUid())) {
                         isExist = true;
                         Toast.makeText(SelectJoinPeopleActivity.this, R.string.selectJoinPeopleHint, Toast.LENGTH_SHORT).show();
                     }
@@ -249,9 +250,10 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                                     if (selectedContacts.size() > 0) {
                                         LogUtils.e("selectedContacts.size() > 0->" + selectedContacts.size());
                                         for (int k = 0; k < selectedContacts.size(); k++) {
+
                                             String uid = selectedContacts.get(k).getUid();
 
-                                            if (joChild.getString("uid").equals(uid)) {
+                                            if (TextUtils.equals(joChild.getString("uid"),uid)) {
                                                 isChecked = true;
                                                 break;
                                             }
@@ -392,7 +394,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                 } else {
                     for (int k = 0; k < selectedContacts.size(); k++) {
                         String uid = selectedContacts.get(k).getUid();
-                        if (child.getUid().equals(uid)) {
+                        if (TextUtils.equals(child.getUid(),uid)) {
                             child.setChecked(true);
                         } else {
                             child.setChecked(false);

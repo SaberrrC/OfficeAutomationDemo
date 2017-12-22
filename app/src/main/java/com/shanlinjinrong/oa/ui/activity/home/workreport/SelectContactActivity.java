@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
@@ -178,11 +179,15 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
         Intent intent = new Intent();
         if (getIntent().getBooleanExtra("", false)) {
             intent.putExtra("nextReceiver", getIntent().getIntExtra("nextReceiver", 0));
-            intent.putExtra("uid", mSelectChild.getUid());
+            if (!TextUtils.isEmpty(mSelectChild.getUid())) {
+                intent.putExtra("uid", mSelectChild.getUid());
+            }
             intent.putExtra("name", mSelectChild.getUsername());
         } else {
             intent.putExtra("nextReceiver", getIntent().getIntExtra("nextReceiver", 0));
-            intent.putExtra("uid", mSelectChild.getUid());
+            if (!TextUtils.isEmpty(mSelectChild.getUid())) {
+                intent.putExtra("uid", mSelectChild.getUid());
+            }
             intent.putExtra("name", mSelectChild.getUsername());
             intent.putExtra("post", mSelectChild.getPost());
         }

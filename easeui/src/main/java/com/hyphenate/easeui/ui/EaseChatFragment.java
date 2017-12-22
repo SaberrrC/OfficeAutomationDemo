@@ -766,7 +766,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
 
             //TODO 存储数据
-            if (!message.getFrom().equals(getArguments().getString(EaseConstant.EXTRA_USER_ID, ""))) {
+            if (!TextUtils.equals(message.getFrom(),getArguments().getString(EaseConstant.EXTRA_USER_ID, ""))) {
                 EMConversation conversationDB = EMClient.getInstance().chatManager().getConversation(toChatUsername);
                 if (conversationDB != null) {
                     JSONObject jsonObject = new JSONObject();
@@ -780,7 +780,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     }
                 }
             }
-
             sendUserInfoDetailsMessage(message);
             sendMessage(message);
         }

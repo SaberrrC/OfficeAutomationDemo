@@ -23,7 +23,6 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRecordInfo;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingInfoFillOutActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingInfoFillOutActivityPresenter;
@@ -402,10 +401,14 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         for (int i = 0; i < contactsList.size(); i++) {
             if (i == contactsList.size() - 1) {
                 person += contactsList.get(i).getUsername();
-                mUid += contactsList.get(i).getUid();
+                if (!TextUtils.isEmpty(contactsList.get(i).getUid())) {
+                    mUid += contactsList.get(i).getUid();
+                }
             } else {
                 person += contactsList.get(i).getUsername() + ",";
-                mUid += contactsList.get(i).getUid() + ",";
+                if (!TextUtils.isEmpty(contactsList.get(i).getUid())) {
+                    mUid += contactsList.get(i).getUid() + ",";
+                }
             }
 
         }

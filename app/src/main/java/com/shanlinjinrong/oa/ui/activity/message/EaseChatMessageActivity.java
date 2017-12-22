@@ -232,7 +232,10 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 } else {
                     intent.putExtra("chatType", false);
                     intent.putExtra("EXTRAS", mExtras);
-                    intent.putExtra("message_to", getIntent().getStringExtra("message_to"));
+                    String message_to = getIntent().getStringExtra("message_to");
+                    if (!TextUtils.isEmpty(message_to)) {
+                        intent.putExtra("message_to", message_to);
+                    }
                     intent.putExtra("message_from", getIntent().getStringExtra("message_from"));
                 }
                 startActivityForResult(intent, REQUEST_CODE);

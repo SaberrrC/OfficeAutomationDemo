@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -42,26 +43,26 @@ import cn.qqtheme.framework.picker.DatePicker;
 public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresenter> implements CreateMeetingContract.View {
     private static final int ADD_JOIN_PEOPLE = 1;
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TextView       tvTitle;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar        toolbar;
     @BindView(R.id.toolbar_text_btn)
-    TextView toolbarTextBtn;
+    TextView       toolbarTextBtn;
     @BindView(R.id.tv_join_people_tips)
-    TextView mTvJoinPeopleTips;
+    TextView       mTvJoinPeopleTips;
     @BindView(R.id.et_meeting_theme)
-    EditText mEtMeetingTheme;
+    EditText       mEtMeetingTheme;
     @BindView(R.id.tv_select_meeting_room)
-    TextView tvSelectMeetingRoom;
+    TextView       tvSelectMeetingRoom;
     @BindView(R.id.layout_root)
     RelativeLayout mRootView;
     @BindView(R.id.tv_date)
-    TextView tvDate;
+    TextView       tvDate;
     @BindView(R.id.tv_selected_meeting_room_type)
-    TextView tvSelectedMRType;
+    TextView       tvSelectedMRType;
     @BindView(R.id.ll_join_people_container)
-    LinearLayout mLlJoinPeopleContainer;
-    private StringBuilder copy;//抄送人id
+    LinearLayout   mLlJoinPeopleContainer;
+    private StringBuilder    copy;//抄送人id
     private ArrayList<Child> contactsList; //抄送人数组
     String roomId = "";
     private String meetingType;
@@ -143,8 +144,7 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
         toolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(toolbar);
 
-        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
-                Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         tvTitle.setLayoutParams(lp);
         toolbar.setNavigationIcon(R.drawable.toolbar_back);
@@ -152,9 +152,7 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
             @Override
             public void onClick(View view) {
 
-                if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim())
-                        || !tvDate.getText().toString().trim().equals("点击选择会议日期")
-                        ) {
+                if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim()) || !tvDate.getText().toString().trim().equals("点击选择会议日期")) {
                     showTip("是否放弃编辑", "确定", "取消");
                 } else {
                     finish();
@@ -170,9 +168,7 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim())
-                        || !tvDate.getText().toString().trim().equals("点击选择会议日期")
-                        ) {
+                if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim()) || !tvDate.getText().toString().trim().equals("点击选择会议日期")) {
                     showTip("是否放弃编辑", "确定", "取消");
                 }
                 break;
@@ -181,38 +177,32 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
     }
 
     public void showTip(String msg, final String posiStr, String negaStr) {
-        @SuppressLint("InflateParams")
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
+        @SuppressLint("InflateParams") View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
         TextView title = (TextView) dialogView.findViewById(R.id.title);
         title.setText("提示");
         TextView message = (TextView) dialogView.findViewById(R.id.message);
         message.setText(msg);
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(this,
-                R.style.AppTheme_Dialog).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.AppTheme_Dialog).create();
         alertDialog.setView(dialogView);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, posiStr,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, posiStr, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
 
-                        finish();
+                finish();
 
-                    }
-                });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                });
+            }
+        });
         alertDialog.show();
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                getResources().getColor(R.color.btn_text_logout));
-        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                getResources().getColor(R.color.btn_text_logout));
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
     }
 
     /**
@@ -220,7 +210,7 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
      */
     private void addCopyPersonOperate(Intent data) {
         this.contactsList.clear();
-//        this.contactsList=data.getParcelableArrayListExtra("contacts");
+        //        this.contactsList=data.getParcelableArrayListExtra("contacts");
         ArrayList<Child> contacts = data.getParcelableArrayListExtra("contacts");
         contactsList.addAll(contacts);
         //清空view
@@ -233,17 +223,18 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
                 String username = contactsList.get(i).getUsername();
 
                 if (i != contactsList.size() - 1) {
-                    copy.append(contactsList.get(i).getUid() + ",");
+                    if (!TextUtils.isEmpty(contactsList.get(i).getUid()))
+                        copy.append(contactsList.get(i).getUid() + ",");
                 } else if (i == contactsList.size() - 1) {
-                    copy.append(contactsList.get(i).getUid());
+                    if (!TextUtils.isEmpty(contactsList.get(i).getUid()))
+                        copy.append(contactsList.get(i).getUid());
                 }
 
 
                 TextView tv = new TextView(CreateMeetingActivity.this);
                 tv.setTextColor(Color.parseColor("#999999"));
                 tv.setText(username);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams
-                        .WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 if (i == 0) {
                     lp.setMargins(0, 0, 0, 0);
 
@@ -264,8 +255,7 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
         super.onDestroy();
     }
 
-    @OnClick({
-            R.id.report_iv_add_person, R.id.btn_create_meeting})
+    @OnClick({R.id.report_iv_add_person, R.id.btn_create_meeting})
     public void onClick(View view) {
         switch (view.getId()) {
 
@@ -301,8 +291,7 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
     private void showDoneDatePicker() {
         final DatePicker picker = new DatePicker(this, DatePicker.YEAR_MONTH_DAY);
         Calendar cal = Calendar.getInstance();
-        picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
-                cal.get(Calendar.DAY_OF_MONTH));
+        picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
         picker.setSubmitText("完成");
         picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
         picker.setTextColor(Color.parseColor("#2d9dff"));
@@ -319,13 +308,7 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
 
     private void sendData() {
         showLoadingView();
-        mPresenter.sendData(begintime,
-                endtime,
-                tvDate.getText().toString().substring(0, 10).trim().replace("/", "-"),
-                mEtMeetingTheme.getText().toString().trim(),
-                copy.toString(),
-                meetingType,
-                roomId);
+        mPresenter.sendData(begintime, endtime, tvDate.getText().toString().substring(0, 10).trim().replace("/", "-"), mEtMeetingTheme.getText().toString().trim(), copy.toString(), meetingType, roomId);
     }
 
     private String subSting(String str) {

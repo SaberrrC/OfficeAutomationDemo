@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -54,7 +55,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar  toolbar;
     @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
     @BindView(R.id.et_meeting_theme)
@@ -70,21 +71,21 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
     RelativeLayout mRootView;
 
     @BindView(R.id.tv_select_meeting_room)
-    TextView tvSelectMeetingRoom;
+    TextView     tvSelectMeetingRoom;
     @BindView(R.id.ll_join_people_container)
     LinearLayout mLlJoinPeopleContainer;
-    private StringBuilder copy;//抄送人id
-    private ArrayList<Child> contactsList; //抄送人数组
-    private MeetRoom meetRoom;
-    private DatePicker picker;
-    private String currentDate;//当前年月日
+    private StringBuilder     copy;//抄送人id
+    private ArrayList<Child>  contactsList; //抄送人数组
+    private MeetRoom          meetRoom;
+    private DatePicker        picker;
+    private String            currentDate;//当前年月日
     private OptionsPickerView beginTimeView;
     private OptionsPickerView endTimeView;
     private ArrayList<String> beginTimes;
     private ArrayList<String> endTimes;
-    private String begintime;//开始时间
-    private String endtime;//结束时间
-    private String meetingType;
+    private String            begintime;//开始时间
+    private String            endtime;//结束时间
+    private String            meetingType;
     private long lastClickTime = 0;
 
     @Override
@@ -103,13 +104,12 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
      * 选择开始时间并请求判断结束时间
      */
     private void showBeginTimeView() {
-        beginTimeView = new OptionsPickerView.Builder(this,
-                new OptionsPickerView.OnOptionsSelectListener() {
-                    @Override
-                    public void onOptionsSelect(int options1, int options2, int options3, View v) {
+        beginTimeView = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
 
-                    }
-                }).isDialog(true).build();
+            }
+        }).isDialog(true).build();
         beginTimeView.setTitle("请选择开始时间");
         beginTimeView.setPicker(beginTimes);//添加数据
         beginTimeView.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
@@ -118,7 +118,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
                 String RoomName = getRoomName();
                 begintime = beginTimes.get(options1);
                 if (begintime.equals("24:00")) {
-                    Toast.makeText(CreateOridinryMeetingActivity.this, RoomName + "  "+ currentDate + "会议排期时间已到上限!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateOridinryMeetingActivity.this, RoomName + "  " + currentDate + "会议排期时间已到上限!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 tvMeetTime.setText(beginTimes.get(options1));
@@ -137,7 +137,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
             if ("（".equals(String.valueOf(charAt))) {
                 break;
             }
-            RoomName +=  charAt;
+            RoomName += charAt;
         }
         return RoomName;
     }
@@ -146,12 +146,11 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
      * 返回结束时间
      */
     private void showEndTimeView() {
-        endTimeView = new OptionsPickerView.Builder(this,
-                new OptionsPickerView.OnOptionsSelectListener() {
-                    @Override
-                    public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                    }
-                }).isDialog(true).build();
+        endTimeView = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+            }
+        }).isDialog(true).build();
         endTimeView.setTitle("请选择结束时间");
         endTimeView.setPicker(endTimes);//添加数据
         endTimeView.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
@@ -206,8 +205,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
         toolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(toolbar);
 
-        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
-                Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         tvTitle.setText("创建普通会议");
         tvTitle.setLayoutParams(lp);
@@ -220,9 +218,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
                     lastClickTime = currentTime;
                     return;
                 }
-                if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim())
-                        || !tvOridinyMeetDate.getText().toString().trim().equals("点击选择会议日期")
-                        ) {
+                if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim()) || !tvOridinyMeetDate.getText().toString().trim().equals("点击选择会议日期")) {
                     showTip("是否放弃编辑", "确定", "取消");
                 } else {
                     finish();
@@ -238,9 +234,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim())
-                        || !tvOridinyMeetDate.getText().toString().trim().equals("点击选择会议日期")
-                        ) {
+                if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim()) || !tvOridinyMeetDate.getText().toString().trim().equals("点击选择会议日期")) {
                     showTip("是否放弃编辑", "确定", "取消");
                 }
                 break;
@@ -249,38 +243,32 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
     }
 
     public void showTip(String msg, final String posiStr, String negaStr) {
-        @SuppressLint("InflateParams")
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
+        @SuppressLint("InflateParams") View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
         TextView title = (TextView) dialogView.findViewById(R.id.title);
         title.setText("提示");
         TextView message = (TextView) dialogView.findViewById(R.id.message);
         message.setText(msg);
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(this,
-                R.style.AppTheme_Dialog).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.AppTheme_Dialog).create();
         alertDialog.setView(dialogView);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, posiStr,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, posiStr, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
 
-                        finish();
+                finish();
 
-                    }
-                });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                });
+            }
+        });
         alertDialog.show();
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                getResources().getColor(R.color.btn_text_logout));
-        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                getResources().getColor(R.color.btn_text_logout));
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
     }
 
     /**
@@ -288,30 +276,31 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
      */
     private void addCopyPersonOperate(Intent data) {
         this.contactsList.clear();
-//        this.contactsList=data.getParcelableArrayListExtra("contacts");
+        //        this.contactsList=data.getParcelableArrayListExtra("contacts");
         ArrayList<Child> contacts = data.getParcelableArrayListExtra("contacts");
         contactsList.addAll(contacts);
         //清空view
         mLlJoinPeopleContainer.removeAllViews();
         if (contactsList != null) {
-//            mTvJoinPeopleTips.setVisibility(View.GONE);
+            //            mTvJoinPeopleTips.setVisibility(View.GONE);
             mLlJoinPeopleContainer.setVisibility(View.VISIBLE);
             copy.setLength(0);
             for (int i = 0; i < contactsList.size(); i++) {
                 String username = contactsList.get(i).getUsername();
 
                 if (i != contactsList.size() - 1) {
-                    copy.append(contactsList.get(i).getUid() + ",");
+                    if (!TextUtils.isEmpty(contactsList.get(i).getUid()))
+                        copy.append(contactsList.get(i).getUid() + ",");
                 } else if (i == contactsList.size() - 1) {
-                    copy.append(contactsList.get(i).getUid());
+                    if (!TextUtils.isEmpty(contactsList.get(i).getUid()))
+                        copy.append(contactsList.get(i).getUid());
                 }
 
 
                 TextView tv = new TextView(CreateOridinryMeetingActivity.this);
                 tv.setTextColor(Color.parseColor("#999999"));
                 tv.setText(username);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams
-                        .WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 if (i == 0) {
                     lp.setMargins(0, 0, 0, 0);
 
@@ -332,8 +321,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    @OnClick({R.id.report_iv_add_person, R.id.btn_create_meeting,
-            R.id.tv_ordiny_meet_date, R.id.tv_meet_time})
+    @OnClick({R.id.report_iv_add_person, R.id.btn_create_meeting, R.id.tv_ordiny_meet_date, R.id.tv_meet_time})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
         if (currentTime - lastClickTime < 1000) {
@@ -396,8 +384,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
             picker = new DatePicker(this, DatePicker.YEAR_MONTH_DAY);
         }
         Calendar cal = Calendar.getInstance();
-        picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
-                cal.get(Calendar.DAY_OF_MONTH));
+        picker.setSelectedItem(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
         picker.setSubmitText("确认");
         picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
         picker.setTextColor(Color.parseColor("#2d9dff"));
@@ -498,15 +485,15 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
         params.put("begintime", begintime);
         params.put("endtime", endtime);
 
-//        LogUtils.e("uid:"+AppConfig.getAppConfig(this).getPrivateUid());
-//        LogUtils.e("token"+ AppConfig.getAppConfig(this).getPrivateToken());
-//        LogUtils.e("begintime"+begintime);
-//        LogUtils.e("endtime"+endtime);
-//        LogUtils.e("date"+tvDate.getText().toString().substring(0,10).trim());
-//        LogUtils.e("theme"+mEtMeetingTheme.getText().toString().trim());
-//        LogUtils.e("attentees"+copy.toString());
-//        LogUtils.e("type"+meetingType);
-//        LogUtils.e("roomid"+roomId);
+        //        LogUtils.e("uid:"+AppConfig.getAppConfig(this).getPrivateUid());
+        //        LogUtils.e("token"+ AppConfig.getAppConfig(this).getPrivateToken());
+        //        LogUtils.e("begintime"+begintime);
+        //        LogUtils.e("endtime"+endtime);
+        //        LogUtils.e("date"+tvDate.getText().toString().substring(0,10).trim());
+        //        LogUtils.e("theme"+mEtMeetingTheme.getText().toString().trim());
+        //        LogUtils.e("attentees"+copy.toString());
+        //        LogUtils.e("type"+meetingType);
+        //        LogUtils.e("roomid"+roomId);
 
 
         initKjHttp().post(Api.CONFERENCE_SETCONF, params, new HttpCallBack() {
@@ -609,26 +596,26 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
                     System.out.println(e.toString());
                 }
             }
-//            @Override
-//            public void onSuccess(String t) {
-//                super.onSuccess(t);
-//                LogUtils.e("创建会议返回数据：" + t);
-//                JSONObject jo = null;
-//                try {
-//                    jo = new JSONObject(t);
-//                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-//
-//                        showToast("发送成功");
-//                        startActivity(new Intent(CreateOridinryMeetingActivity.this, ScheduleActivity.class));
-//                        finish();
-//
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
+            //            @Override
+            //            public void onSuccess(String t) {
+            //                super.onSuccess(t);
+            //                LogUtils.e("创建会议返回数据：" + t);
+            //                JSONObject jo = null;
+            //                try {
+            //                    jo = new JSONObject(t);
+            //                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
+            //
+            //                        showToast("发送成功");
+            //                        startActivity(new Intent(CreateOridinryMeetingActivity.this, ScheduleActivity.class));
+            //                        finish();
+            //
+            //                    }
+            //
+            //                } catch (JSONException e) {
+            //                    e.printStackTrace();
+            //                }
+            //
+            //            }
 
             @Override
             public void onFinish() {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.EditText;
@@ -183,8 +184,10 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 mTopView.setAppTitle("选择与会人员");
                 ArrayList<Child> contacts = new ArrayList<>();
                 for (int i = 0; i < mGroupUsers.size(); i++) {
-                    Child child = new Child(mGroupUsers.get(i).getUsername(), mGroupUsers.get(i).getUid());
-                    contacts.add(child);
+                    if (!TextUtils.isEmpty(mGroupUsers.get(i).getUid())) {
+                        Child child = new Child(mGroupUsers.get(i).getUsername(), mGroupUsers.get(i).getUid());
+                        contacts.add(child);
+                    }
                 }
                 Intent intent = new Intent();
                 intent.putParcelableArrayListExtra("contacts", contacts);

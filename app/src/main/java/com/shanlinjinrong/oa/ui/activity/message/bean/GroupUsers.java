@@ -1,5 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.message.bean;
 
+import android.text.TextUtils;
+
 import com.shanlinjinrong.oa.model.Contacts;
 
 /**
@@ -10,19 +12,19 @@ import com.shanlinjinrong.oa.model.Contacts;
 
 public class GroupUsers {
 
-    private String uid;
-    private String sex;
-    public String code;
-    private String orgId;
-    private String phone;
-    private String email;
-    private String postId;
-    private String isShow;
-    private String username;
-    private String postTitle;
-    private String portraits;
+    private String  uid;
+    private String  sex;
+    public  String  code;
+    private String  orgId;
+    private String  phone;
+    private String  email;
+    private String  postId;
+    private String  isShow;
+    private String  username;
+    private String  postTitle;
+    private String  portraits;
     private boolean isChecked;
-    private String departmentName;
+    private String  departmentName;
 
     public String getOrgId() {
         return orgId;
@@ -130,11 +132,12 @@ public class GroupUsers {
 
     public void save(Contacts contacts) {
         try {
-            setUid(contacts.getUid());
+            if (!TextUtils.isEmpty(contacts.getUid()))
+                setUid(contacts.getUid());
             setSex(contacts.getSex());
             setCode(contacts.getCode());
             setPhone(contacts.getPhone());
-//            setOrgId(contacts.getOrgId());
+            //            setOrgId(contacts.getOrgId());
             setEmail(contacts.getEmail());
             setPostId(contacts.getPostId());
             setIsShow(contacts.getIsshow());

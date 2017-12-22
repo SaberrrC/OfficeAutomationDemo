@@ -49,7 +49,7 @@ public class CountPeopleActivity extends BaseActivity implements View.OnClickLis
     String               mSearchContent = "";
     List<CountResponse1> mData          = new ArrayList<>();
     CountPeopleAdapter mCountPeopleAdapter;
-    private ArrayList<CountResponse1> mCountResponse1s;
+    private ArrayList<CountResponse1> mCountResponse1s = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
