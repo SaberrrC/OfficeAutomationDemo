@@ -505,6 +505,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
      */
     private void changeLoadState() {
         list.clear();
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
         meLaunchCurrentPage = 1;
         waitApprovalCurrentPage = 1;
@@ -536,6 +537,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
      */
     private void clearRecyclerViewData() {
         list.clear();
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
     }
 
@@ -736,6 +738,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
         }
         isLoading = false;
         list.addAll(listApproval);
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
     }
 

@@ -3,7 +3,6 @@ package com.hyphenate.easeui.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -102,6 +101,7 @@ public class EaseConversationList extends ListView {
         adapter.setTimeColor(timeColor);
         adapter.setTimeSize(timeSize);
         setAdapter(adapter);
+        requestLayout();
         adapter.notifyDataSetChanged();
     }
 
@@ -111,6 +111,7 @@ public class EaseConversationList extends ListView {
             switch (message.what) {
                 case MSG_REFRESH_ADAPTER_DATA:
                     if (adapter != null) {
+                        requestLayout();
                         adapter.notifyDataSetChanged();
                     }
                     break;
@@ -235,6 +236,7 @@ public class EaseConversationList extends ListView {
                     @Override
                     public void call(EMConversation s) {
                         conversations.add(0, s);
+                        requestLayout();
                         adapter.notifyDataSetChanged();
                     }
                 }, new Action1<Throwable>() {
@@ -246,6 +248,7 @@ public class EaseConversationList extends ListView {
                     @Override
                     public void call() {
                         if (adapter != null)
+                            requestLayout();
                             adapter.notifyDataSetChanged();
                     }
                 });

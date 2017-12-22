@@ -86,6 +86,7 @@ public class HolidaySearchActivity extends HttpBaseActivity<HolidaySearchPresent
     private List<String> mDate = new ArrayList<>();
     private List<String> data = new ArrayList<>();
     private int mPosition;
+    private RecyclerView mRvSelectedType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +182,7 @@ public class HolidaySearchActivity extends HttpBaseActivity<HolidaySearchPresent
             }
             mDialog.show();
             mDialog.setCanceledOnTouchOutside(true);
+            mRvSelectedType.requestLayout();
             mTypeAdapter.notifyDataSetChanged();
         } catch (Throwable e) {
             e.printStackTrace();
@@ -190,15 +192,15 @@ public class HolidaySearchActivity extends HttpBaseActivity<HolidaySearchPresent
     //初始化Dialog数据
     private View initTypeData() {
         View inflate = LayoutInflater.from(this).inflate(R.layout.dialog_common_selected_type, null);
-        RecyclerView rvSelectedType = (RecyclerView) inflate.findViewById(R.id.rv_selected_type);
+        mRvSelectedType = (RecyclerView) inflate.findViewById(R.id.rv_selected_type);
         TextView tvTitle = (TextView) inflate.findViewById(R.id.tv_common_type_title);
         View lineView = inflate.findViewById(R.id.tv_line_view);
         tvTitle.setVisibility(View.GONE);
         lineView.setVisibility(View.GONE);
         mTypeAdapter = new HolidayAdapter(this, data);
-        rvSelectedType.setLayoutManager(new LinearLayoutManager(this));
-        rvSelectedType.addItemDecoration(new ApproveDecorationLine(this));
-        rvSelectedType.setAdapter(mTypeAdapter);
+        mRvSelectedType.setLayoutManager(new LinearLayoutManager(this));
+        mRvSelectedType.addItemDecoration(new ApproveDecorationLine(this));
+        mRvSelectedType.setAdapter(mTypeAdapter);
         return inflate;
     }
 

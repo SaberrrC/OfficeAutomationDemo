@@ -110,6 +110,7 @@ public class SystemNoticesActivity extends HttpBaseActivity<SystemNoticesPresent
     @Override
     public void loadDataSuccess(List<SystemNotice> pushMessages) {
         list = pushMessages;
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
         setDataForRecyclerView();
         readAllSystemNotices();

@@ -116,6 +116,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                     if (charSequence.toString().trim().equals("")) {
                         showLoadingView();
                         mAdapter.setNewData(mGroupList);
+                        mRvGroupShow.requestLayout();
                         mAdapter.notifyDataSetChanged();
                         hideLoadingView();
                     } else {
@@ -127,6 +128,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                             }
                         }
                         mAdapter.setNewData(mSearchGroupList);
+                        mRvGroupShow.requestLayout();
                         mAdapter.notifyDataSetChanged();
                         hideLoadingView();
                     }
@@ -172,6 +174,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                         },
                         () -> {
                             mAdapter.setNewData(mGroupList);
+                            mRvGroupShow.requestLayout();
                             mAdapter.notifyDataSetChanged();
                             mSrRefresh.setRefreshing(false);
                             initFooterView();
@@ -217,6 +220,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
             if (mSearchEtInput.getText().toString().trim().equals("")) {
                 showLoadingView();
                 mAdapter.setNewData(mGroupList);
+                mRvGroupShow.requestLayout();
                 mAdapter.notifyDataSetChanged();
                 hideLoadingView();
             } else {
@@ -228,6 +232,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                     }
                 }
                 mAdapter.setNewData(mSearchGroupList);
+                mRvGroupShow.requestLayout();
                 mAdapter.notifyDataSetChanged();
                 hideLoadingView();
             }

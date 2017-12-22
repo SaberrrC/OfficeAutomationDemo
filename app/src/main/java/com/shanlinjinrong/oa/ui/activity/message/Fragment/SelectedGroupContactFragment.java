@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedContactAdapter;
@@ -85,6 +84,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
             mContact.clear();
             mContact.addAll(contacts1);
             mAdapter.setNewData(mContact);
+            rvGroupContact.requestLayout();
             mAdapter.notifyDataSetChanged();
             mTvEmptyView.setVisibility(View.GONE);
             return;
@@ -96,6 +96,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
         rvGroupContact.setAdapter(mAdapter);
         rvGroupContact.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rvGroupContact.addOnItemTouchListener(new ItemClick());
+        rvGroupContact.requestLayout();
         mAdapter.notifyDataSetChanged();
     }
 
@@ -131,6 +132,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
                 mOrgIdKey.add(getArguments().getString("orgId", "1"));
                 mContact.addAll(bean);
                 mAdapter.setNewData(mContact);
+                rvGroupContact.requestLayout();
                 mAdapter.notifyDataSetChanged();
                 if (!getArguments().getString("orgId", "1").equals("1")) {
                     mLoadContact.put(Integer.parseInt(getArguments().getString("orgId", "1")), bean);
@@ -188,6 +190,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
                         mAdapter.setNewData(mContact);
+                        rvGroupContact.requestLayout();
                         mAdapter.notifyDataSetChanged();
                     }, 100);
                     break;
@@ -204,6 +207,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
             mContact.clear();
             mContact.addAll(contacts);
             mAdapter.setNewData(mContact);
+            rvGroupContact.requestLayout();
             mAdapter.notifyDataSetChanged();
         } catch (Throwable e) {
             e.printStackTrace();

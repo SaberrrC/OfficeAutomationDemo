@@ -57,6 +57,7 @@ public class EaseChatMessageList extends RelativeLayout {
     public void refreshPageSizeItem(List<EMMessage> var) {
         messageAdapter.refreshList(var);
         messageAdapter.notifyDataSetChanged();
+        listView.requestLayout();
         listView.setSelection(messageAdapter.getCount() - 1);
     }
 

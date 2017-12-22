@@ -171,6 +171,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         mItemList.addAll(reports);
         mAllReportList.loadMoreFinish(false, hasNextPage);
         this.pageNum = pageNum + 1;
+        mAllReportList.requestLayout();
         mAllReportAdapter.notifyDataSetChanged();
         if (mItemList.size() == 0) {
             mTvEmpty.setVisibility(View.VISIBLE);

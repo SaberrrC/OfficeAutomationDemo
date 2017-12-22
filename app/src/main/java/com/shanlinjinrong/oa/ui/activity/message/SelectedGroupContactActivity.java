@@ -403,6 +403,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 }
 
                 mUserAdapter.setNewData(mSearchData);
+                mRvSearchContact.requestLayout();
                 mUserAdapter.notifyDataSetChanged();
             }
         } catch (Throwable e) {
@@ -519,6 +520,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
 
             mSearchData.addAll(bean);
             mUserAdapter.setNewData(mSearchData);
+            mRvSearchContact.requestLayout();
             mUserAdapter.notifyDataSetChanged();
         }
     }
@@ -564,6 +566,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 mUserAdapter.setNewData(mSearchData);
+                mRvSearchContact.requestLayout();
                 mUserAdapter.notifyDataSetChanged();
             }, 100);
 

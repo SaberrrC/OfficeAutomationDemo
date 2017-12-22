@@ -492,6 +492,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         } catch (Throwable e) {
             e.printStackTrace();
         }
+        rvPersonShow.requestLayout();
         mAdapter.notifyDataSetChanged();
     }
 

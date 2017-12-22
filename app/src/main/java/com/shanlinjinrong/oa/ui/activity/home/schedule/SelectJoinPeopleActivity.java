@@ -204,6 +204,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
             }
 
             qty.setText(selectedContacts.size() + "");
+            mListView.requestLayout();
             mAdapter.notifyDataSetChanged();
             return false;
         }
@@ -278,6 +279,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                             hideEmptyView();
                             mListView.setVisibility(View.VISIBLE);
                             mToolBarText.setVisibility(View.VISIBLE);
+                            mListView.requestLayout();
                             mAdapter.notifyDataSetChanged();
                             break;
                         case Api.RESPONSES_CODE_DATA_EMPTY:
@@ -403,6 +405,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                 }
             }
         }
+        mListView.requestLayout();
         mAdapter.notifyDataSetChanged();
     }
 }

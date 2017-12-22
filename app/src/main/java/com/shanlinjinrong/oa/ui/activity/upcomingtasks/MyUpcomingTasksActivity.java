@@ -271,6 +271,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         }
                     }
                     mRvList.setVisibility(View.VISIBLE);
+                    mRvList.requestLayout();
                     mFinalRecycleAdapter.notifyDataSetChanged();
                 } else {
                     finish();
@@ -415,6 +416,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     @Override
                     public void run() {
                         mRvList.setVisibility(View.VISIBLE);
+                        mRvList.requestLayout();
                         mFinalRecycleAdapter.notifyDataSetChanged();
                     }
                 });
@@ -772,12 +774,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         if (bean.getData() == null) {
             mRvList.setVisibility(View.VISIBLE);
+            mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         List<UpcomingTaskItemBean.DataBean.DataListBean> dataList = bean.getData().getDataList();
         if (dataList == null) {
             mRvList.setVisibility(View.VISIBLE);
+            mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
@@ -787,6 +791,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mDatas.addAll(dataList);
         mRvList.requestLayout();
         mRvList.setVisibility(View.VISIBLE);
+        mRvList.requestLayout();
         mFinalRecycleAdapter.notifyDataSetChanged();
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mFinalRecycleAdapter.getItemCount() - 1 >= 0) {
@@ -843,6 +848,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private void setNoItemList(int errorNo) {
         mDatas.clear();
         mRvList.setVisibility(View.VISIBLE);
+        mRvList.requestLayout();
         mFinalRecycleAdapter.notifyDataSetChanged();
     }
 
@@ -871,12 +877,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         if (bean.getData() == null) {
             mRvList.setVisibility(View.VISIBLE);
+            mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
         List<UpcomingSearchResultBean.DataBeanX.DataBean> dataList = bean.getData().getData();
         if (dataList == null) {
             mRvList.setVisibility(View.VISIBLE);
+            mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
@@ -921,12 +929,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     @Override
                     public void run() {
                         mRvList.setVisibility(View.VISIBLE);
+                        mRvList.requestLayout();
                         mFinalRecycleAdapter.notifyDataSetChanged();
                     }
                 });
             }
         });
         mRvList.setVisibility(View.VISIBLE);
+        mRvList.requestLayout();
         mFinalRecycleAdapter.notifyDataSetChanged();
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mFinalRecycleAdapter.getItemCount() - 1 >= 0) {
@@ -988,6 +998,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvErrorShow.setText(strMsg);
             mDatas.clear();
             mRvList.setVisibility(View.VISIBLE);
+            mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
@@ -1020,6 +1031,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mRvList.setVisibility(View.GONE);
             mTvErrorShow.setVisibility(View.VISIBLE);
             mTvErrorShow.setText(strMsg);
+            mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
@@ -1108,6 +1120,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         if (errorNo == 20000) {
             mDatas.clear();
             mRvList.setVisibility(View.VISIBLE);
+            mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();
             return;
         }
@@ -1153,7 +1166,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     bean.setIsChecked(false);
                 }
             }
-            mRvList.setVisibility(View.VISIBLE);
+            mRvList.setVisibility(View.VISIBLE);.
+            mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();
         } else {
             super.onBackPressed();

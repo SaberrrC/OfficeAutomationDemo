@@ -111,6 +111,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
                         return;
                     }
                     messageList.clear();
+                    mLvList.requestLayout();
                     messageaAdapter.notifyDataSetChanged();
                     mTvNoResult.setVisibility(View.GONE);
                 }
@@ -153,6 +154,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
                     messageaAdapter = new SearchedMessageAdapter(MessageSearchActivity.this, 1, messageList);
                     mLvList.setAdapter(messageaAdapter);
                 } else {
+                    mLvList.requestLayout();
                     messageaAdapter.notifyDataSetChanged();
                 }
             }

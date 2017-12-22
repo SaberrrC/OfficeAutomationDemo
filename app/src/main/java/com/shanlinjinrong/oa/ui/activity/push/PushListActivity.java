@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.PushMsg;
 import com.shanlinjinrong.oa.ui.activity.home.approval.ApprovalListActivity;
@@ -109,6 +108,7 @@ public class PushListActivity extends HttpBaseActivity<PushListPresenter> implem
                 //类型 5工作汇报，6审批申请，7审批回复	string
                 PushMsg pushMsg = list.get(i);
                 pushMsg.setStatus("2");
+                mRecyclerView.requestLayout();
                 mAdapter.notifyDataSetChanged();
 
                 //发送推送已读
@@ -220,6 +220,7 @@ public class PushListActivity extends HttpBaseActivity<PushListPresenter> implem
     private void changeLoadState() {
         currentPage = 1;
         list.clear();
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
         hasMore = true;
     }
@@ -264,6 +265,7 @@ public class PushListActivity extends HttpBaseActivity<PushListPresenter> implem
         isLoading = false;
 
         list.addAll(pushMessages);
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
     }
 

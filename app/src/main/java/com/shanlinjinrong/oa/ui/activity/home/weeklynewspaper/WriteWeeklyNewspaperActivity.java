@@ -271,6 +271,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         );
         mRvWorkContent.setAdapter(mAdapter);
         mRvWorkContent.addItemDecoration(new WeekReportDecorationLine(this, mData));
+        mRvWorkContent.requestLayout();
         mAdapter.notifyDataSetChanged();
 
         mRvWorkContent.addOnItemTouchListener(new OnItemClickListener() {
@@ -305,6 +306,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         mNextAdapter = new NextWeekWorkContentAdapter(mNextData);
         mRvNextWorkContent.setAdapter(mNextAdapter);
         mRvNextWorkContent.addItemDecoration(new WeekReportDecorationLine(this, mNextData));
+        mRvWorkContent.requestLayout();
         mNextAdapter.notifyDataSetChanged();
 
         mRvNextWorkContent.addOnItemTouchListener(new OnItemClickListener() {
@@ -360,6 +362,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                                         }
         );
         mRvWorkContent.setAdapter(mAdapter);
+        mRvWorkContent.requestLayout();
         mAdapter.notifyDataSetChanged();
 
         mRvWorkContent.addOnItemTouchListener(new OnItemClickListener() {
@@ -398,6 +401,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
         );
         mNextAdapter = new NextWeekWorkContentAdapter(mNextData);
         mRvNextWorkContent.setAdapter(mNextAdapter);
+        mRvWorkContent.requestLayout();
         mNextAdapter.notifyDataSetChanged();
 
         mRvNextWorkContent.addOnItemTouchListener(new OnItemClickListener() {
@@ -448,6 +452,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                     mWorkContentBean = new WorkContentBean("工作内容 " + workContentIndex, "未填写");
                     mData.add(mWorkContentBean);
                     mAdapter.setNewData(mData);
+                    mRvWorkContent.requestLayout();
                     mAdapter.notifyDataSetChanged();
                     mRvWorkContent.scrollToPosition(mData.size() - 1);
                 } else {
@@ -467,6 +472,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                     mWorkContentBean = new WorkContentBean("工作计划 " + workPlanIndex, "未填写");
                     mNextData.add(mWorkContentBean);
                     mNextAdapter.setNewData(mNextData);
+                    mRvWorkContent.requestLayout();
                     mNextAdapter.notifyDataSetChanged();
                     mScroll.fullScroll(ScrollView.FOCUS_DOWN);
                 }
@@ -625,6 +631,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
             edit.putString(mData.get(i).getTitle() + "work_remark", data.get(i).getRemark());
             edit.apply();
         }
+        mRvWorkContent.requestLayout();
         mAdapter.notifyDataSetChanged();
     }
 
@@ -800,6 +807,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 if (state.isWorkContent()) {
                     mData.get(i).setState(state.getState());
                     mAdapter.setNewData(mData);
+                    mRvWorkContent.requestLayout();
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -809,6 +817,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 if (!state.isWorkContent()) {
                     mNextData.get(i).setState(state.getState());
                     mNextAdapter.setNewData(mNextData);
+                    mRvWorkContent.requestLayout();
                     mNextAdapter.notifyDataSetChanged();
                 }
             }

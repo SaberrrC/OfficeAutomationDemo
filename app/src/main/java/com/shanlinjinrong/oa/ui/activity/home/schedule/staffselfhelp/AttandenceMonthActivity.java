@@ -276,6 +276,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 }
             }
         }
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
 
         if (!isSelectedDay) {
@@ -491,6 +492,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 mData.get(i).setSelect(false);
             }
         }
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
         String content = mData.get(position).getContent();
         mSelectedDay = Integer.parseInt(content);
@@ -525,6 +527,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                                 } else {
                                     setData(true, mSelectedMonth, 1);
                                 }
+                                mRecyclerView.requestLayout();
                                 mAdapter.notifyDataSetChanged();
                                 monthSelectPopWindow.dismiss();
                                 doHttp();

@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.MeetingReservationRecordAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
@@ -81,6 +80,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
                             try {
                                 if (!data.isEmpty())
                                     mRecordAdapter.addFooterView(view);
+                                mRvMeetingReservationRecord.requestLayout();
                                 mRecordAdapter.notifyDataSetChanged();
                                 LoadMore();
                             } catch (Throwable e) {
@@ -119,9 +119,11 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         mTvMeetingReservationRecord.setVisibility(View.VISIBLE);
         mTvEmptyView.setVisibility(View.GONE);
         mRecordAdapter.setNewData(bean);
+        mRvMeetingReservationRecord.requestLayout();
         mRecordAdapter.notifyDataSetChanged();
         mRefresh.setRefreshing(false);
         mRecordAdapter.removeAllFooterView();
+        mRvMeetingReservationRecord.requestLayout();
         mRecordAdapter.notifyDataSetChanged();
     }
 
@@ -140,12 +142,14 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         }
         mRefresh.setRefreshing(false);
         mRecordAdapter.removeAllFooterView();
+        mRvMeetingReservationRecord.requestLayout();
         mRecordAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void removeFooterView() {
         mRecordAdapter.removeAllFooterView();
+        mRvMeetingReservationRecord.requestLayout();
         mRecordAdapter.notifyDataSetChanged();
         showToast(getString(R.string.string_not_more));
     }

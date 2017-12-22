@@ -222,6 +222,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 items = mContacts;
                 hideEmptyView();
                 mContactAdapter.setNewData(mContacts);
+                recyclerView.requestLayout();
                 mContactAdapter.notifyDataSetChanged();
                 reSetSwipRefreash();
                 return;
@@ -298,6 +299,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
             recyclerView.setVisibility(View.GONE);
             recyclerViewSearchResult.setVisibility(View.VISIBLE);
         }
+        recyclerViewSearchResult.requestLayout();
         mSearchUserResultAdapter.notifyDataSetChanged();
         reSetSwipRefreash();
     }
