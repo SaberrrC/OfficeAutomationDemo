@@ -181,7 +181,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private AlertDialog dialog;
     private QBadgeView qBadgeView;
     private TabCommunicationFragment tabCommunicationFragment;
-//    private AbortableFuture<LoginInfo> loginRequest;
+    //    private AbortableFuture<LoginInfo> loginRequest;
     private List<EMMessage> mEMMessage = new ArrayList<>();
     private EMGroup mGroup;
     private String mGroupName;
@@ -652,7 +652,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
             refreshCommCount();
         }
     }
-
 
 
     @Override

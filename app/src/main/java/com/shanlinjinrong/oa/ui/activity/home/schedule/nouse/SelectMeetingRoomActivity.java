@@ -95,6 +95,11 @@ public class SelectMeetingRoomActivity extends BaseActivity {
         mCbNeedRoom.setChecked(true);//默认选中
         mCbNeedRoom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
+            public int hashCode() {
+                return super.hashCode();
+            }
+
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     LoadData(currentDate);
