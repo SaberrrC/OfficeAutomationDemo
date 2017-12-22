@@ -146,28 +146,6 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
                 String nt_id = "";
                 Intent intent = null;
                 switch (Integer.parseInt(showDataType)) {
-                    case 1:
-                        cf_id = scheduleRvDataList.get(i).getCf_id();
-                        intent = new Intent();
-                        intent.putExtra("cf_id", cf_id);
-                        intent.putExtra("meeting_mode", Constants.MEETING_PLAN);
-                        intent.putExtra("isShowJoin", false);
-
-//                        if (Integer.parseInt(cf_id) >= 9999) {
-//                            // TODO 为演示做的演示界面
-//                            intent.setClass(ScheduleActivity.this, MeetingInfoVideoActivity.class);
-//                        } else {
-                        intent.setClass(ScheduleActivity.this, MeetingInfoActivity.class);
-//                        }
-                        break;
-                    case 2:
-                        cf_id = scheduleRvDataList.get(i).getCf_id();
-                        intent = new Intent();
-                        intent.putExtra("cf_id", cf_id);
-                        intent.putExtra("meeting_mode", Constants.ME_LAUNCH_MEETING);
-                        intent.putExtra("isShowJoin", false);
-                        intent.setClass(ScheduleActivity.this, MeetingInfoActivity.class);
-                        break;
 
                     case 3:
                         nt_id = scheduleRvDataList.get(i).getCf_id();
@@ -182,9 +160,6 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
         currentDate = Utils.getDateByTimestamp(System.currentTimeMillis());
         dataPrefix = currentDate.substring(0, currentDate.length() - 3);
 
-
-//        mCalendar.setDayTheme(new MyIDayTheme());
-//        mCalendar.setWeekTheme(new MyIWeekTheme());  CircleCaclendarView
 
         mCalendar.setListenerMove(new ListenerMove() {
             @Override
@@ -385,11 +360,6 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
                                 scheduleRvDataList.add(data);
                             }
                         }
-
-//                    mAdapter = new CalendarRvAdapter(scheduleRvDataList, showDataType);
-//                    mRecyclerView.setAdapter(mAdapter);
-//                        // TODO 16.56tianjia
-//                        break;
                     }
 
                 }

@@ -228,12 +228,6 @@
 -dontwarn com.huawei.android.pushagent.*
 -keep public class com.huawei.android.pushagent.**{*;}
 
-#网易云信
--dontwarn com.netease.**
--dontwarn io.netty.**
--keep class com.netease.** {*;}
-#如果 netty 使用的官方版本，它中间用到了反射，因此需要 keep。如果使用的是我们提供的版本，则不需要 keep
--keep class io.netty.** {*;}
 
 #J256
 -keepclassmembers class com.j256.** { *; }

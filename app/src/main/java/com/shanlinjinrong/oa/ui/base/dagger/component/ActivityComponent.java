@@ -158,5 +158,6 @@ public interface ActivityComponent {
     void inject(Contact_Details_Activity contactDetailsActivity);
 
     void inject(CallActivity callActivity);
+
     void inject(LookGroupMemberActivity lookGroupMemberActivity);
 }

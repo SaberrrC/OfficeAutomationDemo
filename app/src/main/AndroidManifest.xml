@@ -29,7 +29,7 @@
 
     <!-- Optional. Required for location feature -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
-    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -365,69 +365,9 @@
         <!-- 极光推送 结束 -->
 
 
-        <!-- 网易云信开始 -->
-        <!--
-           APP key, 可以在这里设置，也可以在 SDKOptions 中提供。
-           如果 SDKOptions 中提供了，取 SDKOptions 中的值。
-        -->
-        <meta-data
-            android:name="com.netease.nim.appKey"
-            android:value="c5cb21ebaeea46a2cdf9071e02626ba2" />
-        <!-- 声明云信后台服务，如需保持后台推送，使用独立进程效果会更好。 -->
-        <service
-            android:name="com.netease.nimlib.service.NimService"
-            android:process=":core" />
-        <!-- 声明云信后台服务，如需保持后台推送，使用独立进程效果会更好。 -->
-        <service
-            android:name="com.netease.nimlib.service.NimService$Aux"
-            android:process=":core" />
-        <!--
-           云信SDK的监视系统启动和网络变化的广播接收器，用户开机自启动以及网络变化时候重新登录，
-           保持和 NimService 同一进程
-        -->
-        <receiver
-            android:name="com.netease.nimlib.service.NimReceiver"
-            android:exported="false"
-            android:process=":core">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-
-        <!-- 云信进程间通信 Receiver -->
-        <receiver android:name="com.netease.nimlib.service.ResponseReceiver" />
-
-        <!--
-       申明本地电话状态（通话状态）的广播接收器，第三方APP集成时音视频模块时，
-       如果需要网络通话与本地电话互斥，请加上此接收器
-        -->
-        <receiver android:name=".thirdParty.push.receiver.IncomingCallReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-        </receiver>
-
-        <!-- <service -->
-        <!-- android:name="com.netease.cosine.core.CosineService" -->
-        <!-- android:process=":cosine"> -->
-        <!-- </service> -->
-
-
-        <!-- <receiver -->
-        <!-- android:name="com.netease.cosine.target.CosineReceiver" -->
-        <!-- android:exported="true" -->
-        <!-- android:process=":cosine"> -->
-        <!-- </receiver> -->
-
         <meta-data
             android:name="com.netease.cosine.target"
             android:value="" />
-        <meta-data
-            android:name="com.netease.cosine.target.receiver"
-            android:value="com.netease.nimlib.service.NimReceiver" />
-        <!-- 网易云信结束 -->
-
 
         <!-- 首页控制器 -->
         <activity
@@ -629,10 +569,10 @@
             android:screenOrientation="portrait" />
         <!-- 聊天activity -->
         <!--<activity-->
-            <!--android:name=".ui.activity.message.EaseChatMessageActivity"-->
-            <!--android:launchMode="singleTask"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:windowSoftInputMode="adjustResize" /> -->
+        <!--android:name=".ui.activity.message.EaseChatMessageActivity"-->
+        <!--android:launchMode="singleTask"-->
+        <!--android:screenOrientation="portrait"-->
+        <!--android:windowSoftInputMode="adjustResize" /> -->
         <!-- 聊天activity -->
         <activity
             android:name=".ui.activity.message.EaseChatMessageActivity"
@@ -842,7 +782,7 @@
         <activity
             android:name=".ui.activity.message.SelectedGroupContactActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.activity.message.GroupCommonControlActivity"
             android:screenOrientation="portrait" />
@@ -856,7 +796,7 @@
             android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
-        <activity android:name=".ui.activity.message.LookGroupMemberActivity"/>
+        <activity android:name=".ui.activity.message.LookGroupMemberActivity" />
     </application>
 
 </manifest>
