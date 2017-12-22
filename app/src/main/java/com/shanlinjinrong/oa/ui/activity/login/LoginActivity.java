@@ -73,7 +73,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         }
     };
     private boolean isAutoLogin                  = true;
-    private long lastClickTime = 0;
+    private long    lastClickTime                = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,7 +97,11 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         userPwd.setOnKeyListener(this);
         mCbAutoLogin.setChecked(AppConfig.getAppConfig(LoginActivity.this).get(AppConfig.PREF_KEY_PASSWORD_FLAG, false));
         AppConfig.getAppConfig(LoginActivity.this).setAutoLogin(true);
-        userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
+        try {
+            userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mTvFindPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,8 +138,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
                 mRootView.getWindowVisibleDisplayFrame(rect);
                 int screenHeight = mRootView.getRootView().getHeight();
                 int heightDifference = screenHeight - rect.bottom;
-                RelativeLayout.LayoutParams layoutParams = (
-                        RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
 
                 layoutParams.setMargins(0, 0, 0, heightDifference);
 
@@ -177,8 +180,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
         if (check()) {
             //cxp添加，检验通过，隐藏软键盘
-            InputMethodManager imm =
-                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(userEmail.getWindowToken(), 0);
             showLoadingView();
             mPresenter.login(userEmail.getText().toString(), userPwd.getText().toString());
