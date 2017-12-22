@@ -688,6 +688,7 @@ public class DemoHelper {
         @Override
         public void onUserRemoved(String groupId, String groupName) {
             //user is removed from group
+            EventBus.getDefault().post(new GroupEventListener(Constants.MODIFICATIONNAME));
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
             showToast("current user removed, groupId:" + groupId);
         }
@@ -744,6 +745,11 @@ public class DemoHelper {
         //TODO 群聊提醒
         @Override
         public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
+
+            // your application was declined, we do nothing here in demo
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+            EventBus.getDefault().post(new GroupEventListener(Constants.MODIFICATIONNAME));
+            Log.e("groupId", "groupId");
         }
 
         // ============================= group_reform new add api begin

@@ -13,19 +13,25 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
 import com.hyphenate.exceptions.HyphenateException;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.ui.activity.message.adapter.SelectedContactAdapter;
+import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatDetailsPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.views.ClearEditText;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -173,8 +179,23 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
                         }, throwable -> {
                             hideLoadingView();
                             throwable.printStackTrace();
+                            EventBus.getDefault().post(new OnMessagesRefreshEvent());
                             showToast("更换群主失败！");
                         }, () -> {
+
+                            //邀请成员成功后 提醒
+                            StringBuilder content = new StringBuilder("本群已更换");
+                            content.append(mDelete.get(0).getUsername());
+                            content.append("为群主");
+                            //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
+                            EMMessage message = EMMessage.createTxtSendMessage(content.toString(), mGroupId);
+                            //如果是群聊，设置chattype，默认是单聊
+                            message.setChatType(EMMessage.ChatType.GroupChat);
+                            //发送消息
+                            EMClient.getInstance().chatManager().sendMessage(message);
+                            EventBus.getDefault().post(new OnMessagesRefreshEvent());
+
+
                             hideLoadingView();
                             showToast("更换群主成功");
                             Intent intent = new Intent();

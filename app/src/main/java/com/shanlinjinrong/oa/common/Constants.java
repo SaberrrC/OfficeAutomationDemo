@@ -64,6 +64,7 @@ public class Constants {
     public static final int GROUPMEMBERQUIT  = 2; //成员退出
     public static final int GROUPMEMBERADD   = 3; //成员加入
     public static final int GROUPOWNERCHANGE = 4; //群主更改
+
     // ---------------------------------- 群组 详情 ----------------------------------
     public static final String MEMBERADD = "add";
     public static final String MEMBERDELETE = "delete";
