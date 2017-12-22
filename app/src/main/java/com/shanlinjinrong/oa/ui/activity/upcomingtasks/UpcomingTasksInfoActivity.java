@@ -739,7 +739,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         if (TextUtils.equals(billType, "6402")) {//签卡申请
             mCardResultBean = gson.fromJson(json, CardResultBean.class);
-            if (!TextUtils.equals(mCardResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+            if (!TextUtils.equals(mCardResultBean.getCode(), ApiJava.REQUEST_CODE_OK) || mCardResultBean.getData() == null) {
                 onGetApproveInfoFailure(mCardResultBean.getCode(), mCardResultBean.getMessage());
                 return;
             }
@@ -747,15 +747,17 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         if (TextUtils.equals(billType, "6403")) {//出差申请
             mTraverResultBean = gson.fromJson(json, TraverResultBean.class);
-            if (!TextUtils.equals(mTraverResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+            if (!TextUtils.equals(mTraverResultBean.getCode(), ApiJava.REQUEST_CODE_OK)|| mTraverResultBean.getData() == null) {
                 onGetApproveInfoFailure(mTraverResultBean.getCode(), mTraverResultBean.getMessage());
                 return;
             }
-            mDatas.addAll(mTraverResultBean.getData().getNchrevectionApplyDetail());
+            if (mTraverResultBean.getData() != null) {
+                mDatas.addAll(mTraverResultBean.getData().getNchrevectionApplyDetail());
+            }
         }
         if (TextUtils.equals(billType, "6404")) {//休假申请
             mRestResultBean = gson.fromJson(json, RestResultBean.class);
-            if (!TextUtils.equals(mRestResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+            if (!TextUtils.equals(mRestResultBean.getCode(), ApiJava.REQUEST_CODE_OK) || mRestResultBean.getData() == null) {
                 onGetApproveInfoFailure(mRestResultBean.getCode(), mRestResultBean.getMessage());
                 return;
             }
@@ -763,7 +765,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         }
         if (TextUtils.equals(billType, "6405")) {//加班申请
             mOverTimeResultBean = gson.fromJson(json, OverTimeResultBean.class);
-            if (!TextUtils.equals(mOverTimeResultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+            if (!TextUtils.equals(mOverTimeResultBean.getCode(), ApiJava.REQUEST_CODE_OK)|| mOverTimeResultBean.getData() == null) {
                 onGetApproveInfoFailure(mOverTimeResultBean.getCode(), mOverTimeResultBean.getMessage());
                 return;
             }

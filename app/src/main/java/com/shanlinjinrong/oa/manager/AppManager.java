@@ -137,7 +137,7 @@ public class AppManager extends MultiDexApplication {
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(AppManager.mContext);
         strategy.setUploadProcess(processName == null || processName.equals(packageName));
         if (BuildConfig.DEBUG) {
-            CrashReport.initCrashReport(AppManager.mContext, "72d31f8f77", true, strategy);
+            CrashReport.initCrashReport(AppManager.mContext, "d93608e360", true, strategy);
         } else {
             CrashReport.initCrashReport(AppManager.mContext, "72d31f8f77", false, strategy);
         }

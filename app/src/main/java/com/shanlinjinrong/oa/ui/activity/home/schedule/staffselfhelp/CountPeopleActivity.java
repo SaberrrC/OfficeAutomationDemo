@@ -155,7 +155,6 @@ public class CountPeopleActivity extends BaseActivity implements View.OnClickLis
                     mData.addAll(countResponse1s);
                     mCountPeopleAdapter.notifyDataSetChanged();
                 }
-
             }
         });
     }
