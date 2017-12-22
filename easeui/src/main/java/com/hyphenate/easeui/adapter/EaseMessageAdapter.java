@@ -86,6 +86,7 @@ public class EaseMessageAdapter extends BaseAdapter {
 
     private ListView                 listView;
     private EaseMessageListItemStyle itemStyle;
+    private boolean scrollToBottom = true;
 
     public EaseMessageAdapter(Context context, String username, int chatType, ListView listView) {
         this.context = context;
@@ -123,7 +124,16 @@ public class EaseMessageAdapter extends BaseAdapter {
             switch (message.what) {
                 case HANDLER_MESSAGE_REFRESH_LIST:
                     refreshList();
-                    listView.setSelection(messages.size() - 1);
+                    if (scrollToBottom) {
+                        listView.setSelection(messages.size() - 1);
+                        return;
+                    }
+                    if (messages.size() % 20 == 0) {
+                        listView.setSelection(19);
+                    } else {
+                        listView.setSelection((messages.size() % 20) - 1);
+                    }
+                    scrollToBottom = true;
                     break;
                 case HANDLER_MESSAGE_SELECT_LAST:
                     if (messages != null && messages.size() > 0) {
@@ -159,7 +169,8 @@ public class EaseMessageAdapter extends BaseAdapter {
     /**
      * refresh and seek to the position
      */
-    public void refreshSeekTo(int position) {
+    public void refreshSeekTo(int position, boolean scrollToTop) {
+        this.scrollToBottom = scrollToTop;
         handler.sendMessage(handler.obtainMessage(HANDLER_MESSAGE_REFRESH_LIST));
     }
 
