@@ -129,7 +129,9 @@ public class EaseMessageAdapter extends BaseAdapter {
                         return;
                     }
                     if (messages.size() % 20 == 0) {
-                        listView.setSelection(19);
+                        if (messages.size() >= 20) {
+                            listView.setSelection(19);
+                        }
                     } else {
                         listView.setSelection((messages.size() % 20) - 1);
                     }
