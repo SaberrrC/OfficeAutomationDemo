@@ -40,13 +40,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -141,15 +136,16 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setTitle(UnReadMessageEvent event) {
-        if (event.unReadCount <= 0) {
-            mTvCount.setText("");
-            return;
-        }
-        if (event.unReadCount > 99) {
-            mTvCount.setText("消息(99+)");
-            return;
-        }
-        mTvCount.setText("消息(" + event.unReadCount + ")");
+//        if (event.unReadCount <= 0) {
+//            mTvCount.setText("");
+//            return;
+//        }
+//        if (event.unReadCount > 99) {
+//            mTvCount.setText("消息(99+)");
+//            return;
+//        }
+//        mTvCount.setText("消息(" + event.unReadCount + ")");
+        initCount();
     }
 
     @Override
