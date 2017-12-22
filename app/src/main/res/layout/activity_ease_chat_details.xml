@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.shanlinjinrong.oa.ui.activity.message.EaseChatDetailsActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.shanlinjinrong.oa.ui.activity.message.EaseChatDetailsActivity">
 
     <com.shanlinjinrong.views.common.CommonTopView
         android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:topTitle="详细资料" />
+        app:topTitle="详细资料"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
-        android:background="@color/gray_d5d5d5" />
+        android:background="@color/gray_d5d5d5"/>
 
     <TextView
         android:id="@+id/tv_error_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:gravity="center" />
+        android:gravity="center"/>
 
     <ScrollView
         android:id="@+id/sv_container_layout"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingEnd="12dp"
-                android:paddingRight="12dp" />
+                android:paddingRight="12dp"/>
 
             <LinearLayout
                 android:id="@+id/ll_look_more"
@@ -62,12 +62,12 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:text="查看更多群成员"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/icon_look_group_more" />
+                    android:src="@mipmap/icon_look_group_more"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -85,7 +85,7 @@
                     android:gravity="center_vertical"
                     android:text="群组名称"
                     android:textColor="@color/black_333333"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/tv_modification_name"
@@ -96,7 +96,7 @@
                     android:gravity="center_vertical"
                     android:text="OA项目开发"
                     android:textColor="@color/black_99333333"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <ImageView
                     android:id="@+id/img_modification_group_name"
@@ -104,14 +104,14 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/tab_me_arrow" />
+                    android:src="@drawable/tab_me_arrow"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="8dp"
-                    android:background="@color/gray_d5d5d5" />
+                    android:background="@color/gray_d5d5d5"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -129,7 +129,7 @@
                     android:gravity="center_vertical"
                     android:text="群主"
                     android:textColor="@color/black_333333"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/tv_modification_person"
@@ -142,7 +142,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/black_99333333"
                     android:textSize="16sp"
-                    tools:text="吴方华" />
+                    tools:text="吴方华"/>
 
                 <ImageView
                     android:id="@+id/img_group_person"
@@ -152,7 +152,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/tab_me_arrow" />
+                    android:src="@drawable/tab_me_arrow"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -160,7 +160,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
-                    android:background="@color/gray_d5d5d5" />
+                    android:background="@color/gray_d5d5d5"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -178,7 +178,7 @@
                     android:gravity="center_vertical"
                     android:text="群组头像"
                     android:textColor="@color/black_333333"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/img_modification_portrait"
@@ -189,7 +189,7 @@
                     android:layout_marginRight="5dp"
                     android:layout_toLeftOf="@+id/img_portrait"
                     android:layout_toStartOf="@+id/img_portrait"
-                    android:src="@mipmap/icon_default_group_portraits" />
+                    android:src="@mipmap/icon_default_group_portraits"/>
 
                 <ImageView
                     android:id="@+id/img_portrait"
@@ -199,7 +199,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/tab_me_arrow" />
+                    android:src="@drawable/tab_me_arrow"
+                    android:visibility="invisible"/>
 
             </RelativeLayout>
 
@@ -217,7 +218,7 @@
                 android:paddingRight="10dp"
                 android:text="查看聊天记录"
                 android:textColor="@color/black_333333"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/tv_clear_message_record"
@@ -230,12 +231,12 @@
                 android:paddingRight="10dp"
                 android:text="清空聊天记录"
                 android:textColor="@color/black_333333"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/btn_chat_delete"
@@ -250,12 +251,12 @@
                 android:text="解散并退出"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1.5" />
+                android:layout_weight="1.5"/>
         </LinearLayout>
     </ScrollView>
 
