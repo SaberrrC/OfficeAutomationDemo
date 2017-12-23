@@ -62,32 +62,32 @@ import io.reactivex.schedulers.Schedulers;
 public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroupContactPresenter> implements SelectedGroupContactContract.View, SelectedGroupContactFragment.onLoadUsersListener, SelectedGroupContactFragment.onSelectedUsersListener {
 
     @BindView(R.id.top_view)
-    CommonTopView     mTopView;
+    CommonTopView mTopView;
     @BindView(R.id.tv_empty_view)
-    TextView          mTvErrorView;
+    TextView mTvErrorView;
     @BindView(R.id.search_et_input)
-    EditText          mSearchContact;
+    EditText mSearchContact;
     @BindView(R.id.tv_selected_contact)
-    TextView          mTvSelectedContact;
+    TextView mTvSelectedContact;
     @BindView(R.id.rv_search_contact)
-    RecyclerView      mRvSearchContact;
+    RecyclerView mRvSearchContact;
     @BindView(R.id.ll_selected_contact)
-    LinearLayout      mLlSelectedContact;
+    LinearLayout mLlSelectedContact;
     @BindView(R.id.bottom_container_layout)
     BottomSheetLayout bottomContainerLayout;
 
-    private EMGroup                            mGroup;
-    private String[]                           mUserNames;
-    private String[]                           mUserCodes;
-    private List<String>                       mOrgIdKey;
-    private List<Contacts>                     mGroupUsers;
-    private List<Contacts>                     mSearchData;
-    private ArrayList<String>                  mSelectedAccount;
-    private SelectedContactAdapter             mUserAdapter;
-    private GroupContactListFragment           mBottomFragment;
-    private SparseArray<List<Contacts>>        mCacheContact;
+    private EMGroup mGroup;
+    private String[] mUserNames;
+    private String[] mUserCodes;
+    private List<String> mOrgIdKey;
+    private List<Contacts> mGroupUsers;
+    private List<Contacts> mSearchData;
+    private ArrayList<String> mSelectedAccount;
+    private SelectedContactAdapter mUserAdapter;
+    private GroupContactListFragment mBottomFragment;
+    private SparseArray<List<Contacts>> mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
-    private final        int RESULT_CODE     = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101, FINISHRESULT = -5;
+    private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101, FINISHRESULT = -5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,6 +246,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(message);
                     EventBus.getDefault().post(new OnMessagesRefreshEvent());
+
                     showToast("邀请成员成功！");
                     setResult(REFRESHSUCCESS);
                     finish();

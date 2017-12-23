@@ -58,47 +58,47 @@ import io.reactivex.schedulers.Schedulers;
 public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
 
     @BindView(R.id.top_view)
-    CommonTopView  topView;
+    CommonTopView topView;
     @BindView(R.id.btn_chat_delete)
-    TextView       btnChatDelete;
+    TextView btnChatDelete;
     @BindView(R.id.img_portrait)
-    ImageView      imgPortrait;
+    ImageView imgPortrait;
     @BindView(R.id.img_group_person)
-    ImageView      imgGroupPerson;
+    ImageView imgGroupPerson;
     @BindView(R.id.rv_person_show)
-    RecyclerView   rvPersonShow;
+    RecyclerView rvPersonShow;
     @BindView(R.id.rl_group_name)
     RelativeLayout rlGroupName;
     @BindView(R.id.tv_modification_name)
-    TextView       tvModificationName;
+    TextView tvModificationName;
     @BindView(R.id.rl_group_person)
     RelativeLayout rlGroupPerson;
     @BindView(R.id.tv_clear_message_record)
-    TextView       tvClearMessageRecord;
+    TextView tvClearMessageRecord;
     @BindView(R.id.btn_look_message_record)
-    TextView       btnLookMessageRecord;
+    TextView btnLookMessageRecord;
     @BindView(R.id.rl_group_portrait)
     RelativeLayout rlGroupPortrait;
     @BindView(R.id.img_modification_portrait)
-    ImageView      imgModificationPortrait;
+    ImageView imgModificationPortrait;
     @BindView(R.id.img_modification_group_name)
-    ImageView      imgModificationGroupName;
+    ImageView imgModificationGroupName;
     @BindView(R.id.tv_error_layout)
-    TextView       tvErrorLayout;
+    TextView tvErrorLayout;
     @BindView(R.id.sv_container_layout)
-    ScrollView     svContainerLayout;
+    ScrollView svContainerLayout;
     @BindView(R.id.tv_modification_person)
-    TextView       tvModificationPerson;
+    TextView tvModificationPerson;
     @BindView(R.id.ll_look_more)
-    LinearLayout   llLookMore;
+    LinearLayout llLookMore;
 
-    private int                         memberCount;
-    private String                      mGroupId;
-    private EMGroup                     mGroupServer1;
-    private ArrayList<String>           mMemberList;
+    private int memberCount;
+    private String mGroupId;
+    private EMGroup mGroupServer1;
+    private ArrayList<String> mMemberList;
     private List<GroupUserInfoResponse> mData;
-    private CommonGroupControlAdapter   mAdapter;
-    private boolean                     mIsGroup, mIsOwner, mIsResume;
+    private CommonGroupControlAdapter mAdapter;
+    private boolean mIsGroup, mIsOwner, mIsResume;
     private EMCursorResult<String> mGroupMemberResult;
     private String mSearchUserId = "", mQueryUserInfo = "";
     private String mGroupOwner, mGroupName, message_to, message_from;
@@ -157,6 +157,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     mGroupName = mGroupServer1.getGroupName();
                     tvModificationName.setText(mGroupName);
                     mIsOwner = mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
+
+                    if (!mIsOwner) {
+                        imgGroupPerson.setVisibility(View.INVISIBLE);
+                    } else {
+                        imgGroupPerson.setVisibility(View.VISIBLE);
+                    }
                     if (!mIsOwner) {
                         btnChatDelete.setText("退出群聊");
                     }
@@ -265,6 +271,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             try {
                 if (mIsGroup) {
                     topView.setAppTitle("群聊天详情");
+
                 } else {
                     topView.setAppTitle("聊天详情");
                 }
