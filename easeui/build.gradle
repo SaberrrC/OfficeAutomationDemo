@@ -45,7 +45,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.4.0'
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
     //kjHttp
     compile 'org.kymjs.kjframe:kjframe:2.6'
     //解决com.android.support依赖问题

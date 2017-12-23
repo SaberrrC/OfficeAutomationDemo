@@ -184,9 +184,8 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
                         }, () -> {
 
                             //邀请成员成功后 提醒
-                            StringBuilder content = new StringBuilder("本群已更换");
+                            StringBuilder content = new StringBuilder("群主已变更为");
                             content.append(mDelete.get(0).getUsername());
-                            content.append("为群主");
                             //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
                             EMMessage message = EMMessage.createTxtSendMessage(content.toString(), mGroupId);
                             //如果是群聊，设置chattype，默认是单聊

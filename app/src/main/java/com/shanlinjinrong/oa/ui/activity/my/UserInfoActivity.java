@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -156,15 +157,23 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     }
 
     private void initData() {
-        Glide.with(AppManager.mContext)
-                .load(AppConfig.getAppConfig(this).get(
-                        AppConfig.PREF_KEY_PORTRAITS))
-                .dontAnimate()
-                .error(R.drawable.ease_default_avatar)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                .placeholder(R.drawable.ease_default_avatar)
-                .into(userPortrait);
+
+        if (!TextUtils.isEmpty(AppConfig.getAppConfig(this).get(
+                AppConfig.PREF_KEY_PORTRAITS))) {
+            Glide.with(AppManager.mContext)
+                    .load(AppConfig.getAppConfig(this).get(
+                            AppConfig.PREF_KEY_PORTRAITS))
+                    .dontAnimate()
+                    .error(R.drawable.ease_default_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(userPortrait);
+        } else {
+            userPortrait.setImageResource(R.drawable.ease_default_avatar);
+        }
+
+
         userSex.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
         userPost.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
         userDepartment.setText(AppConfig.getAppConfig(this).get(
@@ -235,15 +244,19 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         //上传成功，设置用户头像
         String portraitUri = Constants.PHPSLPicBaseUrl + portrait;
         AppConfig.getAppConfig(UserInfoActivity.this).set(AppConfig.PREF_KEY_PORTRAITS, portraitUri);
+        if (!TextUtils.isEmpty(portraitUri)) {
+            Glide.with(AppManager.mContext)
+                    .load(portraitUri)
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .error(R.drawable.ease_default_avatar)
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(userPortrait);
+        } else {
+            userPortrait.setImageResource(R.drawable.ease_default_avatar);
+        }
 
-        Glide.with(AppManager.mContext)
-                .load(portraitUri)
-                .dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.drawable.ease_default_avatar)
-                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                .placeholder(R.drawable.ease_default_avatar)
-                .into(userPortrait);
         //更新数据库
         FriendsInfoCacheSvc.getInstance(AppManager.mContext).setPortrait("sl_" + portrait, AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
     }

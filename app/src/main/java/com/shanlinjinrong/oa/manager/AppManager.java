@@ -22,10 +22,6 @@ import com.hyphenate.easeui.crash.Cockroach;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.mmtrix.agent.android.Mmtrix;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
@@ -153,26 +149,19 @@ public class AppManager extends MultiDexApplication {
             StrictMode.setVmPolicy(vmPolicyBuilder.build());
         }
 
-        //leakCanary
-//        if (!LeakCanary.isInAnalyzerProcess(this)) {
         LeakCanary.install(this);
 
         //性能魔方
         Mmtrix.withApplicationToken("b6e5828c2a8defbee75d5b0a9473d115").withCrashReportingEnabled(true).start(this);
-//        }
-
-        //blockCanary
-//        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
         initAppComponent();
-
-        initImageLoader(this);
         File cacheFile = new File(this.getCacheDir(), "cache_path_name");
         CacheWebView.getCacheConfig().init(this, cacheFile.getAbsolutePath(), 1024 * 1024 * 20, 1024 * 1024 * 5)
                 .enableDebug(true);//20M 磁盘缓存空间,5M 内存缓存空间
     }
 
     private void initCrash() {
+
         Cockroach.install(new Cockroach.ExceptionHandler() {
 
             // handlerException内部建议手动try{  你的异常处理逻辑  }catch(Throwable e){ } ，以防handlerException内部再次抛出异常，导致循环调用handlerException
@@ -200,17 +189,7 @@ public class AppManager extends MultiDexApplication {
     }
 
 
-    public static void initImageLoader(Context context) {
-        ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
-        config.threadPriority(Thread.NORM_PRIORITY - 2);
-        config.denyCacheImageMultipleSizesInMemory();
-        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
-        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
-        config.diskCacheFileCount(100);//缓存的File数量
-        config.tasksProcessingOrder(QueueProcessingType.LIFO);
-        config.writeDebugLogs(); // Remove for release app
-        ImageLoader.getInstance().init(config.build());
-    }
+
 
     /**
      * 获取进程号对应的进程名

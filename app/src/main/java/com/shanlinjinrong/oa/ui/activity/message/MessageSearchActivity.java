@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -199,12 +200,19 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             holder.message.setText(span, TextView.BufferType.SPANNABLE);
 
             String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());
-            Glide.with(parent.getContext())
-                    .load(portrait).error(R.drawable.ease_default_avatar)
-                    .dontAnimate()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar)
-                    .into(holder.avatar);
+
+            if (!TextUtils.isEmpty(portrait)) {
+
+                Glide.with(parent.getContext())
+                        .load(portrait).error(R.drawable.ease_default_avatar)
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar)
+                        .into(holder.avatar);
+            } else {
+                holder.avatar.setImageResource(R.drawable.ease_default_avatar);
+
+            }
             return convertView;
         }
     }

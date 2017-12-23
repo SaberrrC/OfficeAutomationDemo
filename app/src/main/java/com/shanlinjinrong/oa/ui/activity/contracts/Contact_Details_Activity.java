@@ -4,7 +4,6 @@ package com.shanlinjinrong.oa.ui.activity.contracts;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -21,10 +20,6 @@ import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.listener.PermissionListener;
@@ -303,16 +298,6 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .placeholder(R.drawable.ease_user_portraits).into(ivImgUser);
 
-//            ImageLoader.getInstance().displayImage(mPortrait, ivImgUser, new DisplayImageOptions.Builder()
-//                    .showImageForEmptyUri(R.drawable.ease_default_avatar)
-//                    .showImageOnFail(R.drawable.ease_default_avatar)
-//                    .resetViewBeforeLoading(true)
-//                    .cacheOnDisk(true)
-//                    .imageScaleType(ImageScaleType.EXACTLY)
-//                    .bitmapConfig(Bitmap.Config.RGB_565)
-//                    .considerExifParams(true)
-//                    .displayer(new FadeInBitmapDisplayer(300))
-//                    .build());
             tv_mails.setText(mEmail.equals("") || mEmail == null || mEmail.equals("null") ? "-" : mEmail);
         } catch (Throwable e) {
             e.printStackTrace();

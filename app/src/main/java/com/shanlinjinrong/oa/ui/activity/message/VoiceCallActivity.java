@@ -30,6 +30,7 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -188,6 +189,27 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
             } else {
                 String nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(username);
                 String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(username);
+
+                if (!TextUtils.isEmpty(portrait)) {
+                    Glide.with(AppManager.mContext)
+                            .load(portrait)
+                            .dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .error(R.drawable.ease_default_avatar)
+                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                            .placeholder(R.drawable.ease_default_avatar)
+                            .into(mSwingCard);
+                } else {
+                    mSwingCard.setImageResource(R.drawable.ease_default_avatar);
+                }
+                mTvNickName.setText(nickName);
+            }
+        } else {
+            String nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(username);
+            String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(username);
+
+
+            if (!TextUtils.isEmpty(portrait)) {
                 Glide.with(AppManager.mContext)
                         .load(portrait)
                         .dontAnimate()
@@ -196,19 +218,10 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                         .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(mSwingCard);
-                mTvNickName.setText(nickName);
+            } else {
+                mSwingCard.setImageResource(R.drawable.ease_default_avatar);
             }
-        } else {
-            String nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(username);
-            String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(username);
-            Glide.with(AppManager.mContext)
-                    .load(portrait)
-                    .dontAnimate()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .error(R.drawable.ease_default_avatar)
-                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                    .placeholder(R.drawable.ease_default_avatar)
-                    .into(mSwingCard);
+
             mTvNickName.setText(nickName);
         }
 
@@ -580,14 +593,22 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void CallInfoEvent(CallEventBean bean) {
         if (bean.getEvent().equals("callSuccess")) {
-            Glide.with(AppManager.mContext)
-                    .load(bean.getPortaits())
-                    .dontAnimate()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .error(R.drawable.ease_default_avatar)
-                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                    .placeholder(R.drawable.ease_default_avatar)
-                    .into(mSwingCard);
+
+            if (!TextUtils.isEmpty(bean.getPortaits())) {
+                Glide.with(AppManager.mContext)
+                        .load(bean.getPortaits())
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .error(R.drawable.ease_default_avatar)
+                        .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                        .placeholder(R.drawable.ease_default_avatar)
+                        .into(mSwingCard);
+            } else {
+                mSwingCard.setImageResource(R.drawable.ease_default_avatar);
+
+            }
+
+
             mTvNickName.setText(bean.getUserName());
         }
     }

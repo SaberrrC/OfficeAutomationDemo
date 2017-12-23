@@ -46,14 +46,16 @@ public class CommonGroupControlAdapter extends BaseQuickAdapter<GroupUserInfoRes
                     name.setVisibility(View.VISIBLE);
                     name.setText(bean.getUsername());
 
-                    Glide.with(AppManager.mContext)
-                            .load(portaits)
-                            .dontAnimate()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .error(R.drawable.icon_homepage_work_report_me_launch)
-                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                            .placeholder(R.drawable.icon_homepage_work_report_me_launch)
-                            .into(portraits);
+                    if (!portaits.equals(com.example.retrofit.constants.Constants.SLPicBaseUrl)){
+                        Glide.with(AppManager.mContext)
+                                .load(portaits)
+                                .dontAnimate()
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .error(R.drawable.icon_homepage_work_report_me_launch)
+                                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                                .placeholder(R.drawable.icon_homepage_work_report_me_launch)
+                                .into(portraits);
+                    }
 
                 } catch (Throwable e) {
                     e.printStackTrace();
