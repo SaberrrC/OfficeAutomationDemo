@@ -101,21 +101,25 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                     .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                     .subscribe(o -> {
                     }, throwable -> {
-                        if (throwable instanceof HyphenateException) {
-                            int errorCode = ((HyphenateException) throwable).getErrorCode();
-                            if (errorCode >= 600 && errorCode <= 700) {
-                                if (mIsResume) {
-                                    EaseAlertDialog alertDialog = new EaseAlertDialog(EaseChatMessageActivity.this, null, "群组已经解散", null, (confirmed, bundle) -> {
-                                        EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
-                                        if (mChatType == EaseConstant.CHATTYPE_GROUP) {
-                                            setResult(DELETESUCCESS);
-                                        }
-                                        finish();
-                                    }, false);
-                                    alertDialog.setCancelable(false);
-                                    alertDialog.show();
+                        try {
+                            if (throwable instanceof HyphenateException) {
+                                int errorCode = ((HyphenateException) throwable).getErrorCode();
+                                if (errorCode >= 600 && errorCode <= 700) {
+                                    if (mIsResume) {
+                                        EaseAlertDialog alertDialog = new EaseAlertDialog(EaseChatMessageActivity.this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                            EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
+                                            if (mChatType == EaseConstant.CHATTYPE_GROUP) {
+                                                setResult(DELETESUCCESS);
+                                            }
+                                            finish();
+                                        }, false);
+                                        alertDialog.setCancelable(false);
+                                        alertDialog.show();
+                                    }
                                 }
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     });
         }
