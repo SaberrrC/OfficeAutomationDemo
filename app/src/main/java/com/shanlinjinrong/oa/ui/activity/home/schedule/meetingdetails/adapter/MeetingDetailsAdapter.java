@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -43,11 +44,9 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
         baseViewHolder.setText(R.id.tv_meeting_location, workContentBean.getAddress());
         baseViewHolder.setText(R.id.tv_meeting_people_number, workContentBean.getNop() + "人");
         baseViewHolder.setText(R.id.tv_meeting_device, deviceX);
-
-
         try {
             Glide.with(AppManager.mContext)
-                    .load("http://"+roomimgX)
+                    .load("http://" + roomimgX)
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(R.drawable.video_image_1)

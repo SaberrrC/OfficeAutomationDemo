@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.util.DateUtils;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.message.contract.MessageSearchContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.MessageSearchPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -199,12 +201,17 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             holder.message.setText(span, TextView.BufferType.SPANNABLE);
 
             String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());
-            Glide.with(parent.getContext())
-                    .load(portrait).error(R.drawable.ease_default_avatar)
-                    .dontAnimate()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar)
-                    .into(holder.avatar);
+
+            if (!TextUtils.isEmpty(portrait)) {
+                Glide.with(parent.getContext())
+                        .load(portrait).error(R.drawable.ease_default_avatar)
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar)
+                        .into(holder.avatar);
+            } else {
+                Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(holder.avatar);
+            }
             return convertView;
         }
     }

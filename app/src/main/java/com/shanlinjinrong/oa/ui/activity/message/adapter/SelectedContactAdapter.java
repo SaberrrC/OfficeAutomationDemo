@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.message.adapter;
 
+import android.text.TextUtils;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -55,12 +56,16 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
                 }
 
                 CircleImageView portrait = baseViewHolder.getView(R.id.portrait);
-                Glide.with(AppManager.mContext)
-                        .load(contacts.getPortraits())
-                        .dontAnimate()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(R.drawable.icon_homepage_work_report_me_launch)
-                        .into(portrait);
+                if (!TextUtils.isEmpty(contacts.getPortraits())) {
+                    Glide.with(AppManager.mContext)
+                            .load(contacts.getPortraits())
+                            .dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.icon_homepage_work_report_me_launch)
+                            .into(portrait);
+                } else {
+                    Glide.with(AppManager.mContext).load(R.drawable.icon_homepage_work_report_me_launch).asBitmap().into(portrait);
+                }
                 userName.setText(contacts.getUsername());
                 postName.setText(contacts.getPostTitle());
                 break;
