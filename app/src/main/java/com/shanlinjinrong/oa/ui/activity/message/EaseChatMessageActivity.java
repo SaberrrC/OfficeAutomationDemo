@@ -52,28 +52,28 @@ import io.reactivex.schedulers.Schedulers;
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
     @BindView(R.id.tv_count)
-    TextView     mTvCount;
+    TextView mTvCount;
     @BindView(R.id.tv_title)
-    TextView     mTvTitle;
+    TextView mTvTitle;
     @BindView(R.id.iv_detail)
     LinearLayout mIvDetail;
     @BindView(R.id.img_details_icon)
-    ImageView    imgDetailsIcon;
+    ImageView imgDetailsIcon;
 
-    private String  mTitle;
-    private int     mChatType;
-    private Bundle  mExtras;
-    private String  mNike;
-    private String  mCode;
-    private String  mSex;
-    private String  mPhone;
-    private String  mEmail;
-    private String  mPortrait;
+    private String mTitle;
+    private int mChatType;
+    private Bundle mExtras;
+    private String mNike;
+    private String mCode;
+    private String mSex;
+    private String mPhone;
+    private String mEmail;
+    private String mPortrait;
     private boolean mIsResume;
-    private String  mGroupName;
-    private String  mPost_name;
+    private String mGroupName;
+    private String mPost_name;
     private long lastClickTime = 0;
-    private String           mDepartment_name;
+    private String mDepartment_name;
     private EaseChatFragment chatFragment;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3, DISSOLVEGROUP = 600;
 
@@ -89,6 +89,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         initView();
         checkGroupState();
     }
+
 
     private void checkGroupState() {
         if (mChatType == EaseConstant.CHATTYPE_GROUP) {
@@ -163,7 +164,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         if (mChatType == EaseConstant.CHATTYPE_GROUP) {
             if (getIntent().getStringExtra("groupTitle") != null) {
                 if (!getIntent().getStringExtra("groupTitle").equals("")) {
-                    mTvTitle.setText(getIntent().getStringExtra("groupTitle"));
+                    //        mTvTitle.setText(getIntent().getStringExtra("groupTitle"));
                 } else {
                     remoteGroupName();
                 }
@@ -175,7 +176,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             if (mTitle.equals("")) {
                 mPresenter.searchUserDetails(getIntent().getStringExtra("u_id").substring(3, getIntent().getStringExtra("u_id").length()));
             }
-            mTvTitle.setText(mTitle);
+            //   mTvTitle.setText(mTitle);
             imgDetailsIcon.setImageResource(R.mipmap.icon_contacts_details);
         }
     }
@@ -194,7 +195,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             }).subscribeOn(Schedulers.io())
                     .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                     .subscribe(s -> {
-                    }, Throwable::printStackTrace, () -> mTvTitle.setText(mGroupName));
+                            }, Throwable::printStackTrace, () -> mTvTitle.setText(mGroupName)
+                    );
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -305,7 +307,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 break;
             case RESULTMODIFICATIONNAME:
                 mTitle = data.getStringExtra("groupName");
-                mTvTitle.setText(mTitle);
+                //      mTvTitle.setText(mTitle);
                 //刷新界面
                 setResult(DELETESUCCESS);
                 break;
@@ -315,6 +317,13 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     @Override
     protected void onResume() {
         super.onResume();
+        try {
+            EMGroup group = EMClient.getInstance().groupManager().getGroup(getIntent().getStringExtra("u_id"));
+            final String text = "群聊(" + group.getMembers().size() + ")";
+            mTvTitle.setText(text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mIsResume = true;
     }
 
@@ -350,7 +359,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
                 userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                 userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()))).subscribeOn(Schedulers.io());
-        mTvTitle.setText(userDetailsBean.getUsername());
+        //   mTvTitle.setText(userDetailsBean.getUsername());
     }
 
     @Override
