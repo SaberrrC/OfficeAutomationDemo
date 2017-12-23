@@ -3,6 +3,7 @@ package com.hyphenate.easeui.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;

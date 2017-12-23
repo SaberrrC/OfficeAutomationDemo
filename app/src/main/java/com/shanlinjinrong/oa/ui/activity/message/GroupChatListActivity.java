@@ -249,6 +249,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
             intent.putExtra("groupTitle", mGroupList.get(i).getGroupName());
             intent.putExtra("chatType", EaseConstant.CHATTYPE_GROUP);
             intent.putExtra("u_id", mGroupList.get(i).getGroupId());
+
             intent.putExtra("userHead", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_PORTRAITS));
             intent.putExtra("userCode", AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
             startActivityForResult(intent, REQUESTCODE);
