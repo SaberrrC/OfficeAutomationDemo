@@ -45,6 +45,7 @@ import com.shanlinjinrong.oa.utils.ScreenUtils;
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpConfig;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

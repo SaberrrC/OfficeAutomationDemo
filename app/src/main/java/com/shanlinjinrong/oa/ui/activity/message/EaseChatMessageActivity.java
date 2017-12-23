@@ -94,9 +94,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         if (mChatType == EaseConstant.CHATTYPE_GROUP) {
             //TODO 存在bug
             Observable.create(e -> {
-
                 EMClient.getInstance().groupManager().getGroupFromServer(getIntent().getStringExtra("u_id"));
-
             }).subscribeOn(Schedulers.io())
                     .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                     .subscribe(o -> {
@@ -140,15 +138,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setTitle(UnReadMessageEvent event) {
-//        if (event.unReadCount <= 0) {
-//            mTvCount.setText("");
-//            return;
-//        }
-//        if (event.unReadCount > 99) {
-//            mTvCount.setText("消息(99+)");
-//            return;
-//        }
-//        mTvCount.setText("消息(" + event.unReadCount + ")");
         initCount();
     }
 
@@ -356,14 +345,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
-    }
-
-    @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
         Observable.create(e -> FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
                 Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
@@ -374,6 +355,13 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Override
     public void searchUserDetailsFailed() {
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

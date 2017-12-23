@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.main;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -16,7 +18,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -55,7 +56,7 @@ import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
-import com.shanlinjinrong.oa.ui.fragment.event.OnCountRefreshEvent;
+import com.hyphenate.easeui.event.OnCountRefreshEvent;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -112,23 +113,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView tabMessageText;
+    TextView  tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView tabContactsText;
+    TextView  tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView tabGroupText;
+    TextView  tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView tabMeText;
+    TextView  tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView tabHomeText;
+    TextView  tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView tvMsgUnRead;
+    TextView  tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -153,13 +154,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment> mTabs;
+    private List<Fragment>       mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE = 0;
+    private static final int TAB_MESSAGE  = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME = 2;
-    private static final int TAB_GROUP = 3;
-    private static final int TAB_ME = 4;
+    private static final int TAB_HOME     = 2;
+    private static final int TAB_GROUP    = 3;
+    private static final int TAB_ME       = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -172,23 +173,22 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private int mBlueGreen;
     private int mBlueBlue;
 
-    private TextView[] mTextViews;
+    private TextView[]  mTextViews;
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
 
     int tempMsgCount = 0;
-    private EaseUI easeUI;
-    private AlertDialog dialog;
-    private QBadgeView qBadgeView;
+    private EaseUI                   easeUI;
+    private AlertDialog              dialog;
+    private QBadgeView               qBadgeView;
     private TabCommunicationFragment tabCommunicationFragment;
-    //    private AbortableFuture<LoginInfo> loginRequest;
     private List<EMMessage> mEMMessage = new ArrayList<>();
-    private EMGroup mGroup;
-    private String mGroupName;
+    private EMGroup            mGroup;
+    private String             mGroupName;
     private EMMessage.ChatType chatType;
-    private String mUserName;
-    private String mQueryInfo;
-    private String mNickName;
+    private String             mUserName;
+    private String             mQueryInfo;
+    private String             mNickName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,8 +208,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
         }
-
-
     }
 
     @Override
@@ -307,13 +305,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
 
     public void refreshCommCount() {
-        new Thread(() -> {
-            //                try {
-            mPresenter.loadConversationList();
-            //                } catch (Exception e) {
-            //                    LogUtils.e("加载环信抛异常了");
-            //                }
-        }).start();
+        //new Thread(() -> {
+        //                try {
+        //mPresenter.loadConversationList();
+        //                } catch (Exception e) {
+        //                    LogUtils.e("加载环信抛异常了");
+        //                }
+        //}).start();
     }
 
     public void refreshUnReadMsgCount() {
@@ -336,28 +334,38 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         catchWarningByCode(code);
     }
 
-    @Override
-    public void bindBadgeView(int msgCount) {
-        tempMsgCount = msgCount;
-        runOnUiThread(() -> {
-            //绑定小红点
-            if (qBadgeView == null) {
-                qBadgeView = new QBadgeView(AppManager.mContext);
+
+    //刷新消息数量
+    private final int     BIND_BADGE_REFRESH = -1;
+    @SuppressLint("HandlerLeak")
+    protected     Handler handler            = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case BIND_BADGE_REFRESH:
+                    if (qBadgeView == null) {//绑定小红点
+                        qBadgeView = new QBadgeView(AppManager.mContext);
+                    }
+                    qBadgeView.setBadgeGravity(Gravity.CENTER);
+                    qBadgeView.bindTarget(communicationRedSupport).setBadgeNumber(tempMsgCount);
+                    //设置Title 数量
+                    EventBus.getDefault().post(new UnReadMessageEvent(tempMsgCount));
+                    break;
+                default:
+                    break;
             }
-            qBadgeView.setBadgeGravity(Gravity.CENTER);
-            qBadgeView.bindTarget(communicationRedSupport).setBadgeNumber(tempMsgCount);
-        });
+        }
+    };
+
+    public void bindBadgeView(int count) {
+        tempMsgCount = count;
+        handler.sendEmptyMessage(BIND_BADGE_REFRESH);
+
         //更新Icon 数量
-        new Thread(() -> {
-            if (tempMsgCount != 0) {
-                //  BadgeUtil.setBadgeCount(MainActivity.this, tempMsgCount, R.drawable.ring_red);
-                ShortcutBadger.applyCount(MainActivity.this, tempMsgCount);
-                return;
-            }
-            // BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
-            ShortcutBadger.removeCount(MainActivity.this);
-        }).start();
-        EventBus.getDefault().post(new UnReadMessageEvent(tempMsgCount));
+        if (tempMsgCount != 0) {
+            ShortcutBadger.applyCount(MainActivity.this, tempMsgCount);
+            return;
+        }
+        ShortcutBadger.removeCount(MainActivity.this);
     }
 
     class PageChangeListener implements ViewPager.OnPageChangeListener {
@@ -523,8 +531,12 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @Override
     protected void onResume() {
         judeIsInitPwd();
-        EMClient.getInstance().chatManager().addMessageListener(messageListener);
-        refreshCommCount();
+        Observable.create(e -> EMClient.getInstance().chatManager().addMessageListener(messageListener)).subscribeOn(Schedulers.io()).subscribe();
+        if (tabCommunicationFragment != null) {
+            if (tabCommunicationFragment.myConversationListFragment != null) {
+                tabCommunicationFragment.myConversationListFragment.refresh();
+            }
+        }
         super.onResume();
     }
 
@@ -543,62 +555,64 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         public void onMessageReceived(final List<EMMessage> list) {
 
             for (EMMessage message : list) {
-                String conversationId = message.conversationId();
-                chatType = message.getChatType();
-                if (chatType == EMMessage.ChatType.GroupChat) {
-                    Observable.create(e -> {
-                        mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
-                        mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(message.getFrom());
-                        mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(conversationId);
+//                String conversationId = message.conversationId();
+//                chatType = message.getChatType();
+//                if (chatType == EMMessage.ChatType.GroupChat) {
+//                    Observable.create(e -> {
+//                        mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
+//                        mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(message.getFrom());
+//                        mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(conversationId);
+//
+//                        if (TextUtils.isEmpty(mGroupName)) {
+//                            mGroup = EMClient.getInstance().groupManager().getGroup(conversationId);
+//                            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(conversationId, mGroup.getGroupName(), ""));
+//                        }
+//
+//                        if (TextUtils.isEmpty(mNickName)) {
+//                            mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
+//                        }
+//
+//                        if (!TextUtils.isEmpty(mNickName) && !TextUtils.isEmpty(mGroupName)) {
+//                            e.onComplete();
+//                        }
+//                    }).subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(o -> {
+//                            }, Throwable::printStackTrace, () -> {
+//                                refreshChat(list, mUserId);
+//                                EventBus.getDefault().post(new OnMessagesRefreshEvent());
+//                            });
+//                    return;
+//                } else {
+//                    if (!conversationId.contains("admin") && !conversationId.contains("notice")) {
+//                        Observable.create(e -> {
+//                            mQueryInfo = conversationId.substring(0, 12);
+//                            mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(mQueryInfo);
+//                            mUserName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mQueryInfo);
+//
+//                            if (TextUtils.isEmpty(mUserName) || mUserName.equals("匿名用户")) {
+//                                mEMMessage.clear();
+//                                mEMMessage.addAll(list);
+//                                mPresenter.searchUserDetails(mQueryInfo.substring(3, mQueryInfo.length()));
+//                            }
+//
+//                            if (!TextUtils.isEmpty(mUserName)) {
+//                                e.onComplete();
+//                            }
+//                        }).observeOn(AndroidSchedulers.mainThread())
+//                                .subscribeOn(Schedulers.io())
+//                                .subscribe(o -> {
+//                                }, Throwable::printStackTrace, () -> {
+//                                    refreshChat(list, conversationId);
+//                                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
+//                                });
+//                        return;
+//                    }
+//                    refreshChat(list, conversationId);
+                refreshChat(list);
 
-                        if (TextUtils.isEmpty(mGroupName)) {
-                            mGroup = EMClient.getInstance().groupManager().getGroup(conversationId);
-                            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(conversationId, mGroup.getGroupName(), ""));
-                        }
-
-                        if (TextUtils.isEmpty(mNickName)) {
-                            mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
-                        }
-
-                        if (!TextUtils.isEmpty(mNickName) && !TextUtils.isEmpty(mGroupName)) {
-                            e.onComplete();
-                        }
-                    }).subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(o -> {
-                            }, Throwable::printStackTrace, () -> {
-                                refreshChat(list, mUserId);
-                                EventBus.getDefault().post(new OnMessagesRefreshEvent());
-                            });
-                    return;
-                } else {
-                    if (!conversationId.contains("admin") && !conversationId.contains("notice")) {
-                        Observable.create(e -> {
-                            mQueryInfo = conversationId.substring(0, 12);
-                            mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(mQueryInfo);
-                            mUserName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mQueryInfo);
-
-                            if (TextUtils.isEmpty(mUserName) || mUserName.equals("匿名用户")) {
-                                mEMMessage.clear();
-                                mEMMessage.addAll(list);
-                                mPresenter.searchUserDetails(mQueryInfo.substring(3, mQueryInfo.length()));
-                            }
-
-                            if (!TextUtils.isEmpty(mUserName)) {
-                                e.onComplete();
-                            }
-                        }).observeOn(AndroidSchedulers.mainThread())
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(o -> {
-                                }, Throwable::printStackTrace, () -> {
-                                    refreshChat(list, conversationId);
-                                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
-                                });
-                        return;
-                    }
-                    refreshChat(list, conversationId);
-                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
-                }
+//                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
+//                }
             }
         }
 
@@ -636,20 +650,21 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         }
     };
 
-    private void refreshChat(List<EMMessage> list, String userId) {
-        if (!userId.equals("") || chatType == EMMessage.ChatType.GroupChat) {
-            if (tabCommunicationFragment != null) {
-                if (tabCommunicationFragment.myConversationListFragment != null) {
-                    tabCommunicationFragment.myConversationListFragment.refresh();
-                    tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
-                }
+    private void refreshChat(List<EMMessage> list) {
+        if (tabCommunicationFragment != null) {
+            if (tabCommunicationFragment.myConversationListFragment != null) {
+                tabCommunicationFragment.myConversationListFragment.refresh();
+                //TODO 列表刷新
+                //tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
             }
-            for (EMMessage message1 : list) {
-                if (!easeUI.hasForegroundActivies()) {
-                    easeUI.getNotifier().onNewMsg(message1);
-                }
+        }
+
+        for (EMMessage message : list) {
+
+
+            if (!easeUI.hasForegroundActivies()) {
+                easeUI.getNotifier().onNewMsg(message);
             }
-            refreshCommCount();
         }
     }
 
@@ -684,6 +699,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     }
 
     //开启权限列表
+
     public void startAppSetting() {
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", getPackageName(), null);
@@ -748,7 +764,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshCount(OnCountRefreshEvent event) {
-        refreshCommCount();
+        bindBadgeView(event.getUnReadMsgCount());
     }
 
     //实现ConnectionListener接口

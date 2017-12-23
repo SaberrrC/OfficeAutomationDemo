@@ -636,14 +636,16 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         for (EMMessage message : messages) {
             mEmMessage = message;
             String username = null;
+
             if (message.getChatType() == ChatType.GroupChat || message.getChatType() == ChatType.ChatRoom) {
                 username = message.getTo();
             } else {
                 username = message.getFrom();
             }
+
             if (username.equals(toChatUsername) || message.getTo().equals(toChatUsername) || message.conversationId().equals(toChatUsername)) {
                 messageList.refreshSelectLast();
-                EaseUI.getInstance().getNotifier().vibrateAndPlayTone(message);
+//                EaseUI.getInstance().getNotifier().vibrateAndPlayTone(message);
                 conversation.markMessageAsRead(message.getMsgId());
             } else {
                 EaseUI.getInstance().getNotifier().onNewMsg(message);

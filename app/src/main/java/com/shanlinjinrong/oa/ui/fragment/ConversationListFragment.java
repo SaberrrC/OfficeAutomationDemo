@@ -24,7 +24,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
-import com.shanlinjinrong.oa.ui.fragment.event.OnCountRefreshEvent;
+import com.hyphenate.easeui.event.OnCountRefreshEvent;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,12 +53,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
             public void accept(Object o) throws Exception {
                 reConnection();
             }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-            }
-        });
+        }, Throwable::printStackTrace);
     }
 
     private void reConnection() {
@@ -78,36 +73,32 @@ public class ConversationListFragment extends EaseConversationListFragment {
 
         // register context menu
         registerForContextMenu(conversationListView);
-        conversationListView.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                long currentTime = Calendar.getInstance().getTimeInMillis();
-                if (currentTime - lastClickTime < 1000) {
-                    lastClickTime = currentTime;
-                    return;
-                }
+        conversationListView.setOnItemClickListener((parent, view, position, id) -> {
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (currentTime - lastClickTime < 1000) {
                 lastClickTime = currentTime;
-                EMConversation conversation = conversationListView.getItem(position);
-                String username = conversation.conversationId();
-                if (username.equals(EMClient.getInstance().getCurrentUser()))
-                    Toast.makeText(getActivity(), R.string.Cant_chat_with_yourself, Toast.LENGTH_SHORT).show();
-                else {
-                    // start chat acitivity
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    if (conversation.isGroup()) {
-                        if (conversation.getType() == EMConversationType.ChatRoom) {
-                            // it's group chat
-                            intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
-                        } else {
-                            intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
-                        }
-
+                return;
+            }
+            lastClickTime = currentTime;
+            EMConversation conversation = conversationListView.getItem(position);
+            String username = conversation.conversationId();
+            if (username.equals(EMClient.getInstance().getCurrentUser()))
+                Toast.makeText(getActivity(), R.string.Cant_chat_with_yourself, Toast.LENGTH_SHORT).show();
+            else {
+                // start chat acitivity
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                if (conversation.isGroup()) {
+                    if (conversation.getType() == EMConversationType.ChatRoom) {
+                        // it's group chat
+                        intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
+                    } else {
+                        intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
                     }
-                    // it's single chat
-                    intent.putExtra(Constant.EXTRA_USER_ID, username);
-                    startActivity(intent);
+
                 }
+                // it's single chat
+                intent.putExtra(Constant.EXTRA_USER_ID, username);
+                startActivity(intent);
             }
         });
         super.setUpView();

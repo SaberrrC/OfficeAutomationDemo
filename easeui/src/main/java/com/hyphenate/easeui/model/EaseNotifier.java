@@ -25,10 +25,12 @@ import android.os.Build;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.EaseUI.EaseSettingsProvider;
 import com.hyphenate.easeui.UserDetailsBean;
@@ -144,17 +146,16 @@ public class EaseNotifier {
             return;
         }
         EaseSettingsProvider settingsProvider = EaseUI.getInstance().getSettingsProvider();
+
         if (!settingsProvider.isMsgNotifyAllowed(message)) {
             return;
         }
 
         // check if app running background
         if (!EasyUtils.isAppRunningForeground(appContext)) {
-            EMLog.d(TAG, "app is running in backgroud");
             sendNotification(message, false);
         } else {
             sendNotification(message, true);
-
         }
 
         vibrateAndPlayTone(message);
@@ -258,7 +259,7 @@ public class EaseNotifier {
                             httpParams.putHeaders("token", token);
                             httpParams.putHeaders("uid", uid);
                             //TODO 生产
-                            kjHttp.get("http://testoa.shanlinjinrong.com/webApi/user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
+                            kjHttp.get(EaseConstant.PHP_URL + "user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
 
                                 @Override
                                 public void onFailure(int errorNo, String strMsg) {
@@ -436,27 +437,17 @@ public class EaseNotifier {
     /**
      * vibrate and  play tone
      */
+    //TODO  播放声音跟震动
     public void vibrateAndPlayTone(EMMessage message) {
-        if (message != null) {
-            if (EaseCommonUtils.isSilentMessage(message)) {
-                return;
-            }
-        }
-
         if (System.currentTimeMillis() - lastNotifiyTime < 1000) {
-            // received new messages within 2 seconds, skip play ringtone
             return;
         }
 
         try {
             lastNotifiyTime = System.currentTimeMillis();
 
-            // check if in silent mode
-            if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
-                EMLog.e(TAG, "in slient mode now");
-                return;
-            }
             EaseSettingsProvider settingsProvider = EaseUI.getInstance().getSettingsProvider();
+
             if (settingsProvider.isMsgVibrateAllowed(message)) {
                 long[] pattern = new long[]{0, 180, 80, 120};
                 vibrator.vibrate(pattern, -1);
@@ -468,19 +459,14 @@ public class EaseNotifier {
 
                     ringtone = RingtoneManager.getRingtone(appContext, notificationUri);
                     if (ringtone == null) {
-                        EMLog.d(TAG, "cant find ringtone at:" + notificationUri.getPath());
                         return;
                     }
                 }
 
                 if (!ringtone.isPlaying()) {
                     String vendor = Build.MANUFACTURER;
-
                     ringtone.play();
-                    // for samsung S3, we meet a bug that the phone will
-                    // continue ringtone without stop
-                    // so add below special handler to stop it after 3s if
-                    // needed
+
                     if (vendor != null && vendor.toLowerCase().contains("samsung")) {
                         Thread ctlThread = new Thread() {
                             public void run() {
@@ -493,7 +479,7 @@ public class EaseNotifier {
                                 }
                             }
                         };
-                        ctlThread.run();
+                        ctlThread.start();
                     }
                 }
             }

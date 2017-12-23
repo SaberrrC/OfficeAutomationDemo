@@ -101,33 +101,40 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
         });
     }
 
+    List<Pair<Long, EMConversation>> sortList = new ArrayList<>();
+    List<EMConversation>             list     = new ArrayList<>();
+
+
+    //TODO 卡顿
     public List<EMConversation> loadConversationList() {
         // get all conversations
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
-        if (conversations.isEmpty()) {
-        }
-        List<Pair<Long, EMConversation>> sortList = new ArrayList<>();
+        sortList.clear();
         synchronized (conversations) {
             for (EMConversation conversation : conversations.values()) {
                 if (conversation.getAllMessages().size() != 0) {
-                    //java.lang.NullPointerException: Attempt to invoke virtual method
-                    // 'long com.hyphenate.chat.EMMessage.getMsgTime()' on a null object reference
-                    sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
+                    sortList.add(new Pair<>(conversation.getLastMessage().getMsgTime(), conversation));
                 }
             }
         }
-        List<EMConversation> list = new ArrayList<EMConversation>();
+        list.clear();
         for (Pair<Long, EMConversation> sortItem : sortList) {
             list.add(sortItem.second);
         }
+
         int tempCount = 0;
         for (int i = 0; i < list.size(); i++) {
             int size = list.get(i).getUnreadMsgCount();
             tempCount = tempCount + size;
         }
-        mView.bindBadgeView(tempCount);
+
+
+//        mView.bindBadgeView(tempCount);
         return list;
     }
+
+
+
 
 
     @Override

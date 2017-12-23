@@ -17,8 +17,6 @@ public interface MainControllerContract {
 
         void loadUnReadMsgEmpty(); //加载未读消息条数为0
 
-        void bindBadgeView(int msgCount);
-
         void startAppSetting();
 
         void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean);

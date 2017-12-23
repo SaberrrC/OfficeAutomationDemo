@@ -18,6 +18,7 @@ import android.webkit.WebView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
+import com.github.moduth.blockcanary.BlockCanary;
 import com.hyphenate.easeui.crash.Cockroach;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
@@ -30,6 +31,8 @@ import com.shanlinjinrong.oa.ui.base.dagger.component.AppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerAppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.module.AppManagerModule;
 import com.shanlinjinrong.oa.ui.base.dagger.module.KjHttpModule;
+import com.shanlinjinrong.oa.utils.AppBlockCanaryContext;
+import com.shanlinjinrong.oa.utils.ScreenUtils;
 import com.shanlinjinrong.oa.utils.ToastManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -109,7 +112,7 @@ public class AppManager extends MultiDexApplication {
         Fresco.initialize(AppManager.mContext);
 
         //初始化讯飞语音
-        SpeechUtility.createUtility(AppManager.mContext, SpeechConstant.APPID + "=59ae7651");
+        // SpeechUtility.createUtility(AppManager.mContext, SpeechConstant.APPID + "=59ae7651");
 
         //极光初始化+
         BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(
@@ -119,6 +122,7 @@ public class AppManager extends MultiDexApplication {
         builder.notificationDefaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE |
                 Notification.DEFAULT_LIGHTS;
         JPushInterface.setPushNotificationBuilder(1, builder);
+
         // 设置为铃声与震动都要
         JPushInterface.setDebugMode(true);
         JPushInterface.init(AppManager.mContext);
@@ -153,6 +157,10 @@ public class AppManager extends MultiDexApplication {
 
         //性能魔方
         Mmtrix.withApplicationToken("b6e5828c2a8defbee75d5b0a9473d115").withCrashReportingEnabled(true).start(this);
+//        }
+
+        //blockCanary
+        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
         initAppComponent();
         File cacheFile = new File(this.getCacheDir(), "cache_path_name");

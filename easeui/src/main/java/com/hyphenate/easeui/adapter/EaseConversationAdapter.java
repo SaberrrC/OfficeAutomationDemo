@@ -47,7 +47,6 @@ import java.util.List;
  * conversation list adapter
  */
 
-//TODO 最外边列表展示 Adapter
 public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     private static final String TAG = "ChatAllHistoryAdapter";
     private List<EMConversation> conversationList;

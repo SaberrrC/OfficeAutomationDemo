@@ -1,8 +1,11 @@
 package com.hyphenate.easeui.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,12 +21,28 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.UserDetailsBean;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.event.OnCountRefreshEvent;
 import com.hyphenate.easeui.widget.EaseConversationList;
+import com.hyphenate.exceptions.HyphenateException;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.kymjs.kjframe.KJHttp;
+import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpConfig;
+import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,22 +51,40 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.internal.schedulers.NewThreadScheduler;
+import rx.schedulers.Schedulers;
+
 /**
  * conversation list fragment
  */
 public class EaseConversationListFragment extends EaseBaseFragment {
     private final static int MSG_REFRESH = 2;
-    protected EditText query;
+    protected EditText    query;
     protected ImageButton clearSearch;
-    protected boolean hidden;
+    protected boolean     hidden;
     protected List<EMConversation> conversationList = new ArrayList<EMConversation>();
-    public EaseConversationList conversationListView;
-    protected FrameLayout errorItemContainer;
+    public    EaseConversationList conversationListView;
+    protected FrameLayout          errorItemContainer;
 
     protected boolean isConflict;
 
     private TextView tvErrorView;
-    private long lastClickTime = 0;
+    private       long lastClickTime = 0;
+    private final int  REFRESH_DATA  = -3;
+    private boolean mIsSetup;
+    private List<EMConversation> list                       = new ArrayList<>();
+    private List<EMConversation> conversationIncompleteList = new ArrayList<>();
+
+    private static final String APP_CONFIG              = "app_config";
+    public static final  String DEFAULT_ARGUMENTS_VALUE = "";
+    private EMConversation emConversation;
+    Context mContext;
+    private int    tempCount;
+    private String userCode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +93,10 @@ public class EaseConversationListFragment extends EaseBaseFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        mContext = getActivity();
+        if (!EventBus.getDefault().isRegistered(mContext)) {
+            EventBus.getDefault().register(mContext);
+        }
         if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
         super.onActivityCreated(savedInstanceState);
@@ -74,7 +115,9 @@ public class EaseConversationListFragment extends EaseBaseFragment {
 
     @Override
     protected void setUpView() {
-        conversationList.addAll(loadConversationList());
+//        conversationList.addAll(loadConversationList());
+//        conversationListView.init(conversationList);
+        loadConversationList();
         conversationListView.init(conversationList);
 
         if (listItemClickListener != null) {
@@ -127,8 +170,12 @@ public class EaseConversationListFragment extends EaseBaseFragment {
             handler.sendEmptyMessage(1);
         }
     };
-    private EaseConversationListItemClickListener listItemClickListener;
 
+
+    private EaseConversationListItemClickListener listItemClickListener;
+    private OnCountRefreshEvent onCountRefreshEvent = new OnCountRefreshEvent();
+
+    @SuppressLint("HandlerLeak")
     protected Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
@@ -140,9 +187,38 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                     break;
 
                 case MSG_REFRESH: {
-                    conversationList.clear();
-                    conversationList.addAll(loadConversationList());
-                    conversationListView.refresh();
+
+//                    if (mIsSetup){
+//                    conversationList.clear();
+//                    conversationList.addAll(loadConversationList());
+//                    conversationListView.refresh();
+//                    }
+
+                    loadConversationList();
+
+                    break;
+                }
+                case REFRESH_DATA:
+                    if (mIsSetup) {
+                        conversationList.clear();
+                        conversationList.addAll(list);
+                        conversationListView.refresh();
+                    }
+
+                    //刷新badge
+                    try {
+                        tempCount = 0;
+                        for (int i = 0; i < list.size(); i++) {
+                            int size = list.get(i).getUnreadMsgCount();
+                            tempCount = tempCount + size;
+                        }
+                        onCountRefreshEvent.setUnReadMsgCount(tempCount);
+                        EventBus.getDefault().post(onCountRefreshEvent);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    //错误页面展示
                     try {
                         if (conversationList != null && conversationList.size() == 0) {
                             tvErrorView.setVisibility(View.VISIBLE);
@@ -153,7 +229,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                         e.printStackTrace();
                     }
                     break;
-                }
+
                 default:
                     break;
             }
@@ -190,7 +266,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
      *
      * @return +
      */
-    protected List<EMConversation>  loadConversationList() {
+    public int loadConversationList() {
         // get all conversations
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         List<Pair<Long, EMConversation>> sortList = new ArrayList<Pair<Long, EMConversation>>();
@@ -201,7 +277,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
         synchronized (conversations) {
             for (EMConversation conversation : conversations.values()) {
                 if (conversation.getAllMessages().size() != 0) {
-                    sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
+                    sortList.add(new Pair<>(conversation.getLastMessage().getMsgTime(), conversation));
                 }
             }
         }
@@ -211,11 +287,166 @@ public class EaseConversationListFragment extends EaseBaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        List<EMConversation> list = new ArrayList<>();
+        list.clear();
         for (Pair<Long, EMConversation> sortItem : sortList) {
             list.add(sortItem.second);
         }
-        return list;
+
+        try {
+            Observable.create(new Observable.OnSubscribe<Object>() {
+                @Override
+                public void call(Subscriber<? super Object> subscriber) {
+                    //过滤
+                    conversationIncompleteList.clear();
+                    for (int i = 0; i < list.size(); i++) {
+                        EMMessage lastMessage = list.get(i).getLastMessage();
+                        if (lastMessage.getChatType() == EMMessage.ChatType.GroupChat) {
+                            String nickName = FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.conversationId());
+                            if (TextUtils.isEmpty(nickName) || nickName.equals("匿名群组")) {
+                                EMConversation emConversation = list.get(i);
+                                conversationIncompleteList.add(emConversation);
+                            }
+
+                        } else if (lastMessage.getChatType() == EMMessage.ChatType.Chat) {
+                            if (lastMessage.conversationId().contains("admin") || lastMessage.conversationId().contains("notice")) {
+                                continue;
+                            }
+
+                            String conversationId = lastMessage.conversationId().substring(0, 12);
+                            String nickName = FriendsInfoCacheSvc.getInstance(getContext()).getNickName(conversationId);
+                            if (TextUtils.isEmpty(nickName) || nickName.equals("匿名用户")) {
+                                EMConversation emConversation = list.get(i);
+                                conversationIncompleteList.add(emConversation);
+                            }
+                        }
+                    }
+
+                    if (conversationIncompleteList.size() != 0) {
+                        list.removeAll(conversationIncompleteList);
+                    }
+
+                    if (!mIsSetup) {
+                        conversationList.clear();
+                        conversationList.addAll(list);
+                        conversationListView.refresh();
+                        mIsSetup = true;
+                    } else {
+                        if (!handler.hasMessages(REFRESH_DATA)) {
+                            handler.sendEmptyMessage(REFRESH_DATA);
+                        }
+                    }
+
+                    //加载未刷新的
+                    for (int i = 0; i < conversationIncompleteList.size(); i++) {
+                        emConversation = conversationIncompleteList.get(i);
+                        EMMessage lastMessage = conversationIncompleteList.get(i).getLastMessage();
+                        if (lastMessage.getChatType() == EMMessage.ChatType.GroupChat) {
+                            try {
+                                EMGroup groupFromServer = EMClient.getInstance().groupManager().getGroupFromServer(lastMessage.conversationId());
+                                FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(groupFromServer.getGroupId(), groupFromServer.getGroupName(), ""));
+                                list.add(0, conversationIncompleteList.get(i));
+                                if (!handler.hasMessages(REFRESH_DATA)) {
+                                    handler.sendEmptyMessage(REFRESH_DATA);
+                                }
+                            } catch (HyphenateException e) {
+                                e.printStackTrace();
+                                try {
+                                    FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(lastMessage.conversationId(), "匿名群组", ""));
+                                    list.add(0, conversationIncompleteList.get(i));
+                                    if (!handler.hasMessages(REFRESH_DATA)) {
+                                        handler.sendEmptyMessage(REFRESH_DATA);
+                                    }
+                                } catch (Throwable throwable) {
+                                    throwable.printStackTrace();
+                                }
+                            }
+                        } else if (lastMessage.getChatType() == EMMessage.ChatType.Chat) {
+                            String conversationId = lastMessage.conversationId().substring(0, 12);
+                            userCode = conversationId.substring(3, conversationId.length());
+                            String token = getContext().getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_private_token", DEFAULT_ARGUMENTS_VALUE);
+                            String uid = getContext().getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_user_uid", DEFAULT_ARGUMENTS_VALUE);
+                            KJHttp kjHttp = new KJHttp();
+                            HttpConfig config = new HttpConfig();
+                            HttpConfig.TIMEOUT = 30000;
+                            kjHttp.setConfig(config);
+                            kjHttp.cleanCache();
+                            HttpParams httpParams = new HttpParams();
+                            httpParams.putHeaders("token", token);
+                            httpParams.putHeaders("uid", uid);
+                            //TODO 生产
+                            kjHttp.get("http://testoa.shanlinjinrong.com/webApi/user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
+
+                                @Override
+                                public void onFailure(int errorNo, String strMsg) {
+                                    super.onFailure(errorNo, strMsg);
+                                    try {
+                                        FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userCode, "匿名用户", ""));
+                                        list.add(0, emConversation);
+                                        if (!handler.hasMessages(REFRESH_DATA)) {
+                                            handler.sendEmptyMessage(REFRESH_DATA);
+                                        }
+                                    } catch (Throwable e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void onSuccess(String t) {
+                                    super.onSuccess(t);
+                                    final UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
+                                    if (userDetailsBean != null) {
+                                        try {
+                                            switch (userDetailsBean.getCode()) {
+                                                case 200:
+                                                    Observable.create(new Observable.OnSubscribe<Object>() {
+                                                        @Override
+                                                        public void call(Subscriber<? super Object> subscriber) {
+                                                            FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
+                                                            list.add(0, emConversation);
+                                                            if (!handler.hasMessages(REFRESH_DATA)) {
+                                                                handler.sendEmptyMessage(REFRESH_DATA);
+                                                            }
+                                                        }
+                                                    }).subscribeOn(Schedulers.io())
+                                                            .subscribe(new Action1<Object>() {
+                                                                @Override
+                                                                public void call(Object o) {
+
+                                                                }
+                                                            }, new Action1<Throwable>() {
+                                                                @Override
+                                                                public void call(Throwable throwable) {
+                                                                    throwable.printStackTrace();
+                                                                }
+                                                            });
+                                                    break;
+                                            }
+                                        } catch (Throwable e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                        }
+                    });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        return tempCount;
     }
 
     /**
@@ -259,12 +490,12 @@ public class EaseConversationListFragment extends EaseBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!hidden) {
-            refresh();
-        }
-        conversationList.clear();
-        conversationList.addAll(loadConversationList());
-        conversationListView.refresh();
+//        if (!hidden) {
+//            refresh();
+//        }
+//        conversationList.clear();
+//        conversationList.addAll(loadConversationList());
+//        conversationListView.refresh();
     }
 
     @Override
@@ -299,4 +530,20 @@ public class EaseConversationListFragment extends EaseBaseFragment {
         this.listItemClickListener = listItemClickListener;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData() {
+        if (mIsSetup) {
+            conversationList.clear();
+            conversationList.addAll(list);
+            conversationListView.refresh();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(getContext())) {
+            EventBus.getDefault().unregister(getContext());
+        }
+    }
 }
