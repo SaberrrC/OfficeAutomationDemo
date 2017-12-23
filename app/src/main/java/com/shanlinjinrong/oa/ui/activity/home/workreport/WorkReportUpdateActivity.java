@@ -491,6 +491,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.ll_select_date:
                 showDoneDatePicker(mDate);

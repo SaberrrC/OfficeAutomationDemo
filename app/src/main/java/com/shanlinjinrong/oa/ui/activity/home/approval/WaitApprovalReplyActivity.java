@@ -111,6 +111,7 @@ public class WaitApprovalReplyActivity extends HttpBaseActivity<WaitApprovalRepl
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 if ((!(mEtReply.getText().toString().equals("")))) {
                     showTip("是否放弃编辑", "确定", "取消");
                 } else {

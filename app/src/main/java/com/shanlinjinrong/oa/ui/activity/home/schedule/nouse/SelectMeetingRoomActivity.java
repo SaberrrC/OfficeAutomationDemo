@@ -118,6 +118,7 @@ public class SelectMeetingRoomActivity extends BaseActivity {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 showDoneDatePicker(mTvSelectMeetingRoom);
             }
         });
@@ -229,6 +230,7 @@ public class SelectMeetingRoomActivity extends BaseActivity {
                             lastClickTime = currentTime;
                             return;
                         }
+                        lastClickTime = currentTime;
                         showLocation(detailLocation);
                     }
                 });
@@ -295,6 +297,7 @@ public class SelectMeetingRoomActivity extends BaseActivity {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 checkMRAndGoCR();
             }
         });

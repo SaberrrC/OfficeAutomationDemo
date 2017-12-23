@@ -110,6 +110,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class));
             }
         });

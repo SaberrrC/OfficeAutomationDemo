@@ -197,6 +197,7 @@ public class MeLaunchNoticeActivity extends BaseActivity {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 showDetailDialog("0", al.getInfo().getTime_before(), al.getInfo().getTime_after(),
                         al.getInfo().getUsername(), "");
             }
@@ -271,6 +272,7 @@ public class MeLaunchNoticeActivity extends BaseActivity {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 showDetailDialog(approvers.getApprovalStatus(), approvers.getTime_before(), approvers.getTime_after(), approvers.getUser(), approvers.getReply());
             }
         });

@@ -210,6 +210,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         int id = view.getId();
         if (id == R.id.btn_send) {
             if (listener != null) {

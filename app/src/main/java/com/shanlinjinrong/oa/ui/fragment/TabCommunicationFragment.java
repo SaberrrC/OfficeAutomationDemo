@@ -113,6 +113,7 @@ public class TabCommunicationFragment extends BaseFragment {
                 lastClickTime = currentTime;
                 return;
             }
+            lastClickTime = currentTime;
             if (conversation.isGroup()) {
                 String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
                 startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)

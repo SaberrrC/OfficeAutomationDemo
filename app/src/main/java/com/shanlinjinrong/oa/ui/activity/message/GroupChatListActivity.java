@@ -89,6 +89,7 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                 lastClickTime = currentTime;
                 return;
             }
+            lastClickTime = currentTime;
             Intent intent = new Intent(this, SelectedGroupContactActivity.class);
             intent.putExtra(Constants.SELECTEDTYEPE, 1);
             startActivityForResult(intent, REQUESTCODE);

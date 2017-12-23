@@ -131,6 +131,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.search_et_cancle:
                 recyclerView.setVisibility(View.VISIBLE);

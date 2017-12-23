@@ -144,6 +144,7 @@ public class AppManager extends MultiDexApplication {
             CrashReport.initCrashReport(AppManager.mContext, "d93608e360", true, strategy);
         } else {
             CrashReport.initCrashReport(AppManager.mContext, "72d31f8f77", false, strategy);
+            initCrash();
         }
 
         //解决7.0拍照文件uri闪退问题
@@ -169,7 +170,6 @@ public class AppManager extends MultiDexApplication {
         File cacheFile = new File(this.getCacheDir(), "cache_path_name");
         CacheWebView.getCacheConfig().init(this, cacheFile.getAbsolutePath(), 1024 * 1024 * 20, 1024 * 1024 * 5)
                 .enableDebug(true);//20M 磁盘缓存空间,5M 内存缓存空间
-        initCrash();
     }
 
     private void initCrash() {

@@ -56,6 +56,7 @@ public class MaskDialog extends Dialog {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 dismiss();
             }
         });

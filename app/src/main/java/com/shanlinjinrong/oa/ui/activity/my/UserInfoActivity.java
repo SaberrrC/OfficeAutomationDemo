@@ -182,6 +182,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.user_portrait_box:
                 selectPortrait();

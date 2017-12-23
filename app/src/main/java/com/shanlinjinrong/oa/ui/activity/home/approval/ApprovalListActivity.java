@@ -715,6 +715,7 @@ public class ApprovalListActivity extends HttpBaseActivity<ApprovalListPresenter
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.toolbar_text_btn:
                 startActivity(new Intent(this, LaunchApprovalActivity.class));

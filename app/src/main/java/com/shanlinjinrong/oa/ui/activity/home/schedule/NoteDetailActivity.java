@@ -177,6 +177,7 @@ LogUtils.e("200-->"+jo.getString("time"));
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 Intent intent = new Intent();
                 intent.setClass(NoteDetailActivity.this, CreateNoteActivity.class);
                 intent.putExtra("note_id", note_id);

@@ -162,6 +162,7 @@ public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOff
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 if ((!(mEtContent.getText().toString().equals("")))) {
                     showBackTip("是否放弃编辑", "确定", "取消");
                 } else {
@@ -192,6 +193,7 @@ public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOff
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.btn_voice_input:
                 showDialog();

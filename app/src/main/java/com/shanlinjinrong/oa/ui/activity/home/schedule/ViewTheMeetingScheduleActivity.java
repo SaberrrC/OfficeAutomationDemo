@@ -95,6 +95,7 @@ public class ViewTheMeetingScheduleActivity extends BaseActivity {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 showDoneDatePicker(dayArrangement);
             }
         });

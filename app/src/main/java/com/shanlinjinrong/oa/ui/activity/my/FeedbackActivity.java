@@ -100,6 +100,7 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 if (feedbackText.getText().toString().equals("")) {
                     finish();
                 } else {

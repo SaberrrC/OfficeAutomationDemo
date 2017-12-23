@@ -121,6 +121,7 @@ public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> im
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 if (mTvNoteDate.getText().toString().trim().equals("点击选择日期")) {
                     showToast("请选择日期");
                 } else {
@@ -273,6 +274,7 @@ public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> im
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.tv_note_date:
                 showDoneDatePicker(mTvNoteDate);

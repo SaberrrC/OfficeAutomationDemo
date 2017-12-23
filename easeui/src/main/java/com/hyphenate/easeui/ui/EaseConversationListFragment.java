@@ -90,6 +90,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                         lastClickTime = currentTime;
                         return;
                     }
+                    lastClickTime = currentTime;
                     EMConversation conversation = conversationListView.getItem(position);
                     listItemClickListener.onListItemClicked(conversation);
                 }

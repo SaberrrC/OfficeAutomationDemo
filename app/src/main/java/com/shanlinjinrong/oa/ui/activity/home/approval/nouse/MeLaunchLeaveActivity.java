@@ -402,6 +402,7 @@ public class MeLaunchLeaveActivity extends BaseActivity {
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.iv_approval_pass:
                 Intent i = new Intent(this, WaitApprovalReplyActivity.class);

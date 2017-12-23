@@ -24,11 +24,10 @@ import com.dsw.calendar.entity.CalendarInfo;
 import com.dsw.calendar.inter.ListenerMove;
 import com.dsw.calendar.views.CircleCalendarView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.model.ScheduleRvItemData;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.adapter.CalendarRvAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.ScheduleActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.presenter.ScheduleActivityPresenter;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.adapter.CalendarRvAdapter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.Utils;
@@ -395,6 +394,7 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 showDetailDialog();
             }
         });
@@ -427,6 +427,7 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
                         lastClickTime = currentTime;
                         return;
                     }
+                    lastClickTime = currentTime;
                     Intent intent = new Intent(ScheduleActivity.this, SelectOrdinaryMeetingRoomActivity.class);
                     intent.putExtra("meetingType", "1");
                     startActivity(intent);
@@ -441,6 +442,7 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
                         lastClickTime = currentTime;
                         return;
                     }
+                    lastClickTime = currentTime;
                     Intent intent = new Intent(ScheduleActivity.this, SelectVedioMeetingRoomActivity.class);
                     intent.putExtra("meetingType", "2");
                     startActivity(intent);
@@ -455,6 +457,7 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
                         lastClickTime = currentTime;
                         return;
                     }
+                    lastClickTime = currentTime;
                     startActivity(new Intent(ScheduleActivity.this, CreateNoteActivity.class));
                     popupWindow.dismiss();
                 }

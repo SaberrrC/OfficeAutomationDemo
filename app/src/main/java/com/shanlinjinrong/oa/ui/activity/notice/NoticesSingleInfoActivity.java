@@ -117,6 +117,7 @@ public class NoticesSingleInfoActivity extends HttpBaseActivity<NoticesSingleInf
                             lastClickTime = currentTime;
                             return;
                         }
+                        lastClickTime = currentTime;
                         Intent intent = new Intent(NoticesSingleInfoActivity.this,
                                 ShowPictureActivity.class);
                         try {

@@ -87,6 +87,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 EMConversation conversation = conversationListView.getItem(position);
                 String username = conversation.conversationId();
                 if (username.equals(EMClient.getInstance().getCurrentUser()))

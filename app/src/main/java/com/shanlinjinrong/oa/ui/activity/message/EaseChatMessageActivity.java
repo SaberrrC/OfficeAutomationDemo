@@ -225,6 +225,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 Intent intent = new Intent(this, EaseChatDetailsActivity.class);
                 if (mChatType == EaseConstant.CHATTYPE_GROUP) {
                     intent.putExtra("chatType", true);

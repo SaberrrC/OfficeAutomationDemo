@@ -110,6 +110,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                 lastClickTime = currentTime;
                 return;
             }
+            lastClickTime = currentTime;
             if (selectedContacts.size() > 0) {
                 //-------------
                 appManager.setJoinhandler(mJoinHandler);
@@ -342,6 +343,7 @@ public class SelectJoinPeopleActivity extends BaseActivity {
                 lastClickTime = currentTime;
                 return;
             }
+            lastClickTime = currentTime;
             Intent intent = new Intent();
             intent.putParcelableArrayListExtra("contacts", selectedContacts);
             setResult(RESULT_OK, intent);

@@ -341,6 +341,7 @@ public class CreateVedioMeetingActivity extends BaseActivity {
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             //点击选择会议日期
             case R.id.tv_ordiny_meet_date:

@@ -127,6 +127,7 @@ public class TabMeFragment extends BaseFragment {
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.user_info://用户信息
                 startActivity(new Intent(getActivity(), UserInfoActivity.class));

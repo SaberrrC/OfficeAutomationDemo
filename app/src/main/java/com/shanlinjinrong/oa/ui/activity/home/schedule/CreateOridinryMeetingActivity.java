@@ -218,6 +218,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 if (!StringUtils.isBlank(mEtMeetingTheme.getText().toString().trim()) || !tvOridinyMeetDate.getText().toString().trim().equals("点击选择会议日期")) {
                     showTip("是否放弃编辑", "确定", "取消");
                 } else {
@@ -328,6 +329,7 @@ public class CreateOridinryMeetingActivity extends BaseActivity {
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             //点击选择会议日期
             case R.id.tv_ordiny_meet_date:

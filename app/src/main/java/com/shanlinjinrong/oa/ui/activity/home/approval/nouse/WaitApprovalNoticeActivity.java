@@ -177,6 +177,7 @@ public class WaitApprovalNoticeActivity extends BaseActivity {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 showDetailDialog("0", an.getCreate_date(), an.getCreate_time(),
                         an.getUsername(), an.getTitle());
             }

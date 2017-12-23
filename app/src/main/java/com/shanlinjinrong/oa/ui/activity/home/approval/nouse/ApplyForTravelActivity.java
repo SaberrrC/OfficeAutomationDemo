@@ -280,6 +280,7 @@ public class ApplyForTravelActivity extends BaseActivity {
                     lastClickTime = currentTime;
                     return;
                 }
+                lastClickTime = currentTime;
                 showDoneDatePicker(tvStart, false);
             }
         });

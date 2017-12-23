@@ -133,6 +133,7 @@ public class TabHomePageFragment extends BaseFragment {
             lastClickTime = currentTime;
             return;
         }
+        lastClickTime = currentTime;
         Intent intent = null;
         switch (view.getId()) {
             case R.id.rl_schedule_my_mail:
