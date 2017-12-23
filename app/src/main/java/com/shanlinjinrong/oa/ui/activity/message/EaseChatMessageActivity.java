@@ -319,7 +319,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         super.onResume();
         try {
             EMGroup group = EMClient.getInstance().groupManager().getGroup(getIntent().getStringExtra("u_id"));
-            final String text = "群聊(" + group.getMembers().size() + ")";
+            int i = group.getMembers().size() + 1;
+            final String text = "群聊(" + i + ")";
             mTvTitle.setText(text);
         } catch (Exception e) {
             e.printStackTrace();
