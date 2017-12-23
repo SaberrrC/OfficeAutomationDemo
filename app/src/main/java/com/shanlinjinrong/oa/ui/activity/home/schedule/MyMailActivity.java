@@ -34,18 +34,18 @@ import ren.yale.android.cachewebviewlib.WebViewCache;
 public class MyMailActivity extends BaseActivity {
     private static final String APP_CACAHE_DIRNAME = "/webcache";
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TextView     tvTitle;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar      toolbar;
     @BindView(R.id.web_view)
     CacheWebView webView;
     @BindView(R.id.tv_error_layout)
-    TextView tvErrorLayout;
+    TextView     tvErrorLayout;
 
     @BindView(R.id.rl_loadding)
     RelativeLayout rlloadding;
     @BindView(R.id.progress_bar)
-    ProgressBar progress_bar;
+    ProgressBar    progress_bar;
     private WebViewClient mWebViewClient;
 
     @Override
@@ -60,60 +60,58 @@ public class MyMailActivity extends BaseActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
-        {
-            if (webView != null) {
-                webView.getSettings().setJavaScriptEnabled(true);
-                webView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
-                webView.setEnableCache(true);
-                webView.setUserAgent("Android");
-            }
-            mWebViewClient = new WebViewClient() {
-                @Override
-                public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                    super.onPageStarted(view, url, favicon);
-                    rlloadding.setVisibility(View.VISIBLE);
-                    tvErrorLayout.setVisibility(View.VISIBLE);
-                    tvErrorLayout.setText(getString(R.string.loadding));
-                    progress_bar.setVisibility(View.VISIBLE);
-                }
-
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    view.loadUrl(url);
-                    return true;
-                }
-
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        view.loadUrl(request.getUrl().toString());
-                    }
-                    return true;
-                }
-
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    super.onPageFinished(view, url);
-                    rlloadding.setVisibility(View.GONE);
-
-                }
-
-                @Override
-                public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                    super.onReceivedError(view, request, error);
-                    // hideLoadingView();
-                    rlloadding.setVisibility(View.VISIBLE);
-                    progress_bar.setVisibility(View.GONE);
-                    tvErrorLayout.setVisibility(View.VISIBLE);
-                    tvErrorLayout.setText(getString(R.string.net_no_connection));
-                }
-            };
-
-            webView.setWebViewClient(mWebViewClient);
-
-            webView.loadUrl(Api.MY_MAIL + "?time=" + new Date().getTime());
-
-            webView.setWebViewClient(mWebViewClient);
+        if (webView != null) {
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
+            webView.setEnableCache(true);
+            webView.setUserAgent("Android");
         }
+        mWebViewClient = new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                rlloadding.setVisibility(View.VISIBLE);
+                tvErrorLayout.setVisibility(View.VISIBLE);
+                tvErrorLayout.setText(getString(R.string.loadding));
+                progress_bar.setVisibility(View.VISIBLE);
+            }
+
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    view.loadUrl(request.getUrl().toString());
+                }
+                return true;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                rlloadding.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                // hideLoadingView();
+                rlloadding.setVisibility(View.VISIBLE);
+                progress_bar.setVisibility(View.GONE);
+                tvErrorLayout.setVisibility(View.VISIBLE);
+                tvErrorLayout.setText(getString(R.string.net_no_connection));
+            }
+        };
+
+        webView.setWebViewClient(mWebViewClient);
+
+        webView.loadUrl(Api.MY_MAIL + "?time=" + new Date().getTime());
+
+        webView.setWebViewClient(mWebViewClient);
     }
 
     @Override
@@ -133,8 +131,7 @@ public class MyMailActivity extends BaseActivity {
         toolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(toolbar);
         tvTitle.setText("我的邮箱");
-        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
-                Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         tvTitle.setLayoutParams(lp);
 

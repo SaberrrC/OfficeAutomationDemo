@@ -60,7 +60,6 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.activity.message.bean.CallEventBean;
 
 import org.greenrobot.eventbus.EventBus;
@@ -294,22 +293,26 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float[] its = event.values;
-        if (its != null && event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-            //贴近距离感应器的时候 its[0] 返回值为0.0，离开时返回1.0
-            if (its[0] == 0.0) {
-                // 贴近手机 -> 申请设备电源锁
-                if (!localWakeLock.isHeld()) {
-                    localWakeLock.acquire(100 * 60 * 1000L /*10 minutes*/);
-                }
-            } else {
-                // 远离手机 -> 释放设备电源锁
-                if (!localWakeLock.isHeld()) {
-                    localWakeLock.setReferenceCounted(false);
-                    // 释放设备电源锁
-                    localWakeLock.release();
+        try {
+            float[] its = event.values;
+            if (its != null && event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+                //贴近距离感应器的时候 its[0] 返回值为0.0，离开时返回1.0
+                if (its[0] == 0.0) {
+                    // 贴近手机 -> 申请设备电源锁
+                    if (!localWakeLock.isHeld()) {
+                        localWakeLock.acquire(100 * 60 * 1000L /*10 minutes*/);
+                    }
+                } else {
+                    // 远离手机 -> 释放设备电源锁
+                    if (!localWakeLock.isHeld()) {
+                        localWakeLock.setReferenceCounted(false);
+                        // 释放设备电源锁
+                        localWakeLock.release();
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

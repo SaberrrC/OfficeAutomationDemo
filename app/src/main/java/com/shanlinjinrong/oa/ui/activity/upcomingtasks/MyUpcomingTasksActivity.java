@@ -1166,7 +1166,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     bean.setIsChecked(false);
                 }
             }
-            mRvList.setVisibility(View.VISIBLE);.
+            mRvList.setVisibility(View.VISIBLE);
             mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();
         } else {
