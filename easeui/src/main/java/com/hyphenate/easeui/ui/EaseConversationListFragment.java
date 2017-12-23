@@ -120,7 +120,6 @@ public class EaseConversationListFragment extends EaseBaseFragment {
 //        conversationListView.init(conversationList);
         loadConversationList();
         conversationListView.init(conversationList);
-
         if (listItemClickListener != null) {
             conversationListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -188,15 +187,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                     break;
 
                 case MSG_REFRESH: {
-
-//                    if (mIsSetup){
-//                    conversationList.clear();
-//                    conversationList.addAll(loadConversationList());
-//                    conversationListView.refresh();
-//                    }
-
                     loadConversationList();
-
                     break;
                 }
                 case REFRESH_DATA:
@@ -331,7 +322,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                         conversationList.addAll(list);
                         conversationListView.refresh();
                         mIsSetup = true;
-                    } else {
+                    }else {
                         if (!handler.hasMessages(REFRESH_DATA)) {
                             handler.sendEmptyMessage(REFRESH_DATA);
                         }
