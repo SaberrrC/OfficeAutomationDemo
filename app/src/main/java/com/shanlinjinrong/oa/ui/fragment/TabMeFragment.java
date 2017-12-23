@@ -72,8 +72,7 @@ public class TabMeFragment extends BaseFragment {
     private long lastClickTime = 0;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_me_fragment, container, false);
         ButterKnife.bind(this, view);
         if (EventBus.getDefault().isRegistered(this)) {
@@ -90,8 +89,6 @@ public class TabMeFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        displayVersionName();
         if (!TextUtils.isEmpty(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))) {
             Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
                     .placeholder(R.drawable.ease_default_avatar)
@@ -103,10 +100,8 @@ public class TabMeFragment extends BaseFragment {
         }else{
             Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
         }
-
         userName.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_USERNAME));
         position.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_POST_NAME));
-
     }
 
     @Override
@@ -152,12 +147,6 @@ public class TabMeFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), FeedbackActivity.class));
                 break;
             case R.id.btn_update://版本升级
-               /* if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            001);
-                }*/
-//                getNewVersionInfo();
                 applyPermission();
                 break;
             case R.id.btn_about_us://关于我们
@@ -179,29 +168,15 @@ public class TabMeFragment extends BaseFragment {
     private void applyPermission() {
         if (ActivityCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (SharedPreferenceUtils.getShouldAskPermission(getActivity(), "firstshould") &&
-                    ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) == false) {//第一次已被拒绝
+            if (SharedPreferenceUtils.getShouldAskPermission(getActivity(), "firstshould") && !ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//第一次已被拒绝
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("权限开启");
                 builder.setMessage("更新功能无法正常使用，去权限列表开启该权限");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startAppSettig();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
+                builder.setPositiveButton("确定", (dialog, which) -> startAppSettig()).setNegativeButton("取消", (dialog, which) -> {
                 }).show();
             } else {//
-                SharedPreferenceUtils.setShouldAskPermission(getActivity(), "firstshould",
-                        ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE));
-                ActivityCompat.requestPermissions(getActivity(), new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                SharedPreferenceUtils.setShouldAskPermission(getActivity(), "firstshould", ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE));
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
             }
 
         } else {
@@ -210,10 +185,8 @@ public class TabMeFragment extends BaseFragment {
                 public void onNoUpdateAvailable() {
                     Toast.makeText(getContext(), "当前已是最新版本！", Toast.LENGTH_SHORT).show();
                 }
-
                 @Override
                 public void onUpdateAvailable(String s) {
-
                 }
             });
         }
@@ -245,135 +218,6 @@ public class TabMeFragment extends BaseFragment {
 
     @Override
     protected void lazyLoadData() {
-
-    }
-
-    private void getNewVersionInfo() {
-        HttpParams params = new HttpParams();
-        params.put("uid", AppConfig.getAppConfig(getActivity()).getPrivateUid());
-        params.put("token", AppConfig.getAppConfig(getActivity()).getPrivateToken());
-        initKjHttp().post(Api.UPDATE_APP, params, new HttpCallBack() {
-            @Override
-            public void onPreStart() {
-                showLoadingView();
-                super.onPreStart();
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                LogUtils.e("onSuccess-->" + t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            JSONObject data = Api.getDataToJSONObject(jo);
-                            int newVersionCode = Integer.parseInt(
-                                    data.getString("versionCode"));
-                            if (newVersionCode > getLocalVersionCode()) {
-                                showUploadInfo(data.getString("updateTips"),
-                                        data.getString("changeLog"),
-                                        data.getString("apkUrl"));
-                            } else {
-                                showTips("当前为最新版本！");
-                            }
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            catchWarningByCode(Api.getCode(jo));
-                            break;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                LogUtils.e(errorNo + strMsg);
-                catchWarningByCode(errorNo);
-            }
-        });
-    }
-
-    private void showUploadInfo(String updateTips, String uploadLog, final String apkUrl) {
-        @SuppressLint("InflateParams")
-        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.public_dialog, null);
-        TextView title = (TextView) dialogView.findViewById(R.id.title);
-        title.setText(updateTips);
-        TextView message = (TextView) dialogView.findViewById(R.id.message);
-        message.setText(uploadLog);
-
-        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity(),
-                R.style.AppTheme_Dialog).create();
-        alertDialog.setView(dialogView);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "立即更新",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-                        requestRunTimePermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
-                            @Override
-                            public void onGranted() {
-                                if (!FileUtils.isFileExist(Constants.FileUrl.UPDATE_APP)) {
-                                    FileUtils.createSDDir(Constants.FileUrl.UPDATE_APP);
-                                }
-                                UpdateHelper helper = new UpdateHelper(getActivity(), apkUrl);
-                                helper.showUpdateView();
-                            }
-
-                            @Override
-                            public void onDenied() {
-                                showToast("权限被拒绝!请手动设置");
-                            }
-                        });
-
-
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "关闭",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                getResources().getColor(R.color.tab_bar_text_light));
-        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                getResources().getColor(R.color.tab_bar_text_gray));
-    }
-
-
-    private void displayVersionName() {
-      /*  try {
-            versions.setText(getActivity().getPackageManager().getPackageInfo(
-                    getActivity().getPackageName(), 0).versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }*/
-    }
-
-    private int getLocalVersionCode() {
-        int versionCode = -1;
-        try {
-            PackageInfo info = getActivity().getPackageManager().getPackageInfo(
-                    getActivity().getPackageName(), 0);
-            versionCode = info.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return versionCode;
     }
 
     @Override

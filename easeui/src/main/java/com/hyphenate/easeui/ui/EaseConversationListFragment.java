@@ -29,6 +29,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.Friends;
@@ -56,7 +57,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.internal.schedulers.NewThreadScheduler;
 import rx.schedulers.Schedulers;
 
 /**
@@ -67,7 +67,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
     protected EditText    query;
     protected ImageButton clearSearch;
     protected boolean     hidden;
-    protected List<EMConversation> conversationList = new ArrayList<EMConversation>();
+    protected List<EMConversation> conversationList = new ArrayList<>();
     public    EaseConversationList conversationListView;
     protected FrameLayout          errorItemContainer;
 
@@ -375,7 +375,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                             httpParams.putHeaders("token", token);
                             httpParams.putHeaders("uid", uid);
                             //TODO 生产
-                            kjHttp.get("http://testoa.shanlinjinrong.com/webApi/user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
+                            kjHttp.get(EaseConstant.PHP_URL + "user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
 
                                 @Override
                                 public void onFailure(int errorNo, String strMsg) {

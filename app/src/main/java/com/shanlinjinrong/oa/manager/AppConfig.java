@@ -14,13 +14,13 @@ import com.shanlinjinrong.oa.model.User;
  */
 public class AppConfig {
 
-    private static final String IS_AUTO_LOGIN = "is_auto_login";
-    public static final String PREF_KEY_YX_TOKEN = "yx_token";
+    private static final String IS_AUTO_LOGIN     = "is_auto_login";
+    public static final  String PREF_KEY_YX_TOKEN = "yx_token";
 
-    private Context context;
+    private        Context   context;
     private static AppConfig appConfig;
 
-    private static final String APP_CONFIG = "app_config";
+    public static final String APP_CONFIG = "app_config";
 
     /**
      * 字符串参数默认值，判断需要判断此值，而不是""
@@ -38,57 +38,57 @@ public class AppConfig {
     public static final String BASE_URL = "base_url";
 
     //department
-    public static final String PREF_KEY_DEPARTMENT = "pref_key_user_departmentId";
+    public static final String PREF_KEY_DEPARTMENT      = "pref_key_user_departmentId";
     //oid
-    public static final String PREF_KEY_OID = "pref_key_user_oid";
+    public static final String PREF_KEY_OID             = "pref_key_user_oid";
     //isleader
-    public static final String PREF_KEY_ISLEADER = "pref_key_isLeader";
+    public static final String PREF_KEY_ISLEADER        = "pref_key_isLeader";
     //user uuid
-    public static final String PREF_KEY_USER_UID = "pref_key_user_uid";
+    public static final String PREF_KEY_USER_UID        = "pref_key_user_uid";
     //user token
-    public static final String PREF_KEY_TOKEN = "pref_key_private_token";
+    public static final String PREF_KEY_TOKEN           = "pref_key_private_token";
     //user email
-    public static final String PREF_KEY_USER_EMAIL = "pref_key_user_email";
+    public static final String PREF_KEY_USER_EMAIL      = "pref_key_user_email";
     //头像
-    public static final String PREF_KEY_PORTRAITS = "pref_key_private_portraits";
+    public static final String PREF_KEY_PORTRAITS       = "pref_key_private_portraits";
     //用户名
-    public static final String PREF_KEY_USERNAME = "pref_key_private_username";
+    public static final String PREF_KEY_USERNAME        = "pref_key_private_username";
     //是否是领导
-    public static final String PREF_KEY_IS_LEADER = "pref_key_is_leader";
+    public static final String PREF_KEY_IS_LEADER       = "pref_key_is_leader";
     //性别
-    public static final String PREF_KEY_SEX = "pref_key_private_sex";
+    public static final String PREF_KEY_SEX             = "pref_key_private_sex";
     //手机号码
-    public static final String PREF_KEY_PHONE = "pref_key_private_phone";
+    public static final String PREF_KEY_PHONE           = "pref_key_private_phone";
     //入职日期
-    public static final String PREF_KEY_HIREDATE = "pref_key_private_hiredate";
+    public static final String PREF_KEY_HIREDATE        = "pref_key_private_hiredate";
     //公司名称
-    public static final String PREF_KEY_COMPANY_NAME = "pref_key_private_company_name";
+    public static final String PREF_KEY_COMPANY_NAME    = "pref_key_private_company_name";
     //岗位名称
-    public static final String PREF_KEY_POST_NAME = "pref_key_private_post_name";
+    public static final String PREF_KEY_POST_NAME       = "pref_key_private_post_name";
     //岗位工号
-    public static final String PREF_KEY_CODE = "pref_key_private_code";
+    public static final String PREF_KEY_CODE            = "pref_key_private_code";
     //登录密码
-    public static final String PREF_KEY_LOGIN_PASSWORD = "pref_key_private_login_password";
+    public static final String PREF_KEY_LOGIN_PASSWORD  = "pref_key_private_login_password";
     //记住密码
-    public static final String PREF_KEY_PASSWORD_FLAG = "pref_key_private_password_flag";
+    public static final String PREF_KEY_PASSWORD_FLAG   = "pref_key_private_password_flag";
     //部门名称
     public static final String PREF_KEY_DEPARTMENT_NAME = "pref_key_private_department_name";
     //是否是原始密码
-    public static final String PREF_KEY_IS_INIT_PWD = "pref_key_private_is_init_pwd";
+    public static final String PREF_KEY_IS_INIT_PWD     = "pref_key_private_is_init_pwd";
     //1-进入bi, 0进入首页
-    public static final String PREF_KEY_TYPE = "pref_key_private_type";
+    public static final String PREF_KEY_TYPE            = "pref_key_private_type";
     //即时通讯未读条数
-    public static final String COMMUNICATION_COUNT = "communication_count";
+    public static final String COMMUNICATION_COUNT      = "communication_count";
 
 
     /**
      * 岗位ID
      */
-    private static final String PREF_KEY_POST_ID = "pref_key_post_id";
+    private static final String PREF_KEY_POST_ID       = "pref_key_post_id";
     /**
      * 部门ID
      */
-    public static final String PREF_KEY_DEPARTMENT_ID = "pref_key_department_id";
+    public static final  String PREF_KEY_DEPARTMENT_ID = "pref_key_department_id";
 
     public static AppConfig getAppConfig(Context context) {
         if (appConfig == null) {

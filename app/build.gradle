@@ -18,8 +18,8 @@ android {
         resConfigs "en", "zh-rCN"
 
         //pwd:13579
-        versionCode 25
-        versionName "v1.6.0.0"
+        versionCode 26
+        versionName "v1.6.0.7"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }

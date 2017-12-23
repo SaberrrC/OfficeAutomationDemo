@@ -1,6 +1,15 @@
 package com.shanlinjinrong.oa.ui.activity.my.presenter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
+
+import com.google.gson.Gson;
+import com.hyphenate.easeui.UserDetailsBean;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.Constants;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.UserInfoActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -14,6 +23,15 @@ import org.kymjs.kjframe.http.HttpParams;
 import java.io.File;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by 丁 on 2017/8/19.
@@ -71,6 +89,58 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
                 super.onFinish();
                 if (mView != null)
                     mView.upLoadFinish();
+            }
+        });
+    }
+
+    @Override
+    public void queryUserInfo(String userCode) {
+        HttpParams httpParams = new HttpParams();
+        mKjHttp.phpJsonGet(Api.SEARCH_USER_DETAILS + "?code=" + userCode, httpParams, new HttpCallBack() {
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
+                if (userDetailsBean != null) {
+                    try {
+                        switch (userDetailsBean.getCode()) {
+                            case 200:
+                                Observable.create(e -> {
+                                    SharedPreferences.Editor editor = AppManager.mContext.getSharedPreferences(AppConfig.APP_CONFIG, Context.MODE_PRIVATE).edit();
+                                    editor.putString(AppConfig.PREF_KEY_CODE, userDetailsBean.getData().get(0).getCode());
+                                    editor.putString(AppConfig.PREF_KEY_USER_EMAIL, userDetailsBean.getData().get(0).getEmail());
+                                    editor.putString(AppConfig.PREF_KEY_USERNAME, userDetailsBean.getData().get(0).getUsername());
+                                    editor.putString(AppConfig.PREF_KEY_SEX, userDetailsBean.getData().get(0).getSex());
+                                    editor.putString(AppConfig.PREF_KEY_PHONE, userDetailsBean.getData().get(0).getPhone());
+                                    editor.putString(AppConfig.PREF_KEY_DEPARTMENT_NAME, userDetailsBean.getData().get(0).getOrgan());
+                                    editor.putString(AppConfig.PREF_KEY_PORTRAITS, Constants.PHPSLPicBaseUrl + userDetailsBean.getData().get(0).getImg());
+                                    editor.putString(AppConfig.PREF_KEY_POST_NAME, userDetailsBean.getData().get(0).getPostname());
+                                    editor.apply();
+                                    e.onComplete();
+                                }).observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeOn(Schedulers.io())
+                                        .subscribe(o -> {
+                                        }, Throwable::printStackTrace, () -> {
+                                            try {
+                                                if (mView != null) {
+                                                    mView.queryUserInfoSuccess(userDetailsBean);
+                                                }
+                                            } catch (Throwable throwable) {
+                                                throwable.printStackTrace();
+                                            }
+                                        });
+                                break;
+                        }
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
     }

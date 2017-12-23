@@ -34,6 +34,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.easeui.Constant;
+import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.R;
@@ -72,46 +74,41 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  */
 public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter> implements UserInfoActivityContract.View {
 
-    public static final int UPDATE_PHONE = 0x4;//修改电话
+    public static final int UPDATE_PHONE    = 0x4;//修改电话
     public static final int UPDATE_PROTRAIT = 2;//修改头像
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TextView         tvTitle;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar          toolbar;
     @BindView(R.id.user_portrait)
     SimpleDraweeView userPortrait;
     @BindView(R.id.user_sex)
-    TextView userSex;
+    TextView         userSex;
     @BindView(R.id.user_department)
-    TextView userDepartment;
+    TextView         userDepartment;
     @BindView(R.id.user_post)
-    TextView userPost;
+    TextView         userPost;
     @BindView(R.id.user_phone)
-    TextView userPhone;
+    TextView         userPhone;
     @BindView(R.id.layout_root)
-    LinearLayout mRootView;
+    LinearLayout     mRootView;
     @BindView(R.id.user_mails)
-    TextView user_mails;
+    TextView         user_mails;
     @BindView(R.id.user_jopnumber)
-    TextView user_jopnumber;
+    TextView         user_jopnumber;
 
     private BottomPushPopupWindow mPop;
     private static final int CODE_GALLERY_REQUEST = 0x1;//相册
-    private static final int CODE_CAMERA_REQUEST = 0x2;//拍照
+    private static final int CODE_CAMERA_REQUEST  = 0x2;//拍照
     private static final int CROP_PICTURE_REQUEST = 0x3;//图片路径
-    private static final int MODIFICATION_EMAIL = 101;//邮箱修改
+    private static final int MODIFICATION_EMAIL   = 101;//邮箱修改
 
-    private static final String TEMP_FILE_NAME = "temp_icon.jpg";
+    private static final String TEMP_FILE_NAME   = "temp_icon.jpg";
     private static final String CAMERA_FILE_NAME = "camera_pic.jpg";
 
-    /**
-     * Save the path of photo cropping is completed
-     */
     private Uri icon_path;
     private Uri camera_path;
     private long lastClickTime = 0;
-    //    public static final int PHOTO_REQUEST_CUT = 3;// 裁剪结果
-//    private String mtyb;//手机品牌
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,12 +131,9 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 fileCameraPath.createNewFile();
             }
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                // modify by lvdinghao 2017/8/15 修改名称和包名保持一致
-                icon_path = FileProvider.getUriForFile(AppManager.mContext,
-                        "com.shanlinjinrong.oa.fileprovider", fileIconPath);
-                camera_path = FileProvider.getUriForFile(AppManager.mContext,
-                        "com.shanlinjinrong.oa.fileprovider", fileCameraPath);
-
+                // 修改名称和包名保持一致
+                icon_path = FileProvider.getUriForFile(AppManager.mContext, "com.shanlinjinrong.oa.fileprovider", fileIconPath);
+                camera_path = FileProvider.getUriForFile(AppManager.mContext, "com.shanlinjinrong.oa.fileprovider", fileCameraPath);
             } else {
                 icon_path = Uri.fromFile(fileIconPath);
                 camera_path = Uri.fromFile(fileCameraPath);
@@ -157,12 +151,12 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     }
 
     private void initData() {
+        mPresenter.queryUserInfo(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
 
-        if (!TextUtils.isEmpty(AppConfig.getAppConfig(this).get(
-                AppConfig.PREF_KEY_PORTRAITS))) {
+
+        if (!TextUtils.isEmpty(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS))) {
             Glide.with(AppManager.mContext)
-                    .load(AppConfig.getAppConfig(this).get(
-                            AppConfig.PREF_KEY_PORTRAITS))
+                    .load(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS))
                     .dontAnimate()
                     .error(R.drawable.ease_default_avatar)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -173,7 +167,6 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
             Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
         }
 
-
         userSex.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_SEX));
         userPost.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_POST_NAME));
         userDepartment.setText(AppConfig.getAppConfig(this).get(
@@ -183,8 +176,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         user_jopnumber.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
     }
 
-    @OnClick({R.id.user_portrait_box, R.id.user_sex_box, R.id.user_department_box,
-            R.id.user_post_box, R.id.user_phone_box, R.id.user_date_box, R.id.btn_logout})
+    @OnClick({R.id.user_portrait_box, R.id.user_sex_box, R.id.user_department_box, R.id.user_post_box, R.id.user_phone_box, R.id.user_date_box, R.id.btn_logout})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
         if (currentTime - lastClickTime < 1000) {
@@ -203,8 +195,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
             case R.id.user_post_box:
                 break;
             case R.id.user_phone_box://修改电话
-                startActivityForResult(new Intent(UserInfoActivity.this,
-                        ModifyPhoneActivity.class), UPDATE_PHONE);
+                startActivityForResult(new Intent(UserInfoActivity.this, ModifyPhoneActivity.class), UPDATE_PHONE);
                 break;
             case R.id.user_date_box://邮箱修改
                 startActivityForResult(new Intent(this, ModificationEmailActivity.class), 101);
@@ -271,11 +262,45 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         hideLoadingView();
     }
 
+    @Override
+    public void queryUserInfoSuccess(UserDetailsBean userInfo) {
+        try {
+            if (userInfo != null) {
+                String portraits = Constants.PHPSLPicBaseUrl + userInfo.getData().get(0).getImg();
+
+                if (!TextUtils.isEmpty(portraits) || !portraits.equals("null")) {
+                    Glide.with(AppManager.mContext)
+                            .load(portraits)
+                            .dontAnimate()
+                            .error(R.drawable.ease_default_avatar)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                            .placeholder(R.drawable.ease_default_avatar)
+                            .into(userPortrait);
+                } else {
+                    Glide.with(AppManager.mContext).load(R.drawable.ease_user_portraits).asBitmap().into(userPortrait);
+                }
+                userSex.setText(userInfo.getData().get(0).getSex());
+                userPost.setText(userInfo.getData().get(0).getPostname());
+                userDepartment.setText(userInfo.getData().get(0).getOrgan());
+                userPhone.setText(userInfo.getData().get(0).getPhone());
+                user_mails.setText(userInfo.getData().get(0).getEmail());
+                user_jopnumber.setText(userInfo.getData().get(0).getCode());
+            }
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    }
+
+    @Override
+    public void queryUserInfoFailed() {
+
+    }
+
     /**
      * 头像弹出框：拍照、相册、取消
      */
     private class BottomPopAvatar extends BottomPushPopupWindow<Void> {
-
         public BottomPopAvatar(Context context) {
             super(context, null);
         }
@@ -286,28 +311,17 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
             TextView menuBtn1 = (TextView) root.findViewById(R.id.menuBtn1);
             TextView menuBtn2 = (TextView) root.findViewById(R.id.menuBtn2);
             menuBtn1.setText("拍照");
-            menuBtn1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                    fromCamera();
-                }
+            menuBtn1.setOnClickListener(v -> {
+                dismiss();
+                fromCamera();
             });
             menuBtn2.setText("从相册选取");
-            menuBtn2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                    fromGallery();
-                }
+            menuBtn2.setOnClickListener(v -> {
+                dismiss();
+                fromGallery();
             });
             View cancelView = root.findViewById(R.id.cancel);
-            cancelView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
+            cancelView.setOnClickListener(v -> dismiss());
             return root;
         }
     }
@@ -449,63 +463,48 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         Button btnSubmit = (Button) dialogView.findViewById(R.id.btn_submit);
         Button btnCancel = (Button) dialogView.findViewById(R.id.btn_cancel);
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-                    popupWindow.dismiss();
-                    //退出环信登录
-                    LogUtils.e("退出环信");
-                    DemoHelper.getInstance().logout(true, new EMCallBack() {
-                        @Override
-                        public void onSuccess() {
-                            Log.d("退出环信", "退出环信成功！！");
-                        }
-
-                        @Override
-                        public void onError(int i, String s) {
-                            Log.d("退出环信", i + s);
-                        }
-
-                        @Override
-                        public void onProgress(int i, String s) {
-                            Log.d("退出环信", i + s);
-                        }
-                    });
-
-                    JPushInterface.setAlias(UserInfoActivity.this, "", new TagAliasCallback() {
-                        @Override
-                        public void gotResult(int i, String s, Set<String> set) {
-                        }
-                    });
-                    JPushInterface.setTags(UserInfoActivity.this, null, null);
-
-                    exitToLogin();
-                } catch (Exception e) {
-                    LogUtils.e("退出环信抛出异常" + e.toString());
-                    exitToLogin();
-                }
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnSubmit.setOnClickListener(v -> {
+            try {
                 popupWindow.dismiss();
+                //退出环信登录
+                LogUtils.e("退出环信");
+                DemoHelper.getInstance().logout(true, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("退出环信", "退出环信成功！！");
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+                        Log.d("退出环信", i + s);
+                    }
+
+                    @Override
+                    public void onProgress(int i, String s) {
+                        Log.d("退出环信", i + s);
+                    }
+                });
+
+                JPushInterface.setAlias(UserInfoActivity.this, "", (i, s, set) -> {
+                });
+                JPushInterface.setTags(UserInfoActivity.this, null, null);
+
+                exitToLogin();
+            } catch (Exception e) {
+                LogUtils.e("退出环信抛出异常" + e.toString());
+                exitToLogin();
             }
         });
+        btnCancel.setOnClickListener(v -> popupWindow.dismiss());
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = 0.7f;
         getWindow().setAttributes(lp);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = getWindow().getAttributes();
-                lp.alpha = 1f;
-                getWindow().setAttributes(lp);
-            }
+        popupWindow.setOnDismissListener(() -> {
+            WindowManager.LayoutParams lp1 = getWindow().getAttributes();
+            lp1.alpha = 1f;
+            getWindow().setAttributes(lp1);
         });
         popupWindow.setFocusable(true);
 
@@ -535,12 +534,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         tvTitle.setLayoutParams(lp);
 
         toolbar.setNavigationIcon(R.drawable.toolbar_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
     }
 
     @Override
