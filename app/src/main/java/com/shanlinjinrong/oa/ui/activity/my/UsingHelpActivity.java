@@ -70,19 +70,7 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
         ButterKnife.bind(this);
         initToolBar();
         setTranslucentStatus(this);
-
-
         initWebView();
-        tvErrorLayout.setOnClickListener(view -> {
-            if (NetUtils.hasNetwork(UsingHelpActivity.this)) {
-                RxView.clicks(tvErrorLayout).throttleFirst(1, TimeUnit.SECONDS).subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        initWebView();
-                    }
-                }, Throwable::printStackTrace);
-            }
-        });
     }
 
     @SuppressLint("SetJavaScriptEnabled")
