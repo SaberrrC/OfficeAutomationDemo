@@ -28,6 +28,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
@@ -37,6 +39,7 @@ import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 
@@ -243,102 +246,129 @@ public class EaseNotifier {
             if (notificationInfoProvider != null) {
                 //推送处理
                 Observable.create(new Observable.OnSubscribe<Object>() {
+
+                    private String conversationId;
+
                     @Override
                     public void call(Subscriber<? super Object> subscriber) {
-                        mNickName = FriendsInfoCacheSvc.getInstance(appContext).getNickName(message.getFrom());
-                        if (TextUtils.isEmpty(mNickName)) {
-                            String userCode = message.getFrom().substring(3, message.getFrom().length());
-                            String token = appContext.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_private_token", DEFAULT_ARGUMENTS_VALUE);
-                            String uid = appContext.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_user_uid", DEFAULT_ARGUMENTS_VALUE);
-                            KJHttp kjHttp = new KJHttp();
-                            HttpConfig config = new HttpConfig();
-                            HttpConfig.TIMEOUT = 30000;
-                            kjHttp.setConfig(config);
-                            kjHttp.cleanCache();
-                            HttpParams httpParams = new HttpParams();
-                            httpParams.putHeaders("token", token);
-                            httpParams.putHeaders("uid", uid);
-                            //TODO 生产
-                            kjHttp.get(EaseConstant.PHP_URL + "user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
-
-                                @Override
-                                public void onFailure(int errorNo, String strMsg) {
-                                    super.onFailure(errorNo, strMsg);
-
-                                    Observable.create(new Observable.OnSubscribe<Object>() {
-                                        @Override
-                                        public void call(Subscriber<? super Object> subscriber) {
-                                            FriendsInfoCacheSvc.
-                                                    getInstance(appContext).
-                                                    addOrUpdateFriends(new Friends("sl_" + message.getFrom(), "匿名用户", ""));
-                                            mNickName = "匿名用户";
-                                            subscriber.onCompleted();
-                                        }
-                                    }).subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(new Action1<Object>() {
-                                                @Override
-                                                public void call(Object o) {
-                                                }
-                                            }, new Action1<Throwable>() {
-                                                @Override
-                                                public void call(Throwable throwable) {
-                                                    throwable.printStackTrace();
-                                                }
-                                            }, new Action0() {
-                                                @Override
-                                                public void call() {
-                                                    initNotify(message, numIncrease, isForeground, contentTitle);
-                                                }
-                                            });
+                        if (message.conversationId().contains("admin")) {
+                            mNickName = "会议邀请";
+                            return;
+                        } else if (message.conversationId().contains("notice")) {
+                            mNickName = "公告通知";
+                            return;
+                        } else if (message.getChatType() == EMMessage.ChatType.GroupChat) {
+                            mNickName = FriendsInfoCacheSvc.getInstance(appContext).getNickName(message.conversationId());
+                            if (TextUtils.isEmpty(mNickName)) {
+                                try {
+                                    EMGroup groupFromServer = EMClient.getInstance().groupManager().getGroupFromServer(message.conversationId());
+                                    FriendsInfoCacheSvc.getInstance(appContext).addOrUpdateFriends(new Friends(groupFromServer.getGroupId(), groupFromServer.getGroupName(), ""));
+                                    mNickName = groupFromServer.getGroupName();
+                                } catch (HyphenateException e) {
+                                    e.printStackTrace();
+                                    mNickName = "匿名群组";
                                 }
+                            }
+                        } else if (message.getChatType() == EMMessage.ChatType.Chat) {
+                            try {
+                                conversationId = message.conversationId().substring(0, 12);
+                            } catch (Throwable e) {
+                                conversationId = message.conversationId();
+                            }
+                            mNickName = FriendsInfoCacheSvc.getInstance(appContext).getNickName(conversationId);
+                            if (TextUtils.isEmpty(mNickName)) {
+                                String userCode = message.getFrom().substring(3, message.getFrom().length());
+                                String token = appContext.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_private_token", DEFAULT_ARGUMENTS_VALUE);
+                                String uid = appContext.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_user_uid", DEFAULT_ARGUMENTS_VALUE);
+                                KJHttp kjHttp = new KJHttp();
+                                HttpConfig config = new HttpConfig();
+                                HttpConfig.TIMEOUT = 30000;
+                                kjHttp.setConfig(config);
+                                kjHttp.cleanCache();
+                                HttpParams httpParams = new HttpParams();
+                                httpParams.putHeaders("token", token);
+                                httpParams.putHeaders("uid", uid);
+                                //TODO 生产
+                                kjHttp.get(EaseConstant.PHP_URL + "user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
 
-                                @Override
-                                public void onSuccess(String t) {
-                                    super.onSuccess(t);
-                                    final UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
-                                    if (userDetailsBean != null) {
-                                        try {
-                                            switch (userDetailsBean.getCode()) {
-                                                case 200:
-                                                    Observable.create(new Observable.OnSubscribe<Object>() {
-                                                        @Override
-                                                        public void call(Subscriber<? super Object> subscriber) {
-                                                            FriendsInfoCacheSvc.
-                                                                    getInstance(appContext).
-                                                                    addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(),
-                                                                            userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
-                                                            mNickName = userDetailsBean.getData().get(0).getUsername();
-                                                            subscriber.onCompleted();
-                                                        }
-                                                    }).subscribeOn(Schedulers.io())
-                                                            .observeOn(AndroidSchedulers.mainThread())
-                                                            .subscribe(new Action1<Object>() {
-                                                                @Override
-                                                                public void call(Object o) {
-                                                                }
-                                                            }, new Action1<Throwable>() {
-                                                                @Override
-                                                                public void call(Throwable throwable) {
-                                                                    throwable.printStackTrace();
-                                                                }
-                                                            }, new Action0() {
-                                                                @Override
-                                                                public void call() {
-                                                                    initNotify(message, numIncrease, isForeground, contentTitle);
-                                                                }
-                                                            });
-                                                    break;
+                                    @Override
+                                    public void onFailure(int errorNo, String strMsg) {
+                                        super.onFailure(errorNo, strMsg);
+
+                                        Observable.create(new Observable.OnSubscribe<Object>() {
+                                            @Override
+                                            public void call(Subscriber<? super Object> subscriber) {
+                                                FriendsInfoCacheSvc.
+                                                        getInstance(appContext).
+                                                        addOrUpdateFriends(new Friends("sl_" + message.getFrom(), "匿名用户", ""));
+                                                mNickName = "匿名用户";
+                                                subscriber.onCompleted();
                                             }
-                                        } catch (Throwable e) {
-                                            e.printStackTrace();
+                                        }).subscribeOn(Schedulers.io())
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe(new Action1<Object>() {
+                                                    @Override
+                                                    public void call(Object o) {
+                                                    }
+                                                }, new Action1<Throwable>() {
+                                                    @Override
+                                                    public void call(Throwable throwable) {
+                                                        throwable.printStackTrace();
+                                                    }
+                                                }, new Action0() {
+                                                    @Override
+                                                    public void call() {
+                                                        initNotify(message, numIncrease, isForeground, contentTitle);
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void onSuccess(String t) {
+                                        super.onSuccess(t);
+                                        final UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
+                                        if (userDetailsBean != null) {
+                                            try {
+                                                switch (userDetailsBean.getCode()) {
+                                                    case 200:
+                                                        Observable.create(new Observable.OnSubscribe<Object>() {
+                                                            @Override
+                                                            public void call(Subscriber<? super Object> subscriber) {
+                                                                FriendsInfoCacheSvc.
+                                                                        getInstance(appContext).
+                                                                        addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(),
+                                                                                userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
+                                                                mNickName = userDetailsBean.getData().get(0).getUsername();
+                                                                subscriber.onCompleted();
+                                                            }
+                                                        }).subscribeOn(Schedulers.io())
+                                                                .observeOn(AndroidSchedulers.mainThread())
+                                                                .subscribe(new Action1<Object>() {
+                                                                    @Override
+                                                                    public void call(Object o) {
+                                                                    }
+                                                                }, new Action1<Throwable>() {
+                                                                    @Override
+                                                                    public void call(Throwable throwable) {
+                                                                        throwable.printStackTrace();
+                                                                    }
+                                                                }, new Action0() {
+                                                                    @Override
+                                                                    public void call() {
+                                                                        initNotify(message, numIncrease, isForeground, contentTitle);
+                                                                    }
+                                                                });
+                                                        break;
+                                                }
+                                            } catch (Throwable e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }
-                                }
-                            });
-                            return;
+                                });
+                                return;
+                            }
                         }
-
                         if (!TextUtils.isEmpty(mNickName)) {
                             subscriber.onCompleted();
                         }

@@ -75,7 +75,12 @@ import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import q.rorbin.badgeview.QBadgeView;
@@ -189,6 +194,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private String             mUserName;
     private String             mQueryInfo;
     private String             mNickName;
+    private long               lastNotifiyTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -549,71 +555,10 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         return super.onKeyDown(keyCode, event);
     }
 
-    private String mUserId;
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(final List<EMMessage> list) {
-
-            for (EMMessage message : list) {
-//                String conversationId = message.conversationId();
-//                chatType = message.getChatType();
-//                if (chatType == EMMessage.ChatType.GroupChat) {
-//                    Observable.create(e -> {
-//                        mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
-//                        mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(message.getFrom());
-//                        mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(conversationId);
-//
-//                        if (TextUtils.isEmpty(mGroupName)) {
-//                            mGroup = EMClient.getInstance().groupManager().getGroup(conversationId);
-//                            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(conversationId, mGroup.getGroupName(), ""));
-//                        }
-//
-//                        if (TextUtils.isEmpty(mNickName)) {
-//                            mPresenter.searchUserDetails(message.getFrom().substring(3, message.getFrom().length()));
-//                        }
-//
-//                        if (!TextUtils.isEmpty(mNickName) && !TextUtils.isEmpty(mGroupName)) {
-//                            e.onComplete();
-//                        }
-//                    }).subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe(o -> {
-//                            }, Throwable::printStackTrace, () -> {
-//                                refreshChat(list, mUserId);
-//                                EventBus.getDefault().post(new OnMessagesRefreshEvent());
-//                            });
-//                    return;
-//                } else {
-//                    if (!conversationId.contains("admin") && !conversationId.contains("notice")) {
-//                        Observable.create(e -> {
-//                            mQueryInfo = conversationId.substring(0, 12);
-//                            mUserId = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUserId(mQueryInfo);
-//                            mUserName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(mQueryInfo);
-//
-//                            if (TextUtils.isEmpty(mUserName) || mUserName.equals("匿名用户")) {
-//                                mEMMessage.clear();
-//                                mEMMessage.addAll(list);
-//                                mPresenter.searchUserDetails(mQueryInfo.substring(3, mQueryInfo.length()));
-//                            }
-//
-//                            if (!TextUtils.isEmpty(mUserName)) {
-//                                e.onComplete();
-//                            }
-//                        }).observeOn(AndroidSchedulers.mainThread())
-//                                .subscribeOn(Schedulers.io())
-//                                .subscribe(o -> {
-//                                }, Throwable::printStackTrace, () -> {
-//                                    refreshChat(list, conversationId);
-//                                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
-//                                });
-//                        return;
-//                    }
-//                    refreshChat(list, conversationId);
-                refreshChat(list);
-
-//                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
-//                }
-            }
+            refreshChat(list);
         }
 
         @Override
@@ -632,17 +577,14 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
         @Override
         public void onMessageRead(List<EMMessage> list) {
-
         }
 
         @Override
         public void onMessageDelivered(List<EMMessage> list) {
-
         }
 
         @Override
         public void onMessageRecalled(List<EMMessage> list) {
-
         }
 
         @Override
@@ -654,20 +596,14 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         if (tabCommunicationFragment != null) {
             if (tabCommunicationFragment.myConversationListFragment != null) {
                 tabCommunicationFragment.myConversationListFragment.refresh();
-                //TODO 列表刷新
-                //tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
             }
         }
 
-        for (EMMessage message : list) {
-
-
-            if (!easeUI.hasForegroundActivies()) {
-                easeUI.getNotifier().onNewMsg(message);
-            }
+        if (!easeUI.hasForegroundActivies()) {
+            if (list.size() > 0)
+                easeUI.getNotifier().onNewMsg(list.get(list.size() - 1));
         }
     }
-
 
     @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
