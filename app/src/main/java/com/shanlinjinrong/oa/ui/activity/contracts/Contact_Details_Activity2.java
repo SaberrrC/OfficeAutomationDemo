@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -251,14 +252,17 @@ public class Contact_Details_Activity2 extends BaseActivity {
         } else {
             tv_mails.setText(mEmail);
         }
-
-        Glide.with(AppManager.mContext)
-                .load(mPortrait)
-                .dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.drawable.ease_user_portraits)
-                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                .placeholder(R.drawable.ease_user_portraits).into(ivImgUser);
+        if (!TextUtils.isEmpty(mPortrait)) {
+            Glide.with(AppManager.mContext)
+                    .load(mPortrait)
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .error(R.drawable.ease_user_portraits)
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                    .placeholder(R.drawable.ease_user_portraits).into(ivImgUser);
+        } else {
+            Glide.with(AppManager.mContext).load(R.drawable.ease_user_portraits).asBitmap().into(ivImgUser);
+        }
     }
 
     @OnClick(R.id.btn_back)

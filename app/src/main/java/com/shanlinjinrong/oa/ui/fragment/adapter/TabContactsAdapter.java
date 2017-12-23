@@ -47,7 +47,6 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
                 CircleImageView portrait = helper.getView(R.id.portrait);
                 String portraits = Constants.SLPicBaseUrl + contacts.getPortraits();
                 if (!TextUtils.isEmpty(portraits)) {
-
                     Glide.with(AppManager.mContext)
                             .load(portraits)
                             .dontAnimate()
@@ -56,8 +55,7 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
                             .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                             .placeholder(R.drawable.ease_user_portraits).into(portrait);
                 } else {
-                    portrait.setImageResource(R.drawable.ease_user_portraits);
-
+                    Glide.with(AppManager.mContext).load(R.drawable.ease_user_portraits).asBitmap().into(portrait);
                 }
 
 

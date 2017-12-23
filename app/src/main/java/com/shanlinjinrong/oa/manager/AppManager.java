@@ -177,7 +177,7 @@ public class AppManager extends MultiDexApplication {
                     public void run() {
                         try {
                             //建议使用下面方式在控制台打印异常，这样就可以在Error级别看到红色log
-                            Log.e("AndroidRuntime","--->CockroachException:"+thread+"<---",throwable);
+                            Log.e("AndroidRuntime", "--->CockroachException:" + thread + "<---", throwable);
                             //                        throw new RuntimeException("..."+(i++));
                         } catch (Throwable e) {
 
@@ -187,8 +187,6 @@ public class AppManager extends MultiDexApplication {
             }
         });
     }
-
-
 
 
     /**

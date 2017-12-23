@@ -200,7 +200,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                             .placeholder(R.drawable.ease_default_avatar)
                             .into(mSwingCard);
                 } else {
-                    mSwingCard.setImageResource(R.drawable.ease_default_avatar);
+                    Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(mSwingCard);
                 }
                 mTvNickName.setText(nickName);
             }
@@ -219,7 +219,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(mSwingCard);
             } else {
-                mSwingCard.setImageResource(R.drawable.ease_default_avatar);
+                Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(mSwingCard);
             }
 
             mTvNickName.setText(nickName);
@@ -604,8 +604,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                         .placeholder(R.drawable.ease_default_avatar)
                         .into(mSwingCard);
             } else {
-                mSwingCard.setImageResource(R.drawable.ease_default_avatar);
-
+                Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(mSwingCard);
             }
 
 

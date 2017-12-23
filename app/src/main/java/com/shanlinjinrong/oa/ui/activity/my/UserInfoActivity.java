@@ -170,7 +170,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                     .placeholder(R.drawable.ease_default_avatar)
                     .into(userPortrait);
         } else {
-            userPortrait.setImageResource(R.drawable.ease_default_avatar);
+            Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
         }
 
 
@@ -254,7 +254,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                     .placeholder(R.drawable.ease_default_avatar)
                     .into(userPortrait);
         } else {
-            userPortrait.setImageResource(R.drawable.ease_default_avatar);
+            Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
         }
 
         //更新数据库

@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.message.adapter;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -13,6 +14,7 @@ import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppManager;
+
 import java.util.List;
 
 /**
@@ -46,7 +48,7 @@ public class CommonGroupControlAdapter extends BaseQuickAdapter<GroupUserInfoRes
                     name.setVisibility(View.VISIBLE);
                     name.setText(bean.getUsername());
 
-                    if (!portaits.equals(com.example.retrofit.constants.Constants.SLPicBaseUrl)){
+                    if (!portaits.equals(com.example.retrofit.constants.Constants.SLPicBaseUrl)) {
                         Glide.with(AppManager.mContext)
                                 .load(portaits)
                                 .dontAnimate()
@@ -55,6 +57,8 @@ public class CommonGroupControlAdapter extends BaseQuickAdapter<GroupUserInfoRes
                                 .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                                 .placeholder(R.drawable.icon_homepage_work_report_me_launch)
                                 .into(portraits);
+                    } else {
+                        Glide.with(AppManager.mContext).load(R.drawable.icon_homepage_work_report_me_launch).asBitmap().into(portraits);
                     }
 
                 } catch (Throwable e) {

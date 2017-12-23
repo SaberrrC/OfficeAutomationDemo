@@ -32,6 +32,7 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.util.DateUtils;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.message.contract.MessageSearchContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.MessageSearchPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -202,7 +203,6 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());
 
             if (!TextUtils.isEmpty(portrait)) {
-
                 Glide.with(parent.getContext())
                         .load(portrait).error(R.drawable.ease_default_avatar)
                         .dontAnimate()
@@ -210,8 +210,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
                         .placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar)
                         .into(holder.avatar);
             } else {
-                holder.avatar.setImageResource(R.drawable.ease_default_avatar);
-
+                Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(holder.avatar);
             }
             return convertView;
         }

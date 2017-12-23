@@ -101,7 +101,7 @@ public class TabMeFragment extends BaseFragment {
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .into(userPortrait);
         }else{
-
+            Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
         }
 
         userName.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_USERNAME));
@@ -115,13 +115,17 @@ public class TabMeFragment extends BaseFragment {
         userName.setText(AppConfig.getAppConfig(getContext()).get(AppConfig.PREF_KEY_USERNAME));
         position.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_POST_NAME));
 
-        Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
-                .placeholder(R.drawable.ease_default_avatar)
-                .error(R.drawable.ease_default_avatar)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .dontAnimate()
-                .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
-                .into(userPortrait);
+        if (!TextUtils.isEmpty(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS) )) {
+            Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .error(R.drawable.ease_default_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                    .into(userPortrait);
+        }else{
+            Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
+        }
     }
 
     @OnClick({R.id.user_info, R.id.btn_modify_pwd, R.id.btn_usinghelp,

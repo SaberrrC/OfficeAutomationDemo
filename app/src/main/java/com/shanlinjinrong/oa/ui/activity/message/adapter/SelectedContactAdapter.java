@@ -64,7 +64,7 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
                             .placeholder(R.drawable.icon_homepage_work_report_me_launch)
                             .into(portrait);
                 } else {
-                    portrait.setImageResource(R.drawable.icon_homepage_work_report_me_launch);
+                    Glide.with(AppManager.mContext).load(R.drawable.icon_homepage_work_report_me_launch).asBitmap().into(portrait);
                 }
                 userName.setText(contacts.getUsername());
                 postName.setText(contacts.getPostTitle());
