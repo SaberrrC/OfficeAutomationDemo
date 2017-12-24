@@ -35,17 +35,17 @@ import butterknife.ButterKnife;
 //查看群组 成员
 public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
 
-    @BindView(R.id.rv_look_group_member)
-    RecyclerView rvLookGroupMember;
     @BindView(R.id.top_view)
     CommonTopView topView;
+    @BindView(R.id.rv_look_group_member)
+    RecyclerView  rvLookGroupMember;
 
-    private boolean mIsOwner;
-    private final int REQUSET_CODE = 101;
-    private List<String> mMemberList;
+    private boolean                     mIsOwner;
+    private List<String>                mMemberList;
     private List<GroupUserInfoResponse> mData;
-    private CommonGroupControlAdapter mAdapter;
-    private String mGroupId, mGroupOwner;
+    private CommonGroupControlAdapter   mAdapter;
+    private String                      mGroupId, mGroupOwner;
+    private final int REQUSET_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +101,7 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
     public void searchUserListInfoSuccess(List<GroupUserInfoResponse> userInfo) {
         try {
             if (userInfo != null) {
-                topView.setAppTitle("群成员" + "（" + userInfo.size() + "）");
+                topView.setAppTitle("群成员" + "(" + userInfo.size() + ")");
                 mData.clear();
 
                 int groupIndex = 0;

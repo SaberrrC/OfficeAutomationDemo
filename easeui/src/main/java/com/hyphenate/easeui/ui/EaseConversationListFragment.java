@@ -77,7 +77,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
 
     private TextView tvErrorView;
     private       long lastClickTime = 0;
-    private final int  REFRESH_DATA  = -3;
+    private final int  REFRESH_DATA  = -3, REFRESH_SETUP = -4;
     private boolean mIsSetup;
     private List<EMConversation> list                       = new ArrayList<>();
     private List<EMConversation> conversationIncompleteList = new ArrayList<>();
@@ -186,6 +186,13 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                 case 1:
                     onConnectionConnected();
                     break;
+                case REFRESH_SETUP:
+                    conversationList.clear();
+                    conversationList.addAll(list);
+                    conversationListView.refresh();
+                    mIsSetup = true;
+                    RefreshBadge();
+                    break;
 
                 case MSG_REFRESH: {
                     loadConversationList();
@@ -197,37 +204,40 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                         conversationList.addAll(list);
                         conversationListView.refresh();
                     }
-
                     //刷新badge
-                    try {
-                        tempCount = 0;
-                        for (int i = 0; i < list.size(); i++) {
-                            int size = list.get(i).getUnreadMsgCount();
-                            tempCount = tempCount + size;
-                        }
-                        onCountRefreshEvent.setUnReadMsgCount(tempCount);
-                        EventBus.getDefault().post(onCountRefreshEvent);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    //错误页面展示
-                    try {
-                        if (conversationList != null && conversationList.size() == 0) {
-                            tvErrorView.setVisibility(View.VISIBLE);
-                        } else {
-                            tvErrorView.setVisibility(View.GONE);
-                        }
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
+                    RefreshBadge();
                     break;
-
                 default:
                     break;
             }
         }
     };
+
+    private void RefreshBadge() {
+        //刷新badge
+        try {
+            tempCount = 0;
+            for (int i = 0; i < list.size(); i++) {
+                int size = list.get(i).getUnreadMsgCount();
+                tempCount = tempCount + size;
+            }
+            onCountRefreshEvent.setUnReadMsgCount(tempCount);
+            EventBus.getDefault().post(onCountRefreshEvent);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        //错误页面展示
+        try {
+            if (conversationList != null && conversationList.size() == 0) {
+                tvErrorView.setVisibility(View.VISIBLE);
+            } else {
+                tvErrorView.setVisibility(View.GONE);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * connected to server
@@ -319,13 +329,12 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                     }
 
                     if (!mIsSetup) {
-                        conversationList.clear();
-                        conversationList.addAll(list);
-                        conversationListView.refresh();
-                        mIsSetup = true;
-                    }else {
+                        if (!handler.hasMessages(REFRESH_SETUP)) {
+                            handler.sendEmptyMessage(REFRESH_SETUP);
+                        }
+                    } else {
                         for (int i = 0; i < list.size(); i++) {
-                            for (int j = list.size() - 1 ; j > i; j--) {
+                            for (int j = list.size() - 1; j > i; j--) {
                                 if (list.get(i) == list.get(j)) {
                                     list.remove(j);
                                 }

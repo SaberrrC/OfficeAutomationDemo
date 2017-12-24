@@ -35,47 +35,50 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * ProjectName: dev-beta-v1.0.1
- * PackageName: com.itcrm.GroupInformationPlatform.ui.activity
- * Author:Created by Tsui on Date:2016/12/16 15:10
- * Description:聊天界面 com.hyphenate.easeui.widget.EaseChatMessageList
+ * 聊天界面
  */
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
     @BindView(R.id.tv_count)
-    TextView mTvCount;
+    TextView     mTvCount;
     @BindView(R.id.tv_title)
-    TextView mTvTitle;
+    TextView     mTvTitle;
     @BindView(R.id.iv_detail)
     LinearLayout mIvDetail;
     @BindView(R.id.img_details_icon)
-    ImageView imgDetailsIcon;
+    ImageView    imgDetailsIcon;
 
-    private String mTitle;
-    private int mChatType;
-    private Bundle mExtras;
-    private String mNike;
-    private String mCode;
-    private String mSex;
-    private String mPhone;
-    private String mEmail;
-    private String mPortrait;
+    private String  mTitle;
+    private int     mChatType;
+    private Bundle  mExtras;
+    private String  mNike;
+    private String  mCode;
+    private String  mSex;
+    private String  mPhone;
+    private String  mEmail;
+    private String  mPortrait;
     private boolean mIsResume;
-    private String mGroupName;
-    private String mPost_name;
+    private String  mGroupName;
+    private String  mPost_name;
     private long lastClickTime = 0;
-    private String mDepartment_name;
+    private String           mDepartment_name;
     private EaseChatFragment chatFragment;
-    private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3, DISSOLVEGROUP = 600;
+    private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3, DISSOLVEGROUP = 600, LISTENERGROUPAME = -1;
+    private EMGroup mGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,48 +162,57 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     }
 
     private void initView() {
-        mChatType = getIntent().getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
-        mTitle = getIntent().getStringExtra("title");//人名字
-        if (mChatType == EaseConstant.CHATTYPE_GROUP) {
-            if (getIntent().getStringExtra("groupTitle") != null) {
-                if (!getIntent().getStringExtra("groupTitle").equals("")) {
-                    //        mTvTitle.setText(getIntent().getStringExtra("groupTitle"));
-                } else {
-                    remoteGroupName();
-                }
+        try {
+            mChatType = getIntent().getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+            if (mChatType == EaseConstant.CHATTYPE_GROUP) {
+                Observable.create((ObservableOnSubscribe<String>) e -> {
+                    mGroup = EMClient.getInstance().groupManager().getGroupFromServer(getIntent().getStringExtra("u_id"));
+                    int memberCount = mGroup.getMemberCount();
+                    final String groupTitle = "群聊(" + memberCount + ")";
+                    e.onNext(groupTitle);
+                }).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(s -> mTvTitle.setText(s), throwable -> {
+                            throwable.printStackTrace();
+                            mTvTitle.setText("匿名群组");
+                        });
+                imgDetailsIcon.setImageResource(R.mipmap.icon_chat_group_list);
             } else {
-                remoteGroupName();
+                mTitle = getIntent().getStringExtra("title");
+                if (mTitle.equals("")) {
+                    mPresenter.searchUserDetails(getIntent().getStringExtra("u_id").substring(3, getIntent().getStringExtra("u_id").length()));
+                    mTvTitle.setText("匿名消息");
+                    imgDetailsIcon.setImageResource(R.mipmap.icon_contacts_details);
+                    return;
+                }
+                mTvTitle.setText(mTitle);
+                imgDetailsIcon.setImageResource(R.mipmap.icon_contacts_details);
             }
-            imgDetailsIcon.setImageResource(R.mipmap.icon_chat_group_list);
-        } else {
-            if (mTitle.equals("")) {
-                mPresenter.searchUserDetails(getIntent().getStringExtra("u_id").substring(3, getIntent().getStringExtra("u_id").length()));
-            }
-            //   mTvTitle.setText(mTitle);
-            imgDetailsIcon.setImageResource(R.mipmap.icon_contacts_details);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private void remoteGroupName() {
-        try {
-            String u_id = getIntent().getStringExtra("u_id");
-            Observable.create((ObservableOnSubscribe<String>) e -> {
-                mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(u_id);
-                if (TextUtils.isEmpty(mGroupName)) {
-                    EMGroup group = EMClient.getInstance().groupManager().getGroupFromServer(u_id);
-                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(u_id, group.getGroupName(), ""));
-                    mGroupName = group.getGroupName();
-                }
-                e.onComplete();
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                    .subscribe(s -> {
-                            }, Throwable::printStackTrace, () -> mTvTitle.setText(mGroupName)
-                    );
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
-    }
+//    private void remoteGroupName() {
+//        try {
+//            String u_id = getIntent().getStringExtra("u_id");
+//            Observable.create((ObservableOnSubscribe<String>) e -> {
+//                mGroupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(u_id);
+//                if (TextUtils.isEmpty(mGroupName)) {
+//                    EMGroup group = EMClient.getInstance().groupManager().getGroupFromServer(u_id);
+//                    FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(u_id, group.getGroupName(), ""));
+//                    mGroupName = group.getGroupName();
+//                }
+//                e.onComplete();
+//            }).subscribeOn(Schedulers.io())
+//                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+//                    .subscribe(s -> {
+//                            }, Throwable::printStackTrace, () -> mTvTitle.setText(mGroupName)
+//                    );
+//        } catch (Throwable throwable) {
+//            throwable.printStackTrace();
+//        }
+//    }
 
     @OnClick({R.id.iv_back, R.id.tv_count, R.id.iv_detail})
     public void onClick(View view) {
@@ -307,9 +319,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 break;
             case RESULTMODIFICATIONNAME:
                 mTitle = data.getStringExtra("groupName");
-                //      mTvTitle.setText(mTitle);
                 //刷新界面
                 setResult(DELETESUCCESS);
+                break;
+            case LISTENERGROUPAME:
+                final String groupTitle = "群聊(" + mGroup.getMemberCount() + ")";
+                mTvTitle.setText(groupTitle);
                 break;
         }
     }
@@ -317,14 +332,6 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            EMGroup group = EMClient.getInstance().groupManager().getGroup(getIntent().getStringExtra("u_id"));
-            int i = group.getMembers().size() + 1;
-            final String text = "群聊(" + i + ")";
-            mTvTitle.setText(text);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         mIsResume = true;
     }
 
@@ -338,7 +345,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     public void refreshGroup(GroupEventListener event) {
         switch (event.getEvent()) {
             case Constants.MODIFICATIONNAME:
-                remoteGroupName();
+                //remoteGroupName();
                 break;
             case Constants.GROUPDISSOLVE:
                 if (!event.isEvent() && mIsResume) {
@@ -360,7 +367,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
                 userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                 userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()))).subscribeOn(Schedulers.io());
-        //   mTvTitle.setText(userDetailsBean.getUsername());
+        mTvTitle.setText(userDetailsBean.getUsername());
     }
 
     @Override
