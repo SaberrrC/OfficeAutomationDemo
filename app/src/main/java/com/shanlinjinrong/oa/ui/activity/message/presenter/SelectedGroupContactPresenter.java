@@ -6,6 +6,7 @@ import com.facebook.stetho.Stetho;
 import com.iflytek.cloud.thirdparty.S;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.net.MyKjHttp;
@@ -182,7 +183,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                                 contact.setUsername(user.getString("username"));
                                 contact.setPhone(user.getString("phone"));
                                 contact.setEmail(user.getString("email"));
-                                contact.setPortraits(user.getString("portraits"));
+                                contact.setPortraits(Constants.SLPicBaseUrl + user.getString("portraits"));
                                 contact.setSex(user.getString("sex"));
                                 contact.setPostTitle(user.getString("post_title"));
                                 contact.setPostId(user.getString("post_id"));

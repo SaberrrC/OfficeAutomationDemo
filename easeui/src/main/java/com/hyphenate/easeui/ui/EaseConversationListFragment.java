@@ -50,6 +50,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -150,7 +152,6 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                 return false;
             }
         });
-        refresh();
     }
 
 
@@ -323,6 +324,14 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                         conversationListView.refresh();
                         mIsSetup = true;
                     }else {
+                        for (int i = 0; i < list.size(); i++) {
+                            for (int j = list.size() - 1 ; j > i; j--) {
+                                if (list.get(i) == list.get(j)) {
+                                    list.remove(j);
+                                }
+                            }
+                        }
+
                         if (!handler.hasMessages(REFRESH_DATA)) {
                             handler.sendEmptyMessage(REFRESH_DATA);
                         }
@@ -337,16 +346,16 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 EMGroup groupFromServer = EMClient.getInstance().groupManager().getGroupFromServer(lastMessage.conversationId());
                                 FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(groupFromServer.getGroupId(), groupFromServer.getGroupName(), ""));
                                 list.add(0, conversationIncompleteList.get(i));
-                                if (!handler.hasMessages(REFRESH_DATA)) {
-                                    handler.sendEmptyMessage(REFRESH_DATA);
+                                if (!handler.hasMessages(MSG_REFRESH)) {
+                                    handler.sendEmptyMessage(MSG_REFRESH);
                                 }
                             } catch (HyphenateException e) {
                                 e.printStackTrace();
                                 try {
                                     FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(lastMessage.conversationId(), "匿名群组", ""));
                                     list.add(0, conversationIncompleteList.get(i));
-                                    if (!handler.hasMessages(REFRESH_DATA)) {
-                                        handler.sendEmptyMessage(REFRESH_DATA);
+                                    if (!handler.hasMessages(MSG_REFRESH)) {
+                                        handler.sendEmptyMessage(MSG_REFRESH);
                                     }
                                 } catch (Throwable throwable) {
                                     throwable.printStackTrace();
@@ -374,8 +383,8 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                     try {
                                         FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userCode, "匿名用户", ""));
                                         list.add(0, emConversation);
-                                        if (!handler.hasMessages(REFRESH_DATA)) {
-                                            handler.sendEmptyMessage(REFRESH_DATA);
+                                        if (!handler.hasMessages(MSG_REFRESH)) {
+                                            handler.sendEmptyMessage(MSG_REFRESH);
                                         }
                                     } catch (Throwable e) {
                                         e.printStackTrace();
@@ -395,8 +404,8 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                                         public void call(Subscriber<? super Object> subscriber) {
                                                             FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
                                                             list.add(0, emConversation);
-                                                            if (!handler.hasMessages(REFRESH_DATA)) {
-                                                                handler.sendEmptyMessage(REFRESH_DATA);
+                                                            if (!handler.hasMessages(MSG_REFRESH)) {
+                                                                handler.sendEmptyMessage(MSG_REFRESH);
                                                             }
                                                         }
                                                     }).subscribeOn(Schedulers.io())

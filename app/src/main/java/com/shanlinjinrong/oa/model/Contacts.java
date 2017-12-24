@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.model;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -23,7 +24,7 @@ public class Contacts implements MultiItemEntity, Serializable {
     /**
      * 1-员工
      */
-    public static final int EMPLOYEE = 1;
+    public static final int EMPLOYEE   = 1;
     public String code;//工号
 
     public int itemType;
@@ -49,37 +50,37 @@ public class Contacts implements MultiItemEntity, Serializable {
     /**
      * UID
      */
-    public String uid;
+    public  String  uid;
     /**
      * 用户名称
      */
-    public String username;
+    public  String  username;
     /**
      * 性别
      */
-    public String sex;
+    public  String  sex;
     /**
      * 岗位ID
      */
-    public String postId;
+    public  String  postId;
     /**
      * 岗位名称
      */
-    public String postTitle;
+    public  String  postTitle;
     /**
      * 电话号码
      */
-    public String phone;
+    public  String  phone;
     /**
      * 是否显示
      */
-    public String isshow;
-    public String portraits;
-    public String email;
+    public  String  isshow;
+    public  String  portraits;
+    public  String  email;
     private boolean isChecked;
     private boolean isGroupOwner;
     private boolean isModificationColor;
-    private String orgId;
+    private String  orgId;
 
     public boolean isModificationColor() {
         return isModificationColor;
@@ -125,9 +126,9 @@ public class Contacts implements MultiItemEntity, Serializable {
     public Contacts() {
     }
 
-    public Contacts( String username, String uid) {
-        this.username=username;
-        this.uid=uid;
+    public Contacts(String username, String uid) {
+        this.username = username;
+        this.uid = uid;
     }
 
     public Contacts(JSONObject jsonObject) {
@@ -142,7 +143,7 @@ public class Contacts implements MultiItemEntity, Serializable {
                 username = jsonObject.getString("username");
                 phone = jsonObject.getString("phone");
                 email = jsonObject.getString("email");
-                portraits =jsonObject.getString("portraits");
+                portraits = Constants.SLPicBaseUrl + jsonObject.getString("portraits");
                 sex = jsonObject.getString("sex");
                 postTitle = jsonObject.getString("post_title");
                 postId = jsonObject.getString("department_id");

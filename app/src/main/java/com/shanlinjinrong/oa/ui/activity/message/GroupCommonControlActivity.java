@@ -264,6 +264,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
                 contacts.setCode(user.getCode());
                 contacts.setUsername(user.getUsername());
                 contacts.setItemType(1);
+                contacts.setPortraits(user.getImg());
                 contacts.setModificationColor(true);
                 contacts.setGroupOwner(false);
                 if (contacts.getCode().equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {

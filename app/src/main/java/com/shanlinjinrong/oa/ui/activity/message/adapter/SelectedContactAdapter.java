@@ -61,10 +61,10 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
                             .load(contacts.getPortraits())
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .placeholder(R.drawable.icon_homepage_work_report_me_launch)
+                            .placeholder(R.drawable.ease_user_portraits)
                             .into(portrait);
                 } else {
-                    Glide.with(AppManager.mContext).load(R.drawable.icon_homepage_work_report_me_launch).asBitmap().into(portrait);
+                    Glide.with(AppManager.mContext).load(R.drawable.ease_user_portraits).asBitmap().into(portrait);
                 }
                 userName.setText(contacts.getUsername());
                 postName.setText(contacts.getPostTitle());
