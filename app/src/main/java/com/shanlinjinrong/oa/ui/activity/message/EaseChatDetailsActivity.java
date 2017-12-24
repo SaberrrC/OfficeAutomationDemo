@@ -519,6 +519,9 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             Intent intent = new Intent();
+            if (i > mData.size() || mData.size() == 0) {
+                return;
+            }
             switch (mData.get(i).getUsername()) {
                 case "add":
                     if (mGroupId != null) {

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,19 +32,20 @@ import butterknife.ButterKnife;
 public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroupContactPresenter> implements SelectedGroupContactContract.View {
 
     @BindView(R.id.tv_empty_view)
-    TextView mTvEmptyView;
+    TextView     mTvEmptyView;
     @BindView(R.id.rv_group_contact)
     RecyclerView rvGroupContact;
 
-    private View mRootView;
-    private List<Contacts> mContact;
-    private List<String> mOrgIdKey;
+    private View                        mRootView;
+    private List<Contacts>              mContact;
+    private List<String>                mOrgIdKey;
     private SparseArray<List<Contacts>> mLoadContact;
-    private List<Contacts> mGroupUsers;
-    private onLoadUsersListener mListener;
-    public SelectedContactAdapter mAdapter;
-    private onSelectedUsersListener mUserListener;
-    private ArrayList<String> mSelectedAccount;
+    private List<Contacts>              mGroupUsers;
+    private onLoadUsersListener         mListener;
+    public  SelectedContactAdapter      mAdapter;
+    private onSelectedUsersListener     mUserListener;
+    private ArrayList<String>           mSelectedAccount;
+    private String                      mUserCode;
 
 
     @SuppressLint("ValidFragment")
@@ -79,6 +81,8 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
         mSelectedAccount = new ArrayList<>();
         mAdapter = new SelectedContactAdapter(mContact);
         mSelectedAccount = getArguments().getStringArrayList("selectedAccount");
+        mUserCode = getArguments().getString("userCode");
+
         List<Contacts> contacts1 = mLoadContact.get(Integer.parseInt(getArguments().getString("orgId", "1")));
         if (contacts1 != null) {
             mContact.clear();
@@ -87,6 +91,11 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
             rvGroupContact.requestLayout();
             mAdapter.notifyDataSetChanged();
             mTvEmptyView.setVisibility(View.GONE);
+            return;
+        }
+        //TODO
+        if (!TextUtils.isEmpty(mUserCode)) {
+            mPresenter.QueryGroupContact(getArguments().getString("orgId", "1"), mUserCode);
             return;
         }
         mPresenter.QueryGroupContact(getArguments().getString("orgId", "1"), mSelectedAccount);
@@ -130,7 +139,13 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
             if (bean != null) {
                 mTvEmptyView.setVisibility(View.GONE);
                 mOrgIdKey.add(getArguments().getString("orgId", "1"));
+
+                for (int i = 0; i < bean.size(); i++) {
+
+                }
                 mContact.addAll(bean);
+
+
                 mAdapter.setNewData(mContact);
                 rvGroupContact.requestLayout();
                 mAdapter.notifyDataSetChanged();

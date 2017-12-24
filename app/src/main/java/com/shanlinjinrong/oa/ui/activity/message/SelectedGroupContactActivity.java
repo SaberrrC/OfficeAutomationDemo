@@ -62,30 +62,30 @@ import io.reactivex.schedulers.Schedulers;
 public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroupContactPresenter> implements SelectedGroupContactContract.View, SelectedGroupContactFragment.onLoadUsersListener, SelectedGroupContactFragment.onSelectedUsersListener {
 
     @BindView(R.id.top_view)
-    CommonTopView mTopView;
+    CommonTopView     mTopView;
     @BindView(R.id.tv_empty_view)
-    TextView mTvErrorView;
+    TextView          mTvErrorView;
     @BindView(R.id.search_et_input)
-    EditText mSearchContact;
+    EditText          mSearchContact;
     @BindView(R.id.tv_selected_contact)
-    TextView mTvSelectedContact;
+    TextView          mTvSelectedContact;
     @BindView(R.id.rv_search_contact)
-    RecyclerView mRvSearchContact;
+    RecyclerView      mRvSearchContact;
     @BindView(R.id.ll_selected_contact)
-    LinearLayout mLlSelectedContact;
+    LinearLayout      mLlSelectedContact;
     @BindView(R.id.bottom_container_layout)
     BottomSheetLayout bottomContainerLayout;
 
-    private EMGroup mGroup;
-    private String[] mUserNames;
-    private String[] mUserCodes;
-    private List<String> mOrgIdKey;
-    private List<Contacts> mGroupUsers;
-    private List<Contacts> mSearchData;
-    private ArrayList<String> mSelectedAccount;
-    private SelectedContactAdapter mUserAdapter;
-    private GroupContactListFragment mBottomFragment;
-    private SparseArray<List<Contacts>> mCacheContact;
+    private EMGroup                            mGroup;
+    private String[]                           mUserNames;
+    private String[]                           mUserCodes;
+    private List<String>                       mOrgIdKey;
+    private List<Contacts>                     mGroupUsers;
+    private List<Contacts>                     mSearchData;
+    private ArrayList<String>                  mSelectedAccount;
+    private SelectedContactAdapter             mUserAdapter;
+    private GroupContactListFragment           mBottomFragment;
+    private SparseArray<List<Contacts>>        mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
     private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101, FINISHRESULT = -5;
 
@@ -123,6 +123,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             contacts1.setItemType(1);
             contacts1.setUsername(getIntent().getStringExtra("userName"));
             contacts1.setCode(getIntent().getStringExtra("userCode"));
+            //TODO 过滤人员问题
             mGroupUsers.add(contacts1);
             mTopView.setRightText("确认(1)");
             mTvSelectedContact.setText("1");
@@ -353,6 +354,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         bundle.putString("orgId", orgId);
         bundle.putString("title", title);
         bundle.putBoolean("isBack", true);
+        bundle.putString("userCode", getIntent().getStringExtra("userCode"));
         bundle.putStringArrayList("selectedAccount", mSelectedAccount);
         fragment.setArguments(bundle);
         mFragments.add(0, fragment);
@@ -367,8 +369,6 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         mTopView.setRightText(groupUsers.size() != 0 ? "确认" + "(" + groupUsers.size() + ")" : "确认");
     }
 
-
-    //TODO 选择逻辑问题
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDeleteContact(DeleteContactEvent event) {
 

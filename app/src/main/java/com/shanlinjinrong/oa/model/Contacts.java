@@ -158,6 +158,37 @@ public class Contacts implements MultiItemEntity, Serializable {
         }
     }
 
+    public Contacts(JSONObject jsonObject, String account) {
+        try {
+            departmentId = jsonObject.getString("id");
+            departmentName = jsonObject.getString("name");
+            departmentPersons = jsonObject.getString("memberCount");
+            itemType = 0;
+        } catch (JSONException e) {
+            try {
+                uid = jsonObject.getString("uid");
+                username = jsonObject.getString("username");
+                phone = jsonObject.getString("phone");
+                email = jsonObject.getString("email");
+                portraits = Constants.SLPicBaseUrl + jsonObject.getString("portraits");
+                sex = jsonObject.getString("sex");
+                postTitle = jsonObject.getString("post_title");
+                postId = jsonObject.getString("department_id");
+                departmentName = jsonObject.getString("department_name");
+                code = jsonObject.getString("code");
+                //TODO
+                if (code.equals(account)) {
+                    isChecked = true;
+                }
+                itemType = 1;
+                setIsshow(AppConfig.getAppConfig(AppManager.mContext).getDepartmentId().equals(postId) ? "1" : "0");
+            } catch (Throwable e1) {
+                e1.printStackTrace();
+                LogUtils.e("获取部门和员工异常：" + e1.toString());
+            }
+        }
+    }
+
 
     public String getCode() {
         if (code == null) {

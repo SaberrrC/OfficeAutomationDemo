@@ -37,6 +37,8 @@ public interface SelectedGroupContactContract {
 
         void searchContact(String name, ArrayList<String> account);
 
+        void QueryGroupContact(String name, String account);
+
         void QueryGroupContact(String orgId);
 
         void searchContact(String name);
