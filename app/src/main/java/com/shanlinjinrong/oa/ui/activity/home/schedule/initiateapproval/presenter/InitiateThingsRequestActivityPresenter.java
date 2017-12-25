@@ -141,7 +141,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 try {
                     if (mView != null) {
                         mView.queryEvectionTypeFailure(errorNo, strMsg);
-                        mView.requestFinish();
+                        if (mView != null)
+                            mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -200,7 +201,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 try {
                     if (mView != null) {
                         mView.queryEvectionTypeFailure(errorNo, strMsg);
-                        mView.requestFinish();
+                        if (mView != null)
+                            mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -258,7 +260,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 try {
                     if (mView != null) {
                         mView.submitEvectionApplyFailure(errorNo, strMsg);
-                        mView.requestFinish();
+                        if (mView != null)
+                            mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -370,7 +373,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 try {
                     if (mView != null) {
                         mView.addWorkApplyFailure(errorNo, strMsg);
-                        mView.requestFinish();
+                        if (mView != null)
+                            mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -391,45 +395,45 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
         //            public void onStart() {
         //                super.onStart();
         //                try {
-            //                    mView.showLoading();
-            //                } catch (Throwable e) {
-            //                    e.printStackTrace();
-            //                }
-            //            }
-            //
-            //            @Override
-            //            public void onCompleted() {
-            //                try {
-                //                    mView.requestFinish();
-                //                } catch (Throwable e) {
-                //                    e.printStackTrace();
-                //                }
-                //            }
-                //
-                //            @Override
-                //            public void onError(Throwable e) {
-                //                try {
-                    //                    mView.requestFinish();
-                    //                    if (e instanceof ApiException) {
-                    //                        ApiException baseException = (ApiException) e;
-                    //                        String code = baseException.getCode();
-                    //                        String message = baseException.getMessage();
-                    //                    } else if (e instanceof HttpException) {
-                        //                        mView.uidNull(((HttpException) e).code());
-                        //                    } else if (e instanceof SocketTimeoutException) {
-                            //                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
-                            //                    } else if (e instanceof NullPointerException) {
-                                //                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
-                                //                    } else if (e instanceof ConnectException) {
-                                    //                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
-                                    //                    }
-                                    //                } catch (Throwable e1) {
-                                    //                    e1.printStackTrace();
-                                    //                }
-                                    //            }
-                                    //
-                                    //            @Override
-                                    //            public void onNext(String s) {
+        //                    mView.showLoading();
+        //                } catch (Throwable e) {
+        //                    e.printStackTrace();
+        //                }
+        //            }
+        //
+        //            @Override
+        //            public void onCompleted() {
+        //                try {
+        //                    mView.requestFinish();
+        //                } catch (Throwable e) {
+        //                    e.printStackTrace();
+        //                }
+        //            }
+        //
+        //            @Override
+        //            public void onError(Throwable e) {
+        //                try {
+        //                    mView.requestFinish();
+        //                    if (e instanceof ApiException) {
+        //                        ApiException baseException = (ApiException) e;
+        //                        String code = baseException.getCode();
+        //                        String message = baseException.getMessage();
+        //                    } else if (e instanceof HttpException) {
+        //                        mView.uidNull(((HttpException) e).code());
+        //                    } else if (e instanceof SocketTimeoutException) {
+        //                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
+        //                    } else if (e instanceof NullPointerException) {
+        //                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
+        //                    } else if (e instanceof ConnectException) {
+        //                        mView.submitEvectionApplyFailure(-2, "网络不通，请检查网络连接！");
+        //                    }
+        //                } catch (Throwable e1) {
+        //                    e1.printStackTrace();
+        //                }
+        //            }
+        //
+        //            @Override
+        //            public void onNext(String s) {
         //                mView.submitEvectionApplySuccess(s);
         //            }
         //        });
@@ -479,7 +483,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 try {
                     if (mView != null) {
                         mView.submitFurloughFailure(errorNo, strMsg);
-                        mView.requestFinish();
+                        if (mView != null)
+                            mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -530,10 +535,10 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null) {
+                    if (mView != null)
                         mView.findSignReasonFailure(errorNo, strMsg);
+                    if (mView != null)
                         mView.requestFinish();
-                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -592,7 +597,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 try {
                     if (mView != null) {
                         mView.registrationCardFailure(errorNo, strMsg);
-                        mView.requestFinish();
+                        if (mView != null)
+                            mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
