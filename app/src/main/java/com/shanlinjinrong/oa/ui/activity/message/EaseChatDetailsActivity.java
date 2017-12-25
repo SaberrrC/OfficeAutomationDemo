@@ -142,7 +142,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 if (throwable instanceof HyphenateException) {
                     int errorCode = ((HyphenateException) throwable).getErrorCode();
                     if (errorCode >= 600 && errorCode <= 700) {
-                        EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                        EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
                             setResult(REFRESHSUCCESS);
                             finish();
                         }, false);
@@ -592,7 +592,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 break;
             case Constants.GROUPDISSOLVE:
                 if (!event.isEvent() && mIsResume) {
-                    EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                    EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
                         event.setEvent(true);
                         setResult(REFRESHSUCCESS);
                         finish();

@@ -35,17 +35,13 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -108,7 +104,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                                 int errorCode = ((HyphenateException) throwable).getErrorCode();
                                 if (errorCode >= 600 && errorCode <= 700) {
                                     if (mIsResume) {
-                                        EaseAlertDialog alertDialog = new EaseAlertDialog(EaseChatMessageActivity.this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                        EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
                                             EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
                                             if (mChatType == EaseConstant.CHATTYPE_GROUP) {
                                                 setResult(DELETESUCCESS);
@@ -349,7 +345,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 break;
             case Constants.GROUPDISSOLVE:
                 if (!event.isEvent() && mIsResume) {
-                    EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                    EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
                         event.setEvent(true);
                         setResult(DELETESUCCESS);
                         finish();
