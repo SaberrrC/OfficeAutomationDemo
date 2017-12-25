@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -396,22 +397,32 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             fetchQueue.execute(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        EMClient.getInstance().chatManager().fetchHistoryMessages(toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, "");
-                        final List<EMMessage> msgs = conversation.getAllMessages();
-                        int msgCount = msgs != null ? msgs.size() : 0;
-                        if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
-                            String msgId = null;
-                            if (msgs != null && msgs.size() > 0) {
-                                msgId = msgs.get(0).getMsgId();
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                EMClient.getInstance().chatManager().fetchHistoryMessages(toChatUsername, EaseCommonUtils.getConversationType(chatType), pagesize, "");
+                                final List<EMMessage> msgs = conversation.getAllMessages();
+                                int msgCount = msgs != null ? msgs.size() : 0;
+                                if (msgCount <= conversation.getAllMsgCount() && msgCount < pagesize) {
+                                    String msgId = null;
+                                    if (msgs != null && msgs.size() > 0) {
+                                        msgId = msgs.get(0).getMsgId();
+                                    }
+                                    List<EMMessage> emMessages = conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+                                    mEmMessage = emMessages.get(0);
+                                }
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        messageList.refreshSelectLast();
+                                    }
+                                });
+                            } catch (HyphenateException e) {
+                                e.printStackTrace();
                             }
-                            List<EMMessage> emMessages = conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
-                            mEmMessage = emMessages.get(0);
                         }
-                        messageList.refreshSelectLast();
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
-                    }
+                    }.start();
                 }
             });
             return;

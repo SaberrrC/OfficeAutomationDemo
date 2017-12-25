@@ -3,16 +3,11 @@ package com.shanlinjinrong.oa.ui.activity.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -112,7 +107,6 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
             mConfirmEmailLayout.setVisibility(View.VISIBLE);
             mFindEmailLayout.setVisibility(View.GONE);
         }
-
 //        mEmailSelectIcon.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -125,7 +119,6 @@ public class ConfirmCompanyEmailActivity extends HttpBaseActivity<ConfirmEmailPr
 //            }
 //        });
     }
-
 
     @Override
     public void showLoading() {
