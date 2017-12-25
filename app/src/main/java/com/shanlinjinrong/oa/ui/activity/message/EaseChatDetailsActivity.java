@@ -38,6 +38,7 @@ import com.shanlinjinrong.oa.ui.activity.message.chatgroup.ModificationGroupName
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatDetailsPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -142,12 +143,14 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 if (throwable instanceof HyphenateException) {
                     int errorCode = ((HyphenateException) throwable).getErrorCode();
                     if (errorCode >= 600 && errorCode <= 700) {
-                        EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
-                            setResult(REFRESHSUCCESS);
-                            finish();
-                        }, false);
-                        alertDialog.setCancelable(false);
-                        alertDialog.show();
+                        if (Utils.isActivityRunning(this,"EaseChatDetailsActivity")) {
+                            EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                setResult(REFRESHSUCCESS);
+                                finish();
+                            }, false);
+                            alertDialog.setCancelable(false);
+                            alertDialog.show();
+                        }
                     }
                 }
             }, () -> {
@@ -592,13 +595,15 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 break;
             case Constants.GROUPDISSOLVE:
                 if (!event.isEvent() && mIsResume) {
-                    EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
-                        event.setEvent(true);
-                        setResult(REFRESHSUCCESS);
-                        finish();
-                    }, false);
-                    alertDialog.setCancelable(false);
-                    alertDialog.show();
+                    if (Utils.isActivityRunning(this,"EaseChatDetailsActivity")) {
+                        EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                            event.setEvent(true);
+                            setResult(REFRESHSUCCESS);
+                            finish();
+                        }, false);
+                        alertDialog.setCancelable(false);
+                        alertDialog.show();
+                    }
                 }
                 break;
             case Constants.GROUPMEMBERQUIT:

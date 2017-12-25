@@ -29,6 +29,7 @@ import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.EaseChatMessagePresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -104,15 +105,17 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                                 int errorCode = ((HyphenateException) throwable).getErrorCode();
                                 if (errorCode >= 600 && errorCode <= 700) {
                                     if (mIsResume) {
-                                        EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
-                                            EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
-                                            if (mChatType == EaseConstant.CHATTYPE_GROUP) {
-                                                setResult(DELETESUCCESS);
-                                            }
-                                            finish();
-                                        }, false);
-                                        alertDialog.setCancelable(false);
-                                        alertDialog.show();
+                                        if (Utils.isActivityRunning(this, "EaseChatMessageActivity")) {
+                                            EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                                EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
+                                                if (mChatType == EaseConstant.CHATTYPE_GROUP) {
+                                                    setResult(DELETESUCCESS);
+                                                }
+                                                finish();
+                                            }, false);
+                                            alertDialog.setCancelable(false);
+                                            alertDialog.show();
+                                        }
                                     }
                                 }
                             }
@@ -345,13 +348,15 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 break;
             case Constants.GROUPDISSOLVE:
                 if (!event.isEvent() && mIsResume) {
-                    EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
-                        event.setEvent(true);
-                        setResult(DELETESUCCESS);
-                        finish();
-                    }, false);
-                    alertDialog.setCancelable(false);
-                    alertDialog.show();
+                    if (Utils.isActivityRunning(this, "EaseChatMessageActivity")) {
+                        EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                            event.setEvent(true);
+                            setResult(DELETESUCCESS);
+                            finish();
+                        }, false);
+                        alertDialog.setCancelable(false);
+                        alertDialog.show();
+                    }
                 }
                 break;
         }

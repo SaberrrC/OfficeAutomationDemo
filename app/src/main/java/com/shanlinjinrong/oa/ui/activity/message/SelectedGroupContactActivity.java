@@ -41,6 +41,7 @@ import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.activity.message.contract.SelectedGroupContactContract;
 import com.shanlinjinrong.oa.ui.activity.message.presenter.SelectedGroupContactPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -616,13 +617,15 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             case Constants.MODIFICATIONNAME:
                 break;
             case Constants.GROUPDISSOLVE:
-                EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
-                    event.setEvent(true);
-                    setResult(FINISHRESULT);
-                    finish();
-                }, false);
-                alertDialog.setCancelable(false);
-                alertDialog.show();
+                if (Utils.isActivityRunning(this,"SelectedGroupContactActivity")) {
+                    EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
+                        event.setEvent(true);
+                        setResult(FINISHRESULT);
+                        finish();
+                    }, false);
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
+                }
                 break;
         }
     }
