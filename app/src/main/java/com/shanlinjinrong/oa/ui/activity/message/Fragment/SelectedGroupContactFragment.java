@@ -198,7 +198,15 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
                     if (mContact.get(i).isChecked()) {
                         mGroupUsers.add(mContact.get(i));
                     } else {
-                        mGroupUsers.remove(mContact.get(i));
+                        if(!TextUtils.isEmpty(mUserCode)){
+                            for (int j = 0; j < mGroupUsers.size(); j++) {
+                               if (mGroupUsers.get(j).getCode().equals(mContact.get(i).getCode())){
+                                   mGroupUsers.remove(j);
+                                }
+                            }
+                        }else {
+                            mGroupUsers.remove(mContact.get(i));
+                        }
                     }
                     mUserListener.selectedUsers(mGroupUsers);
 
