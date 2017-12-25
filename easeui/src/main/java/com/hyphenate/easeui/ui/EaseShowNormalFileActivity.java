@@ -53,7 +53,7 @@ public class EaseShowNormalFileActivity extends EaseBaseActivity {
                         if(file != null && file.exists()&&file.isFile())
                             file.delete();
                         String str4 = getResources().getString(R.string.Failed_to_download_file);
-                        Toast.makeText(EaseShowNormalFileActivity.this, str4+message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EaseShowNormalFileActivity.this, str4, Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });

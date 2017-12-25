@@ -104,13 +104,23 @@ public class EaseMessageAdapter extends BaseAdapter {
     private List<EMMessage> messages = new ArrayList<>();
     private List<EMMessage> mDatas   = new ArrayList<>();
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        isRefresh = false;
+}
 
+    private boolean isRefresh = false;
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         private void refreshList() {
             // you should not call getAllMessages() in UI thread
             // otherwise there is problem when refreshing UI and there is new message arrive
+            if (isRefresh) {
+                return;
+            }
             if (conversation != null) {
+                isRefresh = true;
                 mDatas = conversation.getAllMessages();
                 messages.clear();
                 messages.addAll(mDatas);
