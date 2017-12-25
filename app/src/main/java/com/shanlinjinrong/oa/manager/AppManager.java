@@ -153,8 +153,8 @@ public class AppManager extends MultiDexApplication {
         LeakCanary.install(this);
 
         //性能魔方
-        Mmtrix.withApplicationToken("b6e5828c2a8defbee75d5b0a9473d115").withCrashReportingEnabled(true).start(this);
-//        }
+        //Mmtrix.withApplicationToken("b6e5828c2a8defbee75d5b0a9473d115").withCrashReportingEnabled(true).start(this);
+        //}
 
         //blockCanary
         //install(this, new AppBlockCanaryContext()).start();

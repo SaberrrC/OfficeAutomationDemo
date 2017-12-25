@@ -164,6 +164,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         try {
             mChatType = getIntent().getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
             if (mChatType == EaseConstant.CHATTYPE_GROUP) {
+                mTvTitle.setText("群聊");
                 Observable.create((ObservableOnSubscribe<String>) e -> {
                     mGroup = EMClient.getInstance().groupManager().getGroupFromServer(getIntent().getStringExtra("u_id"));
                     int memberCount = mGroup.getMemberCount();
@@ -173,7 +174,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(s -> mTvTitle.setText(s), throwable -> {
                             throwable.printStackTrace();
-                            mTvTitle.setText("匿名群组");
+                            mTvTitle.setText("群聊");
                         });
                 imgDetailsIcon.setImageResource(R.mipmap.icon_chat_group_list);
             } else {

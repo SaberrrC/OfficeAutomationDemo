@@ -608,8 +608,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
         Observable.create(e -> {
-            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
-                    Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
+            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
                     userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(), userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
             e.onComplete();
         }).subscribeOn(Schedulers.io())
@@ -635,7 +634,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     }
 
     //开启权限列表
-
     public void startAppSetting() {
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", getPackageName(), null);
@@ -695,29 +693,42 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         //   BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
         ShortcutBadger.removeCount(MainActivity.this);
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshCount(OnCountRefreshEvent event) {
-        bindBadgeView(event.getUnReadMsgCount());
+        switch (event.getEvent()) {
+            case 1:
+                runOnUiThread(() -> {
+                    if (event.getErrorCode() == EMError.USER_REMOVED) {
+                        NonTokenDialog();
+                    } else if (event.getErrorCode() == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                        NonTokenDialog();
+                    }
+                });
+                break;
+            default:
+                bindBadgeView(event.getUnReadMsgCount());
+                break;
+        }
+
     }
 
     //实现ConnectionListener接口
-    private class MyConnectionListener implements EMConnectionListener {
+    private static class MyConnectionListener implements EMConnectionListener {
         @Override
         public void onConnected() {
         }
 
         @Override
         public void onDisconnected(final int error) {
-            runOnUiThread(() -> {
-                if (error == EMError.USER_REMOVED) {
-                    NonTokenDialog();
-                } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-                    NonTokenDialog();
-                }
-            });
+            OnCountRefreshEvent onCountRefreshEvent = new WeakReference<>(new OnCountRefreshEvent()).get();
+            onCountRefreshEvent.setEvent(1);
+            onCountRefreshEvent.setErrorCode(error);
+            EventBus.getDefault().post(onCountRefreshEvent);
         }
     }
 }

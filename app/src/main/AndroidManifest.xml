@@ -554,19 +554,6 @@
         <activity
             android:name=".ui.activity.home.schedule.SelectJoinPeopleActivity"
             android:screenOrientation="portrait" />
-        <!-- 会议详情 -->
-        <activity
-            android:name=".ui.activity.home.schedule.MeetingInfoActivity"
-            android:screenOrientation="portrait" />
-        <!-- 视频会议详情 -->
-        <activity
-            android:name=".ui.activity.home.schedule.nouse.MeetingInfoVideoActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <!-- 视频会议 -->
-        <activity
-            android:name=".ui.activity.home.schedule.MeetingVideoActivity"
-            android:screenOrientation="portrait" />
         <!-- 聊天activity -->
         <!--<activity-->
         <!--android:name=".ui.activity.message.EaseChatMessageActivity"-->
