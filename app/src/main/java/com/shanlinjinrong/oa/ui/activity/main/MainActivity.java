@@ -38,6 +38,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.event.OnCountRefreshEvent;
 import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.R;
@@ -56,7 +57,6 @@ import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
-import com.hyphenate.easeui.event.OnCountRefreshEvent;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,12 +75,7 @@ import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import q.rorbin.badgeview.QBadgeView;
@@ -536,14 +531,17 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
     @Override
     protected void onResume() {
+        super.onResume();
         judeIsInitPwd();
-        Observable.create(e -> EMClient.getInstance().chatManager().addMessageListener(messageListener)).subscribeOn(Schedulers.io()).subscribe();
+        Observable.create(e ->
+                EMClient.getInstance().chatManager()
+                        .addMessageListener(messageListener))
+                .subscribeOn(Schedulers.io()).subscribe();
         if (tabCommunicationFragment != null) {
             if (tabCommunicationFragment.myConversationListFragment != null) {
                 tabCommunicationFragment.myConversationListFragment.refresh();
             }
         }
-        super.onResume();
     }
 
     @Override

@@ -17,15 +17,15 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 
 public class EaseShowNormalFileActivity extends EaseBaseActivity {
-	private ProgressBar progressBar;
+    private ProgressBar progressBar;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ease_activity_show_file);
-		progressBar = (ProgressBar) findViewById(R.id.progressBar);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ease_activity_show_file);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-		final EMMessage message = getIntent().getParcelableExtra("msg");
+        final EMMessage message = getIntent().getParcelableExtra("msg");
         if (!(message.getBody() instanceof EMFileMessageBody)) {
             Toast.makeText(EaseShowNormalFileActivity.this, "Unsupported message body", Toast.LENGTH_SHORT).show();
             finish();
@@ -69,5 +69,5 @@ public class EaseShowNormalFileActivity extends EaseBaseActivity {
             }
         });
         EMClient.getInstance().chatManager().downloadAttachment(message);
-	}
+    }
 }
