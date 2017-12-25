@@ -26,18 +26,18 @@ import java.util.Calendar;
  * primary menu
  */
 public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnClickListener {
-    private EditText editText;
-    private View buttonSetModeKeyboard;
+    private EditText       editText;
+    private View           buttonSetModeKeyboard;
     private RelativeLayout edittext_layout;
-    private View buttonSetModeVoice;
-    private View buttonSend;
-    private View buttonPressToSpeak;
-    private ImageView faceNormal;
-    private ImageView faceChecked;
-    private Button buttonMore;
-    private TextView tv_holdtotalk;
-    private boolean ctrlPress = false;
-    private long lastClickTime = 0;
+    private View           buttonSetModeVoice;
+    private View           buttonSend;
+    private View           buttonPressToSpeak;
+    private ImageView      faceNormal;
+    private ImageView      faceChecked;
+    private Button         buttonMore;
+    private TextView       tv_holdtotalk;
+    private boolean ctrlPress     = false;
+    private long    lastClickTime = 0;
 
     public EaseChatPrimaryMenu(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -67,7 +67,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
         RelativeLayout faceLayout = (RelativeLayout) findViewById(R.id.rl_face);
         buttonMore = (Button) findViewById(R.id.btn_more);
         tv_holdtotalk = (TextView) findViewById(R.id.tv_holdtotalk);
-//        edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_normal);
+        //edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_normal);
 
         buttonSend.setOnClickListener(this);
         buttonSetModeKeyboard.setOnClickListener(this);
@@ -75,16 +75,16 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
         buttonMore.setOnClickListener(this);
         faceLayout.setOnClickListener(this);
         editText.setOnClickListener(this);
-        editText.requestFocus();
+        //editText.requestFocus();
 
         editText.setOnFocusChangeListener(new OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-//                    edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_active);
+                    //edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_active);
                 } else {
-//                    edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_normal);
+                    //edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_normal);
                 }
 
             }
@@ -237,7 +237,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
             if (listener != null)
                 listener.onToggleExtendClicked();
         } else if (id == R.id.et_sendmessage) {
-//            edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_active);
+            //edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_active);
             faceNormal.setVisibility(View.VISIBLE);
             faceChecked.setVisibility(View.INVISIBLE);
             if (listener != null)

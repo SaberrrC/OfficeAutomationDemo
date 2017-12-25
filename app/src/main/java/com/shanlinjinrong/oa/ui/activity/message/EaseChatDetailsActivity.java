@@ -193,7 +193,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private void InitGroupData() {
         try {
             mQueryUserInfo = "";
-            final int pageSize = 500;
+            final int pageSize =500;
             Observable.create(e -> {
                 do {
                     try {//如果群成员较多，需要多次从服务器获取完成
@@ -205,6 +205,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     }
                 }
                 while (!TextUtils.isEmpty(mGroupMemberResult.getCursor()) && mGroupMemberResult.getData().size() == pageSize);
+
                 e.onComplete();
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
             }, throwable -> {
@@ -242,7 +243,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 } else {
                     memberCount = mMemberList.size();
                 }
-
+                mQueryUserInfo = "";
                 for (int i = 0; i < memberCount; i++) {
                     String userCode = mMemberList.get(i).substring(3, mMemberList.get(i).length());
                     if (i == memberCount - 1) {
