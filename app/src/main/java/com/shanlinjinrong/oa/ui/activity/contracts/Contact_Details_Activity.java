@@ -268,6 +268,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
             mUserCode = "sl_" + user.getCode();
             mNickName = user.getUsername();
             mPortrait = Constants.SLPicBaseUrl + user.getPortraits();
+//            mPortrait =  user.getPortraits();
             mDepartment = user.getDepartmentName();
             mDepartmentId = user.getDepartmentId();
             mUserDepartment = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);

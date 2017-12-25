@@ -266,32 +266,6 @@ public class User implements MultiItemEntity, Serializable {
         }
     }
 
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "yx_token='" + yx_token + '\'' +
-                ", is_initial_pwd='" + is_initial_pwd + '\'' +
-                ", uid='" + uid + '\'' +
-                ", token='" + token + '\'' +
-                ", email='" + email + '\'' +
-                ", portraits='" + portraits + '\'' +
-                ", username='" + username + '\'' +
-                ", sex='" + sex + '\'' +
-                ", phone='" + phone + '\'' +
-                ", isshow='" + isshow + '\'' +
-                ", oid='" + oid + '\'' +
-                ", hiredate='" + hiredate + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", postId='" + postId + '\'' +
-                ", postName='" + postName + '\'' +
-                ", departmentId='" + departmentId + '\'' +
-                ", departmentName='" + departmentName + '\'' +
-                ", isleader='" + isleader + '\'' +
-                ", code='" + code + '\'' +
-                '}';
-    }
-
     @Override
     public int getItemType() {
         return 100;

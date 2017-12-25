@@ -633,7 +633,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                     finish();
                     return;
                 }
-                setResult(LISTENERGROUPAME);
+                setResult(RESULTMODIFICATIONNAME);
                 getGroupInfo();
                 break;
             case MODIFICATIONOWNER:

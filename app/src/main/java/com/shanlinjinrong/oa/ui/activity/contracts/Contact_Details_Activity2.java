@@ -117,7 +117,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
         mEmail = constants.getEmail();
         mPost = constants.getPostTitle();
         mNickName = constants.getUsername();
-        mPortrait = Constants.SLPicBaseUrl + constants.getPortraits();
+        mPortrait =  constants.getPortraits();
         mUserCode = "sl_" + constants.getCode();
         mDepartmentId = constants.getDepartmentId();
         mDepartment = constants.getDepartmentName();

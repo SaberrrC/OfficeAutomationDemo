@@ -32,9 +32,9 @@ public class ModificationGroupNameActivity extends BaseActivity implements TextW
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.ed_modification_group_name)
-    EditText mEdModificationGroupName;
+    EditText      mEdModificationGroupName;
     private final int RESULTMODIFICATIONNAME = -3;
-    private String mGroupName;
+    private String   mGroupName;
     private TextView mRightView;
 
 
@@ -95,7 +95,7 @@ public class ModificationGroupNameActivity extends BaseActivity implements TextW
                         cmdMsg.addBody(cmdBody);
                         EMClient.getInstance().chatManager().sendMessage(cmdMsg);
 
-                        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(groupId, group_name, "", "", "", "", "", "", ""));
+                        FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(groupId, group_name, ""));
 
                         hideLoadingView();
                         Intent intent = new Intent();
