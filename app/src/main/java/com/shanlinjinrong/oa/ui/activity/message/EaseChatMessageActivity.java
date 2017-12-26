@@ -105,7 +105,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                                 int errorCode = ((HyphenateException) throwable).getErrorCode();
                                 if (errorCode >= 600 && errorCode <= 700) {
                                     if (mIsResume) {
-                                        if (Utils.isActivityRunning(this, "EaseChatMessageActivity")) {
+                                        if (Utils.isActivityRunning(this, getClass().getName())) {
                                             EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
                                                 EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
                                                 if (mChatType == EaseConstant.CHATTYPE_GROUP) {
@@ -371,7 +371,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 break;
             case Constants.GROUPDISSOLVE:
                 if (!event.isEvent() && mIsResume) {
-                    if (Utils.isActivityRunning(this, "EaseChatMessageActivity")) {
+                    if (Utils.isActivityRunning(this, getClass().getName())) {
                         EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
                             event.setEvent(true);
                             setResult(DELETESUCCESS);
