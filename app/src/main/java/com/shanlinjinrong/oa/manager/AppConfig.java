@@ -106,7 +106,7 @@ public class AppConfig {
      */
     public String get(String key) {
         String string = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString(key, DEFAULT_ARGUMENTS_VALUE);
-        if (string.equals("null")) {
+        if (TextUtils.equals("null", string)) {
             return "";
         }
         return string;
@@ -119,8 +119,7 @@ public class AppConfig {
      * @return 参数值
      */
     public boolean get(String key, boolean b) {
-        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE)
-                .getBoolean(key, b);
+        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getBoolean(key, b);
     }
 
 
@@ -168,8 +167,7 @@ public class AppConfig {
     }
 
     public void set(User user, Boolean isAutoLogin) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putString(PREF_KEY_TOKEN, user.getToken());
         editor.putString(PREF_KEY_CODE, user.getCode());
         if (!TextUtils.isEmpty(user.getUid())) {
@@ -203,8 +201,7 @@ public class AppConfig {
      * @param value
      */
     public void set(String key, String value) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putString(key, value);
         editor.apply();
     }
@@ -216,8 +213,7 @@ public class AppConfig {
      * @param value
      */
     public void set(String key, boolean value) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putBoolean(key, value);
         editor.apply();
     }
@@ -228,8 +224,7 @@ public class AppConfig {
      * @param autoLogin
      */
     public void setAutoLogin(boolean autoLogin) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putBoolean(IS_AUTO_LOGIN, autoLogin);
         editor.apply();
     }
@@ -240,16 +235,14 @@ public class AppConfig {
      * @return
      */
     public boolean isAutoLogin() {
-        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE)
-                .getBoolean(IS_AUTO_LOGIN, false);
+        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getBoolean(IS_AUTO_LOGIN, false);
     }
 
     /**
      * 登出需要调用此方式
      */
     public void clearLoginInfo() {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putString(PREF_KEY_TOKEN, DEFAULT_ARGUMENTS_VALUE);
         editor.putString(PREF_KEY_USER_UID, DEFAULT_ARGUMENTS_VALUE);
         editor.putString(PREF_KEY_DEPARTMENT_ID, DEFAULT_ARGUMENTS_VALUE);
