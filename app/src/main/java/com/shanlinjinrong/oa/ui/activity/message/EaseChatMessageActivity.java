@@ -69,13 +69,13 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     private String  mEmail;
     private String  mPortrait;
     private boolean mIsResume;
-    private String  mGroupName;
     private String  mPost_name;
     private long lastClickTime = 0;
     private String           mDepartment_name;
     private EaseChatFragment chatFragment;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3, DISSOLVEGROUP = 600, LISTENERGROUPAME = -1;
     private EMGroup mGroup;
+    private String  mGroupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +194,17 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             if (mChatType == EaseConstant.CHATTYPE_GROUP) {
                 if (getIntent().getStringExtra("groupTitle") != null) {
                     if (!getIntent().getStringExtra("groupTitle").equals("")) {
-                        mTvTitle.setText(getIntent().getStringExtra("groupTitle"));
+                        try {
+                            String groupTitle = getIntent().getStringExtra("groupTitle");
+                            if (groupTitle != null)
+                                if (groupTitle.length() > 10) {
+                                    mGroupName = groupTitle.substring(0, 10) + "...";
+                                }
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                            mGroupName = getIntent().getStringExtra("groupTitle");
+                        }
+                        mTvTitle.setText(mGroupName);
                     } else {
                         remoteGroupName();
                     }
@@ -228,7 +238,18 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             }).subscribeOn(Schedulers.io())
                     .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                     .subscribe(s -> {
-                            }, Throwable::printStackTrace, () -> mTvTitle.setText(mGroupName)
+                            }, Throwable::printStackTrace, () -> {
+                                try {
+                                    if (mGroupName != null) {
+                                        if (mGroupName.length() > 10) {
+                                            mGroupName = mGroupName.substring(0, 10) + "...";
+                                        }
+                                        mTvTitle.setText(mGroupName);
+                                    }
+                                } catch (Throwable e) {
+                                    e.printStackTrace();
+                                }
+                            }
                     );
         } catch (Throwable throwable) {
             throwable.printStackTrace();
@@ -339,14 +360,23 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 finish();
                 break;
             case RESULTMODIFICATIONNAME:
-                mTitle = data.getStringExtra("groupName");
-                mTvTitle.setText(mTitle);
+                try {
+                    mTitle = data.getStringExtra("groupName");
+                    if (mTitle != null) {
+                        if (mTitle.length() > 10) {
+                            mTitle = mTitle.substring(0, 10) + "...";
+                        }
+                        mTvTitle.setText(mTitle);
+                    }
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
                 //刷新界面
                 setResult(DELETESUCCESS);
                 break;
             case LISTENERGROUPAME:
-                final String groupTitle = "群聊(" + mGroup.getMemberCount() + ")";
-                mTvTitle.setText(groupTitle);
+//                final String groupTitle = "群聊(" + mGroup.getMemberCount() + ")";
+//                mTvTitle.setText(groupTitle);
                 break;
         }
     }

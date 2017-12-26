@@ -7,6 +7,8 @@ import com.iflytek.cloud.thirdparty.S;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
+import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.net.MyKjHttp;
@@ -80,6 +82,9 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
 
                             for (int i = 0; i < users.length(); i++) {
                                 JSONObject user = users.getJSONObject(i);
+                                if (user.getString("code").equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                                    continue;
+                                }
                                 Contacts userInfo = new Contacts(user);
                                 contacts.add(userInfo);
                             }
@@ -181,7 +186,9 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
 
                             for (int i = 0; i < users.length(); i++) {
                                 JSONObject user = users.getJSONObject(i);
-
+                                if (user.getString("code").equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                                    continue;
+                                }
                                 Contacts userInfo = new Contacts(user, account);
                                 contacts.add(userInfo);
                             }
@@ -368,6 +375,9 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
 
                             for (int i = 0; i < users.length(); i++) {
                                 JSONObject user = users.getJSONObject(i);
+                                if (user.getString("code").equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                                    continue;
+                                }
                                 Contacts userInfo = new Contacts(user);
                                 contacts.add(userInfo);
                             }
@@ -451,6 +461,9 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                             List<Contacts> contacts = new ArrayList<>();
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject user = data.getJSONObject(i);
+                                if (user.getString("code").equals(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode())) {
+                                    continue;
+                                }
                                 Contacts contact = new Contacts();
                                 contact.setUid(user.getString("uid"));
                                 contact.setUsername(user.getString("username"));

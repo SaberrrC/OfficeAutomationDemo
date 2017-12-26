@@ -14,12 +14,20 @@ import java.util.List;
  */
 
 public class GroupChatListAdapter extends BaseQuickAdapter<EMGroup> {
+
+    private String mGroupName;
+
     public GroupChatListAdapter(List<EMGroup> data) {
         super(R.layout.item_group_list_show, data);
     }
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, EMGroup bean) {
-        baseViewHolder.setText(R.id.tv_group_name, bean.getGroupName());
+        if (bean.getGroupName() != null) {
+            if (bean.getGroupName().length() > 10) {
+                mGroupName = bean.getGroupName().substring(0, 10) + "...";
+            }
+        }
+        baseViewHolder.setText(R.id.tv_group_name, mGroupName);
     }
 }
