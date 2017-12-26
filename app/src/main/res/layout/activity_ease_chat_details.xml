@@ -94,7 +94,10 @@
                     android:layout_marginRight="5dp"
                     android:layout_toLeftOf="@+id/img_modification_group_name"
                     android:gravity="center_vertical"
-                    android:text="OA项目开发"
+                    android:maxEms="10"
+                    android:singleLine="true"
+                    android:lines="1"
+                    tools:text="OA项目开发"
                     android:textColor="@color/black_99333333"
                     android:textSize="16sp"/>
 

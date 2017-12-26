@@ -27,8 +27,8 @@ public class Utils {
         ActivityManager activityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> info = activityManager.getRunningTasks(1);
         if (info != null && info.size() > 0) {
-            ComponentName component = info.get(0).topActivity;
-            if (activityClassName.equals(component.getClassName())) {
+            String className = info.get(0).topActivity.getClassName();
+            if (activityClassName.equals(className)) {
                 return true;
             }
         }

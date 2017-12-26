@@ -3,15 +3,20 @@ package com.shanlinjinrong.oa.ui.activity.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AppOpsManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -28,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retrofit.net.RetrofitConfig;
+import com.facebook.stetho.common.LogUtil;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
@@ -64,6 +70,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -74,6 +81,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import ezy.assist.compat.SettingsCompat;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -203,8 +211,17 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         LoginIm();//登录环信
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
+
+        //悬浮窗 权限
+        if (!SettingsCompat.canDrawOverlays(new WeakReference<Context>(this).get())) {
+            //跳转到悬浮窗权限设置页
+            SettingsCompat.manageDrawOverlays(new WeakReference<Context>(this).get());
+        }
+        //设置授权状态
+        SettingsCompat.setDrawOverlays(new WeakReference<Context>(this).get(), true);
+
+
         mPresenter.applyPermission(this);//判断是否有更新
-        //    BadgeUtil.setBadgeCount(MainActivity.this, 0, R.drawable.ring_red);
         ShortcutBadger.removeCount(MainActivity.this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);

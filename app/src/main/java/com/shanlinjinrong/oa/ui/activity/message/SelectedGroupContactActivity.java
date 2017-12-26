@@ -617,7 +617,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             case Constants.MODIFICATIONNAME:
                 break;
             case Constants.GROUPDISSOLVE:
-                if (Utils.isActivityRunning(this,"SelectedGroupContactActivity")) {
+                if (Utils.isActivityRunning(this,getClass().getName())) {
                     EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
                         event.setEvent(true);
                         setResult(FINISHRESULT);
