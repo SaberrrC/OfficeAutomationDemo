@@ -26,6 +26,8 @@ public class GroupChatListAdapter extends BaseQuickAdapter<EMGroup> {
         if (bean.getGroupName() != null) {
             if (bean.getGroupName().length() > 10) {
                 mGroupName = bean.getGroupName().substring(0, 10) + "...";
+            } else {
+                mGroupName = bean.getGroupName();
             }
         }
         baseViewHolder.setText(R.id.tv_group_name, mGroupName);

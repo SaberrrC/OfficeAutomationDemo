@@ -51,31 +51,31 @@ import io.reactivex.schedulers.Schedulers;
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
     @BindView(R.id.tv_count)
-    TextView     mTvCount;
+    TextView mTvCount;
     @BindView(R.id.tv_title)
-    TextView     mTvTitle;
+    TextView mTvTitle;
     @BindView(R.id.iv_detail)
     LinearLayout mIvDetail;
     @BindView(R.id.img_details_icon)
-    ImageView    imgDetailsIcon;
+    ImageView imgDetailsIcon;
 
-    private String  mTitle;
-    private int     mChatType;
-    private Bundle  mExtras;
-    private String  mNike;
-    private String  mCode;
-    private String  mSex;
-    private String  mPhone;
-    private String  mEmail;
-    private String  mPortrait;
+    private String mTitle;
+    private int mChatType;
+    private Bundle mExtras;
+    private String mNike;
+    private String mCode;
+    private String mSex;
+    private String mPhone;
+    private String mEmail;
+    private String mPortrait;
     private boolean mIsResume;
-    private String  mPost_name;
+    private String mPost_name;
     private long lastClickTime = 0;
-    private String           mDepartment_name;
+    private String mDepartment_name;
     private EaseChatFragment chatFragment;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3, DISSOLVEGROUP = 600, LISTENERGROUPAME = -1;
     private EMGroup mGroup;
-    private String  mGroupName;
+    private String mGroupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +199,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                             if (groupTitle != null)
                                 if (groupTitle.length() > 10) {
                                     mGroupName = groupTitle.substring(0, 10) + "...";
+                                } else {
+                                    mGroupName = groupTitle;
                                 }
                         } catch (Throwable e) {
                             e.printStackTrace();
