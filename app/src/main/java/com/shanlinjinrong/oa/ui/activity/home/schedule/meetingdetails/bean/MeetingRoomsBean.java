@@ -8,29 +8,29 @@ import java.util.List;
 
 public class MeetingRoomsBean {
     /**
-     * code : 200
-     * info : success
-     * data : [{"room_id":2,"roomname":"1","address":"1","device":"1","nop":1,"isuse":101,"roomimg":"/group1/M00/00/00/rBDJOFnPW0mAffEXAAvqH_kipG8765.jpg"},{"room_id":3,"roomname":"3","address":"32","device":"23","nop":3332,"isuse":123,"roomimg":null},{"room_id":4,"roomname":"3","address":"32","device":"23","nop":3332,"isuse":123,"roomimg":null},{"room_id":5,"roomname":"3","address":"32","device":"23","nop":3332,"isuse":32,"roomimg":null},{"room_id":6,"roomname":"3","address":"32","device":"23","nop":3332,"isuse":32,"roomimg":null}]
+     * code : 000000
+     * message : success
+     * data : [{"room_id":2,"roomname":"火星","address":"星创5F","device":"投影仪","nop":20,"isuse":1,"roomimg":"/group1/M00/00/01/rBARm1owwZuEav9JAAAAAFj8hFU100.png"},{"room_id":111,"roomname":"金星","address":"星创5F","device":"投影仪","nop":32,"isuse":1,"roomimg":"/group1/M00/00/01/rBARm1owwiqEM83nAAAAALOqaZI654.jpg"},{"room_id":113,"roomname":"会议室113","address":"星创5F","device":"投影","nop":112,"isuse":0,"roomimg":""},{"room_id":115,"roomname":"会议室3","address":"星创5F","device":"投影","nop":10,"isuse":0,"roomimg":""}]
      */
 
-    private int code;
-    private String info;
+    private String code;
+    private String message;
     private List<DataBean> data;
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
-    public String getInfo() {
-        return info;
+    public String getMessage() {
+        return message;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public List<DataBean> getData() {
@@ -44,12 +44,12 @@ public class MeetingRoomsBean {
     public static class DataBean {
         /**
          * room_id : 2
-         * roomname : 1
-         * address : 1
-         * device : 1
-         * nop : 1
-         * isuse : 101
-         * roomimg : /group1/M00/00/00/rBDJOFnPW0mAffEXAAvqH_kipG8765.jpg
+         * roomname : 火星
+         * address : 星创5F
+         * device : 投影仪
+         * nop : 20
+         * isuse : 1
+         * roomimg : /group1/M00/00/01/rBARm1owwZuEav9JAAAAAFj8hFU100.png
          */
 
         private int room_id;
