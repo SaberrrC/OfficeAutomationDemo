@@ -115,8 +115,7 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    UserDetailsBean userInfo = new Gson().fromJson(t, new TypeToken<UserDetailsBean>() {
-                    }.getType());
+                    UserDetailsBean userInfo = new Gson().fromJson(t, new TypeToken<UserDetailsBean>() {}.getType());
                     if (userInfo != null) {
                         switch (userInfo.getCode()) {
                             case ApiJava.REQUEST_CODE_OK:
