@@ -18,9 +18,7 @@ import android.webkit.WebView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
-import com.github.moduth.blockcanary.BlockCanary;
 import com.hyphenate.easeui.crash.Cockroach;
-import com.mmtrix.agent.android.Mmtrix;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
@@ -29,7 +27,6 @@ import com.shanlinjinrong.oa.ui.base.dagger.component.AppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerAppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.module.AppManagerModule;
 import com.shanlinjinrong.oa.ui.base.dagger.module.KjHttpModule;
-import com.shanlinjinrong.oa.utils.AppBlockCanaryContext;
 import com.shanlinjinrong.oa.utils.ToastManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;

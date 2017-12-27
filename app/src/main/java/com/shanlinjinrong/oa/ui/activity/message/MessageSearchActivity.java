@@ -47,17 +47,17 @@ import butterknife.OnClick;
 
 public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresenter> implements MessageSearchContract.View {
     @BindView(R.id.tv_title)
-    TextView mTvTitle;
+    TextView      mTvTitle;
     @BindView(R.id.lv_list)
-    ListView mLvList;
+    ListView      mLvList;
     @BindView(R.id.search_et_input)
     ClearEditText mSearchEtInput;
     @BindView(R.id.tv_no_result)
-    TextView mTvNoResult;
-    private Bundle mBundle;
-    private int chatType;
-    private String toChatUsername;
-    private EMConversation mConversation;
+    TextView      mTvNoResult;
+    private Bundle                 mBundle;
+    private int                    chatType;
+    private String                 toChatUsername;
+    private EMConversation         mConversation;
     private SearchedMessageAdapter messageaAdapter;
 
     @Override
@@ -136,7 +136,8 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             public void run() {
                 //                List<EMMessage> resultList = mConversation.searchMsgFromDB(mSearchEtInput.getText().toString().trim(), System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
                 String decryptStr = EncryptionUtil.getEncryptionStr(mSearchEtInput.getText().toString().trim(), "");
-                List<EMMessage> resultList = mConversation.searchMsgFromDB(decryptStr, System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
+                List<EMMessage> resultList = mConversation.searchMsgFromDB(decryptStr,
+                        System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
                 if (messageList == null) {
                     messageList = resultList;
                 } else {
@@ -194,21 +195,15 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
             EaseUserUtils.setUserAvatar(getContext(), message.getFrom(), holder.avatar);
             holder.time.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
             String msg = ((EMTextMessageBody) message.getBody()).getMessage();
-            //            String decryptStr = EncryptionUtil.getDecryptStr(msg, "");
+            String decryptStr = EncryptionUtil.getDecryptStr(msg, "");
 
-            Spannable span = EaseSmileUtils.getSmiledText(parent.getContext(), msg);
-            //            Spannable jiamiStr = EaseSmileUtils.getSmiledText(getContext(), span);
+            Spannable span = EaseSmileUtils.getSmiledText(parent.getContext(), decryptStr);
             holder.message.setText(span, TextView.BufferType.SPANNABLE);
 
             String portrait = FriendsInfoCacheSvc.getInstance(parent.getContext()).getPortrait(message.getFrom());
 
             if (!TextUtils.isEmpty(portrait)) {
-                Glide.with(parent.getContext())
-                        .load(portrait).error(R.drawable.ease_default_avatar)
-                        .dontAnimate()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar)
-                        .into(holder.avatar);
+                Glide.with(parent.getContext()).load(portrait).error(R.drawable.ease_default_avatar).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(com.hyphenate.easeui.R.drawable.ease_default_avatar).into(holder.avatar);
             } else {
                 Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(holder.avatar);
             }
@@ -217,9 +212,9 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
     }
 
     private static class ViewHolder {
-        TextView name;
-        TextView message;
-        TextView time;
+        TextView  name;
+        TextView  message;
+        TextView  time;
         ImageView avatar;
     }
 }
