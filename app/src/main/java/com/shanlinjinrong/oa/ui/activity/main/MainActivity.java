@@ -271,10 +271,10 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
      */
     private void judeIsInitPwd() {
         //1初始密码，2已修改
-        String isInitPwd = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_IS_INIT_PWD);
-        if (isInitPwd.equals("1")) {
-            showSetPwdDialog();
-        }
+//        String isInitPwd = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_IS_INIT_PWD);
+//        if (isInitPwd.equals("1")) {
+//            showSetPwdDialog();
+//        }
     }
 
     private void showSetPwdDialog() {
