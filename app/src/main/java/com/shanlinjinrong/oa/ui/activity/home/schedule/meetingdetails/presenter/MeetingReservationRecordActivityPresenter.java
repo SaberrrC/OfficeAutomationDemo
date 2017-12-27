@@ -30,8 +30,8 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
 
     @Override
     public void getMeetingRecord(HttpParams httpParams, int page, int num, final boolean isLoadMore, final List<ReservationRecordBean.DataBean> data) {
-        mKjHttp.phpJsonGet(Api.NEW_MEETING_RECORD + "?page=" + page + "&num=" + num, httpParams, new HttpCallBack() {
 
+        mKjHttp.jsonPost(Api.NEW_MEETING_RECORD + "?currentPage=" + page + "&pageSize=" + num, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -40,6 +40,8 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+
+                //todo 暂定
                 try {
                     ReservationRecordBean reservationRecordBean = new ReservationRecordBean();
                     JSONObject jsonObject = new JSONObject(t);
@@ -85,7 +87,7 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                         case Api.RESPONSES_CODE_UID_NULL:
                             if (mView != null)
 //                                mView.uidNull(jsonObject.getInt("code"));
-                            break;
+                                break;
                         default:
                             if (mView != null)
                                 mView.getMeetingRecordFailed(jsonObject.getInt("code"), jsonObject.getString("info"));

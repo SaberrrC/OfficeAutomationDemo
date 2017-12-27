@@ -120,13 +120,13 @@ public class HttpMethods {
         @Override
         public T call(HttpResult<T> httpResult) {
             HttpResult<T> httpResult1 = httpResult;
-//            if (!httpResult.getCode().equals("000000")) {
-//                try {
-//                    throw new ApiException(httpResult.getCode(), 1, httpResult.getMessage());
-//                } catch (ApiException e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            if (!httpResult.getCode().equals("000000")) {
+                try {
+                    throw new ApiException(httpResult.getCode(), 1, httpResult.getMessage());
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+            }
             return httpResult.getData();
         }
     }
