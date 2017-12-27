@@ -66,7 +66,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 

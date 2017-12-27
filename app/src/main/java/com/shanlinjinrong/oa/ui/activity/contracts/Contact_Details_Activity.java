@@ -319,7 +319,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

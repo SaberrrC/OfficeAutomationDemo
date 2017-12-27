@@ -271,11 +271,8 @@ public class DemoHelper {
         Log.d(TAG, "init HuanXin Options");
 
         EMOptions options = new EMOptions();
-        // set if accept the invitation automatically
-        options.setAcceptInvitationAlways(false);
-        // set if you need read ack
+        options.setAcceptInvitationAlways(true);
         options.setRequireAck(true);
-        // set if you need delivery ack
         options.setRequireDeliveryAck(false);
 
         //you need apply & set your own id if you want to use google cloud messaging.

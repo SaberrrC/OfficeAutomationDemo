@@ -47,7 +47,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+//                            mView.uidNull(0);
                             break;
                         default:
                             mView.getReportFailed("", "");
@@ -97,7 +97,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+//                            mView.uidNull(0);
                             break;
                         default:
                             mView.updateReportFailed(jo.getString("message"));

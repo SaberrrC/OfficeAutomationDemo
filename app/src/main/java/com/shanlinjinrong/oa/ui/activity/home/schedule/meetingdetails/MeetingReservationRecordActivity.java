@@ -182,7 +182,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

@@ -525,7 +525,7 @@ public class ScheduleActivity extends HttpBaseActivity<ScheduleActivityPresenter
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 }

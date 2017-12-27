@@ -299,7 +299,7 @@ public class PushListActivity extends HttpBaseActivity<PushListPresenter> implem
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 }

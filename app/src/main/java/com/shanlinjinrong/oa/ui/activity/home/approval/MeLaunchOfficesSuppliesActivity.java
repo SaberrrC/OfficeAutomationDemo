@@ -377,7 +377,7 @@ public class MeLaunchOfficesSuppliesActivity extends HttpBaseActivity<MeLaunchOf
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 }

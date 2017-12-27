@@ -486,7 +486,7 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
 
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 }

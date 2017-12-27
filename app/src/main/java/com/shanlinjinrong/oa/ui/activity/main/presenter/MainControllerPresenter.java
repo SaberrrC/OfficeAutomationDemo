@@ -92,7 +92,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
                             mView.loadUnReadMsgEmpty();
                             break;
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(Api.getCode(jo));
+//                            mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (Exception e) {

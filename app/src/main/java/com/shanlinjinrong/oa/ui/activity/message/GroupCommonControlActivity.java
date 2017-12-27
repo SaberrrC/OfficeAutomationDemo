@@ -241,7 +241,7 @@ public class GroupCommonControlActivity extends HttpBaseActivity<EaseChatDetails
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

@@ -302,7 +302,7 @@ public class CreateNoteActivity extends HttpBaseActivity<CreateNotePresenter> im
 
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

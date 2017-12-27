@@ -51,7 +51,7 @@ public class PushListPresenter extends HttpPresenter<PushListContract.View> impl
                     switch (Api.getCode(jo)) {
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(Api.getCode(jo));
+//                            mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {
@@ -107,7 +107,7 @@ public class PushListPresenter extends HttpPresenter<PushListContract.View> impl
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(Api.getCode(jo));
+//                            mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {

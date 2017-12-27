@@ -45,7 +45,7 @@ public class CreateMeetingPresenter extends HttpPresenter<CreateMeetingContract.
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                         mView.sendDataSuccess();
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                        mView.uidNull(Api.getCode(jo));
+//                        mView.uidNull(Api.getCode(jo));
                     }
 
                 } catch (JSONException e) {

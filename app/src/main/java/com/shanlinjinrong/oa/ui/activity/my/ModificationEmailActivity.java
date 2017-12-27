@@ -193,7 +193,7 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

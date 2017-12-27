@@ -288,7 +288,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

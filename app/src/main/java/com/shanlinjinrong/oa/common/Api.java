@@ -235,7 +235,7 @@ public class Api {
     /**
      * 修改密码
      */
-    public static final String PASSWORD_UPDATE = "person/changepassword";
+    public static final String PASSWORD_UPDATE = "user/changepwd";
     /**
      * 找回密码   forgetpassword/forgetpassword
      */

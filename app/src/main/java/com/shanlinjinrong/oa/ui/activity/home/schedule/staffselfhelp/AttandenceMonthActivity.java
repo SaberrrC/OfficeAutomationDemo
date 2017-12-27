@@ -178,7 +178,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

@@ -96,7 +96,7 @@ public class WaitApprovalReplyPresenter extends HttpPresenter<WaitApprovalReplyC
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         mView.replySuccess();
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                        mView.uidNull(Api.getCode(jo));
+//                        mView.uidNull(Api.getCode(jo));
                     } else {
                         mView.replyResponseOther(Api.getInfo(jo));
                     }

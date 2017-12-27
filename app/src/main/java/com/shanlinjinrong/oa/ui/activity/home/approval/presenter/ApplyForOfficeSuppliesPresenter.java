@@ -45,7 +45,7 @@ public class ApplyForOfficeSuppliesPresenter extends HttpPresenter<ApplyForOffic
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(Api.getCode(jo));
+//                            mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {
@@ -76,7 +76,7 @@ public class ApplyForOfficeSuppliesPresenter extends HttpPresenter<ApplyForOffic
                     if ((Api.getCode(jo) == Api.RESPONSES_CODE_OK)) {
                         mView.submitSuccess();
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                        mView.uidNull(Api.getCode(jo));
+//                        mView.uidNull(Api.getCode(jo));
                     } else {
                         mView.submitOther(Api.getInfo(jo));
 

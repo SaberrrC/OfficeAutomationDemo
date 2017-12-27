@@ -187,7 +187,7 @@ public class NoticesSingleInfoActivity extends HttpBaseActivity<NoticesSingleInf
 
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 

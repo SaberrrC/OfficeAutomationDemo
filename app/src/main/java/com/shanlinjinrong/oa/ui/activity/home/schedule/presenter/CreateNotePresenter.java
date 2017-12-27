@@ -53,9 +53,9 @@ public class CreateNotePresenter extends HttpPresenter<CreateNoteContract.View> 
                     if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
                         mView.createSuccess();
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL)) {
-                        mView.uidNull(Api.getCode(jo));
+//                        mView.uidNull(Api.getCode(jo));
                     } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_TOKEN_NO_MATCH)) {
-                        mView.uidNull(Api.getCode(jo));
+//                        mView.uidNull(Api.getCode(jo));
                     } else {
                         mView.createResponseOther(Api.getInfo(jo));
                     }

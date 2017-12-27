@@ -136,7 +136,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

@@ -286,7 +286,7 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
 
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 

@@ -21,7 +21,7 @@ public class MouthCalenderActivity extends HttpBaseActivity<MouthCalenderPresent
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 }

@@ -139,7 +139,7 @@ public class SystemNoticesActivity extends HttpBaseActivity<SystemNoticesPresent
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 }

@@ -74,8 +74,8 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                         if (mView != null)
                             mView.autoSearchSuccess(users);
                     } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        if (mView != null)
-                            mView.uidNull(Api.getCode(jo));
+//                        if (mView != null)
+//                            mView.uidNull(Api.getCode(jo));
                     } else {
                         if (mView != null)
                             mView.autoSearchOther(Api.getInfo(jo));

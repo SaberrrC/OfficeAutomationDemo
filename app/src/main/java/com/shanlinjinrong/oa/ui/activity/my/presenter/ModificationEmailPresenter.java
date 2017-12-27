@@ -48,8 +48,8 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            if (mView != null)
-                                mView.uidNull(Api.getCode(jsonObject));
+//                            if (mView != null)
+//                                mView.uidNull(Api.getCode(jsonObject));
                         default:
                             if (mView != null)
                                 mView.modificationEmailFailed(code,jsonObject.getString("info"));

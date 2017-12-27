@@ -145,7 +145,7 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 

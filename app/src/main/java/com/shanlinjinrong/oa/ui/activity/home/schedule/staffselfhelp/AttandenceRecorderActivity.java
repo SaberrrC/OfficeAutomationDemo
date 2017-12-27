@@ -235,7 +235,7 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
     private String mCalendar;
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

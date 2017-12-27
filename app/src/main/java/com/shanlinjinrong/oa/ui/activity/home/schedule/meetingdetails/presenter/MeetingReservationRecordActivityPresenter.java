@@ -84,7 +84,7 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
                             if (mView != null)
-                                mView.uidNull(jsonObject.getInt("code"));
+//                                mView.uidNull(jsonObject.getInt("code"));
                             break;
                         default:
                             if (mView != null)

@@ -61,8 +61,8 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            buildConfigField "String", "BASE_URL", prePHPAddress()
-            buildConfigField "String", "BASE_JAVA_URL", preJavaAddress()
+            buildConfigField "String", "BASE_URL", devPHPAddress()
+            buildConfigField "String", "BASE_JAVA_URL", devJavaAddress()
             resValue "string", "app_name", devAppName()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -106,35 +106,38 @@ def devAppName() {
 }
 
 //发开环境
+//def devPHPAddress() {
+//    return "\"http://118.31.18.67:81/\""
+//}
+
 def devPHPAddress() {
-    return "\"http://118.31.18.67:81/\""
+    return "\"http://10.255.232.234/oa-api/\""
 }
 
 def devJavaAddress() {
-    return "\"http://118.31.18.67:8090/\""
+    return "\"http://10.255.232.234/oa-api/\""
 }
-
 //(预生产)测试环境
-//def preJavaAddress() {
-//    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
-//}
-//
-//def prePHPAddress() {
-//    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
-//}
-
-//def prePHPAddress() {
-//    return "\"http://api.testoa.shanlinjinrong.com/\""
-//}
-
-//(新内网) 测试环境
 def preJavaAddress() {
-    return "\"http://10.5.202.122:9105/\""
+    return "\"http://testoa.shanlinjinrong.com/oa-api/\""
 }
 
 def prePHPAddress() {
-    return "\"http://10.5.202.122:81/\""
+    return "\"http://api.testoa.shanlinjinrong.com/\""
 }
+
+//(新内网) 测试环境
+//def preJavaAddress() {
+//    return "\"http://10.5.202.122:9105/\""
+//}
+//
+//def prePHPAddress() {
+//    return "\"http://10.5.202.122:9105/\""
+//}
+
+//def prePHPAddress() {
+//    return "\"http://10.5.202.122:81/\""
+//}
 
 //(新外网) 测试环境
 //def preJavaAddress() {

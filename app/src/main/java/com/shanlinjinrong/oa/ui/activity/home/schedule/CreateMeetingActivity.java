@@ -335,7 +335,7 @@ public class CreateMeetingActivity extends HttpBaseActivity<CreateMeetingPresent
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
 
     }

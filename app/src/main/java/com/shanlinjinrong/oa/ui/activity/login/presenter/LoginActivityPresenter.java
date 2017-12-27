@@ -1,6 +1,11 @@
 package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.User;
+import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -38,27 +43,28 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                 System.out.println(t);
                 LogUtils.e("登录返回数据-》" + t);
                 try {
-                    JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                        if (mView != null)
-                            mView.loginSuccess(Api.getDataToJSONObject(jo));
-                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        if (mView != null)
-                            mView.loginFailed(Api.getCode(jo));
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR)) {
-                        if (mView != null)
-                            mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_USERNAME_NOT_EXIST)) {
-                        if (mView != null)
-                            mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_USER_FREEZE)) {
-                        if (mView != null)
-                            mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
-                    } else {
-                        if (mView != null)
-                            mView.loginOtherError();
+                    UserInfo user = new Gson().fromJson(t, new TypeToken<UserInfo>() {}.getType());
+
+                    switch (user.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            if (mView != null)
+                                mView.loginSuccess(user.getData());
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                            if (mView != null)
+                                mView.loginFailed(user.getCode());
+                            break;
+                        case ApiJava.NOT_EXIST_USER://用户名 密码不存在
+                            if (mView != null)
+                            mView.accountOrPswError(user.getMessage());
+                            break;
+                        default:
+                            break;
                     }
-                } catch (Throwable e) {
+                } catch (
+                        Throwable e)
+
+                {
                     e.printStackTrace();
                 }
             }

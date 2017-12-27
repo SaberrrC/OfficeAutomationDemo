@@ -37,21 +37,21 @@ import butterknife.OnClick;
 public class ModifyPwdActivity extends HttpBaseActivity<ModifyPswActivityPresenter> implements ModifyPswActivityContract.View {
 
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TextView  tvTitle;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar   toolbar;
     @BindView(R.id.toolbar_image_btn)
     ImageView toolbarBack;
     @BindView(R.id.toolbar_text_btn)
-    TextView toolbarTextBtn;
+    TextView  toolbarTextBtn;
     @BindView(R.id.old_pwd)
-    EditText oldPwd;
+    EditText  oldPwd;
     @BindView(R.id.new_pwd)
-    EditText newPwd;
+    EditText  newPwd;
     @BindView(R.id.new_pwd_confirm)
-    EditText newPwdConfirm;
+    EditText  newPwdConfirm;
     @BindView(R.id.tv_original_pwd)
-    TextView tvOriginalPwd;
+    TextView  tvOriginalPwd;
 
     @BindView(R.id.tv_new_pwd)
     TextView tvNewPwd;
@@ -82,12 +82,7 @@ public class ModifyPwdActivity extends HttpBaseActivity<ModifyPswActivityPresent
 
     private void modifyPwd() {
         showLoadingView();
-        mPresenter.modifyPsw(AppConfig.getAppConfig(this).getDepartmentId(),
-                oldPwd.getText().toString(),
-                newPwd.getText().toString(),
-                newPwdConfirm.getText().toString(),
-                AppConfig.getAppConfig(ModifyPwdActivity.this).get(
-                        AppConfig.PREF_KEY_USER_EMAIL));
+        mPresenter.modifyPsw(oldPwd.getText().toString(), newPwd.getText().toString());
     }
 
     private boolean check() {
@@ -176,7 +171,7 @@ public class ModifyPwdActivity extends HttpBaseActivity<ModifyPswActivityPresent
     }
 
     @Override
-    public void modifyFailed(int errorCode, String msg) {
+    public void modifyFailed(String msg) {
         showToast(msg);
     }
 
@@ -186,7 +181,7 @@ public class ModifyPwdActivity extends HttpBaseActivity<ModifyPswActivityPresent
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

@@ -32,6 +32,7 @@ import com.hyphenate.chat.EMClient;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -59,12 +60,12 @@ import cn.jpush.android.api.TagAliasCallback;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    private AlertDialog loadingDialog;
+    private AlertDialog       loadingDialog;
     private CustomDialogUtils mDialog;
-    private TextView msg;
-    private KJHttp kjHttp;
-    private Toast toast;
-    private View empty;
+    private TextView          msg;
+    private KJHttp            kjHttp;
+    private Toast             toast;
+    private View              empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +148,29 @@ public class BaseActivity extends AppCompatActivity {
             case Api.RESPONSES_CODE_NO_RESPONSE:
                 showTips("网络不稳定，请重试！");
                 break;
+        }
+    }
+
+    /**
+     * 捕获服务器接口返回异常状态码，并统一进行处理
+     *
+     * @param code 错误代码
+     */
+    public void catchWarningByCode(String code) {
+        switch (code) {
+            case ApiJava.REQUEST_TOKEN_OUT_TIME:
+            case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+            case ApiJava.ERROR_TOKEN:
+                AppConfig.getAppConfig(this).clearLoginInfo();
+                NonTokenDialog();
+                break;
+            //TODO 网络问题
+//            case Api.RESPONSES_CODE_NO_NETWORK:
+//                showTips("请确认是否已连接网络！");
+//                break;
+//            case Api.RESPONSES_CODE_NO_RESPONSE:
+//                showTips("网络不稳定，请重试！");
+//                break;
         }
     }
 

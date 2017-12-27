@@ -45,7 +45,7 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(recordBean.getCode());
+//                            mView.uidNull(recordBean.getCode());
                             break;
 //                        case Api.RESPONSES_CODE_DATA_EMPTY:
 //                            mView.getMeetingPredetermineFailed(Api.RESPONSES_CODE_DATA_EMPTY, "");
@@ -95,7 +95,7 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(jsonObject.getInt("code"));
+//                            mView.uidNull(jsonObject.getInt("code"));
                             break;
                         case Api.RESPONSES_CODE_NO_CONTENT:
                             mView.requestNetworkError();

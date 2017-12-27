@@ -247,7 +247,7 @@ public class ApplyForOfficeSuppliesActivity extends HttpBaseActivity<ApplyForOff
 
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

@@ -527,7 +527,7 @@ public class LookMessageRecordActivity extends HttpBaseActivity<LookMessageRecor
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
     }
 
     public final class CustomChatRowProvider implements EaseCustomChatRowProvider {

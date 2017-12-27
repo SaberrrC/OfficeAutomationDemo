@@ -67,7 +67,7 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
                             if (mView != null)
-                                mView.uidNull(Api.getCode(jo));
+//                                mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {

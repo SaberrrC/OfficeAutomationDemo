@@ -110,7 +110,7 @@ public class SelectedGroupContactFragment extends BaseHttpFragment<SelectedGroup
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
     }
 
     @Override

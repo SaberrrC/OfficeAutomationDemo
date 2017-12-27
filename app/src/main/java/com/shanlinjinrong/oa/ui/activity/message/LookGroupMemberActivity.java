@@ -83,7 +83,7 @@ public class LookGroupMemberActivity extends HttpBaseActivity<EaseChatDetailsPre
 
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

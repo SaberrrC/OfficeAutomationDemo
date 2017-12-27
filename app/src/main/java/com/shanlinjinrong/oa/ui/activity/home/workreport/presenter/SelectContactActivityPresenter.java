@@ -71,7 +71,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+//                            mView.uidNull(0);
                             break;
                         default:
                             mView.loadDataFailed(0, jo.getString("message"));
@@ -201,7 +201,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+//                            mView.uidNull(0);
                             break;
                         default:
                             mView.loadDataFailed(0, jo.getString("message"));

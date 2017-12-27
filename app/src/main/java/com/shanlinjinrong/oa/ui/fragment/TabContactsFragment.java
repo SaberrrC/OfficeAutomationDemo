@@ -265,8 +265,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     }
 
     @Override
-    public void uidNull(int code) {
-        catchWarningByCode(code);
+    public void uidNull(String code) {
+//        catchWarningByCode(code);
     }
 
     @Override

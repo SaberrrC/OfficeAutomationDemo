@@ -49,7 +49,7 @@ public class MeLaunchOfficesSuppliesPresenter extends HttpPresenter<MeLaunchOffi
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(Api.getCode(jo));
+//                            mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {

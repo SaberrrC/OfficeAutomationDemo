@@ -246,7 +246,7 @@ public class NoticeListActivity extends HttpBaseActivity<NoticeListPresenter> im
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 }

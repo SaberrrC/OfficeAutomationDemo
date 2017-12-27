@@ -357,7 +357,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 

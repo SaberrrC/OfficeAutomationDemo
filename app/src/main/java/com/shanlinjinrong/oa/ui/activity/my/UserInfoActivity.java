@@ -225,7 +225,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

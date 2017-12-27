@@ -68,7 +68,7 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.ERROR_TOKEN:
                             if (mView != null)
-                                mView.uidNull(0);
+//                                mView.uidNull(0);
                             break;
                         default:
                             if (mView != null)
@@ -147,8 +147,8 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.ERROR_TOKEN:
-                            if (mView != null)
-                                mView.uidNull(0);
+//                            if (mView != null)
+//                                mView.uidNull(0);
                             break;
                         default:
                             if (mView != null)

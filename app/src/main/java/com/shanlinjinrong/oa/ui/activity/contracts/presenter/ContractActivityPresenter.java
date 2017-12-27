@@ -105,8 +105,8 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
                                 mView.loadDataTokenNoMatch(Api.getCode(jo));
                             break;
                         case Api.RESPONSES_CODE_UID_NULL:
-                            if (mView != null)
-                                mView.uidNull(Api.getCode(jo));
+//                            if (mView != null)
+//                                mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {

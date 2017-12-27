@@ -159,7 +159,7 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

@@ -48,7 +48,7 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+//                            mView.uidNull(0);
                             break;
                         default:
                             mView.loadDataFailed(code, message);
@@ -90,7 +90,7 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+//                            mView.uidNull(0);
                             break;
                         default:
                             mView.commitFailed(jo.getString("code"), jo.getString("message"));

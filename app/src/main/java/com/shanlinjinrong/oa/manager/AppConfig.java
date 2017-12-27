@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.model.User;
+import com.shanlinjinrong.oa.model.UserInfo;
 
 
 /**
@@ -166,7 +167,7 @@ public class AppConfig {
         return get(PREF_KEY_CODE);
     }
 
-    public void set(User user, Boolean isAutoLogin) {
+    public void set(UserInfo.DataBean user, Boolean isAutoLogin) {
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putString(PREF_KEY_TOKEN, user.getToken());
         editor.putString(PREF_KEY_CODE, user.getCode());
@@ -174,23 +175,23 @@ public class AppConfig {
             editor.putString(PREF_KEY_USER_UID, user.getUid());
         }
         editor.putString(PREF_KEY_USER_EMAIL, user.getEmail());
-        editor.putString(PREF_KEY_DEPARTMENT_ID, user.getDepartmentId());
-        editor.putString(PREF_KEY_POST_ID, user.getPostId());
+        editor.putString(PREF_KEY_DEPARTMENT_ID, user.getDepartment_id());
+        editor.putString(PREF_KEY_POST_ID, user.getPost_id());
         editor.putString(PREF_KEY_USERNAME, user.getUsername());
         editor.putString(PREF_KEY_SEX, user.getSex());
         editor.putString(PREF_KEY_PHONE, user.getPhone());
         editor.putString(PREF_KEY_HIREDATE, user.getHiredate());
-        editor.putString(PREF_KEY_COMPANY_NAME, user.getCompanyName());
-        editor.putString(PREF_KEY_DEPARTMENT_NAME, user.getDepartmentName());
-        editor.putString(PREF_KEY_PORTRAITS, Constants.PHPSLPicBaseUrl + user.getPortraits());
-        editor.putString(PREF_KEY_POST_NAME, user.getPostName());
+        editor.putString(PREF_KEY_COMPANY_NAME, user.getCompany_name());
+        editor.putString(PREF_KEY_DEPARTMENT_NAME, user.getDepartment_name());
+        editor.putString(PREF_KEY_PORTRAITS, Constants.PHPSLPicBaseUrl + user.getPortrait());
+        editor.putString(PREF_KEY_POST_NAME, user.getPost_title());
         editor.putString(PREF_KEY_IS_LEADER, user.getIsleader());
         editor.putBoolean(IS_AUTO_LOGIN, isAutoLogin);
         editor.putString(PREF_KEY_IS_INIT_PWD, user.getIs_initial_pwd());
         editor.putString(PREF_KEY_YX_TOKEN, user.getYx_token());
         editor.putString(PREF_KEY_ISLEADER, user.getIsleader());
         editor.putString(PREF_KEY_OID, user.getOid());
-        editor.putString(PREF_KEY_DEPARTMENT, user.getDepartmentId());
+        editor.putString(PREF_KEY_DEPARTMENT, user.getDepartment_id());
         editor.apply();
     }
 

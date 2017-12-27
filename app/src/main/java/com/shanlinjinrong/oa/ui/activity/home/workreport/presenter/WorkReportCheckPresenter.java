@@ -85,7 +85,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
                             if (mView != null) {
-                                mView.uidNull(0);
+//                                mView.uidNull(0);
                             }
                             break;
                         default:
@@ -142,7 +142,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.ERROR_TOKEN:
                             if (mView != null) {
-                                mView.uidNull(0);
+//                                mView.uidNull(0);
                             }
                             break;
                         default:

@@ -72,8 +72,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             if (mView != null)
                                 mView.getQueryMonoCodeFailure(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
-                        if (mView != null)
-                            mView.uidNull(((HttpException) e).code());
+//                        if (mView != null)
+//                            mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
                         if (mView != null)
                             mView.getQueryMonoCodeFailure(-1, "网络不通，请检查网络连接！");
@@ -121,8 +121,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                             case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                             case ApiJava.REQUEST_TOKEN_OUT_TIME:
                             case ApiJava.ERROR_TOKEN:
-                                if (mView != null)
-                                    mView.uidNull(0);
+//                                if (mView != null)
+//                                    mView.uidNull(0);
                                 break;
                             default:
                                 if (mView != null)
@@ -182,8 +182,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            if (mView != null)
-                                mView.uidNull(0);
+//                            if (mView != null)
+//                                mView.uidNull(0);
                             break;
                         default:
                             if (mView != null)
@@ -242,8 +242,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            if (mView != null)
-                                mView.uidNull(0);
+//                            if (mView != null)
+//                                mView.uidNull(0);
                             break;
                         default:
                             submitFailureTips(queryMonoBean);
@@ -355,8 +355,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            if (mView != null)
-                                mView.uidNull(0);
+//                            if (mView != null)
+//                                mView.uidNull(0);
                             break;
                         default:
                             submitFailureTips(queryMonoBean);
@@ -465,8 +465,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            if (mView != null)
-                                mView.uidNull(0);
+//                            if (mView != null)
+//                                mView.uidNull(0);
                             break;
                         default:
                             submitFailureTips(queryMonoBean);
@@ -518,8 +518,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            if (mView != null)
-                                mView.uidNull(0);
+//                            if (mView != null)
+//                                mView.uidNull(0);
                             break;
                         default:
                             if (mView != null)
@@ -579,8 +579,8 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            if (mView != null)
-                                mView.uidNull(0);
+//                            if (mView != null)
+//                                mView.uidNull(0);
                             break;
                         default:
                             submitFailureTips(queryMonoBean);

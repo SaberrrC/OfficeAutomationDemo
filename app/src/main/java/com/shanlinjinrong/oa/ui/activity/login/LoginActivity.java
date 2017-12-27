@@ -24,6 +24,7 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.User;
+import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
@@ -231,10 +232,19 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @Override
     public void loginSuccess(JSONObject userInfo) {
+//        //登录成功后清空原来的信息
+//        AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
+//        //保存登录用户信息
+//        User user = new User(userInfo);
+//        LogUtils.e("user->" + user);
+//        AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
+//        goToLogin();
+    }
+
+    @Override
+    public void loginSuccess(UserInfo.DataBean user) {
         //登录成功后清空原来的信息
         AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
-        //保存登录用户信息
-        User user = new User(userInfo);
         LogUtils.e("user->" + user);
         AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
         goToLogin();
@@ -242,6 +252,12 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @Override
     public void loginFailed(int errorCode) {
+        hideLoadingView();
+        catchWarningByCode(errorCode);
+    }
+
+    @Override
+    public void loginFailed(String errorCode) {
         hideLoadingView();
         catchWarningByCode(errorCode);
     }
@@ -262,12 +278,18 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     }
 
     @Override
+    public void accountOrPswError(String msg) {
+        hideLoadingView();
+        showToast(msg);
+    }
+
+    @Override
     public void requestFinish() {
     }
 
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         hideLoadingView();
     }
 

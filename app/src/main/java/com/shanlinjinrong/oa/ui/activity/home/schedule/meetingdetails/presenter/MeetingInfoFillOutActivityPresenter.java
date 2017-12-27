@@ -61,7 +61,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(jsonObject.getInt("code"));
+//                            mView.uidNull(jsonObject.getInt("code"));
                             break;
                         case Api.RESPONSES_CODE_NO_CONTENT:
                             mView.requestNetworkError();
@@ -137,7 +137,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(meetingRecordInfo.getCode());
+//                            mView.uidNull(meetingRecordInfo.getCode());
                             break;
                         case Api.RESPONSES_CODE_NO_CONTENT:
                             mView.requestNetworkError();
@@ -207,7 +207,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(jsonObject.getInt("code"));
+//                            mView.uidNull(jsonObject.getInt("code"));
                             break;
                         case Api.RESPONSES_CODE_NO_CONTENT:
                             mView.requestNetworkError();

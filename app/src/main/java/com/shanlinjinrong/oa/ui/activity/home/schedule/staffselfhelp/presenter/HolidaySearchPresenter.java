@@ -56,7 +56,7 @@ public class HolidaySearchPresenter extends HttpPresenter<HolidaySearchContract.
                         if (((HttpException) e).code() > 400) {
                             mView.getDataFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
-                        mView.uidNull(((HttpException) e).code());
+//                        mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
                         mView.getDataFailed(-1, "服务器繁忙，请稍后再查询！");
                     } else if (e instanceof NullPointerException) {

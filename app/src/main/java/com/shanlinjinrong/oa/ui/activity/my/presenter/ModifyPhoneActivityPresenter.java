@@ -41,7 +41,7 @@ public class ModifyPhoneActivityPresenter extends HttpPresenter<ModifyPhoneActiv
                             break;
                         case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
                         case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(code);
+//                            mView.uidNull(code);
                             break;
                     }
                 } catch (JSONException e) {

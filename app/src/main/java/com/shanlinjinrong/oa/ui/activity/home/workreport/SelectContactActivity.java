@@ -216,7 +216,7 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 
