@@ -28,6 +28,7 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
     public void login(String account, String psw) {
         mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
+
         params.put("email", account);
         params.put("pwd", psw);
         mKjHttp.post(Api.LOGIN, params, new HttpCallBack() {
