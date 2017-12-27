@@ -22,8 +22,8 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
     public void modificationEmail(String email) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        httpParams.putJsonParams(email);
-        mKjHttp.jsonPost(ApiJava.CHANGE_EMAIL, httpParams, new HttpCallBack() {
+        httpParams.put("email", email);
+        mKjHttp.post(ApiJava.CHANGE_EMAIL, httpParams, new HttpCallBack() {
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
@@ -51,10 +51,10 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
                             if (mView != null)
-                            mView.uidNull(code);
+                                mView.uidNull(code);
                         default:
                             if (mView != null)
-                                mView.modificationEmailFailed(0, jsonObject.getString("info"));
+                                mView.modificationEmailFailed(0, jsonObject.getString("message"));
                             break;
                     }
                 } catch (Throwable e) {
