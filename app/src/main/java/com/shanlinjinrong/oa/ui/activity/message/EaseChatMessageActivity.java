@@ -199,6 +199,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                             if (groupTitle != null)
                                 if (groupTitle.length() > 10) {
                                     mGroupName = groupTitle.substring(0, 10) + "...";
+                                }else {
+                                    mGroupName = groupTitle;
                                 }
                         } catch (Throwable e) {
                             e.printStackTrace();

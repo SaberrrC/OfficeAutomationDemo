@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
@@ -386,6 +387,8 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                             //TODO 生产
                             kjHttp.get(EaseConstant.PHP_URL + "user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
 
+                                private UserDetailsBean userDetailsBean;
+
                                 @Override
                                 public void onFailure(int errorNo, String strMsg) {
                                     super.onFailure(errorNo, strMsg);
@@ -403,7 +406,12 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 @Override
                                 public void onSuccess(String t) {
                                     super.onSuccess(t);
-                                    final UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
+                                    try {
+                                        userDetailsBean = new Gson().fromJson(t, new TypeToken<UserDetailsBean>() {
+                                        }.getType());
+                                    } catch (Throwable throwable) {
+                                        throwable.printStackTrace();
+                                    }
                                     if (userDetailsBean != null) {
                                         try {
                                             switch (userDetailsBean.getCode()) {

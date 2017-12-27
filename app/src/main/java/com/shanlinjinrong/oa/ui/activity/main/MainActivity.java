@@ -211,16 +211,16 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         LoginIm();//登录环信
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
-
         //悬浮窗 权限
         if (!SettingsCompat.canDrawOverlays(new WeakReference<Context>(this).get())) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("权限开启");
+            builder.setMessage("为了能更好的体验消息通知功能,请您手动开启悬浮窗权限!");
             //跳转到悬浮窗权限设置页
-            SettingsCompat.manageDrawOverlays(new WeakReference<Context>(this).get());
+            builder.setPositiveButton("确定", (dialog, which) -> SettingsCompat.manageDrawOverlays(new WeakReference<Context>(this).get())).setNegativeButton("取消", (dialog, which) -> {}).show();
+            //设置授权状态
+            SettingsCompat.setDrawOverlays(new WeakReference<Context>(this).get(), true);
         }
-        //设置授权状态
-        SettingsCompat.setDrawOverlays(new WeakReference<Context>(this).get(), true);
-
-
         mPresenter.applyPermission(this);//判断是否有更新
         ShortcutBadger.removeCount(MainActivity.this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {

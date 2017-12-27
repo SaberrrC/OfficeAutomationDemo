@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.message;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -143,7 +144,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 if (throwable instanceof HyphenateException) {
                     int errorCode = ((HyphenateException) throwable).getErrorCode();
                     if (errorCode >= 600 && errorCode <= 700) {
-                        if (Utils.isActivityRunning(this,getClass().getName())) {
+                        if (Utils.isActivityRunning(this, getClass().getName())) {
                             EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
                                 setResult(REFRESHSUCCESS);
                                 finish();
@@ -157,6 +158,11 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 if (mGroupServer1 != null) {
                     mGroupOwner = mGroupServer1.getOwner();
                     mGroupName = mGroupServer1.getGroupName();
+                    if (mGroupName != null) {
+                        if (mGroupName.length() > 10) {
+                            mGroupName = mGroupName.substring(0, 10) + "...";
+                        }
+                    }
                     tvModificationName.setText(mGroupName);
                     mIsOwner = mGroupOwner.equals("sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
                     if (!mIsOwner) {
@@ -193,7 +199,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private void InitGroupData() {
         try {
             mQueryUserInfo = "";
-            final int pageSize =500;
+            final int pageSize = 500;
             Observable.create(e -> {
                 do {
                     try {//如果群成员较多，需要多次从服务器获取完成
@@ -283,8 +289,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 rlGroupName.setVisibility(View.VISIBLE);
                 rlGroupPortrait.setVisibility(View.VISIBLE);
                 btnChatDelete.setVisibility(View.VISIBLE);
-                if (mGroupServer1 != null)
-                    tvModificationName.setText(mGroupServer1.getGroupName());
+                if (mGroupServer1 != null) {
+                    if (mGroupServer1.getGroupName().length() > 10) {
+                        mGroupName = mGroupServer1.getGroupName().substring(0, 10) + "...";
+                    }
+                    tvModificationName.setText(mGroupName);
+                }
             } catch (Throwable e) {
                 e.printStackTrace();
             }
@@ -596,7 +606,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 break;
             case Constants.GROUPDISSOLVE:
                 if (!event.isEvent() && mIsResume) {
-                    if (Utils.isActivityRunning(this,getClass().getName())) {
+                    if (Utils.isActivityRunning(this, getClass().getName())) {
                         EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
                             event.setEvent(true);
                             setResult(REFRESHSUCCESS);
