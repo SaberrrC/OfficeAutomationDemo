@@ -172,6 +172,7 @@ public class ModifyPwdActivity extends HttpBaseActivity<ModifyPswActivityPresent
 
     @Override
     public void modifyFailed(String msg) {
+        hideLoadingView();
         showToast(msg);
     }
 

@@ -1,7 +1,6 @@
 package com.hyphenate.easeui;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 作者：王凤旭
@@ -11,55 +10,57 @@ import java.util.List;
 
 public class UserDetailsBean implements Serializable {
 
-
     /**
-     * code : 200
-     * info : success
-     * data : [{"uid":"78","oid":"611","isleader":"0","code":"011000439","username":"宋慧玲","phone":"13023128805","email":"songhuiling@shanlinjinrong.com","sex":"女","organ":"核算组","postname":"会计","token":null,"img":""}]
+     * code : 000000
+     * message : 获取用户信息成功
+     * data : {"uid":"50363","oid":"61","isleader":"0","code":"011000311","username":"杨佳晨","phone":"18149776583","email":"yangjiachen@shanlinjinrong.com","sex":"男","organ":"员工关系组-营业部","postname":"人事专员","token":null,"portrait":"","joindate":"2016-07-11","birthdate":"1993-11-01","education":"专科"}
      */
 
-    private int code;
-    private String info;
-    private List<DataBean> data;
+    private String code;
+    private String   message;
+    private DataBean data;
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
-    public String getInfo() {
-        return info;
+    public String getMessage() {
+        return message;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public List<DataBean> getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
     public static class DataBean {
         /**
-         * uid : 78
-         * oid : 611
+         * uid : 50363
+         * oid : 61
          * isleader : 0
-         * code : 011000439
-         * username : 宋慧玲
-         * phone : 13023128805
-         * email : songhuiling@shanlinjinrong.com
-         * sex : 女
-         * organ : 核算组
-         * postname : 会计
+         * code : 011000311
+         * username : 杨佳晨
+         * phone : 18149776583
+         * email : yangjiachen@shanlinjinrong.com
+         * sex : 男
+         * organ : 员工关系组-营业部
+         * postname : 人事专员
          * token : null
-         * img :
+         * portrait :
+         * joindate : 2016-07-11
+         * birthdate : 1993-11-01
+         * education : 专科
          */
 
         private String uid;
@@ -72,8 +73,11 @@ public class UserDetailsBean implements Serializable {
         private String sex;
         private String organ;
         private String postname;
-        private String token;
-        private String img;
+        private Object token;
+        private String portrait;
+        private String joindate;
+        private String birthdate;
+        private String education;
 
         public String getUid() {
             return uid;
@@ -155,20 +159,44 @@ public class UserDetailsBean implements Serializable {
             this.postname = postname;
         }
 
-        public String getToken() {
+        public Object getToken() {
             return token;
         }
 
-        public void setToken(String token) {
+        public void setToken(Object token) {
             this.token = token;
         }
 
-        public String getImg() {
-            return img;
+        public String getPortrait() {
+            return portrait;
         }
 
-        public void setImg(String img) {
-            this.img = img;
+        public void setPortrait(String portrait) {
+            this.portrait = portrait;
+        }
+
+        public String getJoindate() {
+            return joindate;
+        }
+
+        public void setJoindate(String joindate) {
+            this.joindate = joindate;
+        }
+
+        public String getBirthdate() {
+            return birthdate;
+        }
+
+        public void setBirthdate(String birthdate) {
+            this.birthdate = birthdate;
+        }
+
+        public String getEducation() {
+            return education;
+        }
+
+        public void setEducation(String education) {
+            this.education = education;
         }
     }
 }

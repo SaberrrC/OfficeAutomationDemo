@@ -226,7 +226,7 @@ public class Api {
     /**
      * 头像
      */
-    public static final String PERSON_UPLOAD = "person/upload";
+    public static final String PERSON_UPLOAD = "user/upload";
     /**
      * 读取周报
      */
@@ -511,7 +511,7 @@ public class Api {
     public static final String MODIFICATION_EMAIL = "/users/reemail";
 
     //获取个人信息
-    public static final String SEARCH_USER_DETAILS = "/user/getinfo/";
+    public static final String SEARCH_USER_DETAILS = "/user/getUserInfoById";
 
     //*****************************************************************//
 
