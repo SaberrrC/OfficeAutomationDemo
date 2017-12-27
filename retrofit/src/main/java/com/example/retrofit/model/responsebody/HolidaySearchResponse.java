@@ -36,25 +36,6 @@ public class HolidaySearchResponse {
     private String freezedayorhour;
     private String usefulrestdayorhour;
 
-    @Override
-    public String toString() {
-        return "HolidaySearchResponse{" +
-                "pkPsndoc='" + pkPsndoc + '\'' +
-                ", psname='" + psname + '\'' +
-                ", code='" + code + '\'' +
-                ", deptname='" + deptname + '\'' +
-                ", jobname=" + jobname +
-                ", lastdayorhour='" + lastdayorhour + '\'' +
-                ", changelength='" + changelength + '\'' +
-                ", curdayorhour='" + curdayorhour + '\'' +
-                ", realdayorhour='" + realdayorhour + '\'' +
-                ", yidayorhour='" + yidayorhour + '\'' +
-                ", restdayorhour='" + restdayorhour + '\'' +
-                ", freezedayorhour='" + freezedayorhour + '\'' +
-                ", usefulrestdayorhour='" + usefulrestdayorhour + '\'' +
-                '}';
-    }
-
     public String getPkPsndoc() {
         return pkPsndoc;
     }

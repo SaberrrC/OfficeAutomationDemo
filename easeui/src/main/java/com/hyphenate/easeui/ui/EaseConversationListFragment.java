@@ -415,11 +415,12 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                     if (userDetailsBean != null) {
                                         try {
                                             switch (userDetailsBean.getCode()) {
-                                                case 200:
+                                                case "000000":
                                                     Observable.create(new Observable.OnSubscribe<Object>() {
                                                         @Override
                                                         public void call(Subscriber<? super Object> subscriber) {
-                                                            FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
+                                                            //todo php换java
+//                                                            FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
                                                             list.add(0, emConversation);
                                                             if (!handler.hasMessages(MSG_REFRESH)) {
                                                                 handler.sendEmptyMessage(MSG_REFRESH);

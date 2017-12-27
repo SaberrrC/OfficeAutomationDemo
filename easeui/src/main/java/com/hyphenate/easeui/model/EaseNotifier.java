@@ -330,15 +330,16 @@ public class EaseNotifier {
                                         if (userDetailsBean != null) {
                                             try {
                                                 switch (userDetailsBean.getCode()) {
-                                                    case 200:
+                                                    case "0000000":
+                                                        //todo php 换JAVAa
                                                         Observable.create(new Observable.OnSubscribe<Object>() {
                                                             @Override
                                                             public void call(Subscriber<? super Object> subscriber) {
-                                                                FriendsInfoCacheSvc.
-                                                                        getInstance(appContext).
-                                                                        addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(),
-                                                                                userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
-                                                                mNickName = userDetailsBean.getData().get(0).getUsername();
+//                                                                FriendsInfoCacheSvc.
+//                                                                        getInstance(appContext).
+//                                                                        addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(),
+//                                                                                userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
+//                                                                mNickName = userDetailsBean.getData().get(0).getUsername();
                                                                 subscriber.onCompleted();
                                                             }
                                                         }).subscribeOn(Schedulers.io())

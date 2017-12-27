@@ -31,7 +31,7 @@ public class ModifyPswActivityPresenter extends HttpPresenter<ModifyPswActivityC
 
 
     @Override
-    public void modifyPsw( String oldPsw, String newPsw) {
+    public void modifyPsw(String oldPsw, String newPsw) {
         HttpParams params = new HttpParams();
         params.put("oldpassword", oldPsw);
         params.put("newpassword", newPsw);
@@ -40,18 +40,21 @@ public class ModifyPswActivityPresenter extends HttpPresenter<ModifyPswActivityC
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    CommonRequestBean requestCode = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {}.getType());
+                    CommonRequestBean requestCode = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
                     switch (requestCode.getCode()) {
                         case ApiJava.REQUEST_CODE_OK:
                             mView.modifySuccess();
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             if (mView != null)
                                 mView.uidNull(requestCode.getCode());
                             break;
                         default:
                             if (mView != null)
-                                mView.modifyFailed("");
+                                mView.modifyFailed(requestCode.getMessage());
                             break;
                     }
                 } catch (Throwable e) {
@@ -63,8 +66,8 @@ public class ModifyPswActivityPresenter extends HttpPresenter<ModifyPswActivityC
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-//                    if (mView != null)
-//                        mView.modifyFailed(errorNo, strMsg);
+                    if (mView != null)
+                        mView.modifyFailed("修改密码失败");
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }

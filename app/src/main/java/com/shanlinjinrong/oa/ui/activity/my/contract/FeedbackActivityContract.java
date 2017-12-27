@@ -8,15 +8,15 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
  * 意见反馈接口
  */
 public interface FeedbackActivityContract {
-     interface View extends BaseView {
+    interface View extends BaseView {
         void feedbackSuccess(); // 成功
 
         void feedbackFinish(); //请求结束
 
-        void feedbackFailed(int errorNo, String strMsg); //失败
+        void feedbackFailed(String strMsg); //失败
     }
 
-     interface Presenter extends BasePresenter<View> {
-        void sendFeedback(String departmentId, String content); //意见反馈
+    interface Presenter extends BasePresenter<View> {
+        void sendFeedback(String content); //意见反馈
     }
 }

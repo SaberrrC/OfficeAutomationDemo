@@ -151,9 +151,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     }
 
     private void initData() {
-        mPresenter.queryUserInfo(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
-
-
+        mPresenter.queryUserInfo();
         if (!TextUtils.isEmpty(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS))) {
             Glide.with(AppManager.mContext)
                     .load(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PORTRAITS))
@@ -266,7 +264,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     public void queryUserInfoSuccess(UserDetailsBean userInfo) {
         try {
             if (userInfo != null) {
-                String portraits = Constants.PHPSLPicBaseUrl + userInfo.getData().get(0).getImg();
+                String portraits = Constants.SLPicBaseUrl + userInfo.getData().getPortrait();
 
                 if (!TextUtils.isEmpty(portraits) || !portraits.equals("null")) {
                     Glide.with(AppManager.mContext)
@@ -280,12 +278,12 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 } else {
                     Glide.with(AppManager.mContext).load(R.drawable.ease_user_portraits).asBitmap().into(userPortrait);
                 }
-                userSex.setText(userInfo.getData().get(0).getSex());
-                userPost.setText(userInfo.getData().get(0).getPostname());
-                userDepartment.setText(userInfo.getData().get(0).getOrgan());
-                userPhone.setText(userInfo.getData().get(0).getPhone());
-                user_mails.setText(userInfo.getData().get(0).getEmail());
-                user_jopnumber.setText(userInfo.getData().get(0).getCode());
+                userSex.setText(userInfo.getData().getSex());
+                userPost.setText(userInfo.getData().getPostname());
+                userDepartment.setText(userInfo.getData().getOrgan());
+                userPhone.setText(userInfo.getData().getPhone());
+                user_mails.setText(userInfo.getData().getEmail());
+                user_jopnumber.setText(userInfo.getData().getCode());
             }
         } catch (Throwable throwable) {
             throwable.printStackTrace();
@@ -371,8 +369,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                     FileUtils.createSDDir(Constants.FileUrl.TEMP);
                 }
                 //将要保存图片的路径
-                File file = new File(Constants.FileUrl.TEMP +
-                        "Cut_image_" + Calendar.getInstance().getTimeInMillis() + ".jpg");
+                File file = new File(Constants.FileUrl.TEMP + "Cut_image_" + Calendar.getInstance().getTimeInMillis() + ".jpg");
                 LogUtils.e("file->" + file.getAbsolutePath().toString());
                 try {
                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
@@ -452,7 +449,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
      */
     private void upLoadingPortrait(final File file) {
         showLoadingView();
-        mPresenter.upLoadPortrait(AppConfig.getAppConfig(this).getDepartmentId(), "portrait", file);
+        mPresenter.upLoadPortrait(file);
     }
 
     public void showLogoutTips() {

@@ -143,6 +143,7 @@ public class MyKjHttp extends KJHttp {
      * @param callback 请求中的回调方法
      * @param useCache 是否缓存本条请求
      */
+
     public Request<byte[]> jsonDelete(String url, HttpParams params, boolean useCache, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));

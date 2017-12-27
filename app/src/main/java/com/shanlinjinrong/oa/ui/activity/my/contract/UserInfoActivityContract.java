@@ -26,8 +26,8 @@ public interface UserInfoActivityContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void upLoadPortrait(String departmentId, String file, File portrait); //修改密码
+        void upLoadPortrait(File portrait); //修改密码
 
-        void queryUserInfo(String userCode); //刷新个人信息
+        void queryUserInfo(); //刷新个人信息
     }
 }

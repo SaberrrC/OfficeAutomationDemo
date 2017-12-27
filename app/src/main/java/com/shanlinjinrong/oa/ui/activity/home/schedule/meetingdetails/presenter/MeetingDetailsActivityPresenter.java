@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRoomsBean;
@@ -32,26 +33,28 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
 
-        mKjHttp.phpJsonGet(Api.NEW_MEETINGROOMS, httpParams, new HttpCallBack() {
+        mKjHttp.jsonGet(Api.NEW_MEETINGROOMS, httpParams, new HttpCallBack() {
 
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                System.out.println(t);
                 try {
                     MeetingRoomsBean meetingRoomsBean = new Gson().fromJson(t, MeetingRoomsBean.class);
                     switch (meetingRoomsBean.getCode()) {
-                        case Api.RESPONSES_CODE_OK:
+                        case ApiJava.REQUEST_CODE_OK:
                             mView.getMeetingRoomsSuccess(meetingRoomsBean.getData());
                             break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-//                            mView.uidNull(meetingRoomsBean.getCode());
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(meetingRoomsBean.getCode());
                             break;
-                        case Api.RESPONSES_CODE_NO_CONTENT:
+                        case ApiJava.RESPONSES_CODE_NO_CONTENT:
                             mView.getMeetingRoomsEmpty();
                             break;
                         default:
-                            mView.getMeetingRoomsFailed(meetingRoomsBean.getCode(), meetingRoomsBean.getInfo());
+                            mView.getMeetingRoomsFailed(0, meetingRoomsBean.getMessage());
                             break;
                     }
                 } catch (Throwable e) {

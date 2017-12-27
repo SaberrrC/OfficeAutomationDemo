@@ -40,7 +40,8 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                 System.out.println(t);
                 LogUtils.e("登录返回数据-》" + t);
                 try {
-                    UserInfo user = new Gson().fromJson(t, new TypeToken<UserInfo>() {}.getType());
+                    UserInfo user = new Gson().fromJson(t, new TypeToken<UserInfo>() {
+                    }.getType());
 
                     switch (user.getCode()) {
                         case ApiJava.REQUEST_CODE_OK:
@@ -48,12 +49,14 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                                 mView.loginSuccess(user.getData());
                             break;
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             if (mView != null)
                                 mView.loginFailed(user.getCode());
                             break;
                         case ApiJava.NOT_EXIST_USER://用户名 密码不存在
                             if (mView != null)
-                            mView.accountOrPswError(user.getMessage());
+                                mView.accountOrPswError(user.getMessage());
                             break;
                         default:
                             break;
