@@ -249,7 +249,7 @@ public class Api {
     /**
      * 用户反馈
      */
-    public static final String FEEDBACK = "person/feedback";
+    public static final String FEEDBACK = "feedback/feedback";
     /**
      * 通知公告
      */
