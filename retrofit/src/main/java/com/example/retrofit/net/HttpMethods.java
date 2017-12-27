@@ -1,17 +1,15 @@
 package com.example.retrofit.net;
 
 import com.example.retrofit.model.HttpResult;
-import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
-import com.example.retrofit.model.responsebody.QueryPayResponse;
 import com.example.retrofit.model.responsebody.CountResponse1;
+import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
+import com.example.retrofit.model.responsebody.QueryPayResponse;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -120,13 +118,13 @@ public class HttpMethods {
         @Override
         public T call(HttpResult<T> httpResult) {
             HttpResult<T> httpResult1 = httpResult;
-//            if (!httpResult.getCode().equals("000000")) {
-//                try {
-//                    throw new ApiException(httpResult.getCode(), 1, httpResult.getMessage());
-//                } catch (ApiException e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            if (!httpResult.getCode().equals("000000")) {
+                try {
+                    throw new ApiException(httpResult.getCode(), 1, httpResult.getMessage());
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+            }
             return httpResult.getData();
         }
     }

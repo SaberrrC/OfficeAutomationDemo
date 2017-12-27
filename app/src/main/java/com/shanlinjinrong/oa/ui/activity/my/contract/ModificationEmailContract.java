@@ -6,9 +6,6 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
 public interface ModificationEmailContract {
 
     interface View extends BaseView {
-        void showLoading();
-
-        void hideLoading();
 
         void modificationEmailSuccess(); // 成功
 
@@ -16,6 +13,6 @@ public interface ModificationEmailContract {
     }
 
     interface Presenter extends BasePresenter<ModificationEmailContract.View> {
-        void modificationEmail(String email, String userId);
+        void modificationEmail(String email);
     }
 }

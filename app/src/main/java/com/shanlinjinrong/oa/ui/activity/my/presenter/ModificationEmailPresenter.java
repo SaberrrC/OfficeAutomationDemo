@@ -1,6 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.my.presenter;
 
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModificationEmailContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -19,47 +19,11 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
     }
 
     @Override
-    public void modificationEmail(String email, String userId) {
+    public void modificationEmail(String email) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        httpParams.put("email", email);
-        httpParams.put("code", userId);
-        mKjHttp.phpJsonPost(Api.MODIFICATION_EMAIL, httpParams, new HttpCallBack() {
-            @Override
-            public void onPreStart() {
-                super.onPreStart();
-                try {
-                    mView.showLoading();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                try {
-                    JSONObject jsonObject = new JSONObject(t);
-                    int code = jsonObject.getInt("code");
-                    switch (code) {
-                        case Api.RESPONSES_CODE_OK:
-                            if (mView != null)
-                                mView.modificationEmailSuccess();
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-//                            if (mView != null)
-//                                mView.uidNull(Api.getCode(jsonObject));
-                        default:
-                            if (mView != null)
-                                mView.modificationEmailFailed(code,jsonObject.getString("info"));
-                            break;
-                    }
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-
+        httpParams.putJsonParams(email);
+        mKjHttp.jsonPost(ApiJava.CHANGE_EMAIL, httpParams, new HttpCallBack() {
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
@@ -72,14 +36,32 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
             }
 
             @Override
-            public void onFinish() {
-                super.onFinish();
+            public void onSuccess(String t) {
+                super.onSuccess(t);
                 try {
-                    mView.hideLoading();
+                    JSONObject jsonObject = new JSONObject(t);
+                    String code = jsonObject.getString("code");
+                    switch (code) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            if (mView != null)
+                                mView.modificationEmailSuccess();
+                            break;
+
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null)
+                            mView.uidNull(code);
+                        default:
+                            if (mView != null)
+                                mView.modificationEmailFailed(0, jsonObject.getString("info"));
+                            break;
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
         });
+
     }
 }

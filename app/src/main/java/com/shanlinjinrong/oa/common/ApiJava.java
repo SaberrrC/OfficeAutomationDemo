@@ -129,4 +129,7 @@ public interface ApiJava {
 
     //群组员头像查询
     String QUERY_USER_LIST_INFO = "user/queryUserByCodes";
+
+    //修改邮箱
+    String CHANGE_EMAIL = "user/updateEmail";
 }
