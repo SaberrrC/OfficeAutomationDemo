@@ -465,7 +465,7 @@ public class Api {
     /**
      * 新会议室信息
      */
-    public static final String NEW_MEETINGROOMS = "/new_meetingrooms";
+    public static final String NEW_MEETINGROOMS = "newMeetingRooms";
 
     /**
      * 新会议室记录信息
