@@ -36,7 +36,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar  toolbar;
     @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
     @BindView(R.id.tv_tips)
@@ -59,9 +59,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
                     .debounce(500, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribe(charSequence -> {
-                        check();
-                    });
+                    .subscribe(charSequence -> check());
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -85,7 +83,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
         //修改按钮
         if (check()) {
             showLoadingView();
-            mPresenter.modifyPhone(AppConfig.getAppConfig(this).getDepartmentId(), newNumber);
+            mPresenter.modifyPhone(newNumber);
         }
     }
 
@@ -122,12 +120,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
         toolbarTextBtn.setText("修改");
         toolbarTextBtn.setVisibility(View.VISIBLE);
         toolbar.setNavigationIcon(R.drawable.toolbar_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
     }
 
     @Override
@@ -143,8 +136,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
     @Override
     public void modifySuccess(String newNumber) {
         showToast("修改成功！");
-        AppConfig.getAppConfig(ModifyPhoneActivity.this).set(
-                AppConfig.PREF_KEY_PHONE, newNumber);
+        AppConfig.getAppConfig(ModifyPhoneActivity.this).set(AppConfig.PREF_KEY_PHONE, newNumber);
         setResult(RESULT_OK);
         finish();
     }

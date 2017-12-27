@@ -53,7 +53,7 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
         mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
         params.put("file", file);
-        mKjHttp.post(Api.PERSON_UPLOAD, params, new HttpCallBack() {
+        mKjHttp.jsonPost(Api.PERSON_UPLOAD, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

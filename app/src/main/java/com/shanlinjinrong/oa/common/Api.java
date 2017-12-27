@@ -244,7 +244,7 @@ public class Api {
     /**
      * 修改电话
      */
-    public static final String PHONENUMBER_UPDATE = "person/changephone";
+    public static final String PHONENUMBER_UPDATE = "user/changePhone" ;
 
     /**
      * 用户反馈
