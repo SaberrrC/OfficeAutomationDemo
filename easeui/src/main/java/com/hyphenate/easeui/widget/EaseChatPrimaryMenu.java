@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,18 +27,19 @@ import com.hyphenate.util.EMLog;
  * primary menu
  */
 public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnClickListener {
-    private EditText editText;
-    private View buttonSetModeKeyboard;
-    private RelativeLayout edittext_layout;
-    private View buttonSetModeVoice;
-    private View buttonSend;
-    private View buttonPressToSpeak;
-    private ImageView faceNormal;
-    private ImageView faceChecked;
-    private Button buttonMore;
-    private TextView tv_holdtotalk;
+    private CusEdittextText editText;
+    private View            buttonSetModeKeyboard;
+    private LinearLayout    edittext_layout;
+    private View            buttonSetModeVoice;
+    private View            buttonSend;
+    private View            buttonPressToSpeak;
+    private ImageView       faceNormal;
+    private ImageView       faceChecked;
+    private Button          buttonMore;
+    private TextView        tv_holdtotalk;
     private boolean ctrlPress = false;
     Context context1;
+    private String lastText = "";
 
     public EaseChatPrimaryMenu(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -56,9 +58,9 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
     private void init(final Context context, AttributeSet attrs) {
         context1 = context;
         LayoutInflater.from(context).inflate(R.layout.ease_widget_chat_primary_menu, this);
-        editText = (EditText) findViewById(R.id.et_sendmessage);
+        editText = (CusEdittextText) findViewById(R.id.et_sendmessage);
         buttonSetModeKeyboard = findViewById(R.id.btn_set_mode_keyboard);
-        edittext_layout = (RelativeLayout) findViewById(R.id.edittext_layout);
+        edittext_layout = (LinearLayout) findViewById(R.id.edittext_layout);
         buttonSetModeVoice = findViewById(R.id.btn_set_mode_voice);
         buttonSend = findViewById(R.id.btn_send);
         buttonPressToSpeak = findViewById(R.id.btn_press_to_speak);
@@ -102,16 +104,23 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
                     buttonMore.setVisibility(View.VISIBLE);
                     buttonSend.setVisibility(View.GONE);
                 }
+                //                if (TextUtils.equals(s.toString(), lastText)) {
+                //                    return;
+                //                }
+                //                lastText = s.toString();
+                //                onTextChange(s.toString());
+                //                if (before == 0) {
+                //                    editText.setSelection(start + count);
+                //                }
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                //    editText.append(s);
-             //   onTextChange(s.toString());
             }
         });
 
@@ -136,10 +145,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 EMLog.d("key", "keyCode:" + event.getKeyCode() + " action" + event.getAction() + " ctrl:" + ctrlPress);
-                if (actionId == EditorInfo.IME_ACTION_SEND ||
-                        (event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
-                                event.getAction() == KeyEvent.ACTION_DOWN &&
-                                ctrlPress == true)) {
+                if (actionId == EditorInfo.IME_ACTION_SEND || (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN && ctrlPress == true)) {
                     String s = editText.getText().toString();
                     editText.setText("");
                     listener.onSendBtnClicked(s);
@@ -187,7 +193,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
      * @param emojiContent
      */
     public void onEmojiconInputEvent(CharSequence emojiContent) {
-        editText.append(emojiContent);
+        editText.getText().insert(editText.getSelectionStart(), emojiContent);
     }
 
     public void onTextChange(CharSequence emojiContent) {
