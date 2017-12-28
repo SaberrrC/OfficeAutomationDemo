@@ -174,10 +174,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
             case R.id.btn_meeting_info_complete:
                 beginDate = null;
                 DateIndex = 0;
-                if (!isNetwork) {
+            /*    if (!isNetwork) {
                     showToast(getString(R.string.net_no_connection));
                     return;
-                }
+                }*/
                 for (int i = 0; i < mCheckBoxes.size(); i++) {
                     if (mCheckBoxes.get(i).isChecked()) {
                         if (i - DateIndex == 1 || (DateIndex == 0 && beginDate == null)) {
@@ -378,10 +378,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (!isNetwork) {
+    /*    if (!isNetwork) {
             mPresenter.getMeetingPredetermine(mMeetingId);
             return;
-        }
+        }*/
         mBtnMeetingInfoComplete.setEnabled(true);
         switch (compoundButton.getId()) {
             case R.id.selected_meeting_date1:
