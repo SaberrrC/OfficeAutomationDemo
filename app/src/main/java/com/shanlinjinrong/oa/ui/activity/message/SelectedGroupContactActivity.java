@@ -25,6 +25,7 @@ import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
+import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
@@ -63,30 +64,30 @@ import io.reactivex.schedulers.Schedulers;
 public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroupContactPresenter> implements SelectedGroupContactContract.View, SelectedGroupContactFragment.onLoadUsersListener, SelectedGroupContactFragment.onSelectedUsersListener {
 
     @BindView(R.id.top_view)
-    CommonTopView     mTopView;
+    CommonTopView mTopView;
     @BindView(R.id.tv_empty_view)
-    TextView          mTvErrorView;
+    TextView mTvErrorView;
     @BindView(R.id.search_et_input)
-    EditText          mSearchContact;
+    EditText mSearchContact;
     @BindView(R.id.tv_selected_contact)
-    TextView          mTvSelectedContact;
+    TextView mTvSelectedContact;
     @BindView(R.id.rv_search_contact)
-    RecyclerView      mRvSearchContact;
+    RecyclerView mRvSearchContact;
     @BindView(R.id.ll_selected_contact)
-    LinearLayout      mLlSelectedContact;
+    LinearLayout mLlSelectedContact;
     @BindView(R.id.bottom_container_layout)
     BottomSheetLayout bottomContainerLayout;
 
-    private EMGroup                            mGroup;
-    private String[]                           mUserNames;
-    private String[]                           mUserCodes;
-    private List<String>                       mOrgIdKey;
-    private List<Contacts>                     mGroupUsers;
-    private List<Contacts>                     mSearchData;
-    private ArrayList<String>                  mSelectedAccount;
-    private SelectedContactAdapter             mUserAdapter;
-    private GroupContactListFragment           mBottomFragment;
-    private SparseArray<List<Contacts>>        mCacheContact;
+    private EMGroup mGroup;
+    private String[] mUserNames;
+    private String[] mUserCodes;
+    private List<String> mOrgIdKey;
+    private List<Contacts> mGroupUsers;
+    private List<Contacts> mSearchData;
+    private ArrayList<String> mSelectedAccount;
+    private SelectedContactAdapter mUserAdapter;
+    private GroupContactListFragment mBottomFragment;
+    private SparseArray<List<Contacts>> mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
     private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101, FINISHRESULT = -5;
 
@@ -242,7 +243,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     }
                     content.append("加入群组");
                     //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
-                    EMMessage message = EMMessage.createTxtSendMessage(content.toString(), groupId);
+                    EMMessage message = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr(content.toString(), ""), groupId);
                     //如果是群聊，设置chattype，默认是单聊
                     message.setChatType(EMMessage.ChatType.GroupChat);
                     //发送消息
@@ -310,7 +311,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                         }
                         content.append("加入群组");
                         //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
-                        EMMessage message = EMMessage.createTxtSendMessage(content.toString(), mGroup.getGroupId());
+                        EMMessage message = EMMessage.createTxtSendMessage(EncryptionUtil.getEncryptionStr(content.toString(), ""), mGroup.getGroupId());
                         //如果是群聊，设置chattype，默认是单聊
                         message.setChatType(EMMessage.ChatType.GroupChat);
                         //发送消息
@@ -617,7 +618,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             case Constants.MODIFICATIONNAME:
                 break;
             case Constants.GROUPDISSOLVE:
-                if (Utils.isActivityRunning(this,getClass().getName())) {
+                if (Utils.isActivityRunning(this, getClass().getName())) {
                     EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
                         event.setEvent(true);
                         setResult(FINISHRESULT);

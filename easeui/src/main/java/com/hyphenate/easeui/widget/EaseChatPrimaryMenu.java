@@ -2,6 +2,7 @@ package com.hyphenate.easeui.widget;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -18,23 +19,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.util.EMLog;
 
 /**
  * primary menu
  */
 public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnClickListener {
-    private EditText       editText;
-    private View           buttonSetModeKeyboard;
+    private EditText editText;
+    private View buttonSetModeKeyboard;
     private RelativeLayout edittext_layout;
-    private View           buttonSetModeVoice;
-    private View           buttonSend;
-    private View           buttonPressToSpeak;
-    private ImageView      faceNormal;
-    private ImageView      faceChecked;
-    private Button         buttonMore;
-    private TextView       tv_holdtotalk;
-    private boolean ctrlPress     = false;
+    private View buttonSetModeVoice;
+    private View buttonSend;
+    private View buttonPressToSpeak;
+    private ImageView faceNormal;
+    private ImageView faceChecked;
+    private Button buttonMore;
+    private TextView tv_holdtotalk;
+    private boolean ctrlPress = false;
+    Context context1;
 
     public EaseChatPrimaryMenu(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -51,7 +54,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
     }
 
     private void init(final Context context, AttributeSet attrs) {
-        Context context1 = context;
+        context1 = context;
         LayoutInflater.from(context).inflate(R.layout.ease_widget_chat_primary_menu, this);
         editText = (EditText) findViewById(R.id.et_sendmessage);
         buttonSetModeKeyboard = findViewById(R.id.btn_set_mode_keyboard);
@@ -94,6 +97,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
                 if (!TextUtils.isEmpty(s)) {
                     buttonMore.setVisibility(View.GONE);
                     buttonSend.setVisibility(View.VISIBLE);
+
                 } else {
                     buttonMore.setVisibility(View.VISIBLE);
                     buttonSend.setVisibility(View.GONE);
@@ -106,7 +110,8 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                //    editText.append(s);
+             //   onTextChange(s.toString());
             }
         });
 
@@ -183,6 +188,11 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
      */
     public void onEmojiconInputEvent(CharSequence emojiContent) {
         editText.append(emojiContent);
+    }
+
+    public void onTextChange(CharSequence emojiContent) {
+        Spannable span = EaseSmileUtils.getSmiledText(context1, emojiContent);
+        editText.setText(span, TextView.BufferType.SPANNABLE);
     }
 
     /**
