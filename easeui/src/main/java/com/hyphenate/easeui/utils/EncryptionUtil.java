@@ -20,7 +20,27 @@ public class EncryptionUtil {
             e.printStackTrace();
         }
         return sb.toString();
-//        return content;
+
+
+    }
+
+
+    /***
+     * 加密
+     * @param content
+     * @param
+     * @return
+     */
+    public static String getEncryptionStrSearch(String content, String key) {
+        StringBuffer sb = new StringBuffer();
+        try {
+            content = EncryptionStringUtils.encryptionStr(content);
+            sb.append(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+
 
     }
 

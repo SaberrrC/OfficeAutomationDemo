@@ -47,17 +47,17 @@ import butterknife.OnClick;
 
 public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresenter> implements MessageSearchContract.View {
     @BindView(R.id.tv_title)
-    TextView      mTvTitle;
+    TextView mTvTitle;
     @BindView(R.id.lv_list)
-    ListView      mLvList;
+    ListView mLvList;
     @BindView(R.id.search_et_input)
     ClearEditText mSearchEtInput;
     @BindView(R.id.tv_no_result)
-    TextView      mTvNoResult;
-    private Bundle                 mBundle;
-    private int                    chatType;
-    private String                 toChatUsername;
-    private EMConversation         mConversation;
+    TextView mTvNoResult;
+    private Bundle mBundle;
+    private int chatType;
+    private String toChatUsername;
+    private EMConversation mConversation;
     private SearchedMessageAdapter messageaAdapter;
 
     @Override
@@ -135,7 +135,7 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
         new Thread(new Runnable() {
             public void run() {
                 //                List<EMMessage> resultList = mConversation.searchMsgFromDB(mSearchEtInput.getText().toString().trim(), System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
-                String decryptStr = EncryptionUtil.getEncryptionStr(mSearchEtInput.getText().toString().trim(), "");
+                String decryptStr = EncryptionUtil.getEncryptionStrSearch(mSearchEtInput.getText().toString().trim(), "");
                 List<EMMessage> resultList = mConversation.searchMsgFromDB(decryptStr,
                         System.currentTimeMillis(), 50, null, EMConversation.EMSearchDirection.UP);
                 if (messageList == null) {
@@ -212,9 +212,9 @@ public class MessageSearchActivity extends HttpBaseActivity<MessageSearchPresent
     }
 
     private static class ViewHolder {
-        TextView  name;
-        TextView  message;
-        TextView  time;
+        TextView name;
+        TextView message;
+        TextView time;
         ImageView avatar;
     }
 }
