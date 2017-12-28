@@ -33,5 +33,6 @@ public class EaseConstant {
     public static final String EXTRA_USER_ID = "toChatUsername";//toChatUsername  userId
     public static String GROUPID = "groupId";
 
-    public static String PHP_URL = "http://testoa.shanlinjinrong.com/webApi/";
+    //TODO 生产环境
+    public static String PHP_URL = "http://oa.shanlinjinrong.com/webApi";
 }
