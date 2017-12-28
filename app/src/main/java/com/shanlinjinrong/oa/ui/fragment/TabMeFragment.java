@@ -1,10 +1,7 @@
 package com.shanlinjinrong.oa.ui.fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,10 +26,6 @@ import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.pgyersdk.update.UpdateManagerListener;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.helper.UpdateHelper;
-import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.my.AboutUsActivity;
@@ -41,14 +34,9 @@ import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UserInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UsingHelpActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
-import com.shanlinjinrong.oa.utils.FileUtils;
-import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.Calendar;
 
@@ -127,7 +115,7 @@ public class TabMeFragment extends BaseFragment {
             R.id.btn_feedback, R.id.btn_update, R.id.btn_about_us, R.id.btn_clear_cache})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 1000) {
+        if (currentTime - lastClickTime < 500) {
             lastClickTime = currentTime;
             return;
         }
