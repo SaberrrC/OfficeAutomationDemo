@@ -33,7 +33,7 @@ public class AppConfig {
      */
     public static final String USER_TYPE_BI = "1";
 
-    /**
+    /**Mal
      * 网络请求baseUrl
      */
     public static final String BASE_URL = "base_url";
@@ -183,7 +183,7 @@ public class AppConfig {
         editor.putString(PREF_KEY_HIREDATE, user.getHiredate());
         editor.putString(PREF_KEY_COMPANY_NAME, user.getCompany_name());
         editor.putString(PREF_KEY_DEPARTMENT_NAME, user.getDepartment_name());
-        editor.putString(PREF_KEY_PORTRAITS, Constants.PHPSLPicBaseUrl + user.getPortrait());
+        editor.putString(PREF_KEY_PORTRAITS, user.getPortrait());
         editor.putString(PREF_KEY_POST_NAME, user.getPost_title());
         editor.putString(PREF_KEY_IS_LEADER, user.getIsleader());
         editor.putBoolean(IS_AUTO_LOGIN, isAutoLogin);
@@ -259,8 +259,6 @@ public class AppConfig {
         editor.putString(PREF_KEY_TYPE, DEFAULT_ARGUMENTS_VALUE);
         editor.putString(PREF_KEY_YX_TOKEN, DEFAULT_ARGUMENTS_VALUE);
         editor.putBoolean(IS_AUTO_LOGIN, false);
-        //关心存入结果则使用commit如果不关心存入结果则使用apply
-        //editor.apply();
-        editor.commit();
+        editor.apply();
     }
 }

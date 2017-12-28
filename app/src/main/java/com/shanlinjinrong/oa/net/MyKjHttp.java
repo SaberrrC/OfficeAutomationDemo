@@ -41,6 +41,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> post(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        params.putHeaders("application", "octet-stream");
         return super.post(baseUrl + url, params, callback);
     }
 
@@ -56,7 +57,6 @@ public class MyKjHttp extends KJHttp {
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         return super.jsonPost(baseJavaUrl + url, params, callback);
-
     }
 
     @Override

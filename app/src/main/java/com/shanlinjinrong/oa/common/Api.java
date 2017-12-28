@@ -476,7 +476,7 @@ public class Api {
     /**
      * 新会议室预定时间段情况
      */
-    public static final String NEW_MEETING_ALR_MEETING = "/new_meetings/alr_meeting?room_id=";
+    public static final String NEW_MEETING_ALR_MEETING = "new_meetings/alr_meeting?room_id=";
 
 
     /**

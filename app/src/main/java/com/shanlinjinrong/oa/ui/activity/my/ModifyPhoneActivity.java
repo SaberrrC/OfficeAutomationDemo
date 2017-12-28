@@ -144,6 +144,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
 
     @Override
     public void modifyFailed(int errorCode, String msg) {
+        hideLoadingView();
         showToast(msg);
     }
 

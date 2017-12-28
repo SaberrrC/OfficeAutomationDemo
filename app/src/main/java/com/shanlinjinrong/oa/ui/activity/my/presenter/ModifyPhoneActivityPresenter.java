@@ -31,7 +31,7 @@ public class ModifyPhoneActivityPresenter extends HttpPresenter<ModifyPhoneActiv
     public void modifyPhone(final String phoneNum) {
         HttpParams params = new HttpParams();
         params.put("phone", phoneNum);
-        mKjHttp.jsonPost(Api.PHONENUMBER_UPDATE, params, new HttpCallBack() {
+        mKjHttp.post( Api.PHONENUMBER_UPDATE, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

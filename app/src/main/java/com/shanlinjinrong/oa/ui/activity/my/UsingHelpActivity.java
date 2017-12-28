@@ -121,11 +121,8 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
                 tvErrorLayout.setText(getString(R.string.net_no_connection));
             }
         };
-
         webView.setWebViewClient(mWebViewClient);
-
         webView.loadUrl(BuildConfig.BASE_URL + Api.USINGHELP + "?time=" + new Date().getTime());
-
         webView.setWebViewClient(mWebViewClient);
     }
 
@@ -153,12 +150,7 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
         tvTitle.setLayoutParams(lp);
 
         toolbar.setNavigationIcon(R.drawable.toolbar_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
     }
 
     @Override

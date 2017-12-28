@@ -206,8 +206,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
 
     //修改头像方法
     private void selectPortrait() {
-        requestRunTimePermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission
-                .CAMERA}, new PermissionListener() {
+        requestRunTimePermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, new PermissionListener() {
             @Override
             public void onGranted() {
                 mPop = new BottomPopAvatar(UserInfoActivity.this);
@@ -231,7 +230,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     public void upLoadSuccess(String portrait) {
         showToast("修改成功");
         //上传成功，设置用户头像
-        String portraitUri = Constants.PHPSLPicBaseUrl + portrait;
+        String portraitUri =portrait;
         AppConfig.getAppConfig(UserInfoActivity.this).set(AppConfig.PREF_KEY_PORTRAITS, portraitUri);
         if (!TextUtils.isEmpty(portraitUri)) {
             Glide.with(AppManager.mContext)
@@ -264,7 +263,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     public void queryUserInfoSuccess(UserDetailsBean userInfo) {
         try {
             if (userInfo != null) {
-                String portraits = Constants.SLPicBaseUrl + userInfo.getData().getPortrait();
+                String portraits = userInfo.getData().getPortrait();
 
                 if (!TextUtils.isEmpty(portraits) || !portraits.equals("null")) {
                     Glide.with(AppManager.mContext)
@@ -370,9 +369,10 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 }
                 //将要保存图片的路径
                 File file = new File(Constants.FileUrl.TEMP + "Cut_image_" + Calendar.getInstance().getTimeInMillis() + ".jpg");
-                LogUtils.e("file->" + file.getAbsolutePath().toString());
+                LogUtils.e("file->" + file.getAbsolutePath());
                 try {
                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+                    assert bitmap != null;
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                     bos.flush();
                     bos.close();
@@ -380,10 +380,11 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                     e.printStackTrace();
                 }
                 upLoadingPortrait(file);
+
+
                 break;
             case UPDATE_PHONE:
-                userPhone.setText(AppConfig.getAppConfig(UserInfoActivity.this).get(
-                        AppConfig.PREF_KEY_PHONE));
+                userPhone.setText(AppConfig.getAppConfig(UserInfoActivity.this).get(AppConfig.PREF_KEY_PHONE));
                 break;
         }
         super.onActivityResult(requestCode, resultCode, intent);

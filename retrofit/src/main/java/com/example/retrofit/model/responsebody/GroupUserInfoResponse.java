@@ -93,7 +93,7 @@ public class GroupUserInfoResponse {
     public String getImg() {
         if (img == null || img.equals("null"))
             return "";
-        return Constants.SLPicBaseUrl + img;
+        return  img;
     }
 
     public void setImg(String img) {

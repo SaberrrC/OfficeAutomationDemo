@@ -144,7 +144,7 @@ public class Contacts implements MultiItemEntity, Serializable {
                 username = jsonObject.getString("username");
                 phone = jsonObject.getString("phone");
                 email = jsonObject.getString("email");
-                portraits = Constants.SLPicBaseUrl + jsonObject.getString("portraits");
+                portraits = jsonObject.getString("portraits");
                 sex = jsonObject.getString("sex");
                 postTitle = jsonObject.getString("post_title");
                 postId = jsonObject.getString("department_id");
@@ -171,7 +171,7 @@ public class Contacts implements MultiItemEntity, Serializable {
                 username = jsonObject.getString("username");
                 phone = jsonObject.getString("phone");
                 email = jsonObject.getString("email");
-                portraits = Constants.SLPicBaseUrl + jsonObject.getString("portraits");
+                portraits = jsonObject.getString("portraits");
                 sex = jsonObject.getString("sex");
                 postTitle = jsonObject.getString("post_title");
                 postId = jsonObject.getString("department_id");

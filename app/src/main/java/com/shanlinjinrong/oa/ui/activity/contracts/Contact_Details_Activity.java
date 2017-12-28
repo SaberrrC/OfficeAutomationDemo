@@ -267,7 +267,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
             mPost = user.getPostName();
             mUserCode = "sl_" + user.getCode();
             mNickName = user.getUsername();
-            mPortrait = Constants.SLPicBaseUrl + user.getPortraits();
+            mPortrait =user.getPortraits();
 //            mPortrait =  user.getPortraits();
             mDepartment = user.getDepartmentName();
             mDepartmentId = user.getDepartmentId();
@@ -339,7 +339,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         try {//更新个人详情
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
                     addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(),
-                            userDetailsBean.getUsername(), Constants.PHPSLPicBaseUrl + userDetailsBean.getImg(),
+                            userDetailsBean.getUsername(), userDetailsBean.getImg(),
                             userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                             userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
             initSessionData();
