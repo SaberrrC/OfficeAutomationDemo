@@ -211,14 +211,14 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         LoginIm();//登录环信
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
-        //悬浮窗 权限
+  /*      //悬浮窗 权限
         if (!SettingsCompat.canDrawOverlays(new WeakReference<Context>(this).get())) {
             //跳转到悬浮窗权限设置页
             SettingsCompat.manageDrawOverlays(new WeakReference<Context>(this).get());
         }
         //设置授权状态
         SettingsCompat.setDrawOverlays(new WeakReference<Context>(this).get(), true);
-
+*/
         mPresenter.applyPermission(this);//判断是否有更新
         ShortcutBadger.removeCount(MainActivity.this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
