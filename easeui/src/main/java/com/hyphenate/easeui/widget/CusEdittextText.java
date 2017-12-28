@@ -5,6 +5,7 @@ import android.content.Context;
 import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -39,31 +40,32 @@ public class CusEdittextText extends EditText {
             try {
                 int currentapiVersion = android.os.Build.VERSION.SDK_INT;
                 if (currentapiVersion >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    String value = clipboard.getText().toString();
-                    Editable edit = getEditableText();
-                    // edit.clear();
-                    int index = this.getSelectionStart();
-                    // 获取系统剪切板
                     ClipboardManager clip = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    Spannable span = EaseSmileUtils.getSmiledText(getContext(),  clip.getText().toString());
-                    if (index < 0 || index >= edit.length()) {
-                        edit.append(span);
-                    } else {
-                        edit.insert(index, span);// 光标所在位置插入文字
+                    if (TextUtils.isEmpty(clip.getText().toString())) {
+                        return true;
                     }
-                } else {
-                    android.text.ClipboardManager clip = (android.text.ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    String value = clip.getText().toString();
                     Editable edit = getEditableText();
-                    // edit.clear();
+                    Spannable span = EaseSmileUtils.getSmiledText(getContext(), clip.getText().toString());
                     int index = this.getSelectionStart();
-                    Spannable span = EaseSmileUtils.getSmiledText(getContext(),  value);
                     if (index < 0 || index >= edit.length()) {
                         edit.append(span);
                     } else {
                         edit.insert(index, span);// 光标所在位置插入文字
                     }
+                    return true;
+                }
+                android.text.ClipboardManager clip = (android.text.ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                String value = clip.getText().toString();
+                if (TextUtils.isEmpty(value)) {
+                    return true;
+                }
+                Editable edit = getEditableText();
+                int index = this.getSelectionStart();
+                Spannable span = EaseSmileUtils.getSmiledText(getContext(), value);
+                if (index < 0 || index >= edit.length()) {
+                    edit.append(span);
+                } else {
+                    edit.insert(index, span);// 光标所在位置插入文字
                 }
                 return true;
             } catch (Exception e) {
@@ -72,5 +74,4 @@ public class CusEdittextText extends EditText {
         }
         return super.onTextContextMenuItem(id);
     }
-
 }
