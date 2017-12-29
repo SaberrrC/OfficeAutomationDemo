@@ -1,7 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean;
 
-import com.chad.library.adapter.base.entity.MultiItemEntity;
-
 import java.util.List;
 
 /**
@@ -10,174 +8,239 @@ import java.util.List;
 
 public class ReservationRecordBean {
 
-
     /**
-     * code : 200
-     * info : success
-     * data : [{"id":13,"uid":618,"title":"1212","content":"萨达","start_time":1507852800,"end_time":1507903200,"meeting_place":"32","room_id":3,"send_type":"邮件","created":1507779610,"part_name":"傅梦婷,邱晓嬿"},{"id":12,"uid":618,"title":"1212","content":"萨达","start_time":1508630400,"end_time":1507903200,"meeting_place":"32","room_id":3,"send_type":"邮件","created":1507779218,"part_name":"顾震平,齐娜,姚嵩庆"}]
+     * code : 000000
+     * message : success
+     * data : {"hasPrevious":true,"hasNext":false,"pageCount":8,"pageNum":8,"pageSize":1,"total":8,"data":[{"id":429,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453412,"start_time":1514595600,"end_time":1514599200,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":430,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453436,"start_time":1514437200,"end_time":1514440800,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":426,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453358,"start_time":1514433600,"end_time":1514437200,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":428,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453395,"start_time":1514430000,"end_time":1514433600,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":427,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453386,"start_time":1514426400,"end_time":1514430000,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":423,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453016,"start_time":1514422800,"end_time":1514426400,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":424,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453018,"start_time":1514422800,"end_time":1514426400,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":425,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453066,"start_time":1514422800,"end_time":1514426400,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"}]}
      */
 
-    private int code;
-    private String info;
-    private List<DataBean> data;
+    private String code;
+    private String    message;
+    private DataBeanX data;
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
-    public String getInfo() {
-        return info;
+    public String getMessage() {
+        return message;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public List<DataBean> getData() {
+    public DataBeanX getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBeanX data) {
         this.data = data;
     }
 
-    public static class DataBean implements MultiItemEntity {
+    public static class DataBeanX {
         /**
-         * id : 13
-         * uid : 618
-         * title : 1212
-         * content : 萨达
-         * start_time : 1507852800
-         * end_time : 1507903200
-         * meeting_place : 32
-         * room_id : 3
-         * send_type : 邮件
-         * created : 1507779610
-         * part_name : 傅梦婷,邱晓嬿
+         * hasPrevious : true
+         * hasNext : false
+         * pageCount : 8
+         * pageNum : 8
+         * pageSize : 1
+         * total : 8
+         * data : [{"id":429,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453412,"start_time":1514595600,"end_time":1514599200,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":430,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453436,"start_time":1514437200,"end_time":1514440800,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":426,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453358,"start_time":1514433600,"end_time":1514437200,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":428,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453395,"start_time":1514430000,"end_time":1514433600,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":427,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453386,"start_time":1514426400,"end_time":1514430000,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":423,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453016,"start_time":1514422800,"end_time":1514426400,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":424,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453018,"start_time":1514422800,"end_time":1514426400,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"},{"id":425,"uid":50363,"title":"","content":"￦ﾚﾂ￦ﾗﾠ","created":1514453066,"start_time":1514422800,"end_time":1514426400,"room_id":2,"meetingPlace":"星创5F","send_type":"null","part_name":[],"roomname":"火星"}]
          */
 
-        private int id;
-        private int uid;
-        private String title;
-        private String content;
-        private String start_time;
-        private String end_time;
-        private String meeting_place;
-        private int room_id;
-        private String send_type;
-        private String created;
-        private String part_name;
-        private String roomname;
-        private int itemType;
+        private boolean hasPrevious;
+        private boolean        hasNext;
+        private int            pageCount;
+        private int            pageNum;
+        private int            pageSize;
+        private int            total;
+        private List<DataBean> data;
 
-        public String getRoomname() {
-            return roomname;
+        public boolean isHasPrevious() {
+            return hasPrevious;
         }
 
-        public void setRoomname(String roomname) {
-            this.roomname = roomname;
+        public void setHasPrevious(boolean hasPrevious) {
+            this.hasPrevious = hasPrevious;
         }
 
-        public int getId() {
-            return id;
+        public boolean isHasNext() {
+            return hasNext;
         }
 
-        public void setId(int id) {
-            this.id = id;
+        public void setHasNext(boolean hasNext) {
+            this.hasNext = hasNext;
         }
 
-        public int getUid() {
-            return uid;
+        public int getPageCount() {
+            return pageCount;
         }
 
-        public void setUid(int uid) {
-            this.uid = uid;
+        public void setPageCount(int pageCount) {
+            this.pageCount = pageCount;
         }
 
-        public String getTitle() {
-            return title;
+        public int getPageNum() {
+            return pageNum;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setPageNum(int pageNum) {
+            this.pageNum = pageNum;
         }
 
-        public String getContent() {
-            return content;
+        public int getPageSize() {
+            return pageSize;
         }
 
-        public void setContent(String content) {
-            this.content = content;
+        public void setPageSize(int pageSize) {
+            this.pageSize = pageSize;
         }
 
-        public String getStart_time() {
-            return start_time;
+        public int getTotal() {
+            return total;
         }
 
-        public void setStart_time(String start_time) {
-            this.start_time = start_time;
+        public void setTotal(int total) {
+            this.total = total;
         }
 
-        public String getEnd_time() {
-            return end_time;
+        public List<DataBean> getData() {
+            return data;
         }
 
-        public void setEnd_time(String end_time) {
-            this.end_time = end_time;
+        public void setData(List<DataBean> data) {
+            this.data = data;
         }
 
-        public String getMeeting_place() {
-            return meeting_place;
-        }
+        public static class DataBean {
+            /**
+             * id : 429
+             * uid : 50363
+             * title :
+             * content : ￦ﾚﾂ￦ﾗﾠ
+             * created : 1514453412
+             * start_time : 1514595600
+             * end_time : 1514599200
+             * room_id : 2
+             * meetingPlace : 星创5F
+             * send_type : null
+             * part_name : []
+             * roomname : 火星
+             */
 
-        public void setMeeting_place(String meeting_place) {
-            this.meeting_place = meeting_place;
-        }
+            private int id;
+            private int     uid;
+            private String  title;
+            private String  content;
+            private int     created;
+            private int     start_time;
+            private int     end_time;
+            private int     room_id;
+            private String  meetingPlace;
+            private String  send_type;
+            private String  roomname;
+            private List<?> part_name;
 
-        public int getRoom_id() {
-            return room_id;
-        }
+            public int getId() {
+                return id;
+            }
 
-        public void setRoom_id(int room_id) {
-            this.room_id = room_id;
-        }
+            public void setId(int id) {
+                this.id = id;
+            }
 
-        public String getSend_type() {
-            return send_type;
-        }
+            public int getUid() {
+                return uid;
+            }
 
-        public void setSend_type(String send_type) {
-            this.send_type = send_type;
-        }
+            public void setUid(int uid) {
+                this.uid = uid;
+            }
 
-        public String getCreated() {
-            return created;
-        }
+            public String getTitle() {
+                return title;
+            }
 
-        public void setCreated(String created) {
-            this.created = created;
-        }
+            public void setTitle(String title) {
+                this.title = title;
+            }
 
-        public String getPart_name() {
-            return part_name;
-        }
+            public String getContent() {
+                return content;
+            }
 
-        public void setPart_name(String part_name) {
-            this.part_name = part_name;
-        }
+            public void setContent(String content) {
+                this.content = content;
+            }
 
-        public void setItemType(int type) {
-            this.itemType = type;
-        }
+            public int getCreated() {
+                return created;
+            }
 
+            public void setCreated(int created) {
+                this.created = created;
+            }
 
-        @Override
-        public int getItemType() {
-            return itemType;
+            public int getStart_time() {
+                return start_time;
+            }
+
+            public void setStart_time(int start_time) {
+                this.start_time = start_time;
+            }
+
+            public int getEnd_time() {
+                return end_time;
+            }
+
+            public void setEnd_time(int end_time) {
+                this.end_time = end_time;
+            }
+
+            public int getRoom_id() {
+                return room_id;
+            }
+
+            public void setRoom_id(int room_id) {
+                this.room_id = room_id;
+            }
+
+            public String getMeetingPlace() {
+                return meetingPlace;
+            }
+
+            public void setMeetingPlace(String meetingPlace) {
+                this.meetingPlace = meetingPlace;
+            }
+
+            public String getSend_type() {
+                return send_type;
+            }
+
+            public void setSend_type(String send_type) {
+                this.send_type = send_type;
+            }
+
+            public String getRoomname() {
+                return roomname;
+            }
+
+            public void setRoomname(String roomname) {
+                this.roomname = roomname;
+            }
+
+            public List<?> getPart_name() {
+                return part_name;
+            }
+
+            public void setPart_name(List<?> part_name) {
+                this.part_name = part_name;
+            }
         }
     }
 }

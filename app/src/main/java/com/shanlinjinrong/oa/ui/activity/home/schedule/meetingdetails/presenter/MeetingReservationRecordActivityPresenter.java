@@ -1,6 +1,9 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingReservationRecordActivityContract;
@@ -26,12 +29,10 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
         super(mKjHttp);
     }
 
-    private ReservationRecordBean.DataBean dataBean;
-
     @Override
-    public void getMeetingRecord(HttpParams httpParams, int page, int num, final boolean isLoadMore, final List<ReservationRecordBean.DataBean> data) {
+    public void getMeetingRecord(HttpParams httpParams, int page, int num, final boolean isLoadMore) {
 
-        mKjHttp.jsonPost(Api.NEW_MEETING_RECORD + "?currentPage=" + page + "&pageSize=" + num, httpParams, new HttpCallBack() {
+        mKjHttp.post(Api.NEW_MEETING_RECORD + "?currentPage=" + page + "&pageSize=" + num, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -40,63 +41,27 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-
-                //todo 暂定
                 try {
-                    ReservationRecordBean reservationRecordBean = new ReservationRecordBean();
-                    JSONObject jsonObject = new JSONObject(t);
-                    reservationRecordBean.setCode(jsonObject.getInt("code"));
-                    switch (reservationRecordBean.getCode()) {
-                        case Api.RESPONSES_CODE_OK:
-                            if (!isLoadMore) {
-                                data.clear();
-                            }
-                            JSONArray jsonArray = jsonObject.getJSONArray("data");
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                dataBean = new ReservationRecordBean.DataBean();
-                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                                dataBean.setContent(jsonObject1.getString("content"));
-                                dataBean.setTitle(jsonObject1.getString("title"));
-                                dataBean.setEnd_time(jsonObject1.getString("end_time"));
-                                dataBean.setMeeting_place(jsonObject1.getString("meeting_place"));
-                                dataBean.setRoom_id(jsonObject1.getInt("room_id"));
-                                dataBean.setId(jsonObject1.getInt("id"));
-                                dataBean.setTitle(jsonObject1.getString("title"));
-                                dataBean.setRoomname(jsonObject1.optString("roomname"));
-                                dataBean.setStart_time(jsonObject1.getString("start_time") + "");
-                                if (i == jsonArray.length() - 1) {
-                                    dataBean.setItemType(0);
-                                } else {
-                                    dataBean.setItemType(1);
-                                }
-                                data.add(dataBean);
-                            }
+                    ReservationRecordBean recordBean = new Gson().fromJson(t, new TypeToken<ReservationRecordBean>() {
+                    }.getType());
+                    switch (recordBean.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
                             if (mView != null)
-                                mView.getMeetingRecordSuccess(data);
+                                mView.getMeetingRecordSuccess(recordBean.getData());
                             break;
-                        case Api.RESPONSES_CODE_NO_CONTENT:
-                            if (data.size() == 0) {
-                                if (mView != null)
-                                    mView.getMeetingRecordEmpty();
-                            } else {
-                                if (mView != null)
-                                    mView.removeFooterView();
-                            }
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
                             if (mView != null)
-//                                mView.uidNull(jsonObject.getInt("code"));
-                                break;
+                                mView.uidNull(recordBean.getCode());
                         default:
                             if (mView != null)
-                                mView.getMeetingRecordFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
+                                mView.getMeetingRecordFailed(0, recordBean.getMessage());
                             break;
                     }
+
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    if (mView != null)
-                        mView.getMeetingRecordFailed(-2, e.getMessage());
                 }
             }
 

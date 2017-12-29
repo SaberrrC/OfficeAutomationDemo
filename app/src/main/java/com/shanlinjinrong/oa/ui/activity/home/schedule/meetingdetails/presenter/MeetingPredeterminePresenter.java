@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter
 
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
@@ -29,29 +30,25 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
 
     @Override
     public void getMeetingPredetermine(int meetingId) {
-
         mKjHttp.cleanCache();
-        mKjHttp.phpJsonGet(Api.NEW_MEETING_ALR_MEETING + meetingId, new HttpParams(), new HttpCallBack() {
-
+        mKjHttp.phpJsonGet(Api.NEW_MEETING_ALR_MEETING + "?room_id=" + meetingId, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
                     MeetingBookItem recordBean = new Gson().fromJson(t, MeetingBookItem.class);
                     switch (recordBean.getCode()) {
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                        case Api.RESPONSES_CODE_OK:
+                        case ApiJava.REQUEST_CODE_OK:
                             mView.getMeetingPredetermineSuccess(recordBean.getData());
                             break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-//                            mView.uidNull(recordBean.getCode());
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null)
+                                mView.uidNull(recordBean.getCode());
                             break;
-//                        case Api.RESPONSES_CODE_DATA_EMPTY:
-//                            mView.getMeetingPredetermineFailed(Api.RESPONSES_CODE_DATA_EMPTY, "");
-//                            break;
                         default:
-                            mView.getMeetingPredetermineFailed(recordBean.getCode(), recordBean.getInfo());
+                            mView.getMeetingPredetermineFailed(0, recordBean.getMessage());
                             break;
                     }
                 } catch (Throwable e) {

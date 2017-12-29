@@ -167,12 +167,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     startActivity(intent);
                 }
             }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-            }
-        });
+        }, Throwable::printStackTrace);
     }
 
 
@@ -224,12 +219,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
         if (getIntent().getBooleanExtra("isMeetingPast", false)) {
             mTopView.setRightText("取消");
-            mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showBackTip("您确定要取消会议", "确定", "取消", true);
-                }
-            });
+            mTopView.getRightView().setOnClickListener(view -> showBackTip("您确定要取消会议", "确定", "取消", true));
         }
     }
 
@@ -353,11 +343,11 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             httpParams.put("part_uid", mUid);
             httpParams.put("title", mEdMeetingTheme.getText().toString());
             if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
-                mSendType = "邮件,消息";
+                mSendType = "1,2";
             } else if (mCbMessages.isChecked()) {
-                mSendType = "消息";
+                mSendType = "2";
             } else if (mCbEmail.isChecked()) {
-                mSendType = "邮件";
+                mSendType = "1";
             }
         } else {
             httpParams.put("part_uid", "");
@@ -476,7 +466,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     public void lookMeetingRoomsSuccess(MeetingRecordInfo info) {
         try {
             mTvMeetingName.setText(info.getData().getRoomname());
-            mTvMeetingPersonNumber.setText(info.getData().getNop());
+            mTvMeetingPersonNumber.setText(info.getData().getNop() + "");
             if (!mModifyMeeting) {
                 currentStartTime = DateUtils.stringToDateTransform(info.getData().getStart_time(), "yyyy年MM月dd日  HH:mm");
                 currentEndTime = DateUtils.stringToDateTransform(info.getData().getEnd_time(), "yyyy年MM月dd日  HH:mm");
@@ -497,14 +487,15 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 mTvMeetingPerson.setText(userName);
             }
             switch (info.getData().getSend_type()) {
-                case "邮件,消息":
+                case "1,2":
+                case "2,1":
                     mCbEmail.setChecked(true);
                     mCbMessages.setChecked(true);
                     break;
-                case "邮件":
+                case "1":
                     mCbEmail.setChecked(true);
                     break;
-                case "消息":
+                case "2":
                     mCbMessages.setChecked(true);
                     break;
             }

@@ -244,7 +244,7 @@ public class Api {
     /**
      * 修改电话
      */
-    public static final String PHONENUMBER_UPDATE = "user/changePhone" ;
+    public static final String PHONENUMBER_UPDATE = "user/changePhone";
 
     /**
      * 用户反馈
@@ -476,18 +476,18 @@ public class Api {
     /**
      * 新会议室预定时间段情况
      */
-    public static final String NEW_MEETING_ALR_MEETING = "new_meetings/alr_meeting?room_id=";
+    public static final String NEW_MEETING_ALR_MEETING = "/newMeetings/alrMeeting";
 
 
     /**
      * 添加新会议室
      */
-    public static final String ADD_NEW_MEETING = "/new_meetings";
+    public static final String ADD_NEW_MEETING = "newMeetings/save";
 
     /**
      * 取消新会议室
      */
-    public static final String DELETE_NEW_MEETING = "/new_meetings";
+    public static final String DELETE_NEW_MEETING = "newMeetings/deleteMeeting";
     /**
      * 新会议室调期
      */
@@ -496,7 +496,7 @@ public class Api {
     /**
      * 获取会议详情
      */
-    public static final String LOOK_NEW_MEETING_INFO = "/new_meetings/meeting_info";
+    public static final String LOOK_NEW_MEETING_INFO = "newMeetings/meetingInfo";
 
     // 找回密码，确认邮箱
     public static final String USERS_REPWD = "/users/repwd";

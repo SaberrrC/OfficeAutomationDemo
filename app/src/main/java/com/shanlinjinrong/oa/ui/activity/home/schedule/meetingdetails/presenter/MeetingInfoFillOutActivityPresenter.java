@@ -1,7 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRecordInfo;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingInfoFillOutActivityContract;
@@ -33,7 +36,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
     @Override
     public void addMeetingRooms(HttpParams httpParams) {
         mKjHttp.cleanCache();
-        mKjHttp.phpJsonPost(Api.ADD_NEW_MEETING, httpParams, new HttpCallBack() {
+        mKjHttp.post(Api.ADD_NEW_MEETING, httpParams, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -44,33 +47,31 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
-
             }
-
 
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    if (mView != null)
-                        mView.requestFinish();
-                    JSONObject jsonObject = new JSONObject(t);
-                    switch (jsonObject.getInt("code")) {
-                        case Api.RESPONSES_CODE_OK:
-                            mView.addMeetingRoomsSuccess();
+                    CommonRequestBean requestStatus = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
+                    switch (requestStatus.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            if (mView != null)
+                                mView.addMeetingRoomsSuccess();
                             break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-//                            mView.uidNull(jsonObject.getInt("code"));
-                            break;
-                        case Api.RESPONSES_CODE_NO_CONTENT:
-                            mView.requestNetworkError();
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null)
+                                mView.uidNull(requestStatus.getCode());
                             break;
                         default:
-                            mView.addMeetingRoomsFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
+                            if (mView != null)
+                                mView.addMeetingRoomsFailed(0, requestStatus.getMessage());
                             break;
                     }
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -130,20 +131,20 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
                     if (mView != null) {
                         mView.requestFinish();
                     }
-                    MeetingRecordInfo meetingRecordInfo = new Gson().fromJson(t, MeetingRecordInfo.class);
+                    MeetingRecordInfo meetingRecordInfo = new Gson().fromJson(t, new TypeToken<MeetingRecordInfo>() {
+                    }.getType());
                     switch (meetingRecordInfo.getCode()) {
-                        case Api.RESPONSES_CODE_OK:
+                        case ApiJava.REQUEST_CODE_OK:
                             mView.lookMeetingRoomsSuccess(meetingRecordInfo);
                             break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-//                            mView.uidNull(meetingRecordInfo.getCode());
-                            break;
-                        case Api.RESPONSES_CODE_NO_CONTENT:
-                            mView.requestNetworkError();
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null)
+                                mView.uidNull(meetingRecordInfo.getCode());
                             break;
                         default:
-                            mView.lookMeetingRoomsFailed(meetingRecordInfo.getCode(), meetingRecordInfo.getInfo());
+                            mView.lookMeetingRoomsFailed(0, meetingRecordInfo.getMessage());
                             break;
                     }
                 } catch (Throwable e) {
@@ -181,7 +182,9 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
     public void deleteMeetingRooms(int id) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonDelete(Api.DELETE_NEW_MEETING + "/" + id, httpParams, new HttpCallBack() {
+        httpParams.put("id", id);
+        httpParams.put("send_type", 1);
+        mKjHttp.post(Api.DELETE_NEW_MEETING, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -196,27 +199,26 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-
                 try {
                     if (mView != null)
                         mView.requestFinish();
-                    JSONObject jsonObject = new JSONObject(t);
-                    switch (jsonObject.getInt("code")) {
-                        case Api.RESPONSES_CODE_OK:
+                    CommonRequestBean requestStatus = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
+                    switch (requestStatus.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
                             mView.deleteMeetingRoomsSuccess();
                             break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-//                            mView.uidNull(jsonObject.getInt("code"));
-                            break;
-                        case Api.RESPONSES_CODE_NO_CONTENT:
-                            mView.requestNetworkError();
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null)
+                                mView.uidNull(requestStatus.getCode());
                             break;
                         default:
-                            mView.deleteMeetingRoomsFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
+                            mView.deleteMeetingRoomsFailed(0, requestStatus.getMessage());
                             break;
                     }
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -246,59 +248,6 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             }
         });
     }
-
-//    @Override
-//    public void modifyMeetingRooms(int id, HttpParams httpParams) {
-//        mKjHttp.cleanCache();
-//        mKjHttp.phpJsonPut(Api.MODIFY_NEW_MEETING + id, httpParams, new HttpCallBack() {
-//
-//            @Override
-//            public void onPreStart() {
-//                super.onPreStart();
-//                mView.showLoading();
-//            }
-//
-//            @Override
-//            public void onSuccess(String t) {
-//                super.onSuccess(t);
-//                mView.requestFinish();
-//                try {
-//                    JSONObject jsonObject = new JSONObject(t);
-//                    switch (jsonObject.getInt("code")) {
-//                        case Api.RESPONSES_CODE_OK:
-//                            mView.modifyMeetingRoomsSuccess();
-//                            break;
-//                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-//                        case Api.RESPONSES_CODE_UID_NULL:
-//                            mView.uidNull(jsonObject.getInt("code"));
-//                            break;
-//                        case Api.RESPONSES_CODE_NO_CONTENT:
-//                            mView.requestNetworkError();
-//                            break;
-//                        default:
-//                            mView.modifyMeetingRoomsFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
-//                            break;
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int errorNo, String strMsg) {
-//                super.onFailure(errorNo, strMsg);
-//                mView.modifyMeetingRoomsFailed(errorNo, strMsg);
-//                mView.requestFinish();
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                super.onFinish();
-//                mView.requestFinish();
-//                mView.modifyMeetingRoomsFailed(-2, "");
-//            }
-//        });
-//    }
 
 
 }

@@ -257,8 +257,8 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         }
         for (int i = 0; i < mSelectTime.size(); i++) {
             //接口返回的数据是秒
-            long startTime = Long.parseLong(mSelectTime.get(i).getStart_time());
-            long endTime = Long.parseLong(mSelectTime.get(i).getEnd_time());
+            long startTime = Long.parseLong(String.valueOf(mSelectTime.get(i).getStart_time()));
+            long endTime = Long.parseLong(String.valueOf(mSelectTime.get(i).getEnd_time()));
 
             if (DateUtils.isSameDay(startTime * 1000, date)) {
                 try {
@@ -544,31 +544,28 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         }
         datePopWindow.setData(isDay, month, selectPos);
         datePopWindow.show();
-        datePopWindow.setItemClick(new DatePopWindow.PopItemClick() {
-            @Override
-            public void onPopItemClick(boolean isDay, int position) {
-                if (isDay) {
-                    mDayPos = mDays.get(position);
-                    mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
-                } else {
-                    mMonthPos = position;
-                    mTvMonth.setText(mMonthArrays[mMonthPos]);
-                    int maxDay = DateUtils.getCurrentDaysInMonth(mMonthPos + 1);
-                    if (mDayPos > maxDay) {
-                        mDayPos = maxDay;
-                    }
-
-                    if (DateUtils.getCurrentMonth() == mMonthPos && mDayPos < DateUtils.getCurrentDay()) {
-                        mDayPos = DateUtils.getCurrentDay();
-                    }
+        datePopWindow.setItemClick((isDay1, position) -> {
+            if (isDay1) {
+                mDayPos = mDays.get(position);
+                mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
+            } else {
+                mMonthPos = position;
+                mTvMonth.setText(mMonthArrays[mMonthPos]);
+                int maxDay = DateUtils.getCurrentDaysInMonth(mMonthPos + 1);
+                if (mDayPos > maxDay) {
+                    mDayPos = maxDay;
                 }
 
-                mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
-                mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
-
-                refreshSelectTime(DateUtils.stringToDate(DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos, "yyyy-MM-dd"));
-
+                if (DateUtils.getCurrentMonth() == mMonthPos && mDayPos < DateUtils.getCurrentDay()) {
+                    mDayPos = DateUtils.getCurrentDay();
+                }
             }
+
+            mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
+            mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
+
+            refreshSelectTime(DateUtils.stringToDate(DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos, "yyyy-MM-dd"));
+
         });
     }
 

@@ -232,13 +232,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @Override
     public void loginSuccess(JSONObject userInfo) {
-//        //登录成功后清空原来的信息
-//        AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
-//        //保存登录用户信息
-//        User user = new User(userInfo);
-//        LogUtils.e("user->" + user);
-//        AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
-//        goToLogin();
     }
 
     @Override
