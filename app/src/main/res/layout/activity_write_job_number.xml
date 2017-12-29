@@ -31,7 +31,7 @@
         android:inputType="number"
         android:lines="1"
         android:maxEms="9"
-        android:maxLength="1"
+        android:maxLength="9"
         android:paddingLeft="15dp"
         android:textSize="@dimen/common_text_size" />
 
