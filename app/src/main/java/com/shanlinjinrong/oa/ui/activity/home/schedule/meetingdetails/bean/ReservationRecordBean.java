@@ -1,5 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.util.List;
 
 /**
@@ -117,7 +119,7 @@ public class ReservationRecordBean {
             this.data = data;
         }
 
-        public static class DataBean {
+        public static class DataBean implements MultiItemEntity {
             /**
              * id : 429
              * uid : 50363
@@ -240,6 +242,11 @@ public class ReservationRecordBean {
 
             public void setPart_name(List<?> part_name) {
                 this.part_name = part_name;
+            }
+
+            @Override
+            public int getItemType() {
+                return 0;
             }
         }
     }

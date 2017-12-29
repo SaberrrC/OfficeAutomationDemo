@@ -52,6 +52,8 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     private int mNum = 15;
     private MeetingReservationRecordAdapter mRecordAdapter;
     private List<ReservationRecordBean.DataBeanX.DataBean> mData = new ArrayList<>();
+    private boolean             mIsLoadMore;
+    private LinearLayoutManager mLinearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,37 +71,34 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         mRefresh.setColorSchemeResources(android.R.color.holo_blue_dark);
         mTopView.getLeftView().setOnClickListener(this);
         mRecordAdapter = new MeetingReservationRecordAdapter(this, mData);
-        mRvMeetingReservationRecord.setLayoutManager(new LinearLayoutManager(this));
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRvMeetingReservationRecord.setLayoutManager(mLinearLayoutManager);
         mRvMeetingReservationRecord.setAdapter(mRecordAdapter);
         mRvMeetingReservationRecord.addOnItemTouchListener(new OnItemClick());
         mRecordAdapter.notifyDataSetChanged();
 
         mRvMeetingReservationRecord.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            private int lastPosition;
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 try {
-                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    if (newState == 0 && mData.size() > 10) {
-                        int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-                        if (lastVisibleItemPosition == mData.size() - 1) {
-                            View view = View.inflate(MeetingReservationRecordActivity.this, R.layout.load_more_layout, null);
-                            try {
-                                if (!mData.isEmpty())
-                                    mRecordAdapter.addFooterView(view);
-                                mRvMeetingReservationRecord.requestLayout();
-                                mRecordAdapter.notifyDataSetChanged();
-                                LoadMore();
-                            } catch (Throwable e) {
-                                e.printStackTrace();
-                            }
-                        }
+                    if (newState == 0 && lastPosition + 1 == mData.size()) {
+                        LoadMore();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                lastPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+            }
         });
+
     }
 
     @Override
@@ -111,28 +110,43 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
         mRefresh.setOnRefreshListener(this);
         mRefresh.setRefreshing(true);
         HttpParams httpParams = new HttpParams();
+        mIsLoadMore = false;
         mPage = 1;
         mPresenter.getMeetingRecord(httpParams, mPage, mNum, false);
     }
 
     public void LoadMore() {
         HttpParams httpParams = new HttpParams();
+        mIsLoadMore = true;
         mPage++;
         mPresenter.getMeetingRecord(httpParams, mPage, mNum, true);
     }
 
     @Override
     public void getMeetingRecordSuccess(ReservationRecordBean.DataBeanX bean) {
-        mTvMeetingReservationRecord.setVisibility(View.VISIBLE);
-        mTvEmptyView.setVisibility(View.GONE);
-        mData.clear();
-        mData.addAll(bean.getData());
-        mRecordAdapter.setNewData(mData);
-        mRecordAdapter.notifyDataSetChanged();
-        mRefresh.setRefreshing(false);
-        mRecordAdapter.removeAllFooterView();
-        mRvMeetingReservationRecord.requestLayout();
-        mRecordAdapter.notifyDataSetChanged();
+        try {
+
+            if (bean.getData().size() == 0) {
+                mRvMeetingReservationRecord.removeViewAt(mData.size() );
+                showToast("没有更多会议记录");
+                return;
+            }
+
+            if (!mIsLoadMore) {
+                mData.clear();
+            }
+            mTvMeetingReservationRecord.setVisibility(View.VISIBLE);
+            mTvEmptyView.setVisibility(View.GONE);
+            mData.addAll(bean.getData());
+            mRecordAdapter.setNewData(mData);
+//            mRecordAdapter.notifyDataSetChanged();
+            mRefresh.setRefreshing(false);
+//            mRecordAdapter.removeAllFooterView();
+//            mRvMeetingReservationRecord.requestLayout();
+            mRecordAdapter.notifyDataSetChanged();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

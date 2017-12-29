@@ -31,8 +31,10 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
 
     @Override
     public void getMeetingRecord(HttpParams httpParams, int page, int num, final boolean isLoadMore) {
+        httpParams.put("currentPage", page);
+        httpParams.put("pageSize", num);
 
-        mKjHttp.post(Api.NEW_MEETING_RECORD + "?currentPage=" + page + "&pageSize=" + num, httpParams, new HttpCallBack() {
+        mKjHttp.post(Api.NEW_MEETING_RECORD, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
