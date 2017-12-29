@@ -120,18 +120,29 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     }
 
     @Override
-    public void searchUserSuccess(User user) {
-        String email = user.getEmail();
-        Intent intent = new Intent(WriteJobNumberActivity.this, ConfirmCompanyEmailActivity.class);
-        if (TextUtils.isEmpty(email)) {
-            intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_STATUS, false);
-        } else {
-            intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_ADDRESS, email);
-        }
-        //  intent.putExtra("code", user.getCode());
-        intent.putExtra("code", mJobNumber.getText().toString().trim());
-        startActivity(intent);
+    public void searchUserSuccess(String user) {
+
+
     }
+
+    @Override
+    public void searchUserEmpty(String errorMsg) {
+
+    }
+
+//    @Override
+//    public void searchUserSuccess(User user) {
+//        String email = user.getEmail();
+//        Intent intent = new Intent(WriteJobNumberActivity.this, ConfirmCompanyEmailActivity.class);
+//        if (TextUtils.isEmpty(email)) {
+//            intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_STATUS, false);
+//        } else {
+//            intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_ADDRESS, email);
+//        }
+//        //  intent.putExtra("code", user.getCode());
+//        intent.putExtra("code", mJobNumber.getText().toString().trim());
+//        startActivity(intent);
+//    }
 
     @Override
     public void searchUserFailed(int errorCode, String errMsg) {

@@ -1,23 +1,22 @@
 package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
-import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.model.User;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.login.bean.QueryPhoneBean;
+import com.shanlinjinrong.oa.ui.activity.login.bean.RequestCodeBean;
 import com.shanlinjinrong.oa.ui.activity.login.contract.WriteJobNumberContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
 import javax.inject.Inject;
 
 /**
- * Created by 丁 on 2017/10/09.
  * 获取验证码 presenter
  */
 public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContract.View> implements WriteJobNumberContract.Presenter {
@@ -27,24 +26,29 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
         super(mKjHttp);
     }
 
-
+    //获取验证码
     @Override
     public void getIdentifyingCode() {
         mKjHttp.cleanCache();
-
-        mKjHttp.phpJsonGet(Api.SENDS_CAPTCHA, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(Api.SENDS_CAPTCHA, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    JSONObject jsonObject = new JSONObject(t);
-                    JSONObject data = jsonObject.getJSONObject("data");
-                    if (mView != null)
-                        mView.getIdentifyingCodeSuccess(data.getString("img"), data.getString("keycode"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    RequestCodeBean requestStatus = new Gson().fromJson(t, new TypeToken<RequestCodeBean>() {
+                    }.getType());
 
+                    switch (requestStatus.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            if (mView != null)
+                                mView.getIdentifyingCodeSuccess(requestStatus.getData().getImg(), requestStatus.getData().getKeyCode());
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
             }
 
             @Override
@@ -57,25 +61,22 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
         });
     }
 
     @Override
     public void searchUser(String imgCode, String keyCode, String userCode) {
-        mKjHttp.phpJsonGet(Api.USERS_SEARCH + "?imgcode=" + imgCode + "&keycode=" + keyCode + "&code=" + userCode, new HttpParams(), new HttpCallBack() {
-
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("code", userCode);
+        httpParams.put("imgCode", imgCode);
+        httpParams.put("keyCode", keyCode);
+        mKjHttp.post(Api.USERS_SEARCH, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
                 try {
-                    if (mView != null) {
+                    if (mView != null)
                         mView.showLoading();
-                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -85,34 +86,21 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    if (mView != null) {
-                        mView.hideLoading();
-                    }
-                    JSONObject jsonObject = new JSONObject(t);
-                    int code = jsonObject.getInt("code");
-                    switch (code) {
-                        case Api.RESPONSES_CODE_OK:
-                            JSONArray data = jsonObject.getJSONArray("data");
-                            User user = new User();
-                            JSONObject jsonObject1 = data.optJSONObject(0);
-                            String email = "";
-                            if (jsonObject1 != null) {
-                                email = jsonObject1.optString("email");
-                            }
-                            if (TextUtils.isEmpty(email) || "null".equalsIgnoreCase(email)) {
-                                email = "";
-                            }
-                            user.setEmail(email);
-                            if (mView != null)
-                                mView.searchUserSuccess(user);
+                    QueryPhoneBean queryPhoneBean = new Gson().fromJson(t, new TypeToken<QueryPhoneBean>() {
+                    }.getType());
+                    switch (queryPhoneBean.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.searchUserSuccess(queryPhoneBean.getData().getPhone());
+                            break;
+                        case ApiJava.RESPONSES_CODE_NO_CONTENT://查询无结果
+                            mView.searchUserEmpty("查询无结果");
                             break;
                         default:
                             if (mView != null)
-                                mView.searchUserFailed(code, jsonObject.getString("info"));
+                                mView.searchUserFailed(0, queryPhoneBean.getMessage());
                             break;
                     }
-
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -123,7 +111,6 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                 try {
                     if (mView != null)
                         mView.hideLoading();
-                    mView.requestFinish();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -133,9 +120,10 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
+                    if (mView != null) {
                         mView.hideLoading();
-                    mView.searchUserFailed(errorNo, strMsg);
+                        mView.searchUserFailed(errorNo, strMsg);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

@@ -453,13 +453,13 @@ public class Api {
     public static final String COMMUNICATION_USERINFO = "user/detail";
 
     // 获取验证码
-    public static final String SENDS_CAPTCHA = "/users/code";
+    public static final String SENDS_CAPTCHA = "user/webCode";
 
     // 查询工号信息
-    public static final String USERS_SEARCH = "/users/verifycode";
+    public static final String USERS_SEARCH = "user/search";
 
     // 查询工号信息
-    public static final String VERIFY_CODE = "/users/verifycode";
+    public static final String VERIFY_CODE = "users/verifycode";
 
 
     /**
