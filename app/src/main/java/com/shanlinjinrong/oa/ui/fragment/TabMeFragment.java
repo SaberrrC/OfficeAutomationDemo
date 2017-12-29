@@ -85,7 +85,7 @@ public class TabMeFragment extends BaseFragment {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .into(userPortrait);
-        }else{
+        } else {
             Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
         }
         userName.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_USERNAME));
@@ -98,7 +98,7 @@ public class TabMeFragment extends BaseFragment {
         userName.setText(AppConfig.getAppConfig(getContext()).get(AppConfig.PREF_KEY_USERNAME));
         position.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_POST_NAME));
 
-        if (!TextUtils.isEmpty(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS) )) {
+        if (!TextUtils.isEmpty(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))) {
             Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
                     .placeholder(R.drawable.ease_default_avatar)
                     .error(R.drawable.ease_default_avatar)
@@ -106,7 +106,7 @@ public class TabMeFragment extends BaseFragment {
                     .dontAnimate()
                     .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
                     .into(userPortrait);
-        }else{
+        } else {
             Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
         }
     }
@@ -173,6 +173,7 @@ public class TabMeFragment extends BaseFragment {
                 public void onNoUpdateAvailable() {
                     Toast.makeText(getContext(), "当前已是最新版本！", Toast.LENGTH_SHORT).show();
                 }
+
                 @Override
                 public void onUpdateAvailable(String s) {
                 }
