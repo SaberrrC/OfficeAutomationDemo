@@ -491,7 +491,7 @@ public class Api {
     /**
      * 新会议室调期
      */
-    public static final String MODIFY_NEW_MEETING = "/new_meetings/";
+    public static final String MODIFY_NEW_MEETING = "newMeetings/updateMeeting";
 
     /**
      * 获取会议详情

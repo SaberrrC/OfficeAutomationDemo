@@ -178,6 +178,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
         });
     }
 
+    //删除会议室
     @Override
     public void deleteMeetingRooms(int id) {
         mKjHttp.cleanCache();
@@ -248,6 +249,4 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
             }
         });
     }
-
-
 }

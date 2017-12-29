@@ -1,8 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
@@ -70,9 +72,9 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
 
 
     @Override
-    public void modifyMeetingRooms(int id, HttpParams httpParams) {
+    public void modifyMeetingRooms(HttpParams httpParams) {
         mKjHttp.cleanCache();
-        mKjHttp.phpJsonPut(Api.MODIFY_NEW_MEETING + id, httpParams, new HttpCallBack() {
+        mKjHttp.post(Api.MODIFY_NEW_MEETING, httpParams, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -83,25 +85,25 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                mView.requestFinish();
                 try {
-                    JSONObject jsonObject = new JSONObject(t);
-                    switch (jsonObject.getInt("code")) {
-                        case Api.RESPONSES_CODE_OK:
-                            mView.modifyMeetingRoomsSuccess();
+                    CommonRequestBean requestStatus = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
+                    switch (requestStatus.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            if (mView != null)
+                                mView.modifyMeetingRoomsSuccess();
                             break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-//                            mView.uidNull(jsonObject.getInt("code"));
-                            break;
-                        case Api.RESPONSES_CODE_NO_CONTENT:
-                            mView.requestNetworkError();
-                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null)
+                                mView.uidNull(requestStatus.getCode());
                         default:
-                            mView.modifyMeetingRoomsFailed(jsonObject.getInt("code"), jsonObject.getString("info"));
+                            if (mView != null)
+                                mView.modifyMeetingRoomsFailed(0, requestStatus.getMessage());
                             break;
                     }
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -109,15 +111,27 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.modifyMeetingRoomsFailed(errorNo, strMsg);
-                mView.requestFinish();
+                try {
+                    if (mView != null) {
+                        mView.modifyMeetingRoomsFailed(errorNo, strMsg);
+                        mView.requestFinish();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
-                mView.modifyMeetingRoomsFailed(-2, "");
+                try {
+                    if (mView != null) {
+                        mView.requestFinish();
+                        mView.modifyMeetingRoomsFailed(-2, "");
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

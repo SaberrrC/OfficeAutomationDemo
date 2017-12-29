@@ -35,6 +35,6 @@ public interface MeetingPredetermineContract {
         void getMeetingPredetermine(int meetingId); //获取会议室被预订过的时间段
 
 
-        void modifyMeetingRooms(int id, HttpParams httpParams);
+        void modifyMeetingRooms( HttpParams httpParams);
     }
 }

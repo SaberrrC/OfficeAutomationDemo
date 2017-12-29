@@ -18,9 +18,6 @@ public interface MeetingInfoFillOutActivityContract {
 
         void requestFinish();
 
-
-        void requestNetworkError();
-
         void addMeetingRoomsSuccess();
 
         void addMeetingRoomsFailed(int errorCode, String strMsg);
@@ -32,10 +29,6 @@ public interface MeetingInfoFillOutActivityContract {
         void deleteMeetingRoomsSuccess();
 
         void deleteMeetingRoomsFailed(int errorCode, String strMsg);
-
-//        void modifyMeetingRoomsSuccess();
-//
-//        void modifyMeetingRoomsFailed(int errorCode,String strMsg);
     }
 
     interface Presenter extends BasePresenter<MeetingInfoFillOutActivityContract.View> {
@@ -45,7 +38,5 @@ public interface MeetingInfoFillOutActivityContract {
         void lookMeetingRooms(int id);
 
         void deleteMeetingRooms(int id);
-
-//        void modifyMeetingRooms(int id, HttpParams httpParams);
     }
 }

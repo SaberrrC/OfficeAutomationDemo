@@ -34,8 +34,6 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
@@ -45,7 +43,6 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.functions.Consumer;
 
 /**
  * 预订会议室 确认
@@ -144,28 +141,23 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     private void initListener() {
         //下单重复点击设置
-        RxView.clicks(mBtnMeetingInfoComplete).throttleFirst(1, TimeUnit.SECONDS).subscribe(new Consumer<Object>() {
-            @Override
-            public void accept(Object o) throws Exception {
-                if (mModifyMeeting) {
-//                        modifyMeetingState();
-                    return;
-                } else if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
-                    addMeetingParams();
-                } else {
-                    Intent intent = new Intent(MeetingInfoFillOutActivity.this, MeetingPredetermineRecordActivity.class);
-                    intent.putExtra("id", mId);
-                    intent.putExtra("modifyMeeting", true);
-                    intent.putExtra("isWriteMeetingInfo", false);
-                    intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
-                    intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
-                    intent.putExtra("startTime", currentStartTime);
-                    intent.putExtra("endTime", currentEndTime);
-                    intent.putExtra("start_time", mStartTime);
-                    intent.putExtra("meeting_name", mTvMeetingName.getText().toString());
-                    intent.putExtra("end_time", mEndTime);
-                    startActivity(intent);
-                }
+        RxView.clicks(mBtnMeetingInfoComplete).throttleFirst(1, TimeUnit.SECONDS).subscribe(o -> {
+            if (!getIntent().getBooleanExtra("isMeetingRecord", false)) {
+                addMeetingParams();
+            } else {
+                Intent intent = new Intent(MeetingInfoFillOutActivity.this, MeetingPredetermineRecordActivity.class);
+                intent.putExtra("id", mId);
+                intent.putExtra("modifyMeeting", true);
+                intent.putExtra("isWriteMeetingInfo", false);
+                intent.putExtra("isMeetingPast", getIntent().getBooleanExtra("isMeetingPast", false));
+                intent.putExtra("roomId", getIntent().getIntExtra("roomId", -1));
+                intent.putExtra("startTime", currentStartTime);
+                intent.putExtra("endTime", currentEndTime);
+                intent.putExtra("send_type", mSendType);
+                intent.putExtra("start_time", mStartTime);
+                intent.putExtra("meeting_name", mTvMeetingName.getText().toString());
+                intent.putExtra("end_time", mEndTime);
+                startActivity(intent);
             }
         }, Throwable::printStackTrace);
     }
@@ -296,20 +288,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         }
     }
 
-    //会议调期
-    private void modifyMeetingState() {
-        HttpParams httpParams = new HttpParams();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("start_time", mStartTime);
-            jsonObject.put("end_time", mEndTime);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        httpParams.putJsonParams(jsonObject.toString());
-//        mPresenter.modifyMeetingRooms(mId, httpParams);
-    }
-
     //添加会议参数
     private void addMeetingParams() {
         if (mRbIsMeetingInvite.isChecked()) {
@@ -430,11 +408,6 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
         hideLoadingView();
     }
 
-    @Override
-    public void requestNetworkError() {
-
-    }
-
     //添加会议成功跳转
     @Override
     public void addMeetingRoomsSuccess() {
@@ -500,6 +473,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                     break;
             }
             mEdMeetingContent.setText(info.getData().getContent());
+            mSendType = info.getData().getSend_type();
         } catch (Throwable e) {
             e.printStackTrace();
         }

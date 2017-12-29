@@ -43,49 +43,49 @@ import static com.shanlinjinrong.oa.utils.DateUtils.stringToDate;
 public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingPredeterminePresenter> implements MeetingPredetermineContract.View, CompoundButton.OnCheckedChangeListener {
 
     @BindView(R.id.selected_meeting_date1)
-    CheckBox mSelectedMeetingDate1;
+    CheckBox      mSelectedMeetingDate1;
     @BindView(R.id.selected_meeting_date2)
-    CheckBox mSelectedMeetingDate2;
+    CheckBox      mSelectedMeetingDate2;
     @BindView(R.id.selected_meeting_date3)
-    CheckBox mSelectedMeetingDate3;
+    CheckBox      mSelectedMeetingDate3;
     @BindView(R.id.selected_meeting_date4)
-    CheckBox mSelectedMeetingDate4;
+    CheckBox      mSelectedMeetingDate4;
     @BindView(R.id.selected_meeting_date5)
-    CheckBox mSelectedMeetingDate5;
+    CheckBox      mSelectedMeetingDate5;
     @BindView(R.id.selected_meeting_date6)
-    CheckBox mSelectedMeetingDate6;
+    CheckBox      mSelectedMeetingDate6;
     @BindView(R.id.selected_meeting_date7)
-    CheckBox mSelectedMeetingDate7;
+    CheckBox      mSelectedMeetingDate7;
     @BindView(R.id.selected_meeting_date8)
-    CheckBox mSelectedMeetingDate8;
+    CheckBox      mSelectedMeetingDate8;
     @BindView(R.id.selected_meeting_date9)
-    CheckBox mSelectedMeetingDate9;
+    CheckBox      mSelectedMeetingDate9;
     @BindView(R.id.btn_meeting_info_complete)
-    TextView mBtnMeetingInfoComplete;
+    TextView      mBtnMeetingInfoComplete;
     @BindView(R.id.ll_day_selector)
-    LinearLayout mLlDaySelector;
+    LinearLayout  mLlDaySelector;
     @BindView(R.id.ll_month_selector)
-    LinearLayout mLlMonthSelector;
+    LinearLayout  mLlMonthSelector;
     @BindView(R.id.ll_date_layout)
-    LinearLayout mDateLayout;
+    LinearLayout  mDateLayout;
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_month)
-    TextView mTvMonth;
+    TextView      mTvMonth;
     @BindView(R.id.tv_day)
-    TextView mTvDay;
+    TextView      mTvDay;
     @BindView(R.id.tv_week)
-    TextView mTvWeek;
+    TextView      mTvWeek;
     @BindView(R.id.tv_not_network)
-    TextView mTvNotNetwork;
+    TextView      mTvNotNetwork;
     @BindView(R.id.ll_content_show)
-    LinearLayout mLlContentShow;
+    LinearLayout  mLlContentShow;
 
-    private int DateIndex;
-    private String endDate;
-    private int indexStart;
+    private int     DateIndex;
+    private String  endDate;
+    private int     indexStart;
     private boolean isNetwork;
-    private String beginDate;
+    private String  beginDate;
     private List<CheckBox> mCheckBoxes = new ArrayList<>();
 
     private List<Integer> mDays = new ArrayList<>();
@@ -93,18 +93,18 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     DatePopWindow datePopWindow;
 
-    private int mDayPos = 1;
+    private int mDayPos   = 1;
     private int mMonthPos = 1;
-    private int mWeekPos = 1;
+    private int mWeekPos  = 1;
 
     private String[] mMonthArrays = {"1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
-    private String[] mWeekArray = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
+    private String[] mWeekArray   = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
     private boolean mModifyMeeting;
-    private int mMeetingId;
-    private String mBeginDate;
-    private String mEndDate;
-    private int mStart;
-    private int mEnd;
+    private int     mMeetingId;
+    private String  mBeginDate;
+    private String  mEndDate;
+    private int     mStart;
+    private int     mEnd;
 
 
     @Override
@@ -201,16 +201,23 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
 
                 if (mModifyMeeting) {
+
+
                     HttpParams httpParams = new HttpParams();
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
-                        jsonObject.put("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    httpParams.putJsonParams(jsonObject.toString());
-                    mPresenter.modifyMeetingRooms(getIntent().getIntExtra("id", -1), httpParams);
+//                    JSONObject jsonObject = new JSONObject();
+//                    try {
+//                        jsonObject.put("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
+//                        jsonObject.put("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    httpParams.putJsonParams(jsonObject.toString());
+                    httpParams.put("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
+                    httpParams.put("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
+                    httpParams.put("meeting_id", getIntent().getIntExtra("id", -1));
+                    httpParams.put("send_type", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
+
+                    mPresenter.modifyMeetingRooms(httpParams);
                     return;
                 }
 
