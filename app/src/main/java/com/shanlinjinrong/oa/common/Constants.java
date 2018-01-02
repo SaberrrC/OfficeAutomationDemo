@@ -41,6 +41,13 @@ public class Constants {
     //周报临时数据
     public final static String WORK_WEEKLY_TEMP_DATA = "work_weekly_temp_data";
 
+    //找回密码
+    public final static String PHONE_STATUS = "phone_status";
+    //查询手机号
+    public final static String PHONE_NUMBER = "phone_number";
+    //工号
+    public final static String USER_CODE= "user_code";
+
 
     /**
      * 记事本编辑标识

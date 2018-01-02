@@ -20,6 +20,7 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
+import org.apache.commons.logging.Log;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -85,8 +86,9 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 try {
-                    if (newState == 0 && lastPosition + 1 == mData.size()) {
-                        LoadMore();
+                    if (newState == 0 && lastPosition+1  == mData.size()) {
+//                        LoadMore();
+
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -139,6 +141,11 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
             mTvEmptyView.setVisibility(View.GONE);
             mData.addAll(bean.getData());
             mRecordAdapter.setNewData(mData);
+
+            mRecordAdapter.setOnLoadMoreListener(() -> {
+                android.util.Log.d("12313213","!@31232131312312321");
+//                mRecordAdapter.loadComplete();
+            });
 //            mRecordAdapter.notifyDataSetChanged();
             mRefresh.setRefreshing(false);
 //            mRecordAdapter.removeAllFooterView();

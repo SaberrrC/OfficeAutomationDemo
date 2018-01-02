@@ -167,5 +167,7 @@
     <string name="str_mission_work_title">出差申请</string>
     <string name="str_home_my_email">我的邮箱</string>
     <string name="string_notify_title">通知列表</string>
+    <string name="string_complete_title">完成</string>
+    <string name="string_confirm_phone">确认手机</string>
 
 </resources>

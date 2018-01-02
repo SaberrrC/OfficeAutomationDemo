@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:topTitle="@string/write_job_number_text" />
+        app:topTitle="@string/string_complete_title" />
 
     <ImageView
         android:layout_width="103dp"
@@ -26,7 +26,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:padding="@dimen/common_padding"
-        android:text="系统已将您的密码发送到您的邮箱，请查收！"
+        android:text="系统已将您的密码发送到您的手机，"
+        android:textColor="#999999" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_padding"
+        android:text="请查收！"
         android:textColor="#999999" />
 
 
@@ -40,6 +47,7 @@
         android:onClick="emailFinish"
         android:text="完成"
         android:textColor="@color/white"
-        android:textSize="@dimen/common_title_size16" />
+        android:textSize="@dimen/common_title_size16"
+        tools:ignore="OnClick" />
 
 </LinearLayout>

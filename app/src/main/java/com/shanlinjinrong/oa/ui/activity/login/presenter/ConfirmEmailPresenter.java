@@ -1,6 +1,10 @@
 package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.login.contract.ConfirmEmailContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -12,7 +16,6 @@ import org.kymjs.kjframe.http.HttpParams;
 import javax.inject.Inject;
 
 /**
- * Created by 丁 on 2017/10/09.
  * 发送邮件 presenter
  */
 public class ConfirmEmailPresenter extends HttpPresenter<ConfirmEmailContract.View> implements ConfirmEmailContract.Presenter {
@@ -24,12 +27,11 @@ public class ConfirmEmailPresenter extends HttpPresenter<ConfirmEmailContract.Vi
 
 
     @Override
-    public void sendEmail(String code, String emailAddress) {
+    public void sendEmail(String code) {
         mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
-        params.put("email", emailAddress);
         params.put("code", code);
-        mKjHttp.phpJsonPost(Api.USERS_REPWD, params, new HttpCallBack() {
+        mKjHttp.post(Api.USERS_REPWD, params, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -47,17 +49,20 @@ public class ConfirmEmailPresenter extends HttpPresenter<ConfirmEmailContract.Vi
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
+                    CommonRequestBean requestStatus = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
                     if (mView != null) {
                         mView.hideLoading();
                     }
-                    JSONObject jsonObject = new JSONObject(t);
-                    int code = jsonObject.getInt("code");
-                    if (code == Api.RESPONSES_CODE_OK) {
-                        mView.sendEmailSuccess();
-                    } else {
-                        mView.sendEmailFailed(code, jsonObject.getString("info"));
+                    switch (requestStatus.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            mView.sendEmailSuccess();
+                            break;
+                        default:
+                            mView.sendEmailFailed(0, requestStatus.getMessage());
+                            break;
                     }
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
 

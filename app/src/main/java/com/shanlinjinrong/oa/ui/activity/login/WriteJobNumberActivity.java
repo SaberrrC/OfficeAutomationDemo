@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.WriteJobNumberContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.WriteJobNumberPresenter;
@@ -120,29 +121,21 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     }
 
     @Override
-    public void searchUserSuccess(String user) {
-
-
+    public void searchUserSuccess(String phone) {
+        Intent intent = new Intent(this, ConfirmCompanyEmailActivity.class);
+        intent.putExtra(Constants.PHONE_NUMBER, phone);
+        intent.putExtra(Constants.USER_CODE, mIdentifyingCode.getText().toString().trim());
+        intent.putExtra(Constants.PHONE_STATUS, true);
+        startActivity(intent);
     }
 
     @Override
     public void searchUserEmpty(String errorMsg) {
-
+        Intent intent = new Intent(this, ConfirmCompanyEmailActivity.class);
+        intent.putExtra(Constants.USER_CODE, mIdentifyingCode.getText().toString().trim());
+        intent.putExtra(Constants.PHONE_STATUS, false);
+        startActivity(intent);
     }
-
-//    @Override
-//    public void searchUserSuccess(User user) {
-//        String email = user.getEmail();
-//        Intent intent = new Intent(WriteJobNumberActivity.this, ConfirmCompanyEmailActivity.class);
-//        if (TextUtils.isEmpty(email)) {
-//            intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_STATUS, false);
-//        } else {
-//            intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_ADDRESS, email);
-//        }
-//        //  intent.putExtra("code", user.getCode());
-//        intent.putExtra("code", mJobNumber.getText().toString().trim());
-//        startActivity(intent);
-//    }
 
     @Override
     public void searchUserFailed(int errorCode, String errMsg) {

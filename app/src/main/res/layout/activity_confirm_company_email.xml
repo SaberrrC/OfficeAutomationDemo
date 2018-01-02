@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:topTitle="确认邮箱" />
+        app:topTitle="@string/string_confirm_phone" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -47,22 +47,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/common_padding"
-                    android:text="您的邮箱是："
+                    android:text="您的手机号码是："
                     android:textColor="#666666" />
 
                 <TextView
-                    android:id="@+id/tv_email_address"
+                    android:id="@+id/tv_phone_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/common_padding"
-                    android:text="zhanzhanhong@shanlinjinrong.com"
-                    android:textColor="#151515" />
+                    android:textColor="#151515"
+                    tools:text="13162557309" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/common_padding"
-                    android:text="若有误，请向HR部门联系修改！"
+                    android:text="若有误，请向HR部门联系修改,"
+                    android:textColor="#666666" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/common_padding"
+                    android:text="或邮件oa@shanlinjinrong.com申请修改。"
                     android:textColor="#666666" />
 
             </LinearLayout>
@@ -86,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="哎呀，系统未找到您的邮箱。请联系HR验证" />
+                    android:text="哎呀，系统未找到您的手机号，请联系HR验证" />
 
                 <TextView
                     android:layout_width="match_parent"

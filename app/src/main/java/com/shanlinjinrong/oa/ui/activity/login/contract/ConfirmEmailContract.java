@@ -21,6 +21,6 @@ public interface ConfirmEmailContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void sendEmail(String code, String emailAddress); //发送邮件
+        void sendEmail(String code); //发送邮件
     }
 }

@@ -499,7 +499,7 @@ public class Api {
     public static final String LOOK_NEW_MEETING_INFO = "newMeetings/meetingInfo";
 
     // 找回密码，确认邮箱
-    public static final String USERS_REPWD = "/users/repwd";
+    public static final String USERS_REPWD = "user/repwd";
 
     // 发起申请
     public static final String INITIARE_REQUEST = "/queryMonocode";
