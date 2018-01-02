@@ -1,17 +1,11 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.view.View;
 
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.model.Contacts;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.ITEM_TYPE;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
 import com.shanlinjinrong.oa.utils.DateUtils;
 

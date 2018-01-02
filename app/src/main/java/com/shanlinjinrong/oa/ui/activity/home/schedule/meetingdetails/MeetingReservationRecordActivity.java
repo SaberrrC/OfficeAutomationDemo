@@ -86,7 +86,7 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 try {
-                    if (newState == 0 && lastPosition+1  == mData.size()) {
+                    if (newState == 0 && lastPosition + 1 == mData.size()) {
 //                        LoadMore();
 
                     }
@@ -127,13 +127,12 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     @Override
     public void getMeetingRecordSuccess(ReservationRecordBean.DataBeanX bean) {
         try {
-
             if (bean.getData().size() == 0) {
-                mRvMeetingReservationRecord.removeViewAt(mData.size() );
-                showToast("没有更多会议记录");
+                mTvEmptyView.setVisibility(View.VISIBLE);
+                mTvEmptyView.setText("暂无预订记录");
+                mRefresh.setRefreshing(false);
                 return;
             }
-
             if (!mIsLoadMore) {
                 mData.clear();
             }
@@ -141,12 +140,10 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
             mTvEmptyView.setVisibility(View.GONE);
             mData.addAll(bean.getData());
             mRecordAdapter.setNewData(mData);
-
             mRecordAdapter.setOnLoadMoreListener(() -> {
-                android.util.Log.d("12313213","!@31232131312312321");
+                android.util.Log.d("12313213", "!@31232131312312321");
 //                mRecordAdapter.loadComplete();
             });
-//            mRecordAdapter.notifyDataSetChanged();
             mRefresh.setRefreshing(false);
 //            mRecordAdapter.removeAllFooterView();
 //            mRvMeetingReservationRecord.requestLayout();
