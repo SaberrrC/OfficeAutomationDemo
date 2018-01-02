@@ -39,7 +39,7 @@ public class ContactDetailsPresenter extends HttpPresenter<ContactDetailsContrac
         super(mKjHttp);
     }
 
-    int uid = 0;
+    String uid = "";
 
     @Override
     public void searchUserDetails(String code) {

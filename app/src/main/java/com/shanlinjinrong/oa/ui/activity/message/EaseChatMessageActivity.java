@@ -393,7 +393,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
         Observable.create(e -> FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
-                Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
+                Friends(userDetailsBean.getUid() ,"sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
                 userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                 userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()))).subscribeOn(Schedulers.io());
         mTvTitle.setText(userDetailsBean.getUsername());

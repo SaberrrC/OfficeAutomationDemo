@@ -187,9 +187,9 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener, 
                 }
                 mPresenter.searchUserDetails(username.substring(3, username.length()));
             } else {
+                mPresenter.searchUserDetails(username.substring(3, username.length()));
                 String nickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(username);
                 String portrait = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getPortrait(username);
-
                 if (!TextUtils.isEmpty(portrait)) {
                     Glide.with(AppManager.mContext)
                             .load(portrait)

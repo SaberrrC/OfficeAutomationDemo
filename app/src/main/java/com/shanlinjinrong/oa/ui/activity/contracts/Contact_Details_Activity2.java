@@ -117,6 +117,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
         mEmail = constants.getEmail();
         mPost = constants.getPostTitle();
         mNickName = constants.getUsername();
+        String uid = constants.getUid();
         mPortrait =  constants.getPortraits();
         mUserCode = "sl_" + constants.getCode();
         mDepartmentId = constants.getDepartmentId();
@@ -125,7 +126,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
 
 
         FriendsInfoCacheSvc.getInstance(AppManager.mContext)
-                .addOrUpdateFriends(new Friends(mUserCode, mNickName, mPortrait, mSex, mPhone, mPost, mDepartment, mEmail, mDepartmentId));
+                .addOrUpdateFriends(new Friends(uid,mUserCode, mNickName, mPortrait, mSex, mPhone, mPost, mDepartment, mEmail, mDepartmentId));
 
         //---------------------------------聊天 语音 拨打电话 逻辑处理---------------------------------
 

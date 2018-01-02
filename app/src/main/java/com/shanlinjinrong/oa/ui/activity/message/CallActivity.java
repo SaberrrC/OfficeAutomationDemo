@@ -294,7 +294,7 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
         try {
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
-                    addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(),
+                    addOrUpdateFriends(new Friends(userDetailsBean.getUid(),"sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(),
                             "http://" + userDetailsBean.getImg(), userDetailsBean.getSex(), userDetailsBean.getPhone(),
                             userDetailsBean.getPostname(), userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
 

@@ -25,6 +25,7 @@ public class LoginUtils {
                     EMClient.getInstance().chatManager().loadAllConversations();
                     LogUtils.e("登录聊天服务器成功！");
                     String u_id = Constants.CID + "_" + AppConfig.getAppConfig(context).getPrivateCode();
+                    String uid =  AppConfig.getAppConfig(context).getPrivateUid();
                     String u_name = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_USERNAME);
                     String u_pic = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_PORTRAITS);
                     String sex = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_SEX);
@@ -34,7 +35,7 @@ public class LoginUtils {
                     String email = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_USER_EMAIL);
                     String departmentId = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_DEPARTMENT);
                     FriendsInfoCacheSvc.getInstance(context)
-                            .addOrUpdateFriends(new Friends(u_id, u_name,  u_pic, sex, phone, post, department, email, departmentId));
+                            .addOrUpdateFriends(new Friends(uid,u_id, u_name,  u_pic, sex, phone, post, department, email, departmentId));
                     if (imLoginListener != null) {
                         imLoginListener.loginImSuccess();
                     }

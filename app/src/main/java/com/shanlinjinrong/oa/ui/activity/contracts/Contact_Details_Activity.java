@@ -263,6 +263,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         } else {
             user = (User) this.getIntent().getSerializableExtra("user");
             mSex = user.getSex();
+            String uid =  user.getUid();
             mEmail = user.getEmail();
             mPhone = user.getPhone();
             mPost = user.getPostName();
@@ -274,7 +275,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
             mUserDepartment = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
 
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
-                    addOrUpdateFriends(new Friends(mUserCode,
+                    addOrUpdateFriends(new Friends(uid,mUserCode,
                             mNickName, mPortrait, mSex, mPhone, mPost, mDepartment, mEmail, mDepartmentId));
         }
     }

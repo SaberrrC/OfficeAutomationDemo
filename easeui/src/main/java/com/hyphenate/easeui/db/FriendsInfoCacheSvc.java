@@ -217,13 +217,13 @@ public class FriendsInfoCacheSvc {
         return "";
     }
 
-    public int getUid(String userCode) {
+    public String getUid(String userCode) {
         Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userCode}, null, null, null);
         if (cursor.moveToFirst()) {
-            int uid = cursor.getInt(cursor.getColumnIndex(Friends.COLUMNNAME_UID));
+            String uid = cursor.getString(cursor.getColumnIndex(Friends.COLUMNNAME_UID));
             cursor.close();
             return uid;
         }
-        return 0;
+        return "";
     }
 }
