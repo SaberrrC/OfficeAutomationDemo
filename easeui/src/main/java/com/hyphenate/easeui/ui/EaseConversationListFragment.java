@@ -3,10 +3,8 @@ package com.hyphenate.easeui.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -50,8 +48,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -191,7 +187,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                     conversationList.addAll(list);
                     conversationListView.refresh();
                     mIsSetup = true;
-                    RefreshBadge();
+                    refreshBadge();
                     break;
 
                 case MSG_REFRESH: {
@@ -205,7 +201,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                         conversationListView.refresh();
                     }
                     //刷新badge
-                    RefreshBadge();
+                    refreshBadge();
                     break;
                 default:
                     break;
@@ -213,7 +209,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
         }
     };
 
-    private void RefreshBadge() {
+    private void refreshBadge() {
         //刷新badge
         try {
             tempCount = 0;
@@ -429,6 +425,8 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                                                     throwable.printStackTrace();
                                                                 }
                                                             });
+                                                    break;
+                                                default:
                                                     break;
                                             }
                                         } catch (Throwable e) {
