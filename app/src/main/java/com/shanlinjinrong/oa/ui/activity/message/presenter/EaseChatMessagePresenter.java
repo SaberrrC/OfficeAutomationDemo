@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
@@ -13,10 +14,6 @@ import org.kymjs.kjframe.http.HttpParams;
 
 import javax.inject.Inject;
 
-/**
- * Created by 丁 on 2017/8/19.
- * 登录页面presenter
- */
 public class EaseChatMessagePresenter extends HttpPresenter<EaseChatMessageContract.View> implements EaseChatMessageContract.Presenter {
 
     @Inject
@@ -27,7 +24,9 @@ public class EaseChatMessagePresenter extends HttpPresenter<EaseChatMessageContr
     @Override
     public void searchUserDetails(String code) {
         mKjHttp.cleanCache();
-        mKjHttp.phpJsonGet(Api.SEARCH_USER_DETAILS + "?code=" + code, new HttpParams(), new HttpCallBack() {
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("codeList", code);
+        mKjHttp.jsonGet(Api.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -35,7 +34,7 @@ public class EaseChatMessagePresenter extends HttpPresenter<EaseChatMessageContr
                     UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
                     if (userDetailsBean != null) {
                         switch (userDetailsBean.getCode()) {
-                            case Api.RESPONSES_CODE_OK:
+                            case ApiJava.REQUEST_CODE_OK:
                                 for (int i = 0; i < userDetailsBean.getData().size(); i++) {
                                     if (mView != null)
                                         mView.searchUserDetailsSuccess(userDetailsBean.getData().get(i));
@@ -49,6 +48,7 @@ public class EaseChatMessagePresenter extends HttpPresenter<EaseChatMessageContr
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);

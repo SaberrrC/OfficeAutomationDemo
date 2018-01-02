@@ -41,7 +41,6 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> post(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-        params.putHeaders("application", "octet-stream");
         return super.post(baseUrl + url, params, callback);
     }
 
@@ -65,27 +64,6 @@ public class MyKjHttp extends KJHttp {
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         return super.jsonGet(baseJavaUrl + url, params, callback);
     }
-
-    public Request<byte[]> phpJsonGet(String url, HttpParams params, HttpCallBack callback) {
-        params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
-        params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-        url = phpNewUrl + url;
-        return super.get(url, params, callback);
-    }
-
-    public Request<byte[]> phpJsonPost(String url, HttpParams params, HttpCallBack callback) {
-        return phpJsonPost(url, params, true, callback);
-    }
-
-    public Request<byte[]> phpJsonPost(String url, HttpParams params, boolean hasHeader, HttpCallBack callback) {
-        if (hasHeader) {
-            params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
-            params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-        }
-        url = phpNewUrl + url;
-        return super.post(url, params, callback);
-    }
-
 
     /**
      * 使用JSON传参的put请求

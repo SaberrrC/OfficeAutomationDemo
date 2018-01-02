@@ -94,7 +94,7 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
     @Override
     public void queryUserInfo() {
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(Api.SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
+        mKjHttp.jsonGet(Api.ID_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
 
             @Override
             public void onFailure(int errorNo, String strMsg) {

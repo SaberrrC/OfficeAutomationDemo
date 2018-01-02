@@ -111,7 +111,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
     public void lookMeetingRooms(int id) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.phpJsonGet(Api.LOOK_NEW_MEETING_INFO + "?id=" + id, httpParams, new HttpCallBack() {
+        mKjHttp.jsonGet(Api.LOOK_NEW_MEETING_INFO + "?id=" + id, httpParams, new HttpCallBack() {
 
             @Override
             public void onPreStart() {

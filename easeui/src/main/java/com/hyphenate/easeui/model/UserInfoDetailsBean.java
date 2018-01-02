@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 作者：王凤旭
@@ -9,83 +10,104 @@ import java.io.Serializable;
  */
 
 public class UserInfoDetailsBean implements Serializable {
-    public String CODE;
-    public String department_name;
-    public String email;
-    public String phone;
-    public String portrait;
-    public String post_title;
-    public String sex;
-    public String username;
-    public String getCODE() {
-        return CODE;
+
+    /**
+     * code : 000000
+     * message : 查询成功
+     * data : [{"uid":15191,"code":"010051647","username":"赵紫祺","email":"zhaoziqi_jl@shanlinjinrong.com","sex":"女","img":null}]
+     */
+
+    private String code;
+    private String         message;
+    private List<DataBean> data;
+
+    public String getCode() {
+        return code;
     }
 
-    public UserInfoDetailsBean setCODE(String CODE) {
-        this.CODE = CODE;
-        return this;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getUsername() {
-        return username;
+    public String getMessage() {
+        return message;
     }
 
-    public UserInfoDetailsBean setUsername(String username) {
-        this.username = username;
-        return this;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getDepartment_name() {
-        return department_name;
+    public List<DataBean> getData() {
+        return data;
     }
 
-    public UserInfoDetailsBean setDepartment_name(String department_name) {
-        this.department_name = department_name;
-        return this;
+    public void setData(List<DataBean> data) {
+        this.data = data;
     }
 
-    public String getEmail() {
-        return email;
-    }
+    public static class DataBean {
+        /**
+         * uid : 15191
+         * code : 010051647
+         * username : 赵紫祺
+         * email : zhaoziqi_jl@shanlinjinrong.com
+         * sex : 女
+         * img : null
+         */
 
-    public UserInfoDetailsBean setEmail(String email) {
-        this.email = email;
-        return this;
-    }
+        private int uid;
+        private String code;
+        private String username;
+        private String email;
+        private String sex;
+        private String img;
 
-    public String getPhone() {
-        return phone;
-    }
+        public int getUid() {
+            return uid;
+        }
 
-    public UserInfoDetailsBean setPhone(String phone) {
-        this.phone = phone;
-        return this;
-    }
+        public void setUid(int uid) {
+            this.uid = uid;
+        }
 
-    public String getPortrait() {
-        return portrait;
-    }
+        public String getCode() {
+            return code;
+        }
 
-    public UserInfoDetailsBean setPortrait(String portrait) {
-        this.portrait = portrait;
-        return this;
-    }
+        public void setCode(String code) {
+            this.code = code;
+        }
 
-    public String getPost_title() {
-        return post_title;
-    }
+        public String getUsername() {
+            return username;
+        }
 
-    public UserInfoDetailsBean setPost_title(String post_title) {
-        this.post_title = post_title;
-        return this;
-    }
+        public void setUsername(String username) {
+            this.username = username;
+        }
 
-    public String getSex() {
-        return sex;
-    }
+        public String getEmail() {
+            return email;
+        }
 
-    public UserInfoDetailsBean setSex(String sex) {
-        this.sex = sex;
-        return this;
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getSex() {
+            return sex;
+        }
+
+        public void setSex(String sex) {
+            this.sex = sex;
+        }
+
+        public String getImg() {
+            return img;
+        }
+
+        public void setImg(String img) {
+            this.img = img;
+        }
     }
 }

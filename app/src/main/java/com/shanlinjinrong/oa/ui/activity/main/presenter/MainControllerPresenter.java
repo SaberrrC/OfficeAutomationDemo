@@ -127,60 +127,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
             int size = list.get(i).getUnreadMsgCount();
             tempCount = tempCount + size;
         }
-
-
 //        mView.bindBadgeView(tempCount);
         return list;
     }
-
-
-
-
-
-    @Override
-    public void searchUserDetails(String code) {
-        mKjHttp.cleanCache();
-        mKjHttp.phpJsonGet(Api.SEARCH_USER_DETAILS + "?code=" + code, new HttpParams(), new HttpCallBack() {
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                try {
-                    UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
-                    if (userDetailsBean != null) {
-                        switch (userDetailsBean.getCode()) {
-                            case Api.RESPONSES_CODE_OK:
-                                for (int i = 0; i < userDetailsBean.getData().size(); i++) {
-                                    if (mView != null)
-                                        mView.searchUserDetailsSuccess(userDetailsBean.getData().get(i));
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                try {
-                    if (mView != null) {
-                        mView.searchUserDetailsFailed(code);
-                    }
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
-        });
-    }
-
-
 }

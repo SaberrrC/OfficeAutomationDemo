@@ -27,6 +27,7 @@ import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.User;
+import com.shanlinjinrong.oa.ui.activity.contracts.bean.ContactDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.contracts.contract.ContactDetailsContract;
 import com.shanlinjinrong.oa.ui.activity.contracts.presenter.ContactDetailsPresenter;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
@@ -268,7 +269,6 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
             mUserCode = "sl_" + user.getCode();
             mNickName = user.getUsername();
             mPortrait =user.getPortraits();
-//            mPortrait =  user.getPortraits();
             mDepartment = user.getDepartmentName();
             mDepartmentId = user.getDepartmentId();
             mUserDepartment = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
@@ -334,12 +334,12 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
     }
 
     @Override
-    public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
+    public void searchUserDetailsSuccess(ContactDetailsBean.DataBean userDetailsBean) {
         tvErrorLayout.setVisibility(View.GONE);
         try {//更新个人详情
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
-                    addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(),
-                            userDetailsBean.getUsername(), userDetailsBean.getImg(),
+                    addOrUpdateFriends(new Friends(userDetailsBean.getUid(),"sl_" + userDetailsBean.getCode(),
+                            userDetailsBean.getUsername(), userDetailsBean.getPortrait(),
                             userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                             userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
             initSessionData();

@@ -19,16 +19,10 @@ public interface MainControllerContract {
 
         void startAppSetting();
 
-        void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean);
-
-        void searchUserDetailsFailed(String UserCode);
     }
 
     interface Presenter extends BasePresenter<View> {
 
         void applyPermission(Activity activity); // 申请权限
-
-        void searchUserDetails(String code);
-
     }
 }

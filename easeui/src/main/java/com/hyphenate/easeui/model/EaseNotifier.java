@@ -288,8 +288,9 @@ public class EaseNotifier {
                                 HttpParams httpParams = new HttpParams();
                                 httpParams.putHeaders("token", token);
                                 httpParams.putHeaders("uid", uid);
+                                httpParams.put("codeList", userCode);
                                 //TODO 生产
-                                kjHttp.get(EaseConstant.PHP_URL + "user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
+                                kjHttp.post(EaseConstant.PHP_URL + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
 
                                     @Override
                                     public void onFailure(int errorNo, String strMsg) {
@@ -300,7 +301,7 @@ public class EaseNotifier {
                                             public void call(Subscriber<? super Object> subscriber) {
                                                 FriendsInfoCacheSvc.
                                                         getInstance(appContext).
-                                                        addOrUpdateFriends(new Friends("sl_" + message.getFrom(), "匿名用户", ""));
+                                                        addOrUpdateFriends(new Friends(message.getFrom(), "匿名用户", ""));
                                                 mNickName = "匿名用户";
                                                 subscriber.onCompleted();
                                             }
@@ -326,20 +327,19 @@ public class EaseNotifier {
                                     @Override
                                     public void onSuccess(String t) {
                                         super.onSuccess(t);
-                                        final UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
+                                        final UserInfoDetailsBean userDetailsBean = new Gson().fromJson(t, UserInfoDetailsBean.class);
                                         if (userDetailsBean != null) {
                                             try {
                                                 switch (userDetailsBean.getCode()) {
                                                     case "0000000":
-                                                        //todo php 换JAVAa
                                                         Observable.create(new Observable.OnSubscribe<Object>() {
                                                             @Override
                                                             public void call(Subscriber<? super Object> subscriber) {
-//                                                                FriendsInfoCacheSvc.
-//                                                                        getInstance(appContext).
-//                                                                        addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(),
-//                                                                                userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
-//                                                                mNickName = userDetailsBean.getData().get(0).getUsername();
+                                                                FriendsInfoCacheSvc.
+                                                                        getInstance(appContext).
+                                                                        addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getUid()+"","sl_" + userDetailsBean.getData().get(0).getCode(),
+                                                                                userDetailsBean.getData().get(0).getUsername(), userDetailsBean.getData().get(0).getImg(),userDetailsBean.getData().get(0).getEmail(),userDetailsBean.getData().get(0).getSex()));
+                                                                mNickName = userDetailsBean.getData().get(0).getUsername();
                                                                 subscriber.onCompleted();
                                                             }
                                                         }).subscribeOn(Schedulers.io())

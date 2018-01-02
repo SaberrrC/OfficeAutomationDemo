@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.contracts.contract;
 
+import com.shanlinjinrong.oa.ui.activity.contracts.bean.ContactDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -17,7 +18,7 @@ public interface ContactDetailsContract {
 
         void hideLoading();
 
-        void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean);
+        void searchUserDetailsSuccess(ContactDetailsBean.DataBean userDetailsBean);
 
         void searchUserDetailsFailed(int errorCode,String errorMsh);
 

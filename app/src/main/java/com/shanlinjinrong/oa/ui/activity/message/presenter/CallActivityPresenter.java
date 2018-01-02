@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
 import com.google.gson.Gson;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.contract.CallActivityContract;
@@ -27,7 +28,9 @@ public class CallActivityPresenter extends HttpPresenter<CallActivityContract.Vi
     @Override
     public void searchUserDetails(String code) {
         mKjHttp.cleanCache();
-        mKjHttp.phpJsonGet(Api.SEARCH_USER_DETAILS + "?code=" + code, new HttpParams(), new HttpCallBack() {
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("codeList", code);
+        mKjHttp.post(Api.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -35,7 +38,7 @@ public class CallActivityPresenter extends HttpPresenter<CallActivityContract.Vi
                     UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
                     if (userDetailsBean != null) {
                         switch (userDetailsBean.getCode()) {
-                            case Api.RESPONSES_CODE_OK:
+                            case ApiJava.REQUEST_CODE_OK:
                                 for (int i = 0; i < userDetailsBean.getData().size(); i++) {
                                     if (mView != null)
                                         mView.searchUserDetailsSuccess(userDetailsBean.getData().get(i));

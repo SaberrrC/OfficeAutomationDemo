@@ -36,6 +36,7 @@ import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnCountRefreshEvent;
+import com.hyphenate.easeui.model.UserInfoDetailsBean;
 import com.hyphenate.easeui.widget.EaseConversationList;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -384,11 +385,10 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                             HttpParams httpParams = new HttpParams();
                             httpParams.putHeaders("token", token);
                             httpParams.putHeaders("uid", uid);
+                            httpParams.put("codeList", userCode);
                             //TODO 生产
-                            kjHttp.get(EaseConstant.PHP_URL + "user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
-
-                                private UserDetailsBean userDetailsBean;
-
+                            kjHttp.post(EaseConstant.PHP_URL + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
+                                private UserInfoDetailsBean userDetailsBean;
                                 @Override
                                 public void onFailure(int errorNo, String strMsg) {
                                     super.onFailure(errorNo, strMsg);
@@ -407,7 +407,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 public void onSuccess(String t) {
                                     super.onSuccess(t);
                                     try {
-                                        userDetailsBean = new Gson().fromJson(t, new TypeToken<UserDetailsBean>() {
+                                        userDetailsBean = new Gson().fromJson(t, new TypeToken<UserInfoDetailsBean>() {
                                         }.getType());
                                     } catch (Throwable throwable) {
                                         throwable.printStackTrace();
@@ -419,8 +419,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                                     Observable.create(new Observable.OnSubscribe<Object>() {
                                                         @Override
                                                         public void call(Subscriber<? super Object> subscriber) {
-                                                            //todo php换java
-//                                                            FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), "http://" + userDetailsBean.getData().get(0).getImg()));
+                                                            FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getUid()+"", "sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), userDetailsBean.getData().get(0).getImg(), userDetailsBean.getData().get(0).getEmail(), userDetailsBean.getData().get(0).getSex()));
                                                             list.add(0, emConversation);
                                                             if (!handler.hasMessages(MSG_REFRESH)) {
                                                                 handler.sendEmptyMessage(MSG_REFRESH);
@@ -464,7 +463,6 @@ public class EaseConversationListFragment extends EaseBaseFragment {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-
         return tempCount;
     }
 

@@ -1,26 +1,18 @@
-package com.shanlinjinrong.oa.ui.activity.main.bean;
+package com.shanlinjinrong.oa.ui.activity.contracts.bean;
 
 import java.io.Serializable;
-import java.util.List;
 
-/**
- * 作者：王凤旭
- * 时间：2017/11/29
- * 描述：
- */
-
-public class UserDetailsBean implements Serializable {
-
+public class ContactDetailsBean implements Serializable{
 
     /**
-     * code : 200
-     * info : success
-     * data : [{"uid":"78","oid":"611","isleader":"0","code":"011000439","username":"宋慧玲","phone":"13023128805","email":"songhuiling@shanlinjinrong.com","sex":"女","organ":"核算组","postname":"会计","token":null,"img":""}]
+     * code : 000000
+     * message : 获取用户信息成功
+     * data : {"uid":"52661","oid":"17","isleader":"0","code":"010108982","username":"丁通","phone":"18217071831","email":"dingtong@shanlinjinrong.com","sex":"男","organ":"善贷宝","postname":"前端开发工程师","token":"drOMl60xafpGOD-T5S0IcKh3GO3RUnsfne9Hb8d6WYCtx5X4dTqaK-P9H6MLEbMP","portrait":"","joindate":"2017-03-23","birthdate":"1991-10-28","education":"大学本科"}
      */
 
     private String code;
-    private String info;
-    private List<DataBean> data;
+    private String   message;
+    private DataBean data;
 
     public String getCode() {
         return code;
@@ -30,36 +22,39 @@ public class UserDetailsBean implements Serializable {
         this.code = code;
     }
 
-    public String getInfo() {
-        return info;
+    public String getMessage() {
+        return message;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public List<DataBean> getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
     public static class DataBean {
         /**
-         * uid : 78
-         * oid : 611
+         * uid : 52661
+         * oid : 17
          * isleader : 0
-         * code : 011000439
-         * username : 宋慧玲
-         * phone : 13023128805
-         * email : songhuiling@shanlinjinrong.com
-         * sex : 女
-         * organ : 核算组
-         * postname : 会计
-         * token : null
-         * img :
+         * code : 010108982
+         * username : 丁通
+         * phone : 18217071831
+         * email : dingtong@shanlinjinrong.com
+         * sex : 男
+         * organ : 善贷宝
+         * postname : 前端开发工程师
+         * token : drOMl60xafpGOD-T5S0IcKh3GO3RUnsfne9Hb8d6WYCtx5X4dTqaK-P9H6MLEbMP
+         * portrait :
+         * joindate : 2017-03-23
+         * birthdate : 1991-10-28
+         * education : 大学本科
          */
 
         private String uid;
@@ -73,7 +68,10 @@ public class UserDetailsBean implements Serializable {
         private String organ;
         private String postname;
         private String token;
-        private String img;
+        private String portrait;
+        private String joindate;
+        private String birthdate;
+        private String education;
 
         public String getUid() {
             return uid;
@@ -163,12 +161,36 @@ public class UserDetailsBean implements Serializable {
             this.token = token;
         }
 
-        public String getImg() {
-            return img;
+        public String getPortrait() {
+            return portrait;
         }
 
-        public void setImg(String img) {
-            this.img = img;
+        public void setPortrait(String portrait) {
+            this.portrait = portrait;
+        }
+
+        public String getJoindate() {
+            return joindate;
+        }
+
+        public void setJoindate(String joindate) {
+            this.joindate = joindate;
+        }
+
+        public String getBirthdate() {
+            return birthdate;
+        }
+
+        public void setBirthdate(String birthdate) {
+            this.birthdate = birthdate;
+        }
+
+        public String getEducation() {
+            return education;
+        }
+
+        public void setEducation(String education) {
+            this.education = education;
         }
     }
 }

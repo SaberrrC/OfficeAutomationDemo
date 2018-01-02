@@ -511,7 +511,9 @@ public class Api {
     public static final String MODIFICATION_EMAIL = "/users/reemail";
 
     //获取个人信息
-    public static final String SEARCH_USER_DETAILS = "user/getUserInfoById";
+    public static final String ID_SEARCH_USER_DETAILS   = "user/getUserInfoById";
+    //获取个人信息
+    public static final String CODE_SEARCH_USER_DETAILS = "user/queryUserByCodes";
 
     //*****************************************************************//
 

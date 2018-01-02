@@ -10,25 +10,27 @@ import java.io.Serializable;
 public class Friends implements Serializable {
 
 
-    public static final String COLUMNNAME_USERID = "user_id";
-    public static final String COLUMNNAME_NICKNAME = "nickname";
-    public static final String COLUMNNAME_PORTRAIT = "portrait";
-    public static final String COLUMNNAME_SEX = "userSex";
-    public static final String COLUMNNAME_PHONE = "userPhone";
-    public static final String COLUMNNAME_POST = "userPost";
-    public static final String COLUMNNAME_DEOARTMENT = "userDepartment";
-    public static final String COLUMNNAME_EMAIL = "userEmail";
+    public static final String COLUMNNAME_USERID       = "user_id";
+    public static final String COLUMNNAME_UID          = "uid";
+    public static final String COLUMNNAME_NICKNAME     = "nickname";
+    public static final String COLUMNNAME_PORTRAIT     = "portrait";
+    public static final String COLUMNNAME_SEX          = "userSex";
+    public static final String COLUMNNAME_PHONE        = "userPhone";
+    public static final String COLUMNNAME_POST         = "userPost";
+    public static final String COLUMNNAME_DEOARTMENT   = "userDepartment";
+    public static final String COLUMNNAME_EMAIL        = "userEmail";
     public static final String COLUMNNAME_DEOARTMENTId = "userDepartmentId";
 
-    public String user_id;
-    public String nickname;
-    public String portrait;
-    public String userSex;
-    public String userPhone;
-    public String userPost;
-    public String userDepartment;
-    public String userDepartmentId;
-    public String userEmail;
+    private String uid;
+    private String user_id;
+    private String nickname;
+    private String portrait;
+    private String userSex;
+    private String userPhone;
+    private String userPost;
+    private String userDepartment;
+    private String userDepartmentId;
+    private String userEmail;
 
 
     public Friends() {
@@ -47,10 +49,40 @@ public class Friends implements Serializable {
         this.userDepartmentId = departmentId;
     }
 
+    public Friends(String uid ,String user_id, String nickname, String portrait, String userSex, String userPhone, String userPost, String userDepartment, String userEmail, String departmentId) {
+        this.uid = uid;
+        this.user_id = user_id;
+        this.nickname = nickname;
+        this.portrait = portrait;
+        this.userSex = userSex;
+        this.userPhone = userPhone;
+        this.userPost = userPost;
+        this.userDepartment = userDepartment;
+        this.userEmail = userEmail;
+        this.userDepartmentId = departmentId;
+    }
+
     public Friends(String user_id, String nickname, String portrait) {
         this.user_id = user_id;
         this.nickname = nickname;
         this.portrait = portrait;
+    }
+
+    public Friends(String uid, String code, String nickname, String portrait, String email, String sex) {
+        this.uid = uid;
+        this.user_id = code;
+        this.nickname = nickname;
+        this.portrait = portrait;
+        this.userEmail = email;
+        this.userSex = sex;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getUser_id() {

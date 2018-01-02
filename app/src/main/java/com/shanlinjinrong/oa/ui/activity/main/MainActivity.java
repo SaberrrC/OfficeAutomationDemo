@@ -620,67 +620,12 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         }
     }
 
-    @Override
-    public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
-        Observable.create(e -> {
-            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
-                    userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(), userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {
-                }, Throwable::printStackTrace, () -> {
-                    if (tabCommunicationFragment != null) {
-                        if (tabCommunicationFragment.myConversationListFragment != null) {
-                            tabCommunicationFragment.myConversationListFragment.refresh();
-                            tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
-                        }
-                    }
-                    if (mEMMessage != null) {
-                        for (EMMessage message : mEMMessage) {
-                            if (!easeUI.hasForegroundActivies()) {
-                                easeUI.getNotifier().onNewMsg(message);
-                            }
-                        }
-                    }
-                    refreshCommCount();
-                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
-                });
-    }
-
     //开启权限列表
     public void startAppSetting() {
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         i.setData(uri);
         startActivityForResult(i, 100);
-    }
-
-    @Override
-    public void searchUserDetailsFailed(String userCode) {
-        Observable.create(e -> {
-            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends("sl_" + userCode, "匿名用户", ""));
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {
-                }, Throwable::printStackTrace, () -> {
-                    if (tabCommunicationFragment != null) {
-                        if (tabCommunicationFragment.myConversationListFragment != null) {
-                            tabCommunicationFragment.myConversationListFragment.refresh();
-                            tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
-                        }
-                    }
-                    if (mEMMessage != null) {
-                        for (EMMessage message : mEMMessage) {
-                            if (!easeUI.hasForegroundActivies()) {
-                                easeUI.getNotifier().onNewMsg(message);
-                            }
-                        }
-                    }
-                    refreshCommCount();
-                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
-                });
     }
 
     //位置权限回调

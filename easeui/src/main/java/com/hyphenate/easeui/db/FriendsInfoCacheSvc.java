@@ -17,8 +17,8 @@ import java.lang.ref.WeakReference;
 public class FriendsInfoCacheSvc {
 
     private final SQLiteDatabase mDB;
-    private static FriendsInfoCacheSvc instance = null;
-    public static String TABLE_NAME = "t_friend";
+    private static FriendsInfoCacheSvc instance   = null;
+    public static  String              TABLE_NAME = "t_friend";
 
 
     private FriendsInfoCacheSvc(Context context) {
@@ -80,6 +80,9 @@ public class FriendsInfoCacheSvc {
         if (null != friends.getUserDepartment()) {
             contentValues.put(Friends.COLUMNNAME_DEOARTMENT, friends.getUserDepartment());
         }
+        if (null != friends.getUid()) {
+            contentValues.put(Friends.COLUMNNAME_UID, friends.getUid());
+        }
         if (null != friends.getUserEmail()) {
             contentValues.put(Friends.COLUMNNAME_EMAIL, friends.getUserEmail());
         }
@@ -106,7 +109,7 @@ public class FriendsInfoCacheSvc {
         }
     }
 
-    public void setPortrait (String portrait,String userId) {
+    public void setPortrait(String portrait, String userId) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Friends.COLUMNNAME_PORTRAIT, portrait);
         try {
@@ -214,5 +217,13 @@ public class FriendsInfoCacheSvc {
         return "";
     }
 
-
+    public int getUid(String userCode) {
+        Cursor cursor = mDB.query(TABLE_NAME, null, " user_id=?", new String[]{userCode}, null, null, null);
+        if (cursor.moveToFirst()) {
+            int uid = cursor.getInt(cursor.getColumnIndex(Friends.COLUMNNAME_UID));
+            cursor.close();
+            return uid;
+        }
+        return 0;
+    }
 }
