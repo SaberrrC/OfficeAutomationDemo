@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,8 +89,11 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
                 super.onScrollStateChanged(recyclerView, newState);
                 try {
                     if (newState == 0 && lastPosition + 1 == mData.size()) {
-//                        LoadMore();
-
+                        android.util.Log.d("12313213", "!@31232131312312321aa");
+                        View view = View.inflate(MeetingReservationRecordActivity.this, R.layout.load_more_layout, null);
+                        mRecordAdapter.addFooterView(view);
+                        mRecordAdapter.notifyDataSetChanged();
+                        LoadMore();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -127,26 +132,24 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
     @Override
     public void getMeetingRecordSuccess(ReservationRecordBean.DataBeanX bean) {
         try {
-            if (bean.getData().size() == 0) {
+            if (bean.getData().size() == 0 && !mIsLoadMore) {
                 mTvEmptyView.setVisibility(View.VISIBLE);
                 mTvEmptyView.setText("暂无预订记录");
                 mRefresh.setRefreshing(false);
                 return;
             }
+
             if (!mIsLoadMore) {
                 mData.clear();
             }
+
             mTvMeetingReservationRecord.setVisibility(View.VISIBLE);
             mTvEmptyView.setVisibility(View.GONE);
             mData.addAll(bean.getData());
             mRecordAdapter.setNewData(mData);
-            mRecordAdapter.setOnLoadMoreListener(() -> {
-                android.util.Log.d("12313213", "!@31232131312312321");
-//                mRecordAdapter.loadComplete();
-            });
             mRefresh.setRefreshing(false);
-//            mRecordAdapter.removeAllFooterView();
-//            mRvMeetingReservationRecord.requestLayout();
+            if (mRecordAdapter.getFooterLayoutCount() > 0)
+                mRecordAdapter.removeAllFooterView();
             mRecordAdapter.notifyDataSetChanged();
         } catch (Throwable e) {
             e.printStackTrace();
