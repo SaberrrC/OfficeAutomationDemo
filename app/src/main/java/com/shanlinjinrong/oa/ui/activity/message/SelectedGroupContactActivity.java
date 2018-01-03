@@ -251,6 +251,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     EventBus.getDefault().post(new OnMessagesRefreshEvent());
 
                     showToast("邀请成员成功！");
+                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
                     setResult(REFRESHSUCCESS);
                     finish();
                 });
