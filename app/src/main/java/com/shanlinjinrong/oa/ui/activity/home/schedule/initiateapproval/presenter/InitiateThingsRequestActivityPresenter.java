@@ -106,7 +106,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
     public void queryEvectionType(int type) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(ApiJava.EVENCTIONTYPE + "?itemtype=" + type, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.EVENCTIONTYPE + "?itemtype=" + type, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -168,7 +168,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
     public void queryDuration(String beginTime, String endTime, int type, String billCode, String applyType) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(ApiJava.QUERYDURATION + "?endTime=" + endTime + ":00" + "&startTime=" + beginTime + ":00" + "&type=" + type + "&billCode=" + billCode + "&applyType=" + applyType, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.QUERYDURATION + "?endTime=" + endTime + ":00" + "&startTime=" + beginTime + ":00" + "&type=" + type + "&billCode=" + billCode + "&applyType=" + applyType, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -504,7 +504,7 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
     public void findSignReason() {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(ApiJava.SIGNREASON, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.SIGNREASON, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

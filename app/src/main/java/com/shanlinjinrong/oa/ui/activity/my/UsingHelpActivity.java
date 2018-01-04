@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.retrofit.net.ApiConstant;
 import com.hyphenate.util.NetUtils;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -44,8 +45,6 @@ import rx.functions.Action1;
  * <b>Notes:</b> Created by KevinMeng on 2016/9/20.<br />
  */
 public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
-
-    private static final String APP_CACAHE_DIRNAME = "/webcache";
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -122,7 +121,7 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
             }
         };
         webView.setWebViewClient(mWebViewClient);
-        webView.loadUrl(BuildConfig.BASE_URL + Api.USINGHELP + "?time=" + new Date().getTime());
+        webView.loadUrl("http://api.oa.shanlinjinrong.com/helper/index" + "?time=" + new Date().getTime());
         webView.setWebViewClient(mWebViewClient);
     }
 

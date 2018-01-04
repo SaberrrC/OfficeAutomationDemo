@@ -470,7 +470,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     public void reportFailed(String errCode, String errMsg) {
 
         if (errMsg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_OUT_TIME);
             return;
         }
         switch (errCode) {

@@ -575,7 +575,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void uidNull(String code) {
-        catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+        catchWarningByCode(code);
     }
 
     @Override
@@ -599,7 +599,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void getDefaultReceiverFailed(String errMsg) {
         if (errMsg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
         }
     }
 
@@ -652,7 +652,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void getLastWeekPlanFailure(int code, String msg) {
         if (msg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
         }
     }
 
@@ -673,7 +673,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void sendWeeklyReportFailure(String code, String msg) {
         if (msg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
             return;
         }
         switch (code) {
@@ -702,7 +702,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void getReportFailed(String code, String msg) {
         if (msg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
             return;
         }
         showToast("获取周报信息失败！");

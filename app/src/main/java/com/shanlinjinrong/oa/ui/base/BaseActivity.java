@@ -125,37 +125,6 @@ public class BaseActivity extends AppCompatActivity {
      *
      * @param code 错误代码
      */
-    public void catchWarningByCode(int code) {
-        switch (code) {
-            case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                AppConfig.getAppConfig(this).clearLoginInfo();
-                //gotoLoginPage();
-                NonTokenDialog();
-                break;
-            case Api.RESPONSES_JAVA_TOKEN_NO_MATCH:
-                AppConfig.getAppConfig(this).clearLoginInfo();
-                //gotoLoginPage();
-                NonTokenDialog();
-                break;
-            case Api.RESPONSES_CODE_UID_NULL:
-                AppConfig.getAppConfig(this).clearLoginInfo();
-                //gotoLoginPage();
-                NonTokenDialog();
-                break;
-            case Api.RESPONSES_CODE_NO_NETWORK:
-                showTips("请确认是否已连接网络！");
-                break;
-            case Api.RESPONSES_CODE_NO_RESPONSE:
-                showTips("网络不稳定，请重试！");
-                break;
-        }
-    }
-
-    /**
-     * 捕获服务器接口返回异常状态码，并统一进行处理
-     *
-     * @param code 错误代码
-     */
     public void catchWarningByCode(String code) {
         switch (code) {
             case ApiJava.REQUEST_TOKEN_OUT_TIME:
@@ -164,13 +133,6 @@ public class BaseActivity extends AppCompatActivity {
                 AppConfig.getAppConfig(this).clearLoginInfo();
                 NonTokenDialog();
                 break;
-            //TODO 网络问题
-//            case Api.RESPONSES_CODE_NO_NETWORK:
-//                showTips("请确认是否已连接网络！");
-//                break;
-//            case Api.RESPONSES_CODE_NO_RESPONSE:
-//                showTips("网络不稳定，请重试！");
-//                break;
         }
     }
 

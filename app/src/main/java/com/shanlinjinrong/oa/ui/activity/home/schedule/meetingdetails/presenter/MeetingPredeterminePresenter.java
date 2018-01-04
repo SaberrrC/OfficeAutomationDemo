@@ -33,7 +33,7 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
     @Override
     public void getMeetingPredetermine(int meetingId) {
         mKjHttp.cleanCache();
-        mKjHttp.jsonGet(Api.NEW_MEETING_ALR_MEETING + "?room_id=" + meetingId, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(Api.NEW_MEETING_ALR_MEETING + "?room_id=" + meetingId, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

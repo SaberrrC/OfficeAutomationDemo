@@ -13,7 +13,6 @@
  */
 package com.hyphenate.easeui;
 
-import retrofit2.http.PUT;
 
 public class EaseConstant {
     public static final String MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call";
@@ -36,6 +35,4 @@ public class EaseConstant {
     public static String GROUPID = "groupId";
 
     public static String SEARCHUSERINFO = "user/queryUserByCodes";
-
-    public static String PHP_URL = "http://10.255.232.234/oa-api/";
 }

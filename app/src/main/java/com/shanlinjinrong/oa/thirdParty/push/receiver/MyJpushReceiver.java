@@ -8,18 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.model.EventMessage;
-import com.shanlinjinrong.oa.ui.activity.push.PushListActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.StringUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,24 +65,6 @@ public class MyJpushReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
 
-        }
-    }
-
-    public void initNotification(String content) {
-        LogUtils.e("initNotification执行了。。。");
-        nm = (NotificationManager) AppManager.mContext.getSystemService(Context
-                .NOTIFICATION_SERVICE);
-        notification = new Notification(R.drawable.jpush_notification_icon, content, System
-                .currentTimeMillis());
-        notification.contentView = new RemoteViews(AppManager.mContext.getPackageName(), R
-                .layout.notification);
-        //（就是在Android Market下载软件，点击下载但还没获取到目标大小时的状态）
-        Intent notificationIntent = new Intent(AppManager.mContext, PushListActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(AppManager.mContext, 0,
-                notificationIntent, 0);
-        notification.contentIntent = contentIntent;
-        synchronized (notification) {
-            notification.notify();
         }
     }
 }

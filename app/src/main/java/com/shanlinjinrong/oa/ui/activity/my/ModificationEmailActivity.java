@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.HolidayAdapter;
@@ -210,7 +211,7 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     public void modificationEmailFailed(int errorNo, String strMsg) {
         hideLoadingView();
         if (strMsg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
             return;
         }
         if (!TextUtils.isEmpty(strMsg)) {

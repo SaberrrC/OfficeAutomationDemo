@@ -23,7 +23,6 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
@@ -43,7 +42,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.shanlinjinrong.oa.common.Api.RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR;
 
 /**
  * <h3>Description: 登录界面 </h3>
@@ -244,12 +242,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     }
 
     @Override
-    public void loginFailed(int errorCode) {
-        hideLoadingView();
-        catchWarningByCode(errorCode);
-    }
-
-    @Override
     public void loginFailed(String errorCode) {
         hideLoadingView();
         catchWarningByCode(errorCode);
@@ -264,9 +256,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     @Override
     public void accountOrPswError(int errorCode, String msg) {
         hideLoadingView();
-        if (errorCode == RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR) {
-            userPwd.setText("");
-        }
         showToast(msg);
     }
 

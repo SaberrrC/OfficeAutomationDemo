@@ -24,6 +24,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -101,21 +102,13 @@ public abstract class BaseFragment extends Fragment {
      *
      * @param code 错误代码
      */
-    public void catchWarningByCode(int code) {
+    public void catchWarningByCode(String code) {
         switch (code) {
-            case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                AppConfig.getAppConfig(getActivity()).clearLoginInfo();
+            case ApiJava.REQUEST_TOKEN_OUT_TIME:
+            case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+            case ApiJava.ERROR_TOKEN:
+                AppConfig.getAppConfig(getContext()).clearLoginInfo();
                 gotoLoginPage();
-                break;
-            case Api.RESPONSES_CODE_UID_NULL:
-                AppConfig.getAppConfig(getActivity()).clearLoginInfo();
-                gotoLoginPage();
-                break;
-            case Api.RESPONSES_CODE_NO_NETWORK:
-                showTips("请确认是否已连接网络！");
-                break;
-            case Api.RESPONSES_CODE_NO_RESPONSE:
-                showTips("网络不稳定，请重试！");
                 break;
         }
     }

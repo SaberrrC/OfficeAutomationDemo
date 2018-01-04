@@ -55,9 +55,6 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-//import com.hyphenate.chatuidemo.db.Friends;
-//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
-
 /**
  * <h3>Description: 名片页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
@@ -357,16 +354,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     public void loadDataFailed(int code, String msg) {
         hideLoadingView();
         reSetSwipRefreash();
-        String info = "";
-        switch (code) {
-            case Api.RESPONSES_CODE_NO_NETWORK:
-                info = "请确认是否已连接网络！";
-                break;
-            case Api.RESPONSES_CODE_NO_RESPONSE:
-                info = "网络不稳定，请重试！";
-                break;
-        }
-        showEmptyView(mRlRecyclerViewContainer, info, 0, false);
+        showEmptyView(mRlRecyclerViewContainer, "网络不稳定，请重试！", 0, false);
         reSetSwipRefreash();
     }
 
@@ -385,8 +373,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     }
 
     @Override
-    public void loadDataTokenNoMatch(int code) {
-        hideLoadingView();
+    public void loadDataTokenNoMatch(String code) {
         catchWarningByCode(code);
     }
 

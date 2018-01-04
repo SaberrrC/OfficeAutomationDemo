@@ -339,11 +339,11 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                 mTvNotNetwork.setVisibility(View.VISIBLE);
                 mLlContentShow.setVisibility(View.GONE);
                 break;
-            case Api.RESPONSES_CODE_DATA_EMPTY:
-                mTvNotNetwork.setText("会议室预定错误，请重试");
-                mTvNotNetwork.setVisibility(View.VISIBLE);
-                mLlContentShow.setVisibility(View.GONE);
-                break;
+//            case Api.RESPONSES_CODE_DATA_EMPTY:
+//                mTvNotNetwork.setText("会议室预定错误，请重试");
+//                mTvNotNetwork.setVisibility(View.VISIBLE);
+//                mLlContentShow.setVisibility(View.GONE);
+//                break;
             default:
                 mTvNotNetwork.setVisibility(View.GONE);
                 mLlContentShow.setVisibility(View.VISIBLE);

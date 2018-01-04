@@ -41,7 +41,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
         if (!TextUtils.isEmpty(billCode)) {
             stringBuilder.append("&" + "billCode=" + billCode);
         }
-        mKjHttp.jsonGet(stringBuilder.toString(), httpParams, new HttpCallBack() {
+        mKjHttp.get(stringBuilder.toString(), httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -131,7 +131,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
         String json = new Gson().toJson(list);
         HttpParams httpParams = new HttpParams();
         httpParams.putJsonParams(json);
-        mKjHttp.jsonPost(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
+        mKjHttp.post(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
@@ -172,7 +172,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         try {
-            mKjHttp.jsonGet(ApiJava.DELETE_APPROVEL +"?billCode="+billCode+"&billType="+billType, httpParams, new HttpCallBack() {
+            mKjHttp.get(ApiJava.DELETE_APPROVEL +"?billCode="+billCode+"&billType="+billType, httpParams, new HttpCallBack() {
                 @Override
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);

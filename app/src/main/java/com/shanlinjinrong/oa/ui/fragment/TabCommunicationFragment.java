@@ -157,7 +157,6 @@ public class TabCommunicationFragment extends BaseFragment {
         LogUtils.e("刷新下主界面消息的数量");
         //刷新下主界面消息的数量
         MainActivity mainController = (MainActivity) getActivity();
-        mainController.refreshCommCount();
         super.onResume();
     }
 

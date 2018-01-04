@@ -84,7 +84,7 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
 
     @Override
     public void getDefaultReceiver() {
-        mKjHttp.jsonGet(ApiJava.GET_CURRENT_LEADER, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(ApiJava.GET_CURRENT_LEADER, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

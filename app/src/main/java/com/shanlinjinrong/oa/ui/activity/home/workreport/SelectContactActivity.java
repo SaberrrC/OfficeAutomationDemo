@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
@@ -237,14 +238,12 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     public void loadDataFailed(int errCode, String errMsg) {
         try {
             if (errMsg.equals("auth error")) {
-                catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+                catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
                 return;
             }
             hideLoadingView();
             mContentEmpty.setVisibility(View.VISIBLE);
             mContentEmpty.setText("没有搜索到该员工，请重新搜索");
-//        showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);
-            catchWarningByCode(errCode);
         } catch (Throwable e) {
             e.printStackTrace();
         }

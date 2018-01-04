@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ReportCheckAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.CheckReportItem;
@@ -373,7 +374,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 //        mReportCheckList.loadMoreError(errCode, errMsg);
         if (errCode == -1) {
             if (errMsg.equals("auth error")) {
-                catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+                catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
             } else {
                 showToast(getString(R.string.net_no_connection));
             }
@@ -424,7 +425,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     @Override
     public void uidNull(String code) {
-        catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+        catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
     }
 
     @Override

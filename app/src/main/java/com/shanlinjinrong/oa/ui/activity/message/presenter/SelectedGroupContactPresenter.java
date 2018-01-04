@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
 import android.util.Log;
 
+import com.example.retrofit.net.ApiConstant;
 import com.facebook.stetho.Stetho;
 import com.iflytek.cloud.thirdparty.S;
 import com.shanlinjinrong.oa.common.Api;
@@ -45,7 +46,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
     public void QueryGroupContact(String orgId, ArrayList<String> account) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(Api.GET_CONTACTS + "?orgId=" + orgId, httpParams, new HttpCallBack() {
+        mKjHttp.get(Api.GET_CONTACTS + "?orgId=" + orgId, httpParams, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -149,7 +150,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
     public void QueryGroupContact(String orgId, String account) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(Api.GET_CONTACTS + "?orgId=" + orgId, httpParams, new HttpCallBack() {
+        mKjHttp.get(Api.GET_CONTACTS + "?orgId=" + orgId, httpParams, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -237,7 +238,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
     @Override
     public void searchContact(String name, ArrayList<String> account) {
         mKjHttp.cleanCache();
-        mKjHttp.jsonGet(Api.PHONEBOOK_SEARCHPHONEBOOK + "?name=" + name, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(Api.PHONEBOOK_SEARCHPHONEBOOK + "?name=" + name, new HttpParams(), new HttpCallBack() {
             @Override
             public void onFinish() {
                 super.onFinish();
@@ -278,7 +279,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                                 contact.setUsername(user.getString("username"));
                                 contact.setPhone(user.getString("phone"));
                                 contact.setEmail(user.getString("email"));
-                                contact.setPortraits(Constants.SLPicBaseUrl + user.getString("portraits"));
+                                contact.setPortraits(ApiConstant.SLPicBaseUrl + user.getString("portraits"));
                                 contact.setSex(user.getString("sex"));
                                 contact.setPostTitle(user.getString("post_title"));
                                 contact.setPostId(user.getString("post_id"));
@@ -338,7 +339,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
     public void QueryGroupContact(String orgId) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(Api.GET_CONTACTS + "?orgId=" + orgId, httpParams, new HttpCallBack() {
+        mKjHttp.get(Api.GET_CONTACTS + "?orgId=" + orgId, httpParams, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -425,7 +426,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
     @Override
     public void searchContact(String name) {
         mKjHttp.cleanCache();
-        mKjHttp.jsonGet(Api.PHONEBOOK_SEARCHPHONEBOOK + "?name=" + name, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(Api.PHONEBOOK_SEARCHPHONEBOOK + "?name=" + name, new HttpParams(), new HttpCallBack() {
             @Override
             public void onFinish() {
                 super.onFinish();

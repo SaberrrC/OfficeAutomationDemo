@@ -22,7 +22,6 @@ import com.hyphenate.easeui.model.UserInfoSelfDetailsBean;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.bean.CallEventBean;
@@ -31,8 +30,6 @@ import com.shanlinjinrong.oa.ui.activity.message.presenter.CallActivityPresenter
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 @SuppressLint("Registered")
 public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implements CallActivityContract.View {

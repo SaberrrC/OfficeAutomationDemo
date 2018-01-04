@@ -7,6 +7,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.retrofit.net.ApiConstant;
 import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
@@ -44,7 +45,7 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
                 break;
             case Contacts.EMPLOYEE:
                 CircleImageView portrait = helper.getView(R.id.portrait);
-                String portraits = contacts.getPortraits();
+                String portraits = ApiConstant.SLPicBaseUrl +  contacts.getPortraits();
                 if (!TextUtils.isEmpty(portraits) || !portraits.equals("http://") || !portraits.equals("http://null")) {
                     Glide.with(AppManager.mContext)
                             .load(portraits)

@@ -34,7 +34,7 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
         HttpParams params = new HttpParams();
         String url = ApiJava.DAILY_REPORT + "?pageSize=" + pageSize + "&pageNum=" + pageNum + "&time=" + timeType;
         mKjHttp.cleanCache();
-        mKjHttp.jsonGet(url, params, new HttpCallBack() {
+        mKjHttp.get(url, params, new HttpCallBack() {
 
             @Override
             public void onSuccess(String t) {
@@ -111,7 +111,7 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
         HttpParams params = new HttpParams();
         String url = ApiJava.WEEK_REPORT_LIST + "?pageSize=" + pageSize + "&pageNum=" + pageNum + "&time=" + timeType;
         mKjHttp.cleanCache();
-        mKjHttp.jsonGet(url, params, new HttpCallBack() {
+        mKjHttp.get(url, params, new HttpCallBack() {
 
             @Override
             public void onSuccess(String t) {

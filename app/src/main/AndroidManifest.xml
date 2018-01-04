@@ -425,10 +425,6 @@
             android:name=".ui.activity.home.workreport.PublicImageSelectorActivity"
             android:screenOrientation="portrait" />
         <!-- 通知公告 -->
-        <activity
-            android:name=".ui.activity.notice.NoticeListActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
         <!-- 系统消息 -->
         <activity
             android:name=".ui.activity.push.SystemNoticesActivity"
@@ -444,116 +440,36 @@
             android:screenOrientation="portrait" />
         <!-- 工作汇报回复 -->
         <!-- 审批列表 -->
-        <activity
-            android:name=".ui.activity.home.approval.ApprovalListActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
         <!-- 发起审批 -->
         <activity
             android:name=".ui.activity.home.approval.LaunchApprovalActivity"
             android:screenOrientation="portrait" />
         <!-- 差旅申请 -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.ApplyForTravelActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 公出申请申请 -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.ApplyForPublicOutActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 请假申请 -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.ApplyForLeaveActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 办公用品申请 -->
-        <activity
-            android:name=".ui.activity.home.approval.ApplyForOfficeSuppliesActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 加班申请 -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.ApplyForOverTimeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 待我审批 (请假) -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.WaitApprovalLeaveActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
         <!-- 待我审批 （办公用品） -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.WaitApprovalOfficesSuppliesActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
         <!-- 待我审批 （差旅） -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.WaitApprovaltravalActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
         <!-- 待我审批 （公告） -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.WaitApprovalNoticeActivity"
-            android:screenOrientation="portrait" />
         <!-- 我发起的 (请假) -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.MeLaunchLeaveActivity"
-            android:screenOrientation="portrait" />
         <!-- 我发起的 (办公用品) -->
-        <activity
-            android:name=".ui.activity.home.approval.MeLaunchOfficesSuppliesActivity"
-            android:screenOrientation="portrait" />
         <!-- 我发起的 (办公用品) -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.MeLaunchTravalActivity"
-            android:screenOrientation="portrait" />
         <!-- 我发起的 (加班) -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.MeLaunchOverTimeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 我发起的 (加班) -->
-        <activity
-            android:name=".ui.activity.home.approval.nouse.MeLaunchPublicOutActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 待我审批回复 -->
-        <activity
-            android:name=".ui.activity.home.approval.WaitApprovalReplyActivity"
-            android:screenOrientation="portrait" />
         <!-- 单个图片activity -->
         <activity
             android:name=".ui.activity.common.ShowPictureActivity"
             android:screenOrientation="portrait" />
         <!-- 名片(联系人) -->
         <!-- 推送列表 -->
-        <activity
-            android:name=".ui.activity.push.PushListActivity"
-            android:screenOrientation="portrait" />
         <!-- 日程安排 -->
-        <activity
-            android:name=".ui.activity.home.schedule.ScheduleActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
         <!-- 创建会议 -->
-        <activity
-            android:name=".ui.activity.home.schedule.CreateMeetingActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 创建记事本 -->
-        <activity
-            android:name=".ui.activity.home.schedule.CreateNoteActivity"
-            android:screenOrientation="portrait" />
         <!-- 记事本详情 -->
-        <activity
-            android:name=".ui.activity.home.schedule.NoteDetailActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
         <!-- 选择抄送人 -->
-        <activity
-            android:name=".ui.activity.home.schedule.SelectJoinPeopleActivity"
-            android:screenOrientation="portrait" />
         <!-- 聊天activity -->
         <!--<activity-->
         <!--android:name=".ui.activity.message.EaseChatMessageActivity"-->
@@ -571,23 +487,14 @@
             android:name=".ui.activity.home.workreport.AffirmPictureActivity"
             android:screenOrientation="portrait" />
         <!-- 选择会议室 activity -->
-        <activity
-            android:name=".ui.activity.home.schedule.nouse.SelectMeetingRoomActivity"
-            android:screenOrientation="portrait" />
-        <!-- 搜索联系人返回结果=联系人详情页 -->
         <activity android:name=".ui.activity.contracts.Contact_Details_Activity" />
         <!-- 正常点击部门列表的联系人详情页 -->
         <activity android:name=".ui.activity.contracts.Contact_Details_Activity2" />
         <!-- 创建视频会议——新版 -->
-        <activity android:name=".ui.activity.home.schedule.SelectVedioMeetingRoomActivity" />
         <!-- 创建视频会议——完成 -->
-        <activity android:name=".ui.activity.home.schedule.CreateVedioMeetingActivity" />
         <!-- 请选择会议室 -->
-        <activity android:name=".ui.activity.home.schedule.SelectOrdinaryMeetingRoomActivity" />
         <!-- 今日安排 -->
-        <activity android:name=".ui.activity.home.schedule.ViewTheMeetingScheduleActivity" />
         <!-- 创建普通会议 -->
-        <activity android:name=".ui.activity.home.schedule.CreateOridinryMeetingActivity" />
 
         <!-- 点击聊天图片进入大图片查看 -->
         <activity

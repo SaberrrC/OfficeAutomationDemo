@@ -74,7 +74,7 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                 LogUtils.e(errorNo + "--" + strMsg);
                 try {
                     if (mView != null)
-                        mView.loginFailed(errorNo);
+                        mView.loginFailed(String.valueOf(errorNo));
                     super.onFailure(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();

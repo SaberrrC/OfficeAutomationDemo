@@ -162,7 +162,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
     @Override
     public void getDefaultReceiver() {
 
-        mKjHttp.jsonGet(ApiJava.GET_CURRENT_LEADER, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(ApiJava.GET_CURRENT_LEADER, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -217,7 +217,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
     @Override
     public void getLastWeek() {
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(ApiJava.LOOK_LAST_WEEK, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.LOOK_LAST_WEEK, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -265,7 +265,7 @@ public class WriteWeeklyNewspaperActivityPresenter extends HttpPresenter<WriteWe
     @Override
     public void getWeReportData(int reportId) {
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(ApiJava.WEEK_REPORT + "/" + reportId, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.WEEK_REPORT + "/" + reportId, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

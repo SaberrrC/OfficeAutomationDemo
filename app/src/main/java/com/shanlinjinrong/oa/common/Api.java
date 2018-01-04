@@ -10,110 +10,11 @@ import org.json.JSONObject;
  */
 public class Api {
 
-    public static final String PHP_DEBUG_URL = "http://118.31.18.67:86";
-
-//    public static final String PHP_URL = "http://118.31.18.67:86";
-
-    //TODO会议室管理、找回密码 测试环境
-    public static final String PHP_URL = "http://10.255.232.234/oa-api/";
-    //新 内网
-//    public static final String PHP_URL = "http://10.5.202.122:82";
-//    新 外网
-//    public static final String PHP_URL = "http://116.62.216.129:82";
-
-    //TODO会议室管理、找回密码 生产环境
-//    public static final String PHP_URL = "http://oa.shanlinjinrong.com/webApi";
-
-
     private static final String RESPONSES_KEY_CODE = "code";
 
     private static final String RESPONSES_KEY_INFO = "info";
 
     private static final String RESPONSES_KEY_DATA = "data";
-    /**
-     * 所有接口返回code=200表示成功
-     */
-    public static final  int    RESPONSES_CODE_OK  = 200;
-
-    /**
-     * 用户名错误
-     */
-    public static final int RESPONSES_CODE_ACCOUNT_USERNAME_NOT_EXIST = 302;
-    /**
-     * 用户密码错误
-     */
-    public static final int RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR     = 303;
-    /**
-     * 用户被冻结
-     */
-    public static final int RESPONSES_CODE_ACCOUNT_USER_FREEZE        = 610;
-    /**
-     * 所有接口返回code=304表示Token不匹配
-     */
-    public static final int RESPONSES_CODE_TOKEN_NO_MATCH             = 304;
-    /**
-     * 所有接口返回code=401表示Token不匹配
-     */
-    public static final int RESPONSES_JAVA_TOKEN_NO_MATCH             = 401;
-    /**
-     * 所有接口返回code=362 表示反馈失败
-     */
-    public static final int RESPONSES_CODE_TOKEN_FEEDBACK_FAILURE     = 362;
-    /**
-     * 所有接口返回code=305表示Uid为空
-     */
-    public static final int RESPONSES_CODE_UID_NULL                   = 305;
-    /**
-     * 所有接口返回code=364表示审批详情不存在
-     */
-    public static final int APPROVAL_DETAIL_NOT_EXIST                 = 364;
-    /**
-     * 所有接口返回code=201表示返回数据为空
-     */
-    public static final int RESPONSES_CODE_DATA_EMPTY                 = 201;
-    /**
-     * 所有KjFrame onFailure返回的Error Code，-1表示无网络
-     */
-    public static final int RESPONSES_CODE_NO_NETWORK                 = -1;
-    /**
-     * 所有KjFrame onFailure返回的Error Code，500表示无响应
-     */
-    public static final int RESPONSES_CODE_NO_RESPONSE                = 500;
-    /**
-     * 所有接口返回code=365表示返回数据为空
-     */
-    public static final int RESPONSES_CONTENT_EMPTY                   = 365;
-
-    /**
-     * 没有这个用户
-     */
-    public static final int RESPONSES_CODE_NO_ACCOUNT = 823;
-
-    /**
-     * 暂无数据
-     */
-    public static final int RESPONSES_CODE_NO_CONTENT = 824;
-
-    /**
-     * {"code":"393","info":"分页为空"}
-     */
-    public static final int LIMIT_CONTENT_EMPTY = 393;
-
-    /***
-     * 回复工作汇报一系列
-     ***/
-    public static final int REPORT_ID_CANT_NULL      = 604;
-    public static final int YOU_HAVE_NOT_REPORT      = 703;
-    public static final int you_hava_reply_report    = 704;
-    public static final int report_content_cant_null = 705;
-
-    /***
-     * 找回密码
-     ***/
-    public static final int SEND_FAILD_TRY_AGIN = 631;
-
-    //审批驳回失败
-    public static final int REJECT_FAIL = 373;
 
     //*****************************************************************//
     /**
@@ -122,19 +23,9 @@ public class Api {
     public static final String LOGIN = "site/login";
 
     /**
-     * 获取通讯录接口1
-     */
-    //public static final String GET_CONTACTS = "phonebook/list";
-
-    /**
      * 获取通讯录接口2
      */
     public static final String GET_CONTACTS = "organization/queryOrgAndUser";
-
-//    /**
-//     * 搜索联系人
-//     */
-//    public static final String PHONEBOOK_SEARCHPHONEBOOK = "phonebook/searchphonebook";
 
     /**
      * 搜索联系人
@@ -209,11 +100,6 @@ public class Api {
      * 工作汇报发送给后台
      */
     public static final String REPORT_SEND_TO_BACKGROUND = "report/add";
-
-    /**
-     * 主界面未读消息URL
-     */
-    public static final String TAB_UN_READ_MSG_COUNT = "message/getunread";
 
     /**
      * 工作汇报上传照片

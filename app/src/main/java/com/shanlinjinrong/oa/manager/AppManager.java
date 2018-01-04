@@ -18,18 +18,15 @@ import android.webkit.WebView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
-import com.github.moduth.blockcanary.BlockCanary;
 import com.hyphenate.easeui.crash.Cockroach;
 import com.mmtrix.agent.android.Mmtrix;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
 import com.shanlinjinrong.oa.ui.base.dagger.component.AppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerAppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.module.AppManagerModule;
 import com.shanlinjinrong.oa.ui.base.dagger.module.KjHttpModule;
-import com.shanlinjinrong.oa.utils.AppBlockCanaryContext;
 import com.shanlinjinrong.oa.utils.ToastManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -56,20 +53,8 @@ import ren.yale.android.cachewebviewlib.CacheWebView;
  */
 
 public class AppManager extends MultiDexApplication {
-    // 共享变量
-    private SelectJoinPeopleActivity.MyJoinHandler joinhandler = null;
 
     private WebView mWebView;
-
-    // set方法
-    public void setJoinhandler(SelectJoinPeopleActivity.MyJoinHandler joinhandler) {
-        this.joinhandler = joinhandler;
-    }
-
-    // get方法
-    public SelectJoinPeopleActivity.MyJoinHandler getJoinhandler() {
-        return joinhandler;
-    }
 
     private static Stack<Activity> activityStack;
     private static AppManager instance;

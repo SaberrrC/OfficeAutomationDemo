@@ -5,6 +5,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.retrofit.net.ApiConstant;
 import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
@@ -28,7 +29,7 @@ public class SearchUserResultAdapter extends BaseMultiItemQuickAdapter<User> {
         switch (baseViewHolder.getItemViewType()) {
             case 100:
                 CircleImageView portrait = baseViewHolder.getView(R.id.portrait);
-                String portraits =user.getPortraits();
+                String portraits = ApiConstant.SLPicBaseUrl + user.getPortraits();
                 Glide.with(AppManager.mContext)
                         .load(portraits)
                         .dontAnimate()

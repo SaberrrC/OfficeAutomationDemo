@@ -124,7 +124,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
         String url = reportType == 1 ? ApiJava.REJECT_DAILY_REPORT : ApiJava.REJECT_WEEK_REPORT;
         url += dailyId;
         mKjHttp.cleanCache();
-        mKjHttp.jsonGet(url, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(url, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

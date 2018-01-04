@@ -27,6 +27,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.retrofit.net.ApiConstant;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
@@ -290,7 +291,7 @@ public class EaseNotifier {
                                 httpParams.putHeaders("uid", uid);
                                 httpParams.put("codeList", userCode);
                                 //TODO 生产
-                                kjHttp.post(EaseConstant.PHP_URL + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
+                                kjHttp.post(ApiConstant.JAVA_TEST_HOST+ EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
 
                                     @Override
                                     public void onFailure(int errorNo, String strMsg) {

@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.retrofit.net.ApiConstant;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hyphenate.EMConnectionListener;
@@ -387,7 +388,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                             httpParams.putHeaders("uid", uid);
                             httpParams.put("codeList", userCode);
                             //TODO 生产
-                            kjHttp.post(EaseConstant.PHP_URL + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
+                            kjHttp.post(ApiConstant.JAVA_TEST_HOST + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
                                 private UserInfoDetailsBean userDetailsBean;
                                 @Override
                                 public void onFailure(int errorNo, String strMsg) {

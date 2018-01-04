@@ -228,16 +228,7 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
 
     @Override
     public void loadDataFailed(int errorNo, String strMsg) {
-        String info = "";
-        switch (errorNo) {
-            case Api.RESPONSES_CODE_NO_NETWORK:
-                info = "请确认是否已连接网络！";
-                break;
-            case Api.RESPONSES_CODE_NO_RESPONSE:
-                info = "网络不稳定，请重试！";
-                break;
-        }
-        showEmptyView(mRlRecyclerViewContainer, info, 0, false);
+        showEmptyView(mRlRecyclerViewContainer, "网络不稳定，请重试！", 0, false);
     }
 
     @Override
@@ -251,7 +242,7 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
     }
 
     @Override
-    public void loadDataTokenNoMatch(int code) {
+    public void loadDataTokenNoMatch(String code) {
         catchWarningByCode(code);
     }
 

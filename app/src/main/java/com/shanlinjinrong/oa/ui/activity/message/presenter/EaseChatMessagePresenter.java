@@ -26,7 +26,7 @@ public class EaseChatMessagePresenter extends HttpPresenter<EaseChatMessageContr
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         httpParams.put("codeList", code);
-        mKjHttp.jsonGet(Api.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
+        mKjHttp.get(Api.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

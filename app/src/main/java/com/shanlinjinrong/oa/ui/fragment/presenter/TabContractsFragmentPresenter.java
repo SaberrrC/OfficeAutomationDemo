@@ -25,6 +25,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+
+//TODO TOKEN 失效
 public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFragmentContract.View> implements TabContractsFragmentContract.Presenter {
     @Inject
     public TabContractsFragmentPresenter(MyKjHttp mKjHttp) {
@@ -33,7 +35,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
 
     @Override
     public void autoSearch(String name) {
-        mKjHttp.jsonGet(Api.PHONEBOOK_SEARCHPHONEBOOK + "?name=" + name, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(Api.PHONEBOOK_SEARCHPHONEBOOK + "?name=" + name, new HttpParams(), new HttpCallBack() {
 
             @Override
             public void onFinish() {
@@ -73,9 +75,6 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                         }
                         if (mView != null)
                             mView.autoSearchSuccess(users);
-                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-//                        if (mView != null)
-//                            mView.uidNull(Api.getCode(jo));
                     } else {
                         if (mView != null)
                             mView.autoSearchOther(Api.getInfo(jo));
@@ -95,7 +94,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
 
     @Override
     public void loadData(String orgId) {
-        mKjHttp.jsonGet(Api.GET_CONTACTS + "?orgId=" + orgId, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(Api.GET_CONTACTS + "?orgId=" + orgId, new HttpParams(), new HttpCallBack() {
 
             @Override
             public void onPreStart() {

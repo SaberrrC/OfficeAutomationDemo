@@ -52,7 +52,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
         if (!TextUtils.isEmpty(time)) {
             stringBuilder.append("&" + "time=" + time);
         }
-        mKjHttp.jsonGet(stringBuilder.toString(), httpParams, new HttpCallBack() {
+        mKjHttp.get(stringBuilder.toString(), httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -124,7 +124,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
         if (!TextUtils.isEmpty(userName)) {
             stringBuilder.append("&" + "userName=" + userName);
         }
-        mKjHttp.jsonGet(stringBuilder.toString(), httpParams, new HttpCallBack() {
+        mKjHttp.get(stringBuilder.toString(), httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -180,7 +180,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
         String json = new Gson().toJson(list);
         HttpParams httpParams = new HttpParams();
         httpParams.putJsonParams(json);
-        mKjHttp.jsonPost(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
+        mKjHttp.post(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);

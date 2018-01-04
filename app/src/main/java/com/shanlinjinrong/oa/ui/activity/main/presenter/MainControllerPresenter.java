@@ -51,16 +51,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("权限开启");
                 builder.setMessage("更新功能无法正常使用，去权限列表开启该权限");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mView.startAppSetting();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
+                builder.setPositiveButton("确定", (dialog, which) -> mView.startAppSetting()).setNegativeButton("取消", (dialog, which) -> {
                 }).show();
             } else {//
                 SharedPreferenceUtils.setShouldAskPermission(context, "firstshould", ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.WRITE_EXTERNAL_STORAGE));
@@ -73,34 +64,6 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
             PgyUpdateManager.register(context, "com.shanlinjinrong.oa.fileprovider");
         }
     }
-
-    public void loadUnReadMsg() {
-        mKjHttp.post(Api.TAB_UN_READ_MSG_COUNT, new HttpParams(), new HttpCallBack() {
-            @Override
-            public void onSuccess(String t) {
-                LogUtils.e("unread : " + t);
-                super.onSuccess(t);
-                try {
-                    JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            JSONObject jsonObject = Api.getDataToJSONObject(jo);
-                            String num = jsonObject.getString("num");
-                            mView.loadUnReadMsgOk(num);
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            mView.loadUnReadMsgEmpty();
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-//                            mView.uidNull(Api.getCode(jo));
-                            break;
-                    }
-                } catch (Exception e) {
-                }
-            }
-        });
-    }
-
     List<Pair<Long, EMConversation>> sortList = new ArrayList<>();
     List<EMConversation>             list     = new ArrayList<>();
 

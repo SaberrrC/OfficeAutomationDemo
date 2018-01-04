@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.AllReportAdapter;
@@ -158,7 +159,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
 
     @Override
     public void uidNull(String code) {
-        catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+        catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
     }
 
     @Override
@@ -185,7 +186,7 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         mRefreshLayout.setVisibility(View.VISIBLE);
         if (errCode.equals("-1")) {
             if (errMsg.equals("auth error")) {
-                catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+                catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
             } else {
                 showToast(getString(R.string.net_no_connection));
             }

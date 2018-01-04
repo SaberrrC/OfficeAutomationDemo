@@ -35,7 +35,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
         mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
         // TODO: 2017/8/28 新给的接口没有分组信息
-        mKjHttp.jsonGet(ApiJava.SAME_ORGANIZATION + "?username=" + searchName + "&PAGE_SIZE=" + Integer.MAX_VALUE, params, new HttpCallBack() {
+        mKjHttp.get(ApiJava.SAME_ORGANIZATION + "?username=" + searchName + "&PAGE_SIZE=" + Integer.MAX_VALUE, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -173,7 +173,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
     public void loadRequestData() {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(ApiJava.HANDOVERUSER, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.HANDOVERUSER, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

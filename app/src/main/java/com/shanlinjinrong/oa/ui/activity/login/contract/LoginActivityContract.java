@@ -17,8 +17,6 @@ public interface LoginActivityContract {
 
         void loginSuccess(UserInfo.DataBean user); // 登录成功
 
-        void loginFailed(int errorCode); // 登录失败
-
         void loginFailed(String errorCode); // 登录失败
 
         void loginOtherError(); // 登录出现的其他错误

@@ -321,21 +321,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         LoginUtils.loginIm(AppManager.mContext, null);
     }
 
-
-    public void refreshCommCount() {
-        //new Thread(() -> {
-        //                try {
-        //mPresenter.loadConversationList();
-        //                } catch (Exception e) {
-        //                    LogUtils.e("加载环信抛异常了");
-        //                }
-        //}).start();
-    }
-
-    public void refreshUnReadMsgCount() {
-        new Thread(() -> mPresenter.loadUnReadMsg()).start();
-    }
-
     @Override
     public void loadUnReadMsgOk(String num) {
         tvMsgUnRead.setVisibility(View.VISIBLE);

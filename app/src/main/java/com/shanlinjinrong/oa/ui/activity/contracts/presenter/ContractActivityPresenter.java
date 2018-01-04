@@ -25,6 +25,8 @@ import javax.inject.Inject;
 /**
  * Created by 丁 on 2017/8/21.
  */
+
+//todo 数据 空 token
 public class ContractActivityPresenter extends HttpPresenter<ContractActivityContract.View> implements ContractActivityContract.Presenter {
 
     @Inject
@@ -36,7 +38,7 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
     public void loadData(String departmentId) {
         HttpParams params = new HttpParams();
 //        params.put("id", 1001);
-        mKjHttp.jsonGet(Api.GET_CONTACTS + "?id=" + departmentId, params, new HttpCallBack() {
+        mKjHttp.get(Api.GET_CONTACTS + "?id=" + departmentId, params, new HttpCallBack() {
             @Override
             public void onFinish() {
                 super.onFinish();
@@ -95,18 +97,6 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
                             }
                             if (mView != null)
                                 mView.loadDataSuccess(items);
-                            break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            if (mView != null)
-                                mView.loadDataEmpty();
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            if (mView != null)
-                                mView.loadDataTokenNoMatch(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-//                            if (mView != null)
-//                                mView.uidNull(Api.getCode(jo));
                             break;
                     }
                 } catch (JSONException e) {

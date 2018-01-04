@@ -30,7 +30,7 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
     @Override
     public void loadDailyData(int dailyid) {
         String url = ApiJava.DAILY_REPORT + "/" + dailyid;
-        mKjHttp.jsonGet(url, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(url, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
