@@ -114,8 +114,8 @@ public class EaseConversationListFragment extends EaseBaseFragment {
 
     @Override
     protected void setUpView() {
-//        conversationList.addAll(loadConversationList());
-//        conversationListView.init(conversationList);
+        //        conversationList.addAll(loadConversationList());
+        //        conversationListView.init(conversationList);
         loadConversationList();
         conversationListView.init(conversationList);
         if (listItemClickListener != null) {
@@ -259,7 +259,6 @@ public class EaseConversationListFragment extends EaseBaseFragment {
         }
     }
 
-
     /**
      * load conversation list
      *
@@ -399,9 +398,10 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 @Override
                                 public void onSuccess(String t) {
                                     super.onSuccess(t);
-                                    final UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
-                                    if (userDetailsBean != null) {
-                                        try {
+                                    try {
+                                        final UserDetailsBean userDetailsBean = new Gson().fromJson(t, UserDetailsBean.class);
+                                        if (userDetailsBean != null) {
+
                                             switch (userDetailsBean.getCode()) {
                                                 case 200:
                                                     Observable.create(new Observable.OnSubscribe<Object>() {
@@ -413,43 +413,41 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                                                 handler.sendEmptyMessage(MSG_REFRESH);
                                                             }
                                                         }
-                                                    }).subscribeOn(Schedulers.io())
-                                                            .subscribe(new Action1<Object>() {
-                                                                @Override
-                                                                public void call(Object o) {
+                                                    }).subscribeOn(Schedulers.io()).subscribe(new Action1<Object>() {
+                                                        @Override
+                                                        public void call(Object o) {
 
-                                                                }
-                                                            }, new Action1<Throwable>() {
-                                                                @Override
-                                                                public void call(Throwable throwable) {
-                                                                    throwable.printStackTrace();
-                                                                }
-                                                            });
+                                                        }
+                                                    }, new Action1<Throwable>() {
+                                                        @Override
+                                                        public void call(Throwable throwable) {
+                                                            throwable.printStackTrace();
+                                                        }
+                                                    });
                                                     break;
                                                 default:
                                                     break;
                                             }
-                                        } catch (Throwable e) {
-                                            e.printStackTrace();
+
                                         }
+                                    } catch (Throwable e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             });
                         }
                     }
                 }
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<Object>() {
-                        @Override
-                        public void call(Object o) {
-                        }
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            throwable.printStackTrace();
-                        }
-                    });
+            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Object>() {
+                @Override
+                public void call(Object o) {
+                }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            });
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -498,17 +496,18 @@ public class EaseConversationListFragment extends EaseBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if (!hidden) {
-//            refresh();
-//        }
-//        conversationList.clear();
-//        conversationList.addAll(loadConversationList());
-//        conversationListView.refresh();
+        //        if (!hidden) {
+        //            refresh();
+        //        }
+        //        conversationList.clear();
+        //        conversationList.addAll(loadConversationList());
+        //        conversationListView.refresh();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mContext = null;
         EMClient.getInstance().removeConnectionListener(connectionListener);
     }
 

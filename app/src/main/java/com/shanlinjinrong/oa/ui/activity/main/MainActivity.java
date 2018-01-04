@@ -57,7 +57,6 @@ import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
-import com.shanlinjinrong.oa.utils.LoginUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -300,7 +299,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     public void LoginIm() {
         //注册一个监听连接状态的listener
         EMClient.getInstance().addConnectionListener(new MyConnectionListener());
-        LoginUtils.loginIm(AppManager.mContext, null);
     }
 
 
