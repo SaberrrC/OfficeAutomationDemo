@@ -95,9 +95,9 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     private void initView() {
         userPwd.setOnKeyListener(this);
-        mCbAutoLogin.setChecked(AppConfig.getAppConfig(LoginActivity.this).get(AppConfig.PREF_KEY_PASSWORD_FLAG, false));
-        AppConfig.getAppConfig(LoginActivity.this).setAutoLogin(true);
         try {
+            mCbAutoLogin.setChecked(AppConfig.getAppConfig(LoginActivity.this).get(AppConfig.PREF_KEY_PASSWORD_FLAG, false));
+            AppConfig.getAppConfig(LoginActivity.this).setAutoLogin(true);
             userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
         } catch (Exception e) {
             e.printStackTrace();
