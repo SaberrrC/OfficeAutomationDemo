@@ -105,6 +105,7 @@
     <application
         android:name=".manager.AppManager"
         android:allowBackup="false"
+        tools:replace="android:allowBackup"
         android:icon="@mipmap/oa_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
