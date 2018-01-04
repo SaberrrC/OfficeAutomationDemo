@@ -29,7 +29,7 @@ public class SearchUserResultAdapter extends BaseMultiItemQuickAdapter<User> {
         switch (baseViewHolder.getItemViewType()) {
             case 100:
                 CircleImageView portrait = baseViewHolder.getView(R.id.portrait);
-                String portraits = ApiConstant.SLPicBaseUrl + user.getPortraits();
+                String portraits = ApiConstant.BASE_PIC_URL + user.getPortraits();
                 Glide.with(AppManager.mContext)
                         .load(portraits)
                         .dontAnimate()
@@ -40,6 +40,8 @@ public class SearchUserResultAdapter extends BaseMultiItemQuickAdapter<User> {
 
                 baseViewHolder.setText(R.id.user_name, user.getUsername())
                         .setText(R.id.user_post_name, user.getPostName());
+                break;
+            default:
                 break;
         }
     }

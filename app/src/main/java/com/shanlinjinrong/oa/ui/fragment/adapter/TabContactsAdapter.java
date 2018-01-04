@@ -36,7 +36,7 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
             case Contacts.DEPARTMENT:
                 if (contacts.getItemType() == Contacts.DEPARTMENT) {
                     String departmentPersons = contacts.getDepartmentPersons();
-                    if (departmentPersons.equals("-")) {
+                    if ("-".equals(departmentPersons)) {
                         departmentPersons = "";
                     }
                     helper.setText(R.id.name, contacts.getDepartmentName())
@@ -45,10 +45,10 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
                 break;
             case Contacts.EMPLOYEE:
                 CircleImageView portrait = helper.getView(R.id.portrait);
-                String portraits = ApiConstant.SLPicBaseUrl +  contacts.getPortraits();
-                if (!TextUtils.isEmpty(portraits) || !portraits.equals("http://") || !portraits.equals("http://null")) {
+                String portraits = contacts.getPortraits();
+                if (!TextUtils.isEmpty(portraits) || !"".equals(portraits) || !"null".equals(portraits)) {
                     Glide.with(AppManager.mContext)
-                            .load(portraits)
+                            .load(ApiConstant.BASE_PIC_URL + portraits)
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .error(R.drawable.ease_user_portraits)
@@ -60,6 +60,8 @@ public class TabContactsAdapter extends BaseMultiItemQuickAdapter<Contacts> {
 
                 helper.setText(R.id.user_name, contacts.getUsername())
                         .setText(R.id.user_post_name, contacts.getPostTitle());
+                break;
+            default:
                 break;
         }
     }

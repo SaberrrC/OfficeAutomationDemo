@@ -872,7 +872,8 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void onBackPressed() {
-        if (mFunction == FUNCTION_COMMIT && (!"未填写".equals(mData.get(0).getState()) || !"未填写".equals(mNextData.get(0).getState()))) {
+        boolean isFunction = mFunction == FUNCTION_COMMIT && (!"未填写".equals(mData.get(0).getState()) || !"未填写".equals(mNextData.get(0).getState()));
+        if (isFunction) {
             showBackTip("是否放弃编辑", "确定", "取消");
         } else {
             finish();

@@ -57,7 +57,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     public static final int REQUEST_CODE_MULTIPLE = 1;//多选，接收人
 
     public static final int WRITE_REPORT_OK = 100;//填写日报
-    public static final int SELECT_OK       = 101;//选择成功，requestcode
+    public static final int SELECT_OK = 101;//选择成功，requestcode
 
 
     @BindView(R.id.work_report_list)
@@ -88,11 +88,11 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
     private DatePicker picker;
 
-    private String                      currentDate;//当前年月日
+    private String currentDate;//当前年月日
     private WorkReportLaunchListAdapter mWorkReportListAdapter;
-    private String                      mReceiverId; //接收人ID
-    private String                      mReceiverName; //接收人名称
-    private String                      mReceiverPost; //接收人ID
+    private String mReceiverId; //接收人ID
+    private String mReceiverName; //接收人名称
+    private String mReceiverPost; //接收人ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -571,6 +571,13 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
     @Override
     public void onBackPressed() {
-        showBackTip("是否放弃编辑", "确定", "取消");
+        for (int i = 0; i < mWorkReportListData.size(); i++) {
+            boolean isFunction = "已填写".equals(mWorkReportListData.get(i).getContent()) || "待完善".equals(mWorkReportListData.get(i).getContent()) || !"".equals(mTomorrowPlan.getText().toString().trim()) || (!"".equals(mWorkReportListData.get(i).getContent()) && 1 == mWorkReportListData.get(i).getType());
+            if (isFunction) {
+                showBackTip("是否放弃编辑", "确定", "取消");
+                return;
+            }
+        }
+        finish();
     }
 }
