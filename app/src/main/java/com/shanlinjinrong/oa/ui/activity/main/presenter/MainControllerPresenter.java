@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.util.Pair;
 
@@ -13,7 +12,6 @@ import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.pgyersdk.update.PgyUpdateManager;
-
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
@@ -69,8 +67,8 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
             }
 
         } else {
-            //            PgyUpdateManager.setIsForced(true);
-            PgyUpdateManager.register(context, "com.shanlinjinrong.oa.fileprovider");
+            PgyUpdateManager.setIsForced(true);
+            PgyUpdateManager.register(context);
         }
     }
 

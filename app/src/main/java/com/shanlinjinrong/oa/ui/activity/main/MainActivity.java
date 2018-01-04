@@ -3,20 +3,15 @@ package com.shanlinjinrong.oa.ui.activity.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AppOpsManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
-import android.os.Binder;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -33,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retrofit.net.RetrofitConfig;
-import com.facebook.stetho.common.LogUtil;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
@@ -70,7 +64,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -81,7 +74,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
-import ezy.assist.compat.SettingsCompat;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -540,10 +532,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     protected void onResume() {
         super.onResume();
         judeIsInitPwd();
-        Observable.create(e ->
-                EMClient.getInstance().chatManager()
-                        .addMessageListener(messageListener))
-                .subscribeOn(Schedulers.io()).subscribe();
+        Observable.create(e -> EMClient.getInstance().chatManager().addMessageListener(messageListener)).subscribeOn(Schedulers.io()).subscribe();
         if (tabCommunicationFragment != null) {
             if (tabCommunicationFragment.myConversationListFragment != null) {
                 tabCommunicationFragment.myConversationListFragment.refresh();
@@ -613,29 +602,26 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
         Observable.create(e -> {
-            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
-                    userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(), userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
+            FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends("sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(), userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(), userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
             e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {
-                }, Throwable::printStackTrace, () -> {
-                    if (tabCommunicationFragment != null) {
-                        if (tabCommunicationFragment.myConversationListFragment != null) {
-                            tabCommunicationFragment.myConversationListFragment.refresh();
-                            tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
-                        }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
+        }, Throwable::printStackTrace, () -> {
+            if (tabCommunicationFragment != null) {
+                if (tabCommunicationFragment.myConversationListFragment != null) {
+                    tabCommunicationFragment.myConversationListFragment.refresh();
+                    tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
+                }
+            }
+            if (mEMMessage != null) {
+                for (EMMessage message : mEMMessage) {
+                    if (!easeUI.hasForegroundActivies()) {
+                        easeUI.getNotifier().onNewMsg(message);
                     }
-                    if (mEMMessage != null) {
-                        for (EMMessage message : mEMMessage) {
-                            if (!easeUI.hasForegroundActivies()) {
-                                easeUI.getNotifier().onNewMsg(message);
-                            }
-                        }
-                    }
-                    refreshCommCount();
-                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
-                });
+                }
+            }
+            refreshCommCount();
+            EventBus.getDefault().post(new OnMessagesRefreshEvent());
+        });
     }
 
     //开启权限列表
@@ -651,26 +637,24 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         Observable.create(e -> {
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends("sl_" + userCode, "匿名用户", ""));
             e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {
-                }, Throwable::printStackTrace, () -> {
-                    if (tabCommunicationFragment != null) {
-                        if (tabCommunicationFragment.myConversationListFragment != null) {
-                            tabCommunicationFragment.myConversationListFragment.refresh();
-                            tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
-                        }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
+        }, Throwable::printStackTrace, () -> {
+            if (tabCommunicationFragment != null) {
+                if (tabCommunicationFragment.myConversationListFragment != null) {
+                    tabCommunicationFragment.myConversationListFragment.refresh();
+                    tabCommunicationFragment.myConversationListFragment.conversationListView.refresh();
+                }
+            }
+            if (mEMMessage != null) {
+                for (EMMessage message : mEMMessage) {
+                    if (!easeUI.hasForegroundActivies()) {
+                        easeUI.getNotifier().onNewMsg(message);
                     }
-                    if (mEMMessage != null) {
-                        for (EMMessage message : mEMMessage) {
-                            if (!easeUI.hasForegroundActivies()) {
-                                easeUI.getNotifier().onNewMsg(message);
-                            }
-                        }
-                    }
-                    refreshCommCount();
-                    EventBus.getDefault().post(new OnMessagesRefreshEvent());
-                });
+                }
+            }
+            refreshCommCount();
+            EventBus.getDefault().post(new OnMessagesRefreshEvent());
+        });
     }
 
     //位置权限回调
@@ -681,7 +665,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
             case 100:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     try {
-                        PgyUpdateManager.register(new WeakReference<Activity>(this).get(), "com.shanlinjinrong.oa.fileprovider");
+                        PgyUpdateManager.register(new WeakReference<Activity>(this).get());
                     } catch (Throwable e) {
                         e.printStackTrace();
                     }
