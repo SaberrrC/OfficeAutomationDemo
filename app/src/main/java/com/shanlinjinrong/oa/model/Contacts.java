@@ -1,8 +1,6 @@
 package com.shanlinjinrong.oa.model;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.mmtrix.gson.annotations.SerializedName;
-import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.LogUtils;
