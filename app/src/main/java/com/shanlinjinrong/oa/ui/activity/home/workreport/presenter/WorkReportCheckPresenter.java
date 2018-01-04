@@ -105,6 +105,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 if (mView != null) {
+                    mView.uidNull(strMsg);
                     mView.loadDataFailed(errorNo, strMsg);
                 }
             }
@@ -161,6 +162,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 if (mView != null) {
+                    mView.uidNull(strMsg);
                     mView.rejectReportFailed(errorNo, strMsg);
                 }
             }

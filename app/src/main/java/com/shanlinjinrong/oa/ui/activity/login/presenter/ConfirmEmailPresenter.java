@@ -71,6 +71,7 @@ public class ConfirmEmailPresenter extends HttpPresenter<ConfirmEmailContract.Vi
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.hideLoading();
                         mView.sendEmailFailed(errorNo, strMsg);
                     }

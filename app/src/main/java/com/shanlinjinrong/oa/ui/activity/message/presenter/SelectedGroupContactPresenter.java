@@ -115,8 +115,10 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.QueryGroupContactFailed(errorNo, strMsg);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -205,8 +207,10 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.QueryGroupContactFailed(errorNo, strMsg);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -317,6 +321,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.searchContactFailed(errorNo, strMsg);
                     }
                 } catch (Throwable e) {
@@ -393,8 +398,10 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.QueryGroupContactFailed(errorNo, strMsg);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -493,6 +500,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.searchContactFailed(errorNo, strMsg);
                     }
                 } catch (Throwable e) {

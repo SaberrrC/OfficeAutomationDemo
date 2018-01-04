@@ -64,21 +64,28 @@ import static com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunch
  * 发起周报
  */
 public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNewspaperActivityPresenter> implements WriteWeeklyNewspaperActivityContract.View {
-    //标题栏右侧按键的功能  0：提交周报  1：编辑更新周报 2：审核周报
+    /**
+     * 0：提交周报  1：编辑更新周报 2：审核周报
+     */
     public static int FUNCTION_COMMIT = 0;
     public static int FUNCTION_EDIT = 1;
     public static int FUNCTION_EVALUATION = 2;
+
     @BindView(R.id.top_view)
     CommonTopView mTopView;
+
     @BindView(R.id.tv_date)
     AutoResizeTextView mTvDate;
-    //  TextView mTvDate;
+
     @BindView(R.id.rv_work_content)
     AllRecyclerView mRvWorkContent;
+
     @BindView(R.id.ll_next_work_content)
     LinearLayout mLlNextWorkContent;
+
     @BindView(R.id.rv_next_work_content)
     AllRecyclerView mRvNextWorkContent;
+
     @BindView(R.id.tv_receiver)
     TextView mTvReceiver;
 
@@ -89,19 +96,19 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     TextView mAddNextWeekWorkBtn;
 
     @BindView(R.id.ll_week_report_evaluation)
-    LinearLayout mLlWeekEvaluation;//评价栏
+    LinearLayout mLlWeekEvaluation;
 
     @BindView(R.id.rl_report_date)
-    RelativeLayout mRlReportDateEva; //评价
+    RelativeLayout mRlReportDateEva;
 
     @BindView(R.id.ll_select_date)
-    RelativeLayout mSelectDate; //提交
+    RelativeLayout mSelectDate;
 
     @BindView(R.id.tv_report_date)
-    TextView mTvDateEva;//评价
+    TextView mTvDateEva;
 
     @BindView(R.id.et_work_report_evaluation)
-    EditText mEtWorkReportEvaluation;//评价
+    EditText mEtWorkReportEvaluation;
 
     @BindView(R.id.ll_select_receiver)
     RelativeLayout mSelectReceiver;
@@ -112,26 +119,39 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     private DatePicker picker;
     private int workPlanIndex;
     private int workContentIndex;
-    private String mCurrentDate;//当前年月日
+    private String mCurrentDate;
     private List<String> beginTimeList;
     private ThisWeekWorkContentAdapter mAdapter;
     private NextWeekWorkContentAdapter mNextAdapter;
     private WorkContentBean mWorkContentBean;
     private List<WorkContentBean> mData = new ArrayList<>();
     private List<WorkContentBean> mNextData = new ArrayList<>();
-    private SharedPreferences mSharedPreferences; //记录每个账号的填写情况
+    /**
+     * 记录每个账号的填写情况
+     */
+    private SharedPreferences mSharedPreferences;
     private OptionsPickerView beginTimeView;
 
-    private String mReceiverId; //接收人ID
-    private String mReceiverName; //接收人名称
-    private String mReceiverPost; //接收人ID
+    /**
+     * 接收人ID
+     */
+    private String mReceiverId;
+
+    /**
+     * 接收人名称
+     */
+    private String mReceiverName;
+
+    /**
+     * 接收人ID
+     */
+    private String mReceiverPost;
 
     private String mUserName;
     private boolean hasEvaluation = false;
     private int mDailyId;
 
-
-    private int mFunction = FUNCTION_COMMIT;//标题栏右侧按键的功能  0：提交周报  1：编辑更新周报 2：审核周报
+    private int mFunction = FUNCTION_COMMIT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

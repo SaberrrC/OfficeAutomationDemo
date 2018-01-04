@@ -140,9 +140,9 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.queryEvectionTypeFailure(errorNo, strMsg);
-                        if (mView != null)
-                            mView.requestFinish();
+                        mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -200,9 +200,9 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.queryEvectionTypeFailure(errorNo, strMsg);
-                        if (mView != null)
-                            mView.requestFinish();
+                        mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -259,9 +259,9 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.submitEvectionApplyFailure(errorNo, strMsg);
-                        if (mView != null)
-                            mView.requestFinish();
+                        mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -372,9 +372,9 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.addWorkApplyFailure(errorNo, strMsg);
-                        if (mView != null)
-                            mView.requestFinish();
+                        mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -482,9 +482,9 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.submitFurloughFailure(errorNo, strMsg);
-                        if (mView != null)
-                            mView.requestFinish();
+                        mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -518,12 +518,14 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-//                            if (mView != null)
-//                                mView.uidNull(0);
+                            if (mView != null) {
+                                mView.uidNull(singReasonBean.getCode());
+                            }
                             break;
                         default:
-                            if (mView != null)
+                            if (mView != null) {
                                 mView.findSignReasonFailure(Integer.parseInt(singReasonBean.getCode()), singReasonBean.getMessage());
+                            }
                             break;
                     }
                 } catch (Throwable e) {
@@ -535,10 +537,11 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.findSignReasonFailure(errorNo, strMsg);
-                    if (mView != null)
                         mView.requestFinish();
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -547,8 +550,9 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
             @Override
             public void onFinish() {
                 super.onFinish();
-                if (mView != null)
+                if (mView != null) {
                     mView.requestFinish();
+                }
             }
         });
 
@@ -596,9 +600,9 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.registrationCardFailure(errorNo, strMsg);
-                        if (mView != null)
-                            mView.requestFinish();
+                        mView.requestFinish();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();

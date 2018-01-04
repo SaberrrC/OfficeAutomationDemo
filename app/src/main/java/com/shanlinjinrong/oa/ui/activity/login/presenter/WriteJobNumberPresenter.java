@@ -54,8 +54,9 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
-                        mView.getIdentifyingCodeFailed(errorNo);
+                    if (mView != null){
+                        mView.uidNull(strMsg);
+                        mView.getIdentifyingCodeFailed(errorNo);}
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -120,6 +121,7 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.hideLoading();
                         mView.searchUserFailed(errorNo, strMsg);
                     }

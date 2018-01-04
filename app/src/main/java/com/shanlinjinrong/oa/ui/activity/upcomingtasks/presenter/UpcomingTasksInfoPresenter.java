@@ -69,6 +69,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 super.onFailure(errorNo, strMsg);
                 try {
                      if (mView != null) {
+                         mView.uidNull(strMsg);
                          mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
                      }
                 } catch (Exception e) {
@@ -94,6 +95,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                     super.onFailure(errorNo, strMsg);
                     try {
                          if (mView != null) {
+                             mView.uidNull(strMsg);
                              mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
                          }
                     } catch (Exception e) {
@@ -137,6 +139,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 super.onFailure(errorNo, strMsg);
                 try {
                      if (mView != null) {
+                         mView.uidNull(strMsg);
                          mView.onApproveFailure(errorNo, strMsg);
                      }
                 } catch (Exception e) {
@@ -178,6 +181,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                     super.onFailure(errorNo, strMsg);
                     try {
                          if (mView != null) {
+                             mView.uidNull(strMsg);
                              mView.onDeleteFailure(String.valueOf(errorNo), strMsg);
                          }
                     } catch (Exception e) {

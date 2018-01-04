@@ -58,12 +58,12 @@ import cn.jpush.android.api.TagAliasCallback;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    private AlertDialog       loadingDialog;
+    private AlertDialog loadingDialog;
     private CustomDialogUtils mDialog;
-    private TextView          msg;
-    private KJHttp            kjHttp;
-    private Toast             toast;
-    private View              empty;
+    private TextView msg;
+    private KJHttp kjHttp;
+    private Toast toast;
+    private View empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,11 +131,17 @@ public class BaseActivity extends AppCompatActivity {
                 AppConfig.getAppConfig(this).clearLoginInfo();
                 NonTokenDialog();
                 break;
+            case ApiJava.AUTH_ERROR:
+                AppConfig.getAppConfig(this).clearLoginInfo();
+                NonTokenDialog();
+                break;
+            default:
+                break;
         }
     }
 
     private void gotoLoginPage() {
-//        showToast("您的帐号已在其他设备上登录，请您及时查验！");
+        //showToast("您的帐号已在其他设备上登录，请您及时查验！");
         JPushInterface.setAlias(this, null, null);
         JPushInterface.setTags(this, null, null);
         if (EMClient.getInstance().isConnected()) {

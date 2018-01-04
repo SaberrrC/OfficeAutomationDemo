@@ -40,7 +40,7 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
             public void onFinish() {
                 super.onFinish();
                 try {
-                    if (mView != null){
+                    if (mView != null) {
                         mView.loadDataFinish();
                     }
                 } catch (Throwable e) {
@@ -105,8 +105,10 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.loadDataFailed(errorNo, strMsg);
+                    }
                     super.onFailure(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();

@@ -28,8 +28,10 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.modificationEmailFailed(errorNo, strMsg);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

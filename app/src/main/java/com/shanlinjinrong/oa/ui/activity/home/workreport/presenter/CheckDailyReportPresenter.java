@@ -63,7 +63,12 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.loadDataFailed("" + errorNo, strMsg);
+                try {
+                    mView.uidNull(strMsg);
+                    mView.loadDataFailed("" + errorNo, strMsg);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
             }
 
             @Override
@@ -77,7 +82,7 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
     @Override
     public void commitDailyEvaluation(HttpParams params) {
         mKjHttp.cleanCache();
-        mKjHttp.jsonPut(ApiJava.DAILY_REPORT, params, true,new HttpCallBack() {
+        mKjHttp.jsonPut(ApiJava.DAILY_REPORT, params, true, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -105,7 +110,12 @@ public class CheckDailyReportPresenter extends HttpPresenter<CheckDailyReportCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.commitFailed("" + errorNo, strMsg);
+                try {
+                    mView.uidNull(strMsg);
+                    mView.commitFailed("" + errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

@@ -98,6 +98,11 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                try{
+                    mView.uidNull(strMsg);
+                }catch (Throwable e){
+                    e.printStackTrace();
+                }
             }
 
             @Override

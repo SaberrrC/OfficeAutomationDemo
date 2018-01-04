@@ -1,7 +1,5 @@
 package com.shanlinjinrong.oa.ui.fragment.presenter;
 
-import android.util.Log;
-
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
@@ -24,7 +22,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 
-//TODO TOKEN 失效
 public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFragmentContract.View> implements TabContractsFragmentContract.Presenter {
     @Inject
     public TabContractsFragmentPresenter(MyKjHttp mKjHttp) {
@@ -54,28 +51,37 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                 List<User> users = new ArrayList<>();
                 try {
                     JSONObject jo = new JSONObject(t);
-                    if (jo.getString("code").equals("000000")) {
-                        JSONArray jDepartment = jo.getJSONArray("data");
-                        for (int i = 0; i < jDepartment.length(); i++) {
-                            JSONObject jsonObject = jDepartment.getJSONObject(i);
-                            Log.e("", "-------" + jsonObject.getString("username") + "----" + jsonObject.getString("department_name"));
-                            User user = new User(jsonObject.getString("username"),
-                                    jsonObject.getString("phone"),
-                                    jsonObject.getString("portraits"),
-                                    jsonObject.getString("sex"),
-                                    jsonObject.getString("post_id"),
-                                    jsonObject.getString("code"),
-                                    jsonObject.getString("department_id"),
-                                    jsonObject.getString("post_title"),
-                                    jsonObject.getString("department_name"),
-                                    jsonObject.getString("email"));
-                            users.add(user);
-                        }
-                        if (mView != null)
-                            mView.autoSearchSuccess(users);
-                    } else {
-                        if (mView != null)
-                            mView.autoSearchOther(ApiJava.getInfo(jo));
+                    String code = jo.getString("code");
+                    switch (code) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            JSONArray jDepartment = jo.getJSONArray("data");
+                            for (int i = 0; i < jDepartment.length(); i++) {
+                                JSONObject jsonObject = jDepartment.getJSONObject(i);
+                                User user = new User(jsonObject.getString("username"),
+                                        jsonObject.getString("phone"),
+                                        jsonObject.getString("portraits"),
+                                        jsonObject.getString("sex"),
+                                        jsonObject.getString("post_id"),
+                                        jsonObject.getString("code"),
+                                        jsonObject.getString("department_id"),
+                                        jsonObject.getString("post_title"),
+                                        jsonObject.getString("department_name"),
+                                        jsonObject.getString("email"));
+                                users.add(user);
+                            }
+                            if (mView != null) {
+                                mView.autoSearchSuccess(users);
+                            }
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(code);
+                            break;
+                        default:
+                            if (mView != null) {
+                                mView.autoSearchOther(ApiJava.getInfo(jo));
+                            }
+                            break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -84,8 +90,11 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
-                LogUtils.e(errorNo + "--" + strMsg);
-                super.onFailure(errorNo, strMsg);
+                try {
+                    mView.uidNull(strMsg);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
             }
         });
     }
@@ -109,37 +118,46 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                 super.onSuccess(t);
                 try {
                     JSONObject jsonObject = new JSONObject(t);
-                    if (jsonObject.getString("code").equals(ApiJava.REQUEST_CODE_OK)) {
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                        JSONArray children = jsonObject1.getJSONArray("children");
-                        JSONArray users = jsonObject1.getJSONArray("users");
+                    String code = jsonObject.getString("code");
+                    switch (code) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                            JSONArray children = jsonObject1.getJSONArray("children");
+                            JSONArray users = jsonObject1.getJSONArray("users");
 
-                        List<Contacts> contacts = new ArrayList<>();
-                        for (int i = 0; i < children.length(); i++) {
-                            JSONObject department = children.getJSONObject(i);
-                            String number = department.getString("memberCount");
-                            if (number.equals("0")) {
-                                continue;
+                            List<Contacts> contacts = new ArrayList<>();
+                            for (int i = 0; i < children.length(); i++) {
+                                JSONObject department = children.getJSONObject(i);
+                                String number = department.getString("memberCount");
+                                if ("0".equals(number)) {
+                                    continue;
+                                }
+                                Contacts contact = new Contacts(department);
+                                contacts.add(contact);
                             }
-                            Contacts contact = new Contacts(department);
-                            contacts.add(contact);
-                        }
 
-                        for (int i = 0; i < users.length(); i++) {
-                            JSONObject user = users.getJSONObject(i);
-                            Contacts userInfo = new Contacts(user);
-                            contacts.add(userInfo);
-                        }
-                        mView.loadDataSuccess(contacts);
-                        if (orgId.equals("1")) {
-                            SharedPreferenceUtils.clear(AppManager.mContext, SharedPreferenceUtils.getStringValue(AppManager.mContext, "cacheDate", "dateName", ""));
-                            SharedPreferenceUtils.putStringValue(AppManager.mContext, "cacheDate", "dateName", DateUtils.getCurrentDate("yyyy-MM-dd"));
-                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", children.toString());
-                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
-                        } else {
-                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children" + orgId, children.toString());
-                            SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
-                        }
+                            for (int i = 0; i < users.length(); i++) {
+                                JSONObject user = users.getJSONObject(i);
+                                Contacts userInfo = new Contacts(user);
+                                contacts.add(userInfo);
+                            }
+                            mView.loadDataSuccess(contacts);
+                            if ("1".equals(orgId)) {
+                                SharedPreferenceUtils.clear(AppManager.mContext, SharedPreferenceUtils.getStringValue(AppManager.mContext, "cacheDate", "dateName", ""));
+                                SharedPreferenceUtils.putStringValue(AppManager.mContext, "cacheDate", "dateName", DateUtils.getCurrentDate("yyyy-MM-dd"));
+                                SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children", children.toString());
+                                SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
+                            } else {
+                                SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children" + orgId, children.toString());
+                                SharedPreferenceUtils.putStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + orgId, users.toString());
+                            }
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            mView.uidNull(code);
+                        default:
+                            break;
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -149,6 +167,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 try {
+                    mView.uidNull(strMsg);
                     mView.loadDataFailed(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();

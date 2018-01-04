@@ -88,6 +88,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.onGetApproveDataFailure(errorNo, strMsg);
                     }
                 } catch (Exception e) {
@@ -165,6 +166,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.onGetApproveDataFailure(errorNo, strMsg);
                     }
                 } catch (Throwable e) {
@@ -186,6 +188,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.onApproveFailure(errorNo, strMsg);
                     }
                 } catch (Exception e) {

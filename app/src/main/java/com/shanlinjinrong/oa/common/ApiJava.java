@@ -33,6 +33,12 @@ public interface ApiJava {
      * token不存在或者用户不存在
      */
     String ERROR_TOKEN = "020005";
+
+    /**
+     * token不存在或者用户不存在
+     */
+    String AUTH_ERROR = "auth error";
+
     /**
      * 上传文件异常
      */

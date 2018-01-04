@@ -63,6 +63,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
+                    mView.uidNull(strMsg);
                     mView.getReportFailed("", "");
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -113,6 +114,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
+                    mView.uidNull(strMsg);
                     mView.updateReportFailed(strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();

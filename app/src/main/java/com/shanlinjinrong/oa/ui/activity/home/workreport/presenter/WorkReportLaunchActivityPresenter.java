@@ -62,8 +62,9 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
-                        mView.reportFailed("" + errorNo, strMsg);
+                    if (mView != null){
+                        mView.uidNull(strMsg);
+                        mView.reportFailed("" + errorNo, strMsg);}
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -115,8 +116,9 @@ public class WorkReportLaunchActivityPresenter extends HttpPresenter<WorkReportL
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
-                        mView.getDefaultReceiverFailed(strMsg);
+                    if (mView != null){
+                        mView.uidNull(strMsg);
+                        mView.getDefaultReceiverFailed(strMsg);}
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

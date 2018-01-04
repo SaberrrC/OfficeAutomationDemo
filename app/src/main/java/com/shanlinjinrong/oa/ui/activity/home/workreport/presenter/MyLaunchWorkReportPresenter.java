@@ -89,6 +89,7 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.loadDataFailed("" + errorNo, strMsg);
                     }
                 } catch (Throwable e) {
@@ -175,6 +176,7 @@ public class MyLaunchWorkReportPresenter extends HttpPresenter<MyLaunchWorkRepor
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.loadDataFailed("" + errorNo, strMsg);
                     }
                 } catch (Throwable e) {

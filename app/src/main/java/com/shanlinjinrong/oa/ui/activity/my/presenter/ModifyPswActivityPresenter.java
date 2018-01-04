@@ -61,8 +61,10 @@ public class ModifyPswActivityPresenter extends HttpPresenter<ModifyPswActivityC
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.modifyFailed("修改密码失败");
+                    }
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }

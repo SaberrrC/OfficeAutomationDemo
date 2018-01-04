@@ -61,8 +61,9 @@ public class ModifyPhoneActivityPresenter extends HttpPresenter<ModifyPhoneActiv
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
-                        mView.modifyFailed(errorNo, strMsg);
+                    if (mView != null){
+                        mView.uidNull(strMsg);
+                        mView.modifyFailed(errorNo, strMsg);}
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

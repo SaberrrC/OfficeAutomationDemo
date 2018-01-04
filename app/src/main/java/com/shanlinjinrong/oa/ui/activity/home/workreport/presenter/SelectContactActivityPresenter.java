@@ -85,8 +85,10 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.loadDataFailed(errorNo, strMsg);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -200,7 +202,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-//                            mView.uidNull(0);
+                            mView.uidNull(jo.getString("code"));
                             break;
                         default:
                             mView.loadDataFailed(0, jo.getString("message"));
@@ -214,6 +216,11 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                try {
+                    mView.uidNull(strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
