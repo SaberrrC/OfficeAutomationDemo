@@ -84,7 +84,7 @@ public class EaseVoiceRecorder {
                 }
             }
         }).start();
-        startTime = new Date().getTime();
+        startTime = System.currentTimeMillis();
         EMLog.d("voice", "start voice recording to file:" + file.getAbsolutePath());
         return file == null ? null : file.getAbsolutePath();
     }
@@ -124,7 +124,7 @@ public class EaseVoiceRecorder {
                 file.delete();
                 return EMError.FILE_INVALID;
             }
-            int seconds = (int) (new Date().getTime() - startTime) / 1000;
+            int seconds = (int) (System.currentTimeMillis() - startTime) / 1000;
             EMLog.d("voice", "voice recording finished. seconds:" + seconds + " file length:" + file.length());
             return seconds;
         }

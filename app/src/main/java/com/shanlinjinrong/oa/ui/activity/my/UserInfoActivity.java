@@ -50,7 +50,7 @@ import com.shanlinjinrong.oa.ui.activity.my.presenter.UserInfoActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.FileUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
-import com.shanlinjinrong.oa.views.BottomPushPopupWindow;
+import com.shanlinjinrong.oa.views.BaseBottomPushPopupWindow;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -59,13 +59,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
@@ -97,7 +95,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     @BindView(R.id.user_jopnumber)
     TextView         user_jopnumber;
 
-    private BottomPushPopupWindow mPop;
+    private BaseBottomPushPopupWindow mPop;
     private static final int CODE_GALLERY_REQUEST = 0x1;//相册
     private static final int CODE_CAMERA_REQUEST  = 0x2;//拍照
     private static final int CROP_PICTURE_REQUEST = 0x3;//图片路径
@@ -297,7 +295,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     /**
      * 头像弹出框：拍照、相册、取消
      */
-    private class BottomPopAvatar extends BottomPushPopupWindow<Void> {
+    private class BottomPopAvatar extends BaseBottomPushPopupWindow<Void> {
         public BottomPopAvatar(Context context) {
             super(context, null);
         }

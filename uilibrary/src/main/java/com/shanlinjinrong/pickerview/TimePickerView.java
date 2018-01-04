@@ -92,26 +92,6 @@ public class TimePickerView extends BasePickerView implements View.OnClickListen
         wheelTime.setPicker(year, month, day, hours, minute);
     }
 
-//    /**
-//     * 指定选中的时间，显示选择器
-//     *
-//     * @param date
-//     */
-//    public void show(Date date) {
-//        Calendar calendar = Calendar.getInstance();
-//        if (date == null)
-//            calendar.setTimeInMillis(System.currentTimeMillis());
-//        else
-//            calendar.setTime(date);
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH);
-//        int day = calendar.get(Calendar.DAY_OF_MONTH);
-//        int hours = calendar.get(Calendar.HOUR_OF_DAY);
-//        int minute = calendar.get(Calendar.MINUTE);
-//        wheelTime.setPicker(year, month, day, hours, minute);
-//        show();
-//    }
-
     /**
      * 设置是否循环滚动
      * @param cyclic 是否循环

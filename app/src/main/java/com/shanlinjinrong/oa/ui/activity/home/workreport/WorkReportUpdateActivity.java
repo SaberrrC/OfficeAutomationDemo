@@ -372,7 +372,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     //检测数据是否完整
     private boolean checkDataIsFull() {
         for (int i = 0; i < mWorkReportListData.size(); i++) {
-            if (mWorkReportListData.get(i).getContent().equals("")) {
+            if ("".equals(mWorkReportListData.get(i).getContent())) {
                 Toast.makeText(WorkReportUpdateActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -520,7 +520,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void getReportFailed(String errCode, String errMsg) {
-        if (errMsg.equals("auth error")) {
+        if ("auth error".equals(errMsg)) {
             catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
             return;
         }
@@ -548,7 +548,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void updateReportFailed(String errMsg) {
-        if (errMsg.equals("auth error")){
+        if ("auth error".equals(errMsg)){
             catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
         }
         showToast(getString(R.string.work_report_update_failed));

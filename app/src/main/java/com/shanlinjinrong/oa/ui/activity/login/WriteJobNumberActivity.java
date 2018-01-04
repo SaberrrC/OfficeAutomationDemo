@@ -72,12 +72,10 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
 
         //点击确定按钮
         if (v.getId() == R.id.btn_sure) {
-
-            if (mIdentifyingCode.getText().toString().trim().equals("")) {
+            if ("".equals(mIdentifyingCode.getText().toString().trim())) {
                 showToast("输入验证码为空！");
                 return;
             }
-
             mPresenter.searchUser(mIdentifyingCode.getText().toString().trim(), mKeyCode, mJobNumber.getText().toString().trim());
         }
     }

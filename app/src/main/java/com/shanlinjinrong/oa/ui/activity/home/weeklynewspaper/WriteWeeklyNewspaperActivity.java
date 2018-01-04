@@ -66,22 +66,22 @@ import static com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunch
  */
 public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNewspaperActivityPresenter> implements WriteWeeklyNewspaperActivityContract.View {
     //标题栏右侧按键的功能  0：提交周报  1：编辑更新周报 2：审核周报
-    public static int FUNCTION_COMMIT     = 0;
-    public static int FUNCTION_EDIT       = 1;
+    public static int FUNCTION_COMMIT = 0;
+    public static int FUNCTION_EDIT = 1;
     public static int FUNCTION_EVALUATION = 2;
     @BindView(R.id.top_view)
-    CommonTopView      mTopView;
+    CommonTopView mTopView;
     @BindView(R.id.tv_date)
     AutoResizeTextView mTvDate;
     //  TextView mTvDate;
     @BindView(R.id.rv_work_content)
-    AllRecyclerView    mRvWorkContent;
+    AllRecyclerView mRvWorkContent;
     @BindView(R.id.ll_next_work_content)
-    LinearLayout       mLlNextWorkContent;
+    LinearLayout mLlNextWorkContent;
     @BindView(R.id.rv_next_work_content)
-    AllRecyclerView    mRvNextWorkContent;
+    AllRecyclerView mRvNextWorkContent;
     @BindView(R.id.tv_receiver)
-    TextView           mTvReceiver;
+    TextView mTvReceiver;
 
     @BindView(R.id.btn_add_this_week_work)
     TextView mAddThisWeekWorkBtn;
@@ -110,15 +110,15 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @BindView(R.id.report_scroll_view)
     ScrollView mScroll;
 
-    private DatePicker                 picker;
-    private int                        workPlanIndex;
-    private int                        workContentIndex;
-    private String                     mCurrentDate;//当前年月日
-    private List<String>               beginTimeList;
+    private DatePicker picker;
+    private int workPlanIndex;
+    private int workContentIndex;
+    private String mCurrentDate;//当前年月日
+    private List<String> beginTimeList;
     private ThisWeekWorkContentAdapter mAdapter;
     private NextWeekWorkContentAdapter mNextAdapter;
-    private WorkContentBean            mWorkContentBean;
-    private List<WorkContentBean> mData     = new ArrayList<>();
+    private WorkContentBean mWorkContentBean;
+    private List<WorkContentBean> mData = new ArrayList<>();
     private List<WorkContentBean> mNextData = new ArrayList<>();
     private SharedPreferences mSharedPreferences; //记录每个账号的填写情况
     private OptionsPickerView beginTimeView;
@@ -251,9 +251,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     private void initView() {
         for (int i = 0; i < mData.size(); i++) {
             String this_work_content_state = mSharedPreferences.getString(mData.get(i).getTitle() + "this_work_content_state", "2");
-            if (this_work_content_state.equals("0")) {
+            if ("0".equals(this_work_content_state)) {
                 mData.get(i).setState("已填写");
-            } else if (this_work_content_state.equals("1")) {
+            } else if ("1".equals(this_work_content_state)) {
                 mData.get(i).setState("待完善");
             } else {
                 mData.get(i).setState("未填写");
@@ -288,9 +288,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
         for (int i = 0; i < mNextData.size(); i++) {
             String this_work_content_state = mSharedPreferences.getString(mNextData.get(i).getTitle() + "this_work_plan_state", "2");
-            if (this_work_content_state.equals("0")) {
+            if ("0".equals(this_work_content_state)) {
                 mNextData.get(i).setState("已填写");
-            } else if (this_work_content_state.equals("1")) {
+            } else if ("1".equals(this_work_content_state)) {
                 mNextData.get(i).setState("待完善");
             } else {
                 mNextData.get(i).setState("未填写");
@@ -486,29 +486,27 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     }
 
     private boolean checkData() {
-        if (mTvReceiver.getText().toString().equals("请选择")) {
+        if ("请选择".equals(mTvReceiver.getText().toString())) {
             Toast.makeText(this, "请选择接收人", Toast.LENGTH_SHORT).show();
             return false;
         }
         for (int i = 0; i < mData.size(); i++) {
-            if (mData.get(i).getState().equals("待完善")) {
-                //Toast.makeText(this, "\"工作内容 " + (i + 1) + "\"" + "待完善，请完善后发起!", Toast.LENGTH_SHORT).show();
+            if ("待完善".equals(mData.get(i).getState())) {
                 Toast.makeText(this, "当前有未填写汇报内容,请检查", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
         for (int i = 0; i < mNextData.size(); i++) {
-            if (mNextData.get(i).getState().equals("待完善")) {
-                //Toast.makeText(this, "\"工作计划 " + (i + 1) + "\"" + "待完善，请完善后发起!", Toast.LENGTH_SHORT).show();
+            if ("待完善".equals(mNextData.get(i).getState())) {
                 Toast.makeText(this, "当前有未填写汇报内容,请检查", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
-        if (!mData.get(0).getState().equals("已填写")) {
+        if (!"已填写".equals(mData.get(0).getState())) {
             Toast.makeText(this, "请填写本周工作", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (!mNextData.get(0).getState().equals("已填写")) {
+        if (!"已填写".equals(mNextData.get(0).getState())) {
             Toast.makeText(this, "请填写下周计划", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -598,7 +596,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void getDefaultReceiverFailed(String errMsg) {
-        if (errMsg.equals("auth error")) {
+        if ("auth error".equals(errMsg)) {
             catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
         }
     }
@@ -624,7 +622,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                     Constants.WORK_WEEKLY_TEMP_DATA, Context.MODE_PRIVATE).edit();
             String nextWorkPlan = data.get(i).getNextWorkPlan();
             String remark = data.get(i).getRemark();
-            if (!nextWorkPlan.trim().equals("") || !remark.trim().equals("")) {
+            if (!"".equals(nextWorkPlan.trim()) || !"".equals(remark.trim())) {
                 mData.get(i).setState("待完善");
             }
             edit.putString(mData.get(i).getTitle() + "work_plan", data.get(i).getNextWorkPlan());
@@ -651,7 +649,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void getLastWeekPlanFailure(int code, String msg) {
-        if (msg.equals("auth error")) {
+        if ("auth error".equals(msg)) {
             catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
         }
     }
@@ -672,7 +670,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void sendWeeklyReportFailure(String code, String msg) {
-        if (msg.equals("auth error")) {
+        if ("auth error".equals(msg)) {
             catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
             return;
         }
@@ -701,7 +699,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void getReportFailed(String code, String msg) {
-        if (msg.equals("auth error")) {
+        if ("auth error".equals(msg)) {
             catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
             return;
         }
@@ -853,7 +851,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
 
     @Override
     public void onBackPressed() {
-        if (mFunction == FUNCTION_COMMIT && (!mData.get(0).getState().equals("未填写") || !mNextData.get(0).getState().equals("未填写"))) {
+        if (mFunction == FUNCTION_COMMIT && (!"未填写".equals(mData.get(0).getState()) || !"未填写".equals(mNextData.get(0).getState()))) {
             showBackTip("是否放弃编辑", "确定", "取消");
         } else {
             finish();

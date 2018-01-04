@@ -90,6 +90,7 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
                 progress_bar.setVisibility(View.VISIBLE);
             }
 
+            @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
@@ -121,7 +122,7 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
             }
         };
         webView.setWebViewClient(mWebViewClient);
-        webView.loadUrl("http://api.oa.shanlinjinrong.com/helper/index" + "?time=" + new Date().getTime());
+        webView.loadUrl("http://api.oa.shanlinjinrong.com/helper/index" + "?time=" + System.currentTimeMillis());
         webView.setWebViewClient(mWebViewClient);
     }
 

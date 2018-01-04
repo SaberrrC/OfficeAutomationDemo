@@ -24,14 +24,14 @@ import com.shanlinjinrong.oa.R;
  * 使用方法：继承BottomPushPopupWindow，编写generateCustomView添加自定义的view，调用show方法显示。
  * version：0.0.1
  */
-public abstract class BottomPushPopupWindow<T> extends PopupWindow {
+public abstract class BaseBottomPushPopupWindow<T> extends PopupWindow {
 
     protected Context context;
     private WindowManager wm;
     private View maskView;
 
     @SuppressWarnings("deprecation")
-    public BottomPushPopupWindow(Context context, T t) {
+    public BaseBottomPushPopupWindow(Context context, T t) {
         super(context);
         this.context = context;
         wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

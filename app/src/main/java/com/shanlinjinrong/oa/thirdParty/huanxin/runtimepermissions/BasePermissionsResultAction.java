@@ -33,16 +33,16 @@ import java.util.Set;
  * has been denied). Ideally you put your functionality in the onGranted method and notify
  * the user what won't work in the onDenied method.
  */
-public abstract class PermissionsResultAction {
+public abstract class BasePermissionsResultAction {
 
-  private static final String TAG = PermissionsResultAction.class.getSimpleName();
+  private static final String TAG = BasePermissionsResultAction.class.getSimpleName();
   private final Set<String> mPermissions = new HashSet<String>(1);
   private Looper mLooper = Looper.getMainLooper();
 
   /**
    * Default Constructor
    */
-  public PermissionsResultAction() {}
+  public BasePermissionsResultAction() {}
 
   /**
    * Alternate Constructor. Pass the looper you wish the PermissionsResultAction
@@ -53,7 +53,7 @@ public abstract class PermissionsResultAction {
    * @param looper the looper that the callbacks will be called using.
    */
   @SuppressWarnings("unused")
-  public PermissionsResultAction(@NonNull Looper looper) {mLooper = looper;}
+  public BasePermissionsResultAction(@NonNull Looper looper) {mLooper = looper;}
 
   /**
    * This method is called when ALL permissions that have been

@@ -25,7 +25,7 @@ public class InviteMessgeDao {
 	static final String COLUMN_NAME_ID = "id";
 	static final String COLUMN_NAME_FROM = "username";
 	static final String COLUMN_NAME_GROUP_ID = "groupid";
-	static final String COLUMN_NAME_GROUP_Name = "groupname";
+	static final String COLUMN_NAME_GROUP_NAME = "groupname";
 	
 	static final String COLUMN_NAME_TIME = "time";
 	static final String COLUMN_NAME_REASON = "reason";

@@ -192,7 +192,6 @@ public class EaseEmojiconPagerView extends ViewPager{
     
     /**
      * get size of pages
-     * @param emojiconList
      * @return
      */
     private int getPageSize(EaseEmojiconGroupEntity groupEntity) {

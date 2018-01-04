@@ -433,7 +433,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
         Intent intent = new Intent(this, ModificationGroupNameActivity.class);
         intent.putExtra(EaseConstant.GROUPID, mGroupId);
         intent.putExtra(Constants.ISGROUPOWNER, mIsOwner);
-        intent.putExtra(Constants.GroupName, tvModificationName.getText().toString().trim());
+        intent.putExtra(Constants.GROUPNAME, tvModificationName.getText().toString().trim());
         startActivityForResult(intent, REQUSET_CODE);
     }
 

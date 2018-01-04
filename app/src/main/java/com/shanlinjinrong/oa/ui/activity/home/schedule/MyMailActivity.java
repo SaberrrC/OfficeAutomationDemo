@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
@@ -76,6 +77,7 @@ public class MyMailActivity extends BaseActivity {
                 progress_bar.setVisibility(View.VISIBLE);
             }
 
+            @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
@@ -109,7 +111,7 @@ public class MyMailActivity extends BaseActivity {
 
         webView.setWebViewClient(mWebViewClient);
 
-        webView.loadUrl(Api.MY_MAIL + "?time=" + new Date().getTime());
+        webView.loadUrl(Api.MY_MAIL + "?time=" + System.currentTimeMillis());
 
         webView.setWebViewClient(mWebViewClient);
     }

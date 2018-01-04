@@ -201,7 +201,6 @@ public class EaseEmojicon {
     
     /**
      * set identity code
-     * @param identityId
      */
     public void setIdentityCode(String identityCode) {
         this.identityCode = identityCode;

@@ -342,6 +342,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private final int     BIND_BADGE_REFRESH = -1;
     @SuppressLint("HandlerLeak")
     protected     Handler handler            = new Handler() {
+        @Override
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case BIND_BADGE_REFRESH:
@@ -477,8 +478,8 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
      * 初始化数据
      */
     private void initData() {
-        RetrofitConfig.getInstance().setAuthToken(AppConfig.getAppConfig(AppManager.mContext).getPrivateToken());
-        RetrofitConfig.getInstance().setUserId(AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
+        RetrofitConfig.setAuthToken(AppConfig.getAppConfig(AppManager.mContext).getPrivateToken());
+        RetrofitConfig.setUserId(AppConfig.getAppConfig(AppManager.mContext).getPrivateUid());
         RetrofitConfig.getInstance().setUserCode(AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
         //检测推送页面
         easeUI = EaseUI.getInstance();
@@ -606,6 +607,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     }
 
     //开启权限列表
+
     public void startAppSetting() {
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", getPackageName(), null);

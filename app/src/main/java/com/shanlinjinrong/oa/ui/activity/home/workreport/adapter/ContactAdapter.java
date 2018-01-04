@@ -20,6 +20,7 @@ import java.util.ArrayList;
  * create by lvdinghao
  * 选择接收人Adapter
  * 无力吐槽，单选项，竟然要先选中，然后再点确定按钮返回，没有难度制造难度迎上去啊
+ * ...很赞同你说的
  */
 public class ContactAdapter extends BaseExpandableListAdapter {
 
@@ -35,34 +36,42 @@ public class ContactAdapter extends BaseExpandableListAdapter {
         return groups;
     }
 
+    @Override
     public Object getChild(int groupPosition, int childPosition) {
         return groups.get(groupPosition).getChildItem(childPosition);
     }
 
+    @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
     }
 
+    @Override
     public int getChildrenCount(int groupPosition) {
         return groups.get(groupPosition).getChildrenCount();
     }
 
+    @Override
     public Object getGroup(int groupPosition) {
         return groups.get(groupPosition);
     }
 
+    @Override
     public int getGroupCount() {
         return groups.size();
     }
 
+    @Override
     public long getGroupId(int groupPosition) {
         return groupPosition;
     }
 
+    @Override
     public boolean hasStableIds() {
         return true;
     }
 
+    @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
@@ -70,6 +79,7 @@ public class ContactAdapter extends BaseExpandableListAdapter {
     /**
      * 设置Group
      */
+    @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         Group group = (Group) getGroup(groupPosition);
         if (convertView == null) {
@@ -92,6 +102,7 @@ public class ContactAdapter extends BaseExpandableListAdapter {
     /**
      * 设置childview的内容
      */
+    @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
                              View convertView, ViewGroup parent) {
         Child child = groups.get(groupPosition).getChildItem(childPosition);

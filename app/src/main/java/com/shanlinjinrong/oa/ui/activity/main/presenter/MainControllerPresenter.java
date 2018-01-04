@@ -45,6 +45,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
 
 
     //存储权限判断
+    @Override
     public void applyPermission(Activity context) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (SharedPreferenceUtils.getShouldAskPermission(context, "firstshould") && !ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//第一次已被拒绝

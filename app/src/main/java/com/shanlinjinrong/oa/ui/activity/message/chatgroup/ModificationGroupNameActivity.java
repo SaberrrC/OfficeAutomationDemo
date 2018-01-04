@@ -48,7 +48,7 @@ public class ModificationGroupNameActivity extends BaseActivity implements TextW
     }
 
     private void initData() {
-        mGroupName = getIntent().getStringExtra(Constants.GroupName);
+        mGroupName = getIntent().getStringExtra(Constants.GROUPNAME);
     }
 
     private void initView() {

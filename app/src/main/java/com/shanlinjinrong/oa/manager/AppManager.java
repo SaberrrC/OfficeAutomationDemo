@@ -83,7 +83,7 @@ public class AppManager extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        this.mContext = this;
+        mContext= this;
 
         //注册Crash接口（必选）
         // PgyCrashManager.register(this);
@@ -319,7 +319,7 @@ public class AppManager extends MultiDexApplication {
     /**
      * 退出应用程序
      */
-    public void AppExit() {
+    public void appExit() {
         try {
             finishAllActivity();
             //杀死该应用进程

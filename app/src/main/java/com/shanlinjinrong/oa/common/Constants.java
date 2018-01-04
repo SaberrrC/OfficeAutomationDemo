@@ -59,7 +59,7 @@ public class Constants {
 
     // ---------------------------------- 群组 ----------------------------------
 
-    public static final String GroupName    = "group_name";
+    public static final String GROUPNAME    = "group_name";
     public static final String FINISH_GROUP = "finish_group";
     public static final String ISGROUPOWNER = "isOwner";
 

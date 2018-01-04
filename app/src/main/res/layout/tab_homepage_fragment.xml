@@ -389,7 +389,6 @@
                     android:background="@color/grid_layout_line_color" />
 
                 <TextView
-                    android:id="@+id/tv_schedule_tips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -530,7 +529,6 @@
                     android:background="@color/grid_layout_line_color" />
 
                 <TextView
-                    android:id="@+id/tv_schedule_tips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"

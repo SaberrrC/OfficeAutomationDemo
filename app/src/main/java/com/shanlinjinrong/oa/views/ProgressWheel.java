@@ -280,6 +280,7 @@ public class ProgressWheel extends View {
   //Animation stuff
   //----------------------------------
 
+  @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
 
@@ -717,10 +718,11 @@ public class ProgressWheel extends View {
     //required field that makes Parcelables from a Parcel
     public static final Creator<WheelSavedState> CREATOR =
         new Creator<WheelSavedState>() {
+          @Override
           public WheelSavedState createFromParcel(Parcel in) {
             return new WheelSavedState(in);
           }
-
+          @Override
           public WheelSavedState[] newArray(int size) {
             return new WheelSavedState[size];
           }

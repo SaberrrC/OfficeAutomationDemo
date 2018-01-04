@@ -21,7 +21,7 @@ import com.shanlinjinrong.uilibrary.R;
 /**
  * 圆形头像工具
  */
-public class CircleImageView extends ImageView {
+public class CircleImageView extends android.support.v7.widget.AppCompatImageView {
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 

@@ -32,13 +32,14 @@ public class MyKjHttp extends KJHttp {
     }
 
 
+    @Override
     public Request<byte[]> post(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         return super.post(baseJavaUrl + url, params, callback);
     }
 
-
+    @Override
     public Request<byte[]> get(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));

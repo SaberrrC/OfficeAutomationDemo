@@ -5,13 +5,13 @@ public class ApiException extends Exception {
 
     public static final String USER_NOT_EXIST = "sd";
     public static final String WRONG_PASSWORD = "sd";
-    int type = 0;
-    public static String message = "";
+    int mType = 0;
+    public static String mMessage = "";
     public static String code = "";
 
     public ApiException(String resultCode,int type,String message) {
-        this.type=type;
-        this.message=message;
+        mType=type;
+        mMessage=message;
     }
 
     public  ApiException(){
@@ -29,7 +29,7 @@ public class ApiException extends Exception {
      * @return
      */
     public  String getMessage(){
-        return message;
+        return mMessage;
     }
 
     public   String getCode(){

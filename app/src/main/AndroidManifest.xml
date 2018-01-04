@@ -104,7 +104,7 @@
 
     <application
         android:name=".manager.AppManager"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/oa_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -271,10 +271,6 @@
             android:authorities="com.shanlinjinrong.oa.hms.update.provider"
             android:exported="false"
             android:grantUriPermissions="true"></provider>
-        <!-- PushSDK:Push服务 -->
-        <service
-            android:name="com.huawei.android.pushagent.PushService"
-            android:process=":pushservice"></service>
         <!-- huawei push end -->
 
 
@@ -423,11 +419,6 @@
         <!-- 公用选择头像 -->
         <activity
             android:name=".ui.activity.home.workreport.PublicImageSelectorActivity"
-            android:screenOrientation="portrait" />
-        <!-- 通知公告 -->
-        <!-- 系统消息 -->
-        <activity
-            android:name=".ui.activity.push.SystemNoticesActivity"
             android:screenOrientation="portrait" />
         <!-- 使用帮助 -->
         <activity

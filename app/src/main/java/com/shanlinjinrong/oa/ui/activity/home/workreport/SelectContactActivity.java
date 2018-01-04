@@ -83,7 +83,7 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     private String mSelectChildId;
     private List<Child> mChildren;
 
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_contact);

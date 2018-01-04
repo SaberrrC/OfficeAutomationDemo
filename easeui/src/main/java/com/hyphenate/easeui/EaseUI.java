@@ -169,7 +169,6 @@ public final class EaseUI {
     
     /**
      * set user profile provider
-     * @param provider
      */
     public void setUserProfileProvider(EaseUserProfileProvider userProvider){
         this.userProvider = userProvider;

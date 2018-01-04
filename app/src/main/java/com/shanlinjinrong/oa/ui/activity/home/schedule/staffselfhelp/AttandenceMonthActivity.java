@@ -407,7 +407,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                             return;
                         }
 
-                        if (bean.get(i).getSignCause() == null || bean.get(i).getSignCause().equals("")) {
+                        if (bean.get(i).getSignCause() == null || "".equals(bean.get(i).getSignCause())) {
                             tvsignin.setVisibility(View.GONE);
                         } else {
                             tvsignin.setVisibility(View.VISIBLE);
@@ -478,6 +478,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 case "[迟到]":
                 case "[其他]":
                     return 4;
+                default:
+                    return 0;
             }
         }
         return 0;
@@ -539,6 +541,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             case R.id.ll_count_people:
                 Intent intent = new Intent(AttandenceMonthActivity.this, CountPeopleActivity.class);
                 startActivityForResult(intent, 100);
+                break;
+            default:
                 break;
         }
     }

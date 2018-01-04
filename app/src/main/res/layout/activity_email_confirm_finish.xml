@@ -44,10 +44,8 @@
         android:layout_marginTop="31dp"
         android:background="@drawable/write_report_bth_bg_selector"
         android:gravity="center"
-        android:onClick="emailFinish"
         android:text="完成"
         android:textColor="@color/white"
-        android:textSize="@dimen/common_title_size16"
-        tools:ignore="OnClick" />
+        android:textSize="@dimen/common_title_size16" />
 
 </LinearLayout>

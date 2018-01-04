@@ -55,9 +55,10 @@ public class AutoResizeTextView extends AppCompatTextView {
         _minTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics());
         _maxTextSize = getTextSize();
         _paint = new TextPaint(getPaint());
-        if (_maxLines == 0)
+        if (_maxLines == 0) {
             // no value was assigned during construction
             _maxLines = NO_LINE_LIMIT;
+        }
         // prepare size tester:
         _sizeTester = new SizeTester() {
             final RectF textRect = new RectF();
@@ -68,10 +69,11 @@ public class AutoResizeTextView extends AppCompatTextView {
                 _paint.setTextSize(suggestedSize);
                 final TransformationMethod transformationMethod = getTransformationMethod();
                 final String text;
-                if (transformationMethod != null)
+                if (transformationMethod != null) {
                     text = transformationMethod.getTransformation(getText(), AutoResizeTextView.this).toString();
-                else
+                } else {
                     text = getText().toString();
+                }
                 final boolean singleLine = getMaxLines() == 1;
                 if (singleLine) {
                     textRect.bottom = _paint.getFontSpacing();
@@ -79,8 +81,9 @@ public class AutoResizeTextView extends AppCompatTextView {
                 } else {
                     final StaticLayout layout = new StaticLayout(text, _paint, _widthLimit, Alignment.ALIGN_NORMAL, _spacingMult, _spacingAdd, true);
                     // return early if we have more lines
-                    if (getMaxLines() != NO_LINE_LIMIT && layout.getLineCount() > getMaxLines())
+                    if (getMaxLines() != NO_LINE_LIMIT && layout.getLineCount() > getMaxLines()) {
                         return 1;
+                    }
                     textRect.bottom = layout.getHeight();
                     int maxWidth = -1;
                     int lineCount = layout.getLineCount();

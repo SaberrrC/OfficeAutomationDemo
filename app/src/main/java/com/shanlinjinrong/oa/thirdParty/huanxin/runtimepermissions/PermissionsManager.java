@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
@@ -42,7 +43,7 @@ public class PermissionsManager {
 
   private final Set<String> mPendingRequests = new HashSet<String>(1);
   private final Set<String> mPermissions = new HashSet<String>(1);
-  private final List<WeakReference<PermissionsResultAction>> mPendingActions = new ArrayList<WeakReference<PermissionsResultAction>>(1);
+  private final List<WeakReference<BasePermissionsResultAction>> mPendingActions = new ArrayList<>(1);
 
   private static PermissionsManager mInstance = null;
 
@@ -109,7 +110,7 @@ public class PermissionsManager {
   }
 
   /**
-   * This method adds the {@link PermissionsResultAction} to the current list
+   * This method adds the {@link BasePermissionsResultAction} to the current list
    * of pending actions that will be completed when the permissions are
    * received. The list of permissions passed to this method are registered
    * in the PermissionsResultAction object so that it will be notified of changes
@@ -119,12 +120,12 @@ public class PermissionsManager {
    * @param action      the action to add to the current list of pending actions.
    */
   private synchronized void addPendingAction(@NonNull String[] permissions,
-      @Nullable PermissionsResultAction action) {
+      @Nullable BasePermissionsResultAction action) {
     if (action == null) {
       return;
     }
     action.registerPermissions(permissions);
-    mPendingActions.add(new WeakReference<PermissionsResultAction>(action));
+    mPendingActions.add(new WeakReference<BasePermissionsResultAction>(action));
   }
 
   /**
@@ -135,10 +136,10 @@ public class PermissionsManager {
    *
    * @param action the action to remove
    */
-  private synchronized void removePendingAction(@Nullable PermissionsResultAction action) {
-    for (Iterator<WeakReference<PermissionsResultAction>> iterator = mPendingActions.iterator();
+  private synchronized void removePendingAction(@Nullable BasePermissionsResultAction action) {
+    for (Iterator<WeakReference<BasePermissionsResultAction>> iterator = mPendingActions.iterator();
         iterator.hasNext(); ) {
-      WeakReference<PermissionsResultAction> weakRef = iterator.next();
+      WeakReference<BasePermissionsResultAction> weakRef = iterator.next();
       if (weakRef.get() == action || weakRef.get() == null) {
         iterator.remove();
       }
@@ -189,7 +190,7 @@ public class PermissionsManager {
 
   /**
    * This method will request all the permissions declared in your application manifest
-   * for the specified {@link PermissionsResultAction}. The purpose of this method is to enable
+   * for the specified {@link BasePermissionsResultAction}. The purpose of this method is to enable
    * all permissions to be requested at one shot. The PermissionsResultAction is used to notify
    * you of the user allowing or denying each permission. The Activity and PermissionsResultAction
    * parameters are both annotated Nullable, but this method will not work if the Activity
@@ -203,7 +204,7 @@ public class PermissionsManager {
    */
   @SuppressWarnings("unused")
   public synchronized void requestAllManifestPermissionsIfNecessary(final @Nullable Activity activity,
-      final @Nullable PermissionsResultAction action) {
+      final @Nullable BasePermissionsResultAction action) {
     if (activity == null) {
       return;
     }
@@ -212,7 +213,7 @@ public class PermissionsManager {
   }
 
   /**
-   * This method should be used to execute a {@link PermissionsResultAction} for the array
+   * This method should be used to execute a {@link BasePermissionsResultAction} for the array
    * of permissions passed to this method. This method will request the permissions if
    * they need to be requested (i.e. we don't have permission yet) and will add the
    * PermissionsResultAction to the queue to be notified of permissions being granted or
@@ -222,13 +223,13 @@ public class PermissionsManager {
    * if the Fragment is not currently added to its parent Activity.
    *
    * @param activity    the activity necessary to request the permissions.
-   * @param permissions the list of permissions to request for the {@link PermissionsResultAction}.
+   * @param permissions the list of permissions to request for the {@link BasePermissionsResultAction}.
    * @param action      the PermissionsResultAction to notify when the permissions are granted or denied.
    */
   @SuppressWarnings("unused")
   public synchronized void requestPermissionsIfNecessaryForResult(@Nullable Activity activity,
       @NonNull String[] permissions,
-      @Nullable PermissionsResultAction action) {
+      @Nullable BasePermissionsResultAction action) {
     if (activity == null) {
       return;
     }
@@ -249,7 +250,7 @@ public class PermissionsManager {
   }
 
   /**
-   * This method should be used to execute a {@link PermissionsResultAction} for the array
+   * This method should be used to execute a {@link BasePermissionsResultAction} for the array
    * of permissions passed to this method. This method will request the permissions if
    * they need to be requested (i.e. we don't have permission yet) and will add the
    * PermissionsResultAction to the queue to be notified of permissions being granted or
@@ -258,13 +259,13 @@ public class PermissionsManager {
    * will fail to work as the activity reference is necessary to check for permissions.
    *
    * @param fragment    the fragment necessary to request the permissions.
-   * @param permissions the list of permissions to request for the {@link PermissionsResultAction}.
+   * @param permissions the list of permissions to request for the {@link BasePermissionsResultAction}.
    * @param action      the PermissionsResultAction to notify when the permissions are granted or denied.
    */
   @SuppressWarnings("unused")
   public synchronized void requestPermissionsIfNecessaryForResult(@NonNull Fragment fragment,
       @NonNull String[] permissions,
-      @Nullable PermissionsResultAction action) {
+      @Nullable BasePermissionsResultAction action) {
     Activity activity = fragment.getActivity();
     if (activity == null) {
       return;
@@ -303,9 +304,9 @@ public class PermissionsManager {
     if (results.length < size) {
       size = results.length;
     }
-    Iterator<WeakReference<PermissionsResultAction>> iterator = mPendingActions.iterator();
+    Iterator<WeakReference<BasePermissionsResultAction>> iterator = mPendingActions.iterator();
     while (iterator.hasNext()) {
-      PermissionsResultAction action = iterator.next().get();
+      BasePermissionsResultAction action = iterator.next().get();
       for (int n = 0; n < size; n++) {
         if (action == null || action.onResult(permissions[n], results[n])) {
           iterator.remove();
@@ -329,7 +330,7 @@ public class PermissionsManager {
    */
   private void doPermissionWorkBeforeAndroidM(@NonNull Activity activity,
       @NonNull String[] permissions,
-      @Nullable PermissionsResultAction action) {
+      @Nullable BasePermissionsResultAction action) {
     for (String perm : permissions) {
       if (action != null) {
         if (!mPermissions.contains(perm)) {
@@ -358,7 +359,7 @@ public class PermissionsManager {
   @NonNull
   private List<String> getPermissionsListToRequest(@NonNull Activity activity,
       @NonNull String[] permissions,
-      @Nullable PermissionsResultAction action) {
+      @Nullable BasePermissionsResultAction action) {
     List<String> permList = new ArrayList<String>(permissions.length);
     for (String perm : permissions) {
       if (!mPermissions.contains(perm)) {
