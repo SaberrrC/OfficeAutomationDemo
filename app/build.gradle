@@ -1,7 +1,4 @@
-apply plugin: "mmTrix"
 apply plugin: 'com.android.application'
-apply from: 'file_uri.gradle'
-
 
 android {
     compileSdkVersion 25
@@ -162,15 +159,12 @@ repositories {
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
-
     compile project(':easeui')
     compile project(':retrofit')
     compile project(':uilibrary')
     compile files('libs/Msc.jar')
     compile project(':calendarlibrary')
     compile files('libs/Sunflower.jar')
-    compile files("libs/mmtrix.agent.jar")
-
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
@@ -252,11 +246,15 @@ dependencies {
 
     //分包 65536
     compile 'com.android.support:multidex:1.0.2'
-    compile "me.leolin:ShortcutBadger:1.1.19@aar"
+    compile 'me.leolin:ShortcutBadger:1.1.19@aar'
     compile 'ren.yale.android:cachewebviewlib:1.3.2'
+
     //悬浮窗 权限
     compile 'com.github.czy1121:settingscompat:1.1.4'
+
     //华为推送
+
     //    compile 'com.huawei.android.hms:push:2.5.2.300'
+
     //implementation files('libs/hyphenatechat_3.3.7.jar')
 }
