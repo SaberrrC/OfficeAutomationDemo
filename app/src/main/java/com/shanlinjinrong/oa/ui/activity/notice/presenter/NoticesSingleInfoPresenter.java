@@ -1,6 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.notice.presenter;
 
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.notice.contract.NoticesSingleInfoContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -28,7 +28,7 @@ public class NoticesSingleInfoPresenter extends HttpPresenter<NoticesSingleInfoC
         HttpParams params = new HttpParams();
         params.put("department_id", departmentId);
         params.put("nid", Nid);
-        mKjHttp.post(Api.NOTICE_HAD_READ, params, new HttpCallBack() {
+        mKjHttp.post(ApiJava.NOTICE_HAD_READ, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 LogUtils.e("标记已读" + t);

@@ -8,7 +8,6 @@ import com.example.retrofit.net.HttpMethods;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hyphenate.easeui.UserDetailsBean;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -94,7 +93,7 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
     @Override
     public void queryUserInfo() {
         HttpParams httpParams = new HttpParams();
-        mKjHttp.get(Api.ID_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.ID_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
 
             @Override
             public void onFailure(int errorNo, String strMsg) {

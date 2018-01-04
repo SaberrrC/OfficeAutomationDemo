@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.my.contract;
 
 import com.hyphenate.easeui.UserDetailsBean;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 

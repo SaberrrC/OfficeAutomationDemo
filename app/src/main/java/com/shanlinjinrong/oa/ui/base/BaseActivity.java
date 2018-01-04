@@ -31,7 +31,6 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -46,7 +45,6 @@ import com.shanlinjinrong.oa.utils.ScreenUtils;
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpConfig;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

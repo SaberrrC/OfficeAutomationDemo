@@ -1,18 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.my.presenter;
 
-import android.support.v4.app.NavUtils;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPswActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -35,7 +30,7 @@ public class ModifyPswActivityPresenter extends HttpPresenter<ModifyPswActivityC
         HttpParams params = new HttpParams();
         params.put("oldpassword", oldPsw);
         params.put("newpassword", newPsw);
-        mKjHttp.post(Api.PASSWORD_UPDATE, params, new HttpCallBack() {
+        mKjHttp.post(ApiJava.PASSWORD_UPDATE, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

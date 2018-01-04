@@ -3,7 +3,6 @@ package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.login.bean.QueryPhoneBean;
@@ -30,7 +29,7 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
     @Override
     public void getIdentifyingCode() {
         mKjHttp.cleanCache();
-        mKjHttp.get(Api.SENDS_CAPTCHA, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(ApiJava.SENDS_CAPTCHA, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -70,7 +69,7 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
         httpParams.put("code", userCode);
         httpParams.put("imgCode", imgCode);
         httpParams.put("keyCode", keyCode);
-        mKjHttp.post(Api.USERS_SEARCH, httpParams, new HttpCallBack() {
+        mKjHttp.post(ApiJava.USERS_SEARCH, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -92,7 +91,7 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                         case ApiJava.REQUEST_CODE_OK:
                             mView.searchUserSuccess(queryPhoneBean.getData().getPhone());
                             break;
-                        case ApiJava.RESPONSES_CODE_NO_CONTENT://查询无结果
+                        case ApiJava.REQUEST_NO_RESULT:
                             mView.searchUserEmpty("查询无结果");
                             break;
                         default:

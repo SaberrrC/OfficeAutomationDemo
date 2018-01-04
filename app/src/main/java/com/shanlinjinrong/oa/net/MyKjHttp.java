@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.net;
 
 import com.example.retrofit.net.ApiConstant;
 import com.shanlinjinrong.oa.BuildConfig;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 

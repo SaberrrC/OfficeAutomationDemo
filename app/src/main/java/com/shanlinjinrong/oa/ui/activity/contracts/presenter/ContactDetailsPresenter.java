@@ -1,16 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.contracts.presenter;
 
-import com.example.retrofit.net.api.JavaApi;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.contracts.bean.ContactDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.contracts.contract.ContactDetailsContract;
-import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
 import org.kymjs.kjframe.http.HttpCallBack;
@@ -19,12 +16,9 @@ import org.kymjs.kjframe.http.HttpParams;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -54,7 +48,7 @@ public class ContactDetailsPresenter extends HttpPresenter<ContactDetailsContrac
                     @Override
                     public void run() throws Exception {
                         HttpParams httpParams = new HttpParams();
-                        mKjHttp.get(Api.ID_SEARCH_USER_DETAILS + "?uid=" + uid, httpParams, new HttpCallBack() {
+                        mKjHttp.get(ApiJava.ID_SEARCH_USER_DETAILS + "?uid=" + uid, httpParams, new HttpCallBack() {
                             @Override
                             public void onPreStart() {
                                 super.onPreStart();

@@ -1,21 +1,14 @@
 package com.shanlinjinrong.oa.ui.activity.my.presenter;
 
-import android.support.v4.app.NavUtils;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
-import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.FeedbackActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -37,7 +30,7 @@ public class FeedbackActivityPresenter extends HttpPresenter<FeedbackActivityCon
     public void sendFeedback(String content) {
         HttpParams params = new HttpParams();
         params.put("content", content);
-        mKjHttp.post(Api.FEEDBACK, params, new HttpCallBack() {
+        mKjHttp.post(ApiJava.FEEDBACK, params, new HttpCallBack() {
             @Override
             public void onFinish() {
                 super.onFinish();

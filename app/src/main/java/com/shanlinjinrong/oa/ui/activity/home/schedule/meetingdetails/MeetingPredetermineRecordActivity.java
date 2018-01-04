@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingPredetermineContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingPredeterminePresenter;
@@ -22,8 +21,6 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;

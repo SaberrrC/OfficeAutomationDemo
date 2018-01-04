@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
 
 import com.google.gson.Gson;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
@@ -26,7 +25,7 @@ public class EaseChatMessagePresenter extends HttpPresenter<EaseChatMessageContr
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         httpParams.put("codeList", code);
-        mKjHttp.get(Api.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

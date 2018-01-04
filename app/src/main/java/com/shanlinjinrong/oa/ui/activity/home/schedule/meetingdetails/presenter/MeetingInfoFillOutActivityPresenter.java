@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
@@ -10,8 +9,6 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.Meeti
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingInfoFillOutActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -36,7 +33,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
     @Override
     public void addMeetingRooms(HttpParams httpParams) {
         mKjHttp.cleanCache();
-        mKjHttp.post(Api.ADD_NEW_MEETING, httpParams, new HttpCallBack() {
+        mKjHttp.post(ApiJava.ADD_NEW_MEETING, httpParams, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -111,7 +108,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
     public void lookMeetingRooms(int id) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.get(Api.LOOK_NEW_MEETING_INFO + "?id=" + id, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.LOOK_NEW_MEETING_INFO + "?id=" + id, httpParams, new HttpCallBack() {
 
             @Override
             public void onPreStart() {
@@ -185,7 +182,7 @@ public class MeetingInfoFillOutActivityPresenter extends HttpPresenter<MeetingIn
         HttpParams httpParams = new HttpParams();
         httpParams.put("id", id);
         httpParams.put("send_type", 1);
-        mKjHttp.post(Api.DELETE_NEW_MEETING, httpParams, new HttpCallBack() {
+        mKjHttp.post(ApiJava.DELETE_NEW_MEETING, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();

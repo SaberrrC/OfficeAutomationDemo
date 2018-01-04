@@ -1,24 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
-import com.example.retrofit.net.ApiException;
 import com.example.retrofit.net.HttpMethods;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.net.MyKjHttp;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.CreateNoteContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandanceMonthContract;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.MyAttendenceActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
-import com.shanlinjinrong.oa.utils.LogUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.net.ConnectException;
 import java.net.SocketException;

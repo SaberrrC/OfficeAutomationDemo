@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.presenter;
 
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.model.selectContacts.Group;
@@ -45,7 +44,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                         case ApiJava.REQUEST_CODE_OK:
                             ArrayList<Group> groups = new ArrayList<>();
                             Child selectChild = null;
-                            JSONObject data = Api.getDataToJSONObject(jo);
+                            JSONObject data = ApiJava.getDataToJSONObject(jo);
                             JSONArray usersData = data.getJSONArray("data");
                             Group group = new Group("0", usersData.getJSONObject(0).getString("organization"));
                             for (int j = 0; j < usersData.length(); j++) {
@@ -184,7 +183,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                         case ApiJava.REQUEST_CODE_OK:
                             Child selectChild = null;
                             List<Child> data = new ArrayList<Child>();
-                            JSONArray jsonArray = Api.getDataToJSONArray(jo);
+                            JSONArray jsonArray = ApiJava.getDataToJSONArray(jo);
                             for (int j = 0; j < jsonArray.length(); j++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(j);
                                 Child child = new Child(

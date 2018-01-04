@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.thirdParty.huanxin;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -22,7 +20,6 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
@@ -47,13 +44,10 @@ import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.DemoDBManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
@@ -65,14 +59,10 @@ import com.shanlinjinrong.oa.thirdParty.huanxin.manager.PreferenceManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.manager.UserProfileManager;
 import com.shanlinjinrong.oa.thirdParty.huanxin.receiver.CallReceiver;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
-import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 
 import org.greenrobot.eventbus.EventBus;
-import org.kymjs.kjframe.KJHttp;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
@@ -18,10 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
-
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -111,7 +108,7 @@ public class MyMailActivity extends BaseActivity {
 
         webView.setWebViewClient(mWebViewClient);
 
-        webView.loadUrl(Api.MY_MAIL + "?time=" + System.currentTimeMillis());
+        webView.loadUrl(ApiJava.MY_MAIL + "?time=" + System.currentTimeMillis());
 
         webView.setWebViewClient(mWebViewClient);
     }

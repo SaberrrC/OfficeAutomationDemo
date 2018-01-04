@@ -2,15 +2,12 @@ package com.shanlinjinrong.oa.ui.activity.my.presenter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPhoneActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -31,7 +28,7 @@ public class ModifyPhoneActivityPresenter extends HttpPresenter<ModifyPhoneActiv
     public void modifyPhone(final String phoneNum) {
         HttpParams params = new HttpParams();
         params.put("phone", phoneNum);
-        mKjHttp.post( Api.PHONENUMBER_UPDATE, params, new HttpCallBack() {
+        mKjHttp.post( ApiJava.PHONENUMBER_UPDATE, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

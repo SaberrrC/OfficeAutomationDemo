@@ -1,11 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
-import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRoomsBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingDetailsActivityContract;
@@ -33,7 +29,7 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
 
-        mKjHttp.get(Api.NEW_MEETINGROOMS, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.NEW_MEETINGROOMS, httpParams, new HttpCallBack() {
 
             @Override
             public void onSuccess(String t) {
@@ -50,7 +46,7 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
                         case ApiJava.ERROR_TOKEN:
                             mView.uidNull(meetingRoomsBean.getCode());
                             break;
-                        case ApiJava.RESPONSES_CODE_NO_CONTENT:
+                        case ApiJava.REQUEST_NO_RESULT:
                             mView.getMeetingRoomsEmpty();
                             break;
                         default:

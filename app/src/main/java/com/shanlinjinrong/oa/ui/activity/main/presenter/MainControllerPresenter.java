@@ -2,29 +2,19 @@ package com.shanlinjinrong.oa.ui.activity.main.presenter;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.util.Pair;
 
-import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.pgyersdk.update.PgyUpdateManager;
 
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.net.MyKjHttp;
-import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
-import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
-
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;

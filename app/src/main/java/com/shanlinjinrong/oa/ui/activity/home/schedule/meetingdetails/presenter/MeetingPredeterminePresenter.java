@@ -2,17 +2,13 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingPredetermineContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -33,7 +29,7 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
     @Override
     public void getMeetingPredetermine(int meetingId) {
         mKjHttp.cleanCache();
-        mKjHttp.get(Api.NEW_MEETING_ALR_MEETING + "?room_id=" + meetingId, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(ApiJava.NEW_MEETING_ALR_MEETING + "?room_id=" + meetingId, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -74,7 +70,7 @@ public class MeetingPredeterminePresenter extends HttpPresenter<MeetingPredeterm
     @Override
     public void modifyMeetingRooms(HttpParams httpParams) {
         mKjHttp.cleanCache();
-        mKjHttp.post(Api.MODIFY_NEW_MEETING, httpParams, new HttpCallBack() {
+        mKjHttp.post(ApiJava.MODIFY_NEW_MEETING, httpParams, new HttpCallBack() {
 
             @Override
             public void onPreStart() {

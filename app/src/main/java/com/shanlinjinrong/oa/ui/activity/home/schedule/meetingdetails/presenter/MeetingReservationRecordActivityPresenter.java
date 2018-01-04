@@ -2,19 +2,14 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.ReservationRecordBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingReservationRecordActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -34,7 +29,7 @@ public class MeetingReservationRecordActivityPresenter extends HttpPresenter<Mee
         httpParams.put("currentPage", page);
         httpParams.put("pageSize", num);
 
-        mKjHttp.post(Api.NEW_MEETING_RECORD, httpParams, new HttpCallBack() {
+        mKjHttp.post(ApiJava.NEW_MEETING_RECORD, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();

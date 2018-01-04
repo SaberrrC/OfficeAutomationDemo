@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -238,7 +237,7 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     public void loadDataFailed(int errCode, String errMsg) {
         try {
             if (errMsg.equals("auth error")) {
-                catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
+                catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
                 return;
             }
             hideLoadingView();

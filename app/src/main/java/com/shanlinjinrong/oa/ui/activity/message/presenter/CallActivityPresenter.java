@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
 import com.google.gson.Gson;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
@@ -30,7 +29,7 @@ public class CallActivityPresenter extends HttpPresenter<CallActivityContract.Vi
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         httpParams.put("codeList", code);
-        mKjHttp.post(Api.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
+        mKjHttp.post(ApiJava.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

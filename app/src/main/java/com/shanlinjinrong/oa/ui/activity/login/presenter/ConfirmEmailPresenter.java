@@ -2,14 +2,12 @@ package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.login.contract.ConfirmEmailContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -31,7 +29,7 @@ public class ConfirmEmailPresenter extends HttpPresenter<ConfirmEmailContract.Vi
         mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
         params.put("code", code);
-        mKjHttp.post(Api.USERS_REPWD, params, new HttpCallBack() {
+        mKjHttp.post(ApiJava.USERS_REPWD, params, new HttpCallBack() {
 
             @Override
             public void onPreStart() {

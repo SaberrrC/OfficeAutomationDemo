@@ -13,14 +13,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportLaunchListAdapter;
@@ -404,7 +402,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void uidNull(String code) {
-        catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
+        catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
     }
 
     /**
@@ -521,7 +519,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     @Override
     public void getReportFailed(String errCode, String errMsg) {
         if ("auth error".equals(errMsg)) {
-            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
             return;
         }
         showToast(getString(R.string.load_report_data_error));
@@ -549,7 +547,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     @Override
     public void updateReportFailed(String errMsg) {
         if ("auth error".equals(errMsg)){
-            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
         }
         showToast(getString(R.string.work_report_update_failed));
     }

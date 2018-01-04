@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.fragment.presenter;
 
 import android.util.Log;
 
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
@@ -15,7 +14,6 @@ import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
@@ -35,7 +33,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
 
     @Override
     public void autoSearch(String name) {
-        mKjHttp.get(Api.PHONEBOOK_SEARCHPHONEBOOK + "?name=" + name, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(ApiJava.PHONEBOOK_SEARCHPHONEBOOK + "?name=" + name, new HttpParams(), new HttpCallBack() {
 
             @Override
             public void onFinish() {
@@ -77,7 +75,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                             mView.autoSearchSuccess(users);
                     } else {
                         if (mView != null)
-                            mView.autoSearchOther(Api.getInfo(jo));
+                            mView.autoSearchOther(ApiJava.getInfo(jo));
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -94,7 +92,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
 
     @Override
     public void loadData(String orgId) {
-        mKjHttp.get(Api.GET_CONTACTS + "?orgId=" + orgId, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(ApiJava.GET_CONTACTS + "?orgId=" + orgId, new HttpParams(), new HttpCallBack() {
 
             @Override
             public void onPreStart() {

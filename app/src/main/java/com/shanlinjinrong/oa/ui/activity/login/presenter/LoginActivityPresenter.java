@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.net.MyKjHttp;
@@ -33,7 +32,7 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
 
         params.put("email", account);
         params.put("pwd", psw);
-        mKjHttp.post(Api.LOGIN, params, new HttpCallBack() {
+        mKjHttp.post(ApiJava.LOGIN, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

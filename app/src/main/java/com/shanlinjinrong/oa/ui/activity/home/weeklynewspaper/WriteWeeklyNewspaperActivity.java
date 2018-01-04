@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -373,8 +372,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 intent.putExtra("TopTitle", workContentBean.getTitle());
                 intent.putExtra("isWorkContent", true);
                 intent.putExtra("index", i);
-                if (mFunction == FUNCTION_EVALUATION)
+                if (mFunction == FUNCTION_EVALUATION) {
                     intent.putExtra("isEditTextEnabled", true);
+                }
                 startActivity(intent);
             }
         });
@@ -412,8 +412,9 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
                 intent.putExtra("TopTitle", workContentBean.getTitle());
                 intent.putExtra("isWorkContent", false);
                 intent.putExtra("index", i);
-                if (mFunction == FUNCTION_EVALUATION)
+                if (mFunction == FUNCTION_EVALUATION) {
                     intent.putExtra("isEditTextEnabled", true);
+                }
                 startActivity(intent);
             }
         });
@@ -597,7 +598,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void getDefaultReceiverFailed(String errMsg) {
         if ("auth error".equals(errMsg)) {
-            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
         }
     }
 
@@ -650,7 +651,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void getLastWeekPlanFailure(int code, String msg) {
         if ("auth error".equals(msg)) {
-            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
         }
     }
 
@@ -671,7 +672,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void sendWeeklyReportFailure(String code, String msg) {
         if ("auth error".equals(msg)) {
-            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
             return;
         }
         switch (code) {
@@ -700,7 +701,7 @@ public class WriteWeeklyNewspaperActivity extends HttpBaseActivity<WriteWeeklyNe
     @Override
     public void getReportFailed(String code, String msg) {
         if ("auth error".equals(msg)) {
-            catchWarningByCode(ApiJava.NOT_EXIST_TOKEN);
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
             return;
         }
         showToast("获取周报信息失败！");
