@@ -30,7 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by 丁 on 2017/9/21.
  * 我发起的日报列表
  */
 public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkReportPresenter> implements MyLaunchWorkReportContract.View, SwipeRefreshLayout.OnRefreshListener {
@@ -42,18 +41,30 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_empty)
-    TextView      mTvEmpty;
+    TextView mTvEmpty;
 
     private AllReportAdapter mAllReportAdapter;
     private List<MyLaunchReportItem> mItemList = new ArrayList<>();
 
-    private int pageSize = 20;//页面数量
+    /**
+     * 页面数量
+     */
+    private int pageSize = 20;
 
-    private int pageNum = 1;//请求页
+    /**
+     * 请求页
+     */
+    private int pageNum = 1;
 
-    private int timeType = 0;//时间类型
+    /**
+     * 时间类型
+     */
+    private int timeType = 0;
 
-    private int reportType = 1;//发报类型
+    /**
+     * 发报类型
+     */
+    private int reportType = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +82,24 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
      * @param isMore ：is load more data?
      */
     private void loadData(boolean isMore) {
-        if (reportType == 2)
+        if (reportType == 2) {
             mPresenter.loadWeekReportList(pageSize, pageNum, timeType, isMore);
-        else
+        } else {
             mPresenter.loadDailyReport(pageSize, pageNum, timeType, isMore);
+        }
     }
 
     private void initListView() {
-        mRefreshLayout.setOnRefreshListener(this); // 刷新监听。
+        /**
+         * 刷新监听
+         */
+        mRefreshLayout.setOnRefreshListener(this);
         mAllReportList.setLayoutManager(new LinearLayoutManager(this));
         mAllReportList.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.driver_line)));
-        mAllReportList.setSwipeItemClickListener(mItemClickListener); // RecyclerView Item点击监听。
+        /**
+         * RecyclerView Item点击监听
+         */
+        mAllReportList.setSwipeItemClickListener(mItemClickListener);
 
         mAllReportList.useDefaultLoadMore(); // 使用默认的加载更多的View。
         mAllReportList.setLoadMoreListener(mLoadMoreListener); // 加载更多的监听。
@@ -96,11 +114,11 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
         mTopView.setRightAction(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (reportType == 1)
+                if (reportType == 1) {
                     reportType = 2;
-                else
+                } else {
                     reportType = 1;
-
+                }
                 mAllReportList.setVisibility(View.GONE);
                 mRefreshLayout.setRefreshing(true);
                 onRefresh();
@@ -146,8 +164,9 @@ public class MyLaunchWorkReportActivity extends HttpBaseActivity<MyLaunchWorkRep
                 }
             }
 
-            if (intent != null)
+            if (intent != null) {
                 startActivityForResult(intent, 100);
+            }
         }
     };
 
