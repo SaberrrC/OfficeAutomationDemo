@@ -13,13 +13,16 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
@@ -67,10 +70,11 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
             }
 
         } else {
-            PgyUpdateManager.setIsForced(true);
-            PgyUpdateManager.register(context);
+//            PgyUpdateManager.setIsForced(false);
+//            PgyUpdateManager.register(context);
         }
     }
+
 
     public void loadUnReadMsg() {
         mKjHttp.post(Api.TAB_UN_READ_MSG_COUNT, new HttpParams(), new HttpCallBack() {
@@ -99,8 +103,51 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
         });
     }
 
+    /**
+     * 获取版本号信息
+     */
+    public void getAppEdition() {
+        mKjHttp.jsonGet(ApiJava.APP_GETAPPEDITION, new HttpParams(), new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    switch (jo.getString("code")) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            JSONObject data = jo.getJSONObject("data");
+                            if (mView != null) {
+                                AppVersionBean mAppVersionBean = new Gson().fromJson(t, AppVersionBean.class);
+                                mView.getAppEditionSuccess(mAppVersionBean);
+                            }
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            break;
+                        default:
+                            if (mView != null) {
+                            }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
+    }
+
     List<Pair<Long, EMConversation>> sortList = new ArrayList<>();
-    List<EMConversation>             list     = new ArrayList<>();
+    List<EMConversation> list = new ArrayList<>();
 
 
     //TODO 卡顿
@@ -130,9 +177,6 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
 //        mView.bindBadgeView(tempCount);
         return list;
     }
-
-
-
 
 
     @Override

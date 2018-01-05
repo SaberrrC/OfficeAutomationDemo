@@ -130,4 +130,6 @@ public class ApiJava {
 
     //群组员头像查询
     public static final String QUERY_USER_LIST_INFO = "user/queryUserByCodes";
+    //移动端获取版本号
+    public static final String  APP_GETAPPEDITION = "app/getAppEdition";
 }

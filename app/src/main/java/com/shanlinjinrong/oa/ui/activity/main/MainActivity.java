@@ -3,6 +3,8 @@ package com.shanlinjinrong.oa.ui.activity.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -21,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,6 +48,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.activity.main.event.UnReadMessageEvent;
@@ -57,13 +61,17 @@ import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
+import com.shanlinjinrong.oa.utils.VersionManagementUtil;
+import com.squareup.haha.perflib.Main;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -73,6 +81,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import ezy.assist.compat.SettingsCompat;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -112,23 +121,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @BindView(R.id.tab_message_icon)
     ImageView tabMessageIcon;
     @BindView(R.id.tab_message_text)
-    TextView  tabMessageText;
+    TextView tabMessageText;
     @BindView(R.id.tab_contacts_icon)
     ImageView tabContactsIcon;
     @BindView(R.id.tab_contacts_text)
-    TextView  tabContactsText;
+    TextView tabContactsText;
     @BindView(R.id.tab_group_icon)
     ImageView tabGroupIcon;
     @BindView(R.id.tab_group_text)
-    TextView  tabGroupText;
+    TextView tabGroupText;
     @BindView(R.id.tab_me_icon)
     ImageView tabMeIcon;
     @BindView(R.id.tab_me_text)
-    TextView  tabMeText;
+    TextView tabMeText;
     @BindView(R.id.tab_home_text)
-    TextView  tabHomeText;
+    TextView tabHomeText;
     @BindView(R.id.tv_msg_unread)
-    TextView  tvMsgUnRead;
+    TextView tvMsgUnRead;
 
 
     @BindView(R.id.tab_message_icon_light)
@@ -153,13 +162,13 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     View communicationRedSupport;
 
 
-    private List<Fragment>       mTabs;
+    private List<Fragment> mTabs;
     private FragmentPagerAdapter mAdapter;
-    private static final int TAB_MESSAGE  = 0;
+    private static final int TAB_MESSAGE = 0;
     private static final int TAB_CONTACTS = 1;
-    private static final int TAB_HOME     = 2;
-    private static final int TAB_GROUP    = 3;
-    private static final int TAB_ME       = 4;
+    private static final int TAB_HOME = 2;
+    private static final int TAB_GROUP = 3;
+    private static final int TAB_ME = 4;
 
     //灰色以及相对应的RGB值
     private int mGrayColor;
@@ -172,23 +181,24 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     private int mBlueGreen;
     private int mBlueBlue;
 
-    private TextView[]  mTextViews;
+    private TextView[] mTextViews;
     private ImageView[] mBorderimageViews;  //外部的边框
     private ImageView[] mContentImageViews; //内部的内容
 
     int tempMsgCount = 0;
-    private EaseUI                   easeUI;
-    private AlertDialog              dialog;
-    private QBadgeView               qBadgeView;
+    private EaseUI easeUI;
+    private AlertDialog dialog;
+    private QBadgeView qBadgeView;
     private TabCommunicationFragment tabCommunicationFragment;
     private List<EMMessage> mEMMessage = new ArrayList<>();
-    private EMGroup            mGroup;
-    private String             mGroupName;
+    private EMGroup mGroup;
+    private String mGroupName;
     private EMMessage.ChatType chatType;
-    private String             mUserName;
-    private String             mQueryInfo;
-    private String             mNickName;
-    private long               lastNotifiyTime;
+    private String mUserName;
+    private String mQueryInfo;
+    private String mNickName;
+    private long lastNotifiyTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +213,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.applyPermission(this);//判断是否有更新
+        mPresenter.getAppEdition();
         ShortcutBadger.removeCount(MainActivity.this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
@@ -334,9 +345,9 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
 
     //刷新消息数量
-    private final int     BIND_BADGE_REFRESH = -1;
+    private final int BIND_BADGE_REFRESH = -1;
     @SuppressLint("HandlerLeak")
-    protected     Handler handler            = new Handler() {
+    protected Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case BIND_BADGE_REFRESH:
@@ -654,6 +665,88 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
             EventBus.getDefault().post(new OnMessagesRefreshEvent());
         });
     }
+
+    @Override
+    public void getAppEditionSuccess(AppVersionBean mAppVersionBean) {
+        String androidVersion = mAppVersionBean.getData().getAndroidVersion();
+        if (androidVersion.startsWith("v")) {
+            androidVersion = androidVersion.substring(1);
+        }
+        String androidUrl = mAppVersionBean.getData().getAndroidUrl();
+        mAppVersionBean.getData().getAndroidUrl();
+        String isForceUpdate = mAppVersionBean.getData().getAndroidIsForceUpdate();
+        try {
+            String appVersionName = VersionManagementUtil.getVersion(MainActivity.this);
+            if (appVersionName.startsWith("v")) {
+                appVersionName = appVersionName.substring(1);
+            }
+            int i = VersionManagementUtil.VersionComparison(androidVersion, appVersionName);
+            if (i == 1) {//有更新
+                if (isForceUpdate.equals("1")) {//强制更新
+                    showUpdateDialog(true, androidUrl);
+                } else {
+                    showUpdateDialog(false, androidUrl);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void showUpdateDialog(boolean iosIsForceUpdate, String androidUrl) {
+        View dialogView = LayoutInflater.from(MainActivity.this).inflate(R.layout.public_dialog, null);
+        TextView title = (TextView) dialogView.findViewById(R.id.title);
+        title.setText("版本更新");
+        TextView message = (TextView) dialogView.findViewById(R.id.message);
+        if (iosIsForceUpdate) {
+            message.setText("请更新至最新版本");
+        } else {
+            message.setText("是否更新至最新版本");
+        }
+        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this,
+                R.style.AppTheme_Dialog).create();
+        alertDialog.setView(dialogView);
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!iosIsForceUpdate) {
+                    dialog.dismiss();
+                }
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse(androidUrl);
+                intent.setData(content_url);
+                startActivity(intent);
+            }
+        };
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "更新",listener);
+
+        if (!iosIsForceUpdate) {
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+        }
+        alertDialog.show();
+
+        if (iosIsForceUpdate) {
+            alertDialog.setCancelable(false);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+        } else {
+            alertDialog.setCancelable(true);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+        }
+
+    }
+
 
     //位置权限回调
     @Override
