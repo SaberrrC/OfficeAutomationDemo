@@ -69,27 +69,27 @@ import rx.schedulers.Schedulers;
  */
 public class EaseConversationListFragment extends EaseBaseFragment {
     private final static int MSG_REFRESH = 2;
-    protected EditText    query;
+    protected EditText query;
     protected ImageButton clearSearch;
-    protected boolean     hidden;
+    protected boolean hidden;
     protected List<EMConversation> conversationList = new ArrayList<>();
-    public    EaseConversationList conversationListView;
-    protected FrameLayout          errorItemContainer;
+    public EaseConversationList conversationListView;
+    protected FrameLayout errorItemContainer;
 
     protected boolean isConflict;
 
     private TextView tvErrorView;
-    private       long lastClickTime = 0;
-    private final int  REFRESH_DATA  = -3, REFRESH_SETUP = -4;
+    private long lastClickTime = 0;
+    private final int REFRESH_DATA = -3, REFRESH_SETUP = -4;
     private boolean mIsSetup;
-    private List<EMConversation> list                       = new ArrayList<>();
+    private List<EMConversation> list = new ArrayList<>();
     private List<EMConversation> conversationIncompleteList = new ArrayList<>();
 
-    private static final String APP_CONFIG              = "app_config";
-    public static final  String DEFAULT_ARGUMENTS_VALUE = "";
+    private static final String APP_CONFIG = "app_config";
+    public static final String DEFAULT_ARGUMENTS_VALUE = "";
     private EMConversation emConversation;
     Context mContext;
-    private int    tempCount;
+    private int tempCount;
     private String userCode;
 
     @Override
@@ -390,6 +390,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                             //TODO 生产
                             kjHttp.post(ApiConstant.JAVA_TEST_HOST + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
                                 private UserInfoDetailsBean userDetailsBean;
+
                                 @Override
                                 public void onFailure(int errorNo, String strMsg) {
                                     super.onFailure(errorNo, strMsg);
@@ -408,8 +409,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 public void onSuccess(String t) {
                                     super.onSuccess(t);
                                     try {
-                                        userDetailsBean = new Gson().fromJson(t, new TypeToken<UserInfoDetailsBean>() {
-                                        }.getType());
+                                        userDetailsBean = new Gson().fromJson(t, new TypeToken<UserInfoDetailsBean>() {}.getType());
                                     } catch (Throwable throwable) {
                                         throwable.printStackTrace();
                                     }
@@ -419,8 +419,8 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                                 case "000000":
                                                     Observable.create(new Observable.OnSubscribe<Object>() {
                                                         @Override
-                                                        public void call(Subscriber<? super Object> subscriber) {
-                                                            FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getUid()+"", "sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), userDetailsBean.getData().get(0).getImg(), userDetailsBean.getData().get(0).getEmail(), userDetailsBean.getData().get(0).getSex()));
+                                                        public void   call(Subscriber<? super Object> subscriber) {
+                                                            FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getUid() + "", "sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), ApiConstant.BASE_PIC_URL + userDetailsBean.getData().get(0).getImg(), userDetailsBean.getData().get(0).getEmail(), userDetailsBean.getData().get(0).getSex()));
                                                             list.add(0, emConversation);
                                                             if (!handler.hasMessages(MSG_REFRESH)) {
                                                                 handler.sendEmptyMessage(MSG_REFRESH);
@@ -438,6 +438,8 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                                                     throwable.printStackTrace();
                                                                 }
                                                             });
+                                                    break;
+                                                default:
                                                     break;
                                             }
                                         } catch (Throwable e) {

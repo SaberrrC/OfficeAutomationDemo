@@ -11,6 +11,42 @@ import com.shanlinjinrong.oa.manager.AppManager;
  */
 public class Constants {
 
+
+    /***************环信错误码***************/
+    /**
+     * 服务器繁忙
+     */
+    public final static int SERVER_BUSY = 302;
+    /**
+     * 无法访问到服务器
+     */
+    public final static int SERVER_NOT_REACHABLE = 300;
+    /**
+     * 聊天功能限制
+     */
+    public final static int SERVER_SERVICE_RESTRICTED = 305;
+    /**
+     * 服务器响应超时
+     */
+    public final static int SERVER_TIMEOUT = 301;
+    /**
+     * 未知的服务异常
+     */
+    public final static int SERVER_UNKNOWN_ERROR = 303;
+    /**
+     * 群组不存在
+     */
+    public final static int GROUP_NOT_EXIST = 605;
+    /**
+     * 尚未加入此群组
+     */
+    public final static int GROUP_NOT_JOINED = 602;
+    /**
+     * 群id不正确
+     */
+    public final static int GROUP_INVALID_ID = 600;
+
+
     /**
      * 公司ID
      */
@@ -43,6 +79,8 @@ public class Constants {
      * 工号
      */
     public final static String USER_CODE = "user_code";
+
+    public final static String USER_NAME = "user_name";
 
 
     /**

@@ -122,7 +122,7 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     public void searchUserSuccess(String phone) {
         Intent intent = new Intent(this, ConfirmCompanyEmailActivity.class);
         intent.putExtra(Constants.PHONE_NUMBER, phone);
-        intent.putExtra(Constants.USER_CODE, mIdentifyingCode.getText().toString().trim());
+        intent.putExtra(Constants.USER_CODE, mJobNumber.getText().toString().trim());
         intent.putExtra(Constants.PHONE_STATUS, true);
         startActivity(intent);
     }

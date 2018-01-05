@@ -339,7 +339,7 @@ public class EaseNotifier {
                                                                 FriendsInfoCacheSvc.
                                                                         getInstance(appContext).
                                                                         addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getUid()+"","sl_" + userDetailsBean.getData().get(0).getCode(),
-                                                                                userDetailsBean.getData().get(0).getUsername(), userDetailsBean.getData().get(0).getImg(),userDetailsBean.getData().get(0).getEmail(),userDetailsBean.getData().get(0).getSex()));
+                                                                                userDetailsBean.getData().get(0).getUsername(), ApiConstant.BASE_PIC_URL +  userDetailsBean.getData().get(0).getImg(),userDetailsBean.getData().get(0).getEmail(),userDetailsBean.getData().get(0).getSex()));
                                                                 mNickName = userDetailsBean.getData().get(0).getUsername();
                                                                 subscriber.onCompleted();
                                                             }

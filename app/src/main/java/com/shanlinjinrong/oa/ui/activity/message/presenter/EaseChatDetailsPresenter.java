@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.example.retrofit.net.HttpMethods;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -20,7 +21,7 @@ import rx.Subscriber;
 
 /**
  * @Description：
- * @Auther：王凤旭
+ * @author：王凤旭
  * @Email：Tonnywfx@Gmail.com
  */
 
@@ -33,7 +34,7 @@ public class EaseChatDetailsPresenter extends HttpPresenter<EaseChatDetailsConta
 
     @Override
     public void searchUserListInfo(String codeList) {
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>(16);
         map.put("codeList", codeList);
         HttpMethods.getInstance().queryUserListInfo(map, new Subscriber<ArrayList<GroupUserInfoResponse>>() {
 
@@ -64,10 +65,11 @@ public class EaseChatDetailsPresenter extends HttpPresenter<EaseChatDetailsConta
             public void onError(Throwable e) {
                 try {
                     if (e instanceof HttpException) {
-                        if (((HttpException) e).code() > 400) {
+                        if (((HttpException) e).code() == 401) {
+                            mView.uidNull(ApiJava.REQUEST_TOKEN_NOT_EXIST);
+                        }else {
                             mView.searchUserListInfoFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
-//                        mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
                         mView.searchUserListInfoFailed(-1, "网络不通，请检查网络连接！");
                     } else if (e instanceof NullPointerException) {

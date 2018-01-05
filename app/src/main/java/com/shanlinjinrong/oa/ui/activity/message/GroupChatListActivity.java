@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -48,22 +49,22 @@ import io.reactivex.schedulers.Schedulers;
 public class GroupChatListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnKeyListener {
 
     @BindView(R.id.top_view)
-    CommonTopView      mTopView;
+    CommonTopView mTopView;
     @BindView(R.id.rv_group_show)
-    RecyclerView       mRvGroupShow;
+    RecyclerView mRvGroupShow;
     @BindView(R.id.sr_refresh)
     SwipeRefreshLayout mSrRefresh;
     @BindView(R.id.search_et_input)
-    ClearEditText      mSearchEtInput;
+    ClearEditText mSearchEtInput;
     @BindView(R.id.tv_error_layout)
-    TextView           tvErrorLayout;
+    TextView tvErrorLayout;
 
-    private View                 mFooterView;
+    private View mFooterView;
     private GroupChatListAdapter mAdapter;
-    private       List<EMGroup> mGroupList       = new ArrayList<>();
-    private       List<EMGroup> mSearchGroupList = new ArrayList<>();
+    private List<EMGroup> mGroupList = new ArrayList<>();
+    private List<EMGroup> mSearchGroupList = new ArrayList<>();
     @SuppressWarnings("SpellCheckingInspection")
-    private final int           REQUESTCODE      = 101, DELETESUCCESS = -2, RESULTELECTEDCODE = -3;
+    private final int REQUESTCODE = 101, DELETESUCCESS = -2, RESULTELECTEDCODE = -3;
     private long lastClickTime = 0;
 
     @Override
@@ -164,6 +165,24 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                 mGroupList = EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
             } catch (HyphenateException e) {
                 e.printStackTrace();
+                int errorCode = e.getErrorCode();
+                switch (errorCode) {
+                    case Constants.SERVER_BUSY:
+                        tvErrorLayout.setText("服务器繁忙！");
+                        break;
+                    case Constants.SERVER_NOT_REACHABLE:
+                        tvErrorLayout.setText("无法访问到服务器！");
+                        break;
+                    case Constants.SERVER_TIMEOUT:
+                        tvErrorLayout.setText("服务器出错了！");
+                        break;
+                    case Constants.SERVER_UNKNOWN_ERROR:
+                        tvErrorLayout.setText("服务器异常！");
+                        break;
+                    default:
+                        tvErrorLayout.setText("无法访问到服务器！");
+                        break;
+                }
             }
             subscriber.onComplete();
         }).subscribeOn(Schedulers.io())
@@ -205,6 +224,8 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                 refreshData(); //TODO 待优化
                 break;
             case RESULTELECTEDCODE: //返回选择的群组人员
+                break;
+            default:
                 break;
         }
     }
@@ -264,6 +285,8 @@ public class GroupChatListActivity extends BaseActivity implements SwipeRefreshL
                 break;
             case Constants.GROUPDISSOLVE:
                 refreshData();
+                break;
+            default:
                 break;
         }
     }

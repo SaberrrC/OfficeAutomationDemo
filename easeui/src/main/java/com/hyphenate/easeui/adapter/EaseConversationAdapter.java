@@ -51,15 +51,15 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     private static final String TAG = "ChatAllHistoryAdapter";
     private List<EMConversation> conversationList;
     private List<EMConversation> copyConversationList;
-    private ConversationFilter   conversationFilter;
-    private boolean              notiyfyByFilter;
+    private ConversationFilter conversationFilter;
+    private boolean notiyfyByFilter;
 
-    protected int     primaryColor;
-    protected int     secondaryColor;
-    protected int     timeColor;
-    protected int     primarySize;
-    protected int     secondarySize;
-    protected float   timeSize;
+    protected int primaryColor;
+    protected int secondaryColor;
+    protected int timeColor;
+    protected int primarySize;
+    protected int secondarySize;
+    protected float timeSize;
     protected Context mContext;
     EMMessage lastMessage;
     private String conversationId;
@@ -178,7 +178,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             }
         }
         try {
-            if (lastMessage.getChatType() == EMMessage.ChatType.Chat && !lastMessage.getFrom().equals("sl_admin") && !lastMessage.getFrom().equals("sl_notice")) {
+            if (lastMessage.getChatType() == EMMessage.ChatType.Chat && !lastMessage.conversationId().equals("sl_admin") && !lastMessage.conversationId().equals("sl_notice")) {
                 conversationId = lastMessage.conversationId().substring(0, 12);
                 mUsername = FriendsInfoCacheSvc.getInstance(mContext).getNickName(conversationId);
                 mPortrait = FriendsInfoCacheSvc.getInstance(mContext).getPortrait(conversationId);
@@ -203,7 +203,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
                 holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
                 holder.motioned.setVisibility(View.GONE);
-            } else if (!TextUtils.isEmpty(mUsername) && !lastMessage.getFrom().contains("admin") && !lastMessage.getFrom().contains("notice")) {
+            } else if (!TextUtils.isEmpty(mUsername) && !lastMessage.conversationId().contains("admin") && !lastMessage.conversationId().contains("notice")) {
                 try {
                     Glide.with(mContext)
                             .load(mPortrait)
@@ -218,10 +218,10 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
-            } else if (lastMessage.getFrom().contains("admin")) {
+            } else if (lastMessage.conversationId().contains("admin")) {
                 holder.name.setText("会议邀请");
                 holder.avatar.setImageResource(R.drawable.meeting_invite_icon);
-            } else if (lastMessage.getFrom().contains("notice")) {
+            } else if (lastMessage.conversationId().contains("notice")) {
                 holder.name.setText("公告通知");
                 holder.avatar.setImageResource(R.drawable.notice_message_icon);
             }

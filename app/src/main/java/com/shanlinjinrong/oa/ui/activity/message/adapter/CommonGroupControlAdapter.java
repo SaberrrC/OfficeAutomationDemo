@@ -10,6 +10,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
+import com.example.retrofit.net.ApiConstant;
 import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
@@ -48,9 +49,9 @@ public class CommonGroupControlAdapter extends BaseQuickAdapter<GroupUserInfoRes
                     name.setVisibility(View.VISIBLE);
                     name.setText(bean.getUsername());
 
-                    if (!portaits.equals(com.example.retrofit.constants.Constants.SLPicBaseUrl)) {
+                    if (!"".equals(portaits) || !"null".equals(portaits)) {
                         Glide.with(AppManager.mContext)
-                                .load(portaits)
+                                .load(ApiConstant.BASE_PIC_URL + portaits)
                                 .dontAnimate()
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .error(R.drawable.icon_homepage_work_report_me_launch)

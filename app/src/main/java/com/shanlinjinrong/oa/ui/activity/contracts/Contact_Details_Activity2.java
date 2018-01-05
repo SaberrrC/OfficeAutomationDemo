@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.example.retrofit.net.ApiConstant;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -255,7 +256,7 @@ public class Contact_Details_Activity2 extends BaseActivity {
         }
         if (!TextUtils.isEmpty(mPortrait)) {
             Glide.with(AppManager.mContext)
-                    .load(mPortrait)
+                    .load(ApiConstant.BASE_PIC_URL + mPortrait)
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(R.drawable.ease_user_portraits)
@@ -271,6 +272,8 @@ public class Contact_Details_Activity2 extends BaseActivity {
         switch (view.getId()) {
             case R.id.btn_back:
                 finish();
+                break;
+            default:
                 break;
         }
     }

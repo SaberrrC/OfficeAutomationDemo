@@ -26,6 +26,7 @@ import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
+import com.hyphenate.exceptions.HyphenateException;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
@@ -63,30 +64,30 @@ import io.reactivex.schedulers.Schedulers;
 public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroupContactPresenter> implements SelectedGroupContactContract.View, SelectedGroupContactFragment.onLoadUsersListener, SelectedGroupContactFragment.onSelectedUsersListener {
 
     @BindView(R.id.top_view)
-    CommonTopView     mTopView;
+    CommonTopView mTopView;
     @BindView(R.id.tv_empty_view)
-    TextView          mTvErrorView;
+    TextView mTvErrorView;
     @BindView(R.id.search_et_input)
-    EditText          mSearchContact;
+    EditText mSearchContact;
     @BindView(R.id.tv_selected_contact)
-    TextView          mTvSelectedContact;
+    TextView mTvSelectedContact;
     @BindView(R.id.rv_search_contact)
-    RecyclerView      mRvSearchContact;
+    RecyclerView mRvSearchContact;
     @BindView(R.id.ll_selected_contact)
-    LinearLayout      mLlSelectedContact;
+    LinearLayout mLlSelectedContact;
     @BindView(R.id.bottom_container_layout)
     BottomSheetLayout bottomContainerLayout;
 
-    private EMGroup                            mGroup;
-    private String[]                           mUserNames;
-    private String[]                           mUserCodes;
-    private List<String>                       mOrgIdKey;
-    private List<Contacts>                     mGroupUsers;
-    private List<Contacts>                     mSearchData;
-    private ArrayList<String>                  mSelectedAccount;
-    private SelectedContactAdapter             mUserAdapter;
-    private GroupContactListFragment           mBottomFragment;
-    private SparseArray<List<Contacts>>        mCacheContact;
+    private EMGroup mGroup;
+    private String[] mUserNames;
+    private String[] mUserCodes;
+    private List<String> mOrgIdKey;
+    private List<Contacts> mGroupUsers;
+    private List<Contacts> mSearchData;
+    private ArrayList<String> mSelectedAccount;
+    private SelectedContactAdapter mUserAdapter;
+    private GroupContactListFragment mBottomFragment;
+    private SparseArray<List<Contacts>> mCacheContact;
     private List<SelectedGroupContactFragment> mFragments;
     private final int RESULT_CODE = -3, REFRESHSUCCESS = -2, REQUESTCODE = 101, FINISHRESULT = -5;
 
@@ -227,7 +228,26 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                 }, throwable -> {
                     hideLoadingView();
                     throwable.printStackTrace();
-                    showToast("邀请成员失败，请稍后重试！");
+                    if (throwable instanceof HyphenateException) {
+                        int errorCode = ((HyphenateException) throwable).getErrorCode();
+                        switch (errorCode) {
+                            case Constants.SERVER_BUSY:
+                                Toast.makeText(this, "服务器繁忙！", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Constants.SERVER_NOT_REACHABLE:
+                                Toast.makeText(this, "无法访问到服务器！", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Constants.SERVER_TIMEOUT:
+                                Toast.makeText(this, "服务器出错了！", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Constants.SERVER_UNKNOWN_ERROR:
+                                Toast.makeText(this, "服务器异常！", Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                showToast("邀请成员失败，请稍后重试！");
+                                break;
+                        }
+                    }
                 }, () -> {
                     hideLoadingView();
 
@@ -293,7 +313,26 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     .subscribe(o -> {
                     }, throwable -> {
                         hideLoadingView();
-                        Toast.makeText(this, "群组创建失败！", Toast.LENGTH_SHORT).show();
+                        if (throwable instanceof HyphenateException) {
+                            int errorCode = ((HyphenateException) throwable).getErrorCode();
+                            switch (errorCode) {
+                                case Constants.SERVER_BUSY:
+                                    Toast.makeText(this, "服务器繁忙！", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case Constants.SERVER_NOT_REACHABLE:
+                                    Toast.makeText(this, "无法访问到服务器！", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case Constants.SERVER_TIMEOUT:
+                                    Toast.makeText(this, "服务器出错了！", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case Constants.SERVER_UNKNOWN_ERROR:
+                                    Toast.makeText(this, "服务器异常！", Toast.LENGTH_SHORT).show();
+                                    break;
+                                default:
+                                    Toast.makeText(this, "群组创建失败！", Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        }
                     }, () -> {
                         hideLoadingView();
                         Toast.makeText(this, "群组创建成功！", Toast.LENGTH_SHORT).show();
@@ -617,7 +656,7 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
             case Constants.MODIFICATIONNAME:
                 break;
             case Constants.GROUPDISSOLVE:
-                if (Utils.isActivityRunning(this,getClass().getName())) {
+                if (Utils.isActivityRunning(this, getClass().getName())) {
                     EaseAlertDialog alertDialog = new EaseAlertDialog(getParent(), null, "群组已经解散", null, (confirmed, bundle) -> {
                         event.setEvent(true);
                         setResult(FINISHRESULT);
@@ -627,6 +666,8 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     alertDialog.show();
                 }
                 break;
+                default:
+                    break;
         }
     }
 

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.example.retrofit.net.ApiConstant;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -263,19 +264,19 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         } else {
             user = (User) this.getIntent().getSerializableExtra("user");
             mSex = user.getSex();
-            String uid =  user.getUid();
+            String uid = user.getUid();
             mEmail = user.getEmail();
             mPhone = user.getPhone();
             mPost = user.getPostName();
             mUserCode = "sl_" + user.getCode();
             mNickName = user.getUsername();
-            mPortrait =user.getPortraits();
+            mPortrait = ApiConstant.BASE_PIC_URL + user.getPortraits();
             mDepartment = user.getDepartmentName();
             mDepartmentId = user.getDepartmentId();
             mUserDepartment = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_DEPARTMENT_NAME);
 
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
-                    addOrUpdateFriends(new Friends(uid,mUserCode,
+                    addOrUpdateFriends(new Friends(uid, mUserCode,
                             mNickName, mPortrait, mSex, mPhone, mPost, mDepartment, mEmail, mDepartmentId));
         }
     }
@@ -292,7 +293,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
                 tv_phone_number.setText("-");
             }
 
-            if (!TextUtils.isEmpty(mPortrait)) {
+            if (!TextUtils.isEmpty(mPortrait) && !ApiConstant.BASE_PIC_URL.equals(mPortrait)) {
                 Glide.with(AppManager.mContext)
                         .load(mPortrait)
                         .dontAnimate()
@@ -339,7 +340,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         tvErrorLayout.setVisibility(View.GONE);
         try {//更新个人详情
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
-                    addOrUpdateFriends(new Friends(userDetailsBean.getUid(),"sl_" + userDetailsBean.getCode(),
+                    addOrUpdateFriends(new Friends(userDetailsBean.getUid(), "sl_" + userDetailsBean.getCode(),
                             userDetailsBean.getUsername(), userDetailsBean.getPortrait(),
                             userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                             userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));

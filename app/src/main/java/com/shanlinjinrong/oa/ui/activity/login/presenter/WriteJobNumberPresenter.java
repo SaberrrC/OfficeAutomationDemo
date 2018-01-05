@@ -39,8 +39,9 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
 
                     switch (requestStatus.getCode()) {
                         case ApiJava.REQUEST_CODE_OK:
-                            if (mView != null)
+                            if (mView != null) {
                                 mView.getIdentifyingCodeSuccess(requestStatus.getData().getImg(), requestStatus.getData().getKeyCode());
+                            }
                             break;
                         default:
                             break;
@@ -54,9 +55,10 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null){
+                    if (mView != null) {
                         mView.uidNull(strMsg);
-                        mView.getIdentifyingCodeFailed(errorNo);}
+                        mView.getIdentifyingCodeFailed(errorNo);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -75,8 +77,9 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
             public void onPreStart() {
                 super.onPreStart();
                 try {
-                    if (mView != null)
+                    if (mView != null) {
                         mView.showLoading();
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -96,8 +99,9 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
                             mView.searchUserEmpty("查询无结果");
                             break;
                         default:
-                            if (mView != null)
+                            if (mView != null) {
                                 mView.searchUserFailed(0, queryPhoneBean.getMessage());
+                            }
                             break;
                     }
                 } catch (Throwable e) {
@@ -109,8 +113,9 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
             public void onFinish() {
                 super.onFinish();
                 try {
-                    if (mView != null)
+                    if (mView != null) {
                         mView.hideLoading();
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

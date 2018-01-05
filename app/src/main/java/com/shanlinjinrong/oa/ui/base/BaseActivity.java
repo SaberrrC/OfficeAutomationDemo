@@ -251,8 +251,7 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * @param content 提示内容
      */
-    public void showToast(
-            String content) {
+    public void showToast(String content) {
         if (toast == null) {
             toast = Toast.makeText(this,
                     content,

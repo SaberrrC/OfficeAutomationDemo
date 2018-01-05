@@ -1,7 +1,5 @@
 package com.example.retrofit.model.responsebody;
 
-import com.example.retrofit.constants.Constants;
-
 /**
  * @Description：
  * @Auther：王凤旭
@@ -51,8 +49,9 @@ public class GroupUserInfoResponse {
     }
 
     public String getCode() {
-        if (code == null)
+        if (code == null) {
             return "";
+        }
         return code;
     }
 
@@ -61,8 +60,9 @@ public class GroupUserInfoResponse {
     }
 
     public String getUsername() {
-        if (username == null)
+        if (username == null) {
             username = "";
+        }
         return username;
     }
 
@@ -71,8 +71,9 @@ public class GroupUserInfoResponse {
     }
 
     public String getEmail() {
-        if (email == null)
+        if (email == null) {
             return "";
+        }
         return email;
     }
 
@@ -81,8 +82,9 @@ public class GroupUserInfoResponse {
     }
 
     public String getSex() {
-        if (sex == null)
+        if (sex == null) {
             return "";
+        }
         return sex;
     }
 
@@ -91,9 +93,10 @@ public class GroupUserInfoResponse {
     }
 
     public String getImg() {
-        if (img == null || img.equals("null"))
+        if (img == null || img.equals("null")) {
             return "";
-        return  img;
+        }
+        return img;
     }
 
     public void setImg(String img) {

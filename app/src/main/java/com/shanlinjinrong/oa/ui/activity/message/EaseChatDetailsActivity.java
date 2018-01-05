@@ -60,49 +60,49 @@ import io.reactivex.schedulers.Schedulers;
 public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPresenter> implements EaseChatDetailsContact.View {
 
     @BindView(R.id.top_view)
-    CommonTopView  topView;
+    CommonTopView topView;
     @BindView(R.id.btn_chat_delete)
-    TextView       btnChatDelete;
+    TextView btnChatDelete;
     @BindView(R.id.img_portrait)
-    ImageView      imgPortrait;
+    ImageView imgPortrait;
     @BindView(R.id.img_group_person)
-    ImageView      imgGroupPerson;
+    ImageView imgGroupPerson;
     @BindView(R.id.rv_person_show)
-    RecyclerView   rvPersonShow;
+    RecyclerView rvPersonShow;
     @BindView(R.id.rl_group_name)
     RelativeLayout rlGroupName;
     @BindView(R.id.tv_modification_name)
-    TextView       tvModificationName;
+    TextView tvModificationName;
     @BindView(R.id.rl_group_person)
     RelativeLayout rlGroupPerson;
     @BindView(R.id.tv_clear_message_record)
-    TextView       tvClearMessageRecord;
+    TextView tvClearMessageRecord;
     @BindView(R.id.btn_look_message_record)
-    TextView       btnLookMessageRecord;
+    TextView btnLookMessageRecord;
     @BindView(R.id.rl_group_portrait)
     RelativeLayout rlGroupPortrait;
     @BindView(R.id.img_modification_portrait)
-    ImageView      imgModificationPortrait;
+    ImageView imgModificationPortrait;
     @BindView(R.id.img_modification_group_name)
-    ImageView      imgModificationGroupName;
+    ImageView imgModificationGroupName;
     @BindView(R.id.tv_error_layout)
-    TextView       tvErrorLayout;
+    TextView tvErrorLayout;
     @BindView(R.id.sv_container_layout)
-    ScrollView     svContainerLayout;
+    ScrollView svContainerLayout;
     @BindView(R.id.tv_modification_person)
-    TextView       tvModificationPerson;
+    TextView tvModificationPerson;
     @BindView(R.id.ll_look_more)
-    LinearLayout   llLookMore;
+    LinearLayout llLookMore;
 
-    private int                         memberCount;
-    private String                      mGroupId;
-    private EMGroup                     mGroupServer1;
-    private ArrayList<String>           mMemberList;
+    private int memberCount;
+    private String mGroupId;
+    private EMGroup mGroupServer1;
+    private ArrayList<String> mMemberList;
     private List<GroupUserInfoResponse> mData;
-    private CommonGroupControlAdapter   mAdapter;
-    private EMConversation              mConversation;
-    private EMCursorResult<String>      mGroupMemberResult;
-    private boolean                     mIsGroup, mIsOwner, mIsResume;
+    private CommonGroupControlAdapter mAdapter;
+    private EMConversation mConversation;
+    private EMCursorResult<String> mGroupMemberResult;
+    private boolean mIsGroup, mIsOwner, mIsResume;
     private String mGroupOwner, mGroupName, message_to, message_from;
     private String mSearchUserId = "", mQueryUserInfo = "";
     private final int REQUSET_CODE = 101, REFRESHSUCCESS = -2, RESULTMODIFICATIONNAME = -3, MODIFICATIONOWNER = -4, FINISHRESULT = -5, DISSOLVEGROUP = 600, LISTENERGROUPAME = -1;
@@ -143,15 +143,37 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 hideLoadingView();
                 if (throwable instanceof HyphenateException) {
                     int errorCode = ((HyphenateException) throwable).getErrorCode();
-                    if (errorCode >= 600 && errorCode <= 700) {
-                        if (Utils.isActivityRunning(this, getClass().getName())) {
-                            EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
-                                setResult(REFRESHSUCCESS);
-                                finish();
-                            }, false);
-                            alertDialog.setCancelable(false);
-                            alertDialog.show();
-                        }
+                    switch (errorCode) {
+                        case Constants.SERVER_BUSY:
+                            tvErrorLayout.setText("服务器繁忙");
+                            break;
+                        case Constants.SERVER_NOT_REACHABLE:
+                            tvErrorLayout.setText("无法访问到服务器");
+                            break;
+                        case Constants.SERVER_SERVICE_RESTRICTED:
+                            tvErrorLayout.setText("聊天功能异常");
+                            break;
+                        case Constants.SERVER_TIMEOUT:
+                            tvErrorLayout.setText("服务器出错了");
+                            break;
+                        case Constants.SERVER_UNKNOWN_ERROR:
+                            tvErrorLayout.setText("服务器异常");
+                            break;
+                        case Constants.GROUP_NOT_EXIST:
+                        case Constants.GROUP_NOT_JOINED:
+                        case Constants.GROUP_INVALID_ID:
+                            if (Utils.isActivityRunning(this, getClass().getName())) {
+                                EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                    setResult(REFRESHSUCCESS);
+                                    finish();
+                                }, false);
+                                alertDialog.setCancelable(false);
+                                alertDialog.show();
+                            }
+                            break;
+                        default:
+                            tvErrorLayout.setText("服务器异常");
+                            break;
                     }
                 }
             }, () -> {
@@ -215,9 +237,43 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 e.onComplete();
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
             }, throwable -> {
-                throwable.printStackTrace();
                 hideLoadingView();
-            }, () -> {//TODO 群成团账号
+                if (throwable instanceof HyphenateException) {
+                    int errorCode = ((HyphenateException) throwable).getErrorCode();
+                    switch (errorCode) {
+                        case Constants.SERVER_BUSY:
+                            tvErrorLayout.setText("服务器繁忙");
+                            break;
+                        case Constants.SERVER_NOT_REACHABLE:
+                            tvErrorLayout.setText("无法访问到服务器");
+                            break;
+                        case Constants.SERVER_SERVICE_RESTRICTED:
+                            tvErrorLayout.setText("聊天功能异常");
+                            break;
+                        case Constants.SERVER_TIMEOUT:
+                            tvErrorLayout.setText("服务器出错了");
+                            break;
+                        case Constants.SERVER_UNKNOWN_ERROR:
+                            tvErrorLayout.setText("服务器异常");
+                            break;
+                        case Constants.GROUP_NOT_EXIST:
+                        case Constants.GROUP_NOT_JOINED:
+                        case Constants.GROUP_INVALID_ID:
+                            if (Utils.isActivityRunning(this, getClass().getName())) {
+                                EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                    setResult(REFRESHSUCCESS);
+                                    finish();
+                                }, false);
+                                alertDialog.setCancelable(false);
+                                alertDialog.show();
+                            }
+                            break;
+                        default:
+                            tvErrorLayout.setText("服务器异常");
+                            break;
+                    }
+                }
+            }, () -> {
                 if (mIsOwner) {
                     mMemberList.add(0, "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode());
                 } else {
@@ -363,6 +419,8 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 intent.putExtra("isOwner", mIsOwner);
                 intent.putStringArrayListExtra("memberList", mMemberList);
                 break;
+            default:
+                break;
         }
         startActivityForResult(intent, REQUSET_CODE);
     }
@@ -372,7 +430,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
 
         //---------------------------------- 群组删除处理 ----------------------------------
 
-        if (mGroupOwner != null)
+        if (mGroupOwner != null) {
             if (mIsOwner) {
                 new EaseAlertDialog(this, null, "是否解散群组", null, (confirmed, bundle) -> {
                     if (!confirmed) {
@@ -383,6 +441,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 }, true).show();
                 return;
             }
+        }
         showLoadingView();
         dissolveGroup();
     }
@@ -391,30 +450,68 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
     private void dissolveGroup() {
         Observable.create(e -> {
             if (mIsOwner) {
-                EMClient.getInstance().groupManager().destroyGroup(mGroupId);//解散群组
+                //解散群组
+                EMClient.getInstance().groupManager().destroyGroup(mGroupId);
             } else {
-                EMClient.getInstance().groupManager().leaveGroup(mGroupId);//退出群组
+                //退出群组
+                EMClient.getInstance().groupManager().leaveGroup(mGroupId);
             }
             e.onComplete();
         }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(o -> {
         }, throwable -> {
             hideLoadingView();
-            if (mGroupOwner != null)
+            if (mGroupOwner != null) {
                 if (mIsOwner) {
                     Toast.makeText(this, "群组解散失败，请从新尝试！", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "群组退出失败，请从新尝试！", Toast.LENGTH_SHORT).show();
                 }
-            throwable.printStackTrace();
+            }
+            if (throwable instanceof HyphenateException) {
+                int errorCode = ((HyphenateException) throwable).getErrorCode();
+                switch (errorCode) {
+                    case Constants.SERVER_BUSY:
+                        tvErrorLayout.setText("服务器繁忙");
+                        break;
+                    case Constants.SERVER_NOT_REACHABLE:
+                        tvErrorLayout.setText("无法访问到服务器");
+                        break;
+                    case Constants.SERVER_SERVICE_RESTRICTED:
+                        tvErrorLayout.setText("聊天功能异常");
+                        break;
+                    case Constants.SERVER_TIMEOUT:
+                        tvErrorLayout.setText("服务器出错了");
+                        break;
+                    case Constants.SERVER_UNKNOWN_ERROR:
+                        tvErrorLayout.setText("服务器异常");
+                        break;
+                    case Constants.GROUP_NOT_EXIST:
+                    case Constants.GROUP_NOT_JOINED:
+                    case Constants.GROUP_INVALID_ID:
+                        if (Utils.isActivityRunning(this, getClass().getName())) {
+                            EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                setResult(REFRESHSUCCESS);
+                                finish();
+                            }, false);
+                            alertDialog.setCancelable(false);
+                            alertDialog.show();
+                        }
+                        break;
+                    default:
+                        tvErrorLayout.setText("服务器异常");
+                        break;
+                }
+            }
         }, () -> {
             try {
                 hideLoadingView();
-                if (mGroupOwner != null)
+                if (mGroupOwner != null) {
                     if (mIsOwner) {
                         Toast.makeText(this, "解散成功！", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, "退出成功！", Toast.LENGTH_SHORT).show();
                     }
+                }
             } catch (Throwable e) {
                 e.printStackTrace();
             }
@@ -488,11 +585,12 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 String groupOwner = mGroupOwner.substring(3, mGroupOwner.length());
                 try {
                     for (int i = 0; i < mMemberList.size(); i++) {
-                        if (userInfo.size() > i)
+                        if (userInfo.size() > i) {
                             if (userInfo.get(i).getCode().equals(groupOwner)) {
                                 tvModificationPerson.setText(userInfo.get(i).getUsername());
                                 break;
                             }
+                        }
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -622,6 +720,8 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
             case Constants.GROUPOWNERCHANGE:
                 mSearchUserId = "";
                 initData();
+                break;
+            default:
                 break;
         }
     }
