@@ -1,1 +1,1 @@
-include ':app', ':calendarlibrary', ':uilibrary', ':retrofit', ':easeui', ':ShortcutBadger'
+include ':app', ':calendarlibrary', ':uilibrary', ':retrofit', ':easeui'
