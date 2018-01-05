@@ -20,13 +20,11 @@ public class EncryptionUtil {
             e.printStackTrace();
         }
         return sb.toString();
-
-
     }
 
 
     /***
-     * 加密
+     * 加密    消息记录模糊查询
      * @param content
      * @param
      * @return

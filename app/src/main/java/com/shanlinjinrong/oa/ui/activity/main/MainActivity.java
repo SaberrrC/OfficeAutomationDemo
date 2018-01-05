@@ -710,9 +710,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!iosIsForceUpdate) {
-                    dialog.dismiss();
-                }
+                dialog.dismiss();
                 Intent intent = new Intent();
                 intent.setAction("android.intent.action.VIEW");
                 Uri content_url = Uri.parse(androidUrl);
@@ -720,8 +718,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 startActivity(intent);
             }
         };
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "更新",listener);
-
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "更新", listener);
         if (!iosIsForceUpdate) {
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
                     new DialogInterface.OnClickListener() {
@@ -734,6 +731,17 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         alertDialog.show();
 
         if (iosIsForceUpdate) {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction("android.intent.action.VIEW");
+                    Uri content_url = Uri.parse(androidUrl);
+                    intent.setData(content_url);
+                    startActivity(intent);
+
+                }
+            });
             alertDialog.setCancelable(false);
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
                     getResources().getColor(R.color.btn_text_logout));

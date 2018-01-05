@@ -53,6 +53,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
                 builder.setTitle("权限开启");
                 builder.setMessage("更新功能无法正常使用，去权限列表开启该权限");
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mView.startAppSetting();
