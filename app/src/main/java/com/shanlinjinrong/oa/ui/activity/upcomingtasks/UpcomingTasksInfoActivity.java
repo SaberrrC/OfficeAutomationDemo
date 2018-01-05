@@ -840,13 +840,15 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < beanList.size(); i++) {
             if (!TextUtils.equals(beanList.get(i).getStatus(), "1")) {
-                stringBuilder.append(beanList.get(i).getReason() + "\n");
+//                stringBuilder.append(beanList.get(i).getReason()  + "\n");
+                showToast("审批失败，请重新审批");
+                return;
             }
         }
-        if (!TextUtils.isEmpty(stringBuilder.toString().trim())) {
-            showToast(stringBuilder.toString().trim());
-            return;
-        }
+//        if (!TextUtils.isEmpty(stringBuilder.toString().trim())) {
+//            showToast(stringBuilder.toString().trim());
+//            return;
+//        }
         setResult(101);
         finish();
     }

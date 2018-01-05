@@ -1,43 +1,32 @@
 package com.shanlinjinrong.oa.ui.activity.my;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.hyphenate.util.NetUtils;
-import com.jakewharton.rxbinding.view.RxView;
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.views.ProgressWebView;
 
-import java.io.File;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ren.yale.android.cachewebviewlib.CacheWebView;
 import ren.yale.android.cachewebviewlib.WebViewCache;
-import rx.functions.Action1;
 
 /**
  * <h3>Description: 使用帮助 </h3>
@@ -80,6 +69,10 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
             webView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
             webView.setEnableCache(true);
             webView.setUserAgent("Android");
+            webView.removeJavascriptInterface("searchBoxJavaBridge_");
+            webView.removeJavascriptInterface("accessibility");
+            webView.removeJavascriptInterface("accessibilityTraversal");
+            webView.getSettings().setAllowFileAccess(false);
         }
         mWebViewClient = new WebViewClient() {
             @Override

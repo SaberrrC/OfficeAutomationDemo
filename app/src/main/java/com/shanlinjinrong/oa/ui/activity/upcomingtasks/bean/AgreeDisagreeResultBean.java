@@ -12,7 +12,7 @@ public class AgreeDisagreeResultBean {
     /**
      * code : 000000
      * message : success
-     * data : [{"reason":"QK201706200021127507请先保存，在提交","status":"2"}]
+     * data : [{"reason":"QK20180105000020","status":"1"}]
      */
 
     private String code;
@@ -45,8 +45,8 @@ public class AgreeDisagreeResultBean {
 
     public static class DataBean {
         /**
-         * reason : QK201706200021127507请先保存，在提交
-         * status : 2
+         * reason : QK20180105000020
+         * status : 1
          */
 
         private String reason;

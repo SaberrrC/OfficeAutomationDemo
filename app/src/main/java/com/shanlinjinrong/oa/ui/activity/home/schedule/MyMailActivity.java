@@ -65,6 +65,12 @@ public class MyMailActivity extends BaseActivity {
             webView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
             webView.setEnableCache(true);
             webView.setUserAgent("Android");
+            webView.removeJavascriptInterface("searchBoxJavaBridge_");
+            webView.removeJavascriptInterface("accessibility");
+            webView.removeJavascriptInterface("accessibilityTraversal");
+            //应用的WebView组件支持Javascript的延时执行，这种延时执行能够绕过file协议同源检测。如果将当前 Webview读取的Html文件删除掉并软连接指向其他文件就可以读取到被符号链接所指的文件，然后通过 JavaScript再次读取HTML文件，即可获取到被符号链接所指的任意文件。造成任意文件读取，敏感信息泄 露等威胁
+            webView.getSettings().setAllowFileAccess(false);
+
         }
         mWebViewClient = new WebViewClient() {
             @Override
