@@ -63,6 +63,10 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
             webView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
             webView.setEnableCache(true);
             webView.setUserAgent("Android");
+            webView.removeJavascriptInterface("searchBoxJavaBridge_");
+            webView.removeJavascriptInterface("accessibility");
+            webView.removeJavascriptInterface("accessibilityTraversal");
+            webView.getSettings().setAllowFileAccess(false);
         }
         mWebViewClient = new WebViewClient() {
             @Override
