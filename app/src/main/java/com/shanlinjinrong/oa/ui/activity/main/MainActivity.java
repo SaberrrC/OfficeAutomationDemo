@@ -213,7 +213,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
       //  mPresenter.applyPermission(this);//判断是否有更新
-      //  mPresenter.getAppEdition();
+        mPresenter.getAppEdition();
         ShortcutBadger.removeCount(MainActivity.this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
