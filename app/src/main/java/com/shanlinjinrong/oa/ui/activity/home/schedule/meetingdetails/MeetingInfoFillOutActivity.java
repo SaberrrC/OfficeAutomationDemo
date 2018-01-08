@@ -36,6 +36,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.kymjs.kjframe.http.HttpParams;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -307,34 +309,42 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 return;
             }
         }
-        HttpParams httpParams = new HttpParams();
-        httpParams.put("room_id", mRoomId);
-        httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-        if (mEdMeetingContent.getText().toString().trim().equals("")) {
-            httpParams.put("content", "暂无");
-        } else {
-            httpParams.put("content", mEdMeetingContent.getText().toString());
-        }
-        httpParams.put("start_time", mStartTime);
-        httpParams.put("end_time", mEndTime);
-
-        if (mRbIsMeetingInvite.isChecked()) {
-            httpParams.put("part_uid", mUid);
-            httpParams.put("title", mEdMeetingTheme.getText().toString());
-            if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
-                mSendType = "1,2";
-            } else if (mCbMessages.isChecked()) {
-                mSendType = "2";
-            } else if (mCbEmail.isChecked()) {
-                mSendType = "1";
+        try {
+            HttpParams httpParams = new HttpParams();
+            httpParams.put("room_id", mRoomId);
+            httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
+            if (mEdMeetingContent.getText().toString().trim().equals("")) {
+                httpParams.put("content", "暂无");
+            } else {
+                httpParams.put("content", URLEncoder.encode(mEdMeetingContent.getText().toString(), "utf-8"));
             }
-        } else {
-            httpParams.put("part_uid", "");
-            httpParams.put("title", "");
-        }
+            httpParams.put("start_time", mStartTime);
+            httpParams.put("end_time", mEndTime);
 
-        httpParams.put("send_type", mSendType + "");
-        mPresenter.addMeetingRooms(httpParams);
+            if (mRbIsMeetingInvite.isChecked()) {
+                httpParams.put("part_uid", mUid);
+                String value = mEdMeetingTheme.getText().toString();
+
+                value = URLEncoder.encode(value, "utf-8");
+
+                httpParams.put("title", value);
+                if (mCbEmail.isChecked() && mCbMessages.isChecked()) {
+                    mSendType = "1,2";
+                } else if (mCbMessages.isChecked()) {
+                    mSendType = "2";
+                } else if (mCbEmail.isChecked()) {
+                    mSendType = "1";
+                }
+            } else {
+                httpParams.put("part_uid", "");
+                httpParams.put("title", "");
+            }
+
+            httpParams.put("send_type", mSendType + "");
+            mPresenter.addMeetingRooms(httpParams);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     //判断是否禁用输入框
