@@ -107,13 +107,13 @@ def devAppName() {
 }
 
 //发开环境
-def devPHPAddress() {
-    return "\"http://118.31.18.67:81/\""
-}
-
-def devJavaAddress() {
-    return "\"http://118.31.18.67:8090/\""
-}
+//def devPHPAddress() {
+//    return "\"http://118.31.18.67:81/\""
+//}
+//
+//def devJavaAddress() {
+//    return "\"http://118.31.18.67:8090/\""
+//}
 
 //(预生产)测试环境
 //def preJavaAddress() {
@@ -125,13 +125,13 @@ def devJavaAddress() {
 //}
 
 //(新内网) 开发环境
-def preJavaAddress() {
-    return "\"http://10.5.202.122:9105/\""
-}
-
-def prePHPAddress() {
-    return "\"http://10.5.202.122:81/\""
-}
+//def preJavaAddress() {
+//    return "\"http://10.5.202.122:9105/\""
+//}
+//
+//def prePHPAddress() {
+//    return "\"http://10.5.202.122:81/\""
+//}
 
 //(新外网) 测试环境
 //def preJavaAddress() {
@@ -143,13 +143,13 @@ def prePHPAddress() {
 //}
 
 //TODO 生产环境
-//def preJavaAddress() {
-//    return "\"http://oa.shanlinjinrong.com/oa-api/\""
-//}
-//
-//def prePHPAddress() {
-//    return "\"http://api.oa.shanlinjinrong.com/\""
-//}
+def preJavaAddress() {
+    return "\"http://oa.shanlinjinrong.com/oa-api/\""
+}
+
+def prePHPAddress() {
+    return "\"http://api.oa.shanlinjinrong.com/\""
+}
 
 repositories {
     mavenCentral()
