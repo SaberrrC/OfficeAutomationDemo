@@ -60,6 +60,7 @@ import com.shanlinjinrong.oa.ui.fragment.TabContactsFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
+import com.shanlinjinrong.oa.utils.LoginUtils;
 import com.shanlinjinrong.oa.utils.VersionManagementUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -207,7 +208,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         LoginIm();//登录环信
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
-//       mPresenter.getAppEdition();
+        mPresenter.getAppEdition();
         ShortcutBadger.removeCount(MainActivity.this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
@@ -299,12 +300,6 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         }
     }
 
-
-    //登录环信
-    public void LoginIm() {
-        //注册一个监听连接状态的listener
-        EMClient.getInstance().addConnectionListener(new MyConnectionListener());
-    }
 
 
     public void refreshCommCount() {
@@ -534,6 +529,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     @Override
     protected void onResume() {
         super.onResume();
+        reConnection();
         judeIsInitPwd();
         Observable.create(e -> EMClient.getInstance().chatManager().addMessageListener(messageListener)).subscribeOn(Schedulers.io()).subscribe();
         if (tabCommunicationFragment != null) {
@@ -813,4 +809,23 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
             EventBus.getDefault().post(onCountRefreshEvent);
         }
     }
+
+    private void reConnection() {
+        if (!EMClient.getInstance().isConnected()) {
+            Log.i("ConversationList", "重连");
+            try {
+                LoginUtils.loginIm(MainActivity.this, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.i("ConversationList", "重连error" + e.toString());
+            }
+        }
+    }
+
+    //登录环信
+    public void LoginIm() {
+        //注册一个监听连接状态的listener
+        EMClient.getInstance().addConnectionListener(new MyConnectionListener());
+    }
+
 }

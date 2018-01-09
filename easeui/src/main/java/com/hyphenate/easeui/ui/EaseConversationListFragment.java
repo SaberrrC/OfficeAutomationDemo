@@ -379,7 +379,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                             httpParams.putHeaders("token", token);
                             httpParams.putHeaders("uid", uid);
                             //TODO 生产
-                            kjHttp.get(EaseConstant.PHP_URL + "user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
+                            kjHttp.get(EaseConstant.PHP_URL + "/user/getinfo/?code=" + userCode, httpParams, new HttpCallBack() {
 
                                 @Override
                                 public void onFailure(int errorNo, String strMsg) {

@@ -15,7 +15,6 @@ import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;

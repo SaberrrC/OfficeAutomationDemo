@@ -18,8 +18,8 @@ android {
         resConfigs "en", "zh-rCN"
 
         //pwd:13579
-        versionCode 26
-        versionName "v1.6.1.1"
+        versionCode 27
+        versionName "v1.6.1.2"
 
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
@@ -107,13 +107,13 @@ def devAppName() {
 }
 
 //发开环境
-//def devPHPAddress() {
-//    return "\"http://118.31.18.67:81/\""
-//}
-//
-//def devJavaAddress() {
-//    return "\"http://118.31.18.67:8090/\""
-//}
+def devPHPAddress() {
+    return "\"http://118.31.18.67:81/\""
+}
+
+def devJavaAddress() {
+    return "\"http://118.31.18.67:8090/\""
+}
 
 //(预生产)测试环境
 //def preJavaAddress() {

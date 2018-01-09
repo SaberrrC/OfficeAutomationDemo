@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.fragment;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +30,17 @@ import com.pgyersdk.update.UpdateManagerListener;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.my.AboutUsActivity;
 import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UserInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UsingHelpActivity;
-import com.shanlinjinrong.oa.ui.base.BaseFragment;
+import com.shanlinjinrong.oa.ui.base.BaseHttpFragment;
+import com.shanlinjinrong.oa.ui.fragment.contract.TabMeGetVersionInfo;
+import com.shanlinjinrong.oa.ui.fragment.presenter.TabMeGetVersionPresenter;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
+import com.shanlinjinrong.oa.utils.VersionManagementUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -49,7 +55,7 @@ import butterknife.OnClick;
  * <h3>Description: 首页我的页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class TabMeFragment extends BaseFragment {
+public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> implements View.OnClickListener, TabMeGetVersionInfo.View, View.OnKeyListener {
 
     @BindView(R.id.user_portrait)
     SimpleDraweeView userPortrait;
@@ -90,6 +96,11 @@ public class TabMeFragment extends BaseFragment {
         }
         userName.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_USERNAME));
         position.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_POST_NAME));
+    }
+
+    @Override
+    protected void initInject() {
+
     }
 
     @Override
@@ -136,6 +147,7 @@ public class TabMeFragment extends BaseFragment {
                 break;
             case R.id.btn_update://版本升级
                 applyPermission();
+//                mPresenter.getAppEdition();
                 break;
             case R.id.btn_about_us://关于我们
                 startActivity(new Intent(getActivity(), AboutUsActivity.class));
@@ -215,5 +227,107 @@ public class TabMeFragment extends BaseFragment {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    @Override
+    public void uidNull(int code) {
+
+    }
+
+
+    @Override
+    public void getAppEditionSuccess(AppVersionBean mAppVersionBean) {
+
+        String androidVersion = mAppVersionBean.getData().getAndroidVersion();
+        if (androidVersion.startsWith("v")) {
+            androidVersion = androidVersion.substring(1);
+        }
+        String androidUrl = mAppVersionBean.getData().getAndroidUrl();
+        mAppVersionBean.getData().getAndroidUrl();
+        String isForceUpdate = mAppVersionBean.getData().getAndroidIsForceUpdate();
+        try {
+            String appVersionName = VersionManagementUtil.getVersion(getActivity());
+            if (appVersionName.startsWith("v")) {
+                appVersionName = appVersionName.substring(1);
+            }
+            int i = VersionManagementUtil.VersionComparison(androidVersion, appVersionName);
+            if (i == 1) {//有更新
+                if (isForceUpdate.equals("1")) {//强制更新
+                    showUpdateDialog(true, androidUrl);
+                } else {
+                    showUpdateDialog(false, androidUrl);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void showUpdateDialog(boolean iosIsForceUpdate, String androidUrl) {
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.public_dialog, null);
+        TextView title = (TextView) dialogView.findViewById(R.id.title);
+        title.setText("版本更新");
+        TextView message = (TextView) dialogView.findViewById(R.id.message);
+        if (iosIsForceUpdate) {
+            message.setText("请更新至最新版本");
+        } else {
+            message.setText("是否更新至最新版本");
+        }
+        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity(),
+                R.style.AppTheme_Dialog).create();
+        alertDialog.setView(dialogView);
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse(androidUrl);
+                intent.setData(content_url);
+                startActivity(intent);
+            }
+        };
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "更新", listener);
+        if (!iosIsForceUpdate) {
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+        }
+        alertDialog.show();
+
+        if (iosIsForceUpdate) {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction("android.intent.action.VIEW");
+                    Uri content_url = Uri.parse(androidUrl);
+                    intent.setData(content_url);
+                    startActivity(intent);
+
+                }
+            });
+            alertDialog.setCancelable(false);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+        } else {
+            alertDialog.setCancelable(true);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+        }
+
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        return false;
     }
 }

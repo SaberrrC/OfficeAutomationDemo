@@ -1,0 +1,20 @@
+package com.shanlinjinrong.oa.ui.fragment.contract;
+
+import com.shanlinjinrong.oa.model.Contacts;
+import com.shanlinjinrong.oa.model.User;
+import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
+import com.shanlinjinrong.oa.ui.base.BasePresenter;
+import com.shanlinjinrong.oa.ui.base.BaseView;
+
+import java.util.List;
+
+public interface TabMeGetVersionInfo {
+    interface View extends BaseView {
+        void getAppEditionSuccess(AppVersionBean mAppVersionBean);
+    }
+
+    interface Presenter extends BasePresenter<View> {
+        void getAppEdition();
+    }
+
+}
