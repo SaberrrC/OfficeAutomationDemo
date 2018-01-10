@@ -278,7 +278,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                                 setTimeEnable(j, true, true);
                                 mBtnMeetingInfoComplete.setEnabled(false);
                             }
-                            return;
+                       //     return;
                         }
                     }
                     for (int j = mStart - 9; j <= mEnd - 10; j++) {
