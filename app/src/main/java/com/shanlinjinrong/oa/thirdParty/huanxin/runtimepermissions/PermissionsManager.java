@@ -195,7 +195,7 @@ public class PermissionsManager {
    * you of the user allowing or denying each permission. The Activity and PermissionsResultAction
    * parameters are both annotated Nullable, but this method will not work if the Activity
    * is null. It is only annotated Nullable as a courtesy to prevent crashes in the case
-   * that you call this from a Fragment where {@link Fragment#getActivity()} could yield
+   * that you voice_call_state this from a Fragment where {@link Fragment#getActivity()} could yield
    * null. Additionally, you will not receive any notification of permissions being granted
    * if you provide a null PermissionsResultAction.
    *
@@ -290,7 +290,7 @@ public class PermissionsManager {
    * This method notifies the PermissionsManager that the permissions have change. If you are making
    * the permissions requests using an Activity, then this method should be called from the
    * Activity callback onRequestPermissionsResult() with the variables passed to that method. If
-   * you are passing a Fragment to make the permissions request, then you should call this in
+   * you are passing a Fragment to make the permissions request, then you should voice_call_state this in
    * the {@link Fragment#onRequestPermissionsResult(int, String[], int[])} method.
    * It will notify all the pending PermissionsResultAction objects currently
    * in the queue, and will remove the permissions request from the list of pending requests.

@@ -247,7 +247,7 @@ public class DemoHelper {
             boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
             EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
 
-            // Offline call push
+            // Offline voice_call_state push
             EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(true);
 
             setGlobalListeners();
@@ -342,7 +342,7 @@ public class DemoHelper {
         boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
         EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
 
-        // Offline call push
+        // Offline voice_call_state push
         EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
     }
 
@@ -473,7 +473,7 @@ public class DemoHelper {
             public Intent getLaunchIntent(EMMessage message) {
                 // you can set what activity you want display when user click the notification
                 Intent intent = new Intent(appContext, MainActivity.class);
-                // open calling activity if there is call
+                // open calling activity if there is voice_call_state
                 if (isVideoCalling) {
 //                    intent = new Intent(appContext, VideoCallActivity.class);
                 } else if (isVoiceCalling) {
@@ -557,7 +557,7 @@ public class DemoHelper {
             callReceiver = new CallReceiver();
         }
 
-        //register incoming call receiver
+        //register incoming voice_call_state receiver
         appContext.registerReceiver(callReceiver, callFilter);
         //register connection listener
         EMClient.getInstance().addConnectionListener(connectionListener);

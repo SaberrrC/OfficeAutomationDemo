@@ -65,7 +65,7 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
     EMCallManager.EMCallPushProvider pushProvider;
 
     /**
-     * 0：voice call，1：video call
+     * 0：voice voice_call_state，1：video voice_call_state
      */
     protected int callType = 0;
 
@@ -187,7 +187,7 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
                             return;
                         }
                     } else {
-                        EMLog.d(TAG, "answer call isInComingCall:false");
+                        EMLog.d(TAG, "answer voice_call_state isInComingCall:false");
                     }
                     break;
                 case MSG_CALL_REJECT:
@@ -239,7 +239,7 @@ public class CallActivity extends HttpBaseActivity<CallActivityPresenter> implem
     }
 
     /**
-     * play the incoming call ringtone
+     * play the incoming voice_call_state ringtone
      */
     protected int playMakeCallSounds() {
         try {

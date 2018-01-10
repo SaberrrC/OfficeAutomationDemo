@@ -59,7 +59,7 @@
     <string name="call_version_inconsistent">通话协议版本不一致</string>
     <string name="no_call_data">没有通话数据</string>
     <string name="network_unstable">网络不稳定</string>
-    <string name="have_connected_with">已经和对方建立连接</string>
+    <string name="have_connected_with">正在等待对方接受邀请</string>
     <string name="at_your_in_group">%s在群聊中@了你</string>
     <string name="emojicon_test_name">示例</string>
     <string name="delete_contact">删除联系人</string>

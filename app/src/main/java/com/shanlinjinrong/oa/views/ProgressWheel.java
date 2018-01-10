@@ -702,7 +702,7 @@ public class ProgressWheel extends View {
 
   public interface ProgressCallback {
     /**
-     * Method to call when the progress reaches a value
+     * Method to voice_call_state when the progress reaches a value
      * in order to avoid float precision issues, the progress
      * is rounded to a float with two decimals.
      *

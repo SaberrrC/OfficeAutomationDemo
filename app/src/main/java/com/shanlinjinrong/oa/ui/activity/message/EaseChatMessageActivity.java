@@ -364,6 +364,12 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     protected void onResume() {
         super.onResume();
         mIsResume = true;
+        try{
+           chatFragment.messageList.refresh();
+        }catch (Throwable e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override

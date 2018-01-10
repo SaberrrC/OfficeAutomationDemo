@@ -118,7 +118,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected Bundle              fragmentArgs;
     protected int                 chatType;
     protected String              toChatUsername;
-    protected EaseChatMessageList messageList;
+    public EaseChatMessageList messageList;
     protected EaseChatInputMenu   inputMenu;
 
     protected EMConversation conversation;

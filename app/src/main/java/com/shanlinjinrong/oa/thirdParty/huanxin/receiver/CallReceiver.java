@@ -18,7 +18,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hyphenate.util.EMLog;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 
 public class CallReceiver extends BroadcastReceiver {
@@ -27,7 +26,7 @@ public class CallReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         //username
         String from = intent.getStringExtra("from");
-        //call type
+        //voice_call_state type
         String type = intent.getStringExtra("type");
         if (!"video".equals(type)) {
             context.startActivity(new Intent(context, VoiceCallActivity.class)
