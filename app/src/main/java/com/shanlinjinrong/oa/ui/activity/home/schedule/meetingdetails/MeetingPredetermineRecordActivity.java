@@ -278,8 +278,11 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                     if (mBeginDate != null && mEndDate != null) {
                         String day = mBeginDate.substring(mBeginDate.indexOf("日") - 2, mBeginDate.indexOf("日"));
                         if (mBeginDate.contains(mStart + "") && mEndDate.contains(mEnd + "") && day.contains(mDayPos + "")) {
-                            setTimeEnable(mStart - 9, true, true);
-                            mBtnMeetingInfoComplete.setEnabled(false);
+//                            setTimeEnable(mStart - 9, true, true);
+                            for (int j = mStart - 9; j <= mEnd - 10; j++) {
+                                setTimeEnable(j, true, true);
+                                mBtnMeetingInfoComplete.setEnabled(false);
+                            }
                         }
                     }
                 } catch (Throwable e) {
