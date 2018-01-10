@@ -12,6 +12,8 @@ import android.view.animation.Animation;
 import com.huawei.hms.api.ConnectionResult;
 import com.huawei.hms.api.HuaweiApiClient;
 import com.huawei.hms.support.api.push.HuaweiPush;
+import com.hyphenate.easeui.db.Friends;
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -66,6 +68,8 @@ public class WelcomePage extends Activity {
         //建议在oncreate的时候连接华为移动服务
         //业务可以根据自己业务的形态来确定client的连接和断开的时机，但是确保connect和disconnect必须成对出现
         client.connect();
+        FriendsInfoCacheSvc.getInstance(AppManager.mContext);
+
     }
 
 
