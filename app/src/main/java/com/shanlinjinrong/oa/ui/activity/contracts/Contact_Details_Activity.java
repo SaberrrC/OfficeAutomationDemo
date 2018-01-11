@@ -23,7 +23,6 @@ import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -31,7 +30,6 @@ import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.contracts.bean.ContactDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.contracts.contract.ContactDetailsContract;
 import com.shanlinjinrong.oa.ui.activity.contracts.presenter.ContactDetailsPresenter;
-import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.VoiceCallActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
@@ -341,7 +339,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         try {//更新个人详情
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
                     addOrUpdateFriends(new Friends(userDetailsBean.getUid(), "sl_" + userDetailsBean.getCode(),
-                            userDetailsBean.getUsername(), userDetailsBean.getPortrait(),
+                            userDetailsBean.getUsername(), ApiConstant.BASE_PIC_URL + userDetailsBean.getPortrait(),
                             userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                             userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
             initSessionData();
