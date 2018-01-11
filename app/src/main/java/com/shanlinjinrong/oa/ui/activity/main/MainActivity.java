@@ -596,8 +596,9 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         }
 
         if (!easeUI.hasForegroundActivies()) {
-            if (list.size() > 0)
+            if (list.size() > 0) {
                 easeUI.getNotifier().onNewMsg(list.get(list.size() - 1));
+            }
         }
     }
 

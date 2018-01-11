@@ -69,27 +69,27 @@ import rx.schedulers.Schedulers;
  */
 public class EaseConversationListFragment extends EaseBaseFragment {
     private final static int MSG_REFRESH = 2;
-    protected EditText query;
+    protected EditText    query;
     protected ImageButton clearSearch;
-    protected boolean hidden;
+    protected boolean     hidden;
     protected List<EMConversation> conversationList = new ArrayList<>();
-    public EaseConversationList conversationListView;
-    protected FrameLayout errorItemContainer;
+    public    EaseConversationList conversationListView;
+    protected FrameLayout          errorItemContainer;
 
     protected boolean isConflict;
 
     private TextView tvErrorView;
-    private long lastClickTime = 0;
-    private final int REFRESH_DATA = -3, REFRESH_SETUP = -4;
+    private       long lastClickTime = 0;
+    private final int  REFRESH_DATA  = -3, REFRESH_SETUP = -4;
     private boolean mIsSetup;
-    private List<EMConversation> list = new ArrayList<>();
+    private List<EMConversation> list                       = new ArrayList<>();
     private List<EMConversation> conversationIncompleteList = new ArrayList<>();
 
-    private static final String APP_CONFIG = "app_config";
-    public static final String DEFAULT_ARGUMENTS_VALUE = "";
+    private static final String APP_CONFIG              = "app_config";
+    public static final  String DEFAULT_ARGUMENTS_VALUE = "";
     private EMConversation emConversation;
     Context mContext;
-    private int tempCount;
+    private int    tempCount;
     private String userCode;
 
     @Override
@@ -308,7 +308,9 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                         EMMessage lastMessage = list.get(i).getLastMessage();
                         if (lastMessage.getChatType() == EMMessage.ChatType.GroupChat) {
                             String nickName = FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.conversationId());
-                            if (TextUtils.isEmpty(nickName) || nickName.equals("匿名群组")) {
+                            String userName = FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.getFrom());
+
+                            if (TextUtils.isEmpty(nickName) || nickName.equals("匿名群组")|| TextUtils.isEmpty(userName)) {
                                 EMConversation emConversation = list.get(i);
                                 conversationIncompleteList.add(emConversation);
                             }
@@ -361,6 +363,12 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 if (!handler.hasMessages(MSG_REFRESH)) {
                                     handler.sendEmptyMessage(MSG_REFRESH);
                                 }
+
+                                if ("".equals(FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.getFrom()))) {
+                                    String conversationId = lastMessage.getFrom().substring(0, 12);
+                                    QueryUserInfo(lastMessage.getFrom().substring(3, conversationId.length()));
+                                }
+
                             } catch (HyphenateException e) {
                                 e.printStackTrace();
                                 try {
@@ -376,80 +384,85 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                         } else if (lastMessage.getChatType() == EMMessage.ChatType.Chat) {
                             String conversationId = lastMessage.conversationId().substring(0, 12);
                             userCode = conversationId.substring(3, conversationId.length());
-                            String token = getContext().getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_private_token", DEFAULT_ARGUMENTS_VALUE);
-                            String uid = getContext().getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_user_uid", DEFAULT_ARGUMENTS_VALUE);
-                            KJHttp kjHttp = new KJHttp();
-                            HttpConfig config = new HttpConfig();
-                            HttpConfig.TIMEOUT = 30000;
-                            kjHttp.setConfig(config);
-                            kjHttp.cleanCache();
-                            HttpParams httpParams = new HttpParams();
-                            httpParams.putHeaders("token", token);
-                            httpParams.putHeaders("uid", uid);
-                            httpParams.put("codeList", userCode);
-                            //TODO 生产
-                            kjHttp.post(ApiConstant.JAVA_TEST_HOST + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
-                                private UserInfoDetailsBean userDetailsBean;
-
-                                @Override
-                                public void onFailure(int errorNo, String strMsg) {
-                                    super.onFailure(errorNo, strMsg);
-                                    try {
-                                        FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userCode, "匿名用户", ""));
-                                        list.add(0, emConversation);
-                                        if (!handler.hasMessages(MSG_REFRESH)) {
-                                            handler.sendEmptyMessage(MSG_REFRESH);
-                                        }
-                                    } catch (Throwable e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                @Override
-                                public void onSuccess(String t) {
-                                    super.onSuccess(t);
-                                    try {
-                                        userDetailsBean = new Gson().fromJson(t, new TypeToken<UserInfoDetailsBean>() {}.getType());
-                                    } catch (Throwable throwable) {
-                                        throwable.printStackTrace();
-                                    }
-                                    if (userDetailsBean != null) {
-                                        try {
-                                            switch (userDetailsBean.getCode()) {
-                                                case "000000":
-                                                    Observable.create(new Observable.OnSubscribe<Object>() {
-                                                        @Override
-                                                        public void   call(Subscriber<? super Object> subscriber) {
-                                                            FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getUid() + "", "sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), ApiConstant.BASE_PIC_URL + userDetailsBean.getData().get(0).getImg(), userDetailsBean.getData().get(0).getEmail(), userDetailsBean.getData().get(0).getSex()));
-                                                            list.add(0, emConversation);
-                                                            if (!handler.hasMessages(MSG_REFRESH)) {
-                                                                handler.sendEmptyMessage(MSG_REFRESH);
-                                                            }
-                                                        }
-                                                    }).subscribeOn(Schedulers.io())
-                                                            .subscribe(new Action1<Object>() {
-                                                                @Override
-                                                                public void call(Object o) {
-
-                                                                }
-                                                            }, new Action1<Throwable>() {
-                                                                @Override
-                                                                public void call(Throwable throwable) {
-                                                                    throwable.printStackTrace();
-                                                                }
-                                                            });
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
-                                        } catch (Throwable e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                            });
+                            QueryUserInfo(userCode);
                         }
                     }
+                }
+
+                private void QueryUserInfo(String code) {
+                    String token = getContext().getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_private_token", DEFAULT_ARGUMENTS_VALUE);
+                    String uid = getContext().getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString("pref_key_user_uid", DEFAULT_ARGUMENTS_VALUE);
+                    KJHttp kjHttp = new KJHttp();
+                    HttpConfig config = new HttpConfig();
+                    HttpConfig.TIMEOUT = 30000;
+                    kjHttp.setConfig(config);
+                    kjHttp.cleanCache();
+                    HttpParams httpParams = new HttpParams();
+                    httpParams.putHeaders("token", token);
+                    httpParams.putHeaders("uid", uid);
+                    httpParams.put("codeList", code);
+                    //TODO 生产
+                    kjHttp.post(ApiConstant.JAVA_TEST_HOST + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
+                        private UserInfoDetailsBean userDetailsBean;
+
+                        @Override
+                        public void onFailure(int errorNo, String strMsg) {
+                            super.onFailure(errorNo, strMsg);
+                            try {
+                                FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends("sl_" + userCode, "匿名用户", ""));
+                                list.add(0, emConversation);
+                                if (!handler.hasMessages(MSG_REFRESH)) {
+                                    handler.sendEmptyMessage(MSG_REFRESH);
+                                }
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(String t) {
+                            super.onSuccess(t);
+                            try {
+                                userDetailsBean = new Gson().fromJson(t, new TypeToken<UserInfoDetailsBean>() {
+                                }.getType());
+                            } catch (Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                            if (userDetailsBean != null) {
+                                try {
+                                    switch (userDetailsBean.getCode()) {
+                                        case "000000":
+                                            Observable.create(new Observable.OnSubscribe<Object>() {
+                                                @Override
+                                                public void call(Subscriber<? super Object> subscriber) {
+                                                    FriendsInfoCacheSvc.getInstance(getContext()).addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getUid() + "", "sl_" + userDetailsBean.getData().get(0).getCode(), userDetailsBean.getData().get(0).getUsername(), ApiConstant.BASE_PIC_URL + userDetailsBean.getData().get(0).getImg(), userDetailsBean.getData().get(0).getEmail(), userDetailsBean.getData().get(0).getSex()));
+                                                    list.add(0, emConversation);
+                                                    if (!handler.hasMessages(MSG_REFRESH)) {
+                                                        handler.sendEmptyMessage(MSG_REFRESH);
+                                                    }
+                                                }
+                                            }).subscribeOn(Schedulers.io())
+                                                    .subscribe(new Action1<Object>() {
+                                                        @Override
+                                                        public void call(Object o) {
+
+                                                        }
+                                                    }, new Action1<Throwable>() {
+                                                        @Override
+                                                        public void call(Throwable throwable) {
+                                                            throwable.printStackTrace();
+                                                        }
+                                                    });
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                } catch (Throwable e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
                 }
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

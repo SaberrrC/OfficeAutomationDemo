@@ -201,7 +201,7 @@ public abstract class EaseChatRow extends LinearLayout {
             //单聊 群聊 展示处理
             if (message.getChatType() == EMMessage.ChatType.GroupChat) {
                 if (message.direct() == Direct.RECEIVE) {
-                    String nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(message.getFrom());
+                    String nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(message.getFrom() );
                     usernickView.setText(nickName);
                     //EaseUserUtils.setUserNick(nickName, usernickView);
                 }
