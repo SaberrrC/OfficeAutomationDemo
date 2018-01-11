@@ -134,10 +134,7 @@ public class AppManager extends MultiDexApplication {
             StrictMode.setVmPolicy(vmPolicyBuilder.build());
         }
 
-        LeakCanary.install(this);
-
-        //}
-
+        //LeakCanary.install(this);
         //blockCanary
         //install(this, new AppBlockCanaryContext()).start();
 
