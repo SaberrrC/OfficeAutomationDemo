@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.retrofit.net.ApiConstant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity;
@@ -46,7 +47,7 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
         baseViewHolder.setText(R.id.tv_meeting_device, deviceX);
         try {
             Glide.with(AppManager.mContext)
-                    .load("http://" + roomimgX)
+                    .load(ApiConstant.BASE_PIC_URL + roomimgX)
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(R.drawable.video_image_1)
