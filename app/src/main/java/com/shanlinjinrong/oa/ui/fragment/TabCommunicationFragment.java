@@ -108,7 +108,7 @@ public class TabCommunicationFragment extends BaseFragment {
             TextView title = (TextView) dialogView.findViewById(R.id.title);
             title.setText("提示");
             TextView message = (TextView) dialogView.findViewById(R.id.message);
-            message.setText("请开启悬浮窗权限设置");
+            message.setText("请开启悬浮窗权限设置，支持通知栏消息推送");
 
             final AlertDialog alertDialog = new AlertDialog.Builder(getContext(),
                     R.style.AppTheme_Dialog).create();
