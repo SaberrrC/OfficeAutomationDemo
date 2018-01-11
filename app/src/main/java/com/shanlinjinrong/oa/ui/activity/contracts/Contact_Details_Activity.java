@@ -50,50 +50,51 @@ import static com.shanlinjinrong.oa.manager.AppManager.mContext;
 public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPresenter> implements ContactDetailsContract.View {
 
     @BindView(R.id.tv_sex)
-    TextView tv_sex;
+    TextView        tv_sex;
     @BindView(R.id.btn_back)
-    ImageView btn_back;
+    ImageView       btn_back;
     @BindView(R.id.tv_duties)
-    TextView tv_duties;
+    TextView        tv_duties;
     @BindView(R.id.tv_mails)
-    TextView tv_mails;
+    TextView        tv_mails;
     @BindView(R.id.iv_phone)
-    ImageView iv_phone;
+    ImageView       iv_phone;
     @BindView(R.id.iv_img_user)
     CircleImageView ivImgUser;
     @BindView(R.id.send_voice)
-    ImageView send_voice;
+    ImageView       send_voice;
     @BindView(R.id.send_message)
-    ImageView send_message;
+    ImageView       send_message;
     @BindView(R.id.tv_user_name)
-    TextView tv_user_name;
+    TextView        tv_user_name;
     @BindView(R.id.tv_department)
-    TextView tv_department;
+    TextView        tv_department;
     @BindView(R.id.tv_phone_number)
-    TextView tv_phone_number;
+    TextView        tv_phone_number;
     @BindView(R.id.rel_send_message)
-    RelativeLayout rel_send_message;
+    RelativeLayout  rel_send_message;
     @BindView(R.id.rel_voice_call)
-    RelativeLayout rel_voice_call;
+    RelativeLayout  rel_voice_call;
     @BindView(R.id.rel_phone_call)
-    RelativeLayout rel_phone_call;
+    RelativeLayout  rel_phone_call;
     @BindView(R.id.tv_error_layout)
-    TextView tvErrorLayout;
+    TextView        tvErrorLayout;
 
-    private User user;
-    private String mSex;
-    private String mPost;
-    private String mEmail;
-    private String mPhone;
-    private String mUserId;
-    private String mPortrait;
-    private String mNickName;
-    private String mUserCode;
+    private User    user;
+    private String  mSex;
+    private String  mPost;
+    private String  mEmail;
+    private String  mPhone;
+    private String  mUserId;
+    private String  mPortrait;
+    private String  mNickName;
+    private String  mUserCode;
     private boolean mSession;
-    private String mDepartment;
-    private String mDepartmentId;
-    private String mUserDepartment;
+    private String  mDepartment;
+    private String  mDepartmentId;
+    private String  mUserDepartment;
     private final int RESULTGROUP = -2;
+    private int mUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +113,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
     private void initData() {
         mSession = this.getIntent().getBooleanExtra("isSession", false);
         mUserCode = getIntent().getStringExtra("user_code");
+        mUid = getIntent().getIntExtra("uid", -1);
         mUserId = "sl_" + AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
 
         if (mSession) {
@@ -124,7 +126,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
     }
 
     private void initSessionInfo() {
-        mPresenter.searchUserDetails(mUserCode.substring(3, mUserCode.length()));
+        mPresenter.searchUserDetails(mUid);
     }
 
     private void initUserDetails() {
@@ -136,9 +138,9 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
 
             //---------------------------------聊天 语音 拨打电话 逻辑处理---------------------------------
 
-            if (!mDepartment.equals(mUserDepartment))
+            if (!mDepartment.equals(mUserDepartment)) {
                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
-
+            }
             if (mUserCode.equals(mUserId)) {
 
                 iv_phone.setImageResource(R.mipmap.ico_phone_disabled);
@@ -315,6 +317,8 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
             case R.id.btn_back:
                 finish();
                 break;
+            default:
+                break;
         }
     }
 
@@ -339,7 +343,7 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
         try {//更新个人详情
             FriendsInfoCacheSvc.getInstance(AppManager.mContext).
                     addOrUpdateFriends(new Friends(userDetailsBean.getUid(), "sl_" + userDetailsBean.getCode(),
-                            userDetailsBean.getUsername(), ApiConstant.BASE_PIC_URL + userDetailsBean.getPortrait(),
+                            userDetailsBean.getUsername(), userDetailsBean.getPortrait(),
                             userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
                             userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()));
             initSessionData();

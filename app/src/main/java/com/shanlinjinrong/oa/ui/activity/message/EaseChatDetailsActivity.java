@@ -676,6 +676,7 @@ public class EaseChatDetailsActivity extends HttpBaseActivity<EaseChatDetailsPre
                 default:
                     intent.setClass(EaseChatDetailsActivity.this, Contact_Details_Activity.class);
                     intent.putExtra("user_code", "sl_" + mData.get(i).getCode());
+                    intent.putExtra("uid",  mData.get(i).getUid());
                     intent.putExtra("isSession", true);
                     break;
             }

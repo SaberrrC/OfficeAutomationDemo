@@ -26,7 +26,7 @@ public interface ContactDetailsContract {
 
     interface Presenter extends BasePresenter<ContactDetailsContract.View> {
 
-        void searchUserDetails(String code);
+        void searchUserDetails(int code);
 
     }
 }

@@ -36,79 +36,87 @@ public class ContactDetailsPresenter extends HttpPresenter<ContactDetailsContrac
     String uid = "";
 
     @Override
-    public void searchUserDetails(String code) {
+    public void searchUserDetails(int code) {
         mKjHttp.cleanCache();
-        Observable.create((ObservableOnSubscribe<String>) e -> {
-            uid = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUid("sl_" + code);
-            e.onComplete();
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(s -> {
-                }, Throwable::printStackTrace, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        HttpParams httpParams = new HttpParams();
-                        mKjHttp.get(ApiJava.ID_SEARCH_USER_DETAILS + "?uid=" + uid, httpParams, new HttpCallBack() {
-                            @Override
-                            public void onPreStart() {
-                                super.onPreStart();
-                                try {
-                                    if (mView != null)
-                                        mView.showLoading();
-                                } catch (Throwable e) {
-                                    e.printStackTrace();
-                                }
-                            }
+//        Observable.create((ObservableOnSubscribe<String>) e -> {
+//            uid = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUid("sl_" + code);
+//            e.onComplete();
+//        }).observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(s -> {
+//                }, Throwable::printStackTrace, new Action() {
+//                    @Override
+//                    public void run() throws Exception {
+        HttpParams httpParams = new HttpParams();
+        mKjHttp.get(ApiJava.ID_SEARCH_USER_DETAILS + "?uid=" + code, httpParams, new HttpCallBack() {
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+                try {
+                    if (mView != null)
+                        mView.showLoading();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
 
-                            @Override
-                            public void onSuccess(String t) {
-                                super.onSuccess(t);
-                                try {
-                                    ContactDetailsBean contactDetailsBean = new Gson().fromJson(t, new TypeToken<ContactDetailsBean>() {
-                                    }.getType());
-                                    if (contactDetailsBean != null) {
-                                        switch (contactDetailsBean.getCode()) {
-                                            case ApiJava.REQUEST_CODE_OK:
-                                                mView.searchUserDetailsSuccess(contactDetailsBean.getData());
-                                                break;
-                                            default:
-                                                if (mView != null) {
-                                                    mView.searchUserDetailsFailed(0, contactDetailsBean.getMessage());
-                                                    mView.hideLoading();
-                                                }
-                                                break;
-                                        }
-                                    }
-                                } catch (Throwable e) {
-                                    e.printStackTrace();
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    ContactDetailsBean contactDetailsBean = new Gson().fromJson(t, new TypeToken<ContactDetailsBean>() {
+                    }.getType());
+                    if (contactDetailsBean != null) {
+                        switch (contactDetailsBean.getCode()) {
+                            case ApiJava.REQUEST_CODE_OK:
+                                mView.searchUserDetailsSuccess(contactDetailsBean.getData());
+                                break;
+                            case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                            case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                            case ApiJava.ERROR_TOKEN:
+                                if (mView != null) {
+                                    mView.uidNull(contactDetailsBean.getCode());
                                 }
-                            }
-
-                            @Override
-                            public void onFailure(int errorNo, String strMsg) {
-                                super.onFailure(errorNo, strMsg);
-                                try {
-                                    if (mView != null) {
-                                        mView.hideLoading();
-                                        mView.searchUserDetailsFailed(errorNo, strMsg);
-                                    }
-                                } catch (Throwable e) {
-                                    e.printStackTrace();
+                                break;
+                            default:
+                                if (mView != null) {
+                                    mView.searchUserDetailsFailed(0, contactDetailsBean.getMessage());
+                                    mView.hideLoading();
                                 }
-                            }
-
-                            @Override
-                            public void onFinish() {
-                                super.onFinish();
-                                try {
-                                    if (mView != null)
-                                        mView.hideLoading();
-                                } catch (Throwable e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+                                break;
+                        }
                     }
-                });
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                        mView.searchUserDetailsFailed(errorNo, strMsg);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                try {
+                    if (mView != null) {
+                        mView.hideLoading();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+//                    }
+//                });
     }
 }

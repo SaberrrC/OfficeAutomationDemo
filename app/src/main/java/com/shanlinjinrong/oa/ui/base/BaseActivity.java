@@ -456,6 +456,7 @@ public class BaseActivity extends AppCompatActivity {
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
             }
+            mDialog.setCanceledOnTouchOutside(false);
             mDialog.setCancelable(false);
             mDialog.show();
         } catch (Throwable e) {
