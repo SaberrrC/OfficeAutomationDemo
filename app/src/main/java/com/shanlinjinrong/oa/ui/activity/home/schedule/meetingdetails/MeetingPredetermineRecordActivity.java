@@ -212,8 +212,6 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                     httpParams.put("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
                     httpParams.put("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
                     httpParams.put("meeting_id", getIntent().getIntExtra("id", -1));
-                    httpParams.put("send_type", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
-
                     mPresenter.modifyMeetingRooms(httpParams);
                     return;
                 }

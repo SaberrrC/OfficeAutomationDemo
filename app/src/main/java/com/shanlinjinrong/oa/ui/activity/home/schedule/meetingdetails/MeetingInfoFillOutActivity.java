@@ -340,8 +340,11 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
                 httpParams.put("part_uid", "");
                 httpParams.put("title", "");
             }
-
-            httpParams.put("send_type", mSendType + "");
+            if ("null".equals(mSendType) || mSendType == null) {
+                httpParams.put("send_type", "");
+            }else{
+                httpParams.put("send_type", mSendType +"");
+            }
             mPresenter.addMeetingRooms(httpParams);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
