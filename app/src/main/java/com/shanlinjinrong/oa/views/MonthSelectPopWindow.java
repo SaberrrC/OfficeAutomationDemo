@@ -110,12 +110,7 @@ public class MonthSelectPopWindow extends PopupWindow {
 //                return true;
 //            }
 //        });
-        this.mMenuView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
+        this.mMenuView.setOnTouchListener((v, event) -> false);
     }
 
     public List<DateItem> getDateItemList() {

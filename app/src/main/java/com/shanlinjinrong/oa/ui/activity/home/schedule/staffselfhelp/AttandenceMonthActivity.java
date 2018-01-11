@@ -470,6 +470,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 case "[休假]":
                     return 1;
                 case "[加班转调休]":
+                case "[加班]":
                     return 2;
                 case "[出差]":
                     return 3;
