@@ -324,7 +324,7 @@ public class CheckDailyReportActivity extends HttpBaseActivity<CheckDailyReportP
 
         //职业素养
         listData.add(new ReportPageItem(getString(R.string.work_report_personal_behavior), reportData.getSelfBehavior(), reportData.getSupervisorBehavior(), reportData.getCheckBehavior(), CheckDailyReportAdapter.WRITE_EVALUATION, true, getString(R.string.work_report_professional_qualities)));
-        listData.add(new ReportPageItem(getString(R.string.work_report_environmental_hygiene), reportData.getSelfEnvironmental(), reportData.getSupervisorEnvironMental(), reportData.getCheckEnvironMental(), CheckDailyReportAdapter.WRITE_EVALUATION));
+        listData.add(new ReportPageItem(getString(R.string.work_report_environmental_hygiene), reportData.getSelfEnvironMental(), reportData.getSupervisorEnvironMental(), reportData.getCheckEnvironMental(), CheckDailyReportAdapter.WRITE_EVALUATION));
         listData.add(new ReportPageItem(getString(R.string.work_report_save), reportData.getSelfSave(), reportData.getSupervisorSave(), reportData.getCheckSave(), CheckDailyReportAdapter.WRITE_EVALUATION));
         listData.add(new ReportPageItem(getString(R.string.work_report_communication_skills), reportData.getSelfCommunication(), reportData.getSupervisorCommunication(), reportData.getCheckCommunication(), CheckDailyReportAdapter.WRITE_EVALUATION));
         listData.add(new ReportPageItem(getString(R.string.work_report_appearance), reportData.getSelfAppearance(), reportData.getSupervisorAppearance(), reportData.getCheckAppearance(), CheckDailyReportAdapter.WRITE_EVALUATION));

@@ -260,7 +260,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
         //职业素养
         listData.add(new LaunchReportItem(getString(R.string.work_report_personal_behavior), reportData.getSelfBehavior(), WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_environmental_hygiene), reportData.getSelfEnvironmental(), WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_environmental_hygiene), reportData.getSelfEnvironMental(), WorkReportLaunchListAdapter.WRITE_TYPE));
         listData.add(new LaunchReportItem(getString(R.string.work_report_save), reportData.getSelfSave(), WorkReportLaunchListAdapter.WRITE_TYPE));
         listData.add(new LaunchReportItem(getString(R.string.work_report_communication_skills), reportData.getSelfCommunication(), WorkReportLaunchListAdapter.WRITE_TYPE));
         listData.add(new LaunchReportItem(getString(R.string.work_report_appearance), reportData.getSelfAppearance(), WorkReportLaunchListAdapter.WRITE_TYPE));
