@@ -37,6 +37,9 @@ import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UserInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UsingHelpActivity;
 import com.shanlinjinrong.oa.ui.base.BaseHttpFragment;
+import com.shanlinjinrong.oa.ui.base.dagger.component.AppComponent;
+import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerFragmentComponent;
+import com.shanlinjinrong.oa.ui.base.dagger.component.FragmentComponent;
 import com.shanlinjinrong.oa.ui.fragment.contract.TabMeGetVersionInfo;
 import com.shanlinjinrong.oa.ui.fragment.presenter.TabMeGetVersionPresenter;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
@@ -60,9 +63,9 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
     @BindView(R.id.user_portrait)
     SimpleDraweeView userPortrait;
     @BindView(R.id.user_name)
-    TextView userName;
+    TextView         userName;
     @BindView(R.id.position)
-    TextView position;
+    TextView         position;
     private long lastClickTime = 0;
 
     @Override
@@ -100,7 +103,7 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
 
     @Override
     protected void initInject() {
-
+        getFragmentComponent().inject(this);
     }
 
     @Override
@@ -122,8 +125,7 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
         }
     }
 
-    @OnClick({R.id.user_info, R.id.btn_modify_pwd, R.id.btn_usinghelp,
-            R.id.btn_feedback, R.id.btn_update, R.id.btn_about_us, R.id.btn_clear_cache})
+    @OnClick({R.id.user_info, R.id.btn_modify_pwd, R.id.btn_usinghelp, R.id.btn_feedback, R.id.btn_update, R.id.btn_about_us, R.id.btn_clear_cache})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
         if (currentTime - lastClickTime < 500) {
@@ -132,27 +134,34 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
         }
         lastClickTime = currentTime;
         switch (view.getId()) {
-            case R.id.user_info://用户信息
+            //用户信息
+            case R.id.user_info:
                 startActivity(new Intent(getActivity(), UserInfoActivity.class));
 
                 break;
-            case R.id.btn_modify_pwd://修改密码
+            //修改密码
+            case R.id.btn_modify_pwd:
                 startActivity(new Intent(getActivity(), ModifyPwdActivity.class));
                 break;
-            case R.id.btn_usinghelp://使用帮助
+            //使用帮助
+            case R.id.btn_usinghelp:
                 startActivity(new Intent(getActivity(), UsingHelpActivity.class));
                 break;
-            case R.id.btn_feedback://用户反馈
+            //用户反馈
+            case R.id.btn_feedback:
                 startActivity(new Intent(getActivity(), FeedbackActivity.class));
                 break;
-            case R.id.btn_update://版本升级
-                applyPermission();
-//                mPresenter.getAppEdition();
+            //版本升级
+            case R.id.btn_update:
+                //applyPermission();
+                mPresenter.getAppEdition();
                 break;
-            case R.id.btn_about_us://关于我们
+            //关于我们
+            case R.id.btn_about_us:
                 startActivity(new Intent(getActivity(), AboutUsActivity.class));
                 break;
-            case R.id.btn_clear_cache://清除缓存
+            //清除缓存
+            case R.id.btn_clear_cache:
                 new EaseAlertDialog(getContext(), null, "是否清空缓存", null, (confirmed, bundle) -> {
                     if (!confirmed) {
                         return;
@@ -161,14 +170,19 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
                     showToast("缓存已清理");
                 }, true).show();
                 break;
+            default:
+                break;
         }
     }
 
-    //存储权限判断
+    /**
+     * 存储权限判断
+     */
     private void applyPermission() {
         if (ActivityCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (SharedPreferenceUtils.getShouldAskPermission(getActivity(), "firstshould") && !ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//第一次已被拒绝
+            //第一次已被拒绝
+            if (SharedPreferenceUtils.getShouldAskPermission(getActivity(), "firstshould") && !ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("权限开启");
                 builder.setMessage("更新功能无法正常使用，去权限列表开启该权限");
@@ -214,6 +228,8 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
                     Toast.makeText(getActivity(), "该权限被禁用 无法更新！", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -251,12 +267,16 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
                 appVersionName = appVersionName.substring(1);
             }
             int i = VersionManagementUtil.VersionComparison(androidVersion, appVersionName);
-            if (i == 1) {//有更新
-                if (isForceUpdate.equals("1")) {//强制更新
+            //有更新
+            if (i == 1) {
+                //强制更新
+                if (isForceUpdate.equals("1")) {
                     showUpdateDialog(true, androidUrl);
                 } else {
                     showUpdateDialog(false, androidUrl);
                 }
+            }else {
+                showToast("当前已是最新版本！");
             }
         } catch (Exception e) {
             e.printStackTrace();
