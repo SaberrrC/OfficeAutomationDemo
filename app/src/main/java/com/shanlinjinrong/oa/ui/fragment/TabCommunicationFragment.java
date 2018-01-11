@@ -1,6 +1,8 @@
 package com.shanlinjinrong.oa.ui.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,10 +31,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ezy.assist.compat.SettingsCompat;
 
 /**
  * <h3>Description: 首页通讯列表页面</h3>
@@ -93,11 +97,39 @@ public class TabCommunicationFragment extends BaseFragment {
             return;
         }
         titleView.setText("消息(" + event.unReadCount + ")");
-//        EventBus.getDefault().removeStickyEvent(event);
+        //EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Override
     protected void lazyLoadData() {
+        //悬浮窗 权限
+        if (!SettingsCompat.canDrawOverlays(new WeakReference<Context>(getContext()).get())) {
+            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.public_dialog, null);
+            TextView title = (TextView) dialogView.findViewById(R.id.title);
+            title.setText("提示");
+            TextView message = (TextView) dialogView.findViewById(R.id.message);
+            message.setText("请开启悬浮窗权限设置");
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(getContext(),
+                    R.style.AppTheme_Dialog).create();
+            alertDialog.setView(dialogView);
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "确认",
+                    (dialog, which) -> {
+                        dialog.dismiss();
+                        //跳转到悬浮窗权限设置页
+                        SettingsCompat.manageDrawOverlays(new WeakReference<Context>(getContext()).get());
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
+                    (dialog, which) -> dialog.dismiss());
+            alertDialog.show();
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+            //设置授权状态
+            SettingsCompat.setDrawOverlays(new WeakReference<Context>(getContext()).get(), true);
+        }
+
 
     }
 
@@ -126,7 +158,7 @@ public class TabCommunicationFragment extends BaseFragment {
                     String conversationId = conversation.conversationId().substring(0, 12);
                     mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
                     startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
-                            .putExtra("u_id",  conversation.conversationId())
+                            .putExtra("u_id", conversation.conversationId())
                             .putExtra("title", mNickName)
                             .putExtra("message_to", lastMessage.getTo())
                             .putExtra("message_from", lastMessage.getFrom())
