@@ -3,10 +3,8 @@ package com.hyphenate.easeui.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,7 +31,6 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnCountRefreshEvent;
@@ -53,8 +50,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -310,9 +305,15 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                             String nickName = FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.conversationId());
                             String userName = FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.getFrom());
 
-                            if (TextUtils.isEmpty(nickName) || nickName.equals("匿名群组")|| TextUtils.isEmpty(userName)) {
+                            if (TextUtils.isEmpty(nickName) || nickName.equals("匿名群组")) {
                                 EMConversation emConversation = list.get(i);
                                 conversationIncompleteList.add(emConversation);
+                            }
+                            if (TextUtils.isEmpty(userName)){
+                                if ("".equals(FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.getFrom()))) {
+                                    String conversationId = lastMessage.getFrom().substring(0, 12);
+                                    QueryUserInfo(lastMessage.getFrom().substring(3, conversationId.length()));
+                                }
                             }
 
                         } else if (lastMessage.getChatType() == EMMessage.ChatType.Chat) {
@@ -363,12 +364,6 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 if (!handler.hasMessages(MSG_REFRESH)) {
                                     handler.sendEmptyMessage(MSG_REFRESH);
                                 }
-
-                                if ("".equals(FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.getFrom()))) {
-                                    String conversationId = lastMessage.getFrom().substring(0, 12);
-                                    QueryUserInfo(lastMessage.getFrom().substring(3, conversationId.length()));
-                                }
-
                             } catch (HyphenateException e) {
                                 e.printStackTrace();
                                 try {
