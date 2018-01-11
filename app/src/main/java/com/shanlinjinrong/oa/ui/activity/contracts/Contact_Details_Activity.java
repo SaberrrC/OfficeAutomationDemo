@@ -118,6 +118,8 @@ public class Contact_Details_Activity extends HttpBaseActivity<ContactDetailsPre
 
         if (mSession) {
             tvErrorLayout.setVisibility(View.VISIBLE);
+            mUid = Integer.parseInt(FriendsInfoCacheSvc.getInstance(AppManager.mContext).getUid(mUserCode));
+
             initSessionInfo();
         } else {
             initUserDetails();

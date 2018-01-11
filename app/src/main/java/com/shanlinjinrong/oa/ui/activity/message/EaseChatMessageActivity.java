@@ -316,6 +316,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
         Intent intent = new Intent(this, Contact_Details_Activity.class);
         intent.putExtra("user_code", userinfo);
         intent.putExtra("isSession", true);
+
         startActivity(intent);
     }
 
