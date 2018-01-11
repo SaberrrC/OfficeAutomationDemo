@@ -274,7 +274,7 @@ public class SelectedGroupContactPresenter extends HttpPresenter<SelectedGroupCo
                                 contact.setUsername(user.getString("username"));
                                 contact.setPhone(user.getString("phone"));
                                 contact.setEmail(user.getString("email"));
-                                contact.setPortraits(ApiConstant.BASE_PIC_URL + user.getString("portraits"));
+                                contact.setPortraits( user.getString("portraits"));
                                 contact.setSex(user.getString("sex"));
                                 contact.setPostTitle(user.getString("post_title"));
                                 contact.setPostId(user.getString("post_id"));

@@ -58,9 +58,9 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
                 }
 
                 CircleImageView portrait = baseViewHolder.getView(R.id.portrait);
-                if (!TextUtils.isEmpty(contacts.getPortraits())) {
+                if (!TextUtils.isEmpty( contacts.getPortraits())) {
                     Glide.with(AppManager.mContext)
-                            .load(contacts.getPortraits())
+                            .load(ApiConstant.BASE_PIC_URL + contacts.getPortraits())
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .placeholder(R.drawable.ease_user_portraits)
