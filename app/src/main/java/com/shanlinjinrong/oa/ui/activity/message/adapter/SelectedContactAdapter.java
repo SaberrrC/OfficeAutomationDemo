@@ -8,6 +8,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.retrofit.net.ApiConstant;
+import com.iflytek.cloud.resource.Resource;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
@@ -58,16 +60,19 @@ public class SelectedContactAdapter extends BaseMultiItemQuickAdapter<Contacts> 
                 CircleImageView portrait = baseViewHolder.getView(R.id.portrait);
                 if (!TextUtils.isEmpty(contacts.getPortraits())) {
                     Glide.with(AppManager.mContext)
-                            .load(contacts.getPortraits())
+                            .load(ApiConstant.BASE_PIC_URL + contacts.getPortraits())
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .placeholder(R.drawable.ease_user_portraits)
                             .into(portrait);
                 } else {
-                    Glide.with(AppManager.mContext).load(R.drawable.ease_user_portraits).asBitmap().into(portrait);
+                    //Glide.with(AppManager.mContext).load(R.drawable.ease_user_portraits).into(portrait);
+                    portrait.setImageResource(R.drawable.ease_user_portraits);
                 }
                 userName.setText(contacts.getUsername());
                 postName.setText(contacts.getPostTitle());
+                break;
+            default:
                 break;
         }
     }
