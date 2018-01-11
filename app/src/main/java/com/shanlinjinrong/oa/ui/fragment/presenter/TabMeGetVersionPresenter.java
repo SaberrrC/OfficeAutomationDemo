@@ -25,7 +25,7 @@ public class TabMeGetVersionPresenter extends HttpPresenter<TabMeGetVersionInfo.
      */
     @Override
     public void getAppEdition() {
-        mKjHttp.jsonGet(ApiJava.APP_GETAPPEDITION, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(ApiJava.APP_GETAPPEDITION, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
