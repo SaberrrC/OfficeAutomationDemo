@@ -82,7 +82,8 @@ public class BaseActivity extends AppCompatActivity {
     private void initLoadingDialog(View loading) {
         loadingDialog = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Loading).create();
         loadingDialog.setView(loading);
-//        loadingDialog.setCancelable(false);
+        loadingDialog.setCanceledOnTouchOutside(false);
+        loadingDialog.setCancelable(true);
     }
 
     public KJHttp initKjHttp() {
