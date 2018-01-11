@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -313,8 +314,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             HttpParams httpParams = new HttpParams();
             httpParams.put("room_id", mRoomId);
             httpParams.put("uid", AppConfig.getAppConfig(this).getPrivateUid());
-            if (mEdMeetingContent.getText().toString().trim().equals("")) {
-                httpParams.put("content", "暂无");
+            if (mEdMeetingContent.getText().toString().trim().equals("") || mEdMeetingContent.getText().toString().trim().length() < 1) {
+                httpParams.put("content", URLEncoder.encode("暂无", "utf-8"));
             } else {
                 httpParams.put("content", URLEncoder.encode(mEdMeetingContent.getText().toString(), "utf-8"));
             }
@@ -485,6 +486,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             }
             mEdMeetingContent.setText(info.getData().getContent());
             mSendType = info.getData().getSend_type();
+            Log.e("mSendType",mSendType);
         } catch (Throwable e) {
             e.printStackTrace();
         }

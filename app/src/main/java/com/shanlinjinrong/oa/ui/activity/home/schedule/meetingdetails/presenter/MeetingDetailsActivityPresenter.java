@@ -29,7 +29,7 @@ public class MeetingDetailsActivityPresenter extends HttpPresenter<MeetingDetail
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
 
-        mKjHttp.get(ApiJava.NEW_MEETINGROOMS, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.NEW_MEETINGROOMS + "?isuse=1", httpParams, new HttpCallBack() {
 
             @Override
             public void onSuccess(String t) {
