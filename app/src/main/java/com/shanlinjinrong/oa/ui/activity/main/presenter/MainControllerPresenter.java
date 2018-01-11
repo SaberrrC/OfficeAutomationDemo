@@ -7,14 +7,22 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Pair;
 
+import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.pgyersdk.update.PgyUpdateManager;
 
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +60,52 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
 
         } else {
             //            PgyUpdateManager.setIsForced(true);
-            PgyUpdateManager.register(context, "com.shanlinjinrong.oa.fileprovider");
+           // PgyUpdateManager.register(context, "com.shanlinjinrong.oa.fileprovider");
         }
+    }
+
+
+    /**
+     * 获取版本号信息
+     */
+    public void getAppEdition() {
+        mKjHttp.get(ApiJava.APP_GETAPPEDITION, new HttpParams(), new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    JSONObject jo = new JSONObject(t);
+                    switch (jo.getString("code")) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            JSONObject data = jo.getJSONObject("data");
+                            if (mView != null) {
+                                AppVersionBean mAppVersionBean = new Gson().fromJson(t, AppVersionBean.class);
+                                mView.getAppEditionSuccess(mAppVersionBean);
+                            }
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            break;
+                        default:
+                            if (mView != null) {
+                            }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
     }
     List<Pair<Long, EMConversation>> sortList = new ArrayList<>();
     List<EMConversation>             list     = new ArrayList<>();

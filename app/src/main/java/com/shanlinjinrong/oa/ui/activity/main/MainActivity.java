@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,6 +53,7 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.activity.main.event.UnReadMessageEvent;
@@ -64,6 +67,7 @@ import com.shanlinjinrong.oa.ui.fragment.TabHomePageFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMeFragment;
 import com.shanlinjinrong.oa.ui.fragment.TabMsgListFragment;
 import com.shanlinjinrong.oa.utils.LoginUtils;
+import com.shanlinjinrong.oa.utils.VersionManagementUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -211,16 +215,8 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         LoginIm();//登录环信
         initControllerAndSetAdapter();
         judeIsInitPwd();//判断是否是初始密码
-        //悬浮窗 权限
-        if (!SettingsCompat.canDrawOverlays(new WeakReference<Context>(this).get())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("权限开启");
-            builder.setMessage("为了能更好的体验消息通知功能,请您手动开启悬浮窗权限!");
-            //跳转到悬浮窗权限设置页
-            builder.setPositiveButton("确定", (dialog, which) -> SettingsCompat.manageDrawOverlays(new WeakReference<Context>(this).get())).setNegativeButton("取消", (dialog, which) -> {}).show();
-            //设置授权状态
-            SettingsCompat.setDrawOverlays(new WeakReference<Context>(this).get(), true);
-        }
+        mPresenter.getAppEdition();
+
         mPresenter.applyPermission(this);//判断是否有更新
         ShortcutBadger.removeCount(MainActivity.this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
@@ -613,6 +609,95 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         i.setData(uri);
         startActivityForResult(i, 100);
+    }
+
+    @Override
+    public void getAppEditionSuccess(AppVersionBean mAppVersionBean) {
+        String androidVersion = mAppVersionBean.getData().getAndroidVersion();
+        if (androidVersion.startsWith("v")) {
+            androidVersion = androidVersion.substring(1);
+        }
+        String androidUrl = mAppVersionBean.getData().getAndroidUrl();
+        mAppVersionBean.getData().getAndroidUrl();
+        String isForceUpdate = mAppVersionBean.getData().getAndroidIsForceUpdate();
+        try {
+            String appVersionName = VersionManagementUtil.getVersion(MainActivity.this);
+            if (appVersionName.startsWith("v")) {
+                appVersionName = appVersionName.substring(1);
+            }
+            int i = VersionManagementUtil.VersionComparison(androidVersion, appVersionName);
+            if (i == 1) {//有更新
+                if (isForceUpdate.equals("1")) {//强制更新
+                    showUpdateDialog(true, androidUrl);
+                } else {
+                    showUpdateDialog(false, androidUrl);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void showUpdateDialog(boolean iosIsForceUpdate, String androidUrl) {
+        View dialogView = LayoutInflater.from(MainActivity.this).inflate(R.layout.public_dialog, null);
+        TextView title = (TextView) dialogView.findViewById(R.id.title);
+        title.setText("版本更新");
+        TextView message = (TextView) dialogView.findViewById(R.id.message);
+        if (iosIsForceUpdate) {
+            message.setText("请更新至最新版本");
+        } else {
+            message.setText("是否更新至最新版本");
+        }
+        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this,
+                R.style.AppTheme_Dialog).create();
+        alertDialog.setView(dialogView);
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse(androidUrl);
+                intent.setData(content_url);
+                startActivity(intent);
+            }
+        };
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "更新", listener);
+        if (!iosIsForceUpdate) {
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+        }
+        alertDialog.show();
+
+        if (iosIsForceUpdate) {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction("android.intent.action.VIEW");
+                    Uri content_url = Uri.parse(androidUrl);
+                    intent.setData(content_url);
+                    startActivity(intent);
+
+                }
+            });
+            alertDialog.setCancelable(false);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+        } else {
+            alertDialog.setCancelable(true);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+        }
+
     }
 
     //位置权限回调
