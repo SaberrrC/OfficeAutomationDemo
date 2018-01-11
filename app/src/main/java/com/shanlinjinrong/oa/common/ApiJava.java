@@ -316,7 +316,8 @@ public interface ApiJava {
      * 获取个人信息
      */
     String CODE_SEARCH_USER_DETAILS = "user/queryUserByCodes";
-
+    //移动端获取版本号
+     String  APP_GETAPPEDITION = "app/getAppEdition";
     //*****************************************************************//
 
     /**

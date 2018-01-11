@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.main.contract;
 
 import android.app.Activity;
 
+import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -19,10 +20,12 @@ public interface MainControllerContract {
 
         void startAppSetting();
 
+        void getAppEditionSuccess(AppVersionBean mAppVersionBean);
     }
 
     interface Presenter extends BasePresenter<View> {
 
         void applyPermission(Activity activity); // 申请权限
+
     }
 }
