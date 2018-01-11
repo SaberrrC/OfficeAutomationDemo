@@ -61,9 +61,9 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
     @BindView(R.id.user_portrait)
     SimpleDraweeView userPortrait;
     @BindView(R.id.user_name)
-    TextView userName;
+    TextView         userName;
     @BindView(R.id.position)
-    TextView position;
+    TextView         position;
     private long lastClickTime = 0;
 
     @Override
