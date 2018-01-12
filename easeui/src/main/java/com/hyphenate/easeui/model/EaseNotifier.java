@@ -40,6 +40,7 @@ import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
@@ -73,27 +74,27 @@ public class EaseNotifier {
     protected final static String[] msg_eng = {"sent a message", "sent a picture", "sent a voice",
             "sent location message", "sent a video", "sent a file", "%1 contacts sent %2 messages"
     };
-    protected final static String[] msg_ch  = {"发来一条消息", "[图片]", "[语音]", "发来位置信息", "发来一个视频", "[文件]",
+    protected final static String[] msg_ch = {"发来一条消息", "[图片]", "[语音]", "发来位置信息", "发来一个视频", "[文件]",
             "%1个联系人发来%2条消息"
     };
 
-    protected static int notifyID           = 0525; // start notification id
+    protected static int notifyID = 0525; // start notification id
     protected static int foregroundNotifyID = 0555;
 
     protected NotificationManager notificationManager = null;
 
-    protected HashSet<String> fromUsers       = new HashSet<String>();
-    protected int             notificationNum = 0;
+    protected HashSet<String> fromUsers = new HashSet<String>();
+    protected int notificationNum = 0;
 
-    protected Context                      appContext;
-    protected String                       packageName;
-    protected String[]                     msgs;
-    protected long                         lastNotifiyTime;
-    protected AudioManager                 audioManager;
-    protected Vibrator                     vibrator;
+    protected Context appContext;
+    protected String packageName;
+    protected String[] msgs;
+    protected long lastNotifiyTime;
+    protected AudioManager audioManager;
+    protected Vibrator vibrator;
     protected EaseNotificationInfoProvider notificationInfoProvider;
-    private   String                       mNickName;
-    private   String                       notifyText;
+    private String mNickName;
+    private String notifyText;
 
     public EaseNotifier() {
     }
@@ -204,8 +205,8 @@ public class EaseNotifier {
         sendNotification(message, isForeground, true);
     }
 
-    private static final String APP_CONFIG              = "app_config";
-    public static final  String DEFAULT_ARGUMENTS_VALUE = "";
+    private static final String APP_CONFIG = "app_config";
+    public static final String DEFAULT_ARGUMENTS_VALUE = "";
 
     /**
      * send it to notification bar
@@ -219,7 +220,9 @@ public class EaseNotifier {
             switch (message.getType()) {
                 case TXT:
                     notifyText = notifyText.replace(" ", ":");
-                    notifyText += ((EMTextMessageBody) message.getBody()).getMessage();
+                    String message1 = ((EMTextMessageBody) message.getBody()).getMessage();
+                    message1 = EncryptionUtil.getDecryptStr(message1, "");
+                    notifyText += message1;
                     break;
                 case IMAGE:
                     notifyText += msgs[1];
@@ -291,7 +294,7 @@ public class EaseNotifier {
                                 httpParams.putHeaders("uid", uid);
                                 httpParams.put("codeList", userCode);
                                 //TODO 生产
-                                kjHttp.post(ApiConstant.JAVA_TEST_HOST+ EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
+                                kjHttp.post(ApiConstant.JAVA_TEST_HOST + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
 
                                     @Override
                                     public void onFailure(int errorNo, String strMsg) {
@@ -338,8 +341,8 @@ public class EaseNotifier {
                                                             public void call(Subscriber<? super Object> subscriber) {
                                                                 FriendsInfoCacheSvc.
                                                                         getInstance(appContext).
-                                                                        addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getUid()+"","sl_" + userDetailsBean.getData().get(0).getCode(),
-                                                                                userDetailsBean.getData().get(0).getUsername(), ApiConstant.BASE_PIC_URL +  userDetailsBean.getData().get(0).getImg(),userDetailsBean.getData().get(0).getEmail(),userDetailsBean.getData().get(0).getSex()));
+                                                                        addOrUpdateFriends(new Friends(userDetailsBean.getData().get(0).getUid() + "", "sl_" + userDetailsBean.getData().get(0).getCode(),
+                                                                                userDetailsBean.getData().get(0).getUsername(), ApiConstant.BASE_PIC_URL + userDetailsBean.getData().get(0).getImg(), userDetailsBean.getData().get(0).getEmail(), userDetailsBean.getData().get(0).getSex()));
                                                                 mNickName = userDetailsBean.getData().get(0).getUsername();
                                                                 subscriber.onCompleted();
                                                             }
