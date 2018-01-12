@@ -267,6 +267,14 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
 
     }
 
+    @Override
+    public void getAppEdittionFailed(int errorCode, String errorMsg) {
+        if ("auth error".equals(errorMsg)) {
+            catchWarningByCode(errorMsg);
+            return;
+        }
+    }
+
 
     private void showUpdateDialog(boolean iosIsForceUpdate, String androidUrl) {
         View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.public_dialog, null);

@@ -28,13 +28,13 @@ import butterknife.ButterKnife;
 public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActivityPresenter> implements MeetingDetailsActivityContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.top_view)
-    CommonTopView mTopView;
+    CommonTopView      mTopView;
     @BindView(R.id.meeting_details_list)
-    RecyclerView mMeetingDetailsList;
+    RecyclerView       mMeetingDetailsList;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.tv_network_error)
-    TextView mTvNetworkError;
+    TextView           mTvNetworkError;
     private MeetingDetailsAdapter mMeetingRoomAdapter;
     private List<MeetingRoomsBean.DataBean> data = new ArrayList<>();
 
@@ -93,6 +93,10 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
 
     @Override
     public void getMeetingRoomsFailed(int errorCode, String data) {
+        if ("auth error".equals(data)) {
+            catchWarningByCode(data);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));

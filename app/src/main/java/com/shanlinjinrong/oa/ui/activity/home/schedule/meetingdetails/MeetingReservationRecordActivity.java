@@ -158,6 +158,10 @@ public class MeetingReservationRecordActivity extends HttpBaseActivity<MeetingRe
 
     @Override
     public void getMeetingRecordFailed(int errorCode, String msgStr) {
+        if ("auth error".equals(msgStr)) {
+            catchWarningByCode(msgStr);
+            return;
+        }
         mRefresh.setRefreshing(false);
         switch (errorCode) {
             case -1:

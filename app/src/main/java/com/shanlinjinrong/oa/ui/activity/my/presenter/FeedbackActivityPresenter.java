@@ -74,7 +74,7 @@ public class FeedbackActivityPresenter extends HttpPresenter<FeedbackActivityCon
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null)
-                        mView.feedbackFailed("反馈失败");
+                        mView.feedbackFailed(strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

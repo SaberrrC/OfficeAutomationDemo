@@ -163,7 +163,11 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
 
     @Override
     public void feedbackFailed(String strMsg) {
-        showToast(strMsg);
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
+        showToast("反馈失败");
     }
 
     @Override

@@ -438,6 +438,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void addMeetingRoomsFailed(int errorCode, String strMsg) {
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));
@@ -497,6 +501,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void lookMeetingRoomsFailed(int errorCoe, String strMsg) {
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
         switch (errorCoe) {
             case -1:
                 showToast(getString(R.string.net_no_connection));
@@ -522,6 +530,10 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
 
     @Override
     public void deleteMeetingRoomsFailed(int errorCode, String strMsg) {
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));

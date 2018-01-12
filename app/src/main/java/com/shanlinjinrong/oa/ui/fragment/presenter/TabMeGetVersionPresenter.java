@@ -47,7 +47,7 @@ public class TabMeGetVersionPresenter extends HttpPresenter<TabMeGetVersionInfo.
                             if (mView != null) {
                             }
                     }
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -55,6 +55,12 @@ public class TabMeGetVersionPresenter extends HttpPresenter<TabMeGetVersionInfo.
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                try{
+                    mView.getAppEdittionFailed(errorNo,strMsg);
+                }catch (Throwable e){
+                    e.printStackTrace();
+                }
+
             }
 
             @Override

@@ -757,10 +757,10 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
         @Override
         public void onDisconnected(final int error) {
-            OnCountRefreshEvent onCountRefreshEvent = new WeakReference<>(new OnCountRefreshEvent()).get();
-            onCountRefreshEvent.setEvent(1);
-            onCountRefreshEvent.setErrorCode(error);
-            EventBus.getDefault().post(onCountRefreshEvent);
+//            OnCountRefreshEvent onCountRefreshEvent = new WeakReference<>(new OnCountRefreshEvent()).get();
+//            onCountRefreshEvent.setEvent(1);
+//            onCountRefreshEvent.setErrorCode(error);
+//            EventBus.getDefault().post(onCountRefreshEvent);
         }
     }
 }

@@ -328,6 +328,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     @Override
     public void getMeetingPredetermineFailed(int errorCode, String msgStr) {
+        if ("auth error".equals(msgStr)) {
+            catchWarningByCode(msgStr);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 isNetwork = false;
@@ -366,8 +370,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     @Override
     public void modifyMeetingRoomsFailed(int errorCode, String strMsg) {
-
-
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));

@@ -11,6 +11,8 @@ import java.util.List;
 public interface TabMeGetVersionInfo {
     interface View extends BaseView {
         void getAppEditionSuccess(AppVersionBean mAppVersionBean);
+
+        void getAppEdittionFailed(int errorCode,String errorMsg);
     }
 
     interface Presenter extends BasePresenter<View> {
