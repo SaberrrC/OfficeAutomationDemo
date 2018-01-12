@@ -1,6 +1,6 @@
-apply from: 'file_uri.gradle'
+//apply from: 'file_uri.gradle'
 apply plugin: 'com.android.application'
-apply plugin: "mmTrix"
+//apply plugin: "mmTrix"
 
 android {
     compileSdkVersion 25
@@ -211,5 +211,5 @@ dependencies {
     //implementation files('libs/hyphenatechat_3.3.7.jar')
     implementation files('libs/jcore-android-1.1.9.jar')
     implementation files('libs/jpush-android-3.1.1.jar')
-    compile files("libs/mmtrix.agent.jar")
+    //compile files("libs/mmtrix.agent.jar")
 }
