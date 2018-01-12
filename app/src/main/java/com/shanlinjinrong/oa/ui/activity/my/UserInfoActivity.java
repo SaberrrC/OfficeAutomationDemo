@@ -72,8 +72,10 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  */
 public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter> implements UserInfoActivityContract.View {
 
-    public static final int UPDATE_PHONE    = 0x4;//修改电话
-    public static final int UPDATE_PROTRAIT = 2;//修改头像
+    //修改电话
+    public static final int UPDATE_PHONE    = 0x4;
+    //修改头像
+    public static final int UPDATE_PROTRAIT = 2;
     @BindView(R.id.tv_title)
     TextView         tvTitle;
     @BindView(R.id.toolbar)
@@ -96,10 +98,14 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     TextView         user_jopnumber;
 
     private BaseBottomPushPopupWindow mPop;
-    private static final int CODE_GALLERY_REQUEST = 0x1;//相册
-    private static final int CODE_CAMERA_REQUEST  = 0x2;//拍照
-    private static final int CROP_PICTURE_REQUEST = 0x3;//图片路径
-    private static final int MODIFICATION_EMAIL   = 101;//邮箱修改
+    //相册
+    private static final int CODE_GALLERY_REQUEST = 0x1;
+    //拍照
+    private static final int CODE_CAMERA_REQUEST  = 0x2;
+    //图片路径
+    private static final int CROP_PICTURE_REQUEST = 0x3;
+    //邮箱修改
+    private static final int MODIFICATION_EMAIL   = 101;
 
     private static final String TEMP_FILE_NAME   = "temp_icon.jpg";
     private static final String CAMERA_FILE_NAME = "camera_pic.jpg";
@@ -190,14 +196,19 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 break;
             case R.id.user_post_box:
                 break;
-            case R.id.user_phone_box://修改电话
+            //修改电话
+            case R.id.user_phone_box:
                 startActivityForResult(new Intent(UserInfoActivity.this, ModifyPhoneActivity.class), UPDATE_PHONE);
                 break;
-            case R.id.user_date_box://邮箱修改
+            //邮箱修改
+            case R.id.user_date_box:
                 startActivityForResult(new Intent(this, ModificationEmailActivity.class), 101);
                 break;
-            case R.id.btn_logout://登出
+            //登出
+            case R.id.btn_logout:
                 showLogoutTips();
+                break;
+            default:
                 break;
         }
     }
@@ -228,7 +239,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     public void upLoadSuccess(String portrait) {
         showToast("修改成功");
         //上传成功，设置用户头像
-        String portraitUri =portrait;
+        String portraitUri = portrait;
         AppConfig.getAppConfig(UserInfoActivity.this).set(AppConfig.PREF_KEY_PORTRAITS, portraitUri);
         if (!TextUtils.isEmpty(portraitUri)) {
             Glide.with(AppManager.mContext)
@@ -384,6 +395,9 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
             case UPDATE_PHONE:
                 userPhone.setText(AppConfig.getAppConfig(UserInfoActivity.this).get(AppConfig.PREF_KEY_PHONE));
                 break;
+
+            default:
+                break;
         }
         super.onActivityResult(requestCode, resultCode, intent);
 
@@ -464,15 +478,28 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 popupWindow.dismiss();
                 //退出环信登录
                 LogUtils.e("退出环信");
+                showLoadingView();
                 DemoHelper.getInstance().logout(true, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         Log.d("退出环信", "退出环信成功！！");
+                        runOnUiThread(() -> {
+                            hideLoadingView();
+                            JPushInterface.setAlias(UserInfoActivity.this, "", (i, s, set) -> {
+                            });
+                            JPushInterface.setTags(UserInfoActivity.this, null, null);
+                            exitToLogin();
+                        });
                     }
 
                     @Override
                     public void onError(int i, String s) {
                         Log.d("退出环信", i + s);
+                        runOnUiThread(() -> {
+                            hideLoadingView();
+                            showToast("退出失败，请重试");
+                        });
+
                     }
 
                     @Override
@@ -480,15 +507,13 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                         Log.d("退出环信", i + s);
                     }
                 });
-
-                JPushInterface.setAlias(UserInfoActivity.this, "", (i, s, set) -> {
-                });
-                JPushInterface.setTags(UserInfoActivity.this, null, null);
-
-                exitToLogin();
             } catch (Exception e) {
+                runOnUiThread(() -> {
+                    hideLoadingView();
+                    showToast("退出失败，请重试");
+                });
                 LogUtils.e("退出环信抛出异常" + e.toString());
-                exitToLogin();
+                //exitToLogin();
             }
         });
         btnCancel.setOnClickListener(v -> popupWindow.dismiss());
@@ -509,7 +534,6 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
     }
 
     private void exitToLogin() {
-
         ShortcutBadger.removeCount(UserInfoActivity.this);
         AppConfig.getAppConfig(UserInfoActivity.this).clearLoginInfo();
         startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
@@ -520,7 +544,8 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         if (toolbar == null) {
             return;
         }
-        setTitle("");//必须在setSupportActionBar之前调用
+        //必须在setSupportActionBar之前调用
+        setTitle("");
         toolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(toolbar);
         tvTitle.setText("资料修改");

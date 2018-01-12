@@ -128,26 +128,32 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
         }
         lastClickTime = currentTime;
         switch (view.getId()) {
-            case R.id.user_info://用户信息
+            //用户信息
+            case R.id.user_info:
                 startActivity(new Intent(getActivity(), UserInfoActivity.class));
-
                 break;
-            case R.id.btn_modify_pwd://修改密码
+            //修改密码
+            case R.id.btn_modify_pwd:
                 startActivity(new Intent(getActivity(), ModifyPwdActivity.class));
                 break;
-            case R.id.btn_usinghelp://使用帮助
+            //使用帮助
+            case R.id.btn_usinghelp:
                 startActivity(new Intent(getActivity(), UsingHelpActivity.class));
                 break;
-            case R.id.btn_feedback://用户反馈
+            //用户反馈
+            case R.id.btn_feedback:
                 startActivity(new Intent(getActivity(), FeedbackActivity.class));
                 break;
-            case R.id.btn_update://版本升级
+            //版本升级
+            case R.id.btn_update:
                 mPresenter.getAppEdition();
                 break;
-            case R.id.btn_about_us://关于我们
+            //关于我们
+            case R.id.btn_about_us:
                 startActivity(new Intent(getActivity(), AboutUsActivity.class));
                 break;
-            case R.id.btn_clear_cache://清除缓存
+            //清除缓存
+            case R.id.btn_clear_cache:
                 new EaseAlertDialog(getContext(), null, "是否清空缓存", null, (confirmed, bundle) -> {
                     if (!confirmed) {
                         return;

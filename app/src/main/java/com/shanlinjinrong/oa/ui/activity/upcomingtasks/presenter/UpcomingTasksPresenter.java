@@ -182,7 +182,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
         String json = new Gson().toJson(list);
         HttpParams httpParams = new HttpParams();
         httpParams.putJsonParams(json);
-        mKjHttp.post(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
+        mKjHttp.jsonPost(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);

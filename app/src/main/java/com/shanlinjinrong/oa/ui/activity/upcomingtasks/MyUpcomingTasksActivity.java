@@ -343,6 +343,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @NonNull
     private List<ApporveBodyItemBean> getApporveBodyItemBeenList(boolean approve) {
+
         List<ApporveBodyItemBean> approveBeanList = new ArrayList<>();
         for (int i = 0; i < mDatas.size(); i++) {
             if (mDatas.get(i) instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
@@ -358,6 +359,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 }
             }
         }
+
         return approveBeanList;
     }
 
@@ -916,28 +918,22 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             }
             mTolbarTextBtn.setVisibility(View.VISIBLE);
         }
-        ThreadUtils.runSub(new Runnable() {
-            @Override
-            public void run() {
-                for (Object data : mDatas) {
-                    if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
-                        UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
-                        bean.setIsChecked(false);
-                    }
-                    if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
-                        UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
-                        bean.setIsChecked(false);
-                    }
+        ThreadUtils.runSub(() -> {
+            for (Object data : mDatas) {
+                if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
+                    UpcomingTaskItemBean.DataBean.DataListBean bean1 = (UpcomingTaskItemBean.DataBean.DataListBean) data;
+                    bean1.setIsChecked(false);
                 }
-                ThreadUtils.runMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRvList.setVisibility(View.VISIBLE);
-                        mRvList.requestLayout();
-                        mFinalRecycleAdapter.notifyDataSetChanged();
-                    }
-                });
+                if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                    UpcomingSearchResultBean.DataBeanX.DataBean bean1 = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
+                    bean1.setIsChecked(false);
+                }
             }
+            ThreadUtils.runMain(() -> {
+                mRvList.setVisibility(View.VISIBLE);
+                mRvList.requestLayout();
+                mFinalRecycleAdapter.notifyDataSetChanged();
+            });
         });
         mRvList.setVisibility(View.VISIBLE);
         mRvList.requestLayout();
@@ -971,17 +967,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         initRefreshMode();
         mSrRefresh.setRefreshing(true);
-        mSrRefresh.post(new Runnable() {
-            @Override
-            public void run() {
-                ThreadUtils.runMainDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getListData();
-                    }
-                }, 0);
-            }
-        });
+        mSrRefresh.post(() -> ThreadUtils.runMainDelayed(() -> getListData(), 0));
     }
 
     @Override

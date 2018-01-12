@@ -29,7 +29,6 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
     public void login(String account, String psw) {
         mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
-
         params.put("email", account);
         params.put("pwd", psw);
         mKjHttp.post(ApiJava.LOGIN, params, new HttpCallBack() {
@@ -50,12 +49,15 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            if (mView != null)
+                            if (mView != null) {
                                 mView.loginFailed(user.getCode());
+                            }
                             break;
-                        case ApiJava.NOT_EXIST_USER://用户名 密码不存在
-                            if (mView != null)
+                        //用户名 密码不存在
+                        case ApiJava.NOT_EXIST_USER:
+                            if (mView != null) {
                                 mView.accountOrPswError(user.getMessage());
+                            }
                             break;
                         default:
                             break;
@@ -72,8 +74,10 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
             public void onFailure(int errorNo, String strMsg) {
                 LogUtils.e(errorNo + "--" + strMsg);
                 try {
-                    if (mView != null){ mView.uidNull(strMsg);
-                        mView.loginFailed(String.valueOf(errorNo));}
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
+                        mView.loginFailed(String.valueOf(errorNo));
+                    }
                     super.onFailure(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -84,8 +88,9 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
             public void onFinish() {
                 super.onFinish();
                 try {
-                    if (mView != null)
+                    if (mView != null) {
                         mView.requestFinish();
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
