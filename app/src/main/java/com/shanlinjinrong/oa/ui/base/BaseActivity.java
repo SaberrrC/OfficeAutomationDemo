@@ -52,6 +52,7 @@ import java.util.Set;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
+
 /**
  * <h3>Description: 基础Activity</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>

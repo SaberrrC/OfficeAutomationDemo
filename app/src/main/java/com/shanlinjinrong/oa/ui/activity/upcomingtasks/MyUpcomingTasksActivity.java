@@ -965,6 +965,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             showDetailDialog(beanList);
             return;
         }
+        showToast("操作成功");
         initRefreshMode();
         mSrRefresh.setRefreshing(true);
         mSrRefresh.post(() -> ThreadUtils.runMainDelayed(() -> getListData(), 0));
