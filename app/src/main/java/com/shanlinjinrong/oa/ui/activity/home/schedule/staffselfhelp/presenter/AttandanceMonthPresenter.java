@@ -42,10 +42,13 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
             public void onError(Throwable e) {
                 try {
                     if (e instanceof HttpException) {
+                        if (((HttpException) e).code() == 401) {
+                            mView.uidNull(((HttpException) e).code() + "");
+                            return;
+                        }
                         if (((HttpException) e).code() > 400) {
                             mView.sendDataFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
-//                        mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
                         mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
                     } else if (e instanceof NullPointerException) {

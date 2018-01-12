@@ -58,12 +58,12 @@ import cn.jpush.android.api.TagAliasCallback;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    private AlertDialog loadingDialog;
+    private AlertDialog       loadingDialog;
     private CustomDialogUtils mDialog;
-    private TextView msg;
-    private KJHttp kjHttp;
-    private Toast toast;
-    private View empty;
+    private TextView          msg;
+    private KJHttp            kjHttp;
+    private Toast             toast;
+    private View              empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +129,7 @@ public class BaseActivity extends AppCompatActivity {
             case ApiJava.REQUEST_TOKEN_OUT_TIME:
             case ApiJava.REQUEST_TOKEN_NOT_EXIST:
             case ApiJava.ERROR_TOKEN:
+            case "401":
                 AppConfig.getAppConfig(this).clearLoginInfo();
                 NonTokenDialog();
                 break;

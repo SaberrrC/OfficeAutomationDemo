@@ -907,11 +907,19 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void submitFailureTips(String msg) {
+        if ("auth error".equals(msg)) {
+            catchWarningByCode(msg);
+            return;
+        }
         Toast.makeText(this, msg.trim(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void getQueryMonoCodeFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
         mTvNotNetwork.setText(str);
     }
@@ -923,6 +931,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void initiateThingsRequestFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 mTvNotNetwork.setText(R.string.net_no_connection);
@@ -950,7 +962,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void queryEvectionTypeFailure(int errorCode, String str) {
-
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
     }
 
     @Override
@@ -989,7 +1004,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void queryDurationFailure(int errorCode, String str) {
-
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
     }
 
     @Override
@@ -1000,6 +1018,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void submitEvectionApplyFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         showToast(str);
     }
 
@@ -1011,6 +1033,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void addWorkApplyFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.string_not_network));
@@ -1027,6 +1053,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void submitFurloughFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.string_not_network));
@@ -1053,7 +1083,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void findSignReasonFailure(int errorCode, String str) {
-
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
     }
 
     @Override
@@ -1067,6 +1100,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void registrationCardFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.string_not_network));

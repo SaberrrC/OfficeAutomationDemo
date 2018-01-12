@@ -804,6 +804,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     public void onGetApproveDataFailure(int errorNo, String strMsg) {
         hideLoadingView();
         mSrRefresh.setRefreshing(false);
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
         if (errorNo == -1) {
             mRvList.setVisibility(View.GONE);
             mTvErrorShow.setVisibility(View.VISIBLE);
@@ -984,6 +988,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     public void onSearchFailure(int errorNo, String strMsg) {
         hideLoadingView();
         mSrRefresh.setRefreshing(false);
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
         if (errorNo == -1) {
             mRvList.setVisibility(View.GONE);
             mTvErrorShow.setVisibility(View.VISIBLE);
@@ -1081,6 +1089,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     @Override
     public void onApproveFailure(int errorNo, String strMsg) {
         hideLoadingView();
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
         if (errorNo == -1) {
             mRvList.setVisibility(View.GONE);
             mTvErrorShow.setVisibility(View.VISIBLE);

@@ -68,12 +68,14 @@ public class InitiateThingsRequestActivityPresenter extends HttpPresenter<Initia
                     if (mView != null)
                         mView.requestFinish();
                     if (e instanceof HttpException) {
+                        if (((HttpException) e).code() == 401) {
+                            mView.uidNull(((HttpException) e).code() + "");
+                            return;
+                        }
                         if (((HttpException) e).code() > 400) {
                             if (mView != null)
                                 mView.getQueryMonoCodeFailure(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
-//                        if (mView != null)
-//                            mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
                         if (mView != null)
                             mView.getQueryMonoCodeFailure(-1, "网络不通，请检查网络连接！");
