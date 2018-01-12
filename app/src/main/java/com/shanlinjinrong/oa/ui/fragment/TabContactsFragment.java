@@ -307,6 +307,10 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     public void autoSearchFailed(int errCode, String errMsg) {
         hideLoadingView();
+        if ("auth error".equals(errMsg)) {
+            catchWarningByCode(errMsg);
+            return;
+        }
     }
 
     @Override
@@ -355,6 +359,10 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     public void loadDataFailed(int code, String msg) {
         hideLoadingView();
+        if ("auth error".equals(msg)) {
+            catchWarningByCode(msg);
+            return;
+        }
         reSetSwipRefreash();
         showEmptyView(mRlRecyclerViewContainer, "网络不稳定，请重试！", 0, false);
         reSetSwipRefreash();

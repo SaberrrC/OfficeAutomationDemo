@@ -227,6 +227,10 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
 
     @Override
     public void loadDataFailed(int errorNo, String strMsg) {
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
         showEmptyView(mRlRecyclerViewContainer, "网络不稳定，请重试！", 0, false);
     }
 
@@ -252,7 +256,10 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
 
     @Override
     public void autoSearchFailed(int errCode, String errMsg) {
-
+        if ("auth error".equals(errMsg)) {
+            catchWarningByCode(errMsg);
+            return;
+        }
     }
 
     @Override
