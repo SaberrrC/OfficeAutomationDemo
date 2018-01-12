@@ -14,6 +14,7 @@ import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.UserInfoActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -62,6 +63,10 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
             @Override
             public void onError(Throwable e) {
                 if (e instanceof HttpException) {
+                    if (((HttpException) e).code() == 401) {
+                        mView.uidNull(((HttpException) e).code() + "");
+                        return;
+                    }
                     if (((HttpException) e).code() > 400) {
                         mView.upLoadFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
                     }
@@ -98,9 +103,9 @@ public class UserInfoActivityPresenter extends HttpPresenter<UserInfoActivityCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                try{
+                try {
                     mView.uidNull(strMsg);
-                }catch (Throwable e){
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }

@@ -49,10 +49,10 @@ import cn.jpush.android.api.TagAliasCallback;
 public abstract class BaseFragment extends Fragment {
 
     private AlertDialog loadingDialog;
-    private TextView msg;
-    private KJHttp kjHttp;
-    public Activity mContext;//CXP添加，供子类使用
-    private Toast toast;
+    private TextView    msg;
+    private KJHttp      kjHttp;
+    public  Activity    mContext;//CXP添加，供子类使用
+    private Toast       toast;
 
     //Fragment的View加载完毕的标记
     private boolean isViewCreated;
@@ -108,6 +108,16 @@ public abstract class BaseFragment extends Fragment {
             case ApiJava.ERROR_TOKEN:
                 AppConfig.getAppConfig(getContext()).clearLoginInfo();
                 gotoLoginPage();
+                break;
+            case "401":
+                AppConfig.getAppConfig(getContext()).clearLoginInfo();
+                gotoLoginPage();
+                break;
+            case ApiJava.AUTH_ERROR:
+                AppConfig.getAppConfig(getContext()).clearLoginInfo();
+                gotoLoginPage();
+                break;
+            default:
                 break;
         }
     }

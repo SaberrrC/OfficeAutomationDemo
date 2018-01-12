@@ -167,7 +167,6 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 try {
-                    mView.uidNull(strMsg);
                     mView.loadDataFailed(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();
