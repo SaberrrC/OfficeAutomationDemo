@@ -167,7 +167,8 @@ dependencies {
     compile 'com.github.florent37:viewanimator:1.0.3'
 
     //Jpush
-    compile 'cn.jiguang:jpush:2.1.8'
+
+    //compile 'cn.jiguang:jpush:2.1.8'
 
     //蒲公英
     compile 'com.pgyersdk:sdk:2.5.6'
@@ -206,4 +207,6 @@ dependencies {
     //compile 'com.huawei.android.hms:push:2.5.2.300'
 
     //implementation files('libs/hyphenatechat_3.3.7.jar')
+    implementation files('libs/jcore-android-1.1.9.jar')
+    implementation files('libs/jpush-android-3.1.1.jar')
 }
