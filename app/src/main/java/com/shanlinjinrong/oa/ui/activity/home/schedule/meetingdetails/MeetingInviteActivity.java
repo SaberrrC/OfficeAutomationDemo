@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.ui.activity.home.schedule;
+package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;

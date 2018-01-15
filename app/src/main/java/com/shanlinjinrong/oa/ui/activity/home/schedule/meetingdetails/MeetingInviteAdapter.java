@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.ui.activity.home.schedule;
+package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
