@@ -55,8 +55,10 @@ public class TabHomePageFragment extends BaseFragment {
 
     private RelativeLayout mRootView;
 
-    private static int    TYPE_SEND_TO_ME       = 0;//发送我的
-    private static int    TYPE_WAIT_ME_APPROVAL = 1;//待我审批
+    //发送我的
+    private static int    TYPE_SEND_TO_ME       = 0;
+    //待我审批
+    private static int    TYPE_WAIT_ME_APPROVAL = 1;
     private static String DOT_STATUS            = "DOT_STATUS";
     public static  String DOT_SEND              = "DOT_SEND";
     public static  String DOT_APPORVAL          = "DOT_APPORVAL";
