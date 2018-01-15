@@ -118,7 +118,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     protected Bundle              fragmentArgs;
     protected int                 chatType;
     protected String              toChatUsername;
-    public EaseChatMessageList messageList;
+    public    EaseChatMessageList messageList;
     protected EaseChatInputMenu   inputMenu;
 
     protected EMConversation conversation;
@@ -779,7 +779,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
 
             //TODO 存储数据
-            if (!TextUtils.equals(message.getFrom(),getArguments().getString(EaseConstant.EXTRA_USER_ID, ""))) {
+            if (!TextUtils.equals(message.getFrom(), getArguments().getString(EaseConstant.EXTRA_USER_ID, ""))) {
                 EMConversation conversationDB = EMClient.getInstance().chatManager().getConversation(toChatUsername);
                 if (conversationDB != null) {
                     JSONObject jsonObject = new JSONObject();

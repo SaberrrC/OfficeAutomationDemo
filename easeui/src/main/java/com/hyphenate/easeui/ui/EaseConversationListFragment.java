@@ -309,10 +309,14 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 EMConversation emConversation = list.get(i);
                                 conversationIncompleteList.add(emConversation);
                             }
-                            if (TextUtils.isEmpty(userName)){
-                                if ("".equals(FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.getFrom()))) {
-                                    String conversationId = lastMessage.getFrom().substring(0, 12);
-                                    QueryUserInfo(lastMessage.getFrom().substring(3, conversationId.length()));
+                            if (TextUtils.isEmpty(userName)) {
+                                try {
+                                    if ("".equals(FriendsInfoCacheSvc.getInstance(getContext()).getNickName(lastMessage.getFrom()))) {
+                                        String conversationId = lastMessage.getFrom().substring(0, 12);
+                                        QueryUserInfo(lastMessage.getFrom().substring(3, conversationId.length()));
+                                    }
+                                } catch (Throwable e) {
+                                    e.printStackTrace();
                                 }
                             }
 
@@ -321,12 +325,17 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 continue;
                             }
 
-                            String conversationId = lastMessage.conversationId().substring(0, 12);
-                            String nickName = FriendsInfoCacheSvc.getInstance(getContext()).getNickName(conversationId);
-                            if (TextUtils.isEmpty(nickName) || nickName.equals("匿名用户")) {
-                                EMConversation emConversation = list.get(i);
-                                conversationIncompleteList.add(emConversation);
+                            try {
+                                String conversationId = lastMessage.conversationId().substring(0, 12);
+                                String nickName = FriendsInfoCacheSvc.getInstance(getContext()).getNickName(conversationId);
+                                if (TextUtils.isEmpty(nickName) || nickName.equals("匿名用户")) {
+                                    EMConversation emConversation = list.get(i);
+                                    conversationIncompleteList.add(emConversation);
+                                }
+                            } catch (Throwable throwable) {
+                                throwable.printStackTrace();
                             }
+
                         }
                     }
 
@@ -377,9 +386,13 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                                 }
                             }
                         } else if (lastMessage.getChatType() == EMMessage.ChatType.Chat) {
-                            String conversationId = lastMessage.conversationId().substring(0, 12);
-                            userCode = conversationId.substring(3, conversationId.length());
-                            QueryUserInfo(userCode);
+                            try {
+                                String conversationId = lastMessage.conversationId().substring(0, 12);
+                                userCode = conversationId.substring(3, conversationId.length());
+                                QueryUserInfo(userCode);
+                            } catch (Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
                         }
                     }
                 }

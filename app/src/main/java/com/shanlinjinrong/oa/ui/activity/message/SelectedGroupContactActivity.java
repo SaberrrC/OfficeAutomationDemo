@@ -21,6 +21,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.adapter.EMAGroupManager;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
@@ -222,6 +223,9 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
         Observable.create(e -> {
             EMClient.getInstance().groupManager().inviteUser(groupId, member, null);
             e.onComplete();
+            //根据群组ID从服务器获取群组基本信息
+//            EMGroup group = EMClient.getInstance().groupManager().;
+//            EMGro
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(o -> {
@@ -269,7 +273,11 @@ public class SelectedGroupContactActivity extends HttpBaseActivity<SelectedGroup
                     EMClient.getInstance().chatManager().sendMessage(message);
                     EventBus.getDefault().post(new OnMessagesRefreshEvent());
 
-                    showToast("邀请成员成功！");
+
+
+
+//                    showToast("邀请成员成功！");
+                    showToast("邀请成员成功，请等待对方登录确认！");
                     setResult(REFRESHSUCCESS);
                     finish();
                 });

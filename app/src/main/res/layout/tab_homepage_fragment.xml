@@ -635,7 +635,7 @@
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color"
-                        android:visibility="invisible" />
+                         />
 
                     <RelativeLayout
                         android:layout_width="0dp"

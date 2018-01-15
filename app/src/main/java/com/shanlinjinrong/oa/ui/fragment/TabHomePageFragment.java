@@ -26,6 +26,11 @@ import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
+import com.shanlinjinrong.oa.ui.fragment.bean.RefreshDot;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 
@@ -50,17 +55,20 @@ public class TabHomePageFragment extends BaseFragment {
 
     private RelativeLayout mRootView;
 
-    private static int TYPE_SEND_TO_ME = 0;//发送我的
-    private static int TYPE_WAIT_ME_APPROVAL = 1;//待我审批
-    private static String DOT_STATUS = "DOT_STATUS";
-    public static String DOT_SEND = "DOT_SEND";
-    public static String DOT_APPORVAL = "DOT_APPORVAL";
-    private long lastClickTime = 0;
+    private static int    TYPE_SEND_TO_ME       = 0;//发送我的
+    private static int    TYPE_WAIT_ME_APPROVAL = 1;//待我审批
+    private static String DOT_STATUS            = "DOT_STATUS";
+    public static  String DOT_SEND              = "DOT_SEND";
+    public static  String DOT_APPORVAL          = "DOT_APPORVAL";
+    private        long   lastClickTime         = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = (RelativeLayout) inflater.inflate(R.layout.tab_homepage_fragment, container, false);
         ButterKnife.bind(this, mRootView);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         return mRootView;
     }
 
@@ -89,18 +97,23 @@ public class TabHomePageFragment extends BaseFragment {
         mTvTitle.setText(title);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        refreshDot();
-    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
-    private void refreshDot() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshDot(new RefreshDot());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshDot(RefreshDot dot) {
         SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
         if (sp.getBoolean(DOT_SEND, false)) {
             mSendToMeDot.setVisibility(View.VISIBLE);
@@ -117,7 +130,7 @@ public class TabHomePageFragment extends BaseFragment {
     public void clearDot(Context context, String name) {
         SharedPreferences sp = context.getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
         sp.edit().remove(name).apply();
-        refreshDot();
+        refreshDot(new RefreshDot());
     }
 
 
@@ -191,12 +204,14 @@ public class TabHomePageFragment extends BaseFragment {
                 break;
             case R.id.rl_test:
                 if (BuildConfig.DEBUG) {
-                //intent = new Intent(mContext, UpcomingTasksActivity.class);
+                    //intent = new Intent(mContext, UpcomingTasksActivity.class);
                 }
                 break;
             case R.id.rl_holiday_search:
                 //假期查询
                 intent = new Intent(mContext, HolidaySearchActivity.class);
+                break;
+            default:
                 break;
         }
         if (intent != null) {

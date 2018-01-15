@@ -7,11 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.ui.fragment.bean.RefreshDot;
 import com.shanlinjinrong.oa.utils.StringUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,10 +60,10 @@ public class MyJpushReceiver extends BroadcastReceiver {
                 } else if (type == TYPE_WAIT_ME_APPROVAL) {
                     sp.edit().putBoolean("DOT_APPORVAL", true).apply();
                 }
+                EventBus.getDefault().post(new RefreshDot());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

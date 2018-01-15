@@ -327,6 +327,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Override
     public void uidNull(String code) {
+        catchWarningByCode(code);
     }
 
     @Override
