@@ -237,7 +237,7 @@
 -keepclassmembers interface com.j256.** { *; }
 -keep class com.example.bean.** { *; }
 #蒲公英混淆
--libraryjars libs/pgyer_sdk_x.x.jar
+#-libraryjars libs/pgyer_sdk_x.x.jar
 -dontwarn com.pgyersdk.**
 -keep class com.pgyersdk.** { *; }
 
@@ -269,3 +269,6 @@
 #-keep class com.hianalytics.android.**{*;}
 #-keep class com.huawei.updatesdk.**{*;}
 #-keep class com.huawei.hms.**{*;}
+-ignorewarnings
+-dontwarn com.xx.bbb.**
+-keep class com.xx.bbb.** { *;}

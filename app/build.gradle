@@ -1,6 +1,5 @@
-//apply from: 'file_uri.gradle'
 apply plugin: 'com.android.application'
-//apply plugin: "mmTrix"
+
 
 android {
     compileSdkVersion 25
@@ -18,7 +17,7 @@ android {
 
         //pwd:13579
         versionCode 27
-        versionName "v1.7.0.5"
+        versionName "v1.7.0.0"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
@@ -38,6 +37,7 @@ android {
         }
     }
 
+    // %$l73lh9u62!
     signingConfigs {
         release {
             storeFile file("./shanlin.jks")
@@ -169,10 +169,6 @@ dependencies {
     //animator
     compile 'com.github.florent37:viewanimator:1.0.3'
 
-    //Jpush
-
-    //compile 'cn.jiguang:jpush:2.1.8'
-
     //蒲公英
     compile 'com.pgyersdk:sdk:2.5.6'
 
@@ -209,7 +205,6 @@ dependencies {
 
     //compile 'com.huawei.android.hms:push:2.5.2.300'
 
-    //implementation files('libs/hyphenatechat_3.3.7.jar')
     implementation files('libs/jcore-android-1.1.9.jar')
     implementation files('libs/jpush-android-3.1.1.jar')
 }
