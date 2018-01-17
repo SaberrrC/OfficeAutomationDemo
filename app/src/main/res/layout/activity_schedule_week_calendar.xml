@@ -27,253 +27,19 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:windowSoftInputMode="adjustResize|adjustPan"
-        android:layout_marginBottom="45dp"
         android:layout_below="@+id/view_line"
-        android:fillViewport="true">
+        android:layout_marginBottom="45dp"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        android:windowSoftInputMode="adjustResize|adjustPan">
 
         <LinearLayout
+            android:id="@+id/ll_container_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.5" />
-
-                <TextView
-                    android:id="@+id/tv_nine"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="9点" />
-
-                <TextView
-                    android:id="@+id/tv_ten"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="10点" />
-
-                <TextView
-                    android:id="@+id/tv_eleven"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="11点" />
-
-                <TextView
-                    android:id="@+id/tv_twelve"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="12点" />
-
-                <TextView
-                    android:id="@+id/tv_thirteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="1点" />
-
-                <TextView
-                    android:id="@+id/tv_fourteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="2点" />
-
-                <TextView
-                    android:id="@+id/tv_fifteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="3点" />
-
-                <TextView
-                    android:id="@+id/tv_sixteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="4点" />
-
-                <TextView
-                    android:id="@+id/tv_seventeen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="5点" />
-
-                <TextView
-                    android:id="@+id/tv_eighteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="6点" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.5" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0.1dp"
-                android:layout_height="match_parent"
-                android:background="@color/gray_d5d5d5"
-                android:orientation="vertical">
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_week_calendar_list"
-                    android:layout_width="match_parent"
-                   android:layout_height="40dp"
-                    android:orientation="horizontal" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_nine"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:orientation="vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_ten"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_eleven"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_twelve"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_thirteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_fourteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_fifteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_sixteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_seventeen"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/gray_d5d5d5" />
-
-                <LinearLayout
-                    android:id="@+id/ll_eighteen"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:orientation="vertical" />
-            </LinearLayout>
-        </LinearLayout>
-
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal" />
     </ScrollView>
 
     <LinearLayout
@@ -299,8 +65,8 @@
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="9"
-            android:fitsSystemWindows="true"
             android:background="@drawable/edittext_input_square_bg"
+            android:fitsSystemWindows="true"
             android:hint="请输入任务主题"
             android:paddingLeft="5dp"
             android:textSize="12sp" />

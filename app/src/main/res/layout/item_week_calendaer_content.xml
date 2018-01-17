@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/gray_d5d5d5" />
+
+    <LinearLayout
+        android:id="@+id/ll_week_calendar_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:descendantFocusability="blocksDescendants"
+        android:focusable="false"
+        android:gravity="center"
+        android:listSelector="@drawable/btn_week_calender_enable"
+        android:orientation="horizontal" />
+
+</LinearLayout>
