@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.shanlinjinrong.views.common.CommonTopView
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        app:leftText="取消"
+        app:rightText="确认"
+        app:topTitle="时间" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/grey" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/rv_start_date_selected"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheel_curved="true"
+            app:wheel_cyclic="false"
+            app:wheel_indicator="true"
+            app:wheel_indicator_color="@color/gray_d5d5d5"
+            app:wheel_indicator_size="1dp"
+            app:wheel_item_space="20dp"
+            app:wheel_item_text_size="18sp"
+            app:wheel_selected_item_text_color="@color/black_333333"
+            app:wheel_visible_item_count="5" />
+
+        <RelativeLayout
+            android:layout_width="5dp"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="5dp"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"
+                android:background="@color/black" />
+
+            <com.aigestudio.wheelpicker.WheelPicker
+                android:id="@+id/empty_wheel_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:wheel_curved="true"
+                app:wheel_cyclic="false"
+                app:wheel_indicator="true"
+                android:layout_centerInParent="true"
+                app:wheel_indicator_color="@color/gray_d5d5d5"
+                app:wheel_indicator_size="1dp"
+                app:wheel_item_space="20dp"
+                app:wheel_item_text_size="18sp"
+                app:wheel_visible_item_count="5" />
+
+        </RelativeLayout>
+
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/rv_end_date_selected"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheel_curved="true"
+            app:wheel_cyclic="false"
+            app:wheel_indicator="true"
+            app:wheel_indicator_color="@color/gray_d5d5d5"
+            app:wheel_indicator_size="1dp"
+            app:wheel_item_space="20dp"
+            app:wheel_item_text_size="18sp"
+            app:wheel_selected_item_text_color="@color/black_333333"
+            app:wheel_visible_item_count="5" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

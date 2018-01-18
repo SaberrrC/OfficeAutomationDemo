@@ -687,7 +687,9 @@
         <!--月历-->
         <activity
             android:name=".ui.activity.home.schedule.manage.ScheduleWeekCalendarActivity"
-        />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            />
     </application>
 
 </manifest>

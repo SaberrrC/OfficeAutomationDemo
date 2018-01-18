@@ -59,9 +59,12 @@ public class WheelTime {
 		Context context = view.getContext();
 		// 年
 		wv_year = (WheelView) view.findViewById(R.id.year);
-		wv_year.setAdapter(new NumericWheelAdapter(startYear, endYear));// 设置"年"的显示数据
-		wv_year.setLabel(context.getString(R.string.pickerview_year));// 添加文字
-		wv_year.setCurrentItem(year - startYear);// 初始化时显示的数据
+		// 设置"年"的显示数据
+		wv_year.setAdapter(new NumericWheelAdapter(startYear, endYear));
+		// 添加文字
+		wv_year.setLabel(context.getString(R.string.pickerview_year));
+		// 初始化时显示的数据
+		wv_year.setCurrentItem(year - startYear);
 
 		// 月
 		wv_month = (WheelView) view.findViewById(R.id.month);

@@ -2,6 +2,8 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter;
 
 import android.content.Context;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,6 +45,39 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
         } else {
             llContent.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         }
+
+        llContent.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "changeView"));
+//                switch (content.getData().size()) {
+//                    case 1:
+//                        EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "lookEvent"));
+//                        break;
+//                    case 2:
+//                        EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "selectedView"));
+//                        break;
+//                    case 3:
+//
+//                        int height = view.getHeight();
+//                        float y = view.getY();
+//                        float pivotY = view.getPivotY();
+//                        float rawY = motionEvent.getRawY();
+//                        float y1 = motionEvent.getY();
+//                        float y12 = motionEvent.getX();
+//                        EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "popupWindow", motionEvent.getRawX(), motionEvent.getRawY()));
+//                        break;
+//                    default:
+//                        EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "changeView"));
+//                        break;
+//                }
+//
+            }
+            return false;
+        });
+
+        if (content.getData() == null) {
+            return;
+        }
         llContent.removeAllViews();
         if (content.getData().size() > 0) {
             LinearLayout linearLayout = new LinearLayout(mContext);
@@ -81,42 +116,64 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
             llContent.addView(contentCount);
         }
 
-        llContent.setOnClickListener(view -> {
-            switch (content.getData().size()) {
-                case 1:
-                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "lookEvent"));
-                    break;
-                case 2:
-                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "selectedView"));
-                    break;
-                case 3:
-                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "popupWindow"));
-                    break;
-                default:
-                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "changeView"));
-                    break;
-            }
-        });
+//
+//        llContent.setOnClickListener(view -> {
+//            switch (content.getData().size()) {
+//                case 1:
+//                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "lookEvent"));
+//                    break;
+//                case 2:
+//                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "selectedView"));
+//                    break;
+//                case 3:
+//                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "popupWindow"));
+//                    break;
+//                default:
+//                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "changeView"));
+//                    break;
+//            }
+//        });
 
         for (int i = 0; i < content.getData().size(); i++) {
             LinearLayout childAt = (LinearLayout) llContent.getChildAt(0);
             TextView childAt1 = (TextView) childAt.getChildAt(i);
             if (childAt1 != null) {
-                childAt1.setOnClickListener(view -> {
-                    switch (content.getData().size()) {
-                        case 1:
-                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "lookEvent"));
-                            break;
-                        case 2:
-                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "selectedView"));
-                            break;
-                        case 3:
-                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "popupWindow"));
-                            break;
-                        default:
-                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "changeView"));
-                            break;
+//                childAt1.setOnClickListener(view -> {
+//                    switch (content.getData().size()) {
+//                        case 1:
+//                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "lookEvent"));
+//                            break;
+//                        case 2:
+//                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "selectedView"));
+//                            break;
+//                        case 3:
+//                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "popupWindow"));
+//                            break;
+//                        default:
+//                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "changeView"));
+//                            break;
+//                    }
+//                });
+
+                childAt1.setOnTouchListener((view, motionEvent) -> {
+                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                        switch (content.getData().size()) {
+                            case 1:
+                                EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "lookEvent"));
+                                break;
+                            case 2:
+                                EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "selectedView"));
+                                break;
+                            case 3:
+                                EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "popupWindow", motionEvent.getRawX(), motionEvent.getRawY()));
+                                break;
+                            default:
+                                EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "changeView"));
+                                break;
+                        }
+
                     }
+                    return false;
                 });
             }
         }

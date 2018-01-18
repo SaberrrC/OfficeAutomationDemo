@@ -14,6 +14,34 @@ public class WeekCalendarBean implements Serializable {
 
     private String Day;
 
+    private String month;
+
+    private String year;
+
+
+    public WeekCalendarBean(String week, String day, String month, String year) {
+        Week = week;
+        Day = day;
+        this.month = month;
+        this.year = year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public String getWeek() {
         return Week;
     }
