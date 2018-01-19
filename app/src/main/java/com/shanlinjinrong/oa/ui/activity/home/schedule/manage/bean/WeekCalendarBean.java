@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 作者：王凤旭
@@ -10,51 +11,57 @@ import java.io.Serializable;
 
 public class WeekCalendarBean implements Serializable {
 
-    private String Week;
+    private List<String>  week;
+    private List<String>  Day;
+    private List<String>  month;
+    private List<String>  year;
+    private List<Boolean> isSelected;
 
-    private String Day;
-
-    private String month;
-
-    private String year;
-
-
-    public WeekCalendarBean(String week, String day, String month, String year) {
-        Week = week;
+    public WeekCalendarBean(List<String> week, List<String> day, List<String> month, List<String> year, List<Boolean> isSelected) {
+        this.week = week;
         Day = day;
         this.month = month;
         this.year = year;
+        this.isSelected = isSelected;
     }
 
-    public String getMonth() {
-        return month;
+    public List<String> getWeek() {
+        return week;
     }
 
-    public void setMonth(String month) {
-        this.month = month;
+    public void setWeek(List<String> week) {
+        this.week = week;
     }
 
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getWeek() {
-        return Week;
-    }
-
-    public void setWeek(String week) {
-        Week = week;
-    }
-
-    public String getDay() {
+    public List<String> getDay() {
         return Day;
     }
 
-    public void setDay(String day) {
+    public void setDay(List<String> day) {
         Day = day;
+    }
+
+    public List<String> getMonth() {
+        return month;
+    }
+
+    public void setMonth(List<String> month) {
+        this.month = month;
+    }
+
+    public List<String> getYear() {
+        return year;
+    }
+
+    public void setYear(List<String> year) {
+        this.year = year;
+    }
+
+    public List<Boolean> getIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(List<Boolean> isSelected) {
+        this.isSelected = isSelected;
     }
 }

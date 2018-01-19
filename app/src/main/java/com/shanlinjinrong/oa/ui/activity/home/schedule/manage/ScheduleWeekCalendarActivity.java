@@ -1,34 +1,22 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aigestudio.wheelpicker.WheelPicker;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.LeftDateAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.SelectedWeekCalendarAdapter;
@@ -36,6 +24,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.WriteConte
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.LeftDateBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.WeekCalendarBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.widget.MyPagerSnapHelper;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.ScheduleMonthAdapter;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
@@ -53,72 +42,56 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-
-public class ScheduleWeekCalendarActivity extends AppCompatActivity implements ScheduleMonthAdapter.OnItemClick, WheelPicker.OnItemSelectedListener {
-
+/**
+ * 周历 月历
+ */
+public class ScheduleWeekCalendarActivity extends AppCompatActivity implements WheelPicker.OnItemSelectedListener, ScheduleMonthAdapter.OnItemClick {
 
     @BindView(R.id.topView)
     CommonTopView mTopView;
     @BindView(R.id.ll_container_layout)
-    LinearLayout mLlContainerLayout;
-    @BindView(R.id.ed_input_content)
-    EditText mEdInputContent;
-    @BindView(R.id.ll_voice_content)
-    LinearLayout mLlVoiceContent;
+    LinearLayout  mLlContainerLayout;
+    @BindView(R.id.progress_bar)
+    ProgressBar   mProgressBar;
     @BindView(R.id.ll_month)
-    LinearLayout mDateLayout;
+    LinearLayout  mDateLayout;
 
-    @BindView(R.id.sv_container_layout)
-    ScrollView mSvContainerLayout;
-
-
-    private int mSelectedDay;
-    private int mSelectedMonth;
-    private int mCurrentYear;
-    private int mCurrentDay;
-    private int mCurrentMonth;
-    private int mHeight;
-    private int mViewHeight;
-    private int mViewWidth;
-    private List<WeekCalendarBean> mListDate;
-    private List<TextView> mTextViews;
-    private WriteContentAdapter mAdapter;
-    private String mTitleDay;
-    private RecyclerView mContentRecyclerView;
-    private List<LeftDateBean> mLeftDateList;
-    private RecyclerView mLeftRecyclerView;
-    private List<LeftDateBean> mLlContent;
-    private RecyclerView mHeaderRecyclerView;
-    private SelectedWeekCalendarAdapter mSelectedAdapter;
-    private boolean isMatchShow = true;
+    /**
+     * 月历
+     */
     private View rootView;
+    private boolean isMatchShow = true;
     private ScheduleMonthAdapter mDatePopAttandanceAdapter;
-    private RecyclerView mRecyclerView;
+    private RecyclerView         mRecyclerView;
     private List<PopItem> mData = new ArrayList<>();
-    private LeftDateBean.DataBean mContentDataBean;
-    private LeftDateAdapter mDateAdapter;
-    private int mIndex;
-    private CustomDialogUtils mDialog;
-    private int mIndexTitle;
-    private int mPosition;
-    private WheelPicker mRvStartDateSelected;
-    private WheelPicker mRvEndDateSelected;
-    private List<String> mStartDate;
-    private List<String> mEndDate;
-    private String mStartTime;
-    private String mEndTime;
+    private int mSelectedDay, mCurrentYear, mCurrentMonth, mCurrentDay, mSelectedMonth;
 
-    public ScheduleWeekCalendarActivity() {
-    }
+    /**
+     * 周历
+     */
+    private String[]                    mWeeks;
+    private CustomDialogUtils           mDialog;
+    private WriteContentAdapter         mAdapter;
+    private List<WeekCalendarBean>      mListDate;
+    private List<LeftDateBean>          mLlContent;
+    private LeftDateAdapter             mDateAdapter;
+    private List<LeftDateBean>          mLeftDateList;
+    private SelectedWeekCalendarAdapter mSelectedAdapter;
+    private RecyclerView                mLeftRecyclerView;
+    private WheelPicker                 mRvEndDateSelected;
+    private List<String>                mStartDate, mEndDate;
+    private String mStartTime, mEndTime;
+    private RecyclerView mHeaderRecyclerView;
+    private WheelPicker  mRvStartDateSelected;
+    private RecyclerView mContentRecyclerView;
+    private int          mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight;
 
 
     @Override
@@ -130,25 +103,6 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
             EventBus.getDefault().register(this);
         }
         initData();
-
-    }
-
-
-    public static Date getThisWeekMonday(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        // 获得当前日期是一个星期的第几天
-        int dayWeek = cal.get(Calendar.DAY_OF_WEEK);
-        if (1 == dayWeek) {
-            cal.add(Calendar.DAY_OF_MONTH, -1);
-        }
-        // 设置一个星期的第一天，按中国的习惯一个星期的第一天是星期一
-        cal.setFirstDayOfWeek(Calendar.MONDAY);
-        // 获得当前日期是一个星期的第几天
-        int day = cal.get(Calendar.DAY_OF_WEEK);
-        // 根据日历的规则，给当前日期减去星期几与一个星期第一天的差值
-        cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - day);
-        return cal.getTime();
     }
 
     public Date getMondayOfThisWeek(Calendar calendar) {
@@ -161,64 +115,72 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
         return calendar.getTime();
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressWarnings("SpellCheckingInspection")
     private void initData() {
-
-        //得到当前天
+        mWeeks = new String[]{"日", "一", "二", "三", "四", "五", "六"};
+        mListDate = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
 
         mCurrentYear = calendar.get(Calendar.YEAR);
         mCurrentDay = calendar.get(Calendar.DAY_OF_MONTH);
         mCurrentMonth = calendar.get(Calendar.MONTH) + 1;
 
+        int year = calendar.get(Calendar.YEAR);
+        SimpleDateFormat currentFormat1 = new SimpleDateFormat("yyyy");
+        String currentYear = currentFormat1.format(calendar.getTime());
+        SimpleDateFormat currentFormat2 = new SimpleDateFormat("MM");
+        String currentMonth = currentFormat2.format(calendar.getTime());
+        SimpleDateFormat currentFormat3 = new SimpleDateFormat("dd");
+        String currentDay = currentFormat3.format(calendar.getTime());
+        int lastYear = year - 1;
+        calendar.set(lastYear, 0, 1);
 
+        mTopView.setAppTitle(currentYear + "年" + currentMonth + "月");
         Observable.create(e -> {
-            String[] weeks = {"日", "一", "二", "三", "四", "五", "六"};
-            mListDate = new ArrayList<>();
-            int year = calendar.get(Calendar.YEAR);
-            SimpleDateFormat currentFormat1 = new SimpleDateFormat("yyyy");
-            String currentYear = currentFormat1.format(calendar.getTime());
-            SimpleDateFormat currentFormat2 = new SimpleDateFormat("MM");
-            String currentMonth = currentFormat2.format(calendar.getTime());
-            SimpleDateFormat currentFormat3 = new SimpleDateFormat("dd");
-            String currentDay = currentFormat3.format(calendar.getTime());
+            for (int i = 0; i < 156; i++) {
+                List<String> days = new ArrayList<>();
+                List<String> weeks = new ArrayList<>();
+                List<String> months = new ArrayList<>();
+                List<String> years = new ArrayList<>();
+                List<Boolean> booleans = new ArrayList<>();
+                for (int j = 0; j < 7; j++) {
+                    if (i == 0 && j == 0) {
+                        Date lastDay = getMondayOfThisWeek(calendar);
+                        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+                        String lastyear = yearFormat.format(lastDay);
+                        SimpleDateFormat MonthFormat = new SimpleDateFormat("MM");
+                        String lastmonth = MonthFormat.format(lastDay);
+                        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+                        String lastday = dayFormat.format(lastDay);
+                        String lastWeek = mWeeks[calendar.get(Calendar.DAY_OF_WEEK) - 1];
+                        days.add(lastday);
+                        weeks.add(lastWeek);
+                        months.add(lastmonth);
+                        years.add(lastyear);
+                        booleans.add(false);
+                        continue;
+                    }
+                    calendar.add(Calendar.DATE, +1);
+                    SimpleDateFormat nextYearFormat = new SimpleDateFormat("yyyy");
+                    String nextYear = nextYearFormat.format(calendar.getTime());
+                    SimpleDateFormat nextMonthFormat = new SimpleDateFormat("MM");
+                    String nextMonth = nextMonthFormat.format(calendar.getTime());
+                    SimpleDateFormat nextDayFormat = new SimpleDateFormat("dd");
+                    String nextDay = nextDayFormat.format(calendar.getTime());
+                    String nextWeek = mWeeks[calendar.get(Calendar.DAY_OF_WEEK) - 1];
 
-            int lastYear = year - 1;
-            calendar.set(lastYear, 0, 1);
-            Date lastDay = getMondayOfThisWeek(calendar);
-            SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-            String lastyear = yearFormat.format(lastDay);
-            SimpleDateFormat MonthFormat = new SimpleDateFormat("MM");
-            String month = MonthFormat.format(lastDay);
-            SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-            String lastday = dayFormat.format(lastDay);
-            String lastWeek = weeks[calendar.get(Calendar.DAY_OF_WEEK) - 1];
-            WeekCalendarBean weekCalendarBean = new WeekCalendarBean(lastWeek, lastday, month, lastyear);
-            mListDate.add(weekCalendarBean);
-            for (int i = 0; i < 1095; i++) {
-                calendar.add(Calendar.DATE, +1);
-                SimpleDateFormat nextYearFormat = new SimpleDateFormat("yyyy");
-                String nextYear = nextYearFormat.format(calendar.getTime());
-                SimpleDateFormat nextMonthFormat = new SimpleDateFormat("MM");
-                String nextMonth = nextMonthFormat.format(calendar.getTime());
-                SimpleDateFormat nextDayFormat = new SimpleDateFormat("dd");
-                String nextDay = nextDayFormat.format(calendar.getTime());
-                String nextWeek = weeks[calendar.get(Calendar.DAY_OF_WEEK) - 1];
-
-                if (nextDay.equals(currentDay + "") && nextMonth.equals(currentMonth + "") && nextYear.equals(currentYear + "")) {
-                    mIndex = i;
-                    mIndexTitle = i;
+                    days.add(nextDay);
+                    weeks.add(nextWeek);
+                    months.add(nextMonth);
+                    years.add(nextYear);
+                    booleans.add(false);
+                    if (nextDay.equals(currentDay + "") && nextMonth.equals(currentMonth + "") && nextYear.equals(currentYear + "")) {
+                        mIndex = i;
+                        mIndexTitle1 = i;
+                        mIndexTitle2 = j;
+                    }
                 }
-                WeekCalendarBean nextWeekBean = new WeekCalendarBean(nextWeek, nextDay, nextMonth, nextYear);
-                mListDate.add(nextWeekBean);
-            }
-
-            int index = mIndex + 1;
-            for (int i = 0; i < weeks.length; i++) {
-                WeekCalendarBean week = mListDate.get(index - i);
-                if ("一".equals(week.getWeek())) {
-                    mIndex = index - i;
-                }
+                mListDate.add(new WeekCalendarBean(weeks, days, months, years, booleans));
             }
 
             //左侧时间的数据
@@ -241,19 +203,6 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
                 LeftDateBean leftDateBean = new LeftDateBean();
                 mLlContent.add(leftDateBean);
             }
-
-//            Random random = new Random();
-//            for (int i = 0; i < mLlContent.size(); i++) {
-//                int i1 = random.nextInt(4);
-//                SparseArray<LeftDateBean.DataBean> dataBeanSparseArray = new SparseArray<>();
-//                for (int j = 0; j < i1; j++) {
-//                    mContentDataBean = new LeftDateBean.DataBean();
-//                    mContentDataBean.setContentCount("共3");
-//                    mContentDataBean.setTitle("设计OB需求");
-//                    dataBeanSparseArray.put(j, mContentDataBean);
-//                }
-//                mLlContent.get(i).setData(dataBeanSparseArray);
-//            }
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -262,13 +211,13 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
     }
 
     private void initView() {
-
-        mTopView.setAppTitle(mListDate.get(mIndexTitle + 1).getYear() + "年" + mListDate.get(mIndexTitle + 1).getMonth() + "月" + mListDate.get(mIndexTitle + 1).getDay() + "日");
+        mProgressBar.setVisibility(View.GONE);
+        mLlContainerLayout.setVisibility(View.VISIBLE);
+        mTopView.setAppTitle(mListDate.get(mIndexTitle1).getYear().get(mIndexTitle2) + "年" + mListDate.get(mIndexTitle1).getMonth().get(mIndexTitle2) + "月");
 
         //测量布局的宽高
         mHeight = ScreenUtils.dp2px(this, 57) + ScreenUtils.getStatusHeight(this);
         mViewHeight = (ScreenUtils.getScreenHeight(this) - mHeight) / 11;
-        mViewWidth = (ScreenUtils.getScreenWidth(this) - ScreenUtils.dp2px(this, 41)) / 7;
 
         //左侧时间展示
         mLeftRecyclerView = new RecyclerView(this);
@@ -297,18 +246,16 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
 
         //中间时间选择List
         mHeaderRecyclerView = new RecyclerView(this);
-        mSelectedAdapter = new SelectedWeekCalendarAdapter(mListDate, mViewWidth);
+        mSelectedAdapter = new SelectedWeekCalendarAdapter(mListDate, this);
         mHeaderRecyclerView.setAdapter(mSelectedAdapter);
-        mHeaderRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayout.HORIZONTAL, false) {
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
-        });
+        mHeaderRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayout.HORIZONTAL, false));
         mHeaderRecyclerView.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
         mHeaderRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, mViewHeight));
-        mHeaderRecyclerView.addOnItemTouchListener(new ItemDateClick());
         mHeaderRecyclerView.scrollToPosition(mIndex);
+
+        MyPagerSnapHelper mMySnapHelper = new MyPagerSnapHelper();
+        mMySnapHelper.attachToRecyclerView(mHeaderRecyclerView);
+
         mAdapter.addHeaderView(mHeaderRecyclerView);
         mContentRecyclerView.setAdapter(mAdapter);
         mContentRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayout.VERTICAL, false) {
@@ -329,9 +276,7 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
         mRvEndDateSelected = (WheelPicker) inflate.findViewById(R.id.rv_end_date_selected);
         WheelPicker rvEmptyWheelPicker = (WheelPicker) inflate.findViewById(R.id.empty_wheel_picker);
 
-
         CommonTopView title = (CommonTopView) inflate.findViewById(R.id.top_view);
-
         title.getLeftView().setOnClickListener(view1 -> {
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
@@ -381,22 +326,6 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
 
         mRvStartDateSelected.setOnItemSelectedListener(this);
         mRvEndDateSelected.setOnItemSelectedListener(this);
-
-        //监听键盘搜索键
-        mEdInputContent.setOnEditorActionListener((textView, i, keyEvent) -> {
-            if (i == EditorInfo.IME_ACTION_DONE) {
-                if (mDialog.isShowing()) {
-                    mDialog.dismiss();
-                }
-                mDialog.show();
-                mDialog.setCanceledOnTouchOutside(true);
-            }
-
-            //收起键盘
-            InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            im.hideSoftInputFromWindow(mEdInputContent.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            return true;
-        });
     }
 
     /***
@@ -410,9 +339,7 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
         mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mLlVoiceContent.getVisibility() == LinearLayout.VISIBLE) {
-                    mLlVoiceContent.setVisibility(View.INVISIBLE);
-                }
+
                 if (isMatchShow) {
                     isMatchShow = false;
                     mLlContainerLayout.setVisibility(View.GONE);
@@ -444,14 +371,31 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ChangeLeftView(SelectedWeekCalendarEvent event) {
-        //改变 左侧选中时间段的颜色
-        RefreshChangeView(event);
-        //现实编辑框
-        if (mLlVoiceContent.getVisibility() != LinearLayout.VISIBLE) {
-            mLlVoiceContent.setVisibility(View.VISIBLE);
-        }
-
         switch (event.getEvent()) {
+            case "addData":
+                for (int i = mListDate.size(); i < mListDate.size() + 20; i++) {
+                    List<String> day = new ArrayList<>();
+                    List<String> week = new ArrayList<>();
+                    List<String> month = new ArrayList<>();
+                    List<String> year = new ArrayList<>();
+                    List<Boolean> booleans = new ArrayList<>();
+                    for (int j = 0; j < 7; j++) {
+                        day.add(j + "");
+                        week.add(mWeeks[j] + "");
+                        booleans.add(false);
+                    }
+                    mListDate.add(new WeekCalendarBean(week, day, month, year, booleans));
+                }
+
+                mSelectedAdapter.setNewData(mListDate);
+                mSelectedAdapter.notifyDataSetChanged();
+
+                break;
+            case "TopDate":
+                mTopView.setAppTitle(mListDate.get(event.getPosition()).getYear().get(event.getIndex()) + "年" + mListDate.get(event.getPosition()).getMonth().get(event.getIndex()) + "月");
+                mSelectedAdapter.setNewData(mListDate);
+                mSelectedAdapter.notifyDataSetChanged();
+                break;
             //查看当前事件
             case "lookEvent":
                 break;
@@ -460,7 +404,6 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
                 break;
             //弹出 事件列表
             case "popupWindow":
-
                 Dialog dialog = new Dialog(this, R.style.CustomDialog);
                 dialog.setContentView(R.layout.dialog_week_calendar_content);
                 //获取到当前Activity的Window
@@ -470,26 +413,17 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
                 dialog_window_attributes.width = ScreenUtils.getScreenWidth(this) - ScreenUtils.dp2px(this, 45);
                 //设置高度
                 dialog_window_attributes.height = 400;
-
                 dialog_window_attributes.x = ScreenUtils.dp2px(this, 19);
 
-
                 //TODO 高度存在问题
-
                 int position = (event.getPosition() + 2) * mViewHeight;
-
                 //dialog_window_attributes.y = ((int) event.getRowY() - ScreenUtils.getStatusHeight(this)) - ScreenUtils.getScreenHeight(this) / 2;
                 dialog_window_attributes.y = (position - ScreenUtils.getStatusHeight(this)) - ScreenUtils.getScreenHeight(this) / 2;
-
-
                 dialog_window.setAttributes(dialog_window_attributes);
-
-
                 dialog.show();
                 break;
             default:
                 mPosition = event.getPosition();
-
                 mRvStartDateSelected.setSelectedItemPosition(mPosition - 1);
                 mRvEndDateSelected.setSelectedItemPosition(mPosition - 1);
                 mStartTime = mStartDate.get(mPosition - 1);
@@ -519,43 +453,6 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
     }
 
 
-    @OnClick(R.id.ed_input_content)
-    public void onViewClicked() {
-        getKeyboardHeight();
-    }
-
-
-    private void getKeyboardHeight() {
-        //注册布局变化监听
-        getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                //判断窗口可见区域大小
-                Rect r = new Rect();
-                getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
-                //如果屏幕高度和Window可见区域高度差值大于整个屏幕高度的1/3，则表示软键盘显示中，否则软键盘为隐藏状态。
-                int heightDifference = ScreenUtils.getScreenHeight(ScheduleWeekCalendarActivity.this) - (r.bottom - r.top);
-                boolean isKeyboardShowing = heightDifference > ScreenUtils.getScreenHeight(ScheduleWeekCalendarActivity.this) / 3;
-                if (isKeyboardShowing) {
-                    changeScrollView();
-                    //移除布局变化监听
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    } else {
-                        getWindow().getDecorView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    }
-                }
-            }
-        });
-    }
-
-    private void changeScrollView() {
-        new Handler().postDelayed(() -> {
-            //将ScrollView滚动到底
-            mSvContainerLayout.fullScroll(View.FOCUS_DOWN);
-        }, 100);
-    }
-
     @Override
     public void onItemSelected(WheelPicker picker, Object data, int position) {
         switch (picker.getId()) {
@@ -567,32 +464,6 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
                 break;
             default:
                 break;
-        }
-    }
-
-    /**
-     * 选择时间的点击事件
-     */
-    class ItemDateClick extends OnItemClickListener {
-        @Override
-        public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-            Toast.makeText(ScheduleWeekCalendarActivity.this, mListDate.get(i).getDay(), Toast.LENGTH_LONG).show();
-
-            Random random = new Random();
-            for (int x = 0; x < mLlContent.size(); x++) {
-                int i1 = random.nextInt(4);
-                SparseArray<LeftDateBean.DataBean> dataBeanSparseArray = new SparseArray<>();
-                for (int j = 0; j < i1; j++) {
-                    mContentDataBean = new LeftDateBean.DataBean();
-                    mContentDataBean.setContentCount("共3");
-                    mContentDataBean.setTitle("设计OB需求");
-                    dataBeanSparseArray.put(j, mContentDataBean);
-                }
-                mLlContent.get(x).setData(dataBeanSparseArray);
-            }
-
-            mAdapter.setNewData(mLlContent);
-            mAdapter.notifyDataSetChanged();
         }
     }
 

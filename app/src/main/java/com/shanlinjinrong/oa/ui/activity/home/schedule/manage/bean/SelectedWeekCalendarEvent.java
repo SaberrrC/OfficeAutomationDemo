@@ -18,6 +18,8 @@ public class SelectedWeekCalendarEvent implements Serializable {
 
     private float rowX;
 
+    private int index;
+
 
     public SelectedWeekCalendarEvent(int position, String event) {
         this.position = position;
@@ -29,6 +31,20 @@ public class SelectedWeekCalendarEvent implements Serializable {
         this.event = event;
         this.rowY = rowY;
         this.rowX = rowX;
+    }
+
+    public SelectedWeekCalendarEvent(int position, String event, int index) {
+        this.position = position;
+        this.event = event;
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public float getRowY() {

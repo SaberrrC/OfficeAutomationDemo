@@ -24,70 +24,31 @@
         android:layout_below="@+id/topView"
         android:background="@color/gray_d5d5d5" />
 
-    <ScrollView
-        android:id="@+id/sv_container_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/ll_voice_content"
-        android:layout_below="@+id/view_line">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/ll_container_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="horizontal" />
-
-
-            <LinearLayout
-                android:id="@+id/ll_month"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="horizontal"
-                android:visibility="gone" />
-        </LinearLayout>
-    </ScrollView>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="@color/btn_blue_normal" />
 
     <LinearLayout
-        android:id="@+id/ll_voice_content"
+        android:id="@+id/ll_container_layout"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/gray_d5d5d5"
-        android:gravity="center"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view_line"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:id="@+id/ll_month"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view_line"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal"
-        android:visibility="gone">
-
-        <ImageButton
-            android:id="@+id/voice_input"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/ic_voice" />
-
-        <EditText
-            android:id="@+id/ed_input_content"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="9"
-            android:lines="1"
-            android:singleLine="true"
-            android:maxEms="1"
-            android:background="@drawable/edittext_input_square_bg"
-            android:fitsSystemWindows="true"
-            android:hint="请输入任务主题"
-            android:paddingLeft="5dp"
-            android:textSize="12sp" />
-    </LinearLayout>
+        android:visibility="gone" />
 
 </RelativeLayout>
