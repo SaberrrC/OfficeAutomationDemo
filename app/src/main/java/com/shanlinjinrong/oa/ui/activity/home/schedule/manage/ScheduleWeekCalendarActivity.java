@@ -13,7 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aigestudio.wheelpicker.WheelPicker;
@@ -392,6 +391,9 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements W
 
                 break;
             case "TopDate":
+                Toast.makeText(this, mListDate.get(event.getPosition()).getYear().get(event.getIndex()) + "年"
+                        + mListDate.get(event.getPosition()).getMonth().get(event.getIndex()) + "月"
+                        + mListDate.get(event.getPosition()).getDay().get(event.getIndex()) + "日", Toast.LENGTH_SHORT).show();
                 mTopView.setAppTitle(mListDate.get(event.getPosition()).getYear().get(event.getIndex()) + "年" + mListDate.get(event.getPosition()).getMonth().get(event.getIndex()) + "月");
                 mSelectedAdapter.setNewData(mListDate);
                 mSelectedAdapter.notifyDataSetChanged();
