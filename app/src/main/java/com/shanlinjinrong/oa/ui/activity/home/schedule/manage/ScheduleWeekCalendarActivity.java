@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Rect;
@@ -62,7 +63,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class ScheduleWeekCalendarActivity extends AppCompatActivity implements ScheduleMonthAdapter.OnItemClick ,WheelPicker.OnItemSelectedListener {
+public class ScheduleWeekCalendarActivity extends AppCompatActivity implements ScheduleMonthAdapter.OnItemClick, WheelPicker.OnItemSelectedListener {
 
 
     @BindView(R.id.topView)
@@ -77,7 +78,7 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
     LinearLayout mDateLayout;
 
     @BindView(R.id.sv_container_layout)
-    ScrollView    mSvContainerLayout;
+    ScrollView mSvContainerLayout;
 
 
     private int mSelectedDay;
@@ -103,18 +104,21 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
     private ScheduleMonthAdapter mDatePopAttandanceAdapter;
     private RecyclerView mRecyclerView;
     private List<PopItem> mData = new ArrayList<>();
-    private LeftDateBean.DataBean       mContentDataBean;
-    private LeftDateAdapter             mDateAdapter;
-    private int                         mIndex;
-    private CustomDialogUtils           mDialog;
-    private int                         mIndexTitle;
-    private int                         mPosition;
-    private WheelPicker                 mRvStartDateSelected;
-    private WheelPicker                 mRvEndDateSelected;
-    private List<String>                mStartDate;
-    private List<String>                mEndDate;
-    private String                      mStartTime;
-    private String                      mEndTime;
+    private LeftDateBean.DataBean mContentDataBean;
+    private LeftDateAdapter mDateAdapter;
+    private int mIndex;
+    private CustomDialogUtils mDialog;
+    private int mIndexTitle;
+    private int mPosition;
+    private WheelPicker mRvStartDateSelected;
+    private WheelPicker mRvEndDateSelected;
+    private List<String> mStartDate;
+    private List<String> mEndDate;
+    private String mStartTime;
+    private String mEndTime;
+
+    public ScheduleWeekCalendarActivity() {
+    }
 
 
     @Override
@@ -157,7 +161,7 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
         return calendar.getTime();
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
+    @SuppressLint("SimpleDateFormat")
     private void initData() {
 
         //得到当前天
@@ -406,6 +410,9 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
         mTopView.getRightView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mLlVoiceContent.getVisibility() == LinearLayout.VISIBLE) {
+                    mLlVoiceContent.setVisibility(View.INVISIBLE);
+                }
                 if (isMatchShow) {
                     isMatchShow = false;
                     mLlContainerLayout.setVisibility(View.GONE);
@@ -430,7 +437,6 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
         mDatePopAttandanceAdapter.setOnItemClick(this);
         mRecyclerView.setAdapter(mDatePopAttandanceAdapter);
     }
-
 
 
     /**
@@ -509,7 +515,7 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements S
         String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
         String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
         String date = mCurrentYear + "-" + month + "-" + mDay;
-
+        Toast.makeText(this, position + 1 + "", Toast.LENGTH_SHORT).show();
     }
 
 

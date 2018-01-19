@@ -5,6 +5,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,11 +13,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
 import com.shanlinjinrong.utils.DeviceUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -65,6 +70,7 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
         holder.view.setOnClickListener(v -> {
             if (mOnItemClick != null) {
                 mOnItemClick.onItemClicked(v, position);
+                EventBus.getDefault().post(new SelectedWeekCalendarEvent(position, "changeView"));
             }
         });
 
@@ -77,7 +83,7 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < new Random().nextInt(4); i++) {
             TextView titleText = new TextView(mContext);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             lp.setMargins(1, 1, 1, 1);
@@ -117,7 +123,7 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
             item = (TextView) itemView.findViewById(R.id.pop_item);
             image = (ImageView) itemView.findViewById(R.id.iv_icon);
             llcontent = (LinearLayout) itemView.findViewById(R.id.ll_content);
-            view =  itemView.findViewById(R.id.ll_rootView);
+            view = itemView.findViewById(R.id.ll_rootView);
 
         }
     }

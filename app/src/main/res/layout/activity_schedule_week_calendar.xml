@@ -43,7 +43,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal" />
-            s
+
 
             <LinearLayout
                 android:id="@+id/ll_month"
