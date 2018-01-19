@@ -1,11 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +55,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class ScheduleWeekCalendarActivity extends AppCompatActivity implements WheelPicker.OnItemSelectedListener, ScheduleMonthAdapter.OnItemClick {
 
+    private static final String TAG = "ScheduleWeekCalendarActivity";
     @BindView(R.id.topView)
     CommonTopView mTopView;
     @BindView(R.id.ll_container_layout)
@@ -91,6 +94,11 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements W
     private WheelPicker  mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
     private int          mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight;
+    private String mSelectedYear1;
+    private String mSelectedMonth1;
+    private String mSelectedDay1;
+    private int    mSelectedStartTime;
+    private int    mSelectedEndTime;
 
 
     @Override
@@ -212,7 +220,12 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements W
     private void initView() {
         mProgressBar.setVisibility(View.GONE);
         mLlContainerLayout.setVisibility(View.VISIBLE);
-        mTopView.setAppTitle(mListDate.get(mIndexTitle1).getYear().get(mIndexTitle2) + "年" + mListDate.get(mIndexTitle1).getMonth().get(mIndexTitle2) + "月");
+
+        mSelectedYear1 = mListDate.get(mIndexTitle1).getYear().get(mIndexTitle2);
+        mSelectedMonth1 = mListDate.get(mIndexTitle1).getMonth().get(mIndexTitle2);
+        mSelectedDay1 = mListDate.get(mIndexTitle1).getDay().get(mIndexTitle2);
+
+        mTopView.setAppTitle(mSelectedYear1 + "年" + mSelectedMonth1 + "月");
 
         //测量布局的宽高
         mHeight = ScreenUtils.dp2px(this, 57) + ScreenUtils.getStatusHeight(this);
@@ -391,15 +404,27 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements W
 
                 break;
             case "TopDate":
-                Toast.makeText(this, mListDate.get(event.getPosition()).getYear().get(event.getIndex()) + "年"
-                        + mListDate.get(event.getPosition()).getMonth().get(event.getIndex()) + "月"
-                        + mListDate.get(event.getPosition()).getDay().get(event.getIndex()) + "日", Toast.LENGTH_SHORT).show();
-                mTopView.setAppTitle(mListDate.get(event.getPosition()).getYear().get(event.getIndex()) + "年" + mListDate.get(event.getPosition()).getMonth().get(event.getIndex()) + "月");
+                mSelectedYear1 = mListDate.get(event.getPosition()).getYear().get(event.getIndex());
+                mSelectedMonth1 = mListDate.get(event.getPosition()).getMonth().get(event.getIndex());
+                mSelectedDay1 = mListDate.get(event.getPosition()).getDay().get(event.getIndex());
+
+                Toast.makeText(this, mSelectedYear1 + "年" + mSelectedMonth1 + "月" + mSelectedDay1 + "日", Toast.LENGTH_SHORT).show();
+                mTopView.setAppTitle(mSelectedYear1 + "年" + mSelectedMonth1 + "月");
                 mSelectedAdapter.setNewData(mListDate);
                 mSelectedAdapter.notifyDataSetChanged();
                 break;
             //查看当前事件
             case "lookEvent":
+                break;
+            case "changeView":
+                RefreshChangeView(event);
+                Intent intent = new Intent(this, CalendarRedactActivity.class);
+                intent.putExtra("year", mSelectedYear1);
+                intent.putExtra("month", mSelectedMonth1);
+                intent.putExtra("day", mSelectedDay1);
+                intent.putExtra("startTime", mSelectedStartTime);
+                intent.putExtra("endTime", mSelectedEndTime);
+                startActivity(intent);
                 break;
             //选择某个事件
             case "selectedView":
@@ -481,12 +506,18 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements W
             mLlContent.get(i).setSelected(false);
         }
 
+        mSelectedStartTime = event.getPosition() + 8;
+        mSelectedEndTime = event.getPosition() + 9;
+
         if (event.getPosition() == 10) {
             mLeftDateList.get(event.getPosition()).setPosition(event.getPosition());
+
         } else {
             mLeftDateList.get(event.getPosition()).setPosition(event.getPosition());
             mLeftDateList.get(event.getPosition() + 1).setPosition(event.getPosition());
         }
+
+
         mDateAdapter.setNewData(mLeftDateList);
         mAdapter.notifyItemChanged(event.getPosition());
         mAdapter.notifyItemChanged(event.getPosition() + 1);
@@ -494,6 +525,8 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity implements W
         mLlContent.get(event.getPosition() - 1).setSelected(true);
         mAdapter.setNewData(mLlContent);
         mAdapter.notifyItemChanged(event.getPosition() - 1);
+
+
     }
 
 

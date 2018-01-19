@@ -684,12 +684,13 @@
             android:theme="@style/horizontal_slide" />
         <activity android:name=".ui.activity.message.LookGroupMemberActivity" />
 
-        <!--月历-->
+        <!-- 月历 -->
         <activity
             android:name=".ui.activity.home.schedule.manage.ScheduleWeekCalendarActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".ui.activity.home.schedule.manage.LookCalendarDetailsActivity" />
+        <activity android:name=".ui.activity.home.schedule.manage.CalendarRedactActivity"></activity>
     </application>
 
 </manifest>
