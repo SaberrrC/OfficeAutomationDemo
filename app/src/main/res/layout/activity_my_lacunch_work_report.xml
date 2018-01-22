@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/page_bg"
-    android:orientation="vertical"
-    tools:context="com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/layout_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/page_bg"
+              android:orientation="vertical"
+              tools:context="com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity">
 
     <com.shanlinjinrong.views.common.CommonTopView
         android:id="@+id/top_view"
@@ -15,24 +15,31 @@
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
         app:rightDrawable="@mipmap/report_change_btn"
-        app:topTitle="@string/title_work_report_all_report" />
+        app:topTitle="@string/title_work_report_all_report"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/lineColor" />
+        android:background="@color/lineColor"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <com.shanlinjinrong.views.swipeRecycleview.SwipeMenuRecyclerView
             android:id="@+id/all_report_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="暂无内容"/>
 
 </LinearLayout>

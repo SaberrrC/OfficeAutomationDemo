@@ -1,8 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.contracts.presenter;
 
-import android.text.TextUtils;
-
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
@@ -25,6 +23,8 @@ import javax.inject.Inject;
 /**
  * Created by 丁 on 2017/8/21.
  */
+
+//todo 数据 空 token
 public class ContractActivityPresenter extends HttpPresenter<ContractActivityContract.View> implements ContractActivityContract.Presenter {
 
     @Inject
@@ -35,14 +35,14 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
     @Override
     public void loadData(String departmentId) {
         HttpParams params = new HttpParams();
-//        params.put("id", 1001);
-        mKjHttp.jsonGet(Api.GET_CONTACTS + "?id=" + departmentId, params, new HttpCallBack() {
+        mKjHttp.get(ApiJava.GET_CONTACTS + "?id=" + departmentId, params, new HttpCallBack() {
             @Override
             public void onFinish() {
                 super.onFinish();
                 try {
-                    if (mView != null)
+                    if (mView != null) {
                         mView.loadDataFinish();
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -55,9 +55,9 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
                 List<Contacts> items = new ArrayList<>();
                 try {
                     JSONObject jo = new JSONObject(t);
-                    switch (Api.getCode(jo)) {
+                    switch (ApiJava.getCode(jo)) {
                         case 000000:
-                            JSONArray jDepartment = Api.getDataToJSONObject(jo)
+                            JSONArray jDepartment = ApiJava.getDataToJSONObject(jo)
                                     .getJSONArray("children");
                             for (int i = 0; i < jDepartment.length(); i++) {
                                 JSONObject d = jDepartment.getJSONObject(i);
@@ -66,7 +66,7 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
 //                                    items.add(c);
                                 }
                             }
-                            JSONArray jEmployee = Api.getDataToJSONObject(jo)
+                            JSONArray jEmployee = ApiJava.getDataToJSONObject(jo)
                                     .getJSONArray("users");
                             for (int i = 0; i < jEmployee.length(); i++) {
                                 JSONObject jsonObject = jEmployee.getJSONObject(i);
@@ -96,18 +96,6 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
                             if (mView != null)
                                 mView.loadDataSuccess(items);
                             break;
-                        case Api.RESPONSES_CODE_DATA_EMPTY:
-                            if (mView != null)
-                                mView.loadDataEmpty();
-                            break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                            if (mView != null)
-                                mView.loadDataTokenNoMatch(Api.getCode(jo));
-                            break;
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            if (mView != null)
-                                mView.uidNull(Api.getCode(jo));
-                            break;
                     }
                 } catch (JSONException e) {
                     System.out.println(e.toString());
@@ -117,8 +105,10 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.loadDataFailed(errorNo, strMsg);
+                    }
                     super.onFailure(errorNo, strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();

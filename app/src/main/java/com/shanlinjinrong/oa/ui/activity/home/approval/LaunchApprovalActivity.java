@@ -7,9 +7,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.approval.adapter.LaunchApprovalListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.approval.bean.LaunchApprovalItem;
@@ -33,6 +35,8 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
 
     @BindView(R.id.rv_launch_approval)
     RecyclerView mLaunchApprovalList;//发起审批列表
+    @BindView(R.id.toolbar_image_btn)
+    ImageView toolbarImageBtn;
 
     private List<LaunchApprovalItem> mListData;
 
@@ -48,6 +52,7 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
     private void initView() {
         initToolBar();
         initListData();
+
         mLaunchApprovalList.setLayoutManager(new GridLayoutManager(LaunchApprovalActivity.this, 3));
         mLaunchApprovalList.addItemDecoration(new GridItemDecoration(LaunchApprovalActivity.this, R.drawable.driver_line));
         LaunchApprovalListAdapter approvalListAdapter = new LaunchApprovalListAdapter(mListData);
@@ -68,6 +73,7 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
         if (mToolbar == null) {
             return;
         }
+        toolbarImageBtn.setVisibility(View.GONE);
         setTitle("");//必须在setSupportActionBar之前调用
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(mToolbar);

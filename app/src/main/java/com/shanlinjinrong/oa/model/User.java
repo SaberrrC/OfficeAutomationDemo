@@ -5,7 +5,6 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -77,14 +76,20 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getEmail() {
+        if (email.equals("null")) {
+            return "-";
+        }
         return email;
     }
 
     public String getPortraits() {
-        return "http://" + portraits;
+        return portraits;
     }
 
     public String getUsername() {
+        if (username.equals("null")) {
+            return "-";
+        }
         return username;
     }
 
@@ -101,6 +106,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getSex() {
+        if (sex.equals("null")) {
+            return "-";
+        }
         return sex;
     }
 
@@ -109,6 +117,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getPhone() {
+        if (phone.equals("null")) {
+            return "-";
+        }
         return phone;
     }
 
@@ -165,6 +176,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getPostName() {
+        if (postName.equals("null")) {
+            return "-";
+        }
         return postName;
     }
 
@@ -181,6 +195,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getDepartmentName() {
+        if (departmentName.equals("null")) {
+            return "-";
+        }
         return departmentName;
     }
 
@@ -205,6 +222,9 @@ public class User implements MultiItemEntity, Serializable {
     }
 
     public String getOid() {
+        if (oid.equals("null")) {
+            return "-";
+        }
         return oid;
     }
 
@@ -214,55 +234,30 @@ public class User implements MultiItemEntity, Serializable {
 
     public User(JSONObject jsonObject) {
         try {
-            code = jsonObject.getString("CODE");
-            uid = jsonObject.getString("uid");
-            token = jsonObject.getString("token");
-            email = jsonObject.getString("email");
-            is_initial_pwd = jsonObject.getString("is_initial_pwd");
-            portraits = jsonObject.getString("portraits");
-            username = jsonObject.getString("username");
-            sex = jsonObject.getString("sex");
-            phone = jsonObject.getString("phone");
-            hiredate = jsonObject.getString("hiredate");
-            companyName = jsonObject.getString("company_name");
-            postId = jsonObject.getString("post_id");
-            postName = jsonObject.getString("post_title");
-            departmentId = jsonObject.getString("department_id");
-            departmentName = jsonObject.getString("department_name");
-            email = jsonObject.getString("email");
-            isleader = jsonObject.getString("isleader");
-            yx_token = jsonObject.getString("yx_token");
-            oid = jsonObject.getString("oid");
-        } catch (JSONException e) {
+            code = jsonObject.optString("CODE");
+            uid = jsonObject.optString("uid");
+            token = jsonObject.optString("token");
+            email = jsonObject.optString("email");
+            is_initial_pwd = jsonObject.optString("is_initial_pwd");
+            portraits = jsonObject.optString("portraits");
+            username = jsonObject.optString("username");
+            sex = jsonObject.optString("sex");
+            phone = jsonObject.optString("phone");
+            hiredate = jsonObject.optString("hiredate");
+            companyName = jsonObject.optString("company_name");
+            postId = jsonObject.optString("post_id");
+            postName = jsonObject.optString("post_title");
+            departmentId = jsonObject.optString("department_id");
+            departmentName = jsonObject.optString("department_name");
+            email = jsonObject.optString("email");
+            isleader = jsonObject.optString("isleader");
+            yx_token = jsonObject.optString("yx_token");
+            oid = jsonObject.optString("oid");
+
+        } catch (Exception e) {
             e.printStackTrace();
             LogUtils.e("user解析异常-》" + e.toString());
         }
-    }
-
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "yx_token='" + yx_token + '\'' +
-                ", is_initial_pwd='" + is_initial_pwd + '\'' +
-                ", uid='" + uid + '\'' +
-                ", token='" + token + '\'' +
-                ", email='" + email + '\'' +
-                ", portraits='" + portraits + '\'' +
-                ", username='" + username + '\'' +
-                ", sex='" + sex + '\'' +
-                ", phone='" + phone + '\'' +
-                ", isshow='" + isshow + '\'' +
-                ", oid='" + oid + '\'' +
-                ", hiredate='" + hiredate + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", postId='" + postId + '\'' +
-                ", postName='" + postName + '\'' +
-                ", departmentId='" + departmentId + '\'' +
-                ", departmentName='" + departmentName + '\'' +
-                ", isleader='" + isleader + '\'' +
-                ", code='" + code + '\'' +
-                '}';
     }
 
     @Override

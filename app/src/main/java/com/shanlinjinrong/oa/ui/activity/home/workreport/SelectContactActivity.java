@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
@@ -16,7 +17,7 @@ import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
@@ -81,7 +82,7 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     private String mSelectChildId;
     private List<Child> mChildren;
 
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_contact);
@@ -178,11 +179,15 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
         Intent intent = new Intent();
         if (getIntent().getBooleanExtra("", false)) {
             intent.putExtra("nextReceiver", getIntent().getIntExtra("nextReceiver", 0));
-            intent.putExtra("uid", mSelectChild.getUid());
+            if (!TextUtils.isEmpty(mSelectChild.getUid())) {
+                intent.putExtra("uid", mSelectChild.getUid());
+            }
             intent.putExtra("name", mSelectChild.getUsername());
         } else {
             intent.putExtra("nextReceiver", getIntent().getIntExtra("nextReceiver", 0));
-            intent.putExtra("uid", mSelectChild.getUid());
+            if (!TextUtils.isEmpty(mSelectChild.getUid())) {
+                intent.putExtra("uid", mSelectChild.getUid());
+            }
             intent.putExtra("name", mSelectChild.getUsername());
             intent.putExtra("post", mSelectChild.getPost());
         }
@@ -211,7 +216,7 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 
@@ -232,14 +237,12 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
     public void loadDataFailed(int errCode, String errMsg) {
         try {
             if (errMsg.equals("auth error")) {
-                catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+                catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
                 return;
             }
             hideLoadingView();
             mContentEmpty.setVisibility(View.VISIBLE);
             mContentEmpty.setText("没有搜索到该员工，请重新搜索");
-//        showEmptyView(mRootView, "数据暂无，请联系管理员进行设置", 0, false);
-            catchWarningByCode(errCode);
         } catch (Throwable e) {
             e.printStackTrace();
         }

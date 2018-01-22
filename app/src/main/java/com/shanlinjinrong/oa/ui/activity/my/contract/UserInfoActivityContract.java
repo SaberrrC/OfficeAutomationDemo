@@ -1,6 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.my.contract;
 
-import com.shanlinjinrong.oa.common.Api;
+import com.hyphenate.easeui.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
@@ -18,9 +18,15 @@ public interface UserInfoActivityContract {
         void upLoadFailed(int errorCode, String msg); // 上传失败
 
         void upLoadFinish(); //上传请求结束
+
+        void queryUserInfoSuccess(UserDetailsBean userDetailsBean);
+
+        void queryUserInfoFailed();
     }
 
     interface Presenter extends BasePresenter<View> {
-        void upLoadPortrait(String departmentId, String file, File portrait); //修改密码
+        void upLoadPortrait(File portrait); //修改密码
+
+        void queryUserInfo(); //刷新个人信息
     }
 }

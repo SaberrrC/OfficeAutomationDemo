@@ -13,6 +13,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,17 @@ import java.util.regex.Pattern;
  */
 public class Utils {
 
+    public static boolean isActivityRunning(Context mContext, String activityClassName) {
+        ActivityManager activityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> info = activityManager.getRunningTasks(1);
+        if (info != null && info.size() > 0) {
+            String className = info.get(0).topActivity.getClassName();
+            if (activityClassName.equals(className)) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * 检测网络是否可用
      *

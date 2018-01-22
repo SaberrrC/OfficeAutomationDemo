@@ -1,12 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.my.presenter;
 
-import com.shanlinjinrong.oa.common.Api;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPswActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -25,43 +26,48 @@ public class ModifyPswActivityPresenter extends HttpPresenter<ModifyPswActivityC
 
 
     @Override
-    public void modifyPsw(String departmentId, String oldPsw, String newPsw, String confirmPsw, String email) {
+    public void modifyPsw(String oldPsw, String newPsw) {
         HttpParams params = new HttpParams();
-        params.put("department_id", departmentId);
         params.put("oldpassword", oldPsw);
         params.put("newpassword", newPsw);
-        params.put("confirmpassword", confirmPsw);
-        params.put("email", email);
-        mKjHttp.post(Api.PASSWORD_UPDATE, params, new HttpCallBack() {
+        mKjHttp.post(ApiJava.PASSWORD_UPDATE, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
+                super.onSuccess(t);
                 try {
-                    JSONObject jo = new JSONObject(t);
-                    int code = Api.getCode(jo);
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
+                    CommonRequestBean requestCode = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
+                    switch (requestCode.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
                             mView.modifySuccess();
                             break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(code);
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null)
+                                mView.uidNull(requestCode.getCode());
+                            break;
+                        default:
+                            if (mView != null)
+                                mView.modifyFailed(requestCode.getMessage());
                             break;
                     }
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
-                super.onSuccess(t);
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.modifyFailed(errorNo, strMsg);
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
+                try {
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
+                        mView.modifyFailed("修改密码失败");
+                    }
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
             }
         });
     }

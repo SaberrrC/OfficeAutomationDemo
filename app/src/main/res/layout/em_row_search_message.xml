@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_itease_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="4dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ease_default_avatar"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/avatar"
+        android:textColor="@color/list_itease_primary_color"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/name"
+        android:layout_marginRight="12dp"
+        android:textColor="@color/list_itease_secondary_color"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/name"
+        android:layout_below="@+id/name"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@id/avatar"
+        android:textColor="@color/list_itease_secondary_color"
+        android:textSize="12sp"/>
+
+    <View
+        android:id="@+id/stork"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/message"
+        android:layout_marginTop="5dp"
+        android:background="#EFEFEF"/>
+</RelativeLayout>

@@ -23,9 +23,13 @@ import com.hyphenate.util.NetUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.db.InviteMessgeDao;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
+import com.hyphenate.easeui.event.OnCountRefreshEvent;
 import com.shanlinjinrong.oa.utils.LoginUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
@@ -34,6 +38,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
 
     private TextView errorText;
     private LinearLayout ll_error;
+    private long lastClickTime = 0;
 
     @Override
     protected void initView() {
@@ -48,12 +53,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
             public void accept(Object o) throws Exception {
                 reConnection();
             }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-            }
-        });
+        }, Throwable::printStackTrace);
     }
 
     private void reConnection() {
@@ -70,59 +70,38 @@ public class ConversationListFragment extends EaseConversationListFragment {
 
     @Override
     protected void setUpView() {
-        super.setUpView();
+
         // register context menu
         registerForContextMenu(conversationListView);
-        conversationListView.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EMConversation conversation = conversationListView.getItem(position);
-                String username = conversation.conversationId();
-                if (username.equals(EMClient.getInstance().getCurrentUser()))
-                    Toast.makeText(getActivity(), R.string.Cant_chat_with_yourself, Toast.LENGTH_SHORT).show();
-                else {
-                    // start chat acitivity
-                    Intent intent = new Intent(getActivity(), MainController.class);
-                    if (conversation.isGroup()) {
-                        if (conversation.getType() == EMConversationType.ChatRoom) {
-                            // it's group chat
-                            intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
-                        } else {
-                            intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
-                        }
-
+        conversationListView.setOnItemClickListener((parent, view, position, id) -> {
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (currentTime - lastClickTime < 1000) {
+                lastClickTime = currentTime;
+                return;
+            }
+            lastClickTime = currentTime;
+            EMConversation conversation = conversationListView.getItem(position);
+            String username = conversation.conversationId();
+            if (username.equals(EMClient.getInstance().getCurrentUser()))
+                Toast.makeText(getActivity(), R.string.Cant_chat_with_yourself, Toast.LENGTH_SHORT).show();
+            else {
+                // start chat acitivity
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                if (conversation.isGroup()) {
+                    if (conversation.getType() == EMConversationType.ChatRoom) {
+                        // it's group chat
+                        intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
+                    } else {
+                        intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
                     }
-                    // it's single chat
-                    intent.putExtra(Constant.EXTRA_USER_ID, username);
-                    startActivity(intent);
+
                 }
+                // it's single chat
+                intent.putExtra(Constant.EXTRA_USER_ID, username);
+                startActivity(intent);
             }
         });
-        //red packet code : 红包回执消息在会话列表最后一条消息的展示
-//        conversationListView.setConversationListHelper(new EaseConversationListHelper() {
-//            @Override
-//            public String onSetItemSecondaryText(EMMessage lastMessage) {
-//                if (lastMessage.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
-//                    String sendNick = lastMessage.getStringAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, "");
-//                    String receiveNick = lastMessage.getStringAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
-//                    String msg;
-//                    if (lastMessage.direct() == EMMessage.Direct.RECEIVE) {
-//                        msg = String.format(getResources().getString(R.string.msg_someone_take_red_packet), receiveNick);
-//                    } else {
-//                        if (sendNick.equals(receiveNick)) {
-//                            msg = getResources().getString(R.string.msg_take_red_packet);
-//                        } else {
-//                            msg = String.format(getResources().getString(R.string.msg_take_someone_red_packet), sendNick);
-//                        }
-//                    }
-//                    return msg;
-//                }
-//                return null;
-//            }
-//        });
         super.setUpView();
-        //end of red packet code
     }
 
     @Override
@@ -146,9 +125,10 @@ public class ConversationListFragment extends EaseConversationListFragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         boolean deleteMessage = false;
-        if (item.getItemId() == R.id.delete_message) {
-            deleteMessage = true;
-        } else if (item.getItemId() == R.id.delete_conversation) {
+        //        if (item.getItemId() == R.id.delete_message) {
+        //            deleteMessage = true;
+        //        } else
+        if (item.getItemId() == R.id.delete_conversation) {
             deleteMessage = false;
         }
         EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
@@ -160,22 +140,18 @@ public class ConversationListFragment extends EaseConversationListFragment {
         }
         try {
             // delete conversation
-            EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.conversationId(), deleteMessage);
+            EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.conversationId(), true);
             InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
             inviteMessgeDao.deleteMessage(tobeDeleteCons.conversationId());
+            EventBus.getDefault().post(new OnCountRefreshEvent());
         } catch (Exception e) {
             e.printStackTrace();
         }
         refresh();
-
-        // update unread count
-//        ((MainController) getActivity()).updateUnreadLabel();
         return true;
     }
 
     public void connectHuanXin() {
-//        MainController activity = (MainController) getActivity();
-//        activity.LoginIm();
         LoginUtils.loginIm(getContext(), null);
     }
 

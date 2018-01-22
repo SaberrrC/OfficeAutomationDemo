@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.iflytek.cloud.thirdparty.V;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter.MeetingDetailsAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingRoomsBean;
@@ -20,13 +18,9 @@ import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 
 /**
  * 选择会议室
@@ -34,13 +28,13 @@ import io.reactivex.functions.Consumer;
 public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActivityPresenter> implements MeetingDetailsActivityContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.top_view)
-    CommonTopView mTopView;
+    CommonTopView      mTopView;
     @BindView(R.id.meeting_details_list)
-    RecyclerView mMeetingDetailsList;
+    RecyclerView       mMeetingDetailsList;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.tv_network_error)
-    TextView mTvNetworkError;
+    TextView           mTvNetworkError;
     private MeetingDetailsAdapter mMeetingRoomAdapter;
     private List<MeetingRoomsBean.DataBean> data = new ArrayList<>();
 
@@ -75,7 +69,7 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case com.shanlinjinrong.uilibrary.R.id.topview_right_view:
+            case R.id.topview_right_view:
                 Intent intent = new Intent(this, MeetingReservationRecordActivity.class);
                 startActivity(intent);
                 break;
@@ -99,6 +93,10 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
 
     @Override
     public void getMeetingRoomsFailed(int errorCode, String data) {
+        if ("auth error".equals(data)) {
+            catchWarningByCode(data);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));
@@ -113,7 +111,7 @@ public class MeetingDetailsActivity extends HttpBaseActivity<MeetingDetailsActiv
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 

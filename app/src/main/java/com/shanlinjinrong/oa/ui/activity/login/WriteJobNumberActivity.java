@@ -16,15 +16,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.WriteJobNumberContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.WriteJobNumberPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.ToastManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+//找回密码功能
 public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPresenter> implements WriteJobNumberContract.View {
 
     @BindView(R.id.et_job_number)
@@ -39,7 +42,7 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     @BindView(R.id.btn_sure)
     Button mSureBtn;
 
-    private String mCode;//验证码内容
+    private String mKeyCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,36 +72,29 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
 
         //点击确定按钮
         if (v.getId() == R.id.btn_sure) {
-            if (!mIdentifyingCode.getText().toString().trim().equalsIgnoreCase(mCode)) {
-                showToast("验证码不正确");
-                mPresenter.getIdentifyingCode();
-            } else {
-                mPresenter.searchUser(mJobNumber.getText().toString().trim());
+            if ("".equals(mIdentifyingCode.getText().toString().trim())) {
+                showToast("输入验证码为空！");
+                return;
             }
+            mPresenter.searchUser(mIdentifyingCode.getText().toString().trim(), mKeyCode, mJobNumber.getText().toString().trim());
         }
     }
 
     @Override
-    public void getIdentifyingCodeSuccess(String picUrl, String mCode) {
-        this.mCode = mCode;
-//        if (BuildConfig.DEBUG) {
-//            picUrl = Api.PHP_DEBUG_URL + picUrl;
-//        } else {
-//            picUrl = Api.PHP_URL + picUrl;
-//        }
+    public void showLoading() {
+        showLoadingView();
+    }
 
+    @Override
+    public void hideLoading() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void getIdentifyingCodeSuccess(String picUrl, String keyCode) {
+        mKeyCode = keyCode;
         picUrl = "data:image/gif;base64," + picUrl;
-        Log.i("WriteJobNumberActivity", "mCode : " + mCode);
-        Log.i("WriteJobNumberActivity", "picUrl : " + picUrl);
-
         mIdentifyingCodeImg.setImageBitmap(base64ToBitmap(picUrl));
-
-        Log.i("WriteJobNumberActivity", "mCode : " + mCode);
-
-
-//        Glide.with(this).load(picUrl).into(mIdentifyingCodeImg);
-
-
     }
 
     /**
@@ -123,15 +119,19 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     }
 
     @Override
-    public void searchUserSuccess(User user) {
-        String email = user.getEmail();
-        Intent intent = new Intent(WriteJobNumberActivity.this, ConfirmCompanyEmailActivity.class);
-        if (TextUtils.isEmpty(email)) {
-            intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_STATUS, false);
-        } else {
-            intent.putExtra(ConfirmCompanyEmailActivity.EMAIL_ADDRESS, email);
-        }
-        intent.putExtra("code", user.getCode());
+    public void searchUserSuccess(String phone) {
+        Intent intent = new Intent(this, ConfirmCompanyEmailActivity.class);
+        intent.putExtra(Constants.PHONE_NUMBER, phone);
+        intent.putExtra(Constants.USER_CODE, mJobNumber.getText().toString().trim());
+        intent.putExtra(Constants.PHONE_STATUS, true);
+        startActivity(intent);
+    }
+
+    @Override
+    public void searchUserEmpty(String errorMsg) {
+        Intent intent = new Intent(this, ConfirmCompanyEmailActivity.class);
+        intent.putExtra(Constants.USER_CODE, mIdentifyingCode.getText().toString().trim());
+        intent.putExtra(Constants.PHONE_STATUS, false);
         startActivity(intent);
     }
 
@@ -147,7 +147,7 @@ public class WriteJobNumberActivity extends HttpBaseActivity<WriteJobNumberPrese
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 

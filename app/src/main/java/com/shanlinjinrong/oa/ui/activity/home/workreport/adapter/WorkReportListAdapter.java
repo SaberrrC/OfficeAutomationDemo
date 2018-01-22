@@ -47,12 +47,12 @@ public class WorkReportListAdapter extends BaseQuickAdapter<ReportList> {
 
         String state=report.getStatus();
         //状态 1未读，2已读
-        if (state.equals("1")) {
+        if ("1".equals(state)) {
             title.getPaint().setFakeBoldText(true);
             title.setTextColor(Color.parseColor("#333333"));
             tvTag.setTextColor(Color.parseColor("#333333"));
             name.setTextColor(Color.parseColor("#333333"));
-        } else if (state.equals("2")){
+        } else if ("2".equals(state)){
             title.getPaint().setFakeBoldText(true);
             title.setTextColor(Color.parseColor("#999999"));
             tvTag.setTextColor(Color.parseColor("#999999"));

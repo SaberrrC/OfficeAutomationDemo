@@ -20,11 +20,16 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.HolidayAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandenceRecorderContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.AttandenceRecorderPresenter;
+import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -181,8 +186,9 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
 
                 for (int i = 0; i < mAllWorkAttendanceList.size(); i++) {
                     try {
-                        if ((mAllWorkAttendanceList.get(i).getTbmstatus().equals("[出差]") || mAllWorkAttendanceList.get(i).getTbmstatus().equals("")))
+                        if (("[出差]".equals(mAllWorkAttendanceList.get(i).getTbmstatus()) || "".equals(mAllWorkAttendanceList.get(i).getTbmstatus()))) {
                             continue;
+                        }
                         if ((mAllWorkAttendanceList.get(i).getTbmstatus().contains("[迟到]") && getIntent().getIntExtra("exception", 0) == 0) ||
                                 (mAllWorkAttendanceList.get(i).getTbmstatus().contains("[早退]") && getIntent().getIntExtra("exception", 0) == 1) ||
                                 (mAllWorkAttendanceList.get(i).getTbmstatus().contains("[旷工]") && getIntent().getIntExtra("exception", 0) == 2)) {
@@ -230,7 +236,7 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
     private String mCalendar;
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 
@@ -286,10 +292,10 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                 baseViewHolder.setText(R.id.tv_gowork_time, bean1.getOnebegintime());
                 baseViewHolder.setText(R.id.tv_off_gowork_time, bean1.getTwoendtime());
                 if (bean1.getTbmstatus() != null) {
-                    if (bean1.getTbmstatus().equals("[迟到]")) {
+                    if ("[迟到]".equals(bean1.getTbmstatus())) {
                         baseViewHolder.setTextColor(R.id.tv_gowork_time, Color.RED);
                     }
-                    if (bean1.getTbmstatus().equals("[早退]")) {
+                    if ("[早退]".equals(bean1.getTbmstatus())) {
                         baseViewHolder.setTextColor(R.id.tv_off_gowork_time, Color.RED);
                     }
                 }

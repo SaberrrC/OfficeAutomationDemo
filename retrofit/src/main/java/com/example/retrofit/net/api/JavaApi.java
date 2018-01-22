@@ -1,20 +1,27 @@
 package com.example.retrofit.net.api;
 
 import com.example.retrofit.model.HttpResult;
+import com.example.retrofit.model.UpLoadPortraitsBean;
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.example.retrofit.model.responsebody.CountResponse1;
+import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 import com.example.retrofit.model.responsebody.QueryPayResponse;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 
@@ -61,6 +68,18 @@ public interface JavaApi {
 
     @POST("Approve/allApprove")
     Observable<HttpResult> postAgreeDisagree(@Field("approveList[]") List<ApporveBodyItemBean> approveList);
+
+    //----------------------聊天 群组-----------------------
+
+    @POST("user/queryUserByCodes")
+    Observable<HttpResult<ArrayList<GroupUserInfoResponse>>> queryUserListInfo(@QueryMap Map<String, String> map);
+
+
+    //----------------------头像 上传-----------------------
+
+    @Multipart
+    @POST("user/upload")
+    Observable<HttpResult<UpLoadPortraitsBean>> uploadPortraits(@Part MultipartBody.Part file);
 
     //提交出差申请
     //    @POST("nchrEvection/submitEvectionApply")

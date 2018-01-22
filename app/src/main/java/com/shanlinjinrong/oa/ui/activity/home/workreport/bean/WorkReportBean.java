@@ -1,5 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.bean;
 
+import javax.inject.Named;
+
 /**
  * Created by 丁 on 2017/8/21.
  * 发起日报实体类
@@ -14,9 +16,19 @@ public class WorkReportBean {
     private String selfCooperation;// 合作性
     private String selfDedicated;//	 敬业精神
     private String selfDiscipline;// 工作纪律
+
     private String selfEnvironmental;//	环境卫生
+    private String selfEnvironMental;//	环境卫生
     private String selfJobInitiative;//	工作主动性
     private String selfOrganization;//服从组织安排
+
+    public String getSelfEnvironMental() {
+        return selfEnvironMental;
+    }
+
+    public void setSelfEnvironMental(String selfEnvironMental) {
+        this.selfEnvironMental = selfEnvironMental;
+    }
 
     //自评
     private String selfRatingEigth;

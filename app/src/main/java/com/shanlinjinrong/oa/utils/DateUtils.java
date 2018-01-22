@@ -704,6 +704,15 @@ public class DateUtils {
         return times;
     }
 
+    public static String stringToDateTransform(int time, String pattern) {
+        SimpleDateFormat sdr = new SimpleDateFormat(pattern);
+        @SuppressWarnings("unused")
+        long lcc = time;
+        int i = time;
+        String times = sdr.format(new Date(i * 1000L));
+        return times;
+    }
+
     /**
      * 判断给定字符串时间是否为今日
      */

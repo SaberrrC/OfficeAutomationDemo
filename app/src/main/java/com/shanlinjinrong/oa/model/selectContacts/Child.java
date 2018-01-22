@@ -26,7 +26,7 @@ public class Child implements Parcelable, MultiItemEntity {
 
 
     public Child(String oname, String portrait, String post, String uid, String username,
-                 String sex, String departmentId,String code,
+                 String sex, String departmentId, String code,
                  boolean isChecked) {
         this.oname = oname;
         this.portrait = portrait;
@@ -37,6 +37,12 @@ public class Child implements Parcelable, MultiItemEntity {
         this.sex = sex;
         this.department_id = departmentId;
         this.CODE = code;
+    }
+
+    public Child(String username, String uid) {
+        this.username = username;
+        this.uid = uid;
+
     }
 
     public Child(String uid, String username, boolean isChecked) {

@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.presenter;
 
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.model.selectContacts.Group;
@@ -35,7 +34,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
         mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
         // TODO: 2017/8/28 新给的接口没有分组信息
-        mKjHttp.jsonGet(ApiJava.SAME_ORGANIZATION + "?username=" + searchName + "&pagesize=" + Integer.MAX_VALUE, params, new HttpCallBack() {
+        mKjHttp.get(ApiJava.SAME_ORGANIZATION + "?username=" + searchName + "&PAGE_SIZE=" + Integer.MAX_VALUE, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -45,7 +44,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                         case ApiJava.REQUEST_CODE_OK:
                             ArrayList<Group> groups = new ArrayList<>();
                             Child selectChild = null;
-                            JSONObject data = Api.getDataToJSONObject(jo);
+                            JSONObject data = ApiJava.getDataToJSONObject(jo);
                             JSONArray usersData = data.getJSONArray("data");
                             Group group = new Group("0", usersData.getJSONObject(0).getString("organization"));
                             for (int j = 0; j < usersData.length(); j++) {
@@ -71,7 +70,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+//                            mView.uidNull(0);
                             break;
                         default:
                             mView.loadDataFailed(0, jo.getString("message"));
@@ -86,8 +85,10 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
-                    if (mView != null)
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.loadDataFailed(errorNo, strMsg);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -173,7 +174,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
     public void loadRequestData() {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.jsonGet(ApiJava.HANDOVERUSER, httpParams, new HttpCallBack() {
+        mKjHttp.get(ApiJava.HANDOVERUSER, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -184,7 +185,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                         case ApiJava.REQUEST_CODE_OK:
                             Child selectChild = null;
                             List<Child> data = new ArrayList<Child>();
-                            JSONArray jsonArray = Api.getDataToJSONArray(jo);
+                            JSONArray jsonArray = ApiJava.getDataToJSONArray(jo);
                             for (int j = 0; j < jsonArray.length(); j++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(j);
                                 Child child = new Child(
@@ -201,7 +202,7 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+                            mView.uidNull(jo.getString("code"));
                             break;
                         default:
                             mView.loadDataFailed(0, jo.getString("message"));
@@ -215,6 +216,11 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                try {
+                    mView.uidNull(strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

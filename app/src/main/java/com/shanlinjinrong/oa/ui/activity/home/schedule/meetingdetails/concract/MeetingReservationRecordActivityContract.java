@@ -18,7 +18,7 @@ public interface MeetingReservationRecordActivityContract {
 
     interface View extends BaseView {
 
-        void getMeetingRecordSuccess(List<ReservationRecordBean.DataBean> bean);
+        void getMeetingRecordSuccess(ReservationRecordBean.DataBeanX bean);
 
         void getMeetingRecordFailed(int errorCode, String msgStr);
 
@@ -29,6 +29,6 @@ public interface MeetingReservationRecordActivityContract {
 
     interface Presenter extends BasePresenter<MeetingReservationRecordActivityContract.View> {
 
-        void getMeetingRecord(HttpParams httpParams, int page, int num, boolean isLoadMore, List<ReservationRecordBean.DataBean> data); //获取会议室信息
+        void getMeetingRecord(HttpParams httpParams, int page, int num, boolean isLoadMore); //获取会议室信息
     }
 }

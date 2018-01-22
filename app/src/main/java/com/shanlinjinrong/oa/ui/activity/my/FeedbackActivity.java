@@ -21,6 +21,8 @@ import com.shanlinjinrong.oa.ui.activity.my.presenter.FeedbackActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.StringUtils;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,11 +36,12 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar  toolbar;
     @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
     @BindView(R.id.feedback_text)
     EditText feedbackText;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +73,11 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
 
     private void sendFeedback() {
         showLoadingView();
-        mPresenter.sendFeedback(AppConfig.getAppConfig(this).getDepartmentId(), feedbackText.getText().toString());
+        if (feedbackText.getText().toString().trim().equals("")) {
+            showToast("反馈内容不能为空");
+            return;
+        }
+        mPresenter.sendFeedback(feedbackText.getText().toString());
     }
 
     private void initToolBar() {
@@ -89,14 +96,17 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
         toolbarTextBtn.setText("提交");
         toolbarTextBtn.setVisibility(View.VISIBLE);
         toolbar.setNavigationIcon(R.drawable.toolbar_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (feedbackText.getText().toString().equals("")) {
-                    finish();
-                } else {
-                    confirmBackTips();
-                }
+        toolbar.setNavigationOnClickListener(view -> {
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (currentTime - lastClickTime < 1000) {
+                lastClickTime = currentTime;
+                return;
+            }
+            lastClickTime = currentTime;
+            if (feedbackText.getText().toString().equals("")) {
+                finish();
+            } else {
+                confirmBackTips();
             }
         });
     }
@@ -122,20 +132,12 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
                 R.style.AppTheme_Dialog).create();
         alertDialog.setView(dialogView);
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "退出",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        dialog.dismiss();
-                    }
+                (dialog, which) -> {
+                    finish();
+                    dialog.dismiss();
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                (dialog, which) -> dialog.dismiss());
         alertDialog.show();
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
                 getResources().getColor(R.color.btn_text_logout));
@@ -160,12 +162,16 @@ public class FeedbackActivity extends HttpBaseActivity<FeedbackActivityPresenter
     }
 
     @Override
-    public void feedbackFailed(int errorNo, String strMsg) {
-        showToast("网络超时，请重试");
+    public void feedbackFailed(String strMsg) {
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
+        showToast("反馈失败");
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 }

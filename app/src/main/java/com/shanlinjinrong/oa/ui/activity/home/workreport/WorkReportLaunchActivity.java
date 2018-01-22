@@ -15,14 +15,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
@@ -64,9 +62,6 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
     @BindView(R.id.work_report_list)
     AllRecyclerView mWorkReportList;
-
-    @BindView(R.id.ll_select_date)
-    RelativeLayout mSelectDate; // 选择日期
 
     @BindView(R.id.tv_date)
     TextView mDate; // 日期
@@ -114,7 +109,13 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     }
 
     private void initView(Bundle savedInstanceState) {
-        mWorkReportList.setLayoutManager(new LinearLayoutManager(this));
+        mWorkReportList.setLayoutManager(new LinearLayoutManager(this) {
+                                             @Override
+                                             public boolean canScrollVertically() {
+                                                 return false;
+                                             }
+                                         }
+        );
         if (savedInstanceState != null) {
             mHourReportData = savedInstanceState.getParcelableArrayList("hour_report_list");
             mWorkReportListData = savedInstanceState.getParcelableArrayList("work_report_list");
@@ -355,7 +356,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 
@@ -468,7 +469,7 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
     public void reportFailed(String errCode, String errMsg) {
 
         if (errMsg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_OUT_TIME);
             return;
         }
         switch (errCode) {
@@ -570,6 +571,13 @@ public class WorkReportLaunchActivity extends HttpBaseActivity<WorkReportLaunchA
 
     @Override
     public void onBackPressed() {
-        showBackTip("是否放弃编辑", "确定", "取消");
+        for (int i = 0; i < mWorkReportListData.size(); i++) {
+            boolean isFunction = "已填写".equals(mWorkReportListData.get(i).getContent()) || "待完善".equals(mWorkReportListData.get(i).getContent()) || !"".equals(mTomorrowPlan.getText().toString().trim()) || (!"".equals(mWorkReportListData.get(i).getContent()) && 1 == mWorkReportListData.get(i).getType());
+            if (isFunction) {
+                showBackTip("是否放弃编辑", "确定", "取消");
+                return;
+            }
+        }
+        finish();
     }
 }

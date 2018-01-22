@@ -2,12 +2,15 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.retrofit.net.ApiConstant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity;
@@ -42,11 +45,11 @@ public class MeetingDetailsAdapter extends BaseQuickAdapter<MeetingRoomsBean.Dat
         baseViewHolder.setText(R.id.tv_meeting_location, workContentBean.getAddress());
         baseViewHolder.setText(R.id.tv_meeting_people_number, workContentBean.getNop() + "人");
         baseViewHolder.setText(R.id.tv_meeting_device, deviceX);
-
-
         try {
             Glide.with(AppManager.mContext)
-                    .load("http://"+roomimgX)
+                    .load(ApiConstant.BASE_PIC_URL + roomimgX)
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(R.drawable.video_image_1)
                     .into((ImageView) baseViewHolder.getView(R.id.iv_meeting_details));
         } catch (Throwable e) {

@@ -49,7 +49,7 @@ public class CountPeopleActivity extends BaseActivity implements View.OnClickLis
     String               mSearchContent = "";
     List<CountResponse1> mData          = new ArrayList<>();
     CountPeopleAdapter mCountPeopleAdapter;
-    private ArrayList<CountResponse1> mCountResponse1s;
+    private ArrayList<CountResponse1> mCountResponse1s = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,10 +114,12 @@ public class CountPeopleActivity extends BaseActivity implements View.OnClickLis
                     mData.add(mCountResponse1s.get(i));
                 }
             }
+            mRecyclerView.requestLayout();
             mCountPeopleAdapter.notifyDataSetChanged();
         } else {
             mData.clear();
             mData.addAll(mCountResponse1s);
+            mRecyclerView.requestLayout();
             mCountPeopleAdapter.notifyDataSetChanged();
         }
     }
@@ -153,9 +155,9 @@ public class CountPeopleActivity extends BaseActivity implements View.OnClickLis
                 if (mCountResponse1s != null && countResponse1s.size() != 0) {
                     mData.clear();
                     mData.addAll(countResponse1s);
+                    mRecyclerView.requestLayout();
                     mCountPeopleAdapter.notifyDataSetChanged();
                 }
-
             }
         });
     }

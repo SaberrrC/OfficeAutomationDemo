@@ -1,4 +1,3 @@
-
 package com.shanlinjinrong.oa.ui.fragment;
 
 import android.annotation.SuppressLint;
@@ -12,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +25,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
@@ -40,14 +39,12 @@ import com.shanlinjinrong.oa.ui.fragment.presenter.TabContractsFragmentPresenter
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 import com.shanlinjinrong.oa.views.ClearEditText;
-import com.shanlinjinrong.utils.DataUtils;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -57,14 +54,11 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-//import com.hyphenate.chatuidemo.db.Friends;
-//import com.hyphenate.chatuidemo.db.FriendsInfoCacheSvc;
-
 /**
  * <h3>Description: 名片页面</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
-public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabContractsFragmentContract.View {
+public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPresenter> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabContractsFragmentContract.View, View.OnKeyListener {
 
     @BindView(R.id.title)
     TextView title;
@@ -82,6 +76,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     TextView tvCacle;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.tv_error_layout)
+    TextView mTvErrorLayout;
 
 
     private Dialog dialog;
@@ -97,6 +93,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     private SearchUserResultAdapter mSearchUserResultAdapter;
     private TabContactsAdapter mContactAdapter;
     private List<Contacts> mContacts;
+    private long lastClickTime = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -121,19 +118,17 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 Color.parseColor("#0EA7ED"), Color.parseColor("#0EA7ED"));
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setEnabled(true);
-
-        View viewBack = view.findViewById(R.id.btn_back);
-        viewBack.setVisibility(View.GONE);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //在初始化是为RecyclerView添加点击事件，这样可以防止重复点击问题
-        recyclerView.addOnItemTouchListener(new ItemClick());
-        mContactAdapter = new TabContactsAdapter(items);
-        recyclerView.setAdapter(mContactAdapter);
     }
 
     @OnClick({R.id.search_et_cancle})
+    @Override
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 1000) {
+            lastClickTime = currentTime;
+            return;
+        }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.search_et_cancle:
                 recyclerView.setVisibility(View.VISIBLE);
@@ -141,6 +136,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 recyclerViewSearchResult.setVisibility(View.GONE);
                 reSetSwipRefreash();
                 search_et_input.setText("");
+                mTvErrorLayout.setVisibility(View.GONE);
                 try {
                     inputManager.hideSoftInputFromWindow(
                             getActivity().getCurrentFocus().getWindowToken(),
@@ -148,6 +144,8 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
+                break;
+            default:
                 break;
         }
 
@@ -158,18 +156,17 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         super.onActivityCreated(savedInstanceState);
         View viewBack = view.findViewById(R.id.btn_back);
         viewBack.setVisibility(View.GONE);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //在初始化是为RecyclerView添加点击事件，这样可以防止重复点击问题
         recyclerView.addOnItemTouchListener(new ItemClick());
         mContactAdapter = new TabContactsAdapter(items);
         recyclerView.setAdapter(mContactAdapter);
         loadData();
 
+        search_et_input.setOnKeyListener(this);
 
         //EditText 自动搜索,间隔->输入停止1秒后自动搜索
         RxTextView.textChanges(search_et_input)
-                .debounce(1000, TimeUnit.MILLISECONDS)
+                .debounce(10, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(charSequence -> {
@@ -181,10 +178,12 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                                 .get(AppConfig.PREF_KEY_DEPARTMENT_ID);
                         String isleader = AppConfig.getAppConfig(AppManager.mContext)
                                 .get(AppConfig.PREF_KEY_IS_LEADER);
+                        showLoadingView();
                         mPresenter.autoSearch(search_et_input.getText().toString().trim());
                     } else {
                         recyclerView.setVisibility(View.VISIBLE);
                         recyclerViewSearchResult.setVisibility(View.GONE);
+                        mTvErrorLayout.setVisibility(View.GONE);
                     }
                 });
     }
@@ -223,10 +222,12 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
                 items = mContacts;
                 hideEmptyView();
                 mContactAdapter.setNewData(mContacts);
+                recyclerView.requestLayout();
                 mContactAdapter.notifyDataSetChanged();
                 reSetSwipRefreash();
                 return;
             }
+            showLoadingView();
             mPresenter.loadData("1");
         } catch (Throwable e) {
             e.printStackTrace();
@@ -249,7 +250,6 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
         if (mSwipeRefreshLayout != null) {
             if (recyclerView.getVisibility() == View.VISIBLE) {
                 mSwipeRefreshLayout.setEnabled(true);
-                mPresenter.loadData("1");
             } else {
                 mSwipeRefreshLayout.setEnabled(false);
             }
@@ -260,45 +260,62 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     public void onRefresh() {
         isPullRefreashing = true;
         loadData();
-        lazyLoadData();
+        mPresenter.loadData("1");
     }
 
     @Override
-    public void uidNull(int code) {
-        catchWarningByCode(code);
+    public void uidNull(String code) {
+//        catchWarningByCode(code);
     }
 
     @Override
     public void autoSearchSuccess(List<User> users) {
+        hideLoadingView();
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
         if (userList == null) {
             userList = new ArrayList<>();
         } else {
             userList.clear();
         }
         userList = users;
-        mSearchUserResultAdapter.setNewData(userList);
-        try {
-            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (userList.size() == 0) {
+            mTvErrorLayout.setVisibility(View.VISIBLE);
+            mTvErrorLayout.setText("暂无该联系人！");
+        } else {
+            mTvErrorLayout.setVisibility(View.GONE);
         }
+        mSearchUserResultAdapter.setNewData(userList);
+
+//        try {
+//            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+//                    InputMethodManager.HIDE_NOT_ALWAYS);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         hideEmptyView();
         if (recyclerViewSearchResult != null) {
             recyclerView.setVisibility(View.GONE);
             recyclerViewSearchResult.setVisibility(View.VISIBLE);
         }
+        recyclerViewSearchResult.requestLayout();
         mSearchUserResultAdapter.notifyDataSetChanged();
         reSetSwipRefreash();
     }
 
     @Override
     public void autoSearchFailed(int errCode, String errMsg) {
+        hideLoadingView();
+        if ("auth error".equals(errMsg)) {
+            catchWarningByCode(errMsg);
+            return;
+        }
     }
 
     @Override
     public void autoSearchOther(String msg) {
+
     }
 
     @Override
@@ -323,6 +340,9 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void loadDataSuccess(List<Contacts> contacts) {
+        hideLoadingView();
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
         try {
             if (items.size() > 0 || items != null) {
                 items.clear();
@@ -339,22 +359,18 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     @Override
     public void loadDataFailed(int code, String msg) {
         hideLoadingView();
-        reSetSwipRefreash();
-        String info = "";
-        switch (code) {
-            case Api.RESPONSES_CODE_NO_NETWORK:
-                info = "请确认是否已连接网络！";
-                break;
-            case Api.RESPONSES_CODE_NO_RESPONSE:
-                info = "网络不稳定，请重试！";
-                break;
+        if ("auth error".equals(msg)) {
+            catchWarningByCode(msg);
+            return;
         }
-        showEmptyView(mRlRecyclerViewContainer, info, 0, false);
+        reSetSwipRefreash();
+        showEmptyView(mRlRecyclerViewContainer, "网络不稳定，请重试！", 0, false);
         reSetSwipRefreash();
     }
 
     @Override
     public void loadDataEmpty() {
+        hideLoadingView();
         showEmptyView(mRlRecyclerViewContainer, " ", 0, false);
     }
 
@@ -367,8 +383,27 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
     }
 
     @Override
-    public void loadDataTokenNoMatch(int code) {
+    public void loadDataTokenNoMatch(String code) {
         catchWarningByCode(code);
+    }
+
+    @Override
+    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+            showLoadingView();
+            mPresenter.autoSearch(search_et_input.getText().toString().trim());
+
+            // ------------------------------  隐藏键盘  ------------------------------
+
+            try {
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        return false;
     }
 
     class ItemClick extends OnItemClickListener {

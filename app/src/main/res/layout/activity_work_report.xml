@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.shanlinjinrong.oa.views.KeyboardLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/page_bg"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+                                                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                  android:id="@+id/layout_root"
+                                                  android:layout_width="match_parent"
+                                                  android:layout_height="match_parent"
+                                                  android:background="@color/page_bg"
+                                                  android:fitsSystemWindows="true"
+                                                  android:orientation="vertical">
 
     <com.shanlinjinrong.views.common.CommonTopView
         android:id="@+id/top_view"
@@ -14,12 +14,12 @@
         android:layout_height="44dp"
         app:leftDrawable="@drawable/toolbar_back"
         app:rightText="@string/work_report_right_btn_text"
-        app:topTitle="@string/work_report_launch_title" />
+        app:topTitle="@string/work_report_launch_title"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/gray_E5E5E5" />
+        android:background="@color/gray_E5E5E5"/>
 
     <ScrollView
         android:id="@+id/report_scroll_view"
@@ -36,35 +36,37 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/ll_select_date"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_item_height"
                 android:background="@color/white"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tv_date"
-                    style="@style/work_report_launch_right_text_style"
-                    android:drawableRight="@drawable/arrow_right"
-                    android:enabled="true" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/work_report_launch_left_text_style"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
                     android:layout_marginLeft="14dp"
-                    android:layout_marginStart="14dp"
-                    android:text="@string/work_report_select_date_text" />
-            </RelativeLayout>
+                    android:text="@string/work_report_select_date_text"/>
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:gravity="right|center_vertical"
+                    android:text="dsfsdf"
+                    style="@style/work_report_launch_right_text_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableRight="@drawable/arrow_right"
+                    android:enabled="true"/>
+            </LinearLayout>
 
             <com.shanlinjinrong.oa.views.AllRecyclerView
                 android:id="@+id/work_report_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/common_margin_top"
-                android:background="@color/white" />
+                android:background="@color/white"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -73,7 +75,7 @@
                 android:paddingLeft="@dimen/common_margin_left"
                 android:text="@string/work_report_tomorrow_plan"
                 android:textColor="@color/gray_9b9b9b"
-                android:textSize="@dimen/common_text_size" />
+                android:textSize="@dimen/common_text_size"/>
 
             <EditText
                 android:id="@+id/et_tomorrow_plan"
@@ -84,7 +86,7 @@
                 android:hint="@string/work_report_please_write_tomorrow_plan"
                 android:maxLength="800"
                 android:padding="12dp"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <RelativeLayout
                 android:id="@+id/ll_select_receiver"
@@ -96,19 +98,19 @@
 
                 <TextView
                     style="@style/work_report_launch_left_text_style"
-                    android:text="@string/work_report_receiver" />
+                    android:text="@string/work_report_receiver"/>
 
                 <TextView
                     android:id="@+id/tv_receiver"
                     style="@style/work_report_launch_right_text_style"
                     android:drawableRight="@drawable/arrow_right"
-                    android:text="@string/work_report_please_select" />
+                    android:text="@string/work_report_please_select"/>
 
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"/>
 
         </LinearLayout>
     </ScrollView>

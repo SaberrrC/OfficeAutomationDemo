@@ -29,7 +29,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
     @Override
     public void getReportData(int dailyid) {
         String url = ApiJava.DAILY_REPORT + "/" + dailyid;
-        mKjHttp.jsonGet(url, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(url, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -47,7 +47,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+//                            mView.uidNull(0);
                             break;
                         default:
                             mView.getReportFailed("", "");
@@ -63,6 +63,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
+                    mView.uidNull(strMsg);
                     mView.getReportFailed("", "");
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -97,7 +98,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.ERROR_TOKEN:
-                            mView.uidNull(0);
+//                            mView.uidNull(0);
                             break;
                         default:
                             mView.updateReportFailed(jo.getString("message"));
@@ -113,6 +114,7 @@ public class WorkReportUpdatePresenter extends HttpPresenter<WorkReportUpdateCon
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 try {
+                    mView.uidNull(strMsg);
                     mView.updateReportFailed(strMsg);
                 } catch (Throwable e) {
                     e.printStackTrace();

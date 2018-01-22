@@ -6,41 +6,33 @@ import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Build;
-import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
+import android.util.Log;
+import android.webkit.WebView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechUtility;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.SDKOptions;
-import com.netease.nimlib.sdk.StatusBarNotificationConfig;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
-import com.pgyersdk.crash.PgyCrashManager;
+import com.hyphenate.easeui.crash.Cockroach;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.SelectJoinPeopleActivity;
-import com.shanlinjinrong.oa.ui.activity.main.WelcomePage;
 import com.shanlinjinrong.oa.ui.base.dagger.component.AppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerAppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.module.AppManagerModule;
 import com.shanlinjinrong.oa.ui.base.dagger.module.KjHttpModule;
-import com.shanlinjinrong.oa.utils.ScreenUtils;
 import com.shanlinjinrong.oa.utils.ToastManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -50,6 +42,7 @@ import java.util.Stack;
 
 import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
+import ren.yale.android.cachewebviewlib.CacheWebView;
 
 /**
  * 概述：
@@ -59,18 +52,8 @@ import cn.jpush.android.api.JPushInterface;
  */
 
 public class AppManager extends MultiDexApplication {
-    // 共享变量
-    private SelectJoinPeopleActivity.MyJoinHandler joinhandler = null;
 
-    // set方法
-    public void setJoinhandler(SelectJoinPeopleActivity.MyJoinHandler joinhandler) {
-        this.joinhandler = joinhandler;
-    }
-
-    // get方法
-    public SelectJoinPeopleActivity.MyJoinHandler getJoinhandler() {
-        return joinhandler;
-    }
+    private WebView mWebView;
 
     private static Stack<Activity> activityStack;
     private static AppManager instance;
@@ -99,22 +82,18 @@ public class AppManager extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        this.mContext = this;
+        mContext= this;
 
         //注册Crash接口（必选）
-        PgyCrashManager.register(this);
+        // PgyCrashManager.register(this);
         //查看数据库插件
         Stetho.initializeWithDefaults(this);
 
-        //初始化网易云信SDK
-        // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
-        //如果还没有登录用户，第二个参数传入空
-        NIMClient.init(this, null, options());
 
         Fresco.initialize(AppManager.mContext);
 
         //初始化讯飞语音
-        SpeechUtility.createUtility(AppManager.mContext, SpeechConstant.APPID + "=59ae7651");
+        // SpeechUtility.createUtility(AppManager.mContext, SpeechConstant.APPID + "=59ae7651");
 
         //极光初始化+
         BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(
@@ -124,6 +103,7 @@ public class AppManager extends MultiDexApplication {
         builder.notificationDefaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE |
                 Notification.DEFAULT_LIGHTS;
         JPushInterface.setPushNotificationBuilder(1, builder);
+
         // 设置为铃声与震动都要
         JPushInterface.setDebugMode(true);
         JPushInterface.init(AppManager.mContext);
@@ -142,9 +122,10 @@ public class AppManager extends MultiDexApplication {
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(AppManager.mContext);
         strategy.setUploadProcess(processName == null || processName.equals(packageName));
         if (BuildConfig.DEBUG) {
-            CrashReport.initCrashReport(AppManager.mContext, "72d31f8f77", true, strategy);
+            CrashReport.initCrashReport(AppManager.mContext, "d93608e360", true, strategy);
         } else {
             CrashReport.initCrashReport(AppManager.mContext, "72d31f8f77", false, strategy);
+            initCrash();
         }
 
         //解决7.0拍照文件uri闪退问题
@@ -153,76 +134,42 @@ public class AppManager extends MultiDexApplication {
             StrictMode.setVmPolicy(vmPolicyBuilder.build());
         }
 
-        //leakCanary
-//        if (!LeakCanary.isInAnalyzerProcess(this)) {
-        LeakCanary.install(this);
-//        }
-
+//        LeakCanary.install(this);
         //blockCanary
-//        BlockCanary.install(this, new AppBlockCanaryContext()).start();
+        //install(this, new AppBlockCanaryContext()).start();
 
         initAppComponent();
+        File cacheFile = new File(this.getCacheDir(), "cache_path_name");
+        CacheWebView.getCacheConfig().init(this, cacheFile.getAbsolutePath(), 1024 * 1024 * 20, 1024 * 1024 * 5)
+                .enableDebug(true);//20M 磁盘缓存空间,5M 内存缓存空间
     }
 
-    // 如果返回值为 null，则全部使用默认参数。
-    private SDKOptions options() {
-        SDKOptions options = new SDKOptions();
+    private void initCrash() {
 
-        // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
-        StatusBarNotificationConfig config = new StatusBarNotificationConfig();
-        config.notificationEntrance = WelcomePage.class; // 点击通知栏跳转到该Activity
-        config.notificationSmallIconId = R.mipmap.oa_logo;
-        // 呼吸灯配置
-        config.ledARGB = Color.GREEN;
-        config.ledOnMs = 1000;
-        config.ledOffMs = 1500;
-        // 通知铃声的uri字符串
-        config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";
-        options.statusBarNotificationConfig = config;
+        Cockroach.install(new Cockroach.ExceptionHandler() {
 
-        // 配置保存图片，文件，log 等数据的目录
-        // 如果 options 中没有设置这个值，SDK 会使用下面代码示例中的位置作为 SDK 的数据目录。
-        // 该目录目前包含 log, file, image, audio, video, thumb 这6个目录。
-        // 如果第三方 APP 需要缓存清理功能， 清理这个目录下面个子目录的内容即可。
-        String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim";
-        options.sdkStorageRootPath = sdkPath;
-
-        // 配置是否需要预下载附件缩略图，默认为 true
-        options.preloadAttach = true;
-
-        // 配置附件缩略图的尺寸大小。表示向服务器请求缩略图文件的大小
-        // 该值一般应根据屏幕尺寸来确定， 默认值为 Screen.width / 2
-        options.thumbnailSize = ScreenUtils.getScreenWidth(this) / 2;
-
-        // 用户资料提供者, 目前主要用于提供用户资料，用于新消息通知栏中显示消息来源的头像和昵称
-        options.userInfoProvider = new UserInfoProvider() {
-            @Override
-            public UserInfo getUserInfo(String account) {
-                return null;
-            }
+            // handlerException内部建议手动try{  你的异常处理逻辑  }catch(Throwable e){ } ，以防handlerException内部再次抛出异常，导致循环调用handlerException
 
             @Override
-            public int getDefaultIconResId() {
-                return R.mipmap.oa_logo;
-            }
+            public void handlerException(final Thread thread, final Throwable throwable) {
+                //开发时使用Cockroach可能不容易发现bug，所以建议开发阶段在handlerException中用Toast谈个提示框，
+                //由于handlerException可能运行在非ui线程中，Toast又需要在主线程，所以new了一个new Handler(Looper.getMainLooper())，
+                //所以千万不要在下面的run方法中执行耗时操作，因为run已经运行在了ui线程中。
+                //new Handler(Looper.getMainLooper())只是为了能弹出个toast，并无其他用途
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            //建议使用下面方式在控制台打印异常，这样就可以在Error级别看到红色log
+                            Log.e("AndroidRuntime", "--->CockroachException:" + thread + "<---", throwable);
+                            //                        throw new RuntimeException("..."+(i++));
+                        } catch (Throwable e) {
 
-            @Override
-            public Bitmap getTeamIcon(String tid) {
-                return null;
+                        }
+                    }
+                });
             }
-
-            @Override
-            public Bitmap getAvatarForMessageNotifier(String account) {
-                return null;
-            }
-
-            @Override
-            public String getDisplayNameForMessageNotifier(String account, String sessionId,
-                                                           SessionTypeEnum sessionType) {
-                return null;
-            }
-        };
-        return options;
+        });
     }
 
 
@@ -366,7 +313,7 @@ public class AppManager extends MultiDexApplication {
     /**
      * 退出应用程序
      */
-    public void AppExit() {
+    public void appExit() {
         try {
             finishAllActivity();
             //杀死该应用进程

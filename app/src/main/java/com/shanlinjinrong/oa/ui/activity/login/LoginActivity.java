@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -18,14 +19,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.model.User;
+import com.shanlinjinrong.oa.manager.AppManager;
+import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
-import com.shanlinjinrong.oa.ui.activity.main.MainController;
+import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.AndroidAdjustResizeBugFix;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -35,32 +38,33 @@ import com.shanlinjinrong.oa.views.KeyboardLayout;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.shanlinjinrong.oa.common.Api.RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR;
 
 /**
  * <h3>Description: 登录界面 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/30.<br />
  */
-public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View {
+public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View, View.OnKeyListener {
     @BindView(R.id.user_email)
-    EditText userEmail;
+    EditText       userEmail;
     @BindView(R.id.user_pwd)
-    EditText userPwd;
+    EditText       userPwd;
     @BindView(R.id.layout_root)
     KeyboardLayout mRootView;
     @BindView(R.id.login_scroll_view)
-    ScrollView mScrollView;
+    ScrollView     mScrollView;
     @BindView(R.id.cb_auto_login)
-    CheckBox mCbAutoLogin;
+    CheckBox       mCbAutoLogin;
     @BindView(R.id.tv_find_pwd)
-    TextView mTvFindPwd;
+    TextView       mTvFindPwd;
     private DoubleClickExitHelper doubleClickExitHelper;
-    private int UPDATE_RECYCLERVIEW_POSITION = 11;
-    private Handler mHandler = new Handler() {
+    private int     UPDATE_RECYCLERVIEW_POSITION = 11;
+    private Handler mHandler                     = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -69,7 +73,8 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             }
         }
     };
-    private boolean isAutoLogin = true;
+    private boolean isAutoLogin                  = true;
+    private long    lastClickTime                = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,13 +95,23 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     }
 
     private void initView() {
-        LogUtils.e("LoginActivity:initView");
+        userPwd.setOnKeyListener(this);
         mCbAutoLogin.setChecked(AppConfig.getAppConfig(LoginActivity.this).get(AppConfig.PREF_KEY_PASSWORD_FLAG, false));
         AppConfig.getAppConfig(LoginActivity.this).setAutoLogin(true);
-        userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
+        try {
+            userEmail.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_CODE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mTvFindPwd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
+                lastClickTime = currentTime;
                 startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class));
             }
         });
@@ -125,8 +140,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
                 mRootView.getWindowVisibleDisplayFrame(rect);
                 int screenHeight = mRootView.getRootView().getHeight();
                 int heightDifference = screenHeight - rect.bottom;
-                RelativeLayout.LayoutParams layoutParams = (
-                        RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
 
                 layoutParams.setMargins(0, 0, 0, heightDifference);
 
@@ -156,6 +170,10 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @OnClick(R.id.btn_login)
     public void onClick() {
+        SubmitLogin();
+    }
+
+    private void SubmitLogin() {
         if (mCbAutoLogin.isChecked()) {
             AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_LOGIN_PASSWORD, userPwd.getText().toString());
         } else {
@@ -164,8 +182,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
         if (check()) {
             //cxp添加，检验通过，隐藏软键盘
-            InputMethodManager imm =
-                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(userEmail.getWindowToken(), 0);
             showLoadingView();
             mPresenter.login(userEmail.getText().toString(), userPwd.getText().toString());
@@ -174,7 +191,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     private boolean check() {
         if (userEmail.getText().toString().equals("")) {
-            showToast("请输入您的邮箱帐号");
+            showToast("请输入您的邮箱帐号或员工号");
             return false;
         }
         if (!Utils.isRegex(Constants.Regex.REGEX_EMAIL, userEmail.getText().toString())) {
@@ -215,17 +232,19 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @Override
     public void loginSuccess(JSONObject userInfo) {
+    }
+
+    @Override
+    public void loginSuccess(UserInfo.DataBean user) {
         //登录成功后清空原来的信息
         AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
-        //保存登录用户信息
-        User user = new User(userInfo);
         LogUtils.e("user->" + user);
         AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
         goToLogin();
     }
 
     @Override
-    public void loginFailed(int errorCode) {
+    public void loginFailed(String errorCode) {
         hideLoadingView();
         catchWarningByCode(errorCode);
     }
@@ -239,9 +258,12 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     @Override
     public void accountOrPswError(int errorCode, String msg) {
         hideLoadingView();
-        if (errorCode == RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR) {
-            userPwd.setText("");
-        }
+        showToast(msg);
+    }
+
+    @Override
+    public void accountOrPswError(String msg) {
+        hideLoadingView();
         showToast(msg);
     }
 
@@ -251,7 +273,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         hideLoadingView();
     }
 
@@ -259,7 +281,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     private void goToLogin() {
         showToast("登录成功");
         hideLoadingView();
-        startActivity(new Intent(LoginActivity.this, MainController.class));
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
 
@@ -268,5 +290,15 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         Intent intent = new Intent(context, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(intent);
+    }
+
+    //监听 回车登陆
+    @Override
+    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+            SubmitLogin();
+            return true;
+        }
+        return false;
     }
 }

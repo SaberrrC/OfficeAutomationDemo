@@ -11,33 +11,76 @@ import com.shanlinjinrong.oa.manager.AppManager;
  */
 public class Constants {
 
-    //TODO 当前版本为测试环境，baseurl写死了，没用，先放这
-    public final static String GETBASEURLCID = "6";
 
-    public final static String CID = "sl";//公司ID
+    /***************环信错误码***************/
+    /**
+     * 服务器繁忙
+     */
+    public final static int SERVER_BUSY = 302;
+    /**
+     * 无法访问到服务器
+     */
+    public final static int SERVER_NOT_REACHABLE = 300;
+    /**
+     * 聊天功能限制
+     */
+    public final static int SERVER_SERVICE_RESTRICTED = 305;
+    /**
+     * 服务器响应超时
+     */
+    public final static int SERVER_TIMEOUT = 301;
+    /**
+     * 未知的服务异常
+     */
+    public final static int SERVER_UNKNOWN_ERROR = 303;
+    /**
+     * 群组不存在
+     */
+    public final static int GROUP_NOT_EXIST = 605;
+    /**
+     * 尚未加入此群组
+     */
+    public final static int GROUP_NOT_JOINED = 602;
+    /**
+     * 群id不正确
+     */
+    public final static int GROUP_INVALID_ID = 600;
+
+
+    /**
+     * 公司ID
+     */
+    public final static String CID = "sl";
 
     //TODO 打包时候更改 善林图片前缀:public.sl.s1.zhitongoa.com
-    public final static String SLPicBaseUrl = "http://";
+    //public final static String SLPicBaseUrl = "http://public.testoa.shanlinjinrong.com";
 
+    //public final static String PHPSLPicBaseUrl = "http://";
 
     /**
-     * 日程安排的会议安排标识
+     * 日报临时数据
      */
-    public final static String MEETING_PLAN = "meeting_plan";
-    /**
-     * 日程安排的我发起的会议标识
-     */
-    public final static String ME_LAUNCH_MEETING = "me_launch_meeting";
-    /**
-     * 推送消息进入会议详情的标识
-     */
-    public final static String PUSH_CONFORM_MEETING = "push_conform_meeting";
-
-    //日报临时数据
     public final static String WORK_REPORT_TEMP_DATA = "work_report_temp_data";
 
-    //周报临时数据
-    public final static String WORK_WEEKLY_TEMP_DATA ="work_weekly_temp_data";
+    /**
+     * 周报临时数据
+     */
+    public final static String WORK_WEEKLY_TEMP_DATA = "work_weekly_temp_data";
+
+    /**
+     * 找回密码
+     */
+    public final static String PHONE_STATUS = "phone_status";
+    /**
+     * 查询手机号
+     */
+    public final static String PHONE_NUMBER = "phone_number";
+    /**
+     * 工号
+     */
+    public final static String USER_CODE = "user_code";
+
+    public final static String USER_NAME = "user_name";
 
 
     /**
@@ -47,6 +90,40 @@ public class Constants {
     public static final String MESSAGE_ATTR_IS_VOICE_CALL = "voice";
     public static final String MESSAGE_ATTR_IS_VIDEO_CALL = "video";
 
+    // ---------------------------------- 选择通讯录 ----------------------------------
+
+    public static final String SELECTEDTYEPE = "selected_type";
+
+    // ---------------------------------- 群组 ----------------------------------
+
+    public static final String GROUPNAME = "group_name";
+    public static final String FINISH_GROUP = "finish_group";
+    public static final String ISGROUPOWNER = "isOwner";
+
+    /**
+     * 群名称更改
+     */
+    public static final int MODIFICATIONNAME = 0;
+    /**
+     * 群解散
+     */
+    public static final int GROUPDISSOLVE = 1;
+    /**
+     * 成员退出
+     */
+    public static final int GROUPMEMBERQUIT = 2;
+    /**
+     * 成员加入
+     */
+    public static final int GROUPMEMBERADD = 3;
+    /**
+     * 群主更改
+     */
+    public static final int GROUPOWNERCHANGE = 4;
+
+    // ---------------------------------- 群组 详情 ----------------------------------
+    public static final String MEMBERADD = "add";
+    public static final String MEMBERDELETE = "delete";
 
     /****************6.0权限*********************/
     /**

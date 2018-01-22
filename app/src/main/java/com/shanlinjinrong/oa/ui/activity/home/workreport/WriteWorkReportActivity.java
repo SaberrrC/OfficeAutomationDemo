@@ -162,7 +162,7 @@ public class WriteWorkReportActivity extends FragmentActivity implements WriteRe
                 getResources().getColor(R.color.btn_text_logout));
     }
 
-
+    @Override
     public void onBackPressed() {
         isBack = true;
         int curPage = mViewPager.getCurrentItem();

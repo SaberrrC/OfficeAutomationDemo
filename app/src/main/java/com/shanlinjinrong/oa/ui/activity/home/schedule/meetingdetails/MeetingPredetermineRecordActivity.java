@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MeetingBookItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.concract.MeetingPredetermineContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.presenter.MeetingPredeterminePresenter;
@@ -22,8 +21,6 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
@@ -174,10 +171,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
             case R.id.btn_meeting_info_complete:
                 beginDate = null;
                 DateIndex = 0;
-                if (!isNetwork) {
+            /*    if (!isNetwork) {
                     showToast(getString(R.string.net_no_connection));
                     return;
-                }
+                }*/
                 for (int i = 0; i < mCheckBoxes.size(); i++) {
                     if (mCheckBoxes.get(i).isChecked()) {
                         if (i - DateIndex == 1 || (DateIndex == 0 && beginDate == null)) {
@@ -201,16 +198,21 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
 
                 if (mModifyMeeting) {
+
+
                     HttpParams httpParams = new HttpParams();
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
-                        jsonObject.put("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    httpParams.putJsonParams(jsonObject.toString());
-                    mPresenter.modifyMeetingRooms(getIntent().getIntExtra("id", -1), httpParams);
+//                    JSONObject jsonObject = new JSONObject();
+//                    try {
+//                        jsonObject.put("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
+//                        jsonObject.put("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    httpParams.putJsonParams(jsonObject.toString());
+                    httpParams.put("start_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + beginDate);
+                    httpParams.put("end_time", DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos + " " + endDate);
+                    httpParams.put("meeting_id", getIntent().getIntExtra("id", -1));
+                    mPresenter.modifyMeetingRooms(httpParams);
                     return;
                 }
 
@@ -257,8 +259,8 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         }
         for (int i = 0; i < mSelectTime.size(); i++) {
             //接口返回的数据是秒
-            long startTime = Long.parseLong(mSelectTime.get(i).getStart_time());
-            long endTime = Long.parseLong(mSelectTime.get(i).getEnd_time());
+            long startTime = Long.parseLong(String.valueOf(mSelectTime.get(i).getStart_time()));
+            long endTime = Long.parseLong(String.valueOf(mSelectTime.get(i).getEnd_time()));
 
             if (DateUtils.isSameDay(startTime * 1000, date)) {
                 try {
@@ -267,18 +269,19 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
                     mBeginDate = getIntent().getStringExtra("startTime");
                     mEndDate = getIntent().getStringExtra("endTime");
+
+                    for (int j = mStart - 9; j <= mEnd - 10; j++) {
+                        setTimeEnable(j, false, false);
+                    }
                     if (mBeginDate != null && mEndDate != null) {
                         String day = mBeginDate.substring(mBeginDate.indexOf("日") - 2, mBeginDate.indexOf("日"));
                         if (mBeginDate.contains(mStart + "") && mEndDate.contains(mEnd + "") && day.contains(mDayPos + "")) {
+//                            setTimeEnable(mStart - 9, true, true);
                             for (int j = mStart - 9; j <= mEnd - 10; j++) {
                                 setTimeEnable(j, true, true);
                                 mBtnMeetingInfoComplete.setEnabled(false);
                             }
-                            return;
                         }
-                    }
-                    for (int j = mStart - 9; j <= mEnd - 10; j++) {
-                        setTimeEnable(j, false, false);
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -288,7 +291,7 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 
@@ -325,6 +328,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     @Override
     public void getMeetingPredetermineFailed(int errorCode, String msgStr) {
+        if ("auth error".equals(msgStr)) {
+            catchWarningByCode(msgStr);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 isNetwork = false;
@@ -332,11 +339,11 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
                 mTvNotNetwork.setVisibility(View.VISIBLE);
                 mLlContentShow.setVisibility(View.GONE);
                 break;
-            case Api.RESPONSES_CODE_DATA_EMPTY:
-                mTvNotNetwork.setText("会议室预定错误，请重试");
-                mTvNotNetwork.setVisibility(View.VISIBLE);
-                mLlContentShow.setVisibility(View.GONE);
-                break;
+//            case Api.RESPONSES_CODE_DATA_EMPTY:
+//                mTvNotNetwork.setText("会议室预定错误，请重试");
+//                mTvNotNetwork.setVisibility(View.VISIBLE);
+//                mLlContentShow.setVisibility(View.GONE);
+//                break;
             default:
                 mTvNotNetwork.setVisibility(View.GONE);
                 mLlContentShow.setVisibility(View.VISIBLE);
@@ -363,8 +370,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     @Override
     public void modifyMeetingRoomsFailed(int errorCode, String strMsg) {
-
-
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.net_no_connection));
@@ -378,10 +387,10 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (!isNetwork) {
+    /*    if (!isNetwork) {
             mPresenter.getMeetingPredetermine(mMeetingId);
             return;
-        }
+        }*/
         mBtnMeetingInfoComplete.setEnabled(true);
         switch (compoundButton.getId()) {
             case R.id.selected_meeting_date1:
@@ -544,31 +553,28 @@ public class MeetingPredetermineRecordActivity extends HttpBaseActivity<MeetingP
         }
         datePopWindow.setData(isDay, month, selectPos);
         datePopWindow.show();
-        datePopWindow.setItemClick(new DatePopWindow.PopItemClick() {
-            @Override
-            public void onPopItemClick(boolean isDay, int position) {
-                if (isDay) {
-                    mDayPos = mDays.get(position);
-                    mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
-                } else {
-                    mMonthPos = position;
-                    mTvMonth.setText(mMonthArrays[mMonthPos]);
-                    int maxDay = DateUtils.getCurrentDaysInMonth(mMonthPos + 1);
-                    if (mDayPos > maxDay) {
-                        mDayPos = maxDay;
-                    }
-
-                    if (DateUtils.getCurrentMonth() == mMonthPos && mDayPos < DateUtils.getCurrentDay()) {
-                        mDayPos = DateUtils.getCurrentDay();
-                    }
+        datePopWindow.setItemClick((isDay1, position) -> {
+            if (isDay1) {
+                mDayPos = mDays.get(position);
+                mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
+            } else {
+                mMonthPos = position;
+                mTvMonth.setText(mMonthArrays[mMonthPos]);
+                int maxDay = DateUtils.getCurrentDaysInMonth(mMonthPos + 1);
+                if (mDayPos > maxDay) {
+                    mDayPos = maxDay;
                 }
 
-                mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
-                mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
-
-                refreshSelectTime(DateUtils.stringToDate(DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos, "yyyy-MM-dd"));
-
+                if (DateUtils.getCurrentMonth() == mMonthPos && mDayPos < DateUtils.getCurrentDay()) {
+                    mDayPos = DateUtils.getCurrentDay();
+                }
             }
+
+            mTvDay.setText("" + findDay(mMonthPos + 1, mDayPos) + "日");
+            mTvWeek.setText(mWeekArray[getWeek(mMonthPos + 1, mDayPos)]);
+
+            refreshSelectTime(DateUtils.stringToDate(DateUtils.getCurrentYear() + "-" + (mMonthPos + 1) + "-" + mDayPos, "yyyy-MM-dd"));
+
         });
     }
 

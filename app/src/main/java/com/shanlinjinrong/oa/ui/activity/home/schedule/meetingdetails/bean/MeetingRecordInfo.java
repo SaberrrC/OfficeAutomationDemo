@@ -8,30 +8,31 @@ import java.util.List;
 
 public class MeetingRecordInfo {
 
+
     /**
-     * code : 200
-     * info : success
-     * data : {"id":"41","uid":"618","title":"3","content":"吧","start_time":"1508227200","end_time":"1508230800","meeting_place":"32","room_id":"3","send_type":"邮件,消息","created":"1508228436","send_user":"赵贇","part_name":[{"id":"67874","username":"舒培培"}],"roomname":"3","address":"32","device":"23","nop":"3332","isuse":"123","roomimg":null}
+     * code : 000000
+     * message : success
+     * data : {"id":440,"title":"￦ﾵﾋ￨ﾯﾕ","content":"￦ﾚﾂ￦ﾗﾠ","created":1514518644,"start_time":1514516400,"end_time":1514520000,"room_id":2,"roomname":"火星","meeting_place":"星创5F","nop":20,"device":"投影仪","isuse":1,"send_user":"杨佳晨","uid":50363,"send_type":"￦ﾶﾈ￦ﾁﾯ","part_name":[{"id":46636,"username":"崔娜"}]}
      */
 
-    private int code;
-    private String info;
+    private String code;
+    private String   message;
     private DataBean data;
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
-    public String getInfo() {
-        return info;
+    public String getMessage() {
+        return message;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public DataBean getData() {
@@ -44,59 +45,47 @@ public class MeetingRecordInfo {
 
     public static class DataBean {
         /**
-         * id : 41
-         * uid : 618
-         * title : 3
-         * content : 吧
-         * start_time : 1508227200
-         * end_time : 1508230800
-         * meeting_place : 32
-         * room_id : 3
-         * send_type : 邮件,消息
-         * created : 1508228436
-         * send_user : 赵贇
-         * part_name : [{"id":"67874","username":"舒培培"}]
-         * roomname : 3
-         * address : 32
-         * device : 23
-         * nop : 3332
-         * isuse : 123
-         * roomimg : null
+         * id : 440
+         * title : ￦ﾵﾋ￨ﾯﾕ
+         * content : ￦ﾚﾂ￦ﾗﾠ
+         * created : 1514518644
+         * start_time : 1514516400
+         * end_time : 1514520000
+         * room_id : 2
+         * roomname : 火星
+         * meeting_place : 星创5F
+         * nop : 20
+         * device : 投影仪
+         * isuse : 1
+         * send_user : 杨佳晨
+         * uid : 50363
+         * send_type : ￦ﾶﾈ￦ﾁﾯ
+         * part_name : [{"id":46636,"username":"崔娜"}]
          */
 
-        private String id;
-        private String uid;
-        private String title;
-        private String content;
-        private String start_time;
-        private String end_time;
-        private String meeting_place;
-        private String room_id;
-        private String send_type;
-        private String created;
-        private String send_user;
-        private String roomname;
-        private String address;
-        private String device;
-        private String nop;
-        private String isuse;
-        private Object roomimg;
+        private int id;
+        private String             title;
+        private String             content;
+        private int                created;
+        private int                start_time;
+        private int                end_time;
+        private int                room_id;
+        private String             roomname;
+        private String             meeting_place;
+        private int                nop;
+        private String             device;
+        private int                isuse;
+        private String             send_user;
+        private int                uid;
+        private String             send_type;
         private List<PartNameBean> part_name;
 
-        public String getId() {
+        public int getId() {
             return id;
         }
 
-        public void setId(String id) {
+        public void setId(int id) {
             this.id = id;
-        }
-
-        public String getUid() {
-            return uid;
-        }
-
-        public void setUid(String uid) {
-            this.uid = uid;
         }
 
         public String getTitle() {
@@ -115,60 +104,36 @@ public class MeetingRecordInfo {
             this.content = content;
         }
 
-        public String getStart_time() {
-            return start_time;
-        }
-
-        public void setStart_time(String start_time) {
-            this.start_time = start_time;
-        }
-
-        public String getEnd_time() {
-            return end_time;
-        }
-
-        public void setEnd_time(String end_time) {
-            this.end_time = end_time;
-        }
-
-        public String getMeeting_place() {
-            return meeting_place;
-        }
-
-        public void setMeeting_place(String meeting_place) {
-            this.meeting_place = meeting_place;
-        }
-
-        public String getRoom_id() {
-            return room_id;
-        }
-
-        public void setRoom_id(String room_id) {
-            this.room_id = room_id;
-        }
-
-        public String getSend_type() {
-            return send_type;
-        }
-
-        public void setSend_type(String send_type) {
-            this.send_type = send_type;
-        }
-
-        public String getCreated() {
+        public int getCreated() {
             return created;
         }
 
-        public void setCreated(String created) {
+        public void setCreated(int created) {
             this.created = created;
         }
 
-        public String getSend_user() {
-            return send_user;
+        public int getStart_time() {
+            return start_time;
         }
 
-        public void setSend_user(String send_user) {
-            this.send_user = send_user;
+        public void setStart_time(int start_time) {
+            this.start_time = start_time;
+        }
+
+        public int getEnd_time() {
+            return end_time;
+        }
+
+        public void setEnd_time(int end_time) {
+            this.end_time = end_time;
+        }
+
+        public int getRoom_id() {
+            return room_id;
+        }
+
+        public void setRoom_id(int room_id) {
+            this.room_id = room_id;
         }
 
         public String getRoomname() {
@@ -179,12 +144,20 @@ public class MeetingRecordInfo {
             this.roomname = roomname;
         }
 
-        public String getAddress() {
-            return address;
+        public String getMeeting_place() {
+            return meeting_place;
         }
 
-        public void setAddress(String address) {
-            this.address = address;
+        public void setMeeting_place(String meeting_place) {
+            this.meeting_place = meeting_place;
+        }
+
+        public int getNop() {
+            return nop;
+        }
+
+        public void setNop(int nop) {
+            this.nop = nop;
         }
 
         public String getDevice() {
@@ -195,28 +168,36 @@ public class MeetingRecordInfo {
             this.device = device;
         }
 
-        public String getNop() {
-            return nop;
-        }
-
-        public void setNop(String nop) {
-            this.nop = nop;
-        }
-
-        public String getIsuse() {
+        public int getIsuse() {
             return isuse;
         }
 
-        public void setIsuse(String isuse) {
+        public void setIsuse(int isuse) {
             this.isuse = isuse;
         }
 
-        public Object getRoomimg() {
-            return roomimg;
+        public String getSend_user() {
+            return send_user;
         }
 
-        public void setRoomimg(Object roomimg) {
-            this.roomimg = roomimg;
+        public void setSend_user(String send_user) {
+            this.send_user = send_user;
+        }
+
+        public int getUid() {
+            return uid;
+        }
+
+        public void setUid(int uid) {
+            this.uid = uid;
+        }
+
+        public String getSend_type() {
+            return send_type;
+        }
+
+        public void setSend_type(String send_type) {
+            this.send_type = send_type;
         }
 
         public List<PartNameBean> getPart_name() {
@@ -229,18 +210,18 @@ public class MeetingRecordInfo {
 
         public static class PartNameBean {
             /**
-             * id : 67874
-             * username : 舒培培
+             * id : 46636
+             * username : 崔娜
              */
 
-            private String id;
+            private int id;
             private String username;
 
-            public String getId() {
+            public int getId() {
                 return id;
             }
 
-            public void setId(String id) {
+            public void setId(int id) {
                 this.id = id;
             }
 

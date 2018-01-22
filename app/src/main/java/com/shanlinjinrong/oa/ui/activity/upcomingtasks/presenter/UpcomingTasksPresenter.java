@@ -52,7 +52,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
         if (!TextUtils.isEmpty(time)) {
             stringBuilder.append("&" + "time=" + time);
         }
-        mKjHttp.jsonGet(stringBuilder.toString(), httpParams, new HttpCallBack() {
+        mKjHttp.get(stringBuilder.toString(), httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -88,6 +88,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.onGetApproveDataFailure(errorNo, strMsg);
                     }
                 } catch (Exception e) {
@@ -124,7 +125,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
         if (!TextUtils.isEmpty(userName)) {
             stringBuilder.append("&" + "userName=" + userName);
         }
-        mKjHttp.jsonGet(stringBuilder.toString(), httpParams, new HttpCallBack() {
+        mKjHttp.get(stringBuilder.toString(), httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -148,7 +149,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     e.printStackTrace();
                     if (t.contains("\"code\":\"020000\"")) {
                         if (mView != null) {
-                            mView.onSearchFailure(020000, "查询无结果");
+                            mView.onSearchFailure(020000, "暂无内容");
                         }
                         return;
                     }
@@ -165,6 +166,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.onGetApproveDataFailure(errorNo, strMsg);
                     }
                 } catch (Throwable e) {
@@ -186,6 +188,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 super.onFailure(errorNo, strMsg);
                 try {
                     if (mView != null) {
+                        mView.uidNull(strMsg);
                         mView.onApproveFailure(errorNo, strMsg);
                     }
                 } catch (Exception e) {

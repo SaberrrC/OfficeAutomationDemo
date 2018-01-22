@@ -2,9 +2,11 @@ package com.shanlinjinrong.oa.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
-import com.example.retrofit.net.RetrofitConfig;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.model.User;
+import com.shanlinjinrong.oa.model.UserInfo;
 
 
 /**
@@ -13,13 +15,13 @@ import com.shanlinjinrong.oa.model.User;
  */
 public class AppConfig {
 
-    private static final String IS_AUTO_LOGIN = "is_auto_login";
-    public static final String PREF_KEY_YX_TOKEN = "yx_token";
+    private static final String IS_AUTO_LOGIN     = "is_auto_login";
+    public static final  String PREF_KEY_YX_TOKEN = "yx_token";
 
-    private Context context;
+    private        Context   context;
     private static AppConfig appConfig;
 
-    private static final String APP_CONFIG = "app_config";
+    public static final String APP_CONFIG = "app_config";
 
     /**
      * 字符串参数默认值，判断需要判断此值，而不是""
@@ -31,63 +33,63 @@ public class AppConfig {
      */
     public static final String USER_TYPE_BI = "1";
 
-    /**
+    /**Mal
      * 网络请求baseUrl
      */
     public static final String BASE_URL = "base_url";
 
     //department
-    public static final String PREF_KEY_DEPARTMENT = "pref_key_user_departmentId";
+    public static final String PREF_KEY_DEPARTMENT      = "pref_key_user_departmentId";
     //oid
-    public static final String PREF_KEY_OID = "pref_key_user_oid";
+    public static final String PREF_KEY_OID             = "pref_key_user_oid";
     //isleader
-    public static final String PREF_KEY_ISLEADER = "pref_key_isLeader";
+    public static final String PREF_KEY_ISLEADER        = "pref_key_isLeader";
     //user uuid
-    public static final String PREF_KEY_USER_UID = "pref_key_user_uid";
+    public static final String PREF_KEY_USER_UID        = "pref_key_user_uid";
     //user token
-    public static final String PREF_KEY_TOKEN = "pref_key_private_token";
+    public static final String PREF_KEY_TOKEN           = "pref_key_private_token";
     //user email
-    public static final String PREF_KEY_USER_EMAIL = "pref_key_user_email";
+    public static final String PREF_KEY_USER_EMAIL      = "pref_key_user_email";
     //头像
-    public static final String PREF_KEY_PORTRAITS = "pref_key_private_portraits";
+    public static final String PREF_KEY_PORTRAITS       = "pref_key_private_portraits";
     //用户名
-    public static final String PREF_KEY_USERNAME = "pref_key_private_username";
+    public static final String PREF_KEY_USERNAME        = "pref_key_private_username";
     //是否是领导
-    public static final String PREF_KEY_IS_LEADER = "pref_key_is_leader";
+    public static final String PREF_KEY_IS_LEADER       = "pref_key_is_leader";
     //性别
-    public static final String PREF_KEY_SEX = "pref_key_private_sex";
+    public static final String PREF_KEY_SEX             = "pref_key_private_sex";
     //手机号码
-    public static final String PREF_KEY_PHONE = "pref_key_private_phone";
+    public static final String PREF_KEY_PHONE           = "pref_key_private_phone";
     //入职日期
-    public static final String PREF_KEY_HIREDATE = "pref_key_private_hiredate";
+    public static final String PREF_KEY_HIREDATE        = "pref_key_private_hiredate";
     //公司名称
-    public static final String PREF_KEY_COMPANY_NAME = "pref_key_private_company_name";
+    public static final String PREF_KEY_COMPANY_NAME    = "pref_key_private_company_name";
     //岗位名称
-    public static final String PREF_KEY_POST_NAME = "pref_key_private_post_name";
+    public static final String PREF_KEY_POST_NAME       = "pref_key_private_post_name";
     //岗位工号
-    public static final String PREF_KEY_CODE = "pref_key_private_code";
+    public static final String PREF_KEY_CODE            = "pref_key_private_code";
     //登录密码
-    public static final String PREF_KEY_LOGIN_PASSWORD = "pref_key_private_login_password";
+    public static final String PREF_KEY_LOGIN_PASSWORD  = "pref_key_private_login_password";
     //记住密码
-    public static final String PREF_KEY_PASSWORD_FLAG = "pref_key_private_password_flag";
+    public static final String PREF_KEY_PASSWORD_FLAG   = "pref_key_private_password_flag";
     //部门名称
     public static final String PREF_KEY_DEPARTMENT_NAME = "pref_key_private_department_name";
     //是否是原始密码
-    public static final String PREF_KEY_IS_INIT_PWD = "pref_key_private_is_init_pwd";
+    public static final String PREF_KEY_IS_INIT_PWD     = "pref_key_private_is_init_pwd";
     //1-进入bi, 0进入首页
-    public static final String PREF_KEY_TYPE = "pref_key_private_type";
+    public static final String PREF_KEY_TYPE            = "pref_key_private_type";
     //即时通讯未读条数
-    public static final String COMMUNICATION_COUNT = "communication_count";
+    public static final String COMMUNICATION_COUNT      = "communication_count";
 
 
     /**
      * 岗位ID
      */
-    private static final String PREF_KEY_POST_ID = "pref_key_post_id";
+    private static final String PREF_KEY_POST_ID       = "pref_key_post_id";
     /**
      * 部门ID
      */
-    public static final String PREF_KEY_DEPARTMENT_ID = "pref_key_department_id";
+    public static final  String PREF_KEY_DEPARTMENT_ID = "pref_key_department_id";
 
     public static AppConfig getAppConfig(Context context) {
         if (appConfig == null) {
@@ -104,8 +106,11 @@ public class AppConfig {
      * @return 参数值
      */
     public String get(String key) {
-        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE)
-                .getString(key, DEFAULT_ARGUMENTS_VALUE);
+        String string = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString(key, DEFAULT_ARGUMENTS_VALUE);
+        if (TextUtils.equals("null", string)) {
+            return "";
+        }
+        return string;
     }
 
     /**
@@ -115,8 +120,7 @@ public class AppConfig {
      * @return 参数值
      */
     public boolean get(String key, boolean b) {
-        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE)
-                .getBoolean(key, b);
+        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getBoolean(key, b);
     }
 
 
@@ -163,30 +167,31 @@ public class AppConfig {
         return get(PREF_KEY_CODE);
     }
 
-    public void set(User user, Boolean isAutoLogin) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+    public void set(UserInfo.DataBean user, Boolean isAutoLogin) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putString(PREF_KEY_TOKEN, user.getToken());
         editor.putString(PREF_KEY_CODE, user.getCode());
-        editor.putString(PREF_KEY_USER_UID, user.getUid());
+        if (!TextUtils.isEmpty(user.getUid())) {
+            editor.putString(PREF_KEY_USER_UID, user.getUid());
+        }
         editor.putString(PREF_KEY_USER_EMAIL, user.getEmail());
-        editor.putString(PREF_KEY_DEPARTMENT_ID, user.getDepartmentId());
-        editor.putString(PREF_KEY_POST_ID, user.getPostId());
+        editor.putString(PREF_KEY_DEPARTMENT_ID, user.getDepartment_id());
+        editor.putString(PREF_KEY_POST_ID, user.getPost_id());
         editor.putString(PREF_KEY_USERNAME, user.getUsername());
         editor.putString(PREF_KEY_SEX, user.getSex());
         editor.putString(PREF_KEY_PHONE, user.getPhone());
         editor.putString(PREF_KEY_HIREDATE, user.getHiredate());
-        editor.putString(PREF_KEY_COMPANY_NAME, user.getCompanyName());
-        editor.putString(PREF_KEY_DEPARTMENT_NAME, user.getDepartmentName());
-        editor.putString(PREF_KEY_PORTRAITS, user.getPortraits());
-        editor.putString(PREF_KEY_POST_NAME, user.getPostName());
+        editor.putString(PREF_KEY_COMPANY_NAME, user.getCompany_name());
+        editor.putString(PREF_KEY_DEPARTMENT_NAME, user.getDepartment_name());
+        editor.putString(PREF_KEY_PORTRAITS, user.getPortrait());
+        editor.putString(PREF_KEY_POST_NAME, user.getPost_title());
         editor.putString(PREF_KEY_IS_LEADER, user.getIsleader());
         editor.putBoolean(IS_AUTO_LOGIN, isAutoLogin);
         editor.putString(PREF_KEY_IS_INIT_PWD, user.getIs_initial_pwd());
         editor.putString(PREF_KEY_YX_TOKEN, user.getYx_token());
         editor.putString(PREF_KEY_ISLEADER, user.getIsleader());
         editor.putString(PREF_KEY_OID, user.getOid());
-        editor.putString(PREF_KEY_DEPARTMENT, user.getDepartmentId());
+        editor.putString(PREF_KEY_DEPARTMENT, user.getDepartment_id());
         editor.apply();
     }
 
@@ -197,8 +202,7 @@ public class AppConfig {
      * @param value
      */
     public void set(String key, String value) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putString(key, value);
         editor.apply();
     }
@@ -210,8 +214,7 @@ public class AppConfig {
      * @param value
      */
     public void set(String key, boolean value) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putBoolean(key, value);
         editor.apply();
     }
@@ -222,8 +225,7 @@ public class AppConfig {
      * @param autoLogin
      */
     public void setAutoLogin(boolean autoLogin) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putBoolean(IS_AUTO_LOGIN, autoLogin);
         editor.apply();
     }
@@ -234,16 +236,14 @@ public class AppConfig {
      * @return
      */
     public boolean isAutoLogin() {
-        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE)
-                .getBoolean(IS_AUTO_LOGIN, false);
+        return context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getBoolean(IS_AUTO_LOGIN, false);
     }
 
     /**
      * 登出需要调用此方式
      */
     public void clearLoginInfo() {
-        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG,
-                Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).edit();
         editor.putString(PREF_KEY_TOKEN, DEFAULT_ARGUMENTS_VALUE);
         editor.putString(PREF_KEY_USER_UID, DEFAULT_ARGUMENTS_VALUE);
         editor.putString(PREF_KEY_DEPARTMENT_ID, DEFAULT_ARGUMENTS_VALUE);
@@ -259,8 +259,6 @@ public class AppConfig {
         editor.putString(PREF_KEY_TYPE, DEFAULT_ARGUMENTS_VALUE);
         editor.putString(PREF_KEY_YX_TOKEN, DEFAULT_ARGUMENTS_VALUE);
         editor.putBoolean(IS_AUTO_LOGIN, false);
-        //关心存入结果则使用commit如果不关心存入结果则使用apply
-        //editor.apply();
-        editor.commit();
+        editor.apply();
     }
 }

@@ -85,7 +85,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
                         case ApiJava.REQUEST_TOKEN_OUT_TIME:
                         case ApiJava.ERROR_TOKEN:
                             if (mView != null) {
-                                mView.uidNull(0);
+//                                mView.uidNull(0);
                             }
                             break;
                         default:
@@ -105,6 +105,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 if (mView != null) {
+                    mView.uidNull(strMsg);
                     mView.loadDataFailed(errorNo, strMsg);
                 }
             }
@@ -124,7 +125,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
         String url = reportType == 1 ? ApiJava.REJECT_DAILY_REPORT : ApiJava.REJECT_WEEK_REPORT;
         url += dailyId;
         mKjHttp.cleanCache();
-        mKjHttp.jsonGet(url, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(url, new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -142,7 +143,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
                         case ApiJava.REQUEST_TOKEN_NOT_EXIST:
                         case ApiJava.ERROR_TOKEN:
                             if (mView != null) {
-                                mView.uidNull(0);
+//                                mView.uidNull(0);
                             }
                             break;
                         default:
@@ -161,6 +162,7 @@ public class WorkReportCheckPresenter extends HttpPresenter<WorkReportCheckContr
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 if (mView != null) {
+                    mView.uidNull(strMsg);
                     mView.rejectReportFailed(errorNo, strMsg);
                 }
             }

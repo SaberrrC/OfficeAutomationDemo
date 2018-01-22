@@ -1,24 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
-import com.example.retrofit.net.ApiException;
 import com.example.retrofit.net.HttpMethods;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.net.MyKjHttp;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.contract.CreateNoteContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandanceMonthContract;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.MyAttendenceActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
-import com.shanlinjinrong.oa.utils.LogUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
 
 import java.net.ConnectException;
 import java.net.SocketException;
@@ -53,10 +42,13 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
             public void onError(Throwable e) {
                 try {
                     if (e instanceof HttpException) {
+                        if (((HttpException) e).code() == 401) {
+                            mView.uidNull(((HttpException) e).code() + "");
+                            return;
+                        }
                         if (((HttpException) e).code() > 400) {
                             mView.sendDataFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
-                        mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
                         mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
                     } else if (e instanceof NullPointerException) {
@@ -97,7 +89,7 @@ public class AttandanceMonthPresenter extends HttpPresenter<AttandanceMonthContr
                         if (((HttpException) e).code() > 400) {
                             mView.sendDataFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
-                        mView.uidNull(((HttpException) e).code());
+//                        mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
                         mView.sendDataFailed(-1, "网络不通，请检查网络连接！");
                     } else if (e instanceof NullPointerException) {

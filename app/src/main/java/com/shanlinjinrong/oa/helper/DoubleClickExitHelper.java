@@ -37,7 +37,7 @@ public class DoubleClickExitHelper {
                 backToast.cancel();
             }
             // 退出
-            AppManager.sharedInstance().AppExit();
+            AppManager.sharedInstance().appExit();
         } else {
             isOnKeyBacking = true;
             if(backToast == null) {

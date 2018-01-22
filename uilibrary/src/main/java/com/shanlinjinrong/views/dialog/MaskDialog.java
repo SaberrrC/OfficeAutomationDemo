@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.shanlinjinrong.uilibrary.R;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,6 +26,7 @@ public class MaskDialog extends Dialog {
 
     Drawable mDrawable;
     private ImageView image;
+    private long lastClickTime = 0;
 
     public MaskDialog(Context context, @DrawableRes int drawableId) {
         this(context, drawableId, R.style.TipDialog);
@@ -49,6 +51,12 @@ public class MaskDialog extends Dialog {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime < 1000) {
+                    lastClickTime = currentTime;
+                    return;
+                }
+                lastClickTime = currentTime;
                 dismiss();
             }
         });

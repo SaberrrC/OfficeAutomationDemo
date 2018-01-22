@@ -18,6 +18,6 @@ public interface ModifyPhoneActivityContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void modifyPhone(String departmentId, String phoneNum); //修改手机号
+        void modifyPhone(String phoneNum); //修改手机号
     }
 }

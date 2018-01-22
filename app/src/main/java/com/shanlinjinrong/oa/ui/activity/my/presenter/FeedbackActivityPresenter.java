@@ -1,16 +1,14 @@
 package com.shanlinjinrong.oa.ui.activity.my.presenter;
 
-import android.widget.Toast;
-
-import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.manager.AppManager;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.FeedbackActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -29,15 +27,19 @@ public class FeedbackActivityPresenter extends HttpPresenter<FeedbackActivityCon
 
 
     @Override
-    public void sendFeedback(String departmentId, String content) {
+    public void sendFeedback(String content) {
         HttpParams params = new HttpParams();
-        params.put("department_id", departmentId);
         params.put("content", content);
-        mKjHttp.post(Api.FEEDBACK, params, new HttpCallBack() {
+        mKjHttp.post(ApiJava.FEEDBACK, params, new HttpCallBack() {
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.feedbackFinish();
+                try {
+                    if (mView != null)
+                        mView.feedbackFinish();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -45,21 +47,24 @@ public class FeedbackActivityPresenter extends HttpPresenter<FeedbackActivityCon
                 super.onSuccess(t);
                 LogUtils.d("data-->" + t);
                 try {
-                    JSONObject jo = new JSONObject(t);
-                    LogUtils.d("data-->" + Api.getCode(jo));
-                    switch (Api.getCode(jo)) {
-                        case Api.RESPONSES_CODE_OK:
-                            mView.feedbackSuccess();
+                    CommonRequestBean requestStatus = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {}.getType());
+                    switch (requestStatus.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            if (mView != null)
+                                mView.feedbackSuccess();
                             break;
-                        case Api.RESPONSES_CODE_TOKEN_FEEDBACK_FAILURE:
-                            Toast.makeText(AppManager.sharedInstance(), "反馈失败", Toast.LENGTH_SHORT).show();
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null)
+                                mView.uidNull(requestStatus.getCode());
                             break;
-                        case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                        case Api.RESPONSES_CODE_UID_NULL:
-                            mView.uidNull(Api.getCode(jo));
+                        default:
+                            if (mView != null)
+                                mView.feedbackFailed(requestStatus.getMessage());
                             break;
                     }
-                } catch (JSONException e) {
+                } catch (Throwable e) {
                     LogUtils.e(e.toString());
                 }
             }
@@ -67,7 +72,12 @@ public class FeedbackActivityPresenter extends HttpPresenter<FeedbackActivityCon
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                mView.feedbackFailed(errorNo, strMsg);
+                try {
+                    if (mView != null)
+                        mView.feedbackFailed(strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

@@ -1,56 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:background="@drawable/tab_contacts_selector_bg_x"
-    android:clickable="true"
-    >
-    <com.facebook.drawee.view.SimpleDraweeView
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="@drawable/tab_contacts_selector_bg_x">
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/portrait"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/icon_homepage_work_report_me_launch"
+        fresco:placeholderImage="@drawable/tab_me_head_default"
+        fresco:placeholderImageScaleType="fitXY"
         fresco:roundBottomLeft="true"
         fresco:roundBottomRight="true"
         fresco:roundTopLeft="true"
         fresco:roundTopRight="true"
-        fresco:roundedCornerRadius="5dp"
-        fresco:placeholderImage="@drawable/tab_me_head_default"
-        fresco:placeholderImageScaleType="fitXY"/>
+        fresco:roundedCornerRadius="5dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/portrait"
         android:layout_toRightOf="@id/portrait"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
             android:textColor="#333"
-            android:textSize="@dimen/text_common_dp"/>
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/user_post_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="1dp"
+            android:layout_weight="1"
             android:ellipsize="end"
+            android:gravity="top"
+            android:paddingRight="12dp"
+            android:singleLine="true"
             android:textColor="#999999"
-            android:textSize="@dimen/text_common_dp"/>
+            android:textSize="16sp"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_alignParentBottom="true"
         android:background="@color/common_line_color"/>
+
 </RelativeLayout>

@@ -52,7 +52,9 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
             final int top = child.getBottom() + params.bottomMargin;
             final int bottom = top + mDivider.getIntrinsicHeight();
             mDivider.setBounds(left, top, right, bottom);
-            mDivider.draw(c);
+            if (mDivider != null) {
+                mDivider.draw(c);
+            }
         }
     }
 

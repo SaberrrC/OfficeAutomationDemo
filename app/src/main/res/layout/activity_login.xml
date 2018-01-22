@@ -67,6 +67,7 @@
 
                     <EditText
                         android:id="@+id/user_pwd"
+                        android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_below="@+id/part_line"
@@ -128,7 +129,6 @@
                     <TextView
                         android:id="@+id/tv_find_pwd"
                         android:layout_width="wrap_content"
-
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:gravity="center_vertical"

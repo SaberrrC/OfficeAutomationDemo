@@ -14,7 +14,7 @@ public class ClientBuilder {
 
     private static final String DEBUG = "debug";
 
-    private static final int DEFAULT_TIMEOUT = 10;
+    private static final int DEFAULT_TIMEOUT = 30;
 
     public static <T> T build(String hostAddress, Class<T> clzz) {
 

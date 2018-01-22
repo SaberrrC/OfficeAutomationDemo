@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -49,10 +49,10 @@ import cn.jpush.android.api.TagAliasCallback;
 public abstract class BaseFragment extends Fragment {
 
     private AlertDialog loadingDialog;
-    private TextView msg;
-    private KJHttp kjHttp;
-    public Activity mContext;//CXP添加，供子类使用
-    private Toast toast;
+    private TextView    msg;
+    private KJHttp      kjHttp;
+    public  Activity    mContext;//CXP添加，供子类使用
+    private Toast       toast;
 
     //Fragment的View加载完毕的标记
     private boolean isViewCreated;
@@ -101,21 +101,23 @@ public abstract class BaseFragment extends Fragment {
      *
      * @param code 错误代码
      */
-    public void catchWarningByCode(int code) {
+    public void catchWarningByCode(String code) {
         switch (code) {
-            case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
-                AppConfig.getAppConfig(getActivity()).clearLoginInfo();
+            case ApiJava.REQUEST_TOKEN_OUT_TIME:
+            case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+            case ApiJava.ERROR_TOKEN:
+                AppConfig.getAppConfig(getContext()).clearLoginInfo();
                 gotoLoginPage();
                 break;
-            case Api.RESPONSES_CODE_UID_NULL:
-                AppConfig.getAppConfig(getActivity()).clearLoginInfo();
+            case "401":
+                AppConfig.getAppConfig(getContext()).clearLoginInfo();
                 gotoLoginPage();
                 break;
-            case Api.RESPONSES_CODE_NO_NETWORK:
-                showTips("请确认是否已连接网络！");
+            case ApiJava.AUTH_ERROR:
+                AppConfig.getAppConfig(getContext()).clearLoginInfo();
+                gotoLoginPage();
                 break;
-            case Api.RESPONSES_CODE_NO_RESPONSE:
-                showTips("网络不稳定，请重试！");
+            default:
                 break;
         }
     }
@@ -266,7 +268,7 @@ public abstract class BaseFragment extends Fragment {
     public KJHttp initKjHttp() {
         if (kjHttp == null) {
             kjHttp = new MyKjHttp();
-            HttpConfig.TIMEOUT = 10000;
+            HttpConfig.TIMEOUT = 30000;
         } else {
             kjHttp.cancelAll();
             kjHttp.cleanCache();

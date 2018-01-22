@@ -28,6 +28,7 @@
     <color name="text_red_color">#C1272D</color>
 
     <color name="add_pic_border_color">#2d9dff</color>
+    <color name="bg_call_state">#575e6266</color>
 
     <color name="grid_layout_line_color">#e3e3e3</color>
     <color name="common_line_color">#e3e3e3</color>

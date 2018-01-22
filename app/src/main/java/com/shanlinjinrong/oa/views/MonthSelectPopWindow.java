@@ -26,22 +26,22 @@ import cn.qqtheme.framework.widget.WheelView;
 
 public class MonthSelectPopWindow extends PopupWindow {
 
-    private View mMenuView;
-    private TextView tv_cancle;
-    private TextView tv_confirm;
+    private View      mMenuView;
+    private TextView  tv_cancle;
+    private TextView  tv_confirm;
     private WheelView mWheelView;
     PopListener popListener;
     private Context context;
     private List<DateItem> dataItems = new ArrayList<>();
-    private List<String> strings = new ArrayList<>();
+    private List<String>   strings   = new ArrayList<>();
     List<String> dataList;
-    private String selectedYear="";
-    private String selectedMonth="";
+    private String selectedYear  = "";
+    private String selectedMonth = "";
 
     public MonthSelectPopWindow(Activity context, PopListener popListener) {
         super(context);
-        this.popListener=popListener;
-        this.context=context;
+        this.popListener = popListener;
+        this.context = context;
         mMenuView = LayoutInflater.from(context).inflate(R.layout.time_month_select_layout, null);
         initView();
         initData();
@@ -57,8 +57,8 @@ public class MonthSelectPopWindow extends PopupWindow {
         mWheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(boolean isUserScroll, int selectedIndex, String item) {
-                selectedYear=dataItems.get(selectedIndex).year;
-                selectedMonth=dataItems.get(selectedIndex).month;
+                selectedYear = dataItems.get(selectedIndex).year;
+                selectedMonth = dataItems.get(selectedIndex).month;
             }
         });
 
@@ -67,7 +67,7 @@ public class MonthSelectPopWindow extends PopupWindow {
     public void initView() {
         tv_cancle = (TextView) mMenuView.findViewById(R.id.tv_cancle);
         tv_confirm = (TextView) mMenuView.findViewById(R.id.tv_confirm);
-        mWheelView=(WheelView) mMenuView.findViewById(R.id.wheelView);
+        mWheelView = (WheelView) mMenuView.findViewById(R.id.wheelView);
         tv_cancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +77,7 @@ public class MonthSelectPopWindow extends PopupWindow {
         tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popListener.confirm(selectedYear,selectedMonth);
+                popListener.confirm(selectedYear, selectedMonth);
             }
         });
 
@@ -110,35 +110,31 @@ public class MonthSelectPopWindow extends PopupWindow {
 //                return true;
 //            }
 //        });
-        this.mMenuView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
+        this.mMenuView.setOnTouchListener((v, event) -> false);
     }
 
     public List<DateItem> getDateItemList() {
         Calendar cal = Calendar.getInstance();
         int curYear = cal.get(Calendar.YEAR);
-        int curMonth = cal.get(Calendar.MONTH)+1;
+        int curMonth = cal.get(Calendar.MONTH) + 1;
         List<DateItem> list = new ArrayList<>();
-        int i=0;
-        
-        for(i=0;i<12;i++ ){
-            String year="";
+        int i = 0;
+
+        for (i = 0; i < 12; i++) {
+            String year = "";
             String month = "";
-            if((curMonth-i)==0){
-                month="12";
-                year=curYear-1+"";
-            }else if((curMonth-i)>0){
-                month=curMonth-i+"";
-                year=curYear+"";
-            }else {
-                month=Math.abs(curMonth-i)+"";
-                year=curYear-1+"";
+            if ((curMonth - i) == 0) {
+                month = "12";
+                year = curYear - 1 + "";
+            } else if ((curMonth - i) > 0) {
+                month = curMonth - i + "";
+                year = curYear + "";
+            } else {
+                month = Math.abs(curMonth - i) + "";
+                month = String.valueOf(12 - i +1);
+                year = curYear - 1 + "";
             }
-            DateItem dateItem = new DateItem(year,month);
+            DateItem dateItem = new DateItem(year, month);
             list.add(dateItem);
         }
         return list;
@@ -147,19 +143,20 @@ public class MonthSelectPopWindow extends PopupWindow {
     public List<String> getData() {
         dataItems = getDateItemList();
         List<String> strings = new ArrayList<>();
-        for(DateItem dateItem:dataItems){
-            strings.add(dateItem.year+"年"+dateItem.month+"月");
+        for (DateItem dateItem : dataItems) {
+            strings.add(dateItem.year + "年" + dateItem.month + "月");
         }
         return strings;
     }
 
-    public  interface PopListener{
+    public interface PopListener {
 
         void cancle();
-        void confirm(String year,String month);
+
+        void confirm(String year, String month);
     }
 
-    private class  WheelAdapter  extends android.widget.BaseAdapter{
+    private class WheelAdapter extends android.widget.BaseAdapter {
         @Override
         public int getCount() {
             return strings.size();
@@ -177,17 +174,18 @@ public class MonthSelectPopWindow extends PopupWindow {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = View.inflate(context,R.layout.wheel_dateselect_list_item,null);
-            TextView viewById = (TextView)view.findViewById(R.id.tv_time);
+            View view = View.inflate(context, R.layout.wheel_dateselect_list_item, null);
+            TextView viewById = (TextView) view.findViewById(R.id.tv_time);
             return view;
         }
     }
 
     private class DateItem {
-        public DateItem(String year, String month){
-            this.year=year;
-            this.month=month;
+        public DateItem(String year, String month) {
+            this.year = year;
+            this.month = month;
         }
+
         public String month;
         public String year;
     }

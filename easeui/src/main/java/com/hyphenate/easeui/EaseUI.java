@@ -116,7 +116,7 @@ public final class EaseUI {
         }
         
         initNotifier();
-        registerMessageListener();
+//        registerMessageListener();
         
         if(settingsProvider == null){
             settingsProvider = new DefaultSettingsProvider();
@@ -146,37 +146,6 @@ public final class EaseUI {
         notifier.init(appContext);
     }
     
-    private void registerMessageListener() {
-        EMClient.getInstance().chatManager().addMessageListener(new EMMessageListener() {
-            
-            @Override
-            public void onMessageReceived(List<EMMessage> messages) {
-                EaseAtMessageHelper.get().parseMessages(messages);
-            }
-            @Override
-            public void onMessageRead(List<EMMessage> messages) {
-                
-            }
-            @Override
-            public void onMessageDelivered(List<EMMessage> messages) {
-            }
-
-            @Override
-            public void onMessageRecalled(List<EMMessage> messages) {
-
-            }
-
-            @Override
-            public void onMessageChanged(EMMessage message, Object change) {
-                
-            }
-            @Override
-            public void onCmdMessageReceived(List<EMMessage> messages) {
-                
-            }
-        });
-    }
-    
     protected EaseNotifier createNotifier(){
         return new EaseNotifier();
     }
@@ -200,7 +169,6 @@ public final class EaseUI {
     
     /**
      * set user profile provider
-     * @param provider
      */
     public void setUserProfileProvider(EaseUserProfileProvider userProvider){
         this.userProvider = userProvider;

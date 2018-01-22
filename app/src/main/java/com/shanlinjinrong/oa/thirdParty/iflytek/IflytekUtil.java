@@ -125,10 +125,12 @@ public class IflytekUtil {
         }
 
         //开始录音
+        @Override
         public void onBeginOfSpeech() {
         }
 
         //结束录音
+        @Override
         public void onEndOfSpeech() {
         }
 
@@ -139,10 +141,10 @@ public class IflytekUtil {
 
         @Override
         public void onError(SpeechError speechError) {
-
             //扩展用接口
         }
 
+        @Override
         public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
         }
     };

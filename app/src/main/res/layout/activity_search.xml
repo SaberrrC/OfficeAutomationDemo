@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eee"
@@ -38,7 +38,6 @@
             android:drawableLeft="@mipmap/search_user"
             android:drawablePadding="5dp"
             android:hint="请输入搜索内容"
-
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:textSize="13sp" />
@@ -47,4 +46,4 @@
     </RelativeLayout>
 
 
-</RelativeLayout>
+</FrameLayout>

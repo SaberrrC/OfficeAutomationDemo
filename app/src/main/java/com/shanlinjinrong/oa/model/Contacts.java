@@ -23,7 +23,7 @@ public class Contacts implements MultiItemEntity, Serializable {
     /**
      * 1-员工
      */
-    public static final int EMPLOYEE = 1;
+    public static final int EMPLOYEE   = 1;
     public String code;//工号
 
     public int itemType;
@@ -49,34 +49,69 @@ public class Contacts implements MultiItemEntity, Serializable {
     /**
      * UID
      */
-    public String uid;
+    public  String  uid;
     /**
      * 用户名称
      */
-    public String username;
+    public  String  username;
     /**
      * 性别
      */
-    public String sex;
+    public  String  sex;
     /**
      * 岗位ID
      */
-    public String postId;
+    public  String  postId;
     /**
      * 岗位名称
      */
-    public String postTitle;
+    public  String  postTitle;
     /**
      * 电话号码
      */
-    public String phone;
+    public  String  phone;
     /**
      * 是否显示
      */
-    public String isshow;
-    public String portraits;
-    public String email;
+    public  String  isshow;
+    public  String  portraits;
+    public  String  email;
+    private boolean isChecked;
+    private boolean isGroupOwner;
+    private boolean isModificationColor;
+    private String  orgId;
 
+    public boolean isModificationColor() {
+        return isModificationColor;
+    }
+
+    public void setModificationColor(boolean modificationColor) {
+        isModificationColor = modificationColor;
+    }
+
+    public boolean isGroupOwner() {
+        return isGroupOwner;
+    }
+
+    public void setGroupOwner(boolean groupOwner) {
+        isGroupOwner = groupOwner;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 
     public String getEmail() {
         return email;
@@ -88,6 +123,11 @@ public class Contacts implements MultiItemEntity, Serializable {
 
 
     public Contacts() {
+    }
+
+    public Contacts(String username, String uid) {
+        this.username = username;
+        this.uid = uid;
     }
 
     public Contacts(JSONObject jsonObject) {
@@ -102,7 +142,7 @@ public class Contacts implements MultiItemEntity, Serializable {
                 username = jsonObject.getString("username");
                 phone = jsonObject.getString("phone");
                 email = jsonObject.getString("email");
-                portraits = "http://" + jsonObject.getString("portraits");
+                portraits = jsonObject.getString("portraits");
                 sex = jsonObject.getString("sex");
                 postTitle = jsonObject.getString("post_title");
                 postId = jsonObject.getString("department_id");
@@ -117,8 +157,42 @@ public class Contacts implements MultiItemEntity, Serializable {
         }
     }
 
+    public Contacts(JSONObject jsonObject, String account) {
+        try {
+            departmentId = jsonObject.getString("id");
+            departmentName = jsonObject.getString("name");
+            departmentPersons = jsonObject.getString("memberCount");
+            itemType = 0;
+        } catch (JSONException e) {
+            try {
+                uid = jsonObject.getString("uid");
+                username = jsonObject.getString("username");
+                phone = jsonObject.getString("phone");
+                email = jsonObject.getString("email");
+                portraits = jsonObject.getString("portraits");
+                sex = jsonObject.getString("sex");
+                postTitle = jsonObject.getString("post_title");
+                postId = jsonObject.getString("department_id");
+                departmentName = jsonObject.getString("department_name");
+                code = jsonObject.getString("code");
+                //TODO
+                if (code.equals(account)) {
+                    isChecked = true;
+                }
+                itemType = 1;
+                setIsshow(AppConfig.getAppConfig(AppManager.mContext).getDepartmentId().equals(postId) ? "1" : "0");
+            } catch (Throwable e1) {
+                e1.printStackTrace();
+                LogUtils.e("获取部门和员工异常：" + e1.toString());
+            }
+        }
+    }
+
 
     public String getCode() {
+        if (code == null) {
+            return "";
+        }
         return code;
     }
 
@@ -230,5 +304,26 @@ public class Contacts implements MultiItemEntity, Serializable {
     @Override
     public int getItemType() {
         return itemType;
+    }
+
+    @Override
+    public String toString() {
+        return "Contacts{" +
+                "code='" + code + '\'' +
+                ", itemType=" + itemType +
+                ", type='" + type + '\'' +
+                ", departmentId='" + departmentId + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                ", departmentPersons='" + departmentPersons + '\'' +
+                ", uid='" + uid + '\'' +
+                ", username='" + username + '\'' +
+                ", sex='" + sex + '\'' +
+                ", postId='" + postId + '\'' +
+                ", postTitle='" + postTitle + '\'' +
+                ", phone='" + phone + '\'' +
+                ", isshow='" + isshow + '\'' +
+                ", portraits='" + portraits + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

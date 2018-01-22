@@ -32,7 +32,7 @@ public class KeyboardLayout extends RelativeLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.d(TAG, "onMeasure-----------");
+     //   Log.d(TAG, "onMeasure-----------");
     }
 
     @Override

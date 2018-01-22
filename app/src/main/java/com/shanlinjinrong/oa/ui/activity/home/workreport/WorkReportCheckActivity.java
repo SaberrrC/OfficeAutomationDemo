@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,8 +14,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
-import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.ReportCheckAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.CheckReportItem;
@@ -354,12 +352,14 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
         if (mReportStatus == 1) {
             mReportNoCheckData.addAll(reports);
+            mReportNoCheckList.requestLayout();
             mNoCheckAdapter.notifyDataSetChanged();
             this.noCheckPageNum = pageNum + 1;
             mReportNoCheckList.setVisibility(View.VISIBLE);
             mReportNoCheckList.loadMoreFinish(false, hasNextPage);
         } else {
             mReportCheckData.addAll(reports);
+            mReportNoCheckList.requestLayout();
             mCheckAdapter.notifyDataSetChanged();
             this.checkPageNum = pageNum + 1;
             mReportCheckList.setVisibility(View.VISIBLE);
@@ -370,10 +370,9 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
 
     @Override
     public void loadDataFailed(int errCode, String errMsg) {
-//        mReportCheckList.loadMoreError(errCode, errMsg);
         if (errCode == -1) {
             if (errMsg.equals("auth error")) {
-                catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+                catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
             } else {
                 showToast(getString(R.string.net_no_connection));
             }
@@ -393,11 +392,13 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
         try {
             if (mReportStatus == 1) {
                 mReportNoCheckData.clear();
+                mReportNoCheckList.requestLayout();
                 mNoCheckAdapter.notifyDataSetChanged();
                 mReportNoCheckList.loadMoreFinish(true, false);
                 mReportNoCheckList.setVisibility(View.VISIBLE);
             } else {
                 mReportCheckData.clear();
+                mReportNoCheckList.requestLayout();
                 mCheckAdapter.notifyDataSetChanged();
                 mReportCheckList.loadMoreFinish(true, false);
                 mReportCheckList.setVisibility(View.VISIBLE);
@@ -410,6 +411,7 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     @Override
     public void rejectReportSuccess(int position) {
         mReportNoCheckData.remove(position);
+        mReportNoCheckList.requestLayout();
         mNoCheckAdapter.notifyDataSetChanged();
         showToast("退回成功！");
     }
@@ -420,8 +422,8 @@ public class WorkReportCheckActivity extends HttpBaseActivity<WorkReportCheckPre
     }
 
     @Override
-    public void uidNull(int code) {
-        catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+    public void uidNull(String code) {
+        catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
     }
 
     @Override

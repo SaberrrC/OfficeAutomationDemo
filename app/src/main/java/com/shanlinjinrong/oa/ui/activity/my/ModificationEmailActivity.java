@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.HolidayAdapter;
@@ -82,7 +82,7 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
         mTvEmailSelected.setText(mData.get(0));
         mTopView.getRightView().setOnClickListener(view -> {
             if (check()) {
-                mPresenter.modificationEmail(mEtEmailRedact.getText().toString().trim() + mTvEmailSelected.getText().toString(), AppConfig.getAppConfig(this).getPrivateCode());
+                mPresenter.modificationEmail(mEtEmailRedact.getText().toString().trim() + mTvEmailSelected.getText().toString());
             }
         });
 
@@ -193,22 +193,13 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 
     @Override
-    public void showLoading() {
-        showLoadingView();
-    }
-
-    @Override
-    public void hideLoading() {
-        hideLoadingView();
-    }
-
-    @Override
     public void modificationEmailSuccess() {
+        hideLoadingView();
         AppConfig.getAppConfig(this).set(AppConfig.PREF_KEY_USER_EMAIL, mEtEmailRedact.getText().toString() + mTvEmailSelected.getText().toString());
         setResult(101);
         showToast("修改成功！");
@@ -217,8 +208,9 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
 
     @Override
     public void modificationEmailFailed(int errorNo, String strMsg) {
+        hideLoadingView();
         if (strMsg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
             return;
         }
         if (!TextUtils.isEmpty(strMsg)) {

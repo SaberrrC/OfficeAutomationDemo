@@ -28,8 +28,6 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -180,7 +178,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 
@@ -278,6 +276,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 }
             }
         }
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
 
         if (!isSelectedDay) {
@@ -307,7 +306,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 } else {
                     mTvEmptyLayout.setVisibility(View.VISIBLE);
                     mLlCurrentdayState.setVisibility(View.GONE);
-                    mTvEmptyLayout.setText("暂无日考勤记录！");
+//                    mTvEmptyLayout.setText("暂无日考勤记录！");
                     return;
                 }
 
@@ -408,7 +407,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                             return;
                         }
 
-                        if (bean.get(i).getSignCause() == null || bean.get(i).getSignCause().equals("")) {
+                        if (bean.get(i).getSignCause() == null || "".equals(bean.get(i).getSignCause())) {
                             tvsignin.setVisibility(View.GONE);
                         } else {
                             tvsignin.setVisibility(View.VISIBLE);
@@ -448,7 +447,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     }
                 }
             } else {
-                mTvEmptyLayout.setText("暂无日考勤信息！");
+//                mTvEmptyLayout.setText("暂无日考勤信息！");
                 mTvEmptyLayout.setVisibility(View.VISIBLE);
                 mLlCurrentdayState.setVisibility(View.GONE);
             }
@@ -471,6 +470,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 case "[休假]":
                     return 1;
                 case "[加班转调休]":
+                case "[加班]":
                     return 2;
                 case "[出差]":
                     return 3;
@@ -479,6 +479,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 case "[迟到]":
                 case "[其他]":
                     return 4;
+                default:
+                    return 0;
             }
         }
         return 0;
@@ -493,6 +495,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 mData.get(i).setSelect(false);
             }
         }
+        mRecyclerView.requestLayout();
         mAdapter.notifyDataSetChanged();
         String content = mData.get(position).getContent();
         mSelectedDay = Integer.parseInt(content);
@@ -527,6 +530,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                                 } else {
                                     setData(true, mSelectedMonth, 1);
                                 }
+                                mRecyclerView.requestLayout();
                                 mAdapter.notifyDataSetChanged();
                                 monthSelectPopWindow.dismiss();
                                 doHttp();
@@ -538,6 +542,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             case R.id.ll_count_people:
                 Intent intent = new Intent(AttandenceMonthActivity.this, CountPeopleActivity.class);
                 startActivityForResult(intent, 100);
+                break;
+            default:
                 break;
         }
     }

@@ -1,41 +1,50 @@
 package com.shanlinjinrong.oa.ui.activity.my;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.hyphenate.util.NetUtils;
-import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
-import com.shanlinjinrong.oa.views.ProgressWebView;
-
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ren.yale.android.cachewebviewlib.CacheWebView;
+import ren.yale.android.cachewebviewlib.WebViewCache;
 
 /**
  * <h3>Description: 使用帮助 </h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/9/20.<br />
  */
-public class UsingHelpActivity extends BaseActivity {
+public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.web_view)
-    ProgressWebView webView;
+    CacheWebView webView;
+    @BindView(R.id.tv_error_layout)
+    TextView tvErrorLayout;
+
+    @BindView(R.id.rl_loadding)
+    RelativeLayout rlloadding;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
+
+    private WebViewClient mWebViewClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +53,32 @@ public class UsingHelpActivity extends BaseActivity {
         ButterKnife.bind(this);
         initToolBar();
         setTranslucentStatus(this);
-
-        if (NetUtils.hasNetwork(this)) {
-            initWebView();
-        } else {
-            showToast("当前没有网络连接");
-        }
+        initWebView();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         if (webView != null) {
             webView.getSettings().setJavaScriptEnabled(true);
+            webView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
+            webView.setEnableCache(true);
+            webView.setUserAgent("Android");
+            webView.removeJavascriptInterface("searchBoxJavaBridge_");
+            webView.removeJavascriptInterface("accessibility");
+            webView.removeJavascriptInterface("accessibilityTraversal");
+            webView.getSettings().setAllowFileAccess(false);
         }
-        webView.setWebViewClient(new WebViewClient() {
+        mWebViewClient = new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                rlloadding.setVisibility(View.VISIBLE);
+                tvErrorLayout.setVisibility(View.VISIBLE);
+                tvErrorLayout.setText(getString(R.string.loadding));
+                progress_bar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
@@ -71,10 +92,26 @@ public class UsingHelpActivity extends BaseActivity {
                 return true;
             }
 
-        });
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                rlloadding.setVisibility(View.GONE);
 
-        webView.loadUrl(BuildConfig.BASE_URL + Api.USINGHELP
-                + "?time=" + new Date().getTime());
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                // hideLoadingView();
+                rlloadding.setVisibility(View.VISIBLE);
+                progress_bar.setVisibility(View.GONE);
+                tvErrorLayout.setVisibility(View.VISIBLE);
+                tvErrorLayout.setText(getString(R.string.net_no_connection));
+            }
+        };
+        webView.setWebViewClient(mWebViewClient);
+        webView.loadUrl("http://api.oa.shanlinjinrong.com/helper/index" + "?time=" + System.currentTimeMillis());
+        webView.setWebViewClient(mWebViewClient);
     }
 
 
@@ -101,12 +138,7 @@ public class UsingHelpActivity extends BaseActivity {
         tvTitle.setLayoutParams(lp);
 
         toolbar.setNavigationIcon(R.drawable.toolbar_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
     }
 
     @Override

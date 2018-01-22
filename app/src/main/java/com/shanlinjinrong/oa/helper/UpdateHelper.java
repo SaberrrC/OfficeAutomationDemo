@@ -43,7 +43,7 @@ public class UpdateHelper {
     public UpdateHelper(Activity activity, String downloadUrl) {
         this.activity = activity;
         this.downloadUrl = downloadUrl;
-        path = Constants.FileUrl.UPDATE_APP + new Date().getTime() + ".apk";
+        path = Constants.FileUrl.UPDATE_APP + System.currentTimeMillis()+ ".apk";
         init();
     }
 

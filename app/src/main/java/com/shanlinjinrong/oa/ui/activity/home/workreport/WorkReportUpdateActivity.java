@@ -12,14 +12,14 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.DecorationLine;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.adapter.WorkReportLaunchListAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.HourReportBean;
@@ -37,6 +37,7 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,13 +46,18 @@ import butterknife.OnClick;
 
 
 /**
- * create by lvdinghao
  * 发起日报 页面
  */
 public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdatePresenter> implements WorkReportUpdateContract.View, WorkReportLaunchListAdapter.OnItemClickListener {
 
-    public static final int WRITE_REPORT_OK = 100;//填写日报
-    public static final int SELECT_OK = 101;//选择成功，requestcode
+    /**
+     * 填写日报
+     */
+    public static final int WRITE_REPORT_OK = 100;
+    /**
+     * 选择成功，requestCode
+     */
+    public static final int SELECT_OK = 101;
 
     @BindView(R.id.report_scroll_view)
     ScrollView mScrollView;
@@ -60,34 +66,50 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     AllRecyclerView mWorkReportList;
 
     @BindView(R.id.ll_select_date)
-    RelativeLayout mSelectDate; // 选择日期
+    LinearLayout mSelectDate;
 
     @BindView(R.id.tv_date)
-    TextView mDate; // 日期
+    TextView mDate;
 
     @BindView(R.id.top_view)
-    CommonTopView mTopView;//标题栏
+    CommonTopView mTopView;
 
     @BindView(R.id.tv_receiver)
-    TextView mReceiver;//接收人
+    TextView mReceiver;
 
     @BindView(R.id.et_tomorrow_plan)
-    EditText mTomorrowPlan;//明日计划
+    EditText mTomorrowPlan;
 
 
     private List<HourReportBean> mHourReportData;
 
-    private List<LaunchReportItem> mWorkReportListData;//日报列表数据
+    private List<LaunchReportItem> mWorkReportListData;
 
     private DatePicker picker;
 
-    private String currentDate;//当前年月日
+    private String currentDate;
     private WorkReportLaunchListAdapter mWorkReportListAdapter;
-    private String mReceiverId; //接收人ID
-    private String mReceiverName; //接收人名称
-    private String mReceiverPost; //接收人ID
 
-    private int mDailyId; //日报ID
+    /**
+     * 接收人ID
+     */
+    private String mReceiverId;
+
+    /**
+     * 接收人名称
+     */
+    private String mReceiverName;
+
+    /**
+     * 接收人ID
+     */
+    private String mReceiverPost;
+
+    /**
+     * 日报ID
+     */
+    private int mDailyId;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,28 +141,22 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
         mTopView.setAppTitle(getString(R.string.work_report_edit_report_title));
         mTopView.setRightText(getString(R.string.work_report_update_text));
-        mTopView.setRightAction(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkDataIsFull()) {
-                    return;
-                }
-                showLoadingView();
-                mPresenter.updateReport(createHttpParams());
+        mTopView.setRightAction(v -> {
+            if (!checkDataIsFull()) {
+                return;
             }
+            showLoadingView();
+            mPresenter.updateReport(createHttpParams());
         });
 
-        mTomorrowPlan.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //请求父容器不拦截view的滑动事件
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    v.getParent().requestDisallowInterceptTouchEvent(false);
-                }
-                return false;
+        mTomorrowPlan.setOnTouchListener((v, event) -> {
+            //请求父容器不拦截view的滑动事件
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.getParent().requestDisallowInterceptTouchEvent(false);
             }
+            return false;
         });
 
         InputFilter[] filters = new InputFilter[]{new EmojiFilter(800)};
@@ -150,9 +166,8 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
 
     private void setListViewData(WorkReportBean reportData) {
-
-        mDate.setText(DateUtils.longToDateString(reportData.getTime(), "yyyy-MM-dd"));//设置日期
-
+        //设置日期
+        mDate.setText(DateUtils.longToDateString(reportData.getTime(), "yyyy-MM-dd"));
 
         //设置接收人
         mReceiverId = reportData.getCheckManId();
@@ -162,7 +177,6 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
         //明日计划
         mTomorrowPlan.setText(reportData.getTomorrowPlan());
-
         mWorkReportListData = initListData(reportData);
         mWorkReportListAdapter = new WorkReportLaunchListAdapter(this, mWorkReportListData);
         mWorkReportList.setAdapter(mWorkReportListAdapter);
@@ -246,7 +260,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
         //职业素养
         listData.add(new LaunchReportItem(getString(R.string.work_report_personal_behavior), reportData.getSelfBehavior(), WorkReportLaunchListAdapter.WRITE_TYPE, true, getString(R.string.work_report_professional_qualities)));
-        listData.add(new LaunchReportItem(getString(R.string.work_report_environmental_hygiene), reportData.getSelfEnvironmental(), WorkReportLaunchListAdapter.WRITE_TYPE));
+        listData.add(new LaunchReportItem(getString(R.string.work_report_environmental_hygiene), reportData.getSelfEnvironMental(), WorkReportLaunchListAdapter.WRITE_TYPE));
         listData.add(new LaunchReportItem(getString(R.string.work_report_save), reportData.getSelfSave(), WorkReportLaunchListAdapter.WRITE_TYPE));
         listData.add(new LaunchReportItem(getString(R.string.work_report_communication_skills), reportData.getSelfCommunication(), WorkReportLaunchListAdapter.WRITE_TYPE));
         listData.add(new LaunchReportItem(getString(R.string.work_report_appearance), reportData.getSelfAppearance(), WorkReportLaunchListAdapter.WRITE_TYPE));
@@ -368,7 +382,7 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     //检测数据是否完整
     private boolean checkDataIsFull() {
         for (int i = 0; i < mWorkReportListData.size(); i++) {
-            if (mWorkReportListData.get(i).getContent().equals("")) {
+            if ("".equals(mWorkReportListData.get(i).getContent())) {
                 Toast.makeText(WorkReportUpdateActivity.this, getString(R.string.work_report_data_write_not_full), Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -399,8 +413,8 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
     }
 
     @Override
-    public void uidNull(int code) {
-        catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+    public void uidNull(String code) {
+        catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
     }
 
     /**
@@ -421,8 +435,9 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
-            if (bundle == null)
+            if (bundle == null) {
                 return;
+            }
             if (requestCode == WRITE_REPORT_OK) {
                 //填写日报返回
                 mHourReportData = bundle.getParcelableArrayList("hour_report_list");
@@ -483,6 +498,12 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @OnClick({R.id.ll_select_date, R.id.ll_select_receiver})
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 1000) {
+            lastClickTime = currentTime;
+            return;
+        }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.ll_select_date:
                 showDoneDatePicker(mDate);
@@ -510,8 +531,8 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void getReportFailed(String errCode, String errMsg) {
-        if (errMsg.equals("auth error")) {
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+        if ("auth error".equals(errMsg)) {
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
             return;
         }
         showToast(getString(R.string.load_report_data_error));
@@ -538,8 +559,8 @@ public class WorkReportUpdateActivity extends HttpBaseActivity<WorkReportUpdateP
 
     @Override
     public void updateReportFailed(String errMsg) {
-        if (errMsg.equals("auth error")){
-            catchWarningByCode(Api.RESPONSES_CODE_UID_NULL);
+        if ("auth error".equals(errMsg)) {
+            catchWarningByCode(ApiJava.REQUEST_TOKEN_NOT_EXIST);
         }
         showToast(getString(R.string.work_report_update_failed));
     }

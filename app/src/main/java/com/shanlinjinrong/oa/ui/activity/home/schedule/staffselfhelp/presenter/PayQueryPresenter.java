@@ -91,10 +91,11 @@ public class PayQueryPresenter extends HttpPresenter<PayQueryContract.View> impl
                 try {
                     mView.payQueryInfoFinish();
                     if (e instanceof HttpException) {
+
                         if (((HttpException) e).code() > 400) {
                             mView.payQueryInfoFailed(((HttpException) e).code(), "服务器异常，请稍后重试！");
                         }
-                        mView.uidNull(((HttpException) e).code());
+//                        mView.uidNull(((HttpException) e).code());
                     } else if (e instanceof SocketTimeoutException) {
                         mView.payQueryInfoFailed(-1, "服务器繁忙，请稍后再查询！");
                     } else if (e instanceof NullPointerException) {

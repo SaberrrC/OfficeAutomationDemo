@@ -41,7 +41,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
         if (!TextUtils.isEmpty(billCode)) {
             stringBuilder.append("&" + "billCode=" + billCode);
         }
-        mKjHttp.jsonGet(stringBuilder.toString(), httpParams, new HttpCallBack() {
+        mKjHttp.get(stringBuilder.toString(), httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {
                 super.onPreStart();
@@ -69,6 +69,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 super.onFailure(errorNo, strMsg);
                 try {
                      if (mView != null) {
+                         mView.uidNull(strMsg);
                          mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
                      }
                 } catch (Exception e) {
@@ -94,6 +95,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                     super.onFailure(errorNo, strMsg);
                     try {
                          if (mView != null) {
+                             mView.uidNull(strMsg);
                              mView.onGetApproveInfoFailure(String.valueOf(errorNo), strMsg);
                          }
                     } catch (Exception e) {
@@ -137,6 +139,7 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
                 super.onFailure(errorNo, strMsg);
                 try {
                      if (mView != null) {
+                         mView.uidNull(strMsg);
                          mView.onApproveFailure(errorNo, strMsg);
                      }
                 } catch (Exception e) {
@@ -172,12 +175,13 @@ public class UpcomingTasksInfoPresenter extends HttpPresenter<UpcomingTasksInfoC
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         try {
-            mKjHttp.jsonGet(ApiJava.DELETE_APPROVEL +"?billCode="+billCode+"&billType="+billType, httpParams, new HttpCallBack() {
+            mKjHttp.get(ApiJava.DELETE_APPROVEL +"?billCode="+billCode+"&billType="+billType, httpParams, new HttpCallBack() {
                 @Override
                 public void onFailure(int errorNo, String strMsg) {
                     super.onFailure(errorNo, strMsg);
                     try {
                          if (mView != null) {
+                             mView.uidNull(strMsg);
                              mView.onDeleteFailure(String.valueOf(errorNo), strMsg);
                          }
                     } catch (Exception e) {

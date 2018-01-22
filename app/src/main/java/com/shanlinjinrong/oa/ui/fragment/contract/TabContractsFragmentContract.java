@@ -26,7 +26,7 @@ public interface TabContractsFragmentContract {
 
         void loadDataFinish();
 
-        void loadDataTokenNoMatch(int code);
+        void loadDataTokenNoMatch(String code);
 
     }
 

@@ -12,14 +12,20 @@ public interface WriteJobNumberContract {
 
     interface View extends BaseView {
 
-        void getIdentifyingCodeSuccess(String picUrl, String code); // 成功
+        void showLoading();
+
+        void hideLoading();
+
+        void getIdentifyingCodeSuccess(String picUrl, String keyCode); // 成功
 
         void getIdentifyingCodeFailed(int errorCode); // 失败
 
 
-        void searchUserSuccess(User user); // 成功
+        void searchUserSuccess(String user); // 成功
 
-        void searchUserFailed(int errorCode,String errMsg); // 失败
+        void searchUserEmpty(String errorMsg); // 成功
+
+        void searchUserFailed(int errorCode, String errMsg); // 失败
 
         void requestFinish();
     }
@@ -27,7 +33,8 @@ public interface WriteJobNumberContract {
     interface Presenter extends BasePresenter<View> {
         void getIdentifyingCode(); //获取验证码
 
-        void searchUser(String jobNum);//通过工号查询用户信息
+        void searchUser(String imgCode, String keyCode, String userCode);//通过工号查询用户信息
 
+//        void submitReqeust(); //提交请求
     }
 }

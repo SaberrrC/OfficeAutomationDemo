@@ -63,47 +63,47 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_coder_number)
-    TextView mTvCoderNumber;
+    TextView      mTvCoderNumber;
     @BindView(R.id.tv_not_network)
-    TextView mTvNotNetwork;
+    TextView      mTvNotNetwork;
     @BindView(R.id.tv_request_date)
-    TextView mTvRequestDate;
+    TextView      mTvRequestDate;
     @BindView(R.id.btn_add_details)
-    TextView mBtnAddDetails;
+    TextView      mBtnAddDetails;
     @BindView(R.id.sv_container_show)
-    ScrollView mSvContainerShow;
+    ScrollView    mSvContainerShow;
     @BindView(R.id.ll_container_view)
-    LinearLayout mLlContainerView;
+    LinearLayout  mLlContainerView;
     @BindView(R.id.tv_commonality_type)
-    TextView mTvCommonalityType;
+    TextView      mTvCommonalityType;
     @BindView(R.id.tv_commonality_coder)
-    TextView mTvCommonalityCoder;
+    TextView      mTvCommonalityCoder;
     @BindView(R.id.ll_commonality_type)
-    LinearLayout mLlCommonalityType;
+    LinearLayout  mLlCommonalityType;
     @BindView(R.id.tv_commonality_type_dot)
-    TextView mTvCommonalityTypeDot;
+    TextView      mTvCommonalityTypeDot;
     @BindView(R.id.tv_commonality_over_time)
-    TextView mTvCommonalityOverTime;
+    TextView      mTvCommonalityOverTime;
     @BindView(R.id.tv_commonality_type_date)
-    TextView mTvCommonalityTypeDate;
+    TextView      mTvCommonalityTypeDate;
     @BindView(R.id.tv_commonality_request_date)
-    TextView mTvCommonalityRequestDate;
+    TextView      mTvCommonalityRequestDate;
     @BindView(R.id.tv_commonality_type_selected)
-    TextView mTvCommonalityTypeSelected;
+    TextView      mTvCommonalityTypeSelected;
     @BindView(R.id.ll_commonality_annual_leave)
-    LinearLayout mLlCommonalityAnnualLeave;
+    LinearLayout  mLlCommonalityAnnualLeave;
 
-    private View mContentView1;
-    private CustomDialogUtils mDialog;
-    private CommonTypeBean mCommonTypeBean;
-    private int mIndex = 1, mYearPosition = 0;
-    private YearDateSelected mYearDateSelected;
+    private View                      mContentView1;
+    private CustomDialogUtils         mDialog;
+    private CommonTypeBean            mCommonTypeBean;
+    private YearDateSelected          mYearDateSelected;
     private InitiateThingsTypeAdapter mTypeAdapter;
+    private int mIndex = 1, mYearPosition = 0;
     private boolean isNextDate, isSeletcedNextType;
 
-    private List<String> mDate = new ArrayList<>();
+    private List<String>             mDate = new ArrayList<>();
     //Dialog 数据源
-    private List<Dialog_Common_bean> data = new ArrayList<>();
+    private List<Dialog_Common_bean> data  = new ArrayList<>();
 
     //时间选取 -- 时间选择
     private String mBeginDate, mEndDate, mNext_begin_date, mNext_end_date,
@@ -386,7 +386,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 //            body.setType(mSelectedTypeID);
 //            body.setMonocode(mTvCoderNumber.getText().toString());
 //            mPresenter.addWorkApply(body);
-            if (mEt_common_show2.getText().toString().trim().equals("")&& !mEt_common_show2.getHint().toString().equals("")) {
+            if (mEt_common_show2.getText().toString().trim().equals("") && !mEt_common_show2.getHint().toString().equals("")) {
                 showToast("请填写加班原因！");
                 return;
             }
@@ -701,6 +701,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_duration_number.setText("0小时");
         mTv_common_detail.setText("加班明细");
         mTv_common_show2.setText("加班原因");
+        mBtnAddDetails.setText("+ 添加加班明细");
         mEt_common_show2.setHint("请填写加班原因");
         mTvCommonalityTypeSelected.setText("转调休加班 ");
     }
@@ -710,12 +711,14 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mLl_common_show1.setVisibility(View.GONE);
         mLlCommonalityAnnualLeave.setVisibility(View.VISIBLE);
         mTopView.setAppTitle("休假申请");
+        mTv_common_detail.setText("休假明细");
         mTvCommonalityType.setText("休假假别");
         mTvCommonalityCoder.setText("休假编码");
         mTv_common_show3.setText("工作交接人");
         mTv_common_show2.setText("休假事由");
         mTv_common_duration.setText("休假时长");
         mEt_common_show2.setHint("请填写休假事由");
+        mBtnAddDetails.setText("+ 添加休假明细");
         mEt_common_show3.setHint("请填写工作交接人");
         mEt_common_show3.setFocusable(false);
         mTvCommonalityTypeSelected.setText("转调休加班 ");
@@ -738,6 +741,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_show3.setText("签卡说明");
         mTv_common_detail.setText("签卡明细");
         mTv_common_begin_time.setText("签卡时间");
+        mBtnAddDetails.setText("+ 添加签卡明细");
         mEt_common_show2.setHint("请选择签卡原因");
         mEt_common_show3.setHint("请填写签卡说明");
         mEt_common_show3.setClickable(false);
@@ -766,6 +770,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
         mTv_common_next_show2.setText("休假事由");
         mTv_common_next_duration.setText("休假时长");
         mEt_common_next_show2.setHint("请填写休假事由");
+        mTv_common_next_detail.setText("休假明细");
         mEt_common_next_show3.setHint("请填写工作交接人");
         mEt_common_next_show3.setFocusable(false);
     }
@@ -857,7 +862,7 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 
@@ -902,11 +907,19 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void submitFailureTips(String msg) {
+        if ("auth error".equals(msg)) {
+            catchWarningByCode(msg);
+            return;
+        }
         Toast.makeText(this, msg.trim(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void getQueryMonoCodeFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
         mTvNotNetwork.setText(str);
     }
@@ -918,6 +931,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void initiateThingsRequestFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 mTvNotNetwork.setText(R.string.net_no_connection);
@@ -945,7 +962,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void queryEvectionTypeFailure(int errorCode, String str) {
-
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
     }
 
     @Override
@@ -984,7 +1004,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void queryDurationFailure(int errorCode, String str) {
-
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
     }
 
     @Override
@@ -995,6 +1018,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void submitEvectionApplyFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         showToast(str);
     }
 
@@ -1006,6 +1033,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void addWorkApplyFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.string_not_network));
@@ -1022,6 +1053,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void submitFurloughFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.string_not_network));
@@ -1048,7 +1083,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void findSignReasonFailure(int errorCode, String str) {
-
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
     }
 
     @Override
@@ -1062,6 +1100,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void registrationCardFailure(int errorCode, String str) {
+        if ("auth error".equals(str)) {
+            catchWarningByCode(str);
+            return;
+        }
         switch (errorCode) {
             case -1:
                 showToast(getString(R.string.string_not_network));

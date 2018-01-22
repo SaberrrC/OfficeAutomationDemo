@@ -16,15 +16,18 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.Contacts;
 import com.shanlinjinrong.oa.model.User;
-import com.shanlinjinrong.oa.ui.activity.contracts.contract.ContractActivityContract;
-import com.shanlinjinrong.oa.ui.activity.contracts.presenter.ContractActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.ui.fragment.adapter.TabContactsAdapter;
 import com.shanlinjinrong.oa.ui.fragment.contract.TabContractsFragmentContract;
 import com.shanlinjinrong.oa.ui.fragment.presenter.TabContractsFragmentPresenter;
+import com.shanlinjinrong.oa.utils.DateUtils;
+import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +43,7 @@ import butterknife.OnClick;
  * <b>Notes:</b> Created by KevinMeng on 2016/9/22.<br />
  */
 public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPresenter> implements TabContractsFragmentContract.View {
+
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.btn_back)
@@ -48,7 +52,6 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
     TextView title;
     @BindView(R.id.layout_root)
     RelativeLayout mRootView;
-
     @BindView(R.id.rl_top2)
     RelativeLayout mRLSearchView;
 
@@ -61,7 +64,6 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-
     /**
      * 页面加载数据所需部门ID
      */
@@ -70,8 +72,9 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
      * 页面标题
      */
     public static final String PAGE_MAP_TITLE = "pageMapTitle";
-    private PopupWindow popupWindow;
     private String phoneStr;
+    private PopupWindow popupWindow;
+    private List<Contacts> mContacts;
 
     @SuppressLint("InflateParams")
     @Override
@@ -112,14 +115,50 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
      *
      * @param departmentId 部门ID
      */
+    @SuppressWarnings("SpellCheckingInspection")
     private void loadData(String departmentId) {
         title.setText(pageMap.get(pageMap.size() - 1).get(PAGE_MAP_TITLE));
+        try {
+            if (!SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + departmentId, "").equals("")) {
+                String users = SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "users" + departmentId, "");
+                JSONArray user = new JSONArray(users);
+                mContacts = new ArrayList<>();
+                for (int i = 0; i < user.length(); i++) {
+                    JSONObject userInfo = user.getJSONObject(i);
+                    Contacts person = new Contacts(userInfo);
+                    mContacts.add(person);
+                }
+                String childrens = SharedPreferenceUtils.getStringValue(AppManager.mContext, DateUtils.getCurrentDate("yyyy-MM-dd"), "children" + departmentId, "");
+                if (!childrens.equals("")) {
+                    JSONArray children = new JSONArray(childrens);
+                    for (int i = children.length() - 1; i >= 0; i--) {
+                        JSONObject department = children.getJSONObject(i);
+                        String number = department.getString("memberCount");
+                        if (number.equals("0")) {
+                            continue;
+                        }
+                        Contacts contact = new Contacts(department);
+                        mContacts.add(0, contact);
+                    }
+                }
+                if (items.size() > 0 || items != null) {
+                    items.clear();
+                }
+                items = mContacts;
+                adapter.setNewData(items);
+                adapter.notifyDataSetChanged();
+                return;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
         showLoadingView();
         mPresenter.loadData(departmentId);
     }
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
         catchWarningByCode(code);
     }
 
@@ -129,10 +168,6 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             switch (items.get(i).getItemType()) {
                 case Contacts.DEPARTMENT:
-                    //部门为0 禁止点击
-                    if (items.get(i).getDepartmentPersons().equals("0")) {
-                        return;
-                    }
                     if (!pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID).equals(
                             items.get(i).getDepartmentId())) {
                         pageMap.add(getPageParam(items.get(i).getDepartmentId(),
@@ -187,20 +222,16 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
         }
         items = contacts;
         adapter.setNewData(items);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void loadDataFailed(int errorNo, String strMsg) {
-        String info = "";
-        switch (errorNo) {
-            case Api.RESPONSES_CODE_NO_NETWORK:
-                info = "请确认是否已连接网络！";
-                break;
-            case Api.RESPONSES_CODE_NO_RESPONSE:
-                info = "网络不稳定，请重试！";
-                break;
+        if ("auth error".equals(strMsg)) {
+            catchWarningByCode(strMsg);
+            return;
         }
-        showEmptyView(mRlRecyclerViewContainer, info, 0, false);
+        showEmptyView(mRlRecyclerViewContainer, "网络不稳定，请重试！", 0, false);
     }
 
     @Override
@@ -214,7 +245,7 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
     }
 
     @Override
-    public void loadDataTokenNoMatch(int code) {
+    public void loadDataTokenNoMatch(String code) {
         catchWarningByCode(code);
     }
 
@@ -225,7 +256,10 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
 
     @Override
     public void autoSearchFailed(int errCode, String errMsg) {
-
+        if ("auth error".equals(errMsg)) {
+            catchWarningByCode(errMsg);
+            return;
+        }
     }
 
     @Override
@@ -250,19 +284,10 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
 
     private void back() {
         if (pageMap.size() == 1) {
-            finish();
+            this.finish();
         } else {
             pageMap.remove(pageMap.size() - 1);
             loadData(pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID));
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (popupWindow != null) {
-            popupWindow.dismiss();
-            popupWindow = null;
         }
     }
 }

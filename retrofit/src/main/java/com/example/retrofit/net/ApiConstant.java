@@ -1,14 +1,53 @@
 package com.example.retrofit.net;
 
 public class ApiConstant {
-    public static final String USERINFO_DEV_HOST = "http://121.196.197.178:9000/";
-    //生产
-//    public static final String JAVA_TEST_HOST = "http://oa.shanlinjinrong.com/oa-api/";
+//TODO   图片地址
+    /**
+     * 生产环境
+     */
+//    public final static String BASE_PIC_URL = "http://public.oa.shanlinjinrong.com/";
+    /**
+     * 预发布环境  testoa
+     */
+    public final static String BASE_PIC_URL = "http://public.testoa.shanlinjinrong.com";
 
-//    public static final String JAVA_TEST_HOST = "http://testoa.shanlinjinrong.com/oa-api/";
-//    public static final String JAVA_TEST_HOST = "http://118.31.18.67:8090/";
-    //新外网
+    /**
+     * 开发环境
+     */
+//    public final static String BASE_PIC_URL = "http://10.255.232.234:96";
+    /**
+     * 测试环境
+     */
+//    public final static String BASE_PIC_URL = "http://10.5.202.122:9105";
+
+
+
+
+//TODO   接口地址
+    /**
+     * 生产环境
+     */
+    // public static final String JAVA_TEST_HOST = "http://oa.shanlinjinrong.com/oa-api/";
+
+    /**
+     *  预发布环境  testoa
+     */
+    public static final String JAVA_TEST_HOST = "http://testoa.shanlinjinrong.com/oa-api/";
+
+
+    /**
+     * 开发环境
+     */
+    //public static final String JAVA_TEST_HOST = "http://10.255.232.234/oa-api/"; /**
+
+    /**
+     * 测试环境
+     */
+//       public static final String JAVA_TEST_HOST = "http://10.5.202.122:9105/";
+
+    /**
+     * 新外网
+     */
 //    public static final String JAVA_TEST_HOST = "http://116.62.216.129:9105/";
-    //新内网
-    public static final String JAVA_TEST_HOST = "http://10.5.202.122:9105/";
+
 }

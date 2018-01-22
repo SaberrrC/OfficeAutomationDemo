@@ -31,7 +31,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.common.Api;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.listener.PermissionListener;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
@@ -52,18 +52,19 @@ import java.util.Set;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
+
 /**
  * <h3>Description: 基础Activity</h3>
  * <b>Notes:</b> Created by KevinMeng on 2016/8/26.<br/>
  */
 public class BaseActivity extends AppCompatActivity {
 
-    private AlertDialog loadingDialog;
+    private AlertDialog       loadingDialog;
     private CustomDialogUtils mDialog;
-    private TextView msg;
-    private KJHttp kjHttp;
-    private Toast toast;
-    private View empty;
+    private TextView          msg;
+    private KJHttp            kjHttp;
+    private Toast             toast;
+    private View              empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +83,15 @@ public class BaseActivity extends AppCompatActivity {
     private void initLoadingDialog(View loading) {
         loadingDialog = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Loading).create();
         loadingDialog.setView(loading);
-//        loadingDialog.setCancelable(false);
+        loadingDialog.setCanceledOnTouchOutside(false);
+        loadingDialog.setCancelable(true);
     }
 
     public KJHttp initKjHttp() {
         if (kjHttp == null) {
             kjHttp = new MyKjHttp();
             HttpConfig config = new HttpConfig();
-            HttpConfig.TIMEOUT = 10000;
+            HttpConfig.TIMEOUT = 30000;
             kjHttp.setConfig(config);
         } else {
             kjHttp.cleanCache();
@@ -104,9 +106,14 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showLoadingView() {
-        if (loadingDialog != null && !loadingDialog.isShowing())
-            loadingDialog.show();
+        try {
+            if (loadingDialog != null && !loadingDialog.isShowing())
+                loadingDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void showLoadingView(String text) {
         msg.setText(text);
@@ -118,34 +125,26 @@ public class BaseActivity extends AppCompatActivity {
      *
      * @param code 错误代码
      */
-    public void catchWarningByCode(int code) {
+    public void catchWarningByCode(String code) {
         switch (code) {
-            case Api.RESPONSES_CODE_TOKEN_NO_MATCH:
+            case ApiJava.REQUEST_TOKEN_OUT_TIME:
+            case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+            case ApiJava.ERROR_TOKEN:
+            case "401":
                 AppConfig.getAppConfig(this).clearLoginInfo();
-                //gotoLoginPage();
                 NonTokenDialog();
                 break;
-            case Api.RESPONSES_JAVA_TOKEN_NO_MATCH:
+            case ApiJava.AUTH_ERROR:
                 AppConfig.getAppConfig(this).clearLoginInfo();
-                //gotoLoginPage();
                 NonTokenDialog();
                 break;
-            case Api.RESPONSES_CODE_UID_NULL:
-                AppConfig.getAppConfig(this).clearLoginInfo();
-                //gotoLoginPage();
-                NonTokenDialog();
-                break;
-            case Api.RESPONSES_CODE_NO_NETWORK:
-                showTips("请确认是否已连接网络！");
-                break;
-            case Api.RESPONSES_CODE_NO_RESPONSE:
-                showTips("网络不稳定，请重试！");
+            default:
                 break;
         }
     }
 
     private void gotoLoginPage() {
-//        showToast("您的帐号已在其他设备上登录，请您及时查验！");
+        //showToast("您的帐号已在其他设备上登录，请您及时查验！");
         JPushInterface.setAlias(this, null, null);
         JPushInterface.setTags(this, null, null);
         if (EMClient.getInstance().isConnected()) {
@@ -255,8 +254,7 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * @param content 提示内容
      */
-    public void showToast(
-            String content) {
+    public void showToast(String content) {
         if (toast == null) {
             toast = Toast.makeText(this,
                     content,
@@ -340,7 +338,10 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void hideLoadingView() {
-        loadingDialog.dismiss();
+        if (loadingDialog != null) {
+            if (loadingDialog.isShowing())
+                loadingDialog.dismiss();
+        }
     }
 
     /**
@@ -458,6 +459,7 @@ public class BaseActivity extends AppCompatActivity {
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
             }
+            mDialog.setCanceledOnTouchOutside(false);
             mDialog.setCancelable(false);
             mDialog.show();
         } catch (Throwable e) {

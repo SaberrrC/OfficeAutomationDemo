@@ -1,16 +1,19 @@
 package com.example.retrofit.net;
 
 import com.example.retrofit.model.HttpResult;
-import com.example.retrofit.model.responsebody.QueryPayResponse;
+import com.example.retrofit.model.UpLoadPortraitsBean;
 import com.example.retrofit.model.responsebody.CountResponse1;
+import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.example.retrofit.model.responsebody.HolidaySearchResponse;
 import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
+import com.example.retrofit.model.responsebody.QueryPayResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -79,6 +82,21 @@ public class HttpMethods {
         Observable map1 = ApiFactory.getJavaApi().getApproveData(map).map(new HttpResultFuncTypeJava());
         toSubscribe(map1, subscriber);
     }
+
+    //----------------------群组 聊天-----------------------
+
+    public void queryUserListInfo(Map<String, String> map, Subscriber<ArrayList<GroupUserInfoResponse>> subscriber) {
+        Observable<ArrayList<GroupUserInfoResponse>> map1 = ApiFactory.getJavaApi().queryUserListInfo(map).map(new HttpResultFuncTypeJava<ArrayList<GroupUserInfoResponse>>());
+        toSubscribe(map1, subscriber);
+    }
+
+    //---------------------- 头像 上传-----------------------
+
+    public void uploadPortraits(MultipartBody.Part file, Subscriber<UpLoadPortraitsBean> subscriber) {
+        Observable<UpLoadPortraitsBean> map = ApiFactory.getJavaApi().uploadPortraits(file).map(new HttpResultFuncTypeJava<UpLoadPortraitsBean>());
+        toSubscribe(map, subscriber);
+    }
+
 
     //    //出差申请
     //    public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {

@@ -22,6 +22,7 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -54,6 +55,7 @@ public class NoticesSingleInfoActivity extends HttpBaseActivity<NoticesSingleInf
     private String nid;
     LinearLayout.LayoutParams picParams;
     private List<String> imgsLists;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +112,12 @@ public class NoticesSingleInfoActivity extends HttpBaseActivity<NoticesSingleInf
                 pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        long currentTime = Calendar.getInstance().getTimeInMillis();
+                        if (currentTime - lastClickTime < 1000) {
+                            lastClickTime = currentTime;
+                            return;
+                        }
+                        lastClickTime = currentTime;
                         Intent intent = new Intent(NoticesSingleInfoActivity.this,
                                 ShowPictureActivity.class);
                         try {
@@ -179,7 +187,7 @@ public class NoticesSingleInfoActivity extends HttpBaseActivity<NoticesSingleInf
 
 
     @Override
-    public void uidNull(int code) {
+    public void uidNull(String code) {
 
     }
 

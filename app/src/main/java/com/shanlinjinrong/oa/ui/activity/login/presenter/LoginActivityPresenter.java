@@ -1,13 +1,14 @@
 package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
-import com.shanlinjinrong.oa.common.Api;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -30,28 +31,41 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
         HttpParams params = new HttpParams();
         params.put("email", account);
         params.put("pwd", psw);
-        mKjHttp.post(Api.LOGIN, params, new HttpCallBack() {
+        mKjHttp.post(ApiJava.LOGIN, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 System.out.println(t);
                 LogUtils.e("登录返回数据-》" + t);
                 try {
-                    JSONObject jo = new JSONObject(t);
-                    if (Api.getCode(jo) == Api.RESPONSES_CODE_OK) {
-                        mView.loginSuccess(Api.getDataToJSONObject(jo));
-                    } else if (Api.getCode(jo) == Api.RESPONSES_CODE_UID_NULL) {
-                        mView.loginFailed(Api.getCode(jo));
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_PASSWORD_ERROR)) {
-                        mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_USERNAME_NOT_EXIST)) {
-                        mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
-                    } else if ((Api.getCode(jo) == Api.RESPONSES_CODE_ACCOUNT_USER_FREEZE)) {
-                        mView.accountOrPswError(Api.getCode(jo), Api.getInfo(jo));
-                    } else {
-                        mView.loginOtherError();
+                    UserInfo user = new Gson().fromJson(t, new TypeToken<UserInfo>() {
+                    }.getType());
+
+                    switch (user.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            if (mView != null)
+                                mView.loginSuccess(user.getData());
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null) {
+                                mView.loginFailed(user.getCode());
+                            }
+                            break;
+                        //用户名 密码不存在
+                        case ApiJava.NOT_EXIST_USER:
+                            if (mView != null) {
+                                mView.accountOrPswError(user.getMessage());
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                } catch (JSONException e) {
+                } catch (
+                        Throwable e)
+
+                {
                     e.printStackTrace();
                 }
             }
@@ -59,14 +73,27 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 LogUtils.e(errorNo + "--" + strMsg);
-                mView.loginFailed(errorNo);
-                super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
+                        mView.loginFailed(String.valueOf(errorNo));
+                    }
+                    super.onFailure(errorNo, strMsg);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mView.requestFinish();
+                try {
+                    if (mView != null) {
+                        mView.requestFinish();
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
