@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,7 +109,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     }
 
     @Override
-    protected void lazyLoadData() {}
+    protected void lazyLoadData() {
+    }
 
     private void initDta() {
         mWeeks = new String[]{"日", "一", "二", "三", "四", "五", "六"};
@@ -191,6 +193,14 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             mLlContent = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 LeftDateBean leftDateBean = new LeftDateBean();
+                if (i == 0) {
+                    SparseArray<LeftDateBean.DataBean> dataBean = new SparseArray<>();
+                    LeftDateBean.DataBean dataBean1 = new LeftDateBean.DataBean();
+                    dataBean1.setTitle("saasdasd");
+                    dataBean1.setContentCount("3");
+                    dataBean.put(0, dataBean1);
+                    leftDateBean.setData(dataBean);
+                }
                 mLlContent.add(leftDateBean);
             }
             e.onComplete();
@@ -341,25 +351,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ChangeLeftView(SelectedWeekCalendarEvent event) {
         switch (event.getEvent()) {
-            case "addData":
-                for (int i = mListDate.size(); i < mListDate.size() + 20; i++) {
-                    List<String> day = new ArrayList<>();
-                    List<String> week = new ArrayList<>();
-                    List<String> month = new ArrayList<>();
-                    List<String> year = new ArrayList<>();
-                    List<Boolean> booleans = new ArrayList<>();
-                    for (int j = 0; j < 7; j++) {
-                        day.add(j + "");
-                        week.add(mWeeks[j] + "");
-                        booleans.add(false);
-                    }
-                    mListDate.add(new WeekCalendarBean(week, day, month, year, booleans));
-                }
-
-                mSelectedAdapter.setNewData(mListDate);
-                mSelectedAdapter.notifyDataSetChanged();
-
-                break;
             case "TopDate":
                 mSelectedYear1 = mListDate.get(event.getPosition()).getYear().get(event.getIndex());
                 mSelectedMonth1 = mListDate.get(event.getPosition()).getMonth().get(event.getIndex());
@@ -372,6 +363,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 break;
             //查看当前事件
             case "lookEvent":
+
                 break;
             case "changeView":
                 RefreshChangeView(event);
@@ -385,9 +377,11 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 break;
             //选择某个事件
             case "selectedView":
+
                 break;
             //弹出 事件列表
             case "popupWindow":
+                RefreshChangeView(event);
                 Dialog dialog = new Dialog(getContext(), R.style.CustomDialog);
                 dialog.setContentView(R.layout.dialog_week_calendar_content);
                 //获取到当前Activity的Window
@@ -399,20 +393,12 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 dialog_window_attributes.height = 400;
                 dialog_window_attributes.x = ScreenUtils.dp2px(getContext(), 19);
 
-                //TODO 高度存在问题
                 int position = (event.getPosition() + 2) * mViewHeight;
-                //dialog_window_attributes.y = ((int) event.getRowY() - ScreenUtils.getStatusHeight(this)) - ScreenUtils.getScreenHeight(this) / 2;
                 dialog_window_attributes.y = (position - ScreenUtils.getStatusHeight(getContext())) - ScreenUtils.getScreenHeight(getContext()) / 2;
                 dialog_window.setAttributes(dialog_window_attributes);
                 dialog.show();
                 break;
             default:
-                mPosition = event.getPosition();
-                mRvStartDateSelected.setSelectedItemPosition(mPosition - 1);
-                mRvEndDateSelected.setSelectedItemPosition(mPosition - 1);
-                mStartTime = mStartDate.get(mPosition - 1);
-                mEndTime = mEndDate.get(mPosition - 1);
-                RefreshChangeView(event);
                 break;
         }
     }
@@ -450,15 +436,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         mAdapter.notifyItemChanged(event.getPosition() - 1);
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
-    }
-
     @Override
     public void uidNull(String code) {
         catchWarningByCode(code);
@@ -471,11 +448,19 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
     @Override
     public void showLoading() {
-
+        showLoadingView();
     }
 
     @Override
     public void hideLoading() {
+        hideLoadingView();
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

@@ -107,6 +107,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         mDatePopAttandanceAdapter.notifyDataSetChanged();
         String content = mData.get(position).getContent();
         mSelectedDay = Integer.parseInt(content);
+
         String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
         String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
         String date = mCurrentYear + "-" + month + "-" + mDay;
