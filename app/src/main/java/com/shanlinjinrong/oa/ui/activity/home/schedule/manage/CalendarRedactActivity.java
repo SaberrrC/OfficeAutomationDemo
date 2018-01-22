@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
+import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
+import com.shanlinjinrong.oa.utils.DateUtils;
+import com.shanlinjinrong.pickerview.OptionsPickerView;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import java.text.SimpleDateFormat;
@@ -41,16 +44,17 @@ public class CalendarRedactActivity extends AppCompatActivity {
     @BindView(R.id.view_completes)
     View          mViewCompletes;
 
-    private String mDate;
-    private int    mStartTime;
-    private int    mEndTime;
-    private String mStartTimes;
-    private String mEndTimes;
-    private String mTitle;
-    private String mContent;
-    private String mYear;
-    private String mMonth;
-    private int    mItemType;
+    private String            mDate;
+    private int               mStartTime;
+    private int               mEndTime;
+    private String            mStartTimes;
+    private String            mEndTimes;
+    private String            mTitle;
+    private String            mContent;
+    private String            mYear;
+    private String            mMonth;
+    private int               mItemType;
+    private OptionsPickerView beginTimeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +190,6 @@ public class CalendarRedactActivity extends AppCompatActivity {
             default:
                 break;
         }
-
     }
+
 }
