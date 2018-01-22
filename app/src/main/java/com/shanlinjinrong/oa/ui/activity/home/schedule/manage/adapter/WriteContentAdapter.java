@@ -45,9 +45,8 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
             llContent.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         }
 
-        if (content.getData() == null) {
+        if (content.getData().size() == 0) {
             llContent.setOnClickListener(view -> EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "changeView")));
-            return;
         }
 
         llContent.removeAllViews();
@@ -84,7 +83,9 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
             llContent.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
             llContent.addView(contentCount);
         }
-        llContent.setOnClickListener(view -> EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "popupWindow")));
+        if (llContent.getChildCount() > 0) {
+            llContent.setOnClickListener(view -> EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "popupWindow")));
+        }
         for (int i = 0; i < content.getData().size(); i++) {
             LinearLayout childAt = (LinearLayout) llContent.getChildAt(0);
             TextView childAt1 = (TextView) childAt.getChildAt(i);

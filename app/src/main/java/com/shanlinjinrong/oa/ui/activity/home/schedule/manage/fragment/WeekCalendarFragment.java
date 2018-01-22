@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +13,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aigestudio.wheelpicker.WheelPicker;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.CalendarRedactActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.LookCalendarDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.LeftDateAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.LookContentAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.SelectedWeekCalendarAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.WriteContentAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.LeftDateBean;
@@ -75,11 +83,12 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private WheelPicker  mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
     private int          mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight;
-    private String mSelectedYear1;
-    private String mSelectedMonth1;
-    private String mSelectedDay1;
-    private int    mSelectedStartTime;
-    private int    mSelectedEndTime;
+    private String                      mSelectedYear1;
+    private String                      mSelectedMonth1;
+    private String                      mSelectedDay1;
+    private int                         mSelectedStartTime;
+    private int                         mSelectedEndTime;
+    private List<LeftDateBean.DataBean> mPopupData;
 
 
     public Date getMondayOfThisWeek(Calendar calendar) {
@@ -196,9 +205,41 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 if (i == 0) {
                     SparseArray<LeftDateBean.DataBean> dataBean = new SparseArray<>();
                     LeftDateBean.DataBean dataBean1 = new LeftDateBean.DataBean();
-                    dataBean1.setTitle("saasdasd");
+                    dataBean1.setTitle("测试1");
                     dataBean1.setContentCount("3");
+                    dataBean1.setDate("1月22日");
+                    dataBean1.setTitle("测试Title1");
+                    dataBean1.setStartTime("15:00");
+                    dataBean1.setEndTime("17:00");
                     dataBean.put(0, dataBean1);
+                    leftDateBean.setData(dataBean);
+
+                    LeftDateBean.DataBean dataBean2 = new LeftDateBean.DataBean();
+                    dataBean2.setTitle("测试2");
+                    dataBean2.setTitle("测试Title2");
+                    dataBean2.setDate("1月22日");
+                    dataBean2.setContentCount("3");
+                    dataBean2.setContent("312312312");
+                    dataBean2.setStartTime("9:00");
+                    dataBean2.setEndTime("12:00");
+
+                    dataBean.put(1, dataBean2);
+                    leftDateBean.setData(dataBean);
+
+
+//                    LeftDateBean.DataBean dataBean3 = new LeftDateBean.DataBean();
+//                    dataBean3.setTitle("saasdasd");
+//                    dataBean3.setContentCount("3");
+//                    dataBean.put(2, dataBean3);
+//                    leftDateBean.setData(dataBean);
+//
+//                    LeftDateBean.DataBean dataBean4 = new LeftDateBean.DataBean();
+//                    dataBean4.setTitle("saasdasd");
+//                    dataBean4.setContentCount("3");
+//                    dataBean.put(3, dataBean4);
+//                    leftDateBean.setData(dataBean);
+                } else {
+                    SparseArray<LeftDateBean.DataBean> dataBean = new SparseArray<>();
                     leftDateBean.setData(dataBean);
                 }
                 mLlContent.add(leftDateBean);
@@ -368,11 +409,12 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             case "changeView":
                 RefreshChangeView(event);
                 Intent intent = new Intent(getContext(), CalendarRedactActivity.class);
-                intent.putExtra("year", mSelectedYear1);
-                intent.putExtra("month", mSelectedMonth1);
-                intent.putExtra("day", mSelectedDay1);
-                intent.putExtra("startTime", mSelectedStartTime);
-                intent.putExtra("endTime", mSelectedEndTime);
+                intent.putExtra(Constants.CALENDARYEAR, mSelectedYear1);
+                intent.putExtra(Constants.CALENDARMONTH, mSelectedMonth1);
+                intent.putExtra(Constants.CALENDARDATE, mSelectedDay1);
+                intent.putExtra(Constants.CALENDARSTARTTIME, mSelectedStartTime);
+                intent.putExtra(Constants.CALENDARENDTIME, mSelectedEndTime);
+                intent.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
                 startActivity(intent);
                 break;
             //选择某个事件
@@ -383,18 +425,66 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             case "popupWindow":
                 RefreshChangeView(event);
                 Dialog dialog = new Dialog(getContext(), R.style.CustomDialog);
-                dialog.setContentView(R.layout.dialog_week_calendar_content);
+
+                View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_week_calendar_content, null);
+                ImageView addCalendar = (ImageView) view.findViewById(R.id.img_add_calendar);
+                TextView tvContentCount = (TextView) view.findViewById(R.id.tv_content_count);
+
+                tvContentCount.setText("共" + mLlContent.get(event.getPosition() - 1).getData().size());
+                //添加新事件
+                addCalendar.setOnClickListener(view1 -> {
+                    Intent intent1 = new Intent(getContext(), CalendarRedactActivity.class);
+                    intent1.putExtra(Constants.CALENDARYEAR, mSelectedYear1);
+                    intent1.putExtra(Constants.CALENDARMONTH, mSelectedMonth1);
+                    intent1.putExtra(Constants.CALENDARDATE, mSelectedDay1);
+                    intent1.putExtra(Constants.CALENDARSTARTTIME, mSelectedStartTime);
+                    intent1.putExtra(Constants.CALENDARENDTIME, mSelectedEndTime);
+                    intent1.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
+                    startActivity(intent1);
+                });
+
+                //展示可查看的事件
+                RecyclerView rvContent = (RecyclerView) view.findViewById(R.id.rv_content);
+                SparseArray<LeftDateBean.DataBean> data = mLlContent.get(event.getPosition() - 1).getData();
+
+                mPopupData = new ArrayList<>();
+                for (int i = 0; i < data.size(); i++) {
+                    mPopupData.add(data.get(i));
+                }
+
+                LookContentAdapter adapter = new LookContentAdapter(mPopupData);
+
+                rvContent.setAdapter(adapter);
+                rvContent.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.VERTICAL, false));
+                rvContent.addOnItemTouchListener(new ItemClick());
+                adapter.notifyDataSetChanged();
+
+                dialog.setContentView(view);
                 //获取到当前Activity的Window
                 Window dialog_window = dialog.getWindow();
                 WindowManager.LayoutParams dialog_window_attributes = dialog_window.getAttributes();
                 //设置宽度
                 dialog_window_attributes.width = ScreenUtils.getScreenWidth(getContext()) - ScreenUtils.dp2px(getContext(), 45);
                 //设置高度
-                dialog_window_attributes.height = 400;
+                int position = (event.getPosition() + 2) * mViewHeight;
+                switch (mLlContent.get(event.getPosition() - 1).getData().size()) {
+                    case 0:
+                    case 1:
+                    case 2:
+                        dialog_window_attributes.height = 400;
+                        dialog_window_attributes.y = (position - ScreenUtils.getStatusHeight(getContext())) - ScreenUtils.getScreenHeight(getContext()) / 2;
+                        break;
+                    case 3:
+                        dialog_window_attributes.height = 500;
+                        dialog_window_attributes.y = (position - ScreenUtils.getStatusHeight(getContext()) + 50) - ScreenUtils.getScreenHeight(getContext()) / 2;
+                        break;
+                    default:
+                        dialog_window_attributes.height = 600;
+                        dialog_window_attributes.y = (position - ScreenUtils.getStatusHeight(getContext()) + 100) - ScreenUtils.getScreenHeight(getContext()) / 2;
+                        break;
+                }
                 dialog_window_attributes.x = ScreenUtils.dp2px(getContext(), 19);
 
-                int position = (event.getPosition() + 2) * mViewHeight;
-                dialog_window_attributes.y = (position - ScreenUtils.getStatusHeight(getContext())) - ScreenUtils.getScreenHeight(getContext()) / 2;
                 dialog_window.setAttributes(dialog_window_attributes);
                 dialog.show();
                 break;
@@ -454,6 +544,21 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     @Override
     public void hideLoading() {
         hideLoadingView();
+    }
+
+    public class ItemClick extends OnItemClickListener {
+
+        @Override
+        public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+            Intent intent = new Intent(getContext(), CalendarRedactActivity.class);
+            intent.putExtra(Constants.CALENDARTITLE, mPopupData.get(i).getTitle());
+            intent.putExtra(Constants.CALENDARCONTENT, mPopupData.get(i).getContent());
+            intent.putExtra(Constants.CALENDARSTARTTIME, mPopupData.get(i).getStartTime());
+            intent.putExtra(Constants.CALENDARENDTIME, mPopupData.get(i).getEndTime());
+            intent.putExtra(Constants.CALENDARDATE, mPopupData.get(i).getDate());
+            intent.putExtra(Constants.CALENDARTYPE, Constants.LOOKCALENDAR);
+            startActivity(intent);
+        }
     }
 
     @Override

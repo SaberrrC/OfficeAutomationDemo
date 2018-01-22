@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal">
+
+   <TextView
+       android:id="@+id/tv_content"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       tools:text="设计OB需求"
+       android:layout_marginTop="5dp"
+       android:layout_marginLeft="5dp"
+       android:layout_marginRight="5dp"
+       android:textSize="16sp"
+       android:textColor="@color/black"
+       android:background="@color/blue_69B0F2"
+       android:gravity="center"/>
+
+
+</LinearLayout>
