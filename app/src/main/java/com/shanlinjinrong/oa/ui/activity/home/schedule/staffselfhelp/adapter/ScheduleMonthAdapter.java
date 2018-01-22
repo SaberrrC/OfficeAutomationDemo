@@ -70,7 +70,6 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
         holder.view.setOnClickListener(v -> {
             if (mOnItemClick != null) {
                 mOnItemClick.onItemClicked(v, position);
-                EventBus.getDefault().post(new SelectedWeekCalendarEvent(position, "changeView"));
             }
         });
 
