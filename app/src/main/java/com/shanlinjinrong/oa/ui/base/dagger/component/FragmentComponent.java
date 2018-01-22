@@ -1,5 +1,7 @@
 package com.shanlinjinrong.oa.ui.base.dagger.component;
 
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.MonthlyCalendarFragment;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.WeekCalendarFragment;
 import com.shanlinjinrong.oa.ui.activity.message.Fragment.SelectedGroupContactFragment;
 import com.shanlinjinrong.oa.ui.base.dagger.annotation.PerFragment;
 import com.shanlinjinrong.oa.ui.base.dagger.module.FragmentModule;
@@ -17,4 +19,8 @@ public interface FragmentComponent {
     void inject(SelectedGroupContactFragment selectedGroupContactFragment);
 
     void inject(TabMeFragment tabMeFragment);
+
+    void inject(WeekCalendarFragment weekCalendarFragment);
+
+    void inject(MonthlyCalendarFragment monthlyCalendarFragment);
 }
