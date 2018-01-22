@@ -24,31 +24,10 @@
         android:layout_below="@+id/topView"
         android:background="@color/gray_d5d5d5" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminateTint="@color/btn_blue_normal" />
-
-    <LinearLayout
-        android:id="@+id/ll_container_layout"
+    <FrameLayout
+        android:id="@+id/fl_container_layout"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/view_line"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="horizontal" />
-
-    <LinearLayout
-        android:id="@+id/ll_month"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/view_line"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="horizontal"
-        android:visibility="gone" />
+        android:layout_below="@id/view_line"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

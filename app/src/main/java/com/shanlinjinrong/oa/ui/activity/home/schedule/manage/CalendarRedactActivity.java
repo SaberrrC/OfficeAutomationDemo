@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.views.common.CommonTopView;
@@ -40,6 +41,10 @@ public class CalendarRedactActivity extends AppCompatActivity {
     private void initView() {
         mTopView.getRightView().setOnClickListener(view -> {
             //TODO 提交按钮
+            if ("".equals(mEdTaskTheme.getText().toString())) {
+                Toast.makeText(this, "任务主题不能为空！", Toast.LENGTH_SHORT).show();
+                return;
+            }
         });
     }
 
