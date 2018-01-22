@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F2F2"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/toolbar"/>
+
+    <include layout="@layout/toolbar_shadow"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/rl_rootView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="50dp"
+            android:visibility="gone"
+            >
+
+
+            <RelativeLayout
+                android:id="@+id/rl_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="20dp"
+                >
+
+
+                <LinearLayout
+                    android:id="@+id/ll_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="类型 : "
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_event_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_start_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ll_type"
+                    android:layout_marginTop="@dimen/text_common_margin_top"
+                    android:clickable="true"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="开始时间 : "
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_time_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_end_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ll_start_time"
+                    android:layout_marginTop="@dimen/text_common_margin_top"
+                    android:clickable="true"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="结束时间 : "
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_time_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_top_status"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignRight="@+id/ll_start_time"
+                    android:layout_below="@+id/ll_type"
+                    android:layout_marginRight="100dp"
+                    android:src="@drawable/approval_top_state_passed_image"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/ll_date_length"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ll_end_time"
+                    android:layout_marginTop="@dimen/text_common_margin_top"
+                    android:clickable="true"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="时长 : "
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_duration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_leave_reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ll_date_length"
+                    android:layout_marginTop="@dimen/text_common_margin_top"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="请假原因 : "
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_reason"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/text_common_color"
+                        android:textSize="@dimen/text_fourteen_dp"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_approval_process_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_detail"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_approval_state_iv_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <ImageView
+                        android:id="@+id/iv_approval_state_launch_image"
+                        android:layout_width="43dp"
+                        android:layout_height="43dp"
+                        android:src="@drawable/approval_state_launch_image"
+                        />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_approval_info_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:orientation="vertical"
+                    >
+
+                    <include
+                        android:id="@+id/ll_approval_launcher_info_layout"
+                        layout="@layout/approval_process_item_info_layout"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_not_approval_operate_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_approval_process_layout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:orientation="vertical"
+                >
+
+                <Button
+                    android:id="@+id/iv_approval_pass"
+                    android:layout_width="216dp"
+                    android:layout_height="34dp"
+                    android:background="@drawable/btn_blue_round_bg"
+                    android:clickable="true"
+                    android:text="通过"
+                    android:textColor="@color/white"
+                    />
+
+                <Button
+                    android:id="@+id/iv_approval_reject"
+                    android:layout_width="216dp"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_red_round_bg"
+                    android:clickable="true"
+                    android:text="驳回"
+                    android:textColor="@color/white"
+                    />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

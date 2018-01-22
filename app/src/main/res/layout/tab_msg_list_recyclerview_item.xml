@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_notice_detail_rv_item_root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:background="@color/white"
+    android:gravity="center"
+    android:paddingTop="10dp"
+    >
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_msg_list_approval"
+        />
+
+    <ImageView
+        android:id="@+id/iv_no_red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/iv_icon"
+        android:src="@drawable/red_point"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/tv_item_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/iv_icon"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxWidth="160dp"
+        android:singleLine="true"
+        android:textColor="#333333"
+        android:textSize="@dimen/text_common_dp"/>
+
+    <TextView
+        android:id="@+id/tv_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:textColor="#999999"
+        android:textSize="@dimen/text_common_dp"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_item_type"
+        android:layout_below="@+id/tv_item_type"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:singleLine="true"
+        android:textColor="#999999"
+        android:textSize="@dimen/text_common_dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginTop="4dp"
+        android:background="#e3e3e3"
+        />
+</RelativeLayout>
