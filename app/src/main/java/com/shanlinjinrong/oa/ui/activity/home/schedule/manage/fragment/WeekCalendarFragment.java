@@ -136,7 +136,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         int lastYear = year - 1;
         calendar.set(lastYear, 0, 1);
         //更新Title
-        EventBus.getDefault().post(new UpdateTitleBean(currentYear + "年" + currentMonth + "月", "updateTitle"));
+        EventBus.getDefault().post(new UpdateTitleBean(currentYear + "年" + currentMonth + "月" + currentDay + "日", "updateTitle"));
         Observable.create(e -> {
             for (int i = 0; i < 156; i++) {
                 List<String> days = new ArrayList<>();
@@ -226,12 +226,11 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     dataBean.put(1, dataBean2);
                     leftDateBean.setData(dataBean);
 
-
-//                    LeftDateBean.DataBean dataBean3 = new LeftDateBean.DataBean();
-//                    dataBean3.setTitle("saasdasd");
-//                    dataBean3.setContentCount("3");
-//                    dataBean.put(2, dataBean3);
-//                    leftDateBean.setData(dataBean);
+                    LeftDateBean.DataBean dataBean3 = new LeftDateBean.DataBean();
+                    dataBean3.setTitle("saasdasd");
+                    dataBean3.setContentCount("3");
+                    dataBean.put(2, dataBean3);
+                    leftDateBean.setData(dataBean);
 //
 //                    LeftDateBean.DataBean dataBean4 = new LeftDateBean.DataBean();
 //                    dataBean4.setTitle("saasdasd");
@@ -240,6 +239,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 //                    leftDateBean.setData(dataBean);
                 } else {
                     SparseArray<LeftDateBean.DataBean> dataBean = new SparseArray<>();
+                    dataBean.put(0, new LeftDateBean.DataBean());
+       
                     leftDateBean.setData(dataBean);
                 }
                 mLlContent.add(leftDateBean);
@@ -398,7 +399,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mSelectedDay1 = mListDate.get(event.getPosition()).getDay().get(event.getIndex());
                 Toast.makeText(getContext(), mSelectedYear1 + "年" + mSelectedMonth1 + "月" + mSelectedDay1 + "日", Toast.LENGTH_SHORT).show();
                 //更新 Title
-                EventBus.getDefault().post(new UpdateTitleBean(mSelectedYear1 + "年" + mSelectedMonth1 + "月", "updateTitle"));
+                EventBus.getDefault().post(new UpdateTitleBean(mSelectedYear1 + "年" + mSelectedMonth1 + "月" + mSelectedDay1 + "日", "updateTitle"));
                 mSelectedAdapter.setNewData(mListDate);
                 mSelectedAdapter.notifyDataSetChanged();
                 break;
@@ -426,7 +427,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             case "popupWindow":
                 RefreshChangeView(event);
                 Dialog dialog = new Dialog(getContext(), R.style.CustomDialog);
-
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_week_calendar_content, null);
                 ImageView addCalendar = (ImageView) view.findViewById(R.id.img_add_calendar);
                 TextView tvContentCount = (TextView) view.findViewById(R.id.tv_content_count);
@@ -469,23 +469,11 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 //设置宽度
                 dialog_window_attributes.width = ScreenUtils.getScreenWidth(getContext()) - ScreenUtils.dp2px(getContext(), 45);
                 //设置高度
-                int position = (event.getPosition() + 2) * mViewHeight;
-                switch (mLlContent.get(event.getPosition() - 1).getData().size()) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        dialog_window_attributes.height = 400;
-                        dialog_window_attributes.y = (position - ScreenUtils.getStatusHeight(getContext())) - ScreenUtils.getScreenHeight(getContext()) / 2;
-                        break;
-                    case 3:
-                        dialog_window_attributes.height = 500;
-                        dialog_window_attributes.y = (position - ScreenUtils.getStatusHeight(getContext()) + 50) - ScreenUtils.getScreenHeight(getContext()) / 2;
-                        break;
-                    default:
-                        dialog_window_attributes.height = 600;
-                        dialog_window_attributes.y = (position - ScreenUtils.getStatusHeight(getContext()) + 100) - ScreenUtils.getScreenHeight(getContext()) / 2;
-                        break;
-                }
+                int position = (event.getPosition() + 1) * mViewHeight;
+
+                dialog_window_attributes.height = 350;
+                dialog_window_attributes.y = (position - (ScreenUtils.getScreenHeight(getContext()) / 2 - (ScreenUtils.getStatusHeight(getContext()) + ScreenUtils.dp2px(getContext(), 56))));
+
                 dialog_window_attributes.x = ScreenUtils.dp2px(getContext(), 19);
 
                 dialog_window.setAttributes(dialog_window_attributes);
