@@ -159,6 +159,12 @@ public class Constants {
      * 周历 详情内容
      */
     public static final String CALENDARCONTENT   = "content";
+    /**
+     * 周历 选择时间
+     */
+    public static final String SELECTEDTIME      = "selectedTime";
+
+    public static final String SELECTEDPOSITION  = "position";
 
     /**
      * 编辑周历

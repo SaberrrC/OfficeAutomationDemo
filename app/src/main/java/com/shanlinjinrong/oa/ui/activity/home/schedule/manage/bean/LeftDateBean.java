@@ -73,9 +73,25 @@ public class LeftDateBean implements MultiItemEntity {
 
         private String date;
 
-        private String startTime;
+        private int startTime;
 
-        private String endTime;
+        private int endTime;
+
+        public void setStartTime(int startTime) {
+            this.startTime = startTime;
+        }
+
+        public void setEndTime(int endTime) {
+            this.endTime = endTime;
+        }
+
+        public int getStartTime() {
+            return startTime;
+        }
+
+        public int getEndTime() {
+            return endTime;
+        }
 
         public String getContent() {
             return content;
@@ -91,22 +107,6 @@ public class LeftDateBean implements MultiItemEntity {
 
         public void setDate(String date) {
             this.date = date;
-        }
-
-        public String getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(String startTime) {
-            this.startTime = startTime;
-        }
-
-        public String getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(String endTime) {
-            this.endTime = endTime;
         }
 
         public String getTitle() {

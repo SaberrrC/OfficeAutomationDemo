@@ -3,17 +3,26 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.easeui.Constant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
+import com.shanlinjinrong.oa.utils.SelectedTimeFragment;
 import com.shanlinjinrong.pickerview.OptionsPickerView;
 import com.shanlinjinrong.views.common.CommonTopView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,23 +53,25 @@ public class CalendarRedactActivity extends AppCompatActivity {
     @BindView(R.id.view_completes)
     View          mViewCompletes;
 
-    private String            mDate;
-    private int               mStartTime;
-    private int               mEndTime;
-    private String            mStartTimes;
-    private String            mEndTimes;
-    private String            mTitle;
-    private String            mContent;
-    private String            mYear;
-    private String            mMonth;
-    private int               mItemType;
-    private OptionsPickerView beginTimeView;
+    private String               mDate;
+    private int                  mStartTime;
+    private int                  mEndTime;
+    private String               mTitle;
+    private String               mContent;
+    private String               mYear;
+    private String               mMonth;
+    private int                  mItemType;
+    private OptionsPickerView    beginTimeView;
+    private SelectedTimeFragment mSelectedTimeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar_redact);
         ButterKnife.bind(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         initData();
         initView();
     }
@@ -111,7 +122,7 @@ public class CalendarRedactActivity extends AppCompatActivity {
                 mEdTaskDetails.setEnabled(false);
 
                 mEdTaskTheme.setText(mTitle);
-                mTvTaskDate.setText(mStartTimes + "-" + mEndTimes);
+                mTvTaskDate.setText(mStartTime + ":00-" + mEndTime + ":00");
                 mEdTaskDetails.setText(mContent);
                 break;
             case Constants.MEETINGCALENDAR:
@@ -129,15 +140,15 @@ public class CalendarRedactActivity extends AppCompatActivity {
                 mYear = getIntent().getStringExtra(Constants.CALENDARYEAR);
                 mMonth = getIntent().getStringExtra(Constants.CALENDARMONTH);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
-                mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, -1);
-                mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, -1);
+                mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
+                mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
                 break;
             //查看周历
             case Constants.LOOKCALENDAR:
                 mTitle = getIntent().getStringExtra(Constants.CALENDARTITLE);
                 mContent = getIntent().getStringExtra(Constants.CALENDARCONTENT);
-                mStartTimes = getIntent().getStringExtra(Constants.CALENDARSTARTTIME);
-                mEndTimes = getIntent().getStringExtra(Constants.CALENDARENDTIME);
+                mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
+                mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
                 break;
             //查看会议室
@@ -185,11 +196,39 @@ public class CalendarRedactActivity extends AppCompatActivity {
                 break;
             //TODO 弹出时间选择框
             case R.id.tv_task_date:
-
+                if (mSelectedTimeFragment == null) {
+                    mSelectedTimeFragment = new SelectedTimeFragment();
+                }
+                mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
+                bundle.putInt(Constants.CALENDARSTARTTIME, mStartTime);
+                bundle.putInt(Constants.CALENDARENDTIME, mEndTime);
+                mSelectedTimeFragment.setArguments(bundle);
                 break;
             default:
                 break;
         }
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ReceiveEvent(SelectedWeekCalendarEvent event) {
+        switch (event.getEvent()) {
+            case Constants.SELECTEDTIME:
+                Toast.makeText(this, event.getStartTime() + "|" + event.getEndTime(), Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

@@ -209,8 +209,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     dataBean1.setContentCount("3");
                     dataBean1.setDate("1月22日");
                     dataBean1.setTitle("测试Title1");
-                    dataBean1.setStartTime("15:00");
-                    dataBean1.setEndTime("17:00");
+                    dataBean1.setStartTime(15);
+                    dataBean1.setEndTime(17);
                     dataBean.put(0, dataBean1);
                     leftDateBean.setData(dataBean);
 
@@ -220,8 +220,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     dataBean2.setDate("1月22日");
                     dataBean2.setContentCount("3");
                     dataBean2.setContent("312312312");
-                    dataBean2.setStartTime("9:00");
-                    dataBean2.setEndTime("12:00");
+                    dataBean2.setStartTime(9);
+                    dataBean2.setEndTime(12);
 
                     dataBean.put(1, dataBean2);
                     leftDateBean.setData(dataBean);
@@ -415,6 +415,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 intent.putExtra(Constants.CALENDARSTARTTIME, mSelectedStartTime);
                 intent.putExtra(Constants.CALENDARENDTIME, mSelectedEndTime);
                 intent.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
+                intent.putExtra(Constants.SELECTEDPOSITION, event.getPosition());
                 startActivity(intent);
                 break;
             //选择某个事件
@@ -440,6 +441,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     intent1.putExtra(Constants.CALENDARSTARTTIME, mSelectedStartTime);
                     intent1.putExtra(Constants.CALENDARENDTIME, mSelectedEndTime);
                     intent1.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
+                    intent1.putExtra(Constants.SELECTEDPOSITION, event.getPosition());
+
                     startActivity(intent1);
                 });
 
@@ -557,6 +560,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             intent.putExtra(Constants.CALENDARENDTIME, mPopupData.get(i).getEndTime());
             intent.putExtra(Constants.CALENDARDATE, mPopupData.get(i).getDate());
             intent.putExtra(Constants.CALENDARTYPE, Constants.LOOKCALENDAR);
+            intent.putExtra(Constants.SELECTEDPOSITION, i);
             startActivity(intent);
         }
     }
