@@ -131,6 +131,7 @@ public class Constants {
      * 周历 类型
      */
     public static final String CALENDARTYPE      = "itemType";
+
     /**
      * 周历 开始时间
      */
@@ -143,6 +144,10 @@ public class Constants {
      * 周历 日期
      */
     public static final String CALENDARDATE      = "date";
+    /**
+     * 周历 日期
+     */
+    public static final String CALENDARID      = "id";
     /**
      * 周历 年
      */
@@ -173,11 +178,11 @@ public class Constants {
     /**
      * 查看周历
      */
-    public static final int LOOKCALENDAR    = 1;
+    public static final int LOOKCALENDAR    = 2;
     /**
      * 查看会议室
      */
-    public static final int MEETINGCALENDAR = 2;
+    public static final int MEETINGCALENDAR = 1;
 
 
     /****************6.0权限*********************/

@@ -21,6 +21,6 @@ public class LookContentAdapter extends BaseQuickAdapter<LeftDateBean.DataBean> 
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, LeftDateBean.DataBean dataBean) {
-        baseViewHolder.setText(R.id.tv_content, dataBean.getTitle());
+        baseViewHolder.setText(R.id.tv_content, dataBean.getTaskTheme());
     }
 }

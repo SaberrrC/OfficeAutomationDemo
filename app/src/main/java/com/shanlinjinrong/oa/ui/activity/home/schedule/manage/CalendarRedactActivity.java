@@ -65,6 +65,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private SelectedTimeFragment mSelectedTimeFragment;
     private String               mTaskStartTime;
     private String               mTaskEndTime;
+    private int mId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,14 +86,14 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     private void initView() {
         mTopView.getRightView().setOnClickListener(view -> {
-            //TODO 提交按钮
             switch (mItemType) {
+                //删除 返回
                 case Constants.WRITECALENDAR:
                     finish();
                     break;
-                //TODO 删除
+                //删除 日程
                 case Constants.LOOKCALENDAR:
-
+                    mPresenter.deleteCalendarSchedule(mId);
                     break;
                 case Constants.MEETINGCALENDAR:
                     break;
@@ -163,6 +164,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
                 mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
+                mId = getIntent().getIntExtra(Constants.CALENDARID,-1);
 
                 if (mStartTime == 9) {
                     mTaskStartTime = "0" + mStartTime;
@@ -281,13 +283,34 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void addCalendarScheduleSuccess() {
-        showToast("新增日程成功!");
+        showToast("新增日程成功");
         finish();
     }
 
     @Override
     public void addCalendarScheduleFailure(int errorCode, String errorMsg) {
         showToast("新增日程失败!");
+    }
+
+    @Override
+    public void deleteCalendarScheduleSuccess() {
+        showToast("删除日程成功");
+        finish();
+    }
+
+    @Override
+    public void deleteCalendarScheduleFailure(int errorCode, String errorMsg) {
+        showToast("删除日程失败");
+    }
+
+    @Override
+    public void updateCalendarScheduleSuccess() {
+        showToast("更新日程成功");
+    }
+
+    @Override
+    public void updateCalendarScheduleFailure(int errorCode, String errorMsg) {
+        showToast("更新日程失败");
     }
 
     @Override

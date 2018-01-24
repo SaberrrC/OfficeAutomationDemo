@@ -1,66 +1,48 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean;
 
-import android.util.SparseArray;
-
-import com.chad.library.adapter.base.entity.MultiItemEntity;
+import java.util.List;
 
 /**
  * 作者：王凤旭
- * 创建时间：2018/1/16
+ * 创建时间：2018/1/24
  * 功能描述：
  */
 
-public class LeftDateBean implements MultiItemEntity {
-    private String date;
-
-    private int itemType;
-
-    private int position;
-
-    private boolean isSelected;
-
-    private SparseArray<LeftDateBean.DataBean> data;
+public class CalendarScheduleContentBean {
 
 
-    public SparseArray<DataBean> getData() {
+    /**
+     * code : 000000
+     * message : success
+     * data : [{"id":35,"userId":40030,"taskTheme":"测试","taskDate":"2018-01-24","startTime":"2018-01-24 11:00:00","endTime":"2018-01-24 09:00:00","taskDetail":"xiangqing","taskType":2,"taskId":0,"status":0,"remark":null},{"id":37,"userId":40030,"taskTheme":"测试","taskDate":"2018-01-24","startTime":"2018-01-24 09:00:00","endTime":"2018-01-24 12:00:00","taskDetail":"xiangqing","taskType":2,"taskId":0,"status":0,"remark":null},{"id":38,"userId":40030,"taskTheme":"测试","taskDate":"2018-01-24","startTime":"2018-01-24 09:00:00","endTime":"2018-01-24 11:00:00","taskDetail":"xiangqing","taskType":0,"taskId":0,"status":0,"remark":null},{"id":39,"userId":40030,"taskTheme":"测试","taskDate":"2018-01-24","startTime":"2018-01-24 09:00:00","endTime":"2018-01-24 11:00:00","taskDetail":"xiangqing","taskType":0,"taskId":0,"status":0,"remark":null},{"id":40,"userId":40030,"taskTheme":"嗯","taskDate":"2018-01-24","startTime":"2018-01-24 09:00:00","endTime":"2018-01-24 10:00:00","taskDetail":"嗯嗯","taskType":2,"taskId":0,"status":0,"remark":null},{"id":42,"userId":40030,"taskTheme":"吧","taskDate":"2018-01-24","startTime":"2018-01-24 09:00:00","endTime":"2018-01-24 17:00:00","taskDetail":"莫","taskType":2,"taskId":0,"status":0,"remark":null}]
+     */
+
+    private String code;
+    private String         message;
+    private List<DataBean> data;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<DataBean> getData() {
         return data;
     }
 
-    public void setData(SparseArray<DataBean> data) {
+    public void setData(List<DataBean> data) {
         this.data = data;
-    }
-
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public void setItemType(int itemType) {
-        this.itemType = itemType;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    @Override
-    public int getItemType() {
-        return itemType;
     }
 
     public static class DataBean {
@@ -78,7 +60,7 @@ public class LeftDateBean implements MultiItemEntity {
          * remark : null
          */
 
-        private int    id;
+        private int id;
         private int    userId;
         private String taskTheme;
         private String taskDate;

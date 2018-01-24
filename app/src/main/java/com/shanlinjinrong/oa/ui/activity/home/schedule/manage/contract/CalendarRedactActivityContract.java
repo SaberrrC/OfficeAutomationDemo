@@ -21,11 +21,23 @@ public interface CalendarRedactActivityContract {
 
         void addCalendarScheduleFailure(int errorCode, String errorMsg);
 
+        void deleteCalendarScheduleSuccess();
+
+        void deleteCalendarScheduleFailure(int errorCode, String errorMsg);
+
+        void updateCalendarScheduleSuccess();
+
+        void updateCalendarScheduleFailure(int errorCode, String errorMsg);
+
+
     }
 
     interface Presenter extends BasePresenter<CalendarRedactActivityContract.View> {
 
+        void addCalendarSchedule(String schedule);
 
-        void addCalendarSchedule(String chedule);
+        void deleteCalendarSchedule(int calendarId);
+
+        void updateCalendarSchedule(String schedule);
     }
 }
