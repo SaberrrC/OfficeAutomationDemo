@@ -88,7 +88,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
             //TODO 提交按钮
             switch (mItemType) {
                 case Constants.WRITECALENDAR:
-
+                    finish();
                     break;
                 //TODO 删除
                 case Constants.LOOKCALENDAR:
