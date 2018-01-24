@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,11 +9,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.MonthlyCalendarFragmentContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.MonthlyCalendarFragmentContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.MonthlyCalendarFragmentPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.ScheduleMonthAdapter;
@@ -44,6 +47,8 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     private int mSelectedDay, mCurrentYear, mCurrentMonth, mCurrentDay, mSelectedMonth, mSelectedYear;
     private List<PopItem> listDate;
     private MonthSelectPopWindow monthSelectPopWindow;
+    private int mViewHeight;
+    private int mViewWidth;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,7 +81,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         String currentMonth = currentFormat2.format(calendar.getTime());
         SimpleDateFormat currentFormat3 = new SimpleDateFormat("dd");
         String currentDay = currentFormat3.format(calendar.getTime());
-       // int lastYear = year - 1;// calendar.set(lastYear, 0, 1);
+        // int lastYear = year - 1;// calendar.set(lastYear, 0, 1);
         //更新Title
         EventBus.getDefault().post(new UpdateTitleBean(currentYear + "年" + currentMonth + "月" + currentDay + "日", "monthLUpdateTitle"));
         mData = new ArrayList<>();
@@ -89,7 +94,8 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         mSelectedMonth = mCurrentMonth;
         //测量布局的宽高
         int mHeight = ScreenUtils.dp2px(getContext(), 97) + ScreenUtils.getStatusHeight(getContext());
-        int mViewHeight = (ScreenUtils.getScreenHeight(getContext()) - mHeight) / 6;
+        mViewHeight = (ScreenUtils.getScreenHeight(getContext()) - mHeight) / 6;
+        mViewWidth = ScreenUtils.getScreenWidth(getContext()) / 7;
 
         listDate = DateUtils.getAttandenceDate(mCurrentMonth, mCurrentDay);
         mData.addAll(listDate);
@@ -146,7 +152,6 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
 
     @Override
     public void onItemClicked(View v, int position) {
-
         for (int i = 0; i < mData.size(); i++) {
             if (i == position) {
                 mData.get(position).setSelect(true);
@@ -158,13 +163,63 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         mScheduleMonthAdapter.notifyDataSetChanged();
         String content = mData.get(position).getContent();
         mSelectedDay = Integer.parseInt(content);
-
         String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
         String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
         String date = mSelectedYear + "年" + month + "月" + mDay + "日";
-        Toast.makeText(getContext(), position + 1 + "", Toast.LENGTH_SHORT).show();
         EventBus.getDefault().post(new UpdateTitleBean(date, "monthLUpdateTitle"));
+        Toast.makeText(getContext(), position + 1 + "", Toast.LENGTH_SHORT).show();
+        showPopWindow(v, position + 1);
 
+    }
+
+    private void showPopWindow(View v, int clickPosition) {
+        Dialog dialog = new Dialog(getContext(), R.style.CustomDialog);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_month_calendar_content, null);
+        dialog.setContentView(view);
+        //获取到当前Activity的Window
+        Window dialog_window = dialog.getWindow();
+        WindowManager.LayoutParams dialog_window_attributes = dialog_window.getAttributes();
+
+        dialog_window_attributes.width = mViewWidth * 3;
+        dialog_window_attributes.height = mViewHeight * 3;
+
+        if ((clickPosition - 1) % 7 >= 4) {
+            dialog_window_attributes.x = mViewWidth * (7 - (clickPosition - 1) % 7);
+            if (((clickPosition - 1) / 7) >= 3) {
+                dialog_window.setGravity(Gravity.RIGHT | Gravity.BOTTOM);
+                if (((clickPosition - 1) / 7) == 3) {
+                    dialog_window_attributes.y = mViewHeight * 2;
+                } else if (((clickPosition - 1) / 7) == 4) {
+                    dialog_window_attributes.y = mViewHeight;
+                }
+
+            } else {
+                dialog_window.setGravity(Gravity.RIGHT | Gravity.TOP);
+                dialog_window_attributes.y = ((clickPosition - 1) / 7) * mViewHeight + ScreenUtils.dp2px(getContext(), 96);
+            }
+        } else {
+            dialog_window_attributes.x = mViewWidth * ((clickPosition - 1) % 7);
+            if (((clickPosition - 1) / 7) >= 3) {
+                dialog_window.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+                if (((clickPosition - 1) / 7) == 3) {
+                    dialog_window_attributes.y = mViewHeight * 2;
+                } else if (((clickPosition - 1) / 7) == 4) {
+                    dialog_window_attributes.y = mViewHeight;
+                }
+            } else {
+                dialog_window.setGravity(Gravity.LEFT | Gravity.TOP);
+                dialog_window_attributes.y = ((clickPosition - 1) / 7) * mViewHeight + ScreenUtils.dp2px(getContext(), 96);
+            }
+        }
+        dialog_window.setAttributes(dialog_window_attributes);
+        dialog.show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void getTitleViewClicked(UpdateTitleBean bean) {
+        if ("MonthlyCalendarFragment".equals(bean.getEvent()) && "MonthlyCalendarFragment".equals(bean.getTitle())) {
+            selectMonthPopwindow();
+        }
     }
 
     private void selectMonthPopwindow() {
@@ -192,12 +247,5 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
                     }
                 });
         monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void getTitleViewClicked(UpdateTitleBean bean) {
-        if ("MonthlyCalendarFragment".equals(bean.getEvent()) && "MonthlyCalendarFragment".equals(bean.getTitle())) {
-            selectMonthPopwindow();
-        }
     }
 }

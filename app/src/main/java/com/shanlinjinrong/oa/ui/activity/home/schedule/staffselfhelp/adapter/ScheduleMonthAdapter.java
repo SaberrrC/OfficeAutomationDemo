@@ -85,7 +85,7 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
             TextView titleText = new TextView(mContext);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             titleText.setLayoutParams(lp);
-            titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP ,12);
+            titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             titleText.setGravity(Gravity.CENTER);
             if (i == 2) {
                 titleText.setText("更多");
