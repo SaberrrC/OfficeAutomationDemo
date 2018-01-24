@@ -130,7 +130,11 @@ public class Constants {
     /**
      * 周历 类型
      */
-    public static final String CALENDARTYPE      = "itemType";
+    public static final String CALENDARTYPE   = "itemType";
+    /**
+     * 周历 状态
+     */
+    public static final String CALENDARSTATUS = "status";
 
     /**
      * 周历 开始时间
@@ -147,7 +151,7 @@ public class Constants {
     /**
      * 周历 日期
      */
-    public static final String CALENDARID      = "id";
+    public static final String CALENDARID        = "id";
     /**
      * 周历 年
      */
@@ -169,7 +173,7 @@ public class Constants {
      */
     public static final String SELECTEDTIME      = "selectedTime";
 
-    public static final String SELECTEDPOSITION  = "position";
+    public static final String SELECTEDPOSITION = "position";
 
     /**
      * 编辑周历

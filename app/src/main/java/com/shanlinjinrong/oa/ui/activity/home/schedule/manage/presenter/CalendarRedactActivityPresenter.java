@@ -177,6 +177,8 @@ public class CalendarRedactActivityPresenter extends HttpPresenter<CalendarRedac
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         httpParams.putJsonParams(schedule);
+
+
         mKjHttp.jsonPost("schedule/updateSchedule", httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {

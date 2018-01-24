@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ import butterknife.OnClick;
 /**
  * 编辑日历
  */
-public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActivityPresenter> implements CalendarRedactActivityContract.View {
+public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActivityPresenter> implements CalendarRedactActivityContract.View ,CompoundButton.OnCheckedChangeListener{
 
     @BindView(R.id.top_view)
     CommonTopView mTopView;
@@ -66,6 +67,11 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private String               mTaskStartTime;
     private String               mTaskEndTime;
     private int                  mId;
+    private int                  mStatus;
+    private String               mOldTheme;
+    private String               mOldDate;
+    private String               mOldDetails;
+    private boolean              mIsFirst, mIsCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +106,15 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 default:
                     break;
             }
-
         });
+
+        if (mStatus == 1) {
+            mCbCompletes.setChecked(true);
+            mCbCompletes.setEnabled(false);
+            mBtnCommonCalendar.setVisibility(View.GONE);
+        }
+
+        mCbCompletes.setOnCheckedChangeListener(this);
 
         SimpleDateFormat from = new SimpleDateFormat("yyyyMMdd");
         String date = from.format(new Date());
@@ -139,6 +152,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     }
 
     private void initData() {
+        mIsFirst = true;
         mItemType = getIntent().getIntExtra(Constants.CALENDARTYPE, -1);
         switch (mItemType) {
             //编辑周历
@@ -165,7 +179,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
                 mId = getIntent().getIntExtra(Constants.CALENDARID, -1);
-
+                mStatus = getIntent().getIntExtra(Constants.PHONE_STATUS, 0);
                 if (mStartTime == 9) {
                     mTaskStartTime = "0" + mStartTime;
                     mTaskEndTime = mEndTime + "";
@@ -214,8 +228,48 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                             mEdTaskTheme.setEnabled(true);
                             mTvTaskDate.setEnabled(true);
                             mEdTaskDetails.setEnabled(true);
-                            mBtnCommonCalendar.setText("更改");
+                            mBtnCommonCalendar.setText("更新");
+
+                            if (mIsFirst) {
+                                mIsFirst = false;
+                                mOldTheme = mEdTaskTheme.getText().toString();
+                                mOldDate = mTvTaskDate.getText().toString();
+                                mOldDetails = mEdTaskDetails.getText().toString();
+                            }
                         } else {
+                            try {
+                                JSONObject jsonObject = new JSONObject();
+
+
+                                if (!mOldTheme.equals(mEdTaskTheme.getText().toString().trim())) {
+                                    jsonObject.put("taskTheme", mEdTaskTheme.getText().toString().trim());
+                                }
+
+                                if (!mOldDate.equals(mTvTaskDate.getText().toString().trim())) {
+                                    if ("9".equals(mTaskStartTime)) {
+                                        mTaskStartTime = "09";
+                                    }
+                                    jsonObject.put("startTime", mTaskStartTime + ":00:00");
+                                    jsonObject.put("endTime", mTaskEndTime + ":00:00");
+                                }
+
+                                if (!mOldDetails.equals(mEdTaskDetails.getText().toString().trim())) {
+                                    jsonObject.put("taskDetail", mEdTaskDetails.getText().toString().trim());
+                                }
+
+                                String json = jsonObject.toString();
+
+                                if ("{}".equals(json)) {
+                                    Toast.makeText(this, "日程无变更，更新失败", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    jsonObject.put("id", mId);
+                                    String calendar = jsonObject.toString();
+                                    mPresenter.updateCalendarSchedule(calendar);
+                                }
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                            }
+
                             mEdTaskTheme.setEnabled(false);
                             mTvTaskDate.setEnabled(false);
                             mEdTaskDetails.setEnabled(false);
@@ -258,12 +312,12 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
             case Constants.SELECTEDTIME:
                 mTaskStartTime = event.getStartTime();
                 mTaskEndTime = event.getEndTime();
+
                 mTvTaskDate.setText(mTaskStartTime + ":00" + "-" + mTaskEndTime + ":00");
                 break;
             default:
                 break;
         }
-
     }
 
     @Override
@@ -305,7 +359,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void updateCalendarScheduleSuccess() {
-
+        if (mIsCheckBox) {
+            finish();
+        }
         showToast("更新日程成功");
     }
 
@@ -319,6 +375,22 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (b) {
+            try {
+                mIsCheckBox = true;
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", mId);
+                jsonObject.put("status", 1);
+                String calendar = jsonObject.toString();
+                mPresenter.updateCalendarSchedule(calendar);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
     }
 }

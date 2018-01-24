@@ -600,6 +600,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setTaskType(dataBean.getTaskType());
+                    leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
@@ -651,6 +653,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             intent.putExtra(Constants.CALENDARID, mPopupData.get(i).getId());
             intent.putExtra(Constants.CALENDARTYPE, mPopupData.get(i).getTaskType());
             intent.putExtra(Constants.CALENDARTYPE, Constants.LOOKCALENDAR);
+            intent.putExtra(Constants.CALENDARSTATUS, mPopupData.get(i).getStatus());
             intent.putExtra(Constants.SELECTEDPOSITION, i);
             startActivity(intent);
         }
