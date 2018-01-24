@@ -27,9 +27,11 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
     @BindView(R.id.topView)
     CommonTopView mTopView;
 
-    private WeekCalendarFragment    mWeekCalendarFragment;
+    private WeekCalendarFragment mWeekCalendarFragment;
     private MonthlyCalendarFragment mMonthlyCalendarFragment;
     private SelectedTimeFragment mSelectedTimeFragment;
+    private String weekLastTitle = "";
+    private String monthLastTitle = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +46,23 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
         mTopView.getTitleView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mSelectedTimeFragment == null) {
-                    mSelectedTimeFragment = new SelectedTimeFragment();
+                if (!mMonthlyCalendarFragment.isHidden() && mWeekCalendarFragment.isHidden()) {
+                    if (!EventBus.getDefault().isRegistered(mMonthlyCalendarFragment)) {
+                        EventBus.getDefault().register(mMonthlyCalendarFragment);
+                    }
+                    EventBus.getDefault().postSticky(new UpdateTitleBean("MonthlyCalendarFragment", "MonthlyCalendarFragment"));
+                } else {
+                    if (mSelectedTimeFragment == null) {
+                        mSelectedTimeFragment = new SelectedTimeFragment();
+                    }
+                    mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
+                    bundle.putInt(Constants.CALENDARSTARTTIME, 1);
+                    bundle.putInt(Constants.CALENDARENDTIME, 2);
+                    mSelectedTimeFragment.setArguments(bundle);
                 }
-                mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
-                bundle.putInt(Constants.CALENDARSTARTTIME, 1);
-                bundle.putInt(Constants.CALENDARENDTIME, 2);
-                mSelectedTimeFragment.setArguments(bundle);
+
             }
         });
     }
@@ -64,12 +74,15 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.fl_container_layout, mMonthlyCalendarFragment).commit();
 
         mTopView.getRightView().setOnClickListener(view -> {
+
             if (mMonthlyCalendarFragment.isHidden()) {
                 getSupportFragmentManager().beginTransaction().show(mMonthlyCalendarFragment).commit();
                 getSupportFragmentManager().beginTransaction().hide(mWeekCalendarFragment).commit();
+                mTopView.setAppTitle(monthLastTitle);
             } else {
                 getSupportFragmentManager().beginTransaction().show(mWeekCalendarFragment).commit();
                 getSupportFragmentManager().beginTransaction().hide(mMonthlyCalendarFragment).commit();
+                mTopView.setAppTitle(weekLastTitle);
             }
         });
     }
@@ -77,7 +90,11 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void RefreshTitle(UpdateTitleBean event) {
         if ("updateTitle".equals(event.getEvent())) {
-            mTopView.setAppTitle(event.getTitle());
+            weekLastTitle = event.getTitle();
+            mTopView.setAppTitle(weekLastTitle);
+        } else if ("monthLUpdateTitle".equals(event.getEvent())) {
+            monthLastTitle = event.getTitle();
+            mTopView.setAppTitle(monthLastTitle);
         }
     }
 
@@ -86,6 +103,9 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
+        }
+        if (EventBus.getDefault().isRegistered(mMonthlyCalendarFragment)) {
+            EventBus.getDefault().unregister(mMonthlyCalendarFragment);
         }
     }
 }

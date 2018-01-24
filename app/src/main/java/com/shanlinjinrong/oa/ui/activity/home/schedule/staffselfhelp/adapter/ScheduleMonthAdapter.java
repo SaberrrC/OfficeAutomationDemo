@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter;
 import android.content.Context;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
 import com.shanlinjinrong.utils.DeviceUtil;
 
@@ -23,19 +25,15 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 import java.util.Random;
 
-
-/**
- * Created by 丁 on 2017/10/12.
- * 自定义日期选择框
- */
 public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdapter.ItemHolder> {
     private List<PopItem> mData;
     private Context mContext;
-
+    private int mViewHeight;
     private OnItemClick mOnItemClick;
 
-    public ScheduleMonthAdapter(List<PopItem> mData) {
+    public ScheduleMonthAdapter(List<PopItem> mData, int mViewHeight) {
         this.mData = mData;
+        this.mViewHeight = mViewHeight;
     }
 
     @Override
@@ -46,6 +44,10 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
 
     @Override
     public void onBindViewHolder(final ItemHolder holder, final int position) {
+        ViewGroup.LayoutParams mLayoutParams = holder.view.getLayoutParams();
+        mLayoutParams.height = mViewHeight;
+        holder.view.setLayoutParams(mLayoutParams);
+
         holder.item.setText(mData.get(position).getContent());
         if (mData.get(position).isSelect()) {
             holder.item.setTextColor(ResourcesCompat.getColor(mContext.getResources(), R.color.white, null));
@@ -72,8 +74,6 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
                 mOnItemClick.onItemClicked(v, position);
             }
         });
-
-
         holder.llcontent.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         holder.llcontent.removeAllViews();
         LinearLayout linearLayout = new LinearLayout(mContext);
@@ -81,16 +81,21 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
-
-        for (int i = 0; i < new Random().nextInt(4); i++) {
+        for (int i = 0; i < 3; i++) {
             TextView titleText = new TextView(mContext);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(1, 1, 1, 1);
             titleText.setLayoutParams(lp);
+            titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP ,12);
             titleText.setGravity(Gravity.CENTER);
-            titleText.setText("OA");
+            if (i == 2) {
+                titleText.setText("更多");
+            } else {
+                titleText.setText("OA");
+            }
+
             linearLayout.addView(titleText);
         }
+
         holder.llcontent.addView(linearLayout);
 
     }

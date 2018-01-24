@@ -3,7 +3,6 @@ package com.shanlinjinrong.oa.utils;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import java.lang.reflect.Field;
