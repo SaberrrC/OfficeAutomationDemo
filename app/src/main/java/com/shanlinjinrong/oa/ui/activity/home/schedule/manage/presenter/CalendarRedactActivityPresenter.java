@@ -131,7 +131,7 @@ public class CalendarRedactActivityPresenter extends HttpPresenter<CalendarRedac
                                 mView.deleteCalendarScheduleSuccess();
                                 break;
                             default:
-                                mView.addCalendarScheduleFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                                mView.deleteCalendarScheduleFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
                                 break;
                         }
                     }
