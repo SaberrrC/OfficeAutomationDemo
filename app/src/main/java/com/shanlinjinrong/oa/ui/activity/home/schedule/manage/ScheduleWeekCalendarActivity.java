@@ -2,11 +2,14 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.MonthlyCalendarFragment;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.WeekCalendarFragment;
+import com.shanlinjinrong.oa.utils.SelectedTimeFragment;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -26,6 +29,7 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
 
     private WeekCalendarFragment    mWeekCalendarFragment;
     private MonthlyCalendarFragment mMonthlyCalendarFragment;
+    private SelectedTimeFragment mSelectedTimeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,21 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
             EventBus.getDefault().register(this);
         }
         initData();
+
+        mTopView.getTitleView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mSelectedTimeFragment == null) {
+                    mSelectedTimeFragment = new SelectedTimeFragment();
+                }
+                mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
+                bundle.putInt(Constants.CALENDARSTARTTIME, 1);
+                bundle.putInt(Constants.CALENDARENDTIME, 2);
+                mSelectedTimeFragment.setArguments(bundle);
+            }
+        });
     }
 
     private void initData() {

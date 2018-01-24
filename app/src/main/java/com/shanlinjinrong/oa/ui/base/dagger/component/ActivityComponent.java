@@ -4,6 +4,7 @@ import com.shanlinjinrong.oa.ui.activity.calendar.MouthCalenderActivity;
 import com.shanlinjinrong.oa.ui.activity.contracts.Contact_Details_Activity;
 import com.shanlinjinrong.oa.ui.activity.contracts.ContactsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.CalendarRedactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity;
@@ -130,4 +131,6 @@ public interface ActivityComponent {
     void inject(CallActivity callActivity);
 
     void inject(LookGroupMemberActivity lookGroupMemberActivity);
+
+    void inject(CalendarRedactActivity calendarRedactActivity);
 }

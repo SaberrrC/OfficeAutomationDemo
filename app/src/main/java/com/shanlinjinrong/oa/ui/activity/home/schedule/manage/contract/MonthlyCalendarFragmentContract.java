@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contact;
+package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract;
 
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -9,17 +9,16 @@ import com.shanlinjinrong.oa.ui.base.BaseView;
  * 功能描述：
  */
 
-public interface WeekCalendarFragmentContact {
+public interface MonthlyCalendarFragmentContract {
 
-    interface View extends BaseView {
+    interface View extends BaseView{
 
         void showLoading();
 
         void hideLoading();
-
     }
 
-    interface Presenter extends BasePresenter<WeekCalendarFragmentContact.View> {
+    interface Presenter extends BasePresenter<MonthlyCalendarFragmentContract.View>{
 
     }
 }

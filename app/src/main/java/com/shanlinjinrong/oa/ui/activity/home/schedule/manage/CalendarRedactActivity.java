@@ -1,21 +1,19 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.easeui.Constant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
+import com.example.retrofit.model.ScheduleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
-import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity;
-import com.shanlinjinrong.oa.utils.DateUtils;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.CalendarRedactActivityContract;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.CalendarRedactActivityPresenter;
+import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.SelectedTimeFragment;
 import com.shanlinjinrong.pickerview.OptionsPickerView;
 import com.shanlinjinrong.views.common.CommonTopView;
@@ -23,6 +21,8 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +34,7 @@ import butterknife.OnClick;
 /**
  * 编辑日历
  */
-public class CalendarRedactActivity extends AppCompatActivity {
+public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActivityPresenter> implements CalendarRedactActivityContract.View {
 
     @BindView(R.id.top_view)
     CommonTopView mTopView;
@@ -63,6 +63,8 @@ public class CalendarRedactActivity extends AppCompatActivity {
     private int                  mItemType;
     private OptionsPickerView    beginTimeView;
     private SelectedTimeFragment mSelectedTimeFragment;
+    private String               mTaskStartTime;
+    private String               mTaskEndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +78,17 @@ public class CalendarRedactActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
     private void initView() {
         mTopView.getRightView().setOnClickListener(view -> {
             //TODO 提交按钮
             switch (mItemType) {
                 case Constants.WRITECALENDAR:
-                    finish();
+
                     break;
                 //TODO 删除
                 case Constants.LOOKCALENDAR:
@@ -95,10 +102,8 @@ public class CalendarRedactActivity extends AppCompatActivity {
 
         });
 
-
         SimpleDateFormat from = new SimpleDateFormat("yyyyMMdd");
         String date = from.format(new Date());
-
 
         switch (mItemType) {
             case Constants.WRITECALENDAR:
@@ -142,6 +147,14 @@ public class CalendarRedactActivity extends AppCompatActivity {
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
                 mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
                 mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
+
+                if (mStartTime == 9) {
+                    mTaskStartTime = "0" + mStartTime;
+                    mTaskEndTime = mEndTime + "";
+                } else {
+                    mTaskStartTime = mStartTime + "";
+                    mTaskEndTime = mEndTime + "";
+                }
                 break;
             //查看周历
             case Constants.LOOKCALENDAR:
@@ -150,6 +163,14 @@ public class CalendarRedactActivity extends AppCompatActivity {
                 mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
                 mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
+
+                if (mStartTime == 9) {
+                    mTaskStartTime = "0" + mStartTime;
+                    mTaskEndTime = mEndTime + "";
+                } else {
+                    mTaskStartTime = mStartTime + "";
+                    mTaskEndTime = mEndTime + "";
+                }
                 break;
             //查看会议室
             case Constants.MEETINGCALENDAR:
@@ -167,9 +188,22 @@ public class CalendarRedactActivity extends AppCompatActivity {
                 switch (mItemType) {
                     //编辑周历
                     case Constants.WRITECALENDAR:
-                        if ("".equals(mEdTaskTheme.getText().toString())) {
-                            Toast.makeText(this, "任务主题不能为空！", Toast.LENGTH_SHORT).show();
-                            return;
+                        try {
+                            if ("".equals(mEdTaskTheme.getText().toString())) {
+                                Toast.makeText(this, "任务主题不能为空！", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            JSONObject jsonObject = new JSONObject();
+                            String taskDate = mYear + "-" + mMonth + "-" + mDate;
+                            jsonObject.put("taskDate", taskDate);
+                            jsonObject.put("taskTheme", mEdTaskTheme.getText().toString());
+                            jsonObject.put("startTime", taskDate + " " + mTaskStartTime + ":00:00");
+                            jsonObject.put("endTime", taskDate + " " + mTaskEndTime + ":00:00");
+                            jsonObject.put("taskDetail", mEdTaskDetails.getText().toString());
+                            jsonObject.put("taskType", 2);
+                            mPresenter.addCalendarSchedule(jsonObject.toString());
+                        } catch (Throwable e) {
+                            e.printStackTrace();
                         }
                         break;
                     //查看周历
@@ -196,32 +230,64 @@ public class CalendarRedactActivity extends AppCompatActivity {
                 break;
             //TODO 弹出时间选择框
             case R.id.tv_task_date:
-                if (mSelectedTimeFragment == null) {
-                    mSelectedTimeFragment = new SelectedTimeFragment();
+                try {
+                    if (mSelectedTimeFragment == null) {
+                        mSelectedTimeFragment = new SelectedTimeFragment();
+                    }
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
+                    bundle.putInt(Constants.CALENDARSTARTTIME, mStartTime);
+                    bundle.putInt(Constants.CALENDARENDTIME, mEndTime);
+                    mSelectedTimeFragment.setArguments(bundle);
+                    mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
-                mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
-                bundle.putInt(Constants.CALENDARSTARTTIME, mStartTime);
-                bundle.putInt(Constants.CALENDARENDTIME, mEndTime);
-                mSelectedTimeFragment.setArguments(bundle);
                 break;
             default:
                 break;
         }
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ReceiveEvent(SelectedWeekCalendarEvent event) {
         switch (event.getEvent()) {
             case Constants.SELECTEDTIME:
-                Toast.makeText(this, event.getStartTime() + "|" + event.getEndTime(), Toast.LENGTH_SHORT).show();
+                mTaskStartTime = event.getStartTime();
+                mTaskEndTime = event.getEndTime();
+                mTvTaskDate.setText(mTaskStartTime + ":00" + "-" + mTaskEndTime + ":00");
                 break;
             default:
                 break;
         }
 
+    }
+
+    @Override
+    public void uidNull(String code) {
+        catchWarningByCode(code);
+    }
+
+    @Override
+    public void showLoading() {
+        showLoadingView();
+    }
+
+    @Override
+    public void hideLoading() {
+        hideLoadingView();
+    }
+
+    @Override
+    public void addCalendarScheduleSuccess() {
+        showToast("新增日程成功!");
+        finish();
+    }
+
+    @Override
+    public void addCalendarScheduleFailure(int errorCode, String errorMsg) {
+        showToast("新增日程失败!");
     }
 
     @Override

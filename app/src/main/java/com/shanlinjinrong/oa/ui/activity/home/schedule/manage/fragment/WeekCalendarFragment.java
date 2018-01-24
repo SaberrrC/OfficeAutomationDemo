@@ -3,7 +3,6 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +23,6 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.CalendarRedactActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.LookCalendarDetailsActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.LeftDateAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.LookContentAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.SelectedWeekCalendarAdapter;
@@ -33,7 +31,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.LeftDateBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.WeekCalendarBean;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contact.WeekCalendarFragmentContact;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.WeekCalendarFragmentContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.WeekCalendarFragmentPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.widget.MyPagerSnapHelper;
 import com.shanlinjinrong.oa.ui.base.BaseHttpFragment;
@@ -58,7 +56,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentPresenter> implements WheelPicker.OnItemSelectedListener, WeekCalendarFragmentContact.View {
+public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentPresenter> implements WheelPicker.OnItemSelectedListener, WeekCalendarFragmentContract.View {
 
     @BindView(R.id.ll_container_layout)
     LinearLayout mLlContainerLayout;
@@ -240,7 +238,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 } else {
                     SparseArray<LeftDateBean.DataBean> dataBean = new SparseArray<>();
                     dataBean.put(0, new LeftDateBean.DataBean());
-       
+
                     leftDateBean.setData(dataBean);
                 }
                 mLlContent.add(leftDateBean);
@@ -326,6 +324,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mDialog.dismiss();
             }
         });
+
 
         title.getRightView().setOnClickListener(view12 -> {
             int startTime = Integer.parseInt(mStartTime.substring(0, 2));
@@ -478,6 +477,29 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
                 dialog_window.setAttributes(dialog_window_attributes);
                 dialog.show();
+                break;
+            case Constants.SELECTEDTIME:
+
+                String startTime = event.getStartTime();
+
+                for (int i = 0; i < mListDate.size(); i++) {
+
+                    List<String> year = mListDate.get(i).getYear();
+                    List<String> month = mListDate.get(i).getMonth();
+                    List<String> day = mListDate.get(i).getDay();
+
+                    for (int j = 0; j < year.size(); j++) {
+                        mListDate.get(i).getIsSelected().set(j,false);
+                        if (startTime.equals(year.get(j) + "年" + month.get(j) + "月" + day.get(j) + "日")) {
+                            mHeaderRecyclerView.scrollToPosition(i);
+
+
+                            mListDate.get(i).getIsSelected().set(j,true);
+                            mSelectedAdapter.setNewData(mListDate);
+                            mSelectedAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
                 break;
             default:
                 break;

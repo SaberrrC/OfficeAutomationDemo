@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contact.MonthlyCalendarFragmentContact;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.MonthlyCalendarFragmentContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.MonthlyCalendarFragmentPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.ScheduleMonthAdapter;
@@ -25,7 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFragmentPresenter> implements MonthlyCalendarFragmentContact.View, ScheduleMonthAdapter.OnItemClick {
+public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFragmentPresenter> implements MonthlyCalendarFragmentContract.View, ScheduleMonthAdapter.OnItemClick {
 
 
     @BindView(R.id.top_data_list)

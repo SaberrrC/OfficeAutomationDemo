@@ -81,6 +81,15 @@ public class SelectedTimeFragment extends DialogFragment {
             mEndTimes.add(10 + i + "点");
         }
 
+//
+//        for (int i = 0; i < 50; i++) {
+//            mStartTimes.add( "0" + i + "月");
+//        }
+//
+//        for (int i = 0; i < 50; i++) {
+//            mEndTimes.add(i + "日");
+//        }
+
         mPickerStartTime.setData(mStartTimes);
         mPickerEndTime.setData(mEndTimes);
         mPickerEmpty.setData(new ArrayList());
@@ -172,7 +181,7 @@ public class SelectedTimeFragment extends DialogFragment {
                 String startTime = mStartTimes.get(currentStartTime);
                 String endTime = mEndTimes.get(currentEndTime);
 
-                EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, startTime, endTime));
+                EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME,  currentStartTime + 9 +"" , currentEndTime + 10+""));
                 dismiss();
                 break;
             default:

@@ -1,7 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter;
 
 import com.shanlinjinrong.oa.net.MyKjHttp;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contact.MonthlyCalendarFragmentContact;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.MonthlyCalendarFragmentContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
 import javax.inject.Inject;
@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * 功能描述：
  */
 
-public class MonthlyCalendarFragmentPresenter extends HttpPresenter<MonthlyCalendarFragmentContact.View> implements MonthlyCalendarFragmentContact.Presenter {
+public class MonthlyCalendarFragmentPresenter extends HttpPresenter<MonthlyCalendarFragmentContract.View> implements MonthlyCalendarFragmentContract.Presenter {
 
     @Inject
     public MonthlyCalendarFragmentPresenter(MyKjHttp mKjHttp) {

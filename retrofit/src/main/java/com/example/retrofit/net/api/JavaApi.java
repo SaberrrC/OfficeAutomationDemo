@@ -1,6 +1,7 @@
 package com.example.retrofit.net.api;
 
 import com.example.retrofit.model.HttpResult;
+import com.example.retrofit.model.ScheduleBean;
 import com.example.retrofit.model.UpLoadPortraitsBean;
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.example.retrofit.model.responsebody.CountResponse1;
@@ -80,6 +81,20 @@ public interface JavaApi {
     @Multipart
     @POST("user/upload")
     Observable<HttpResult<UpLoadPortraitsBean>> uploadPortraits(@Part MultipartBody.Part file);
+
+    //提交出差申请
+    //    @POST("nchrEvection/submitEvectionApply")
+    //    Observable<HttpResult> submitEvectionApply(@Body EvectionBody data);
+
+
+    //提交加班申请
+    //    @POST("nchrEvection/submitEvectionApply")
+    //    Observable<HttpResult> addWorkApply(@Body AddWorkBody data);
+
+    // ----------------------日程 管理-----------------------
+
+    @POST("schedule/insertSchedule")
+    Observable<HttpResult> calendarSchedule(@Body ScheduleBean scheduleBean);
 
     //提交出差申请
     //    @POST("nchrEvection/submitEvectionApply")
