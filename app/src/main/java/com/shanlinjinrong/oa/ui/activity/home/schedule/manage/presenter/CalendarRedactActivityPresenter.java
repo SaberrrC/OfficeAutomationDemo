@@ -169,7 +169,9 @@ public class CalendarRedactActivityPresenter extends HttpPresenter<CalendarRedac
         });
     }
 
-    //更新日程
+    /**
+     * 更新日程
+     */
     @Override
     public void updateCalendarSchedule(String schedule) {
         mKjHttp.cleanCache();
@@ -193,12 +195,21 @@ public class CalendarRedactActivityPresenter extends HttpPresenter<CalendarRedac
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
+                    CommonRequestBean bean = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
                     if (mView != null) {
-                        mView.updateCalendarScheduleSuccess();
+                        switch (bean.getCode()) {
+                            case ApiJava.REQUEST_CODE_OK:
+                                mView.updateCalendarScheduleSuccess();
+                                break;
+                            default:
+                                mView.updateCalendarScheduleFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                                break;
+                        }
+
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
-
                 }
             }
 
