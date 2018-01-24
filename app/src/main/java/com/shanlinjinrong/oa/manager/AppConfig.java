@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.model.UserInfo;
 
 
@@ -33,7 +31,8 @@ public class AppConfig {
      */
     public static final String USER_TYPE_BI = "1";
 
-    /**Mal
+    /**
+     * Mal
      * 网络请求baseUrl
      */
     public static final String BASE_URL = "base_url";
@@ -106,11 +105,16 @@ public class AppConfig {
      * @return 参数值
      */
     public String get(String key) {
-        String string = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString(key, DEFAULT_ARGUMENTS_VALUE);
-        if (TextUtils.equals("null", string)) {
+        try {
+            String string = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString(key, DEFAULT_ARGUMENTS_VALUE);
+            if (TextUtils.equals("null", string)) {
+                return "";
+            }
+            return string;
+        } catch (Exception e) {
+            e.printStackTrace();
             return "";
         }
-        return string;
     }
 
     /**
