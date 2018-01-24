@@ -1,5 +1,9 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.CalendarRedactActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -45,9 +49,18 @@ public class CalendarRedactActivityPresenter extends HttpPresenter<CalendarRedac
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
+                    CommonRequestBean bean = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
                     if (mView != null) {
                         mView.hideLoading();
-                        mView.addCalendarScheduleSuccess();
+                        switch (bean.getCode()) {
+                            case ApiJava.REQUEST_CODE_OK:
+                                mView.addCalendarScheduleSuccess();
+                                break;
+                            default:
+                                mView.addCalendarScheduleFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                                break;
+                        }
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -109,15 +122,21 @@ public class CalendarRedactActivityPresenter extends HttpPresenter<CalendarRedac
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
+                    CommonRequestBean bean = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
                     if (mView != null) {
-
-
                         mView.hideLoading();
-                        mView.deleteCalendarScheduleSuccess();
+                        switch (bean.getCode()) {
+                            case ApiJava.REQUEST_CODE_OK:
+                                mView.deleteCalendarScheduleSuccess();
+                                break;
+                            default:
+                                mView.addCalendarScheduleFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                                break;
+                        }
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
-
                 }
             }
 

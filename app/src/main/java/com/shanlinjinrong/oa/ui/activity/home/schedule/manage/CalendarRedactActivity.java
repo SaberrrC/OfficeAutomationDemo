@@ -65,7 +65,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private SelectedTimeFragment mSelectedTimeFragment;
     private String               mTaskStartTime;
     private String               mTaskEndTime;
-    private int mId;
+    private int                  mId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +164,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
                 mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
-                mId = getIntent().getIntExtra(Constants.CALENDARID,-1);
+                mId = getIntent().getIntExtra(Constants.CALENDARID, -1);
 
                 if (mStartTime == 9) {
                     mTaskStartTime = "0" + mStartTime;
@@ -300,17 +300,18 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void deleteCalendarScheduleFailure(int errorCode, String errorMsg) {
-        showToast("删除日程失败");
+        showToast("删除日程失败，请稍后重试");
     }
 
     @Override
     public void updateCalendarScheduleSuccess() {
+
         showToast("更新日程成功");
     }
 
     @Override
     public void updateCalendarScheduleFailure(int errorCode, String errorMsg) {
-        showToast("更新日程失败");
+        showToast("更新日程失败，请稍后重试");
     }
 
     @Override

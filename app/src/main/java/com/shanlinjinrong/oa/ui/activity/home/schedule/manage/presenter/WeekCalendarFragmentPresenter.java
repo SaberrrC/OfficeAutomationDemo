@@ -58,6 +58,8 @@ public class WeekCalendarFragmentPresenter extends HttpPresenter<WeekCalendarFra
                         case ApiJava.REQUEST_NO_RESULT:
                             break;
                         default:
+
+                            mView.QueryCalendarScheduleFailure(Integer.parseInt(bean.getCode()),bean.getMessage());
                             break;
                     }
                 } catch (Throwable e) {
