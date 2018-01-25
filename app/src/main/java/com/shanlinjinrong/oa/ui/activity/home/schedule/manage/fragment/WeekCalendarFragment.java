@@ -89,6 +89,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private int                         mSelectedStartTime;
     private int                         mSelectedEndTime;
     private List<LeftDateBean.DataBean> mPopupData;
+    private Dialog                      mPopupDialog;
 
 
     public Date getMondayOfThisWeek(Calendar calendar) {
@@ -457,7 +458,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             //弹出 事件列表
             case "popupWindow":
                 RefreshChangeView(event);
-                Dialog dialog = new Dialog(getContext(), R.style.CustomDialog);
+                mPopupDialog = new Dialog(getContext(), R.style.CustomDialog);
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_week_calendar_content, null);
                 ImageView addCalendar = (ImageView) view.findViewById(R.id.img_add_calendar);
                 TextView tvContentCount = (TextView) view.findViewById(R.id.tv_content_count);
@@ -474,8 +475,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     intent1.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
                     intent1.putExtra(Constants.SELECTEDPOSITION, event.getPosition());
                     startActivityForResult(intent1, 101);
-                    if (dialog.isShowing()) {
-                        dialog.dismiss();
+                    if (mPopupDialog.isShowing()) {
+                        mPopupDialog.dismiss();
                     }
                 });
 
@@ -493,9 +494,9 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 rvContent.addOnItemTouchListener(new ItemClick());
                 adapter.notifyDataSetChanged();
 
-                dialog.setContentView(view);
+                mPopupDialog.setContentView(view);
                 //获取到当前Activity的Window
-                Window dialog_window = dialog.getWindow();
+                Window dialog_window = mPopupDialog.getWindow();
                 WindowManager.LayoutParams dialog_window_attributes = dialog_window.getAttributes();
                 //设置宽度
                 dialog_window_attributes.width = ScreenUtils.getScreenWidth(getContext()) - ScreenUtils.dp2px(getContext(), 45);
@@ -508,7 +509,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 dialog_window_attributes.x = ScreenUtils.dp2px(getContext(), 19);
 
                 dialog_window.setAttributes(dialog_window_attributes);
-                dialog.show();
+                mPopupDialog.show();
                 break;
             case Constants.SELECTEDTIME:
 
@@ -752,14 +753,19 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             intent.putExtra(Constants.CALENDARTYPE, Constants.LOOKCALENDAR);
             intent.putExtra(Constants.CALENDARSTATUS, mPopupData.get(i).getStatus());
             intent.putExtra(Constants.SELECTEDPOSITION, i);
-            startActivity(intent);
+            startActivityForResult(intent, 101);
+            if (mPopupDialog.isShowing()) {
+                mPopupDialog.dismiss();
+            }
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        queryCalendar(mRefreshCalendar0, mRefreshCalendar1);
+        if (resultCode == -1) {
+            queryCalendar(mRefreshCalendar0, mRefreshCalendar1);
+        }
     }
 
     @Override

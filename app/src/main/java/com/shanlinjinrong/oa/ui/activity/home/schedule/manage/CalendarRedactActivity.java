@@ -350,6 +350,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     @Override
     public void deleteCalendarScheduleSuccess() {
         showToast("删除日程成功");
+        setResult(-1);
         finish();
     }
 
@@ -360,10 +361,12 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void updateCalendarScheduleSuccess() {
+        setResult(-1);
         if (mIsCheckBox) {
             finish();
         }
         showToast("更新日程成功");
+
     }
 
     @Override
