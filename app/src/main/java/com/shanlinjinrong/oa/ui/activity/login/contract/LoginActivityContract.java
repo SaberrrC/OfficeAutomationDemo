@@ -1,7 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.login.contract;
 
-import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.model.UserInfo;
+import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
@@ -27,9 +27,14 @@ public interface LoginActivityContract {
 
         void requestFinish(); //登录请求结束
 
+        void onGetUserLimitSuccess(LimitBean bean);
+
+        void onGetUserLimitFailure(String code, String message);
     }
 
     interface Presenter extends BasePresenter<View> {
         void login(String account, String psw); //登录
+
+        void getUserLimit();
     }
 }

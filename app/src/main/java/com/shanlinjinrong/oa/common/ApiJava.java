@@ -318,6 +318,11 @@ public interface ApiJava {
     String CODE_SEARCH_USER_DETAILS = "user/queryUserByCodes";
     //移动端获取版本号
      String  APP_GETAPPEDITION = "app/getAppEdition";
+
+    /**
+     * 获取用户权限
+     */
+    String USER_LIMIT = "auth/findRightByUserId";
     //*****************************************************************//
 
     /**

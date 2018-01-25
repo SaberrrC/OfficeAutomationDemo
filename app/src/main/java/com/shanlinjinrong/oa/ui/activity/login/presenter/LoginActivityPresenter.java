@@ -1,10 +1,13 @@
 package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -62,10 +65,7 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                         default:
                             break;
                     }
-                } catch (
-                        Throwable e)
-
-                {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -92,6 +92,55 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                         mView.requestFinish();
                     }
                 } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getUserLimit() {
+        mKjHttp.cleanCache();
+        mKjHttp.get(ApiJava.USER_LIMIT, new HttpParams(), new HttpCallBack() {
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    LimitBean bean = new Gson().fromJson(t, LimitBean.class);
+                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        if (mView != null) {
+                            mView.onGetUserLimitSuccess(bean);
+                        }
+                        return;
+                    }
+                    if (mView != null) {
+                        mView.onGetUserLimitFailure(bean.getCode(), bean.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
+                        mView.onGetUserLimitFailure(String.valueOf(errorNo), strMsg);
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
