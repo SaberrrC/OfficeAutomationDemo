@@ -1,10 +1,12 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +16,11 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.CalendarScheduleContentBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.MonthlyCalendarFragmentContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.MonthlyCalendarFragmentPresenter;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MonthlyCalenderPopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.ScheduleMonthAdapter;
 import com.shanlinjinrong.oa.ui.base.BaseHttpFragment;
 import com.shanlinjinrong.oa.utils.DateUtils;
@@ -42,13 +45,14 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     @BindView(R.id.top_data_list)
     RecyclerView mRecyclerView;
     private View mRootView;
-    private List<PopItem> mData;
+    private List<MonthlyCalenderPopItem> mData;
     private ScheduleMonthAdapter mScheduleMonthAdapter;
     private int mSelectedDay, mCurrentYear, mCurrentMonth, mCurrentDay, mSelectedMonth, mSelectedYear;
-    private List<PopItem> listDate;
+
     private MonthSelectPopWindow monthSelectPopWindow;
     private int mViewHeight;
     private int mViewWidth;
+    private List<CalendarScheduleContentBean.DataBean> DataBeanLists;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,7 +85,6 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         String currentMonth = currentFormat2.format(calendar.getTime());
         SimpleDateFormat currentFormat3 = new SimpleDateFormat("dd");
         String currentDay = currentFormat3.format(calendar.getTime());
-        // int lastYear = year - 1;// calendar.set(lastYear, 0, 1);
         //更新Title
         EventBus.getDefault().post(new UpdateTitleBean(currentYear + "年" + currentMonth + "月" + currentDay + "日", "monthLUpdateTitle"));
         mData = new ArrayList<>();
@@ -97,14 +100,16 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         mViewHeight = (ScreenUtils.getScreenHeight(getContext()) - mHeight) / 6;
         mViewWidth = ScreenUtils.getScreenWidth(getContext()) / 7;
 
-        listDate = DateUtils.getAttandenceDate(mCurrentMonth, mCurrentDay);
-        mData.addAll(listDate);
         mRecyclerView.addItemDecoration(new GridItemDecoration(getContext(), R.drawable.divider));
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 7));
+
         mScheduleMonthAdapter = new ScheduleMonthAdapter(mData, mViewHeight);
         mScheduleMonthAdapter.setOnItemClick(this);
         mRecyclerView.setAdapter(mScheduleMonthAdapter);
+        setData(mCurrentMonth, mCurrentDay);
+        mPresenter.getScheduleByDate("2018-01-01", "2018-01-31");
     }
+
 
     @Override
     protected void lazyLoadData() {
@@ -134,6 +139,47 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
 
     }
 
+    @SuppressLint("LongLogTag")
+    @Override
+    public void GetScheduleByDateSuccess(CalendarScheduleContentBean bean) {
+        if (bean == null) {
+            return;
+        }
+        DataBeanLists = bean.getData();
+        Log.e("----GetScheduleByDateSuccess----", DataBeanLists.size() + "");
+        for (int i = 0; i < mData.size(); i++) {
+            MonthlyCalenderPopItem monthlyCalenderPopItem = mData.get(i);
+            String taskDate = getPopItemDataString(monthlyCalenderPopItem);
+            for (int j = 0; j < DataBeanLists.size(); j++) {
+                List<CalendarScheduleContentBean.DataBean> data = new ArrayList<>();
+                if (taskDate.equals(DataBeanLists.get(j).getTaskDate())) {
+                    data.add(DataBeanLists.get(j));
+                }
+                monthlyCalenderPopItem.setData(data);
+            }
+        }
+    }
+
+    /**
+     * 获取时间   taskDate 2018-01-27
+     *
+     * @param monthlyCalenderPopItem
+     * @return
+     */
+    private String getPopItemDataString(MonthlyCalenderPopItem monthlyCalenderPopItem) {
+        String content = monthlyCalenderPopItem.getContent();
+        mSelectedDay = Integer.parseInt(content);
+        String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
+        String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
+        String date = mSelectedYear + "-" + month + "-" + mDay;
+        return date;
+    }
+
+    @Override
+    public void GetScheduleByDateFailure(int errorCode, String errorMsg) {
+
+    }
+
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
@@ -143,7 +189,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         if (mData != null) {
             mData.clear();
         }
-        List<PopItem> date = DateUtils.getAttandenceDate(month, selectPos);
+        List<MonthlyCalenderPopItem> date = DateUtils.getMonthlyScheduleCalendarDate(month, selectPos);
         mData.addAll(date);
         mScheduleMonthAdapter.notifyDataSetChanged();
         String dateStr = mSelectedYear + "年" + month + "月" + selectPos + "日";
