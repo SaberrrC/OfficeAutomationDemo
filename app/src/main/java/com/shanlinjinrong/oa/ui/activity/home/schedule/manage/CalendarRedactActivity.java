@@ -35,7 +35,7 @@ import butterknife.OnClick;
 /**
  * 编辑日历
  */
-public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActivityPresenter> implements CalendarRedactActivityContract.View ,CompoundButton.OnCheckedChangeListener{
+public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActivityPresenter> implements CalendarRedactActivityContract.View, CompoundButton.OnCheckedChangeListener {
 
     @BindView(R.id.top_view)
     CommonTopView mTopView;
@@ -338,6 +338,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     @Override
     public void addCalendarScheduleSuccess() {
         showToast("新增日程成功");
+        setResult(-1);
         finish();
     }
 

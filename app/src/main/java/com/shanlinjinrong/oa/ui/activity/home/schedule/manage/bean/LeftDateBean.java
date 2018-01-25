@@ -4,6 +4,8 @@ import android.util.SparseArray;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
+import java.util.List;
+
 /**
  * 作者：王凤旭
  * 创建时间：2018/1/16
@@ -19,14 +21,14 @@ public class LeftDateBean implements MultiItemEntity {
 
     private boolean isSelected;
 
-    private SparseArray<LeftDateBean.DataBean> data;
+    private List<DataBean> data;
 
 
-    public SparseArray<DataBean> getData() {
+    public List<DataBean> getData() {
         return data;
     }
 
-    public void setData(SparseArray<DataBean> data) {
+    public void setData(List<DataBean> data) {
         this.data = data;
     }
 
