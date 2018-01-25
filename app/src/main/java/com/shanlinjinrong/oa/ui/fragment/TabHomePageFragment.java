@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,10 +28,12 @@ import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspap
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
+import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +52,147 @@ public class TabHomePageFragment extends BaseFragment {
     ImageView mSendToMeDot;
 
     @BindView(R.id.iv_wait_me_approval_dot)
-    ImageView mWaitMeApprovalDot;
+    ImageView      mWaitMeApprovalDot;
+    @BindView(R.id.title)
+    TextView       mTitle;
+    @BindView(R.id.tv_appoint)
+    TextView       mTvAppoint;
+    @BindView(R.id.tab_homepage_top)
+    RelativeLayout mTabHomepageTop;
+    @BindView(R.id.parting_line_top)
+    View           mPartingLineTop;
+    @BindView(R.id.parting_line_bottom)
+    View           mPartingLineBottom;
+    @BindView(R.id.toolbar_shadow)
+    LinearLayout   mToolbarShadow;
+    @BindView(R.id.tv_work_report_tips)
+    TextView       mTvWorkReportTips;
+    @BindView(R.id.stork11)
+    View           mStork11;
+    @BindView(R.id.iv_homepage_wr_me_launch)
+    ImageView      mIvHomepageWrMeLaunch;
+    @BindView(R.id.rl_work_report_launch)
+    RelativeLayout mRlWorkReportLaunch;
+    @BindView(R.id.stork12)
+    View           mStork12;
+    @BindView(R.id.iv_homepage_wr_launch_work_report)
+    ImageView      mIvHomepageWrLaunchWorkReport;
+    @BindView(R.id.rl_work_report_launch_report)
+    RelativeLayout mRlWorkReportLaunchReport;
+    @BindView(R.id.stork13)
+    View           mStork13;
+    @BindView(R.id.iv_homepage_wr_copy_to_me)
+    ImageView      mIvHomepageWrCopyToMe;
+    @BindView(R.id.rl_work_report_copy_to_me)
+    RelativeLayout mRlWorkReportCopyToMe;
+    @BindView(R.id.iv_homepage_wr_send_to_me)
+    ImageView      mIvHomepageWrSendToMe;
+    @BindView(R.id.rl_work_report_send_to_me)
+    RelativeLayout mRlWorkReportSendToMe;
+    @BindView(R.id.iv_send_to_me_dot)
+    ImageView      mIvSendToMeDot;
+    @BindView(R.id.stork_blank11)
+    View           mStorkBlank11;
+    @BindView(R.id.fl_blank11)
+    FrameLayout    mFlBlank11;
+    @BindView(R.id.stork_blank12)
+    View           mStorkBlank12;
+    @BindView(R.id.fl_blank12)
+    FrameLayout    mFlBlank12;
+    @BindView(R.id.stork_blank13)
+    View           mStorkBlank13;
+    @BindView(R.id.fl_blank13)
+    FrameLayout    mFlBlank13;
+    @BindView(R.id.stork_blank14)
+    View           mStorkBlank14;
+    @BindView(R.id.fl_blank14)
+    FrameLayout    mFlBlank14;
+    @BindView(R.id.ll_work_report_container)
+    LinearLayout   mLlWorkReportContainer;
+    @BindView(R.id.tv_approval_tips)
+    TextView       mTvApprovalTips;
+    @BindView(R.id.iv_approval_me_launch)
+    ImageView      mIvApprovalMeLaunch;
+    @BindView(R.id.rl_approval_me_launch)
+    RelativeLayout mRlApprovalMeLaunch;
+    @BindView(R.id.iv_homepage_approval_wait_me_approval)
+    ImageView      mIvHomepageApprovalWaitMeApproval;
+    @BindView(R.id.rl_approval_wait_me_approval)
+    RelativeLayout mRlApprovalWaitMeApproval;
+    @BindView(R.id.iv_wait_me_approval_dot)
+    ImageView      mIvWaitMeApprovalDot;
+    @BindView(R.id.iv_homepage_approval_me_approval)
+    ImageView      mIvHomepageApprovalMeApproval;
+    @BindView(R.id.rl_approval_me_approvaled)
+    RelativeLayout mRlApprovalMeApprovaled;
+    @BindView(R.id.iv_homepage_approval_launch_approval)
+    ImageView      mIvHomepageApprovalLaunchApproval;
+    @BindView(R.id.rl_approval_launch_approval)
+    RelativeLayout mRlApprovalLaunchApproval;
+    @BindView(R.id.ll_approval_container)
+    LinearLayout   mLlApprovalContainer;
+    @BindView(R.id.iv_my_attandance)
+    ImageView      mIvMyAttandance;
+    @BindView(R.id.rl_my_attandance)
+    RelativeLayout mRlMyAttandance;
+    @BindView(R.id.iv_holiday_search)
+    ImageView      mIvHolidaySearch;
+    @BindView(R.id.rl_holiday_search)
+    RelativeLayout mRlHolidaySearch;
+    @BindView(R.id.rl_pay_search)
+    RelativeLayout mRlPaySearch;
+    @BindView(R.id.rl_test)
+    RelativeLayout mRlTest;
+    @BindView(R.id.iv_homepage_schedule_manage)
+    ImageView      mIvHomepageScheduleManage;
+    @BindView(R.id.rl_schedule_manage)
+    RelativeLayout mRlScheduleManage;
+    @BindView(R.id.iv_homepage_schedule_me_launch)
+    ImageView      mIvHomepageScheduleMeLaunch;
+    @BindView(R.id.rl_schedule_book_meeting)
+    RelativeLayout mRlScheduleBookMeeting;
+    @BindView(R.id.iv_schedule_administration)
+    ImageView      mIvScheduleAdministration;
+    @BindView(R.id.rl_schedule_my_mail)
+    RelativeLayout mRlScheduleMyMail;
+    @BindView(R.id.iv_homepage_schedule_my_mail)
+    ImageView      mIvHomepageScheduleMyMail;
+    @BindView(R.id.rl_schedule_administration)
+    RelativeLayout mRlScheduleAdministration;
+    @BindView(R.id.stork21)
+    View           mStork21;
+    @BindView(R.id.stork22)
+    View           mStork22;
+    @BindView(R.id.stork23)
+    View           mStork23;
+    @BindView(R.id.stork_blank21)
+    View           mStorkBlank21;
+    @BindView(R.id.fl_blank21)
+    FrameLayout    mFlBlank21;
+    @BindView(R.id.stork_blank22)
+    View           mStorkBlank22;
+    @BindView(R.id.fl_blank22)
+    FrameLayout    mFlBlank22;
+    @BindView(R.id.stork_blank23)
+    View           mStorkBlank23;
+    @BindView(R.id.fl_blank23)
+    FrameLayout    mFlBlank23;
+    @BindView(R.id.stork_blank24)
+    View           mStorkBlank24;
+    @BindView(R.id.fl_blank24)
+    FrameLayout    mFlBlank24;
+    @BindView(R.id.stork_blank31)
+    View           mStorkBlank31;
+    @BindView(R.id.fl_blank31)
+    FrameLayout    mFlBlank31;
+    @BindView(R.id.stork_blank32)
+    View           mStorkBlank32;
+    @BindView(R.id.fl_blank32)
+    FrameLayout    mFlBlank32;
+    @BindView(R.id.stork31)
+    View           mStork31;
+    @BindView(R.id.stork32)
+    View           mStork32;
 
     private RelativeLayout mRootView;
 
@@ -69,15 +214,12 @@ public class TabHomePageFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initWidget();
-
-
+        checkUserLimit();
     }
 
     @Override
     protected void lazyLoadData() {
-
     }
-
 
     /**
      * 初始化控件
@@ -88,6 +230,64 @@ public class TabHomePageFragment extends BaseFragment {
             title = "上海善林金融";
         }
         mTvTitle.setText(title);
+    }
+
+    private void checkUserLimit() {
+        LimitBean userLimitBean = AppConfig.getAppConfig(getActivity()).getUserLimitBean();
+        List<LimitBean.DataBean> dataList = userLimitBean.getData();
+        for (LimitBean.DataBean data : dataList) {
+            if (TextUtils.equals("203", data.getParentId())) {//我发起的
+                mRlWorkReportLaunch.setVisibility(View.VISIBLE);
+                mStorkBlank11.setVisibility(View.GONE);
+                mFlBlank11.setVisibility(View.GONE);
+            }
+            if (TextUtils.equals("201", data.getParentId())) {//发起日报
+                mStork11.setVisibility(View.VISIBLE);
+                mRlWorkReportLaunchReport.setVisibility(View.VISIBLE);
+                mStorkBlank12.setVisibility(View.GONE);
+                mFlBlank12.setVisibility(View.GONE);
+            }
+            if (TextUtils.equals("202", data.getParentId())) {//发起周报
+                mStork12.setVisibility(View.VISIBLE);
+                mRlWorkReportCopyToMe.setVisibility(View.VISIBLE);
+                mStorkBlank13.setVisibility(View.GONE);
+                mFlBlank13.setVisibility(View.GONE);
+            }
+            if (TextUtils.equals("302", data.getParentId())) {//我的申请
+                mRlApprovalMeLaunch.setVisibility(View.VISIBLE);
+                mStorkBlank21.setVisibility(View.GONE);
+                mFlBlank21.setVisibility(View.GONE);
+            }
+            if (TextUtils.equals("303", data.getParentId())) {//待办事宜
+                mRlApprovalWaitMeApproval.setVisibility(View.VISIBLE);
+                mStork21.setVisibility(View.VISIBLE);
+                mStorkBlank22.setVisibility(View.GONE);
+                mFlBlank22.setVisibility(View.GONE);
+            }
+            if (TextUtils.equals("304", data.getParentId())) {//已办事宜
+                mStork22.setVisibility(View.VISIBLE);
+                mRlApprovalMeApprovaled.setVisibility(View.VISIBLE);
+                mStorkBlank23.setVisibility(View.GONE);
+                mFlBlank23.setVisibility(View.GONE);
+            }
+            if (TextUtils.equals("301", data.getParentId())) {//发起申请
+                mStork23.setVisibility(View.VISIBLE);
+                mRlApprovalLaunchApproval.setVisibility(View.VISIBLE);
+                mStorkBlank24.setVisibility(View.GONE);
+                mFlBlank24.setVisibility(View.GONE);
+            }
+            if (TextUtils.equals("111", data.getParentId())) {//我的考勤
+                mRlMyAttandance.setVisibility(View.VISIBLE);
+                mStorkBlank31.setVisibility(View.GONE);
+                mFlBlank31.setVisibility(View.GONE);
+            }
+            if (TextUtils.equals("112", data.getParentId())) {//假期查询
+                mStork31.setVisibility(View.VISIBLE);
+                mRlWorkReportLaunchReport.setVisibility(View.VISIBLE);
+                mStorkBlank32.setVisibility(View.GONE);
+                mFlBlank32.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -122,12 +322,7 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.rl_test, R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me,
-            R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch,
-            R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
-            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance,
-            R.id.rl_holiday_search, R.id.rl_pay_search, R.id.rl_schedule_manage
-    })
+    @OnClick({R.id.rl_test, R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me, R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance, R.id.rl_holiday_search, R.id.rl_pay_search, R.id.rl_schedule_manage})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
         if (currentTime - lastClickTime < 1000) {
