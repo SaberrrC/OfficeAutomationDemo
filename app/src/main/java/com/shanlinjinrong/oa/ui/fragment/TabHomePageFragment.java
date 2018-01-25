@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,10 +27,12 @@ import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspap
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
+import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +51,87 @@ public class TabHomePageFragment extends BaseFragment {
     ImageView mSendToMeDot;
 
     @BindView(R.id.iv_wait_me_approval_dot)
-    ImageView mWaitMeApprovalDot;
+    ImageView      mWaitMeApprovalDot;
+    @BindView(R.id.tv_appoint)
+    TextView       mTvAppoint;
+    @BindView(R.id.tab_homepage_top)
+    RelativeLayout mTabHomepageTop;
+    @BindView(R.id.parting_line_top)
+    View           mPartingLineTop;
+    @BindView(R.id.parting_line_bottom)
+    View           mPartingLineBottom;
+    @BindView(R.id.toolbar_shadow)
+    LinearLayout   mToolbarShadow;
+    @BindView(R.id.tv_work_report_tips)
+    TextView       mTvWorkReportTips;
+    @BindView(R.id.iv_homepage_wr_me_launch)
+    ImageView      mIvHomepageWrMeLaunch;
+    @BindView(R.id.rl_work_report_launch)
+    RelativeLayout mRlWorkReportLaunch;
+    @BindView(R.id.iv_homepage_wr_launch_work_report)
+    ImageView      mIvHomepageWrLaunchWorkReport;
+    @BindView(R.id.rl_work_report_launch_report)
+    RelativeLayout mRlWorkReportLaunchReport;
+    @BindView(R.id.iv_homepage_wr_copy_to_me)
+    ImageView      mIvHomepageWrCopyToMe;
+    @BindView(R.id.rl_work_report_copy_to_me)
+    RelativeLayout mRlWorkReportCopyToMe;
+    @BindView(R.id.iv_homepage_wr_send_to_me)
+    ImageView      mIvHomepageWrSendToMe;
+    @BindView(R.id.rl_work_report_send_to_me)
+    RelativeLayout mRlWorkReportSendToMe;
+    @BindView(R.id.ll_work_report_container)
+    LinearLayout   mLlWorkReportContainer;
+    @BindView(R.id.tv_approval_tips)
+    TextView       mTvApprovalTips;
+    @BindView(R.id.iv_approval_me_launch)
+    ImageView      mIvApprovalMeLaunch;
+    @BindView(R.id.rl_approval_me_launch)
+    RelativeLayout mRlApprovalMeLaunch;
+    @BindView(R.id.iv_homepage_approval_wait_me_approval)
+    ImageView      mIvHomepageApprovalWaitMeApproval;
+    @BindView(R.id.rl_approval_wait_me_approval)
+    RelativeLayout mRlApprovalWaitMeApproval;
+    @BindView(R.id.iv_homepage_approval_me_approval)
+    ImageView      mIvHomepageApprovalMeApproval;
+    @BindView(R.id.rl_approval_me_approvaled)
+    RelativeLayout mRlApprovalMeApprovaled;
+    @BindView(R.id.iv_homepage_approval_launch_approval)
+    ImageView      mIvHomepageApprovalLaunchApproval;
+    @BindView(R.id.rl_approval_launch_approval)
+    RelativeLayout mRlApprovalLaunchApproval;
+    @BindView(R.id.ll_approval_container)
+    LinearLayout   mLlApprovalContainer;
+    @BindView(R.id.iv_my_attandance)
+    ImageView      mIvMyAttandance;
+    @BindView(R.id.rl_my_attandance)
+    RelativeLayout mRlMyAttandance;
+    @BindView(R.id.iv_holiday_search)
+    ImageView      mIvHolidaySearch;
+    @BindView(R.id.rl_holiday_search)
+    RelativeLayout mRlHolidaySearch;
+    @BindView(R.id.rl_pay_search)
+    RelativeLayout mRlPaySearch;
+    @BindView(R.id.rl_test)
+    RelativeLayout mRlTest;
+    @BindView(R.id.iv_homepage_schedule_manage)
+    ImageView      mIvHomepageScheduleManage;
+    @BindView(R.id.rl_schedule_manage)
+    RelativeLayout mRlScheduleManage;
+    @BindView(R.id.iv_homepage_schedule_me_launch)
+    ImageView      mIvHomepageScheduleMeLaunch;
+    @BindView(R.id.rl_schedule_book_meeting)
+    RelativeLayout mRlScheduleBookMeeting;
+    @BindView(R.id.iv_schedule_administration)
+    ImageView      mIvScheduleAdministration;
+    @BindView(R.id.rl_schedule_my_mail)
+    RelativeLayout mRlScheduleMyMail;
+    @BindView(R.id.iv_homepage_schedule_my_mail)
+    ImageView      mIvHomepageScheduleMyMail;
+    @BindView(R.id.rl_schedule_administration)
+    RelativeLayout mRlScheduleAdministration;
+    @BindView(R.id.stork_rl_approval_launch_approval)
+    View           mStorkRlApprovalLaunchApproval;
 
     private RelativeLayout mRootView;
 
@@ -69,8 +153,27 @@ public class TabHomePageFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initWidget();
+    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        checkUserLimit();
+    }
 
+    private void checkUserLimit() {
+        LimitBean userLimitBean = AppConfig.getAppConfig(getActivity()).getUserLimitBean();
+        List<LimitBean.DataBean> dataList = userLimitBean.getData();
+        for (LimitBean.DataBean data : dataList) {
+            if (TextUtils.equals("301", data.getRightId())) {
+                mRlApprovalLaunchApproval.setVisibility(View.VISIBLE);
+                mStorkRlApprovalLaunchApproval.setVisibility(View.VISIBLE);
+            }
+            if (TextUtils.equals("301", data.getRightId())) {
+                mRlApprovalLaunchApproval.setVisibility(View.VISIBLE);
+                mStorkRlApprovalLaunchApproval.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -122,12 +225,7 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.rl_test, R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me,
-            R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch,
-            R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval,
-            R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance,
-            R.id.rl_holiday_search, R.id.rl_pay_search, R.id.rl_schedule_manage
-    })
+    @OnClick({R.id.rl_test, R.id.rl_work_report_launch, R.id.rl_work_report_send_to_me, R.id.rl_work_report_copy_to_me, R.id.rl_work_report_launch_report, R.id.rl_approval_me_launch, R.id.rl_approval_wait_me_approval, R.id.rl_approval_me_approvaled, R.id.rl_approval_launch_approval, R.id.rl_schedule_my_mail, R.id.rl_schedule_book_meeting, R.id.rl_my_attandance, R.id.rl_holiday_search, R.id.rl_pay_search, R.id.rl_schedule_manage})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
         if (currentTime - lastClickTime < 1000) {

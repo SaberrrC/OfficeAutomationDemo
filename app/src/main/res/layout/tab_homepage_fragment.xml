@@ -341,6 +341,7 @@
                     </RelativeLayout>
 
                     <View
+                        android:id="@+id/stork_rl_approval_launch_approval"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color" />

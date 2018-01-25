@@ -272,7 +272,9 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
 
     @Override
     public void onGetUserLimitSuccess(LimitBean bean) {
-        goToLogin();
+        hideLoadingView();
+        AppConfig.getAppConfig(LoginActivity.this).setUserLimit(bean);
+        goToLogin(bean);
     }
 
     @Override
@@ -286,10 +288,11 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         hideLoadingView();
     }
 
-    private void goToLogin() {
+    private void goToLogin(LimitBean bean) {
         showToast("登录成功");
         hideLoadingView();
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 

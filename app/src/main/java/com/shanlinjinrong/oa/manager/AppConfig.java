@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.shanlinjinrong.oa.model.UserInfo;
+import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 
 
 /**
@@ -89,6 +90,7 @@ public class AppConfig {
      * 部门ID
      */
     public static final  String PREF_KEY_DEPARTMENT_ID = "pref_key_department_id";
+    private static LimitBean mUserLimitBean;
 
     public static AppConfig getAppConfig(Context context) {
         if (appConfig == null) {
@@ -264,5 +266,13 @@ public class AppConfig {
         editor.putString(PREF_KEY_YX_TOKEN, DEFAULT_ARGUMENTS_VALUE);
         editor.putBoolean(IS_AUTO_LOGIN, false);
         editor.apply();
+    }
+
+    public void setUserLimit(LimitBean bean) {
+        mUserLimitBean = bean;
+    }
+
+    public LimitBean getUserLimitBean() {
+        return mUserLimitBean;
     }
 }

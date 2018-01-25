@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/layout_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/toolbar"
@@ -16,7 +16,7 @@
             android:layout_centerInParent="true"
             android:text="个人中心"
             android:textColor="@color/text_common_color"
-            android:textSize="18dp" />
+            android:textSize="18dp"/>
 
     </RelativeLayout>
 
@@ -24,7 +24,7 @@
         layout="@layout/toolbar_shadow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar" />
+        android:layout_below="@+id/toolbar"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                     fresco:roundTopLeft="true"
                     fresco:roundTopRight="true"
                     fresco:roundedCornerRadius="5dp"
-                    fresco:roundingBorderColor="@android:color/white" />
+                    fresco:roundingBorderColor="@android:color/white"/>
 
 
                 <LinearLayout
@@ -72,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/text_common_color"
-                        android:textSize="@dimen/text_common_dp" />
+                        android:textSize="@dimen/text_common_dp"/>
 
 
                     <TextView
@@ -81,13 +81,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textColor="@color/text_common_dark_color"
-                        android:textSize="@dimen/text_common_dp" />
+                        android:textSize="@dimen/text_common_dp"/>
 
                 </LinearLayout>
 
             </RelativeLayout>
 
-            <include layout="@layout/toolbar_shadow" />
+            <include layout="@layout/toolbar_shadow"/>
 
             <RelativeLayout
                 android:id="@+id/btn_modify_pwd"
@@ -95,7 +95,8 @@
                 android:layout_height="55dp"
                 android:background="@drawable/tab_me_box_selector_bg_x"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                android:paddingRight="20dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,20 +105,20 @@
                     android:layout_marginBottom="17dp"
                     android:text="修改密码"
                     android:textColor="@color/text_common_color"
-                    android:textSize="@dimen/text_common_dp" />
+                    android:textSize="@dimen/text_common_dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/tab_me_arrow" />
+                    android:src="@drawable/tab_me_arrow"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
-                    android:background="#e3e3e3" />
+                    android:background="#e3e3e3"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -135,20 +136,20 @@
                     android:layout_marginBottom="17dp"
                     android:text="使用帮助"
                     android:textColor="@color/text_common_color"
-                    android:textSize="@dimen/text_common_dp" />
+                    android:textSize="@dimen/text_common_dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/tab_me_arrow" />
+                    android:src="@drawable/tab_me_arrow"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
-                    android:background="#e3e3e3" />
+                    android:background="#e3e3e3"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -166,20 +167,20 @@
                     android:layout_marginBottom="17dp"
                     android:text="用户反馈"
                     android:textColor="@color/text_common_color"
-                    android:textSize="@dimen/text_common_dp" />
+                    android:textSize="@dimen/text_common_dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/tab_me_arrow" />
+                    android:src="@drawable/tab_me_arrow"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
-                    android:background="#e3e3e3" />
+                    android:background="#e3e3e3"/>
             </RelativeLayout>
 
 
@@ -198,20 +199,20 @@
                     android:layout_marginBottom="17dp"
                     android:text="关于我们"
                     android:textColor="@color/text_common_color"
-                    android:textSize="@dimen/text_common_dp" />
+                    android:textSize="@dimen/text_common_dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/tab_me_arrow" />
+                    android:src="@drawable/tab_me_arrow"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
-                    android:background="#e3e3e3" />
+                    android:background="#e3e3e3"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -229,20 +230,20 @@
                     android:layout_marginBottom="17dp"
                     android:text="版本更新"
                     android:textColor="@color/text_common_color"
-                    android:textSize="@dimen/text_common_dp" />
+                    android:textSize="@dimen/text_common_dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/tab_me_arrow" />
+                    android:src="@drawable/tab_me_arrow"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
-                    android:background="#e3e3e3" />
+                    android:background="#e3e3e3"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -260,20 +261,20 @@
                     android:layout_marginBottom="17dp"
                     android:text="清除缓存"
                     android:textColor="@color/text_common_color"
-                    android:textSize="@dimen/text_common_dp" />
+                    android:textSize="@dimen/text_common_dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/tab_me_arrow" />
+                    android:src="@drawable/tab_me_arrow"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
-                    android:background="#e3e3e3" />
+                    android:background="#e3e3e3"/>
 
             </RelativeLayout>
 
