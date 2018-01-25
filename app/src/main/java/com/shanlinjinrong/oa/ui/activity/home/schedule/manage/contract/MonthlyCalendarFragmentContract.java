@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract;
 
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.CalendarScheduleContentBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
@@ -16,9 +17,13 @@ public interface MonthlyCalendarFragmentContract {
         void showLoading();
 
         void hideLoading();
+
+        void GetScheduleByDateSuccess(CalendarScheduleContentBean bean);
+
+        void GetScheduleByDateFailure(int errorCode, String errorMsg);
     }
 
     interface Presenter extends BasePresenter<MonthlyCalendarFragmentContract.View>{
-
+        void   getScheduleByDate(String startDate, String endDate);
     }
 }

@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.utils;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MonthlyCalenderPopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 
 import java.text.ParseException;
@@ -492,6 +493,55 @@ public class DateUtils {
             int size = 7 - data.size() % 7;
             for (int i = 1; i <= size; i++) {
                 item = new PopItem("" + i, false, false);
+                data.add(item);
+            }
+        }
+        return data;
+    }
+
+    public static List<MonthlyCalenderPopItem> getMonthlyScheduleCalendarDate(int month, int select) {
+        List<MonthlyCalenderPopItem> data = new ArrayList<>();
+        if (month < 1 || month > 12) {
+            return null;
+        }
+        MonthlyCalenderPopItem item;
+        Calendar cal = Calendar.getInstance();
+        int curDay = cal.get(Calendar.DAY_OF_MONTH);
+        int curMonth = cal.get(Calendar.MONTH);
+        int monthDays = calculateDaysInMonth(Calendar.YEAR, month); //获取当月天数
+        int lastMonthDays;//上个月的天数
+        if (month == 1) {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR - 1, 11);
+        } else {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
+        }
+
+        //设置月份
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 0);
+        int col = cal.get(Calendar.DAY_OF_WEEK);   //获取该天在本星期的第几天 ，也就是第几列
+        for (int i = col - 2; i >= 0; i--) {
+            item = new MonthlyCalenderPopItem("" + (lastMonthDays - i), false, false);
+            data.add(item);
+        }
+
+        for (int i = 1; i <= monthDays; i++) {
+            if (i < curDay && month == curMonth + 1) {
+                item = new MonthlyCalenderPopItem("" + i, true, false);
+            } else {
+                item = new MonthlyCalenderPopItem("" + i, true, false);
+            }
+            if (select == i) {
+                item.setSelect(true);
+            }
+            data.add(item);
+        }
+
+
+        if (data.size() % 7 != 0) {
+            int size = 7 - data.size() % 7;
+            for (int i = 1; i <= size; i++) {
+                item = new MonthlyCalenderPopItem("" + i, false, false);
                 data.add(item);
             }
         }

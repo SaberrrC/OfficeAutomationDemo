@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MonthlyCalenderPopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
@@ -26,12 +27,13 @@ import java.util.List;
 import java.util.Random;
 
 public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdapter.ItemHolder> {
-    private List<PopItem> mData;
+    //      DatePopAttandanceAdapter
+    private List<MonthlyCalenderPopItem> mData;
     private Context mContext;
     private int mViewHeight;
     private OnItemClick mOnItemClick;
 
-    public ScheduleMonthAdapter(List<PopItem> mData, int mViewHeight) {
+    public ScheduleMonthAdapter(List<MonthlyCalenderPopItem> mData, int mViewHeight) {
         this.mData = mData;
         this.mViewHeight = mViewHeight;
     }
@@ -68,7 +70,8 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
         } else {
             holder.item.setTextColor(0xFF999999);
         }
-        holder.item.setEnabled(mData.get(position).isEnable());
+
+        holder.view.setEnabled(mData.get(position).isEnable());
         holder.view.setOnClickListener(v -> {
             if (mOnItemClick != null) {
                 mOnItemClick.onItemClicked(v, position);
@@ -92,10 +95,8 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
             } else {
                 titleText.setText("OA");
             }
-
             linearLayout.addView(titleText);
         }
-
         holder.llcontent.addView(linearLayout);
 
     }
@@ -128,7 +129,6 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
             image = (ImageView) itemView.findViewById(R.id.iv_icon);
             llcontent = (LinearLayout) itemView.findViewById(R.id.ll_content);
             view = itemView.findViewById(R.id.ll_rootView);
-
         }
     }
 
