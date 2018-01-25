@@ -16,7 +16,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +30,6 @@ import com.pgyersdk.update.UpdateManagerListener;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.TabMeGetVersionInfo;
 import com.shanlinjinrong.oa.ui.activity.my.AboutUsActivity;
@@ -47,7 +45,6 @@ import com.shanlinjinrong.oa.utils.VersionManagementUtil;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,8 +63,6 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
     TextView         userName;
     @BindView(R.id.position)
     TextView         position;
-    @BindView(R.id.btn_modify_pwd)
-    RelativeLayout   mBtnModifyPwd;
     private long lastClickTime = 0;
 
     @Override
@@ -89,23 +84,18 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (!TextUtils.isEmpty(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))) {
-            Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS)).placeholder(R.drawable.ease_default_avatar).error(R.drawable.ease_default_avatar).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5)).into(userPortrait);
+            Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .error(R.drawable.ease_default_avatar)
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                    .into(userPortrait);
         } else {
             Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
         }
         userName.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_USERNAME));
         position.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_POST_NAME));
-        checkUserLimit();
-    }
-
-    private void checkUserLimit() {
-        LimitBean userLimitBean = AppConfig.getAppConfig(getActivity()).getUserLimitBean();
-        List<LimitBean.DataBean> dataList = userLimitBean.getData();
-        for (LimitBean.DataBean data : dataList) {
-            if (TextUtils.equals("802", data.getRightId())) {//修改密码
-                mBtnModifyPwd.setVisibility(View.VISIBLE);
-            }
-        }
     }
 
     @Override
@@ -115,13 +105,20 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
         position.setText(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_POST_NAME));
 
         if (!TextUtils.isEmpty(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))) {
-            Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS)).placeholder(R.drawable.ease_default_avatar).error(R.drawable.ease_default_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).dontAnimate().transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5)).into(userPortrait);
+            Glide.with(AppManager.mContext).load(AppConfig.getAppConfig(getActivity()).get(AppConfig.PREF_KEY_PORTRAITS))
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .error(R.drawable.ease_default_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .transform(new CenterCrop(AppManager.mContext), new GlideRoundTransformUtils(AppManager.mContext, 5))
+                    .into(userPortrait);
         } else {
             Glide.with(AppManager.mContext).load(R.drawable.ease_default_avatar).asBitmap().into(userPortrait);
         }
     }
 
-    @OnClick({R.id.user_info, R.id.btn_modify_pwd, R.id.btn_usinghelp, R.id.btn_feedback, R.id.btn_update, R.id.btn_about_us, R.id.btn_clear_cache})
+    @OnClick({R.id.user_info, R.id.btn_modify_pwd, R.id.btn_usinghelp,
+            R.id.btn_feedback, R.id.btn_update, R.id.btn_about_us, R.id.btn_clear_cache})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
         if (currentTime - lastClickTime < 1000) {
@@ -176,7 +173,8 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
 
     //存储权限判断
     private void applyPermission() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (SharedPreferenceUtils.getShouldAskPermission(getActivity(), "firstshould") && !ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//第一次已被拒绝
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("权限开启");
@@ -293,7 +291,8 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
         } else {
             message.setText("是否更新至最新版本");
         }
-        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity(),
+                R.style.AppTheme_Dialog).create();
         alertDialog.setView(dialogView);
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
@@ -308,12 +307,13 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
         };
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "更新", listener);
         if (!iosIsForceUpdate) {
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
         }
         alertDialog.show();
 
@@ -330,11 +330,14 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
                 }
             });
             alertDialog.setCancelable(false);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
         } else {
             alertDialog.setCancelable(true);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    getResources().getColor(R.color.btn_text_logout));
         }
 
     }
