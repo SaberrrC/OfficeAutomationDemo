@@ -213,6 +213,8 @@ public class TabHomePageFragment extends BaseFragment {
     View           mStorkBlank44;
     @BindView(R.id.fl_blank44)
     FrameLayout    mFlBlank44;
+    @BindView(R.id.fl_approval_wait_me_approval)
+    FrameLayout    mFlApprovalWaitMeApproval;
     private RelativeLayout mRootView;
 
     private static int    TYPE_SEND_TO_ME       = 0;//发送我的
@@ -268,58 +270,58 @@ public class TabHomePageFragment extends BaseFragment {
     private void setUserLimit(LimitResponseBody userLimitBean) {
         List<LimitResponseBody.DataBean> dataList = userLimitBean.getData();
         for (LimitResponseBody.DataBean data : dataList) {
-            if (TextUtils.equals("203", data.getParentId())) {//我发起的
+            if (TextUtils.equals("203", data.getRightId())) {//我发起的
                 mRlWorkReportLaunch.setVisibility(View.VISIBLE);
                 mStorkBlank11.setVisibility(View.GONE);
                 mFlBlank11.setVisibility(View.GONE);
             }
-            if (TextUtils.equals("201", data.getParentId())) {//发起日报
+            if (TextUtils.equals("201", data.getRightId())) {//发起日报
                 mStork11.setVisibility(View.VISIBLE);
                 mRlWorkReportLaunchReport.setVisibility(View.VISIBLE);
                 mStorkBlank12.setVisibility(View.GONE);
                 mFlBlank12.setVisibility(View.GONE);
             }
-            if (TextUtils.equals("202", data.getParentId())) {//发起周报
+            if (TextUtils.equals("202", data.getRightId())) {//发起周报
                 mStork12.setVisibility(View.VISIBLE);
                 mRlWorkReportCopyToMe.setVisibility(View.VISIBLE);
                 mStorkBlank13.setVisibility(View.GONE);
                 mFlBlank13.setVisibility(View.GONE);
             }
-            if (TextUtils.equals("302", data.getParentId())) {//我的申请
+            if (TextUtils.equals("302", data.getRightId())) {//我的申请
                 mRlApprovalMeLaunch.setVisibility(View.VISIBLE);
                 mStorkBlank21.setVisibility(View.GONE);
                 mFlBlank21.setVisibility(View.GONE);
             }
-            if (TextUtils.equals("303", data.getParentId())) {//待办事宜
-                mRlApprovalWaitMeApproval.setVisibility(View.VISIBLE);
+            if (TextUtils.equals("303", data.getRightId())) {//待办事宜
+                mFlApprovalWaitMeApproval.setVisibility(View.VISIBLE);
                 mStork21.setVisibility(View.VISIBLE);
                 mStorkBlank22.setVisibility(View.GONE);
                 mFlBlank22.setVisibility(View.GONE);
             }
-            if (TextUtils.equals("304", data.getParentId())) {//已办事宜
+            if (TextUtils.equals("304", data.getRightId())) {//已办事宜
                 mStork22.setVisibility(View.VISIBLE);
                 mRlApprovalMeApprovaled.setVisibility(View.VISIBLE);
                 mStorkBlank23.setVisibility(View.GONE);
                 mFlBlank23.setVisibility(View.GONE);
             }
-            if (TextUtils.equals("301", data.getParentId())) {//发起申请
+            if (TextUtils.equals("301", data.getRightId())) {//发起申请
                 mStork23.setVisibility(View.VISIBLE);
                 mRlApprovalLaunchApproval.setVisibility(View.VISIBLE);
                 mStorkBlank24.setVisibility(View.GONE);
                 mFlBlank24.setVisibility(View.GONE);
             }
-            if (TextUtils.equals("111", data.getParentId())) {//我的考勤
+            if (TextUtils.equals("111", data.getRightId())) {//我的考勤
                 mRlMyAttandance.setVisibility(View.VISIBLE);
                 mStorkBlank31.setVisibility(View.GONE);
                 mFlBlank31.setVisibility(View.GONE);
             }
-            if (TextUtils.equals("112", data.getParentId())) {//假期查询
+            if (TextUtils.equals("112", data.getRightId())) {//假期查询
                 mStork31.setVisibility(View.VISIBLE);
                 mRlHolidaySearch.setVisibility(View.VISIBLE);
                 mStorkBlank32.setVisibility(View.GONE);
                 mFlBlank32.setVisibility(View.GONE);
             }
-            if (TextUtils.equals("101", data.getParentId())) {//会议室预定
+            if (TextUtils.equals("101", data.getRightId())) {//会议室预定
                 mRlScheduleBookMeeting.setVisibility(View.VISIBLE);
                 mStork41.setVisibility(View.VISIBLE);
                 mStorkBlank42.setVisibility(View.GONE);
@@ -347,7 +349,7 @@ public class TabHomePageFragment extends BaseFragment {
                         setUserLimit(bean);
                         return;
                     }
-                   showToast("获取用户权限失败");
+                    showToast("获取用户权限失败");
                 } catch (Exception e) {
                     e.printStackTrace();
                     showToast("获取用户权限失败");
