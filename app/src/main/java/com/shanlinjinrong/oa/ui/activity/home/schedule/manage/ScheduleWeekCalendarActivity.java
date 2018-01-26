@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.bigkoo.pickerview.TimePickerView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.MonthlyCalendarFragment;
@@ -16,7 +15,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.sql.Date;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -69,14 +67,6 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
                     //TODO 时间选择器
 
                     //时间选择器
-                    TimePickerView pvTime = new TimePickerView.Builder(ScheduleWeekCalendarActivity.this, new TimePickerView.OnTimeSelectListener() {
-                        @Override
-                        public void onTimeSelect(java.util.Date date, View v) {
-
-                        }
-                    }).build();
-                    pvTime.setDate(Calendar.getInstance());
-                    pvTime.show();
 
 
 //                    if (mSelectedTimeFragment == null) {
