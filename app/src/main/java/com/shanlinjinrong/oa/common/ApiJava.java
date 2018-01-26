@@ -322,7 +322,8 @@ public interface ApiJava {
     /**
      * 获取用户权限
      */
-    String USER_LIMIT = "auth/findRightByUserId";
+//    String USER_LIMIT = "auth/findRightByUserId";
+    String USER_LIMIT = "auth/getAppRight";
     //*****************************************************************//
 
     /**
