@@ -42,6 +42,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> get(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        params.putHeaders("X-Source", "android");
         return super.get(baseJavaUrl + url, params, callback);
     }
 
@@ -51,6 +52,7 @@ public class MyKjHttp extends KJHttp {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         return super.jsonPost(baseJavaUrl + url, params, callback);
     }
+
     /**
      * 使用JSON传参的put请求
      *
