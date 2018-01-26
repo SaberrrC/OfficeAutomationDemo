@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.MonthlyCalendarFragment;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.WeekCalendarFragment;
 import com.shanlinjinrong.oa.utils.SelectedTimeFragment;
+import com.shanlinjinrong.pickerview.TimePickerView;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -62,7 +64,7 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
                     if (!EventBus.getDefault().isRegistered(mMonthlyCalendarFragment)) {
                         EventBus.getDefault().register(mMonthlyCalendarFragment);
                     }
-                    EventBus.getDefault().postSticky(new UpdateTitleBean("MonthlyCalendarFragment", "MonthlyCalendarFragment"));
+                    EventBus.getDefault().post(new UpdateTitleBean("MonthlyCalendarFragment", "MonthlyCalendarFragment"));
                 } else {
                     //TODO 时间选择器
 

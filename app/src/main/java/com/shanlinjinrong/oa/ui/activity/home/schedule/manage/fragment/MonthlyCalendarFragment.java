@@ -324,7 +324,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void getTitleViewClicked(UpdateTitleBean bean) {
         if ("MonthlyCalendarFragment".equals(bean.getEvent()) && "MonthlyCalendarFragment".equals(bean.getTitle())) {
             selectMonthPopwindow();
