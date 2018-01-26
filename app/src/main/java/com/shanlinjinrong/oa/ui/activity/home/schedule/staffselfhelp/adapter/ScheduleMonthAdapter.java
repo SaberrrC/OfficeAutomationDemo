@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter;
 import android.content.Context;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,15 +28,16 @@ import java.util.List;
 import java.util.Random;
 
 public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdapter.ItemHolder> {
-    //      DatePopAttandanceAdapter
     private List<MonthlyCalenderPopItem> mData;
     private Context mContext;
     private int mViewHeight;
+    private int mViewWidth;
     private OnItemClick mOnItemClick;
 
-    public ScheduleMonthAdapter(List<MonthlyCalenderPopItem> mData, int mViewHeight) {
+    public ScheduleMonthAdapter(List<MonthlyCalenderPopItem> mData, int mViewHeight, int mViewWidth) {
         this.mData = mData;
         this.mViewHeight = mViewHeight;
+        this.mViewWidth = mViewWidth;
     }
 
     @Override
@@ -79,25 +81,41 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
         });
         holder.llcontent.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         holder.llcontent.removeAllViews();
-        LinearLayout linearLayout = new LinearLayout(mContext);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setGravity(Gravity.CENTER);
-        linearLayout.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
-        for (int i = 0; i < 3; i++) {
-            TextView titleText = new TextView(mContext);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            titleText.setLayoutParams(lp);
-            titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-            titleText.setGravity(Gravity.CENTER);
-            if (i == 2) {
-                titleText.setText("更多");
+        if (mData.get(position).isEnable()) {
+            if (mData.get(position).getData() != null && mData.get(position).getData().size() > 0) {
+                LinearLayout linearLayout = new LinearLayout(mContext);
+                linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                linearLayout.setGravity(Gravity.CENTER);
+                linearLayout.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
+                for (int i = 0; i < mData.get(position).getData().size(); i++) {
+                    TextView titleText = new TextView(mContext);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(5, 1, 5, 1);
+                    titleText.setLayoutParams(lp);
+                    titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    titleText.setMaxLines(1);
+                    titleText.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
+                    titleText.setGravity(Gravity.CENTER);
+                    titleText.setText(mData.get(position).getData().get(i).getTaskTheme());
+                    if (i < 2) {
+                        titleText.setBackgroundColor(mContext.getResources().getColor(R.color.btn_gray_pressed));
+                        titleText.setTextColor(mContext.getResources().getColor(R.color.btn_green_noraml));
+                        titleText.setText(mData.get(position).getData().get(i).getTaskTheme());
+                        linearLayout.addView(titleText);
+                    } else {
+                        titleText.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        titleText.setTextColor(mContext.getResources().getColor(R.color.text_gray));
+                        titleText.setText("共" + mData.get(position).getData().size());
+                        linearLayout.addView(titleText);
+                        break;
+                    }
+                }
+                holder.llcontent.addView(linearLayout);
             } else {
-                titleText.setText("OA");
+                holder.llcontent.removeAllViews();
             }
-            linearLayout.addView(titleText);
         }
-        holder.llcontent.addView(linearLayout);
 
     }
 

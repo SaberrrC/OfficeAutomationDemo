@@ -67,29 +67,29 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     /**
      * 周历
      */
-    private String[]                    mWeeks;
-    private CustomDialogUtils           mDialog;
-    private WriteContentAdapter         mAdapter;
-    private List<WeekCalendarBean>      mListDate;
-    private List<LeftDateBean>          mLlContent;
-    private LeftDateAdapter             mDateAdapter;
-    private List<LeftDateBean>          mLeftDateList;
+    private String[] mWeeks;
+    private CustomDialogUtils mDialog;
+    private WriteContentAdapter mAdapter;
+    private List<WeekCalendarBean> mListDate;
+    private List<LeftDateBean> mLlContent;
+    private LeftDateAdapter mDateAdapter;
+    private List<LeftDateBean> mLeftDateList;
     private SelectedWeekCalendarAdapter mSelectedAdapter;
-    private RecyclerView                mLeftRecyclerView;
-    private WheelPicker                 mRvEndDateSelected;
-    private List<String>                mStartDate, mEndDate;
+    private RecyclerView mLeftRecyclerView;
+    private WheelPicker mRvEndDateSelected;
+    private List<String> mStartDate, mEndDate;
     private String mStartTime, mEndTime;
     private RecyclerView mHeaderRecyclerView;
-    private WheelPicker  mRvStartDateSelected;
+    private WheelPicker mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
-    private int          mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight, mRefreshCalendar0, mRefreshCalendar1;
-    private String                      mSelectedYear1;
-    private String                      mSelectedMonth1;
-    private String                      mSelectedDay1;
-    private int                         mSelectedStartTime;
-    private int                         mSelectedEndTime;
+    private int mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight, mRefreshCalendar0, mRefreshCalendar1;
+    private String mSelectedYear1;
+    private String mSelectedMonth1;
+    private String mSelectedDay1;
+    private int mSelectedStartTime;
+    private int mSelectedEndTime;
     private List<LeftDateBean.DataBean> mPopupData;
-    private Dialog                      mPopupDialog;
+    private Dialog mPopupDialog;
 
 
     public Date getMondayOfThisWeek(Calendar calendar) {

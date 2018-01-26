@@ -2,21 +2,30 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.Constants;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.CalendarRedactActivity;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.MonthContentAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.CalendarScheduleContentBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.LeftDateBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.MonthlyCalendarFragmentContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.MonthlyCalendarFragmentPresenter;
@@ -46,13 +55,17 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     RecyclerView mRecyclerView;
     private View mRootView;
     private List<MonthlyCalenderPopItem> mData;
+
     private ScheduleMonthAdapter mScheduleMonthAdapter;
     private int mSelectedDay, mCurrentYear, mCurrentMonth, mCurrentDay, mSelectedMonth, mSelectedYear;
-
+    private List<CalendarScheduleContentBean.DataBean> mPopupData;
     private MonthSelectPopWindow monthSelectPopWindow;
     private int mViewHeight;
     private int mViewWidth;
-    private List<CalendarScheduleContentBean.DataBean> DataBeanLists;
+    private Dialog dialog;
+    private String startDate;
+    private String endDate;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +90,6 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
 
     private void initData() {
         Calendar calendar = Calendar.getInstance();
-
         int year = calendar.get(Calendar.YEAR);
         SimpleDateFormat currentFormat1 = new SimpleDateFormat("yyyy");
         String currentYear = currentFormat1.format(calendar.getTime());
@@ -103,11 +115,11 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         mRecyclerView.addItemDecoration(new GridItemDecoration(getContext(), R.drawable.divider));
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 7));
 
-        mScheduleMonthAdapter = new ScheduleMonthAdapter(mData, mViewHeight);
+        mScheduleMonthAdapter = new ScheduleMonthAdapter(mData, mViewHeight, mViewWidth);
         mScheduleMonthAdapter.setOnItemClick(this);
         mRecyclerView.setAdapter(mScheduleMonthAdapter);
         setData(mCurrentMonth, mCurrentDay);
-        mPresenter.getScheduleByDate("2018-01-01", "2018-01-31");
+
     }
 
 
@@ -142,22 +154,26 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     @SuppressLint("LongLogTag")
     @Override
     public void GetScheduleByDateSuccess(CalendarScheduleContentBean bean) {
-        if (bean == null) {
-            return;
-        }
-        DataBeanLists = bean.getData();
-        Log.e("----GetScheduleByDateSuccess----", DataBeanLists.size() + "");
-        for (int i = 0; i < mData.size(); i++) {
-            MonthlyCalenderPopItem monthlyCalenderPopItem = mData.get(i);
-            String taskDate = getPopItemDataString(monthlyCalenderPopItem);
-            for (int j = 0; j < DataBeanLists.size(); j++) {
-                List<CalendarScheduleContentBean.DataBean> data = new ArrayList<>();
-                if (taskDate.equals(DataBeanLists.get(j).getTaskDate())) {
-                    data.add(DataBeanLists.get(j));
-                }
-                monthlyCalenderPopItem.setData(data);
+        try {
+            if (bean == null) {
+                return;
             }
+            List<CalendarScheduleContentBean.DataBean> DataBeanLists = bean.getData();
+            for (int i = 0; i < mData.size(); i++) {
+                String taskDate = getPopItemDataString(mData.get(i));
+                List<CalendarScheduleContentBean.DataBean> data = new ArrayList<>();
+                for (int j = 0; j < DataBeanLists.size(); j++) {
+                    if (taskDate.equals(DataBeanLists.get(j).getTaskDate())) {
+                        data.add(DataBeanLists.get(j));
+                    }
+                }
+                mData.get(i).setData(data);
+            }
+            mScheduleMonthAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     /**
@@ -194,6 +210,9 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         mScheduleMonthAdapter.notifyDataSetChanged();
         String dateStr = mSelectedYear + "年" + month + "月" + selectPos + "日";
         EventBus.getDefault().post(new UpdateTitleBean(dateStr, "monthLUpdateTitle"));
+        startDate = mSelectedYear + "-" + month + "-" + "01";
+        endDate = mSelectedYear + "-" + month + "-" + DateUtils.getDaysByYearMonth(mSelectedYear, month);
+        mPresenter.getScheduleByDate(startDate, endDate);
     }
 
     @Override
@@ -212,22 +231,44 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
         String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
         String date = mSelectedYear + "年" + month + "月" + mDay + "日";
-        EventBus.getDefault().post(new UpdateTitleBean(date, "monthLUpdateTitle"));
-        Toast.makeText(getContext(), position + 1 + "", Toast.LENGTH_SHORT).show();
-        showPopWindow(v, position + 1);
 
+        EventBus.getDefault().post(new UpdateTitleBean(date, "monthLUpdateTitle"));
+        showPopWindow(v, mData.get(position).getData(), position + 1, mSelectedYear + "", month, mDay);
     }
 
-    private void showPopWindow(View v, int clickPosition) {
-        Dialog dialog = new Dialog(getContext(), R.style.CustomDialog);
+    private void showPopWindow(View v, List<CalendarScheduleContentBean.DataBean> data, int clickPosition, String mSelectedYear1, String mSelectedMonth1, String mSelectedDay1) {
+        dialog = new Dialog(getContext(), R.style.CustomDialog);
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_month_calendar_content, null);
+        RecyclerView rvContent = (RecyclerView) view.findViewById(R.id.rv_content);
+        ImageView addCalendar = (ImageView) view.findViewById(R.id.img_add_calendar);
+
+        mPopupData = new ArrayList<>();
+        mPopupData.addAll(data);
+        MonthContentAdapter adapter = new MonthContentAdapter(data);
+        rvContent.setAdapter(adapter);
+        rvContent.addOnItemTouchListener(new ItemClick());
+        //添加新事件
+        addCalendar.setOnClickListener(view1 -> {
+            Intent intent1 = new Intent(getContext(), CalendarRedactActivity.class);
+            intent1.putExtra(Constants.CALENDARYEAR, mSelectedYear1);
+            intent1.putExtra(Constants.CALENDARMONTH, mSelectedMonth1);
+            intent1.putExtra(Constants.CALENDARDATE, mSelectedDay1);
+
+            intent1.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
+            startActivityForResult(intent1, 101);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        });
+        rvContent.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.VERTICAL, false));
+        adapter.notifyDataSetChanged();
+
         dialog.setContentView(view);
         //获取到当前Activity的Window
         Window dialog_window = dialog.getWindow();
         WindowManager.LayoutParams dialog_window_attributes = dialog_window.getAttributes();
 
         dialog_window_attributes.width = mViewWidth * 3;
-        dialog_window_attributes.height = mViewHeight * 3;
 
         if ((clickPosition - 1) % 7 >= 4) {
             dialog_window_attributes.x = mViewWidth * (7 - (clickPosition - 1) % 7);
@@ -259,6 +300,28 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         }
         dialog_window.setAttributes(dialog_window_attributes);
         dialog.show();
+    }
+
+    public class ItemClick extends OnItemClickListener {
+
+        @Override
+        public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+            Intent intent = new Intent(getContext(), CalendarRedactActivity.class);
+            intent.putExtra(Constants.CALENDARTITLE, mPopupData.get(i).getTaskTheme());
+            intent.putExtra(Constants.CALENDARCONTENT, mPopupData.get(i).getTaskDetail());
+            intent.putExtra(Constants.CALENDARSTARTTIME, mPopupData.get(i).getStartTime());
+            intent.putExtra(Constants.CALENDARENDTIME, mPopupData.get(i).getEndTime());
+            intent.putExtra(Constants.CALENDARDATE, mPopupData.get(i).getTaskDate());
+            intent.putExtra(Constants.CALENDARID, mPopupData.get(i).getId());
+            intent.putExtra(Constants.CALENDARTYPE, mPopupData.get(i).getTaskType());
+            intent.putExtra(Constants.CALENDARTYPE, Constants.LOOKCALENDAR);
+            intent.putExtra(Constants.CALENDARSTATUS, mPopupData.get(i).getStatus());
+            intent.putExtra(Constants.SELECTEDPOSITION, i);
+            startActivityForResult(intent, 101);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -293,5 +356,13 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
                     }
                 });
         monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == -1) {
+            mPresenter.getScheduleByDate(startDate, endDate);
+        }
     }
 }
