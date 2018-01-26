@@ -11,7 +11,6 @@ import com.example.retrofit.model.responsebody.MyAttandanceResponse;
 import com.example.retrofit.model.responsebody.MyAttendanceResponse;
 import com.example.retrofit.model.responsebody.QueryPayResponse;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -104,4 +103,5 @@ public interface JavaApi {
     //提交加班申请
     //    @POST("nchrEvection/submitEvectionApply")
     //    Observable<HttpResult> addWorkApply(@Body AddWorkBody data);
+
 }

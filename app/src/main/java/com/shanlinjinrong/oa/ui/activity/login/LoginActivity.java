@@ -19,12 +19,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.retrofit.model.responsebody.LimitResponseBody;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.UserInfo;
-import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
@@ -271,10 +271,10 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     }
 
     @Override
-    public void onGetUserLimitSuccess(LimitBean bean) {
+    public void onGetUserLimitSuccess(LimitResponseBody bean) {
         hideLoadingView();
         AppConfig.getAppConfig(LoginActivity.this).setUserLimit(bean);
-        goToLogin(bean);
+        goToLogin();
     }
 
     @Override
@@ -288,7 +288,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         hideLoadingView();
     }
 
-    private void goToLogin(LimitBean bean) {
+    private void goToLogin() {
         showToast("登录成功");
         hideLoadingView();
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

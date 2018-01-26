@@ -15,8 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.retrofit.model.responsebody.LimitResponseBody;
+import com.google.gson.Gson;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.activity.home.approval.LaunchApprovalActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.MyMailActivity;
@@ -28,9 +31,12 @@ import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspap
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
-import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
+
+import org.kymjs.kjframe.KJHttp;
+import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpParams;
 
 import java.util.Calendar;
 import java.util.List;
@@ -46,15 +52,7 @@ import butterknife.OnClick;
 public class TabHomePageFragment extends BaseFragment {
 
     @BindView(R.id.title)
-    TextView mTvTitle;
-
-    @BindView(R.id.iv_send_to_me_dot)
-    ImageView mSendToMeDot;
-
-    @BindView(R.id.iv_wait_me_approval_dot)
-    ImageView      mWaitMeApprovalDot;
-    @BindView(R.id.title)
-    TextView       mTitle;
+    TextView       mTvTitle;
     @BindView(R.id.tv_appoint)
     TextView       mTvAppoint;
     @BindView(R.id.tab_homepage_top)
@@ -63,28 +61,28 @@ public class TabHomePageFragment extends BaseFragment {
     View           mPartingLineTop;
     @BindView(R.id.parting_line_bottom)
     View           mPartingLineBottom;
-    @BindView(R.id.toolbar_shadow)
+    @BindView(R.id.toolbarshadow)
     LinearLayout   mToolbarShadow;
     @BindView(R.id.tv_work_report_tips)
     TextView       mTvWorkReportTips;
-    @BindView(R.id.stork11)
-    View           mStork11;
     @BindView(R.id.iv_homepage_wr_me_launch)
     ImageView      mIvHomepageWrMeLaunch;
     @BindView(R.id.rl_work_report_launch)
     RelativeLayout mRlWorkReportLaunch;
-    @BindView(R.id.stork12)
-    View           mStork12;
+    @BindView(R.id.stork11)
+    View           mStork11;
     @BindView(R.id.iv_homepage_wr_launch_work_report)
     ImageView      mIvHomepageWrLaunchWorkReport;
     @BindView(R.id.rl_work_report_launch_report)
     RelativeLayout mRlWorkReportLaunchReport;
-    @BindView(R.id.stork13)
-    View           mStork13;
+    @BindView(R.id.stork12)
+    View           mStork12;
     @BindView(R.id.iv_homepage_wr_copy_to_me)
     ImageView      mIvHomepageWrCopyToMe;
     @BindView(R.id.rl_work_report_copy_to_me)
     RelativeLayout mRlWorkReportCopyToMe;
+    @BindView(R.id.stork13)
+    View           mStork13;
     @BindView(R.id.iv_homepage_wr_send_to_me)
     ImageView      mIvHomepageWrSendToMe;
     @BindView(R.id.rl_work_report_send_to_me)
@@ -115,56 +113,26 @@ public class TabHomePageFragment extends BaseFragment {
     ImageView      mIvApprovalMeLaunch;
     @BindView(R.id.rl_approval_me_launch)
     RelativeLayout mRlApprovalMeLaunch;
+    @BindView(R.id.stork21)
+    View           mStork21;
     @BindView(R.id.iv_homepage_approval_wait_me_approval)
     ImageView      mIvHomepageApprovalWaitMeApproval;
     @BindView(R.id.rl_approval_wait_me_approval)
     RelativeLayout mRlApprovalWaitMeApproval;
     @BindView(R.id.iv_wait_me_approval_dot)
     ImageView      mIvWaitMeApprovalDot;
+    @BindView(R.id.stork22)
+    View           mStork22;
     @BindView(R.id.iv_homepage_approval_me_approval)
     ImageView      mIvHomepageApprovalMeApproval;
     @BindView(R.id.rl_approval_me_approvaled)
     RelativeLayout mRlApprovalMeApprovaled;
+    @BindView(R.id.stork23)
+    View           mStork23;
     @BindView(R.id.iv_homepage_approval_launch_approval)
     ImageView      mIvHomepageApprovalLaunchApproval;
     @BindView(R.id.rl_approval_launch_approval)
     RelativeLayout mRlApprovalLaunchApproval;
-    @BindView(R.id.ll_approval_container)
-    LinearLayout   mLlApprovalContainer;
-    @BindView(R.id.iv_my_attandance)
-    ImageView      mIvMyAttandance;
-    @BindView(R.id.rl_my_attandance)
-    RelativeLayout mRlMyAttandance;
-    @BindView(R.id.iv_holiday_search)
-    ImageView      mIvHolidaySearch;
-    @BindView(R.id.rl_holiday_search)
-    RelativeLayout mRlHolidaySearch;
-    @BindView(R.id.rl_pay_search)
-    RelativeLayout mRlPaySearch;
-    @BindView(R.id.rl_test)
-    RelativeLayout mRlTest;
-    @BindView(R.id.iv_homepage_schedule_manage)
-    ImageView      mIvHomepageScheduleManage;
-    @BindView(R.id.rl_schedule_manage)
-    RelativeLayout mRlScheduleManage;
-    @BindView(R.id.iv_homepage_schedule_me_launch)
-    ImageView      mIvHomepageScheduleMeLaunch;
-    @BindView(R.id.rl_schedule_book_meeting)
-    RelativeLayout mRlScheduleBookMeeting;
-    @BindView(R.id.iv_schedule_administration)
-    ImageView      mIvScheduleAdministration;
-    @BindView(R.id.rl_schedule_my_mail)
-    RelativeLayout mRlScheduleMyMail;
-    @BindView(R.id.iv_homepage_schedule_my_mail)
-    ImageView      mIvHomepageScheduleMyMail;
-    @BindView(R.id.rl_schedule_administration)
-    RelativeLayout mRlScheduleAdministration;
-    @BindView(R.id.stork21)
-    View           mStork21;
-    @BindView(R.id.stork22)
-    View           mStork22;
-    @BindView(R.id.stork23)
-    View           mStork23;
     @BindView(R.id.stork_blank21)
     View           mStorkBlank21;
     @BindView(R.id.fl_blank21)
@@ -181,6 +149,24 @@ public class TabHomePageFragment extends BaseFragment {
     View           mStorkBlank24;
     @BindView(R.id.fl_blank24)
     FrameLayout    mFlBlank24;
+    @BindView(R.id.ll_approval_container)
+    LinearLayout   mLlApprovalContainer;
+    @BindView(R.id.iv_my_attandance)
+    ImageView      mIvMyAttandance;
+    @BindView(R.id.rl_my_attandance)
+    RelativeLayout mRlMyAttandance;
+    @BindView(R.id.stork31)
+    View           mStork31;
+    @BindView(R.id.iv_holiday_search)
+    ImageView      mIvHolidaySearch;
+    @BindView(R.id.rl_holiday_search)
+    RelativeLayout mRlHolidaySearch;
+    @BindView(R.id.stork32)
+    View           mStork32;
+    @BindView(R.id.rl_pay_search)
+    RelativeLayout mRlPaySearch;
+    @BindView(R.id.rl_test)
+    RelativeLayout mRlTest;
     @BindView(R.id.stork_blank31)
     View           mStorkBlank31;
     @BindView(R.id.fl_blank31)
@@ -189,11 +175,44 @@ public class TabHomePageFragment extends BaseFragment {
     View           mStorkBlank32;
     @BindView(R.id.fl_blank32)
     FrameLayout    mFlBlank32;
-    @BindView(R.id.stork31)
-    View           mStork31;
-    @BindView(R.id.stork32)
-    View           mStork32;
-
+    @BindView(R.id.iv_homepage_schedule_manage)
+    ImageView      mIvHomepageScheduleManage;
+    @BindView(R.id.rl_schedule_manage)
+    RelativeLayout mRlScheduleManage;
+    @BindView(R.id.stork41)
+    View           mStork41;
+    @BindView(R.id.iv_homepage_schedule_me_launch)
+    ImageView      mIvHomepageScheduleMeLaunch;
+    @BindView(R.id.rl_schedule_book_meeting)
+    RelativeLayout mRlScheduleBookMeeting;
+    @BindView(R.id.stork42)
+    View           mStork42;
+    @BindView(R.id.iv_schedule_administration)
+    ImageView      mIvScheduleAdministration;
+    @BindView(R.id.rl_schedule_my_mail)
+    RelativeLayout mRlScheduleMyMail;
+    @BindView(R.id.stork43)
+    View           mStork43;
+    @BindView(R.id.iv_homepage_schedule_my_mail)
+    ImageView      mIvHomepageScheduleMyMail;
+    @BindView(R.id.rl_schedule_administration)
+    RelativeLayout mRlScheduleAdministration;
+    @BindView(R.id.stork_blank41)
+    View           mStorkBlank41;
+    @BindView(R.id.fl_blank41)
+    FrameLayout    mFlBlank41;
+    @BindView(R.id.stork_blank42)
+    View           mStorkBlank42;
+    @BindView(R.id.fl_blank42)
+    FrameLayout    mFlBlank42;
+    @BindView(R.id.stork_blank43)
+    View           mStorkBlank43;
+    @BindView(R.id.fl_blank43)
+    FrameLayout    mFlBlank43;
+    @BindView(R.id.stork_blank44)
+    View           mStorkBlank44;
+    @BindView(R.id.fl_blank44)
+    FrameLayout    mFlBlank44;
     private RelativeLayout mRootView;
 
     private static int    TYPE_SEND_TO_ME       = 0;//发送我的
@@ -214,6 +233,11 @@ public class TabHomePageFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initWidget();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         checkUserLimit();
     }
 
@@ -233,9 +257,17 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
     private void checkUserLimit() {
-        LimitBean userLimitBean = AppConfig.getAppConfig(getActivity()).getUserLimitBean();
-        List<LimitBean.DataBean> dataList = userLimitBean.getData();
-        for (LimitBean.DataBean data : dataList) {
+        LimitResponseBody userLimitBean = AppConfig.getAppConfig(getActivity()).getUserLimitBean();
+        if (userLimitBean == null) {
+            getUserLimitFromNet();
+            return;
+        }
+        setUserLimit(userLimitBean);
+    }
+
+    private void setUserLimit(LimitResponseBody userLimitBean) {
+        List<LimitResponseBody.DataBean> dataList = userLimitBean.getData();
+        for (LimitResponseBody.DataBean data : dataList) {
             if (TextUtils.equals("203", data.getParentId())) {//我发起的
                 mRlWorkReportLaunch.setVisibility(View.VISIBLE);
                 mStorkBlank11.setVisibility(View.GONE);
@@ -283,11 +315,57 @@ public class TabHomePageFragment extends BaseFragment {
             }
             if (TextUtils.equals("112", data.getParentId())) {//假期查询
                 mStork31.setVisibility(View.VISIBLE);
-                mRlWorkReportLaunchReport.setVisibility(View.VISIBLE);
+                mRlHolidaySearch.setVisibility(View.VISIBLE);
                 mStorkBlank32.setVisibility(View.GONE);
                 mFlBlank32.setVisibility(View.GONE);
             }
+            if (TextUtils.equals("101", data.getParentId())) {//会议室预定
+                mRlScheduleBookMeeting.setVisibility(View.VISIBLE);
+                mStork41.setVisibility(View.VISIBLE);
+                mStorkBlank42.setVisibility(View.GONE);
+                mFlBlank42.setVisibility(View.GONE);
+            }
         }
+    }
+
+    private void getUserLimitFromNet() {
+        KJHttp kjHttp = initKjHttp();
+        kjHttp.cleanCache();
+        kjHttp.get(ApiJava.USER_LIMIT, new HttpParams(), new HttpCallBack() {
+            @Override
+            public void onPreStart() {
+                super.onPreStart();
+            }
+
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    LimitResponseBody bean = new Gson().fromJson(t, LimitResponseBody.class);
+                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        AppConfig.getAppConfig(getActivity()).setUserLimit(bean);
+                        setUserLimit(bean);
+                        return;
+                    }
+                   showToast("获取用户权限失败");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showToast("获取用户权限失败");
+                }
+
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                showToast("获取用户权限失败");
+            }
+        });
     }
 
     @Override
@@ -304,14 +382,14 @@ public class TabHomePageFragment extends BaseFragment {
     private void refreshDot() {
         SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
         if (sp.getBoolean(DOT_SEND, false)) {
-            mSendToMeDot.setVisibility(View.VISIBLE);
+            mIvSendToMeDot.setVisibility(View.VISIBLE);
         } else {
-            mSendToMeDot.setVisibility(View.GONE);
+            mIvSendToMeDot.setVisibility(View.GONE);
         }
         if (sp.getBoolean(DOT_APPORVAL, false)) {
-            mWaitMeApprovalDot.setVisibility(View.VISIBLE);
+            mIvWaitMeApprovalDot.setVisibility(View.VISIBLE);
         } else {
-            mWaitMeApprovalDot.setVisibility(View.GONE);
+            mIvWaitMeApprovalDot.setVisibility(View.GONE);
         }
     }
 

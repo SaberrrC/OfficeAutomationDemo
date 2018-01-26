@@ -1,4 +1,4 @@
-package com.shanlinjinrong.oa.ui.activity.login.bean;
+package com.example.retrofit.model.responsebody;
 
 import java.io.Serializable;
 import java.util.List;
@@ -427,7 +427,7 @@ import java.util.List;
  }
  */
 
-public class LimitBean implements Serializable{
+public class LimitResponseBody implements Serializable{
 
     /**
      * code : 000000

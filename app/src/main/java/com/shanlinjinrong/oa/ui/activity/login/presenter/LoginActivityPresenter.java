@@ -2,12 +2,12 @@ package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
 import android.text.TextUtils;
 
+import com.example.retrofit.model.responsebody.LimitResponseBody;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.net.MyKjHttp;
-import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 import com.shanlinjinrong.oa.utils.LogUtils;
@@ -111,7 +111,7 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    LimitBean bean = new Gson().fromJson(t, LimitBean.class);
+                    LimitResponseBody bean = new Gson().fromJson(t, LimitResponseBody.class);
                     if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
                         if (mView != null) {
                             mView.onGetUserLimitSuccess(bean);

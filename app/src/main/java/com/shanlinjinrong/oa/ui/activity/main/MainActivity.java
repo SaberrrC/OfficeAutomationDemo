@@ -255,10 +255,10 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
      */
     private void judeIsInitPwd() {
         //1初始密码，2已修改
-//        String isInitPwd = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_IS_INIT_PWD);
-//        if (isInitPwd.equals("1")) {
-//            showSetPwdDialog();
-//        }
+        //        String isInitPwd = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_IS_INIT_PWD);
+        //        if (isInitPwd.equals("1")) {
+        //            showSetPwdDialog();
+        //        }
     }
 
     private void showSetPwdDialog() {
@@ -746,10 +746,10 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
         @Override
         public void onDisconnected(final int error) {
-//            OnCountRefreshEvent onCountRefreshEvent = new WeakReference<>(new OnCountRefreshEvent()).get();
-//            onCountRefreshEvent.setEvent(1);
-//            onCountRefreshEvent.setErrorCode(error);
-//            EventBus.getDefault().post(onCountRefreshEvent);
+            //            OnCountRefreshEvent onCountRefreshEvent = new WeakReference<>(new OnCountRefreshEvent()).get();
+            //            onCountRefreshEvent.setEvent(1);
+            //            onCountRefreshEvent.setErrorCode(error);
+            //            EventBus.getDefault().post(onCountRefreshEvent);
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.login.contract;
 
+import com.example.retrofit.model.responsebody.LimitResponseBody;
 import com.shanlinjinrong.oa.model.UserInfo;
-import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
@@ -27,7 +27,7 @@ public interface LoginActivityContract {
 
         void requestFinish(); //登录请求结束
 
-        void onGetUserLimitSuccess(LimitBean bean);
+        void onGetUserLimitSuccess(LimitResponseBody bean);
 
         void onGetUserLimitFailure(String code, String message);
     }

@@ -3,7 +3,6 @@ package com.shanlinjinrong.oa.ui.activity.main.contract;
 import android.app.Activity;
 
 import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
-import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 

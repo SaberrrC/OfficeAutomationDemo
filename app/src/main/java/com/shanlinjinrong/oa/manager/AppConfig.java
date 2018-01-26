@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.example.retrofit.model.responsebody.LimitResponseBody;
 import com.shanlinjinrong.oa.model.UserInfo;
-import com.shanlinjinrong.oa.ui.activity.login.bean.LimitBean;
 
 
 /**
@@ -90,7 +90,7 @@ public class AppConfig {
      * 部门ID
      */
     public static final  String PREF_KEY_DEPARTMENT_ID = "pref_key_department_id";
-    private static LimitBean mUserLimitBean;
+    private static LimitResponseBody mUserLimitBean;
 
     public static AppConfig getAppConfig(Context context) {
         if (appConfig == null) {
@@ -268,11 +268,11 @@ public class AppConfig {
         editor.apply();
     }
 
-    public void setUserLimit(LimitBean bean) {
+    public void setUserLimit(LimitResponseBody bean) {
         mUserLimitBean = bean;
     }
 
-    public LimitBean getUserLimitBean() {
+    public LimitResponseBody getUserLimitBean() {
         return mUserLimitBean;
     }
 }
