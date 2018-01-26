@@ -700,7 +700,7 @@
                         android:layout_height="84dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_homepage_schedule_manage"
@@ -759,7 +759,7 @@
                         android:layout_height="84dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_schedule_administration"
