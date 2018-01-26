@@ -226,6 +226,19 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
     private void setUserLimit(LimitResponseBody userLimitBean) {
+        if (userLimitBean == null) {
+            showToast("没有任何权限");
+
+
+            mLlWorkReportContainer.setVisibility(View.GONE);
+            mLlApprovalContainer.setVisibility(View.GONE);
+            mLlApprovalChecking.setVisibility(View.GONE);
+            //            mLlApprovalDate.setVisibility(View.GONE);
+            mToolbarShadow.setVisibility(View.GONE);
+            mRlScheduleManage.setVisibility(View.VISIBLE);
+            mLlApprovalDate.setVisibility(View.VISIBLE);
+            return;
+        }
         List<LimitResponseBody.DataBean> dataList = userLimitBean.getData();
         if (dataList == null || dataList.size() == 0) {
             mLlWorkReportContainer.setVisibility(View.GONE);
@@ -233,6 +246,9 @@ public class TabHomePageFragment extends BaseFragment {
             mLlApprovalChecking.setVisibility(View.GONE);
             mLlApprovalDate.setVisibility(View.GONE);
             mToolbarShadow.setVisibility(View.GONE);
+
+            mRlScheduleManage.setVisibility(View.VISIBLE);
+            mLlApprovalDate.setVisibility(View.VISIBLE);
             return;
         }
         for (LimitResponseBody.DataBean data : dataList) {
@@ -323,6 +339,8 @@ public class TabHomePageFragment extends BaseFragment {
         if (!checkLineLimit(dataList, "10")) {//日程管理
             mLlApprovalDate.setVisibility(View.GONE);
         }
+        mRlScheduleManage.setVisibility(View.VISIBLE);
+        mLlApprovalDate.setVisibility(View.VISIBLE);
     }
 
     public boolean checkLineLimit(List<LimitResponseBody.DataBean> dataList, String limits) {
@@ -353,10 +371,11 @@ public class TabHomePageFragment extends BaseFragment {
                         setUserLimit(bean);
                         return;
                     }
-                    showToast("获取用户权限失败");
+                    setUserLimit(null);
                 } catch (Exception e) {
                     e.printStackTrace();
                     showToast("获取用户权限失败");
+                    setUserLimit(null);
                 }
 
             }
