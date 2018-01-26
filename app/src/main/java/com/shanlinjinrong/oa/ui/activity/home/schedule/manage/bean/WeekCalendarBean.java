@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,9 @@ public class WeekCalendarBean implements Serializable {
     private List<String>  month;
     private List<String>  year;
     private List<Boolean> isSelected;
+
+    public WeekCalendarBean() {
+    }
 
     public WeekCalendarBean(List<String> week, List<String> day, List<String> month, List<String> year, List<Boolean> isSelected) {
         this.week = week;

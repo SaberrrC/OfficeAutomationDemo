@@ -322,20 +322,26 @@ public class DateUtils {
         List<String> bigList = Arrays.asList(bigMonths);
         List<String> littleList = Arrays.asList(littleMonths);
         // 判断大小月及是否闰年,用来确定"日"的数据
-        if (bigList.contains(String.valueOf(month))) {
-            return 31;
-        } else if (littleList.contains(String.valueOf(month))) {
-            return 30;
+        for (int i = 0; i < bigList.size(); i++) {
+            if (bigList.get(i).equals(String.valueOf(month))) {
+                return 31;
+            }
+        }
+
+        for (int i = 0; i < littleList.size(); i++) {
+            if (littleList.get(i).equals(String.valueOf(month))) {
+                return 30;
+            }
+        }
+
+        if (year <= 0) {
+            return 29;
+        }
+        // 是否闰年
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+            return 29;
         } else {
-            if (year <= 0) {
-                return 29;
-            }
-            // 是否闰年
-            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-                return 29;
-            } else {
-                return 28;
-            }
+            return 28;
         }
     }
 
@@ -450,7 +456,7 @@ public class DateUtils {
         return data;
     }
 
-    public static List<PopItem> getAttandenceDate(int month, int select) {
+    public static List<PopItem> getAttandenceDate(int year, int month, int select) {
         List<PopItem> data = new ArrayList<>();
         if (month < 1 || month > 12) {
             return null;
@@ -461,16 +467,37 @@ public class DateUtils {
         int curMonth = cal.get(Calendar.MONTH);
         int monthDays = calculateDaysInMonth(Calendar.YEAR, month); //获取当月天数
         int lastMonthDays;//上个月的天数
+
         if (month == 1) {
             lastMonthDays = calculateDaysInMonth(Calendar.YEAR - 1, 11);
         } else {
             lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
         }
 
+        if (month == 1) {
+            month = 12;
+            year = year - 1;
+        } else {
+            month = month - 1;
+        }
+
+        cal.set(Calendar.YEAR, year);
         //设置月份
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, 0);
-        int col = cal.get(Calendar.DAY_OF_WEEK);   //获取该天在本星期的第几天 ，也就是第几列
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        //获取该天在本星期的第几天 ，也就是第几列
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String format1 = format.format(cal.getTime());
+
+        int col = cal.get(Calendar.DAY_OF_WEEK) - 1;
+
+        if (cal.getFirstDayOfWeek() == Calendar.SUNDAY) {
+            if (col == 0) {
+                col = 7;
+            }
+        }
+
+
         for (int i = col - 2; i >= 0; i--) {
             item = new PopItem("" + (lastMonthDays - i), false, false);
             data.add(item);

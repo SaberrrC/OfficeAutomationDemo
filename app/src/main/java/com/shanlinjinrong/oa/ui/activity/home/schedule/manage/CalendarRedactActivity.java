@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -10,10 +11,10 @@ import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
-import com.example.retrofit.model.ScheduleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.CalendarRedactActivityContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.CalendarRedactActivityPresenter;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.SelectedTimeFragment;
 import com.shanlinjinrong.pickerview.OptionsPickerView;
@@ -22,7 +23,6 @@ import com.shanlinjinrong.views.common.CommonTopView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -72,6 +72,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private String               mOldDate;
     private String               mOldDetails;
     private boolean              mIsFirst, mIsCheckBox;
+    private int                  mTaskId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +122,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
         switch (mItemType) {
             case Constants.WRITECALENDAR:
+                mCbCompletes.setVisibility(View.GONE);
+                mViewCompletes.setVisibility(View.GONE);
                 if (date.equals(mYear + mMonth + mDate + "")) {
                     mTvDate.setText(mMonth + "月" + mDate + "日  今天");
                 } else {
@@ -129,7 +132,6 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mTvTaskDate.setText(mStartTime + ":00" + "-" + mEndTime + ":00");
                 break;
             case Constants.LOOKCALENDAR:
-
                 mTvDate.setText(mDate);
                 mTopView.setRightText("删除");
                 mBtnCommonCalendar.setText("编辑");
@@ -145,6 +147,19 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mEdTaskDetails.setText(mContent);
                 break;
             case Constants.MEETINGCALENDAR:
+                mTvDate.setText(mDate);
+                mBtnCommonCalendar.setText("查看详情");
+                mTopView.setAppTitle("普通会议");
+                mBtnCommonCalendar.setBackgroundColor(getResources().getColor(R.color.blue_69B0F2));
+                mCbCompletes.setVisibility(View.GONE);
+                mTopView.setRightText("");
+                mViewCompletes.setVisibility(View.GONE);
+                mEdTaskTheme.setEnabled(false);
+                mTvTaskDate.setEnabled(false);
+                mEdTaskDetails.setEnabled(false);
+                mEdTaskTheme.setText(mTitle);
+                mTvTaskDate.setText(mStartTime + ":00-" + mEndTime + ":00");
+                mEdTaskDetails.setText(mContent);
                 break;
             default:
                 break;
@@ -179,7 +194,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
                 mId = getIntent().getIntExtra(Constants.CALENDARID, -1);
-                mStatus = getIntent().getIntExtra(Constants.PHONE_STATUS, 0);
+                mStatus = getIntent().getIntExtra(Constants.CALENDARSTATUS, 0);
                 if (mStartTime == 9) {
                     mTaskStartTime = "0" + mStartTime;
                     mTaskEndTime = mEndTime + "";
@@ -190,6 +205,20 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 break;
             //查看会议室
             case Constants.MEETINGCALENDAR:
+                mTitle = getIntent().getStringExtra(Constants.CALENDARTITLE);
+                mContent = getIntent().getStringExtra(Constants.CALENDARCONTENT);
+                mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
+                mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
+                mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
+
+                mTaskId = getIntent().getIntExtra(Constants.SELECTEDTASTID, -1);
+                if (mStartTime == 9) {
+                    mTaskStartTime = "0" + mStartTime;
+                    mTaskEndTime = mEndTime + "";
+                } else {
+                    mTaskStartTime = mStartTime + "";
+                    mTaskEndTime = mEndTime + "";
+                }
                 break;
             default:
                 break;
@@ -278,6 +307,11 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                         break;
                     //查看会议室
                     case Constants.MEETINGCALENDAR:
+
+                        Intent intent  = new Intent(this, MeetingInfoFillOutActivity.class);
+                        intent.putExtra("isWriteMeetingInfo", false);
+                        intent.putExtra("id", mTaskId);
+                        startActivity(intent);
                         break;
                     default:
                         break;

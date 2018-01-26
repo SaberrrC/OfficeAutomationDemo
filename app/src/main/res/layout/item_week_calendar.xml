@@ -12,9 +12,7 @@
         android:id="@+id/fl_container1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/iv_icon1"
@@ -36,8 +34,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|bottom"
-                android:textSize="14sp"
-                tools:text="20" />
+                android:text="01"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week1"
@@ -45,8 +43,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|top"
-                android:textSize="14sp"
-                tools:text="三" />
+                android:text="一"
+                android:textSize="14sp" />
         </LinearLayout>
     </FrameLayout>
 
@@ -54,9 +52,7 @@
         android:id="@+id/fl_container2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:focusable="true"
-        android:focusableInTouchMode="false">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/iv_icon2"
@@ -78,8 +74,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|bottom"
-                android:textSize="14sp"
-                tools:text="20" />
+                android:text="02"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week2"
@@ -87,8 +83,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|top"
-                android:textSize="14sp"
-                tools:text="三" />
+                android:text="二"
+                android:textSize="14sp" />
         </LinearLayout>
     </FrameLayout>
 
@@ -96,9 +92,7 @@
         android:id="@+id/fl_container3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:focusable="true"
-        android:focusableInTouchMode="false">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/iv_icon3"
@@ -120,8 +114,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|bottom"
-                android:textSize="14sp"
-                tools:text="20" />
+                android:text="03"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week3"
@@ -129,8 +123,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|top"
-                android:textSize="14sp"
-                tools:text="三" />
+                android:text="三"
+                android:textSize="14sp" />
         </LinearLayout>
     </FrameLayout>
 
@@ -138,9 +132,7 @@
         android:id="@+id/fl_container4"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:focusable="true"
-        android:focusableInTouchMode="false">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/iv_icon4"
@@ -162,8 +154,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|bottom"
-                android:textSize="14sp"
-                tools:text="20" />
+                android:text="04"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week4"
@@ -171,8 +163,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|top"
-                android:textSize="14sp"
-                tools:text="三" />
+                android:text="四"
+                android:textSize="14sp" />
         </LinearLayout>
     </FrameLayout>
 
@@ -180,9 +172,7 @@
         android:id="@+id/fl_container5"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:focusable="true"
-        android:focusableInTouchMode="false">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/iv_icon5"
@@ -204,8 +194,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|bottom"
-                android:textSize="14sp"
-                tools:text="20" />
+                android:text="05"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week5"
@@ -213,8 +203,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|top"
-                android:textSize="14sp"
-                tools:text="三" />
+                android:text="五"
+                android:textSize="14sp" />
         </LinearLayout>
     </FrameLayout>
 
@@ -222,9 +212,7 @@
         android:id="@+id/fl_container6"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:focusable="true"
-        android:focusableInTouchMode="false">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/iv_icon6"
@@ -246,8 +234,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|bottom"
-                android:textSize="14sp"
-                tools:text="20" />
+                android:text="06"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week6"
@@ -255,8 +243,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|top"
-                android:textSize="14sp"
-                tools:text="三" />
+                android:text="六"
+                android:textSize="14sp" />
         </LinearLayout>
     </FrameLayout>
 
@@ -264,9 +252,7 @@
         android:id="@+id/fl_container7"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:focusable="true"
-        android:focusableInTouchMode="false">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/iv_icon7"
@@ -288,8 +274,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|bottom"
-                android:textSize="14sp"
-                tools:text="20" />
+                android:text="07"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week7"
@@ -297,8 +283,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|top"
-                android:textSize="14sp"
-                tools:text="三" />
+                android:text="日"
+                android:textSize="14sp" />
         </LinearLayout>
     </FrameLayout>
 
