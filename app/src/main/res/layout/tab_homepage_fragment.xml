@@ -178,7 +178,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <RelativeLayout
                             android:id="@+id/rl_work_report_send_to_me"
@@ -253,13 +253,15 @@
                         android:id="@+id/stork_blank14"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color"/>
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <FrameLayout
                         android:id="@+id/fl_blank14"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 
@@ -491,6 +493,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_approval_checking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_approval_container"
@@ -612,11 +615,6 @@
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color"/>
 
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color"/>
-
                     <RelativeLayout
                         android:id="@+id/rl_test"
                         android:layout_width="0dp"
@@ -657,6 +655,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_approval_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_approval_container"
@@ -807,18 +806,18 @@
                     </RelativeLayout>
 
                     <View
-                        android:visibility="gone"
                         android:id="@+id/stork_blank41"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color"/>
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <FrameLayout
-                        android:visibility="gone"
                         android:id="@+id/fl_blank41"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:visibility="gone"/>
 
                     <View
                         android:id="@+id/stork_blank42"
@@ -833,18 +832,18 @@
                         android:layout_weight="1"/>
 
                     <View
-                        android:visibility="gone"
                         android:id="@+id/stork_blank43"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color"/>
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <FrameLayout
-                        android:visibility="gone"
                         android:id="@+id/fl_blank43"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:visibility="gone"/>
 
                     <View
                         android:id="@+id/stork_blank44"

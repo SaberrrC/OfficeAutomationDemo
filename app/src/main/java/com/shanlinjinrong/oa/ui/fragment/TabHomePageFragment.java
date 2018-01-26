@@ -53,40 +53,18 @@ public class TabHomePageFragment extends BaseFragment {
 
     @BindView(R.id.title)
     TextView       mTvTitle;
-    @BindView(R.id.tv_appoint)
-    TextView       mTvAppoint;
-    @BindView(R.id.tab_homepage_top)
-    RelativeLayout mTabHomepageTop;
-    @BindView(R.id.parting_line_top)
-    View           mPartingLineTop;
-    @BindView(R.id.parting_line_bottom)
-    View           mPartingLineBottom;
-    @BindView(R.id.toolbarshadow)
-    LinearLayout   mToolbarShadow;
-    @BindView(R.id.tv_work_report_tips)
-    TextView       mTvWorkReportTips;
-    @BindView(R.id.iv_homepage_wr_me_launch)
-    ImageView      mIvHomepageWrMeLaunch;
     @BindView(R.id.rl_work_report_launch)
     RelativeLayout mRlWorkReportLaunch;
     @BindView(R.id.stork11)
     View           mStork11;
-    @BindView(R.id.iv_homepage_wr_launch_work_report)
-    ImageView      mIvHomepageWrLaunchWorkReport;
     @BindView(R.id.rl_work_report_launch_report)
     RelativeLayout mRlWorkReportLaunchReport;
     @BindView(R.id.stork12)
     View           mStork12;
-    @BindView(R.id.iv_homepage_wr_copy_to_me)
-    ImageView      mIvHomepageWrCopyToMe;
     @BindView(R.id.rl_work_report_copy_to_me)
     RelativeLayout mRlWorkReportCopyToMe;
     @BindView(R.id.stork13)
     View           mStork13;
-    @BindView(R.id.iv_homepage_wr_send_to_me)
-    ImageView      mIvHomepageWrSendToMe;
-    @BindView(R.id.rl_work_report_send_to_me)
-    RelativeLayout mRlWorkReportSendToMe;
     @BindView(R.id.iv_send_to_me_dot)
     ImageView      mIvSendToMeDot;
     @BindView(R.id.stork_blank11)
@@ -105,20 +83,10 @@ public class TabHomePageFragment extends BaseFragment {
     View           mStorkBlank14;
     @BindView(R.id.fl_blank14)
     FrameLayout    mFlBlank14;
-    @BindView(R.id.ll_work_report_container)
-    LinearLayout   mLlWorkReportContainer;
-    @BindView(R.id.tv_approval_tips)
-    TextView       mTvApprovalTips;
-    @BindView(R.id.iv_approval_me_launch)
-    ImageView      mIvApprovalMeLaunch;
     @BindView(R.id.rl_approval_me_launch)
     RelativeLayout mRlApprovalMeLaunch;
     @BindView(R.id.stork21)
     View           mStork21;
-    @BindView(R.id.iv_homepage_approval_wait_me_approval)
-    ImageView      mIvHomepageApprovalWaitMeApproval;
-    @BindView(R.id.rl_approval_wait_me_approval)
-    RelativeLayout mRlApprovalWaitMeApproval;
     @BindView(R.id.iv_wait_me_approval_dot)
     ImageView      mIvWaitMeApprovalDot;
     @BindView(R.id.stork22)
@@ -129,8 +97,6 @@ public class TabHomePageFragment extends BaseFragment {
     RelativeLayout mRlApprovalMeApprovaled;
     @BindView(R.id.stork23)
     View           mStork23;
-    @BindView(R.id.iv_homepage_approval_launch_approval)
-    ImageView      mIvHomepageApprovalLaunchApproval;
     @BindView(R.id.rl_approval_launch_approval)
     RelativeLayout mRlApprovalLaunchApproval;
     @BindView(R.id.stork_blank21)
@@ -149,24 +115,14 @@ public class TabHomePageFragment extends BaseFragment {
     View           mStorkBlank24;
     @BindView(R.id.fl_blank24)
     FrameLayout    mFlBlank24;
-    @BindView(R.id.ll_approval_container)
-    LinearLayout   mLlApprovalContainer;
-    @BindView(R.id.iv_my_attandance)
-    ImageView      mIvMyAttandance;
     @BindView(R.id.rl_my_attandance)
     RelativeLayout mRlMyAttandance;
     @BindView(R.id.stork31)
     View           mStork31;
-    @BindView(R.id.iv_holiday_search)
-    ImageView      mIvHolidaySearch;
     @BindView(R.id.rl_holiday_search)
     RelativeLayout mRlHolidaySearch;
     @BindView(R.id.stork32)
     View           mStork32;
-    @BindView(R.id.rl_pay_search)
-    RelativeLayout mRlPaySearch;
-    @BindView(R.id.rl_test)
-    RelativeLayout mRlTest;
     @BindView(R.id.stork_blank31)
     View           mStorkBlank31;
     @BindView(R.id.fl_blank31)
@@ -175,28 +131,14 @@ public class TabHomePageFragment extends BaseFragment {
     View           mStorkBlank32;
     @BindView(R.id.fl_blank32)
     FrameLayout    mFlBlank32;
-    @BindView(R.id.iv_homepage_schedule_manage)
-    ImageView      mIvHomepageScheduleManage;
-    @BindView(R.id.rl_schedule_manage)
-    RelativeLayout mRlScheduleManage;
     @BindView(R.id.stork41)
     View           mStork41;
-    @BindView(R.id.iv_homepage_schedule_me_launch)
-    ImageView      mIvHomepageScheduleMeLaunch;
     @BindView(R.id.rl_schedule_book_meeting)
     RelativeLayout mRlScheduleBookMeeting;
     @BindView(R.id.stork42)
     View           mStork42;
-    @BindView(R.id.iv_schedule_administration)
-    ImageView      mIvScheduleAdministration;
-    @BindView(R.id.rl_schedule_my_mail)
-    RelativeLayout mRlScheduleMyMail;
     @BindView(R.id.stork43)
     View           mStork43;
-    @BindView(R.id.iv_homepage_schedule_my_mail)
-    ImageView      mIvHomepageScheduleMyMail;
-    @BindView(R.id.rl_schedule_administration)
-    RelativeLayout mRlScheduleAdministration;
     @BindView(R.id.stork_blank41)
     View           mStorkBlank41;
     @BindView(R.id.fl_blank41)
@@ -215,7 +157,20 @@ public class TabHomePageFragment extends BaseFragment {
     FrameLayout    mFlBlank44;
     @BindView(R.id.fl_approval_wait_me_approval)
     FrameLayout    mFlApprovalWaitMeApproval;
+    @BindView(R.id.ll_work_report_container)
+    LinearLayout   mLlWorkReportContainer;
+    @BindView(R.id.ll_approval_container)
+    LinearLayout   mLlApprovalContainer;
+    @BindView(R.id.ll_approval_checking)
+    LinearLayout   mLlApprovalChecking;
+    @BindView(R.id.ll_approval_date)
+    LinearLayout   mLlApprovalDate;
     private RelativeLayout mRootView;
+
+    private String[] WorkReportContainerLimit   = {"203", "201", "202"};
+    private String[] WorkApprovalContainerLimit = {"302", "303", "304", "301"};
+    private String[] WorkApprovalCheckingLimit  = {"111", "112"};
+    private String[] WorkApprovalDateLimit      = {"101"};
 
     private static int    TYPE_SEND_TO_ME       = 0;//发送我的
     private static int    TYPE_WAIT_ME_APPROVAL = 1;//待我审批
@@ -328,6 +283,22 @@ public class TabHomePageFragment extends BaseFragment {
                 mFlBlank42.setVisibility(View.GONE);
             }
         }
+        //        checkLineLimit(dataList, WorkReportContainerLimit);
+        checkLineLimit(dataList, WorkApprovalContainerLimit);
+        checkLineLimit(dataList, WorkApprovalCheckingLimit);
+        //        checkLineLimit(dataList, WorkApprovalDateLimit);
+    }
+
+    public boolean checkLineLimit(List<LimitResponseBody.DataBean> dataList, String[] limits) {
+        boolean hasAllLimit = false;
+        for (String code : limits) {
+            for (LimitResponseBody.DataBean dataBean : dataList) {
+                if (TextUtils.equals(dataBean.getRightId(), code)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void getUserLimitFromNet() {
