@@ -173,6 +173,8 @@ public class TabHomePageFragment extends BaseFragment {
     RelativeLayout mRlScheduleMyMail;
     @BindView(R.id.toolbarshadow)
     LinearLayout   mToolbarShadow;
+    @BindView(R.id.fl_work_report_send_to_me)
+    FrameLayout    mFlWorkReportSendToMe;
     private RelativeLayout mRootView;
 
     private static int    TYPE_SEND_TO_ME       = 0;//发送我的
@@ -228,15 +230,13 @@ public class TabHomePageFragment extends BaseFragment {
     private void setUserLimit(LimitResponseBody userLimitBean) {
         if (userLimitBean == null) {
             showToast("没有任何权限");
-
-
             mLlWorkReportContainer.setVisibility(View.GONE);
             mLlApprovalContainer.setVisibility(View.GONE);
             mLlApprovalChecking.setVisibility(View.GONE);
-            //            mLlApprovalDate.setVisibility(View.GONE);
+            mLlApprovalDate.setVisibility(View.GONE);
             mToolbarShadow.setVisibility(View.GONE);
-            mRlScheduleManage.setVisibility(View.VISIBLE);
-            mLlApprovalDate.setVisibility(View.VISIBLE);
+            //            mRlScheduleManage.setVisibility(View.VISIBLE);
+            //            mLlApprovalDate.setVisibility(View.VISIBLE);
             return;
         }
         List<LimitResponseBody.DataBean> dataList = userLimitBean.getData();
@@ -246,9 +246,6 @@ public class TabHomePageFragment extends BaseFragment {
             mLlApprovalChecking.setVisibility(View.GONE);
             mLlApprovalDate.setVisibility(View.GONE);
             mToolbarShadow.setVisibility(View.GONE);
-
-            mRlScheduleManage.setVisibility(View.VISIBLE);
-            mLlApprovalDate.setVisibility(View.VISIBLE);
             return;
         }
         for (LimitResponseBody.DataBean data : dataList) {
@@ -271,7 +268,7 @@ public class TabHomePageFragment extends BaseFragment {
             }
             if (TextUtils.equals("204", data.getId())) {//发给我的
                 mStork13.setVisibility(View.VISIBLE);
-                mRlWorkReportSendToMe.setVisibility(View.VISIBLE);
+                mFlWorkReportSendToMe.setVisibility(View.VISIBLE);
                 mStorkBlank14.setVisibility(View.GONE);
                 mFlBlank14.setVisibility(View.GONE);
             }
@@ -339,8 +336,6 @@ public class TabHomePageFragment extends BaseFragment {
         if (!checkLineLimit(dataList, "10")) {//日程管理
             mLlApprovalDate.setVisibility(View.GONE);
         }
-        mRlScheduleManage.setVisibility(View.VISIBLE);
-        mLlApprovalDate.setVisibility(View.VISIBLE);
     }
 
     public boolean checkLineLimit(List<LimitResponseBody.DataBean> dataList, String limits) {
