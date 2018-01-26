@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -11,8 +10,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.WeekCalendarBean;
+import com.shanlinjinrong.oa.utils.CalendarUtils;
+import com.shanlinjinrong.oa.utils.DateUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,29 +23,44 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * 作者：王凤旭
- * 创建时间：2018/1/16
- * 功能描述：
- */
+public class TestAdapter extends BaseQuickAdapter<WeekCalendarBean> {
 
-public class SelectedWeekCalendarAdapter extends BaseQuickAdapter<WeekCalendarBean> {
-
-    private Context                mContext;
+    private DateTime               mInitialDateTime;
+    private int                    mCurrPage;
+    private String                 mCurrentDay;
+    private boolean                mIsFirst;
     private List<WeekCalendarBean> mData;
 
-    public SelectedWeekCalendarAdapter(List<WeekCalendarBean> data, Context context) {
+    public TestAdapter(List<WeekCalendarBean> data, String currentDay, DateTime initialDateTime, int currPage) {
         super(R.layout.item_week_calendar, data);
-        mContext = context;
+        mInitialDateTime = initialDateTime;
+        mCurrPage = currPage;
+        mCurrentDay = currentDay;
         mData = data;
     }
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, WeekCalendarBean weekCalendarBean) {
+
+        DateTime dateTime = mInitialDateTime.plusDays((baseViewHolder.getPosition() - mCurrPage) * 7);
+
+        CalendarUtils.NCalendar weekCalendar2 = CalendarUtils.getWeekCalendar2(dateTime, 1);
+
+        List<DateTime> dateTimeList = weekCalendar2.dateTimeList;
+
+
         List<TextView> textDays = new ArrayList<>();
         List<TextView> textWeeks = new ArrayList<>();
         List<ImageView> textIcon = new ArrayList<>();
         List<FrameLayout> frameLayouts = new ArrayList<>();
+
+        textIcon.add(baseViewHolder.getView(R.id.iv_icon1));
+        textIcon.add(baseViewHolder.getView(R.id.iv_icon2));
+        textIcon.add(baseViewHolder.getView(R.id.iv_icon3));
+        textIcon.add(baseViewHolder.getView(R.id.iv_icon4));
+        textIcon.add(baseViewHolder.getView(R.id.iv_icon5));
+        textIcon.add(baseViewHolder.getView(R.id.iv_icon6));
+        textIcon.add(baseViewHolder.getView(R.id.iv_icon7));
 
         textDays.add(baseViewHolder.getView(R.id.tv_day1));
         textDays.add(baseViewHolder.getView(R.id.tv_day2));
@@ -61,14 +78,6 @@ public class SelectedWeekCalendarAdapter extends BaseQuickAdapter<WeekCalendarBe
         textWeeks.add(baseViewHolder.getView(R.id.tv_week6));
         textWeeks.add(baseViewHolder.getView(R.id.tv_week7));
 
-        textIcon.add(baseViewHolder.getView(R.id.iv_icon1));
-        textIcon.add(baseViewHolder.getView(R.id.iv_icon2));
-        textIcon.add(baseViewHolder.getView(R.id.iv_icon3));
-        textIcon.add(baseViewHolder.getView(R.id.iv_icon4));
-        textIcon.add(baseViewHolder.getView(R.id.iv_icon5));
-        textIcon.add(baseViewHolder.getView(R.id.iv_icon6));
-        textIcon.add(baseViewHolder.getView(R.id.iv_icon7));
-
         frameLayouts.add(baseViewHolder.getView(R.id.fl_container1));
         frameLayouts.add(baseViewHolder.getView(R.id.fl_container2));
         frameLayouts.add(baseViewHolder.getView(R.id.fl_container3));
@@ -77,9 +86,18 @@ public class SelectedWeekCalendarAdapter extends BaseQuickAdapter<WeekCalendarBe
         frameLayouts.add(baseViewHolder.getView(R.id.fl_container6));
         frameLayouts.add(baseViewHolder.getView(R.id.fl_container7));
 
+
+        String[] weeks = {"一", "二", "三", "四", "五", "六", "日"};
         for (int i = 0; i < 7; i++) {
-            textDays.get(i).setText(weekCalendarBean.getDay().get(i));
-            textWeeks.get(i).setText(weekCalendarBean.getWeek().get(i));
+            textDays.get(i).setText(dateTimeList.get(i).toLocalDate().toString().substring(dateTimeList.get(i).toLocalDate().toString().length() - 2, dateTimeList.get(i).toLocalDate().toString().length()));
+            textWeeks.get(i).setText(weeks[i]);
+
+            if (dateTimeList.get(i).toLocalDate().toString().substring(dateTimeList.get(i).toLocalDate().toString().length() - 2, dateTimeList.get(i).toLocalDate().toString().length()).equals(mCurrentDay) && !mIsFirst) {
+                mIsFirst = true;
+                weekCalendarBean.getIsSelected().set(i, true);
+            }
+
+
             if (weekCalendarBean.getIsSelected().get(i)) {
                 textIcon.get(i).setVisibility(View.VISIBLE);
                 textDays.get(i).setTextColor(mContext.getResources().getColor(R.color.white));
@@ -89,15 +107,11 @@ public class SelectedWeekCalendarAdapter extends BaseQuickAdapter<WeekCalendarBe
                 textDays.get(i).setTextColor(mContext.getResources().getColor(R.color.gray_normal));
                 textWeeks.get(i).setTextColor(mContext.getResources().getColor(R.color.gray_normal));
             }
-
-            frameLayouts.get(i).requestFocus();
-            frameLayouts.get(i).requestFocusFromTouch();
-
             int finalI = i;
             frameLayouts.get(i).setOnClickListener(view -> {
                 Observable.create(e -> {
                     for (int j = 0; j < mData.size(); j++) {
-                        for (int k = 0; k < mData.get(j).getIsSelected().size(); k++) {
+                        for (int k = 0; k < 7; k++) {
                             mData.get(j).getIsSelected().set(k, false);
                         }
                     }
@@ -107,7 +121,8 @@ public class SelectedWeekCalendarAdapter extends BaseQuickAdapter<WeekCalendarBe
                         .subscribe(o -> {
                         }, Throwable::printStackTrace, () -> {
                             weekCalendarBean.getIsSelected().set(finalI, true);
-//                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), "TopDate", finalI));
+                            String date = DateUtils.getBiDisplayDateByTimestamp(DateUtils.getTimestampFromString(dateTimeList.get(finalI).toLocalDate().toString(), "yyyy-MM-dd"));
+                            EventBus.getDefault().post(new SelectedWeekCalendarEvent(baseViewHolder.getPosition(), finalI, date, "TopDate"));
                         });
             });
         }

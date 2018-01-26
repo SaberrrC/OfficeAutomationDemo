@@ -76,7 +76,7 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
                 holder.item.setTextColor(0xFF4A4A4A);
         } else {
             holder.item.setTextColor(0xFF999999);
-            holder.imageState.setVisibility(View.GONE);
+            holder.imageState.setVisibility(View.INVISIBLE);
         }
 
 

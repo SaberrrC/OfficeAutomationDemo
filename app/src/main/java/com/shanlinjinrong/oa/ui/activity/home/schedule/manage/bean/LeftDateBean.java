@@ -64,23 +64,22 @@ public class LeftDateBean implements MultiItemEntity {
     public int getItemType() {
         return itemType;
     }
-
     public static class DataBean {
         /**
-         * id : 35
-         * userId : 40030
-         * taskTheme : 测试
-         * taskDate : 2018-01-24
-         * startTime : 2018-01-24 11:00:00
-         * endTime : 2018-01-24 09:00:00
-         * taskDetail : xiangqing
+         * id : 110
+         * userId : 52837
+         * taskTheme : 吴他
+         * taskDate : 2018-01-26
+         * startTime : 2018-01-26 11:35:05
+         * endTime : 2018-01-26 10:00:00
+         * taskDetail : 吴
          * taskType : 2
          * taskId : 0
          * status : 0
          * remark : null
          */
 
-        private int    id;
+        private int id;
         private int    userId;
         private String taskTheme;
         private String taskDate;

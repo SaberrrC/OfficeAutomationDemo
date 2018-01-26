@@ -22,23 +22,10 @@ public class SelectedWeekCalendarEvent implements Serializable {
 
     private String startTime;
 
+    private String date;
+
     private String endTime;
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
 
     public SelectedWeekCalendarEvent(String event, String startTime, String endTime) {
         this.event = event;
@@ -58,10 +45,35 @@ public class SelectedWeekCalendarEvent implements Serializable {
         this.rowX = rowX;
     }
 
-    public SelectedWeekCalendarEvent(int position, String event, int index) {
+    public SelectedWeekCalendarEvent(int position, int index, String date, String event) {
         this.position = position;
         this.event = event;
         this.index = index;
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public int getIndex() {

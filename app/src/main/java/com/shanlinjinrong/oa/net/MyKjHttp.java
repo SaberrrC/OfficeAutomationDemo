@@ -35,6 +35,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> post(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        params.putHeaders("X-Source", "android");
         return super.post(baseJavaUrl + url, params, callback);
     }
 
@@ -42,6 +43,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> get(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        params.putHeaders("X-Source", "android");
         return super.get(baseJavaUrl + url, params, callback);
     }
 
@@ -49,6 +51,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> jsonPost(String url, HttpParams params, HttpCallBack callback) {
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
+        params.putHeaders("X-Source", "android");
         return super.jsonPost(baseJavaUrl + url, params, callback);
     }
     /**
@@ -63,7 +66,7 @@ public class MyKjHttp extends KJHttp {
                                    boolean useCache, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
-
+        params.putHeaders("X-Source", "android");
         Request<byte[]> request = new JsonRequest(Request.HttpMethod.PUT, baseJavaUrl + url, params,
                 callback);
         request.setShouldCache(useCache);
@@ -87,6 +90,7 @@ public class MyKjHttp extends KJHttp {
     public Request<byte[]> jsonDelete(String url, HttpParams params, boolean useCache, HttpCallBack callback) {
         params.putHeaders("uid", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_USER_UID));
         params.putHeaders("token", AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_TOKEN));
+        params.putHeaders("X-Source", "android");
         url = baseJavaUrl + url;
         Request<byte[]> request = new JsonRequest(Request.HttpMethod.DELETE, url, params,
                 callback);
