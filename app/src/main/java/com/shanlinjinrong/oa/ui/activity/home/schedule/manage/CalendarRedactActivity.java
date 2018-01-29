@@ -44,8 +44,6 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     TextView      mTvDate;
     @BindView(R.id.ed_task_theme)
     EditText      mEdTaskTheme;
-    @BindView(R.id.tv_task_date)
-    TextView      mTvTaskDate;
     @BindView(R.id.ed_task_details)
     EditText      mEdTaskDetails;
     @BindView(R.id.btn_common_calendar)
@@ -56,6 +54,10 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     View          mViewCompletes;
     @BindView(R.id.tv_task_address)
     EditText      mTvTaskAddress;
+    @BindView(R.id.tv_task_end_date)
+    TextView      mTvTaskEndDate;
+    @BindView(R.id.tv_task_start_date)
+    TextView      mTvTaskStartDate;
 
     private String               mDate;
     private int                  mStartTime;
@@ -75,7 +77,6 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private String               mOldDate;
     private String               mOldDetails;
     private boolean              mIsFirst, mIsCheckBox;
-    private boolean mIsDateFirst = true;
     private int    mTaskId;
     private String mAddress;
 
@@ -135,15 +136,16 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 } else {
                     mTvDate.setText(mMonth + "月" + mDate + "日");
                 }
-                mTvTaskDate.setText(mStartTime + ":00" + "-" + mEndTime + ":00");
+                mTvTaskStartDate.setText(mStartTime + ":00");
+                mTvTaskEndDate.setText(mEndTime + ":00");
                 break;
             case Constants.LOOKCALENDAR:
-                if (mAddress == null){
-                    mAddress = " ";
-                }
-                if (mContent == null) {
-                    mContent = "暂无";
-                }
+//                if (mAddress == null) {
+//                    mAddress = " ";
+//                }
+//                if (mContent == null) {
+//                    mContent = "暂无";
+//                }
 
                 mTvDate.setText(mDate);
                 mTopView.setRightText("删除");
@@ -152,22 +154,24 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mViewCompletes.setVisibility(View.VISIBLE);
 
                 mEdTaskTheme.setEnabled(false);
-                mTvTaskDate.setEnabled(false);
+                mTvTaskStartDate.setEnabled(false);
+                mTvTaskEndDate.setEnabled(false);
                 mEdTaskDetails.setEnabled(false);
                 mTvTaskAddress.setEnabled(false);
 
                 mTvTaskAddress.setText(mAddress);
                 mEdTaskTheme.setText(mTitle);
-                mTvTaskDate.setText(mStartTime + ":00-" + mEndTime + ":00");
+                mTvTaskStartDate.setText(mStartTime + ":00");
+                mTvTaskEndDate.setText(mEndTime + ":00");
                 mEdTaskDetails.setText(mContent);
                 break;
             case Constants.MEETINGCALENDAR:
-                if (mAddress == null){
-                    mAddress = " ";
-                }
-                if (mContent == null) {
-                    mContent = "暂无";
-                }
+//                if (mAddress == null) {
+//                    mAddress = " ";
+//                }
+//                if (mContent == null) {
+//                    mContent = "暂无";
+//                }
 
                 mTvDate.setText(mDate);
                 mBtnCommonCalendar.setText("查看详情");
@@ -178,19 +182,22 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mViewCompletes.setVisibility(View.GONE);
 
                 mEdTaskTheme.setEnabled(false);
-                mTvTaskDate.setEnabled(false);
+                mTvTaskStartDate.setEnabled(false);
+                mTvTaskEndDate.setEnabled(false);
                 mEdTaskDetails.setEnabled(false);
                 mTvTaskAddress.setEnabled(false);
 
 
                 mTvTaskAddress.setBackground(null);
                 mEdTaskTheme.setBackground(null);
-                mTvTaskDate.setBackground(null);
+                mTvTaskStartDate.setBackground(null);
+                mTvTaskEndDate.setBackground(null);
                 mEdTaskDetails.setBackground(null);
 
                 mTvTaskAddress.setText(mAddress);
                 mEdTaskTheme.setText(mTitle);
-                mTvTaskDate.setText(mStartTime + ":00-" + mEndTime + ":00");
+                mTvTaskStartDate.setText(mStartTime + ":00");
+                mTvTaskEndDate.setText(mEndTime + ":00");
                 mEdTaskDetails.setText(mContent);
                 break;
             default:
@@ -260,7 +267,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     }
 
-    @OnClick({R.id.tv_task_date, R.id.btn_common_calendar})
+    @OnClick({R.id.tv_task_end_date, R.id.btn_common_calendar, R.id.tv_task_start_date})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_common_calendar:
@@ -294,60 +301,60 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                         break;
                     //查看周历
                     case Constants.LOOKCALENDAR:
-                        if ("编辑".equals(mBtnCommonCalendar.getText().toString())) {
-                            mEdTaskTheme.setEnabled(true);
-                            mTvTaskDate.setEnabled(true);
-                            mEdTaskDetails.setEnabled(true);
-                            mTvTaskAddress.setEnabled(true);
-
-                            mBtnCommonCalendar.setText("更新");
-
-                            if (mIsFirst) {
-                                mIsFirst = false;
-                                mOldTheme = mEdTaskTheme.getText().toString();
-                                mOldDate = mTvTaskDate.getText().toString();
-                                mOldDetails = mEdTaskDetails.getText().toString();
-                            }
-                        } else {
-                            try {
-                                JSONObject jsonObject = new JSONObject();
-
-
-                                if (!mOldTheme.equals(mEdTaskTheme.getText().toString().trim())) {
-                                    jsonObject.put("taskTheme", mEdTaskTheme.getText().toString().trim());
-                                }
-
-                                if (!mOldDate.equals(mTvTaskDate.getText().toString().trim())) {
-                                    if ("9".equals(mTaskStartTime)) {
-                                        mTaskStartTime = "09";
-                                    }
-                                    jsonObject.put("startTime", mTaskStartTime + ":00:00");
-                                    jsonObject.put("endTime", mTaskEndTime + ":00:00");
-                                }
-
-                                if (!mOldDetails.equals(mEdTaskDetails.getText().toString().trim())) {
-                                    jsonObject.put("taskDetail", mEdTaskDetails.getText().toString().trim());
-                                }
-
-                                String json = jsonObject.toString();
-
-                                if ("{}".equals(json)) {
-                                    Toast.makeText(this, "日程无变更，更新失败", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    jsonObject.put("id", mId);
-                                    String calendar = jsonObject.toString();
-                                    mPresenter.updateCalendarSchedule(calendar);
-                                }
-                            } catch (Throwable e) {
-                                e.printStackTrace();
-                            }
-
-                            mEdTaskTheme.setEnabled(false);
-                            mTvTaskDate.setEnabled(false);
-                            mEdTaskDetails.setEnabled(false);
-                            mTvTaskAddress.setEnabled(false);
-                            mBtnCommonCalendar.setText("编辑");
-                        }
+//                        if ("编辑".equals(mBtnCommonCalendar.getText().toString())) {
+//                            mEdTaskTheme.setEnabled(true);
+//                            mTvTaskDate.setEnabled(true);
+//                            mEdTaskDetails.setEnabled(true);
+//                            mTvTaskAddress.setEnabled(true);
+//
+//                            mBtnCommonCalendar.setText("更新");
+//
+//                            if (mIsFirst) {
+//                                mIsFirst = false;
+//                                mOldTheme = mEdTaskTheme.getText().toString();
+//                                mOldDate = mTvTaskDate.getText().toString();
+//                                mOldDetails = mEdTaskDetails.getText().toString();
+//                            }
+//                        } else {
+//                            try {
+//                                JSONObject jsonObject = new JSONObject();
+//
+//
+//                                if (!mOldTheme.equals(mEdTaskTheme.getText().toString().trim())) {
+//                                    jsonObject.put("taskTheme", mEdTaskTheme.getText().toString().trim());
+//                                }
+//
+//                                if (!mOldDate.equals(mTvTaskDate.getText().toString().trim())) {
+//                                    if ("9".equals(mTaskStartTime)) {
+//                                        mTaskStartTime = "09";
+//                                    }
+//                                    jsonObject.put("startTime", mTaskStartTime + ":00:00");
+//                                    jsonObject.put("endTime", mTaskEndTime + ":00:00");
+//                                }
+//
+//                                if (!mOldDetails.equals(mEdTaskDetails.getText().toString().trim())) {
+//                                    jsonObject.put("taskDetail", mEdTaskDetails.getText().toString().trim());
+//                                }
+//
+//                                String json = jsonObject.toString();
+//
+//                                if ("{}".equals(json)) {
+//                                    Toast.makeText(this, "日程无变更，更新失败", Toast.LENGTH_SHORT).show();
+//                                } else {
+//                                    jsonObject.put("id", mId);
+//                                    String calendar = jsonObject.toString();
+//                                    mPresenter.updateCalendarSchedule(calendar);
+//                                }
+//                            } catch (Throwable e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                            mEdTaskTheme.setEnabled(false);
+//                            mTvTaskDate.setEnabled(false);
+//                            mEdTaskDetails.setEnabled(false);
+//                            mTvTaskAddress.setEnabled(false);
+//                            mBtnCommonCalendar.setText("编辑");
+//                        }
                         break;
                     //查看会议室
                     case Constants.MEETINGCALENDAR:
@@ -363,12 +370,16 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 }
                 break;
             //TODO 弹出时间选择框
-            case R.id.tv_task_date:
+            case R.id.tv_task_start_date:
                 try {
-                    if (mSelectedTimeFragment == null) {
-                        mSelectedTimeFragment = new SelectedTimeFragment();
-                    }
-                    showDate();
+                    showDate(true);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.tv_task_end_date:
+                try {
+                    showDate(false);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -378,12 +389,15 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
         }
     }
 
-    private void showDate() {
+    private void showDate(boolean start) {
+        if (mSelectedTimeFragment == null) {
+            mSelectedTimeFragment = new SelectedTimeFragment();
+        }
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
         bundle.putInt(Constants.CALENDARSTARTTIME, mStartTime);
         bundle.putInt(Constants.CALENDARENDTIME, mEndTime);
-        bundle.putBoolean("isFirst", mIsDateFirst);
+        bundle.putBoolean("isStart", start);
         mSelectedTimeFragment.setArguments(bundle);
         mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
     }
@@ -392,16 +406,40 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     public void ReceiveEvent(SelectedWeekCalendarEvent event) {
         switch (event.getEvent()) {
             case Constants.SELECTEDTIME:
-                if (!mIsDateFirst) {
-                    mTaskStartTime = event.getStartTime();
-                    mIsFirst = event.isFirst();
-                    mSelectedTimeFragment = new SelectedTimeFragment();
-                    showDate();
-                    return;
+                boolean isStart = event.isStart();
+                if (isStart) {
+                    int startHour = event.getStartHour();
+                    int startMin = event.getStartMin();
+                    StringBuffer startTime = new StringBuffer();
+
+                    if (startHour == 9) {
+                        startTime.append("0").append(startHour).append(":");
+                    } else {
+                        startTime.append(startHour).append(":");
+                    }
+
+                    if (startMin < 10) {
+                        startTime.append("0").append(startMin);
+                    } else {
+                        startTime.append(startMin);
+                    }
+
+                    mTvTaskStartDate.setText(startTime);
+                } else {
+                    int endHour = event.getEndHour();
+                    int endMin = event.getEndMin();
+                    StringBuffer endTime = new StringBuffer();
+
+                    endTime.append(endHour).append(":");
+
+                    if (endMin < 10) {
+                        endTime.append("0").append(endMin);
+                    } else {
+                        endTime.append(endMin);
+                    }
+
+                    mTvTaskEndDate.setText(endTime);
                 }
-                mIsFirst = event.isFirst();
-                mTaskEndTime = event.getEndTime();
-                mTvTaskDate.setText(mTaskStartTime + "-" + mTaskEndTime);
                 break;
             default:
                 break;

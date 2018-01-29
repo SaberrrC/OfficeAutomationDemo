@@ -26,27 +26,77 @@ public class SelectedWeekCalendarEvent implements Serializable {
 
     private String endTime;
 
-    private boolean isFirst;
+    private boolean isStart;
 
+    private int startHour;
+    private int endHour;
+    private int startMin;
+    private int endMin;
 
-    public boolean isFirst() {
-        return isFirst;
+    public int getStartHour() {
+        return startHour;
     }
 
-    public void setFirst(boolean first) {
-        isFirst = first;
+    public void setStartHour(int startHour) {
+        this.startHour = startHour;
     }
 
-    public SelectedWeekCalendarEvent(String event, String startTime, boolean isFirst) {
+    public int getEndHour() {
+        return endHour;
+    }
+
+    public void setEndHour(int endHour) {
+        this.endHour = endHour;
+    }
+
+    public int getStartMin() {
+        return startMin;
+    }
+
+    public void setStartMin(int startMin) {
+        this.startMin = startMin;
+    }
+
+    public int getEndMin() {
+        return endMin;
+    }
+
+    public void setEndMin(int endMin) {
+        this.endMin = endMin;
+    }
+
+    public boolean isStart() {
+        return isStart;
+    }
+
+    public void setStart(boolean start) {
+        isStart = start;
+    }
+
+    public SelectedWeekCalendarEvent(String event, boolean isStart, int startHour, int startMin) {
+        this.event = event;
+        this.isStart = isStart;
+        this.startHour = startHour;
+        this.startMin = startMin;
+    }
+
+    public SelectedWeekCalendarEvent(String event, int endHour, int endMin, boolean isStart) {
+        this.event = event;
+        this.isStart = isStart;
+        this.endHour = endHour;
+        this.endMin = endMin;
+    }
+
+    public SelectedWeekCalendarEvent(String event, String startTime, boolean isStart) {
         this.event = event;
         this.startTime = startTime;
-        this.isFirst = isFirst;
+        this.isStart = isStart;
     }
 
-    public SelectedWeekCalendarEvent(String event, boolean isFirst, String endTime) {
+    public SelectedWeekCalendarEvent(String event, boolean isStart, String endTime) {
         this.event = event;
         this.endTime = endTime;
-        this.isFirst = isFirst;
+        this.isStart = isStart;
     }
 
     public SelectedWeekCalendarEvent(String event, String startTime, String endTime) {

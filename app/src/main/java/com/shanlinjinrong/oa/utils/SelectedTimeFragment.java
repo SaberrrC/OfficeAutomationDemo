@@ -46,7 +46,7 @@ public class SelectedTimeFragment extends DialogFragment {
     private List<String> mEndTimes;
     private int          mStartTime;
     private int          mEndTime;
-    private boolean      mIsFirst;
+    private boolean      mIsStart;
     private Context      mContext;
     private String       tag;
     private String       mMinTime;
@@ -65,7 +65,7 @@ public class SelectedTimeFragment extends DialogFragment {
         Bundle arguments = getArguments();
         mStartTime = arguments.getInt(Constants.CALENDARSTARTTIME);
         mEndTime = arguments.getInt(Constants.CALENDARENDTIME);
-        mIsFirst = arguments.getBoolean("isFirst", true);
+        mIsStart = arguments.getBoolean("isStart", true);
         initWheelPicker();
 
         slideToUp(view);
@@ -76,7 +76,7 @@ public class SelectedTimeFragment extends DialogFragment {
 
         mStartTimes = new ArrayList<>();
         mEndTimes = new ArrayList<>();
-        if (mIsFirst) {
+        if (mIsStart) {
             for (int i = 0; i < 10; i++) {
                 if (i == 0) {
                     mStartTimes.add("09点");
@@ -104,9 +104,9 @@ public class SelectedTimeFragment extends DialogFragment {
 
         try {
             int position1 = mStartTime - 9;
-            int position2 = mEndTime - 10;
+            //int position2 = mEndTime - 10;
             mPickerHourTime.setSelectedItemPosition(position1);
-            mPickerMinTime.setSelectedItemPosition(position2);
+            mPickerMinTime.setSelectedItemPosition(0);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -183,33 +183,16 @@ public class SelectedTimeFragment extends DialogFragment {
                 dismiss();
                 break;
             case R.id.btn_affirm:
-
-
                 int currentHourTime = mPickerHourTime.getCurrentItemPosition();
                 int currentMinTime = mPickerMinTime.getCurrentItemPosition();
 
-
-                if (currentMinTime < 10) {
-                    mMinTime = "0" + currentMinTime;
+                if (mIsStart) {
+                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, mIsStart, currentHourTime + 9, currentMinTime));
+                    dismiss();
                 } else {
-                    mMinTime = currentMinTime + "";
+                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, currentHourTime + 10, currentMinTime, mIsStart));
+                    dismiss();
                 }
-
-                if (currentHourTime < 10) {
-                    mHourTime = "09";
-                } else {
-                    mHourTime = currentHourTime + "";
-                }
-
-                mIsFirst = !mIsFirst;
-//                if (mIsFirst) {
-                EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, mHourTime + ":" + mMinTime, mIsFirst));
-                dismiss();
-//                }
-//                if (!mIsFirst) {
-//                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, mIsFirst, mHourTime  + ":" + mMinTime));
-//                    dismiss();
-//                }
                 break;
             default:
                 dismiss();
