@@ -126,6 +126,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
         String date = from.format(new Date());
 
         switch (mItemType) {
+
             case Constants.WRITECALENDAR:
                 mCbCompletes.setVisibility(View.GONE);
                 mViewCompletes.setVisibility(View.GONE);
@@ -137,6 +138,13 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mTvTaskDate.setText(mStartTime + ":00" + "-" + mEndTime + ":00");
                 break;
             case Constants.LOOKCALENDAR:
+                if (mAddress == null){
+                    mAddress = " ";
+                }
+                if (mContent == null) {
+                    mContent = "暂无";
+                }
+
                 mTvDate.setText(mDate);
                 mTopView.setRightText("删除");
                 mBtnCommonCalendar.setText("编辑");
@@ -154,6 +162,13 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mEdTaskDetails.setText(mContent);
                 break;
             case Constants.MEETINGCALENDAR:
+                if (mAddress == null){
+                    mAddress = " ";
+                }
+                if (mContent == null) {
+                    mContent = "暂无";
+                }
+
                 mTvDate.setText(mDate);
                 mBtnCommonCalendar.setText("查看详情");
                 mTopView.setAppTitle("普通会议");
@@ -167,6 +182,13 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mEdTaskDetails.setEnabled(false);
                 mTvTaskAddress.setEnabled(false);
 
+
+                mTvTaskAddress.setBackground(null);
+                mEdTaskTheme.setBackground(null);
+                mTvTaskDate.setBackground(null);
+                mEdTaskDetails.setBackground(null);
+
+                mTvTaskAddress.setText(mAddress);
                 mEdTaskTheme.setText(mTitle);
                 mTvTaskDate.setText(mStartTime + ":00-" + mEndTime + ":00");
                 mEdTaskDetails.setText(mContent);
@@ -219,6 +241,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mTitle = getIntent().getStringExtra(Constants.CALENDARTITLE);
                 mContent = getIntent().getStringExtra(Constants.CALENDARCONTENT);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
+                mAddress = getIntent().getStringExtra(Constants.CALENDARADDRESS);
                 mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
                 mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
 
