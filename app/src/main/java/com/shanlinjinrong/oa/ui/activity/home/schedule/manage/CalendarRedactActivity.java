@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.easeui.Constant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
@@ -60,8 +61,6 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     TextView      mTvTaskStartDate;
 
     private String               mDate;
-    private int                  mStartTime;
-    private int                  mEndTime;
     private String               mTitle;
     private String               mContent;
     private String               mYear;
@@ -69,16 +68,20 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private int                  mItemType;
     private OptionsPickerView    beginTimeView;
     private SelectedTimeFragment mSelectedTimeFragment;
-    private String               mTaskStartTime;
-    private String               mTaskEndTime;
     private int                  mId;
     private int                  mStatus;
     private String               mOldTheme;
     private String               mOldDate;
     private String               mOldDetails;
     private boolean              mIsFirst, mIsCheckBox;
-    private int    mTaskId;
-    private String mAddress;
+    private int          mTaskId;
+    private String       mAddress;
+    private StringBuffer mTaskStartTime;
+    private StringBuffer mTaskEndTime;
+    private int          mStartHour;
+    private int          mStartMin;
+    private int          mEndHour;
+    private int          mEndMin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,8 +139,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 } else {
                     mTvDate.setText(mMonth + "月" + mDate + "日");
                 }
-                mTvTaskStartDate.setText(mStartTime + ":00");
-                mTvTaskEndDate.setText(mEndTime + ":00");
+                mTvTaskStartDate.setText(mTaskStartTime.toString());
+                mTvTaskEndDate.setText(mTaskEndTime.toString());
+
                 break;
             case Constants.LOOKCALENDAR:
 //                if (mAddress == null) {
@@ -161,8 +165,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
                 mTvTaskAddress.setText(mAddress);
                 mEdTaskTheme.setText(mTitle);
-                mTvTaskStartDate.setText(mStartTime + ":00");
-                mTvTaskEndDate.setText(mEndTime + ":00");
+                mTvTaskStartDate.setText(mTaskStartTime.toString());
+                mTvTaskEndDate.setText(mTaskEndTime.toString());
                 mEdTaskDetails.setText(mContent);
                 break;
             case Constants.MEETINGCALENDAR:
@@ -196,8 +200,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
                 mTvTaskAddress.setText(mAddress);
                 mEdTaskTheme.setText(mTitle);
-                mTvTaskStartDate.setText(mStartTime + ":00");
-                mTvTaskEndDate.setText(mEndTime + ":00");
+                mTvTaskStartDate.setText(mTaskStartTime);
+                mTvTaskEndDate.setText(mTaskEndTime);
                 mEdTaskDetails.setText(mContent);
                 break;
             default:
@@ -207,6 +211,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     private void initData() {
         mIsFirst = true;
+        mTaskStartTime = new StringBuffer();
+
+        mTaskEndTime = new StringBuffer();
         mItemType = getIntent().getIntExtra(Constants.CALENDARTYPE, -1);
         switch (mItemType) {
             //编辑周历
@@ -214,34 +221,71 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mYear = getIntent().getStringExtra(Constants.CALENDARYEAR);
                 mMonth = getIntent().getStringExtra(Constants.CALENDARMONTH);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
-                mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
-                mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
+                mStartHour = getIntent().getIntExtra(Constants.CALENDARSTARTHOUR, 9);
+                mStartMin = getIntent().getIntExtra(Constants.CALENDARSTARTMIN, 0);
 
-                if (mStartTime == 9) {
-                    mTaskStartTime = "0" + mStartTime;
-                    mTaskEndTime = mEndTime + "";
+                mEndHour = getIntent().getIntExtra(Constants.CALENDARENDHOUR, 10);
+                mEndMin = getIntent().getIntExtra(Constants.CALENDARENDMIN, 0);
+
+
+                if (mStartHour == 9) {
+                    mTaskStartTime.append("0").append(mStartHour).append(":");
                 } else {
-                    mTaskStartTime = mStartTime + "";
-                    mTaskEndTime = mEndTime + "";
+                    mTaskStartTime.append(mStartHour).append(":");
+                }
+
+                if (mStartMin < 10) {
+                    mTaskStartTime.append("0").append(mStartMin);
+                } else {
+                    mTaskStartTime.append(mStartMin);
+                }
+
+
+                mTaskEndTime.append(mEndHour).append(":");
+
+                if (mEndMin < 10) {
+                    mTaskEndTime.append("0").append(mEndMin);
+                } else {
+                    mTaskEndTime.append(mEndMin);
                 }
                 break;
             //查看周历
             case Constants.LOOKCALENDAR:
                 mTitle = getIntent().getStringExtra(Constants.CALENDARTITLE);
                 mContent = getIntent().getStringExtra(Constants.CALENDARCONTENT);
-                mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
-                mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
                 mAddress = getIntent().getStringExtra(Constants.CALENDARADDRESS);
                 mId = getIntent().getIntExtra(Constants.CALENDARID, -1);
                 mStatus = getIntent().getIntExtra(Constants.CALENDARSTATUS, 0);
-                if (mStartTime == 9) {
-                    mTaskStartTime = "0" + mStartTime;
-                    mTaskEndTime = mEndTime + "";
+
+                mStartHour = getIntent().getIntExtra(Constants.CALENDARSTARTHOUR, 9);
+                mStartMin = getIntent().getIntExtra(Constants.CALENDARSTARTMIN, 0);
+
+                mEndHour = getIntent().getIntExtra(Constants.CALENDARENDHOUR, 10);
+                mEndMin = getIntent().getIntExtra(Constants.CALENDARENDMIN, 0);
+
+
+                if (mStartHour == 9) {
+                    mTaskStartTime.append("0").append(mStartHour).append(":");
                 } else {
-                    mTaskStartTime = mStartTime + "";
-                    mTaskEndTime = mEndTime + "";
+                    mTaskStartTime.append(mStartHour).append(":");
                 }
+
+                if (mStartMin < 10) {
+                    mTaskStartTime.append("0").append(mStartMin);
+                } else {
+                    mTaskStartTime.append(mStartMin);
+                }
+
+
+                mTaskEndTime.append(mEndHour).append(":");
+
+                if (mEndMin < 10) {
+                    mTaskEndTime.append("0").append(mEndMin);
+                } else {
+                    mTaskEndTime.append(mEndMin);
+                }
+
                 break;
             //查看会议室
             case Constants.MEETINGCALENDAR:
@@ -249,17 +293,34 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mContent = getIntent().getStringExtra(Constants.CALENDARCONTENT);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
                 mAddress = getIntent().getStringExtra(Constants.CALENDARADDRESS);
-                mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
-                mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
 
-                mTaskId = getIntent().getIntExtra(Constants.SELECTEDTASTID, -1);
-                if (mStartTime == 9) {
-                    mTaskStartTime = "0" + mStartTime;
-                    mTaskEndTime = mEndTime + "";
+                mStartHour = getIntent().getIntExtra(Constants.CALENDARSTARTHOUR, 9);
+                mStartMin = getIntent().getIntExtra(Constants.CALENDARSTARTMIN, 0);
+
+                mEndHour = getIntent().getIntExtra(Constants.CALENDARENDHOUR, 10);
+                mEndMin = getIntent().getIntExtra(Constants.CALENDARENDMIN, 0);
+
+                if (mStartHour == 9) {
+                    mTaskStartTime.append("0").append(mStartHour).append(":");
                 } else {
-                    mTaskStartTime = mStartTime + "";
-                    mTaskEndTime = mEndTime + "";
+                    mTaskStartTime.append(mStartHour).append(":");
                 }
+
+                if (mStartMin < 10) {
+                    mTaskStartTime.append("0").append(mStartMin);
+                } else {
+                    mTaskStartTime.append(mStartMin);
+                }
+
+
+                mTaskEndTime.append(mEndHour).append(":");
+
+                if (mEndMin < 10) {
+                    mTaskEndTime.append("0").append(mEndMin);
+                } else {
+                    mTaskEndTime.append(mEndMin);
+                }
+
                 break;
             default:
                 break;
@@ -395,8 +456,14 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
         }
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
-        bundle.putInt(Constants.CALENDARSTARTTIME, mStartTime);
-        bundle.putInt(Constants.CALENDARENDTIME, mEndTime);
+
+        if (start) {
+            bundle.putInt(Constants.CALENDARSTARTHOUR, mStartHour);
+            bundle.putInt(Constants.CALENDARSTARTMIN, mStartMin);
+        } else {
+            bundle.putInt(Constants.CALENDARENDHOUR, mEndHour);
+            bundle.putInt(Constants.CALENDARENDMIN, mEndMin);
+        }
         bundle.putBoolean("isStart", start);
         mSelectedTimeFragment.setArguments(bundle);
         mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
@@ -410,6 +477,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 if (isStart) {
                     int startHour = event.getStartHour();
                     int startMin = event.getStartMin();
+                    mStartHour = event.getStartHour();
+                    mStartMin = event.getStartMin();
                     StringBuffer startTime = new StringBuffer();
 
                     if (startHour == 9) {
@@ -428,6 +497,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 } else {
                     int endHour = event.getEndHour();
                     int endMin = event.getEndMin();
+                    mEndHour = event.getEndHour();
+                    mEndMin = event.getEndMin();
                     StringBuffer endTime = new StringBuffer();
 
                     endTime.append(endHour).append(":");

@@ -103,10 +103,17 @@ public class SelectedTimeFragment extends DialogFragment {
         mPickerEmpty.setData(new ArrayList());
 
         try {
-            int position1 = mStartTime - 9;
+            //int position1 = mStartTime - 9;
             //int position2 = mEndTime - 10;
-            mPickerHourTime.setSelectedItemPosition(position1);
-            mPickerMinTime.setSelectedItemPosition(0);
+
+
+            if (mIsStart) {
+                mPickerHourTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARSTARTHOUR) -9);
+                mPickerMinTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARSTARTMIN));
+            } else {
+                mPickerHourTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARENDHOUR) -10);
+                mPickerMinTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARENDMIN));
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
