@@ -121,7 +121,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
         if (mStatus == 1) {
             mCbCompletes.setChecked(true);
             mCbCompletes.setEnabled(false);
-            mBtnCommonCalendar.setVisibility(View.GONE);
+            mBtnCommonCalendar.setEnabled(false);
+            mBtnCommonCalendar.setBackgroundColor(getResources().getColor(R.color.FFDBDBDB));
         }
 
         mCbCompletes.setOnCheckedChangeListener(this);
