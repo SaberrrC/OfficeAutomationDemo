@@ -73,6 +73,11 @@ public class SelectedWeekCalendarEvent implements Serializable {
         isStart = start;
     }
 
+
+    public SelectedWeekCalendarEvent(String date, String event) {
+        this.date = date;
+        this.event = event;
+    }
     public SelectedWeekCalendarEvent(String event, boolean isStart, int startHour, int startMin) {
         this.event = event;
         this.isStart = isStart;

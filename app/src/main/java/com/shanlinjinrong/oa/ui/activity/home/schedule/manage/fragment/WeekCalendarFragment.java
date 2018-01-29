@@ -2,10 +2,12 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,6 +44,7 @@ import com.shanlinjinrong.oa.utils.CalendarUtils;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
+import com.shanlinjinrong.oa.views.DatePicker;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -76,36 +79,40 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     /**
      * 周历
      */
-    private String[]                    mWeeks;
-    private CustomDialogUtils           mDialog;
-    private WriteContentAdapter         mAdapter;
-    private List<WeekCalendarBean>      mListDate;
-    private List<LeftDateBean>          mLlContent;
-    private LeftDateAdapter             mDateAdapter;
-    private List<LeftDateBean>          mLeftDateList;
+    private String[] mWeeks;
+    private CustomDialogUtils mDialog;
+    private WriteContentAdapter mAdapter;
+    private List<WeekCalendarBean> mListDate;
+    private List<LeftDateBean> mLlContent;
+    private LeftDateAdapter mDateAdapter;
+    private List<LeftDateBean> mLeftDateList;
     private SelectedWeekCalendarAdapter mSelectedAdapter;
-    private RecyclerView                mLeftRecyclerView;
-    private WheelPicker                 mRvEndDateSelected;
-    private List<String>                mStartDate, mEndDate;
+    private RecyclerView mLeftRecyclerView;
+    private WheelPicker mRvEndDateSelected;
+    private List<String> mStartDate, mEndDate;
     private String mStartTime, mEndTime;
     private RecyclerView mHeaderRecyclerView;
-    private WheelPicker  mRvStartDateSelected;
+    private WheelPicker mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
-    private int          mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight, mRefreshCalendar0, mRefreshCalendar1;
+    private int mSelectedStartTime;
+    private int mSelectedEndTime;
+    private int mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight, mRefreshCalendar0, mRefreshCalendar1;
     private String mSelectedYear1;
     private String mSelectedMonth1;
     private String mSelectedDay1;
-    private int    mSelectedStartHour;
-    private int    mSelectedEndHour;
+    private int mSelectedStartHour;
+    private int mSelectedEndHour;
 
 
     private List<LeftDateBean.DataBean> mPopupData;
-    private Dialog                      mPopupDialog;
-    private int                         mIntervalWeek;
-    private DateTime                    mInitialDateTime;
-    private TestAdapter                 mTestAdapter;
-    private List<WeekCalendarBean>      mWeekCalendarBeans;
-    private String                      mCurrentDay;
+    private Dialog mPopupDialog;
+    private int mIntervalWeek;
+    private DateTime mInitialDateTime;
+    private TestAdapter mTestAdapter;
+    private List<WeekCalendarBean> mWeekCalendarBeans;
+    private String mCurrentDay;
+    private DatePicker picker;
+
     //    private TextView                    mTvErrorView;
 
 
@@ -516,6 +523,10 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mPopupDialog.show();
                 break;
 
+            case "mWeekCalendarFragment":
+                showDoneDatePicker(event.getDate());
+                break;
+
             //TODO Title 时间选择
             case Constants.SELECTEDTIME:
                 try {
@@ -631,6 +642,44 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     @Override
     public void hideLoading() {
         hideLoadingView();
+    }
+
+
+    /**
+     * 选择日期底部弹出窗
+     * 2018年01月09日  格式
+     */
+    private void showDoneDatePicker(String dateStr) {
+        try {
+            if (picker == null) {
+                picker = new DatePicker(getActivity(), false);//1990  2050
+            }
+
+            if (!TextUtils.isEmpty(dateStr)) {
+                dateStr = dateStr + "xxxx";
+                int year = Integer.parseInt(dateStr.substring(0, 4));
+                int month = Integer.parseInt(dateStr.substring(5, 7));
+                int day = Integer.parseInt(dateStr.substring(8, 10));
+                picker.setSelectedItem(year, month, day);
+            } else {
+                picker.setCurrentDate();
+            }
+            picker.setSubmitText("确认");
+            picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
+            picker.setTextColor(Color.parseColor("#2d9dff"));
+            picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+                @Override
+                public void onDatePicked(String year, String month, String day) {
+                    String mSelectedDay = year + "年" + month + "月" + day + "日";
+                    EventBus.getDefault().post(new UpdateTitleBean(mSelectedDay, "updateTitle"));
+                    String startDate = year + "-" + month + "-" + day;
+                    queryCalendar(startDate, startDate);
+                }
+            });
+            picker.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

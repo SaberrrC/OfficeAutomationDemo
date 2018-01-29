@@ -4,13 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.MonthlyCalendarFragment;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.WeekCalendarFragment;
 import com.shanlinjinrong.oa.utils.SelectedTimeFragment;
-import com.shanlinjinrong.pickerview.TimePickerView;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,10 +29,10 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
     @BindView(R.id.topView)
     CommonTopView mTopView;
 
-    private WeekCalendarFragment    mWeekCalendarFragment;
+    private WeekCalendarFragment mWeekCalendarFragment;
     private MonthlyCalendarFragment mMonthlyCalendarFragment;
-    private SelectedTimeFragment    mSelectedTimeFragment;
-    private String weekLastTitle  = "";
+    private SelectedTimeFragment mSelectedTimeFragment;
+    private String weekLastTitle = "";
     private String monthLastTitle = "";
 
     @Override
@@ -67,10 +66,13 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
                     EventBus.getDefault().post(new UpdateTitleBean("MonthlyCalendarFragment", "MonthlyCalendarFragment"));
                 } else {
                     //TODO 时间选择器
+                    if (!EventBus.getDefault().isRegistered(mWeekCalendarFragment)) {
+                        EventBus.getDefault().register(mWeekCalendarFragment);
+                    }
+                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(mTopView.getTitleView().getText().toString(), "mWeekCalendarFragment"));
+
 
                     //时间选择器
-
-
 //                    if (mSelectedTimeFragment == null) {
 //                        mSelectedTimeFragment = new SelectedTimeFragment();
 //                    }
@@ -128,6 +130,9 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
         }
         if (EventBus.getDefault().isRegistered(mMonthlyCalendarFragment)) {
             EventBus.getDefault().unregister(mMonthlyCalendarFragment);
+        }
+        if (EventBus.getDefault().isRegistered(mWeekCalendarFragment)) {
+            EventBus.getDefault().unregister(mWeekCalendarFragment);
         }
     }
 }

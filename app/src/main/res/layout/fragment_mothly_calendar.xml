@@ -16,7 +16,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="一"
-            android:textColor="#FF333333"
+            android:textColor="#898989"
             android:textSize="16sp" />
 
         <TextView
@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="二"
-            android:textColor="#FF333333"
+            android:textColor="#898989"
             android:textSize="16sp" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="三"
-            android:textColor="#FF333333"
+            android:textColor="#898989"
             android:textSize="16sp" />
 
         <TextView
@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="四"
-            android:textColor="#FF333333"
+            android:textColor="#898989"
             android:textSize="16sp" />
 
         <TextView
@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="五"
-            android:textColor="#FF333333"
+            android:textColor="#898989"
             android:textSize="16sp" />
 
         <TextView
@@ -61,7 +61,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="六"
-            android:textColor="#FF333333"
+            android:textColor="#898989"
             android:textSize="16sp" />
 
         <TextView
@@ -70,7 +70,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="七"
-            android:textColor="#FF333333"
+            android:textColor="#898989"
             android:textSize="16sp" />
     </LinearLayout>
 

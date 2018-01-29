@@ -68,5 +68,7 @@
 
     <color name="red">#ff0000</color>
     <color name="grey">#FF898989</color>
+    <color name="bg_69B0F2">#7F69B0F2</color>
+    <color name="bg_B269B0F2">#CC69B0F2</color>
 
 </resources>

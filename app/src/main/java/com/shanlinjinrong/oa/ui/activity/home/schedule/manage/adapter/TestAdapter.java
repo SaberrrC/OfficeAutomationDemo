@@ -25,10 +25,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class TestAdapter extends BaseQuickAdapter<WeekCalendarBean> {
 
-    private DateTime               mInitialDateTime;
-    private int                    mCurrPage;
-    private String                 mCurrentDay;
-    private boolean                mIsFirst;
+    private DateTime mInitialDateTime;
+    private int mCurrPage;
+    private String mCurrentDay;
+    private boolean mIsFirst;
     private List<WeekCalendarBean> mData;
 
     public TestAdapter(List<WeekCalendarBean> data, String currentDay, DateTime initialDateTime, int currPage) {
