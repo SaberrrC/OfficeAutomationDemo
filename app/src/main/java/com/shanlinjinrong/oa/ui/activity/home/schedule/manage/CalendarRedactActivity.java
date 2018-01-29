@@ -283,8 +283,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                             String taskDate = mYear + "-" + mMonth + "-" + mDate;
                             jsonObject.put("taskDate", taskDate);
                             jsonObject.put("taskTheme", mEdTaskTheme.getText().toString());
-                            jsonObject.put("startTime", taskDate + " " + mTaskStartTime + ":00:00");
-                            jsonObject.put("endTime", taskDate + " " + mTaskEndTime + ":00:00");
+                            jsonObject.put("startTime", taskDate + " " + mTvTaskStartDate.getText().toString() + ":00");
+                            jsonObject.put("endTime", taskDate + " " + mTvTaskEndDate.getText().toString() + ":00");
                             jsonObject.put("taskType", 2);
 
                             if (!TextUtils.isEmpty(mEdTaskDetails.getText().toString().trim())) {
