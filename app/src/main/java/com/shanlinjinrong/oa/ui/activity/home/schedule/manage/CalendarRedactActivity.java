@@ -293,6 +293,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mContent = getIntent().getStringExtra(Constants.CALENDARCONTENT);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
                 mAddress = getIntent().getStringExtra(Constants.CALENDARADDRESS);
+                mTaskId = getIntent().getIntExtra(Constants.SELECTEDTASTID, 0);
+
 
                 mStartHour = getIntent().getIntExtra(Constants.CALENDARSTARTHOUR, 9);
                 mStartMin = getIntent().getIntExtra(Constants.CALENDARSTARTMIN, 0);

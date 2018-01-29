@@ -229,27 +229,14 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
                 }, Throwable::printStackTrace, () -> {
-
-                    queryCalendar(mIndex, mIndexTitle2);
-                    mRefreshCalendar0 = mIndex;
-                    mRefreshCalendar1 = mIndexTitle2;
+                    String initDate = currentYear + currentMonth + mCurrentDay;
+                    queryCalendar(initDate, initDate);
                     initView();
                 });
 
     }
 
-    private void queryCalendar(int position0, int position1) {
-        String startYear = mListDate.get(position0).getYear().get(position1);
-        String startMonth = mListDate.get(position0).getMonth().get(position1);
-        String startDay = mListDate.get(position0).getDay().get(position1);
-
-        String endYear = mListDate.get(position0).getYear().get(position1);
-        String endMonth = mListDate.get(position0).getMonth().get(position1);
-        String endDay = mListDate.get(position0).getDay().get(position1);
-
-        String startDate = startYear + "-" + startMonth + "-" + startDay;
-        String endDate = endYear + "-" + endMonth + "-" + endDay;
-
+    private void queryCalendar(String startDate, String endDate) {
         mPresenter.QueryCalendarSchedule(startDate, endDate);
     }
 
@@ -860,7 +847,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         super.onActivityResult(requestCode, resultCode, data);
         //刷新界面
         if (resultCode == -1) {
-            queryCalendar(mRefreshCalendar0, mRefreshCalendar1);
+            String startDate = mSelectedYear1 + "-" + mSelectedMonth1 + "-" + mSelectedDay1;
+            queryCalendar(startDate, startDate);
         }
     }
 
