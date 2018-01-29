@@ -461,9 +461,9 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mPopupDialog = new Dialog(getContext(), R.style.CustomDialog);
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_week_calendar_content, null);
                 ImageView addCalendar = (ImageView) view.findViewById(R.id.img_add_calendar);
-                TextView tvContentCount = (TextView) view.findViewById(R.id.tv_content_count);
+                //TextView tvContentCount = (TextView) view.findViewById(R.id.tv_content_count);
+                //tvContentCount.setText("共" + mLlContent.get(event.getPosition() - 1).getData().size());
 
-                tvContentCount.setText("共" + mLlContent.get(event.getPosition() - 1).getData().size());
                 //添加新事件
                 addCalendar.setOnClickListener(view1 -> {
                     Intent intent1 = new Intent(getContext(), CalendarRedactActivity.class);

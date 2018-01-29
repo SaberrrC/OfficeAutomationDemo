@@ -706,7 +706,7 @@
                         <ImageView
                             android:id="@+id/iv_homepage_schedule_manage"
                             style="@style/home_page_icon_style"
-                            android:background="@drawable/icon_homepage_schedule_meeting_plan"/>
+                            android:background="@drawable/icon_schedule_calendar"/>
 
                         <TextView
                             style="@style/common_text_style"
