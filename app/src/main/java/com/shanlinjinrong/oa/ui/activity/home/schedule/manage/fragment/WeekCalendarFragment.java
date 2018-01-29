@@ -230,6 +230,11 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 .subscribe(o -> {
                 }, Throwable::printStackTrace, () -> {
                     String initDate = currentYear + currentMonth + mCurrentDay;
+
+                    mSelectedYear1 = currentYear;
+                    mSelectedMonth1 = currentMonth;
+                    mSelectedDay1 = mCurrentDay;
+
                     queryCalendar(initDate, initDate);
                     initView();
                 });
