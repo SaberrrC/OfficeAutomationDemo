@@ -254,10 +254,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     }
 
     private void initView() {
-        mSelectedYear1 = mListDate.get(mIndexTitle1).getYear().get(mIndexTitle2);
-        mSelectedMonth1 = mListDate.get(mIndexTitle1).getMonth().get(mIndexTitle2);
-        mSelectedDay1 = mListDate.get(mIndexTitle1).getDay().get(mIndexTitle2);
-
 
         //测量布局的宽高
         mHeight = ScreenUtils.dp2px(getContext(), 57) + ScreenUtils.getStatusHeight(getContext());
@@ -436,6 +432,11 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 String year = event.getDate().replace("年", "-");
                 String month = year.replace("月", "-");
                 String day = month.replace("日", "");
+
+                mSelectedYear1 = event.getDate().substring(0, 4);
+                mSelectedMonth1 = event.getDate().substring(5, 7);
+                mSelectedDay1 = event.getDate().substring(8, 10);
+
                 mPresenter.QueryCalendarSchedule(day, day);
                 //更新 Title
                 EventBus.getDefault().post(new UpdateTitleBean(event.getDate(), "updateTitle"));
@@ -447,9 +448,11 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             case "changeView":
                 RefreshChangeView(event);
                 Intent intent = new Intent(getContext(), CalendarRedactActivity.class);
+
                 intent.putExtra(Constants.CALENDARYEAR, mSelectedYear1);
                 intent.putExtra(Constants.CALENDARMONTH, mSelectedMonth1);
                 intent.putExtra(Constants.CALENDARDATE, mSelectedDay1);
+
                 intent.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
                 intent.putExtra(Constants.SELECTEDPOSITION, event.getPosition());
 
@@ -471,9 +474,11 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 //添加新事件
                 addCalendar.setOnClickListener(view1 -> {
                     Intent intent1 = new Intent(getContext(), CalendarRedactActivity.class);
+
                     intent1.putExtra(Constants.CALENDARYEAR, mSelectedYear1);
                     intent1.putExtra(Constants.CALENDARMONTH, mSelectedMonth1);
                     intent1.putExtra(Constants.CALENDARDATE, mSelectedDay1);
+
                     intent1.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
                     intent1.putExtra(Constants.SELECTEDPOSITION, event.getPosition());
 
