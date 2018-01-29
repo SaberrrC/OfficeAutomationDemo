@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -53,6 +54,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     CheckBox      mCbCompletes;
     @BindView(R.id.view_completes)
     View          mViewCompletes;
+    @BindView(R.id.tv_task_address)
+    EditText      mTvTaskAddress;
 
     private String               mDate;
     private int                  mStartTime;
@@ -72,7 +75,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private String               mOldDate;
     private String               mOldDetails;
     private boolean              mIsFirst, mIsCheckBox;
-    private int                  mTaskId;
+    private boolean mIsDateFirst = true;
+    private int    mTaskId;
+    private String mAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +146,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mEdTaskTheme.setEnabled(false);
                 mTvTaskDate.setEnabled(false);
                 mEdTaskDetails.setEnabled(false);
+                mTvTaskAddress.setEnabled(false);
 
+                mTvTaskAddress.setText(mAddress);
                 mEdTaskTheme.setText(mTitle);
                 mTvTaskDate.setText(mStartTime + ":00-" + mEndTime + ":00");
                 mEdTaskDetails.setText(mContent);
@@ -154,9 +161,12 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mCbCompletes.setVisibility(View.GONE);
                 mTopView.setRightText("");
                 mViewCompletes.setVisibility(View.GONE);
+
                 mEdTaskTheme.setEnabled(false);
                 mTvTaskDate.setEnabled(false);
                 mEdTaskDetails.setEnabled(false);
+                mTvTaskAddress.setEnabled(false);
+
                 mEdTaskTheme.setText(mTitle);
                 mTvTaskDate.setText(mStartTime + ":00-" + mEndTime + ":00");
                 mEdTaskDetails.setText(mContent);
@@ -193,6 +203,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mStartTime = getIntent().getIntExtra(Constants.CALENDARSTARTTIME, 9);
                 mEndTime = getIntent().getIntExtra(Constants.CALENDARENDTIME, 10);
                 mDate = getIntent().getStringExtra(Constants.CALENDARDATE);
+                mAddress = getIntent().getStringExtra(Constants.CALENDARADDRESS);
                 mId = getIntent().getIntExtra(Constants.CALENDARID, -1);
                 mStatus = getIntent().getIntExtra(Constants.CALENDARSTATUS, 0);
                 if (mStartTime == 9) {
@@ -244,8 +255,15 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                             jsonObject.put("taskTheme", mEdTaskTheme.getText().toString());
                             jsonObject.put("startTime", taskDate + " " + mTaskStartTime + ":00:00");
                             jsonObject.put("endTime", taskDate + " " + mTaskEndTime + ":00:00");
-                            jsonObject.put("taskDetail", mEdTaskDetails.getText().toString());
                             jsonObject.put("taskType", 2);
+
+                            if (!TextUtils.isEmpty(mEdTaskDetails.getText().toString().trim())) {
+                                jsonObject.put("taskDetail", mEdTaskDetails.getText().toString());
+                            }
+                            if (!TextUtils.isEmpty(mTvTaskAddress.getText().toString().trim())) {
+                                jsonObject.put("address", mTvTaskAddress.getText().toString());
+                            }
+
                             mPresenter.addCalendarSchedule(jsonObject.toString());
                         } catch (Throwable e) {
                             e.printStackTrace();
@@ -257,6 +275,8 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                             mEdTaskTheme.setEnabled(true);
                             mTvTaskDate.setEnabled(true);
                             mEdTaskDetails.setEnabled(true);
+                            mTvTaskAddress.setEnabled(true);
+
                             mBtnCommonCalendar.setText("更新");
 
                             if (mIsFirst) {
@@ -302,13 +322,14 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                             mEdTaskTheme.setEnabled(false);
                             mTvTaskDate.setEnabled(false);
                             mEdTaskDetails.setEnabled(false);
+                            mTvTaskAddress.setEnabled(false);
                             mBtnCommonCalendar.setText("编辑");
                         }
                         break;
                     //查看会议室
                     case Constants.MEETINGCALENDAR:
 
-                        Intent intent  = new Intent(this, MeetingInfoFillOutActivity.class);
+                        Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
                         intent.putExtra("isWriteMeetingInfo", false);
                         intent.putExtra("id", mTaskId);
                         startActivity(intent);
@@ -324,13 +345,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                     if (mSelectedTimeFragment == null) {
                         mSelectedTimeFragment = new SelectedTimeFragment();
                     }
-
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
-                    bundle.putInt(Constants.CALENDARSTARTTIME, mStartTime);
-                    bundle.putInt(Constants.CALENDARENDTIME, mEndTime);
-                    mSelectedTimeFragment.setArguments(bundle);
-                    mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
+                    showDate();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -340,14 +355,30 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
         }
     }
 
+    private void showDate() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.SELECTEDPOSITION, getIntent().getIntExtra(Constants.SELECTEDPOSITION, 0));
+        bundle.putInt(Constants.CALENDARSTARTTIME, mStartTime);
+        bundle.putInt(Constants.CALENDARENDTIME, mEndTime);
+        bundle.putBoolean("isFirst", mIsDateFirst);
+        mSelectedTimeFragment.setArguments(bundle);
+        mSelectedTimeFragment.show(getSupportFragmentManager(), "0");
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ReceiveEvent(SelectedWeekCalendarEvent event) {
         switch (event.getEvent()) {
             case Constants.SELECTEDTIME:
-                mTaskStartTime = event.getStartTime();
+                if (!mIsDateFirst) {
+                    mTaskStartTime = event.getStartTime();
+                    mIsFirst = event.isFirst();
+                    mSelectedTimeFragment = new SelectedTimeFragment();
+                    showDate();
+                    return;
+                }
+                mIsFirst = event.isFirst();
                 mTaskEndTime = event.getEndTime();
-
-                mTvTaskDate.setText(mTaskStartTime + ":00" + "-" + mTaskEndTime + ":00");
+                mTvTaskDate.setText(mTaskStartTime + "-" + mTaskEndTime);
                 break;
             default:
                 break;

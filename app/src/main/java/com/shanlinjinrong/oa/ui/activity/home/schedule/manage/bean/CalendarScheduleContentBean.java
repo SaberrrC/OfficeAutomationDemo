@@ -14,7 +14,7 @@ public class CalendarScheduleContentBean {
     /**
      * code : 000000
      * message : success
-     * data : [{"id":110,"userId":52837,"taskTheme":"吴他","taskDate":"2018-01-26","startTime":"2018-01-26 11:35:05","endTime":"2018-01-26 10:00:00","taskDetail":"吴","taskType":2,"taskId":0,"status":0,"remark":null},{"id":111,"userId":52837,"taskTheme":"吴吴","taskDate":"2018-01-26","startTime":"2018-01-26 11:35:05","endTime":"2018-01-26 13:00:00","taskDetail":"吴","taskType":2,"taskId":0,"status":0,"remark":null},{"id":117,"userId":52837,"taskTheme":"都","taskDate":"2018-01-26","startTime":"2018-01-26 17:00:00","endTime":"2018-01-26 18:00:00","taskDetail":"我","taskType":1,"taskId":554,"status":0,"remark":null},{"id":120,"userId":52837,"taskTheme":"吴","taskDate":"2018-01-26","startTime":"2018-01-26 15:00:00","endTime":"2018-01-26 16:00:00","taskDetail":"啊","taskType":2,"taskId":0,"status":0,"remark":null}]
+     * data : [{"id":129,"userId":52837,"taskTheme":"吴","taskDate":"2018-01-29","startTime":"2018-01-29 10:00:00","endTime":"2018-01-29 11:00:00","taskDetail":"没有","taskType":2,"taskId":0,"status":0,"remark":null,"address":null}]
      */
 
     private String code;
@@ -47,17 +47,18 @@ public class CalendarScheduleContentBean {
 
     public static class DataBean {
         /**
-         * id : 110
+         * id : 129
          * userId : 52837
-         * taskTheme : 吴他
-         * taskDate : 2018-01-26
-         * startTime : 2018-01-26 11:35:05
-         * endTime : 2018-01-26 10:00:00
-         * taskDetail : 吴
+         * taskTheme : 吴
+         * taskDate : 2018-01-29
+         * startTime : 2018-01-29 10:00:00
+         * endTime : 2018-01-29 11:00:00
+         * taskDetail : 没有
          * taskType : 2
          * taskId : 0
          * status : 0
          * remark : null
+         * address : null
          */
 
         private int id;
@@ -70,7 +71,8 @@ public class CalendarScheduleContentBean {
         private int    taskType;
         private int    taskId;
         private int    status;
-        private Object remark;
+        private String remark;
+        private String address;
 
         public int getId() {
             return id;
@@ -152,12 +154,20 @@ public class CalendarScheduleContentBean {
             this.status = status;
         }
 
-        public Object getRemark() {
+        public String getRemark() {
             return remark;
         }
 
-        public void setRemark(Object remark) {
+        public void setRemark(String remark) {
             this.remark = remark;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
         }
     }
 }

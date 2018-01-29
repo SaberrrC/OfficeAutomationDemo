@@ -149,6 +149,10 @@ public class Constants {
      */
     public static final String CALENDARDATE      = "date";
     /**
+     * 周历 地址
+     */
+    public static final String CALENDARADDRESS   = "address";
+    /**
      * 周历 日期
      */
     public static final String CALENDARID        = "id";
@@ -173,9 +177,9 @@ public class Constants {
      */
     public static final String SELECTEDTIME      = "selectedTime";
 
-    public static final String SELECTEDTASTID= "taskId";
+    public static final String SELECTEDTASTID = "taskId";
 
-    public static final String SELECTEDPOSITION= "position";
+    public static final String SELECTEDPOSITION = "position";
 
     /**
      * 编辑周历

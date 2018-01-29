@@ -26,6 +26,28 @@ public class SelectedWeekCalendarEvent implements Serializable {
 
     private String endTime;
 
+    private boolean isFirst;
+
+
+    public boolean isFirst() {
+        return isFirst;
+    }
+
+    public void setFirst(boolean first) {
+        isFirst = first;
+    }
+
+    public SelectedWeekCalendarEvent(String event, String startTime, boolean isFirst) {
+        this.event = event;
+        this.startTime = startTime;
+        this.isFirst = isFirst;
+    }
+
+    public SelectedWeekCalendarEvent(String event, boolean isFirst, String endTime) {
+        this.event = event;
+        this.endTime = endTime;
+        this.isFirst = isFirst;
+    }
 
     public SelectedWeekCalendarEvent(String event, String startTime, String endTime) {
         this.event = event;

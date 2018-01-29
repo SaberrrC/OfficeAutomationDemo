@@ -66,17 +66,18 @@ public class LeftDateBean implements MultiItemEntity {
     }
     public static class DataBean {
         /**
-         * id : 110
+         * id : 129
          * userId : 52837
-         * taskTheme : 吴他
-         * taskDate : 2018-01-26
-         * startTime : 2018-01-26 11:35:05
-         * endTime : 2018-01-26 10:00:00
-         * taskDetail : 吴
+         * taskTheme : 吴
+         * taskDate : 2018-01-29
+         * startTime : 2018-01-29 10:00:00
+         * endTime : 2018-01-29 11:00:00
+         * taskDetail : 没有
          * taskType : 2
          * taskId : 0
          * status : 0
          * remark : null
+         * address : null
          */
 
         private int id;
@@ -89,7 +90,8 @@ public class LeftDateBean implements MultiItemEntity {
         private int    taskType;
         private int    taskId;
         private int    status;
-        private Object remark;
+        private String remark;
+        private String address;
 
         public int getId() {
             return id;
@@ -171,12 +173,20 @@ public class LeftDateBean implements MultiItemEntity {
             this.status = status;
         }
 
-        public Object getRemark() {
+        public String getRemark() {
             return remark;
         }
 
-        public void setRemark(Object remark) {
+        public void setRemark(String remark) {
             this.remark = remark;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
         }
     }
 }

@@ -654,6 +654,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
@@ -666,6 +667,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setId(dataBean.getId());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
@@ -678,6 +680,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
@@ -690,6 +693,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
@@ -703,6 +707,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskId(dataBean.getTaskId());
@@ -716,6 +721,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
@@ -729,6 +735,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setStatus(dataBean.getStatus());
@@ -744,6 +751,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setId(dataBean.getId());
                     leftDateBean.setTaskType(dataBean.getTaskType());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
@@ -759,6 +767,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
                     leftDateBean.setTaskId(dataBean.getTaskId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(8).getData().add(leftDateBean);
@@ -767,6 +776,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setId(dataBean.getId());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
@@ -805,6 +815,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             intent.putExtra(Constants.CALENDARTYPE, mPopupData.get(i).getTaskType());
             intent.putExtra(Constants.CALENDARSTATUS, mPopupData.get(i).getStatus());
             intent.putExtra(Constants.SELECTEDTASTID, mPopupData.get(i).getTaskId());
+            intent.putExtra(Constants.CALENDARADDRESS, mPopupData.get(i).getAddress());
             intent.putExtra(Constants.SELECTEDPOSITION, i);
 
             try {
