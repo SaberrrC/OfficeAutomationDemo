@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -79,40 +80,37 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     /**
      * 周历
      */
-    private String[] mWeeks;
-    private CustomDialogUtils mDialog;
-    private WriteContentAdapter mAdapter;
-    private List<WeekCalendarBean> mListDate;
-    private List<LeftDateBean> mLlContent;
-    private LeftDateAdapter mDateAdapter;
-    private List<LeftDateBean> mLeftDateList;
+    private String[]                    mWeeks;
+    private CustomDialogUtils           mDialog;
+    private WriteContentAdapter         mAdapter;
+    private List<WeekCalendarBean>      mListDate;
+    private List<LeftDateBean>          mLlContent;
+    private LeftDateAdapter             mDateAdapter;
+    private List<LeftDateBean>          mLeftDateList;
     private SelectedWeekCalendarAdapter mSelectedAdapter;
-    private RecyclerView mLeftRecyclerView;
-    private WheelPicker mRvEndDateSelected;
-    private List<String> mStartDate, mEndDate;
+    private RecyclerView                mLeftRecyclerView;
+    private WheelPicker                 mRvEndDateSelected;
+    private List<String>                mStartDate, mEndDate;
     private String mStartTime, mEndTime;
     private RecyclerView mHeaderRecyclerView;
-    private WheelPicker mRvStartDateSelected;
+    private WheelPicker  mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
-    private int mSelectedStartTime;
-    private int mSelectedEndTime;
-    private int mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight, mRefreshCalendar0, mRefreshCalendar1;
+    private int          mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight, mRefreshCalendar0, mRefreshCalendar1;
     private String mSelectedYear1;
     private String mSelectedMonth1;
     private String mSelectedDay1;
-    private int mSelectedStartHour;
-    private int mSelectedEndHour;
+    private int    mSelectedStartHour;
+    private int    mSelectedEndHour;
 
 
     private List<LeftDateBean.DataBean> mPopupData;
-    private Dialog mPopupDialog;
-    private int mIntervalWeek;
-    private DateTime mInitialDateTime;
-    private TestAdapter mTestAdapter;
-    private List<WeekCalendarBean> mWeekCalendarBeans;
-    private String mCurrentDay;
-    private DatePicker picker;
-
+    private Dialog                      mPopupDialog;
+    private int                         mIntervalWeek;
+    private DateTime                    mInitialDateTime;
+    private TestAdapter                 mTestAdapter;
+    private List<WeekCalendarBean>      mWeekCalendarBeans;
+    private String                      mCurrentDay;
+    private DatePicker                  picker;
     //    private TextView                    mTvErrorView;
 
 
@@ -163,53 +161,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         //更新Title
         EventBus.getDefault().post(new UpdateTitleBean(currentYear + "年" + currentMonth + "月" + mCurrentDay + "日", "updateTitle"));
         Observable.create(e -> {
-            for (int i = 0; i < 156; i++) {
-                List<String> days = new ArrayList<>();
-                List<String> weeks = new ArrayList<>();
-                List<String> months = new ArrayList<>();
-                List<String> years = new ArrayList<>();
-                List<Boolean> booleans = new ArrayList<>();
-                for (int j = 0; j < 7; j++) {
-                    if (i == 0 && j == 0) {
-                        Date lastDay = getMondayOfThisWeek(calendar);
-                        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-                        String lastyear = yearFormat.format(lastDay);
-                        SimpleDateFormat MonthFormat = new SimpleDateFormat("MM");
-                        String lastmonth = MonthFormat.format(lastDay);
-                        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-                        String lastday = dayFormat.format(lastDay);
-                        String lastWeek = mWeeks[calendar.get(Calendar.DAY_OF_WEEK) - 1];
-                        days.add(lastday);
-                        weeks.add(lastWeek);
-                        months.add(lastmonth);
-                        years.add(lastyear);
-                        booleans.add(false);
-                        continue;
-                    }
-                    calendar.add(Calendar.DATE, +1);
-                    SimpleDateFormat nextYearFormat = new SimpleDateFormat("yyyy");
-                    String nextYear = nextYearFormat.format(calendar.getTime());
-                    SimpleDateFormat nextMonthFormat = new SimpleDateFormat("MM");
-                    String nextMonth = nextMonthFormat.format(calendar.getTime());
-                    SimpleDateFormat nextDayFormat = new SimpleDateFormat("dd");
-                    String nextDay = nextDayFormat.format(calendar.getTime());
-                    String nextWeek = mWeeks[calendar.get(Calendar.DAY_OF_WEEK) - 1];
-
-                    days.add(nextDay);
-                    weeks.add(nextWeek);
-                    months.add(nextMonth);
-                    years.add(nextYear);
-                    booleans.add(false);
-                    if (nextDay.equals(mCurrentDay + "") && nextMonth.equals(currentMonth + "") && nextYear.equals(currentYear + "")) {
-                        mIndex = i;
-                        mIndexTitle1 = i;
-                        mIndexTitle2 = j;
-                    }
-                }
-                mListDate.add(new WeekCalendarBean(weeks, days, months, years, booleans));
-            }
-
-            //左侧时间的数据
+            //时间 数据
             mLeftDateList = new ArrayList<>();
             for (int i = 0; i < 12; i++) {
                 LeftDateBean leftDateBean = new LeftDateBean();
@@ -225,7 +177,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
             //中间站位数据
             mLlContent = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 12; i++) {
                 LeftDateBean leftDateBean = new LeftDateBean();
                 List<LeftDateBean.DataBean> dataBean = new ArrayList<>();
                 leftDateBean.setData(dataBean);
@@ -237,11 +189,9 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 .subscribe(o -> {
                 }, Throwable::printStackTrace, () -> {
                     String initDate = currentYear + currentMonth + mCurrentDay;
-
                     mSelectedYear1 = currentYear;
                     mSelectedMonth1 = currentMonth;
                     mSelectedDay1 = mCurrentDay;
-
                     queryCalendar(initDate, initDate);
                     initView();
                 });
@@ -254,11 +204,11 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
     private void initView() {
 
-        //测量布局的宽高
-        mHeight = ScreenUtils.dp2px(getContext(), 57) + ScreenUtils.getStatusHeight(getContext());
-        mViewHeight = (ScreenUtils.getScreenHeight(getContext()) - mHeight) / 11;
+        //布局 宽高
+        mHeight = ScreenUtils.dp2px(getContext(), 57) + ScreenUtils.getStatusHeight(getContext()) + ScreenUtils.dp2px(getContext(), 85);
+        mViewHeight = (ScreenUtils.getScreenHeight(getContext()) - mHeight) / 10;
 
-        //左侧时间展示
+        //左侧 时间
         mLeftRecyclerView = new RecyclerView(getContext());
         mDateAdapter = new LeftDateAdapter(mLeftDateList, getContext(), mViewHeight);
         mLeftRecyclerView.setAdapter(mDateAdapter);
@@ -271,16 +221,23 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         mLeftRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(ScreenUtils.dp2px(getContext(), 40), RecyclerView.LayoutParams.MATCH_PARENT));
         mLlContainerLayout.addView(mLeftRecyclerView);
 
-        //边界线
+        FrameLayout frameLayout = new FrameLayout(getContext());
+        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils.dp2px(getContext(), 71) - mViewHeight));
+        mDateAdapter.addHeaderView(frameLayout);
+
+        //垂直 边界线
         View view = new View(getContext());
-        view.setLayoutParams(new ViewGroup.LayoutParams(1, ViewGroup.LayoutParams.MATCH_PARENT));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(1, ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.setMargins(0, 0, 0, ScreenUtils.dp2px(getContext(), 12));
+        view.setLayoutParams(layoutParams);
         view.setBackground(getResources().getDrawable(R.color.gray_d5d5d5));
         mLlContainerLayout.addView(view);
 
-        //中间内容部分
+        //中间 内容
         mContentRecyclerView = new RecyclerView(getContext());
         mContentRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.MATCH_PARENT));
         mLlContainerLayout.addView(mContentRecyclerView);
+
 
 //        mTvErrorView = new TextView(getContext());
 //        mTvErrorView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -295,10 +252,9 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         //中间时间选择List
         mHeaderRecyclerView = new RecyclerView(getContext());
 
-        DateTime StartTime = new DateTime("1901-01-01");
+        DateTime StartTime = new DateTime("1970-01-01");
         mIntervalWeek = CalendarUtils.getIntervalWeek(StartTime, new DateTime("2099-12-31"), 1);
-        mWeekCalendarBeans = new ArrayList<>(mIntervalWeek);
-
+        mWeekCalendarBeans = new ArrayList<>();
 
         for (int i = 0; i < mIntervalWeek; i++) {
             List<Boolean> isSelected = new ArrayList<>();
@@ -312,22 +268,13 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
         //今天
         mInitialDateTime = new DateTime().withTimeAtStartOfDay();
-
         int mCurrPage = CalendarUtils.getIntervalWeek(StartTime, mInitialDateTime, 1);
-
         mTestAdapter = new TestAdapter(mWeekCalendarBeans, mCurrentDay, mInitialDateTime, mCurrPage);
         mHeaderRecyclerView.setAdapter(mTestAdapter);
-//        mSelectedAdapter = new SelectedWeekCalendarAdapter(mListDate, getContext());
-//        mHeaderRecyclerView.setAdapter(mSelectedAdapter);
-
-
         mHeaderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.HORIZONTAL, false));
         mHeaderRecyclerView.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-        mHeaderRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, mViewHeight));
-//        mHeaderRecyclerView.scrollToPosition(mIndex);
+        mHeaderRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, ScreenUtils.dp2px(getContext(), 71)));
         mHeaderRecyclerView.scrollToPosition(mCurrPage);
-
-        mListDate.get(mIndex).getIsSelected().set(mIndexTitle2, true);
 
         MyPagerSnapHelper mMySnapHelper = new MyPagerSnapHelper();
         mMySnapHelper.attachToRecyclerView(mHeaderRecyclerView);
@@ -344,7 +291,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         //刷新界面
         mDateAdapter.notifyDataSetChanged();
         mTestAdapter.notifyDataSetChanged();
-        //       mSelectedAdapter.notifyDataSetChanged();
         mAdapter.notifyDataSetChanged();
         CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(getContext());
         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.dialog_date_selected, null);
@@ -525,6 +471,10 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
             case "mWeekCalendarFragment":
                 showDoneDatePicker(event.getDate());
+                String date = event.getDate();
+                String date1 = event.getDate();
+
+
                 break;
 
             //TODO Title 时间选择
@@ -588,6 +538,14 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 }
                 break;
             default:
+                for (int i = 0; i < mWeekCalendarBeans.size(); i++) {
+                    for (int j = 0; j < 7; j++) {
+                        mWeekCalendarBeans.get(i).getIsSelected().set(j, false);
+                    }
+                }
+                int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime("1970-01-01"), new DateTime(event.getTitleDate()), 1);
+                mHeaderRecyclerView.scrollToPosition(mCurrPage);
+
                 break;
         }
     }
@@ -652,7 +610,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private void showDoneDatePicker(String dateStr) {
         try {
             if (picker == null) {
-                picker = new DatePicker(getActivity(), false);//1990  2050
+                picker = new DatePicker(getActivity(), false);
             }
 
             if (!TextUtils.isEmpty(dateStr)) {
@@ -667,14 +625,36 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             picker.setSubmitText("确认");
             picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
             picker.setTextColor(Color.parseColor("#2d9dff"));
-            picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
-                @Override
-                public void onDatePicked(String year, String month, String day) {
-                    String mSelectedDay = year + "年" + month + "月" + day + "日";
-                    EventBus.getDefault().post(new UpdateTitleBean(mSelectedDay, "updateTitle"));
-                    String startDate = year + "-" + month + "-" + day;
-                    queryCalendar(startDate, startDate);
+            picker.setOnDatePickListener((DatePicker.OnYearMonthDayPickListener) (year, month, day) -> {
+                String mSelectedDay = year + "年" + month + "月" + day + "日";
+                EventBus.getDefault().post(new UpdateTitleBean(mSelectedDay, "updateTitle"));
+                String startDate = year + "-" + month + "-" + day;
+
+                for (int i = 0; i < mWeekCalendarBeans.size(); i++) {
+                    for (int j = 0; j < 7; j++) {
+                        mWeekCalendarBeans.get(i).getIsSelected().set(j, false);
+                    }
                 }
+
+                int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime("1970-01-01"), new DateTime(startDate), 1);
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar c = Calendar.getInstance();
+                try {
+                    c.setTime(format.parse(startDate));
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+                int i = c.get(Calendar.DAY_OF_WEEK);
+                if (i == 1) {
+                    mWeekCalendarBeans.get(mCurrPage).getIsSelected().set(6, true);
+                } else {
+                    mWeekCalendarBeans.get(mCurrPage).getIsSelected().set(i - 2, true);
+                }
+                mHeaderRecyclerView.scrollToPosition(mCurrPage);
+                mTestAdapter.notifyItemChanged(mCurrPage);
+
+                queryCalendar(startDate, startDate);
             });
             picker.show();
         } catch (Exception e) {

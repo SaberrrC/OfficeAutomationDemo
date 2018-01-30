@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_selected_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="71dp"
     android:background="#7dbedcf7"
     android:gravity="center"
     android:orientation="horizontal">
@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|bottom"
+                android:gravity="center"
                 android:text="一"
                 android:textColor="#FF898989"
                 android:textSize="14sp" />
@@ -51,10 +51,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:gravity="center|top"
+                    android:gravity="center"
                     android:text="01"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
@@ -75,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|bottom"
+                android:gravity="center"
                 android:text="二"
                 android:textColor="#FF898989"
                 android:textSize="14sp" />
@@ -102,10 +102,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:gravity="center|top"
+                    android:gravity="center"
                     android:text="02"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
@@ -127,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|bottom"
+                android:gravity="center"
                 android:text="三"
                 android:textColor="#FF898989"
                 android:textSize="14sp" />
@@ -155,10 +155,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:gravity="center|top"
+                    android:gravity="center"
                     android:text="03"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -180,7 +180,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|bottom"
+                android:gravity="center"
                 android:text="四"
                 android:textColor="#FF898989"
                 android:textSize="14sp" />
@@ -208,10 +208,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:gravity="center|top"
+                    android:gravity="center"
                     android:text="04"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -233,7 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|bottom"
+                android:gravity="center"
                 android:text="五"
                 android:textColor="#FF898989"
                 android:textSize="14sp" />
@@ -260,10 +260,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:gravity="center|top"
+                    android:gravity="center"
                     android:text="05"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
@@ -286,7 +286,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|bottom"
+                android:gravity="center"
                 android:text="六"
                 android:textColor="#FF898989"
                 android:textSize="14sp" />
@@ -313,10 +313,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:gravity="center|top"
+                    android:gravity="center"
                     android:text="06"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
@@ -339,7 +339,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|bottom"
+                android:gravity="center"
                 android:text="日"
                 android:textColor="#FF898989"
                 android:textSize="14sp" />
@@ -366,10 +366,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:gravity="center|top"
+                    android:gravity="center"
                     android:text="07"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </RelativeLayout>
 
         </LinearLayout>

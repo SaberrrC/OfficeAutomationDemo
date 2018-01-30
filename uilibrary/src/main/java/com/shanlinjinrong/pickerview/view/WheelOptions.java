@@ -3,17 +3,17 @@ package com.shanlinjinrong.pickerview.view;
 import android.view.View;
 
 import com.shanlinjinrong.pickerview.adapter.ArrayWheelAdapter;
-import com.shanlinjinrong.pickerview.lib.WheelView;
+import com.shanlinjinrong.pickerview.lib.ShanLinWheelView;
 import com.shanlinjinrong.pickerview.listener.OnItemSelectedListener;
 import com.shanlinjinrong.uilibrary.R;
 
 import java.util.List;
 
 public class WheelOptions<T> {
-	private View view;
-	private WheelView wv_option1;
-	private WheelView wv_option2;
-	private WheelView wv_option3;
+	private View             view;
+	private ShanLinWheelView wv_option1;
+	private ShanLinWheelView wv_option2;
+	private ShanLinWheelView wv_option3;
 
 	private List<T> mOptions1Items;
 	private List<List<T>> mOptions2Items;
@@ -60,16 +60,16 @@ public class WheelOptions<T> {
 		if (this.mOptions2Items == null)
 			len = 12;
 		// 选项1
-		wv_option1 = (WheelView) view.findViewById(R.id.options1);
+		wv_option1 = (ShanLinWheelView) view.findViewById(R.id.options1);
 		wv_option1.setAdapter(new ArrayWheelAdapter(mOptions1Items, len));// 设置显示数据
 		wv_option1.setCurrentItem(0);// 初始化时显示的数据
 		// 选项2
-		wv_option2 = (WheelView) view.findViewById(R.id.options2);
+		wv_option2 = (ShanLinWheelView) view.findViewById(R.id.options2);
 		if (mOptions2Items != null)
 			wv_option2.setAdapter(new ArrayWheelAdapter(mOptions2Items.get(0)));// 设置显示数据
 		wv_option2.setCurrentItem(wv_option1.getCurrentItem());// 初始化时显示的数据
 		// 选项3
-		wv_option3 = (WheelView) view.findViewById(R.id.options3);
+		wv_option3 = (ShanLinWheelView) view.findViewById(R.id.options3);
 		if (mOptions3Items != null)
 			wv_option3.setAdapter(new ArrayWheelAdapter(mOptions3Items.get(0)
 					.get(0)));// 设置显示数据

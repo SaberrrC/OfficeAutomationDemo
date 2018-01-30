@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.shanlinjinrong.pickerview.TimePickerView;
 import com.shanlinjinrong.pickerview.adapter.NumericWheelAdapter;
-import com.shanlinjinrong.pickerview.lib.WheelView;
+import com.shanlinjinrong.pickerview.lib.ShanLinWheelView;
 import com.shanlinjinrong.pickerview.listener.OnItemSelectedListener;
 import com.shanlinjinrong.uilibrary.R;
 
@@ -17,18 +17,18 @@ import java.util.List;
 
 public class WheelTime {
 	public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-	private View view;
-	private WheelView wv_year;
-	private WheelView wv_month;
-	private WheelView wv_day;
-	private WheelView wv_hours;
-	private WheelView wv_mins;
+	private View             view;
+	private ShanLinWheelView wv_year;
+	private ShanLinWheelView wv_month;
+	private ShanLinWheelView wv_day;
+	private ShanLinWheelView wv_hours;
+	private ShanLinWheelView wv_mins;
 
 	private TimePickerView.Type type;
-	public static final int DEFULT_START_YEAR = 1990;
-	public static final int DEFULT_END_YEAR = 2100;
-	private int startYear = DEFULT_START_YEAR;
-	private int endYear = DEFULT_END_YEAR;
+	public static final int DEFULT_START_YEAR = 1970;
+	public static final int DEFULT_END_YEAR = 2099;
+	public int startYear = DEFULT_START_YEAR;
+	public int endYear = DEFULT_END_YEAR;
 
 
 
@@ -58,7 +58,7 @@ public class WheelTime {
 
 		Context context = view.getContext();
 		// 年
-		wv_year = (WheelView) view.findViewById(R.id.year);
+		wv_year = (ShanLinWheelView) view.findViewById(R.id.year);
 		// 设置"年"的显示数据
 		wv_year.setAdapter(new NumericWheelAdapter(startYear, endYear));
 		// 添加文字
@@ -67,13 +67,13 @@ public class WheelTime {
 		wv_year.setCurrentItem(year - startYear);
 
 		// 月
-		wv_month = (WheelView) view.findViewById(R.id.month);
+		wv_month = (ShanLinWheelView) view.findViewById(R.id.month);
 		wv_month.setAdapter(new NumericWheelAdapter(1, 12));
 		wv_month.setLabel(context.getString(R.string.pickerview_month));
 		wv_month.setCurrentItem(month);
 
 		// 日
-		wv_day = (WheelView) view.findViewById(R.id.day);
+		wv_day = (ShanLinWheelView) view.findViewById(R.id.day);
 		// 判断大小月及是否闰年,用来确定"日"的数据
 		if (list_big.contains(String.valueOf(month + 1))) {
 			wv_day.setAdapter(new NumericWheelAdapter(1, 31));
@@ -90,12 +90,12 @@ public class WheelTime {
 		wv_day.setCurrentItem(day - 1);
 
 
-        wv_hours = (WheelView)view.findViewById(R.id.hour);
+        wv_hours = (ShanLinWheelView)view.findViewById(R.id.hour);
 		wv_hours.setAdapter(new NumericWheelAdapter(0, 23));
 		wv_hours.setLabel(context.getString(R.string.pickerview_hours));// 添加文字
 		wv_hours.setCurrentItem(h);
 
-		wv_mins = (WheelView)view.findViewById(R.id.min);
+		wv_mins = (ShanLinWheelView)view.findViewById(R.id.min);
 		wv_mins.setAdapter(new NumericWheelAdapter(0, 59));
 		wv_mins.setLabel(context.getString(R.string.pickerview_minutes));// 添加文字
 		wv_mins.setCurrentItem(m);
@@ -213,7 +213,7 @@ public class WheelTime {
 	}
 	public String getTime() {
 		StringBuffer sb = new StringBuffer();
-			sb.append((wv_year.getCurrentItem() + startYear)).append("-")
+			sb.append((wv_year.getCurrentItem()  + startYear)).append("-")
 			.append((wv_month.getCurrentItem() + 1)).append("-")
 			.append((wv_day.getCurrentItem() + 1)).append(" ")
 			.append(wv_hours.getCurrentItem()).append(":")

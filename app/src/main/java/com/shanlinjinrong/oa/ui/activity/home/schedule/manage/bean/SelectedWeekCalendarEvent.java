@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 作者：王凤旭
@@ -32,6 +33,22 @@ public class SelectedWeekCalendarEvent implements Serializable {
     private int endHour;
     private int startMin;
     private int endMin;
+
+    private Date titleDate;
+
+
+    public SelectedWeekCalendarEvent(String event, Date titleDate) {
+        this.event = event;
+        this.titleDate = titleDate;
+    }
+
+    public Date getTitleDate() {
+        return titleDate;
+    }
+
+    public void setTitleDate(Date titleDate) {
+        this.titleDate = titleDate;
+    }
 
     public int getStartHour() {
         return startHour;

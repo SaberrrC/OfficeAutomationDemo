@@ -7,9 +7,9 @@ final class SmoothScrollTimerTask extends TimerTask {
     int realTotalOffset;
     int realOffset;
     int offset;
-    final WheelView loopView;
+    final ShanLinWheelView loopView;
 
-    SmoothScrollTimerTask(WheelView loopview, int offset) {
+    SmoothScrollTimerTask(ShanLinWheelView loopview, int offset) {
         this.loopView = loopview;
         this.offset = offset;
         realTotalOffset = Integer.MAX_VALUE;
