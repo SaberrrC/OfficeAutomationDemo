@@ -66,15 +66,13 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private String               mYear;
     private String               mMonth;
     private int                  mItemType;
-    private OptionsPickerView    beginTimeView;
     private SelectedTimeFragment mSelectedTimeFragment;
     private int                  mId;
     private int                  mStatus;
     private String               mOldTheme;
     private String               mOldStartTime;
     private String               mOldEndTime;
-    private String               mOldAdress;
-    private String               mOldDate;
+    private String               mOldAddress;
     private String               mOldDetails;
     private boolean              mIsFirst, mIsCheckBox;
     private int          mTaskId;
@@ -148,7 +146,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
                 break;
             case Constants.LOOKCALENDAR:
-                long time = DateUtils.getTimestampFromString(mDate,"yyyy-MM-dd");
+                long time = DateUtils.getTimestampFromString(mDate, "yyyy-MM-dd");
                 String lookDate = DateUtils.getDisplayMonthDay(time);
                 mTvDate.setText(lookDate);
                 mTopView.setRightText("删除");
@@ -169,7 +167,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mEdTaskDetails.setText(mContent);
                 break;
             case Constants.MEETINGCALENDAR:
-                long time1 = DateUtils.getTimestampFromString(mDate,"yyyy-MM-dd");
+                long time1 = DateUtils.getTimestampFromString(mDate, "yyyy-MM-dd");
                 String meetingDate = DateUtils.getDisplayMonthDay(time1);
                 mTvDate.setText(meetingDate);
                 mBtnCommonCalendar.setText("查看详情");
@@ -371,7 +369,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                             mOldTheme = mEdTaskTheme.getText().toString().trim();
                             mOldStartTime = mTvTaskStartDate.getText().toString().trim();
                             mOldEndTime = mTvTaskEndDate.getText().toString().trim();
-                            mOldAdress = mTvTaskAddress.getText().toString().trim();
+                            mOldAddress = mTvTaskAddress.getText().toString().trim();
                             mOldDetails = mEdTaskDetails.getText().toString().trim();
                         } else {
 
@@ -379,7 +377,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                                 boolean isTheme = mOldTheme.equals(mEdTaskTheme.getText().toString().trim());
                                 boolean isStart = mOldStartTime.equals(mTvTaskStartDate.getText().toString().trim());
                                 boolean isEnd = mOldEndTime.equals(mTvTaskEndDate.getText().toString().trim());
-                                boolean isAddress = mOldAdress.equals(mTvTaskAddress.getText().toString().trim());
+                                boolean isAddress = mOldAddress.equals(mTvTaskAddress.getText().toString().trim());
                                 boolean isDetails = mOldDetails.equals(mEdTaskDetails.getText().toString().trim());
                                 if (isTheme && isStart && isEnd && isAddress && isDetails) {
                                     showToast("内容无变更，完成失败");
@@ -474,6 +472,22 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 if (isStart) {
                     int startHour = event.getStartHour();
                     int startMin = event.getStartMin();
+
+                    if (startHour > mEndHour) {
+                        showToast("开始时间无法大于结束时间");
+                        return;
+                    }
+
+                    if (startHour == mEndHour) {
+                        if (startMin > mEndMin) {
+                            showToast("开始时间无法大于结束时间");
+                            return;
+                        }
+                        if (startMin == mEndMin) {
+                            showToast("开始时间不可以等于结束时间");
+                            return;
+                        }
+                    }
                     mStartHour = event.getStartHour();
                     mStartMin = event.getStartMin();
                     StringBuffer startTime = new StringBuffer();
@@ -494,6 +508,22 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 } else {
                     int endHour = event.getEndHour();
                     int endMin = event.getEndMin();
+
+                    if (endHour < mStartHour) {
+                        showToast("结束时间无法小于开始时间");
+                        return;
+                    }
+
+                    if (endHour == mStartHour) {
+                        if (endMin < mStartMin) {
+                            showToast("结束时间无法小于开始时间");
+                            return;
+                        }
+                        if (endMin == mStartMin) {
+                            showToast("结束时间不可以等于开始时间");
+                            return;
+                        }
+                    }
                     mEndHour = event.getEndHour();
                     mEndMin = event.getEndMin();
                     StringBuffer endTime = new StringBuffer();
@@ -567,7 +597,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
             mOldTheme = mEdTaskTheme.getText().toString().trim();
             mOldStartTime = mTvTaskStartDate.getText().toString().trim();
             mOldEndTime = mTvTaskEndDate.getText().toString().trim();
-            mOldAdress = mTvTaskAddress.getText().toString().trim();
+            mOldAddress = mTvTaskAddress.getText().toString().trim();
             mOldDetails = mEdTaskDetails.getText().toString().trim();
 
             mEdTaskTheme.setEnabled(false);
