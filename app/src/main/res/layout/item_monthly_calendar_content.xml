@@ -13,10 +13,12 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        android:background="@color/btn_gray_pressed"
+        android:background="@color/bg_69B0F2"
+        android:ellipsize="end"
         android:gravity="center"
-        android:textColor="@color/btn_green_noraml"
-        android:textSize="16sp"
+        android:maxLines="1"
+        android:textColor="@color/text_333333"
+        android:textSize="14sp"
         tools:text="设计OB需求" />
 
 

@@ -8,9 +8,9 @@ final class MessageHandler extends Handler {
     public static final int WHAT_SMOOTH_SCROLL = 2000;
     public static final int WHAT_ITEM_SELECTED = 3000;
 
-    final WheelView loopview;
+    final ShanLinWheelView loopview;
 
-    MessageHandler(WheelView loopview) {
+    MessageHandler(ShanLinWheelView loopview) {
         this.loopview = loopview;
     }
 
@@ -22,7 +22,7 @@ final class MessageHandler extends Handler {
                 break;
 
             case WHAT_SMOOTH_SCROLL:
-                loopview.smoothScroll(WheelView.ACTION.FLING);
+                loopview.smoothScroll(ShanLinWheelView.ACTION.FLING);
                 break;
 
             case WHAT_ITEM_SELECTED:

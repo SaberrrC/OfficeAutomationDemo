@@ -2,10 +2,12 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +45,7 @@ import com.shanlinjinrong.oa.utils.CalendarUtils;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
+import com.shanlinjinrong.oa.views.DatePicker;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -92,11 +96,13 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private WheelPicker  mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
     private int          mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight, mRefreshCalendar0, mRefreshCalendar1;
-    private String                      mSelectedYear1;
-    private String                      mSelectedMonth1;
-    private String                      mSelectedDay1;
-    private int                         mSelectedStartTime;
-    private int                         mSelectedEndTime;
+    private String mSelectedYear1;
+    private String mSelectedMonth1;
+    private String mSelectedDay1;
+    private int    mSelectedStartHour;
+    private int    mSelectedEndHour;
+
+
     private List<LeftDateBean.DataBean> mPopupData;
     private Dialog                      mPopupDialog;
     private int                         mIntervalWeek;
@@ -104,6 +110,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private TestAdapter                 mTestAdapter;
     private List<WeekCalendarBean>      mWeekCalendarBeans;
     private String                      mCurrentDay;
+    private DatePicker                  picker;
     //    private TextView                    mTvErrorView;
 
 
@@ -154,53 +161,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         //更新Title
         EventBus.getDefault().post(new UpdateTitleBean(currentYear + "年" + currentMonth + "月" + mCurrentDay + "日", "updateTitle"));
         Observable.create(e -> {
-            for (int i = 0; i < 156; i++) {
-                List<String> days = new ArrayList<>();
-                List<String> weeks = new ArrayList<>();
-                List<String> months = new ArrayList<>();
-                List<String> years = new ArrayList<>();
-                List<Boolean> booleans = new ArrayList<>();
-                for (int j = 0; j < 7; j++) {
-                    if (i == 0 && j == 0) {
-                        Date lastDay = getMondayOfThisWeek(calendar);
-                        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-                        String lastyear = yearFormat.format(lastDay);
-                        SimpleDateFormat MonthFormat = new SimpleDateFormat("MM");
-                        String lastmonth = MonthFormat.format(lastDay);
-                        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-                        String lastday = dayFormat.format(lastDay);
-                        String lastWeek = mWeeks[calendar.get(Calendar.DAY_OF_WEEK) - 1];
-                        days.add(lastday);
-                        weeks.add(lastWeek);
-                        months.add(lastmonth);
-                        years.add(lastyear);
-                        booleans.add(false);
-                        continue;
-                    }
-                    calendar.add(Calendar.DATE, +1);
-                    SimpleDateFormat nextYearFormat = new SimpleDateFormat("yyyy");
-                    String nextYear = nextYearFormat.format(calendar.getTime());
-                    SimpleDateFormat nextMonthFormat = new SimpleDateFormat("MM");
-                    String nextMonth = nextMonthFormat.format(calendar.getTime());
-                    SimpleDateFormat nextDayFormat = new SimpleDateFormat("dd");
-                    String nextDay = nextDayFormat.format(calendar.getTime());
-                    String nextWeek = mWeeks[calendar.get(Calendar.DAY_OF_WEEK) - 1];
-
-                    days.add(nextDay);
-                    weeks.add(nextWeek);
-                    months.add(nextMonth);
-                    years.add(nextYear);
-                    booleans.add(false);
-                    if (nextDay.equals(mCurrentDay + "") && nextMonth.equals(currentMonth + "") && nextYear.equals(currentYear + "")) {
-                        mIndex = i;
-                        mIndexTitle1 = i;
-                        mIndexTitle2 = j;
-                    }
-                }
-                mListDate.add(new WeekCalendarBean(weeks, days, months, years, booleans));
-            }
-
-            //左侧时间的数据
+            //时间 数据
             mLeftDateList = new ArrayList<>();
             for (int i = 0; i < 12; i++) {
                 LeftDateBean leftDateBean = new LeftDateBean();
@@ -216,7 +177,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
             //中间站位数据
             mLlContent = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 12; i++) {
                 LeftDateBean leftDateBean = new LeftDateBean();
                 List<LeftDateBean.DataBean> dataBean = new ArrayList<>();
                 leftDateBean.setData(dataBean);
@@ -227,41 +188,27 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
                 }, Throwable::printStackTrace, () -> {
-
-                    queryCalendar(mIndex, mIndexTitle2);
-                    mRefreshCalendar0 = mIndex;
-                    mRefreshCalendar1 = mIndexTitle2;
+                    String initDate = currentYear + currentMonth + mCurrentDay;
+                    mSelectedYear1 = currentYear;
+                    mSelectedMonth1 = currentMonth;
+                    mSelectedDay1 = mCurrentDay;
+                    queryCalendar(initDate, initDate);
                     initView();
                 });
 
     }
 
-    private void queryCalendar(int position0, int position1) {
-        String startYear = mListDate.get(position0).getYear().get(position1);
-        String startMonth = mListDate.get(position0).getMonth().get(position1);
-        String startDay = mListDate.get(position0).getDay().get(position1);
-
-        String endYear = mListDate.get(position0).getYear().get(position1);
-        String endMonth = mListDate.get(position0).getMonth().get(position1);
-        String endDay = mListDate.get(position0).getDay().get(position1);
-
-        String startDate = startYear + "-" + startMonth + "-" + startDay;
-        String endDate = endYear + "-" + endMonth + "-" + endDay;
-
+    private void queryCalendar(String startDate, String endDate) {
         mPresenter.QueryCalendarSchedule(startDate, endDate);
     }
 
     private void initView() {
-        mSelectedYear1 = mListDate.get(mIndexTitle1).getYear().get(mIndexTitle2);
-        mSelectedMonth1 = mListDate.get(mIndexTitle1).getMonth().get(mIndexTitle2);
-        mSelectedDay1 = mListDate.get(mIndexTitle1).getDay().get(mIndexTitle2);
 
+        //布局 宽高
+        mHeight = ScreenUtils.dp2px(getContext(), 57) + ScreenUtils.getStatusHeight(getContext()) + ScreenUtils.dp2px(getContext(), 85);
+        mViewHeight = (ScreenUtils.getScreenHeight(getContext()) - mHeight) / 10;
 
-        //测量布局的宽高
-        mHeight = ScreenUtils.dp2px(getContext(), 57) + ScreenUtils.getStatusHeight(getContext());
-        mViewHeight = (ScreenUtils.getScreenHeight(getContext()) - mHeight) / 11;
-
-        //左侧时间展示
+        //左侧 时间
         mLeftRecyclerView = new RecyclerView(getContext());
         mDateAdapter = new LeftDateAdapter(mLeftDateList, getContext(), mViewHeight);
         mLeftRecyclerView.setAdapter(mDateAdapter);
@@ -274,16 +221,23 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         mLeftRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(ScreenUtils.dp2px(getContext(), 40), RecyclerView.LayoutParams.MATCH_PARENT));
         mLlContainerLayout.addView(mLeftRecyclerView);
 
-        //边界线
+        FrameLayout frameLayout = new FrameLayout(getContext());
+        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils.dp2px(getContext(), 71) - mViewHeight));
+        mDateAdapter.addHeaderView(frameLayout);
+
+        //垂直 边界线
         View view = new View(getContext());
-        view.setLayoutParams(new ViewGroup.LayoutParams(1, ViewGroup.LayoutParams.MATCH_PARENT));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(1, ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.setMargins(0, 0, 0, ScreenUtils.dp2px(getContext(), 12));
+        view.setLayoutParams(layoutParams);
         view.setBackground(getResources().getDrawable(R.color.gray_d5d5d5));
         mLlContainerLayout.addView(view);
 
-        //中间内容部分
+        //中间 内容
         mContentRecyclerView = new RecyclerView(getContext());
         mContentRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.MATCH_PARENT));
         mLlContainerLayout.addView(mContentRecyclerView);
+
 
 //        mTvErrorView = new TextView(getContext());
 //        mTvErrorView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -298,10 +252,9 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         //中间时间选择List
         mHeaderRecyclerView = new RecyclerView(getContext());
 
-        DateTime StartTime = new DateTime("1901-01-01");
+        DateTime StartTime = new DateTime("1970-01-01");
         mIntervalWeek = CalendarUtils.getIntervalWeek(StartTime, new DateTime("2099-12-31"), 1);
-        mWeekCalendarBeans = new ArrayList<>(mIntervalWeek);
-
+        mWeekCalendarBeans = new ArrayList<>();
 
         for (int i = 0; i < mIntervalWeek; i++) {
             List<Boolean> isSelected = new ArrayList<>();
@@ -315,22 +268,13 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
         //今天
         mInitialDateTime = new DateTime().withTimeAtStartOfDay();
-
         int mCurrPage = CalendarUtils.getIntervalWeek(StartTime, mInitialDateTime, 1);
-
         mTestAdapter = new TestAdapter(mWeekCalendarBeans, mCurrentDay, mInitialDateTime, mCurrPage);
         mHeaderRecyclerView.setAdapter(mTestAdapter);
-//        mSelectedAdapter = new SelectedWeekCalendarAdapter(mListDate, getContext());
-//        mHeaderRecyclerView.setAdapter(mSelectedAdapter);
-
-
         mHeaderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.HORIZONTAL, false));
         mHeaderRecyclerView.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
-        mHeaderRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, mViewHeight));
-//        mHeaderRecyclerView.scrollToPosition(mIndex);
+        mHeaderRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, ScreenUtils.dp2px(getContext(), 71)));
         mHeaderRecyclerView.scrollToPosition(mCurrPage);
-
-        mListDate.get(mIndex).getIsSelected().set(mIndexTitle2, true);
 
         MyPagerSnapHelper mMySnapHelper = new MyPagerSnapHelper();
         mMySnapHelper.attachToRecyclerView(mHeaderRecyclerView);
@@ -347,7 +291,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         //刷新界面
         mDateAdapter.notifyDataSetChanged();
         mTestAdapter.notifyDataSetChanged();
-        //       mSelectedAdapter.notifyDataSetChanged();
         mAdapter.notifyDataSetChanged();
         CustomDialogUtils.Builder builder = new CustomDialogUtils.Builder(getContext());
         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.dialog_date_selected, null);
@@ -400,7 +343,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             mEndDate.add(i + 10 + ":" + "00");
         }
 
-
         showToast(mIntervalWeek + "");
         mRvStartDateSelected.setData(mStartDate);
         mRvEndDateSelected.setData(mEndDate);
@@ -435,6 +377,11 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 String year = event.getDate().replace("年", "-");
                 String month = year.replace("月", "-");
                 String day = month.replace("日", "");
+
+                mSelectedYear1 = event.getDate().substring(0, 4);
+                mSelectedMonth1 = event.getDate().substring(5, 7);
+                mSelectedDay1 = event.getDate().substring(8, 10);
+
                 mPresenter.QueryCalendarSchedule(day, day);
                 //更新 Title
                 EventBus.getDefault().post(new UpdateTitleBean(event.getDate(), "updateTitle"));
@@ -446,13 +393,18 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             case "changeView":
                 RefreshChangeView(event);
                 Intent intent = new Intent(getContext(), CalendarRedactActivity.class);
+
                 intent.putExtra(Constants.CALENDARYEAR, mSelectedYear1);
                 intent.putExtra(Constants.CALENDARMONTH, mSelectedMonth1);
                 intent.putExtra(Constants.CALENDARDATE, mSelectedDay1);
-                intent.putExtra(Constants.CALENDARSTARTTIME, mSelectedStartTime);
-                intent.putExtra(Constants.CALENDARENDTIME, mSelectedEndTime);
+
                 intent.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
                 intent.putExtra(Constants.SELECTEDPOSITION, event.getPosition());
+
+                intent.putExtra(Constants.CALENDARSTARTHOUR, mSelectedStartHour);
+                intent.putExtra(Constants.CALENDARENDHOUR, mSelectedEndHour);
+                intent.putExtra(Constants.CALENDARSTARTMIN, 0);
+                intent.putExtra(Constants.CALENDARENDMIN, 0);
                 startActivityForResult(intent, 101);
                 break;
             //弹出 事件列表
@@ -461,19 +413,24 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mPopupDialog = new Dialog(getContext(), R.style.CustomDialog);
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_week_calendar_content, null);
                 ImageView addCalendar = (ImageView) view.findViewById(R.id.img_add_calendar);
-                TextView tvContentCount = (TextView) view.findViewById(R.id.tv_content_count);
+                //TextView tvContentCount = (TextView) view.findViewById(R.id.tv_content_count);
+                //tvContentCount.setText("共" + mLlContent.get(event.getPosition() - 1).getData().size());
 
-                tvContentCount.setText("共" + mLlContent.get(event.getPosition() - 1).getData().size());
                 //添加新事件
                 addCalendar.setOnClickListener(view1 -> {
                     Intent intent1 = new Intent(getContext(), CalendarRedactActivity.class);
+
                     intent1.putExtra(Constants.CALENDARYEAR, mSelectedYear1);
                     intent1.putExtra(Constants.CALENDARMONTH, mSelectedMonth1);
                     intent1.putExtra(Constants.CALENDARDATE, mSelectedDay1);
-                    intent1.putExtra(Constants.CALENDARSTARTTIME, mSelectedStartTime);
-                    intent1.putExtra(Constants.CALENDARENDTIME, mSelectedEndTime);
+
                     intent1.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
                     intent1.putExtra(Constants.SELECTEDPOSITION, event.getPosition());
+
+                    intent1.putExtra(Constants.CALENDARSTARTHOUR, mSelectedStartHour);
+                    intent1.putExtra(Constants.CALENDARENDHOUR, 0);
+                    intent1.putExtra(Constants.CALENDARSTARTMIN, mSelectedEndHour);
+                    intent1.putExtra(Constants.CALENDARENDMIN, 0);
                     startActivityForResult(intent1, 101);
                     if (mPopupDialog.isShowing()) {
                         mPopupDialog.dismiss();
@@ -510,6 +467,14 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
                 dialog_window.setAttributes(dialog_window_attributes);
                 mPopupDialog.show();
+                break;
+
+            case "mWeekCalendarFragment":
+                showDoneDatePicker(event.getDate());
+                String date = event.getDate();
+                String date1 = event.getDate();
+
+
                 break;
 
             //TODO Title 时间选择
@@ -573,6 +538,14 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 }
                 break;
             default:
+                for (int i = 0; i < mWeekCalendarBeans.size(); i++) {
+                    for (int j = 0; j < 7; j++) {
+                        mWeekCalendarBeans.get(i).getIsSelected().set(j, false);
+                    }
+                }
+                int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime("1970-01-01"), new DateTime(event.getTitleDate()), 1);
+                mHeaderRecyclerView.scrollToPosition(mCurrPage);
+
                 break;
         }
     }
@@ -589,8 +562,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             mLlContent.get(i).setSelected(false);
         }
 
-        mSelectedStartTime = event.getPosition() + 8;
-        mSelectedEndTime = event.getPosition() + 9;
+        mSelectedStartHour = event.getPosition() + 8;
+        mSelectedEndHour = event.getPosition() + 9;
 
         if (event.getPosition() == 10) {
             mLeftDateList.get(event.getPosition()).setPosition(event.getPosition());
@@ -629,6 +602,66 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         hideLoadingView();
     }
 
+
+    /**
+     * 选择日期底部弹出窗
+     * 2018年01月09日  格式
+     */
+    private void showDoneDatePicker(String dateStr) {
+        try {
+            if (picker == null) {
+                picker = new DatePicker(getActivity(), false);
+            }
+
+            if (!TextUtils.isEmpty(dateStr)) {
+                dateStr = dateStr + "xxxx";
+                int year = Integer.parseInt(dateStr.substring(0, 4));
+                int month = Integer.parseInt(dateStr.substring(5, 7));
+                int day = Integer.parseInt(dateStr.substring(8, 10));
+                picker.setSelectedItem(year, month, day);
+            } else {
+                picker.setCurrentDate();
+            }
+            picker.setSubmitText("确认");
+            picker.setSubmitTextColor(Color.parseColor("#2d9dff"));
+            picker.setTextColor(Color.parseColor("#2d9dff"));
+            picker.setOnDatePickListener((DatePicker.OnYearMonthDayPickListener) (year, month, day) -> {
+                String mSelectedDay = year + "年" + month + "月" + day + "日";
+                EventBus.getDefault().post(new UpdateTitleBean(mSelectedDay, "updateTitle"));
+                String startDate = year + "-" + month + "-" + day;
+
+                for (int i = 0; i < mWeekCalendarBeans.size(); i++) {
+                    for (int j = 0; j < 7; j++) {
+                        mWeekCalendarBeans.get(i).getIsSelected().set(j, false);
+                    }
+                }
+
+                int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime("1970-01-01"), new DateTime(startDate), 1);
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar c = Calendar.getInstance();
+                try {
+                    c.setTime(format.parse(startDate));
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+                int i = c.get(Calendar.DAY_OF_WEEK);
+                if (i == 1) {
+                    mWeekCalendarBeans.get(mCurrPage).getIsSelected().set(6, true);
+                } else {
+                    mWeekCalendarBeans.get(mCurrPage).getIsSelected().set(i - 2, true);
+                }
+                mHeaderRecyclerView.scrollToPosition(mCurrPage);
+                mTestAdapter.notifyItemChanged(mCurrPage);
+
+                queryCalendar(startDate, startDate);
+            });
+            picker.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void QueryCalendarScheduleSuccess(CalendarScheduleContentBean bean) {
         if (bean.getData() == null) {
@@ -645,7 +678,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mLlContent.get(i).getData().clear();
             }
             for (int i = 0; i < bean.getData().size(); i++) {
-                if (bean.getData().get(i).getStartTime().contains("09:00:00")) {
+                String startTime = bean.getData().get(i).getStartTime().substring(11, bean.getData().get(i).getStartTime().length() - 6);
+                if (startTime.contains("09")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
@@ -654,11 +688,12 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(0).getData().add(leftDateBean);
-                } else if (bean.getData().get(i).getStartTime().contains("10:00:00")) {
+                } else if (startTime.contains("10")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
@@ -666,30 +701,33 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setId(dataBean.getId());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(1).getData().add(leftDateBean);
-                } else if (bean.getData().get(i).getStartTime().contains("11:00:00")) {
+                } else if (startTime.contains("11")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(2).getData().add(leftDateBean);
-                } else if (bean.getData().get(i).getStartTime().contains("12:00:00")) {
+                } else if (startTime.contains("12")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
@@ -697,12 +735,13 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(3).getData().add(leftDateBean);
-                } else if (bean.getData().get(i).getStartTime().contains("13:00:00")) {
+                } else if (startTime.contains("13")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskId(dataBean.getTaskId());
@@ -710,12 +749,13 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(4).getData().add(leftDateBean);
-                } else if (bean.getData().get(i).getStartTime().contains("14:00:00")) {
+                } else if (startTime.contains("14")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
@@ -723,12 +763,13 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(5).getData().add(leftDateBean);
-                } else if (bean.getData().get(i).getStartTime().contains("15:00:00")) {
+                } else if (startTime.contains("15")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
                     leftDateBean.setId(dataBean.getId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setStatus(dataBean.getStatus());
@@ -736,7 +777,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(6).getData().add(leftDateBean);
-                } else if (bean.getData().get(i).getStartTime().contains("16:00:00")) {
+                } else if (startTime.contains("16")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
@@ -744,12 +785,13 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setTaskId(dataBean.getTaskId());
                     leftDateBean.setId(dataBean.getId());
                     leftDateBean.setTaskType(dataBean.getTaskType());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(7).getData().add(leftDateBean);
-                } else if (bean.getData().get(i).getStartTime().contains("17:00:00")) {
+                } else if (startTime.contains("17")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
@@ -759,14 +801,16 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     leftDateBean.setStatus(dataBean.getStatus());
                     leftDateBean.setTaskDetail(dataBean.getTaskDetail());
                     leftDateBean.setTaskId(dataBean.getTaskId());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setTaskTheme(dataBean.getTaskTheme());
                     leftDateBean.setTaskDate(dataBean.getTaskDate());
                     mLlContent.get(8).getData().add(leftDateBean);
-                } else if (bean.getData().get(i).getStartTime().contains("18:00:00")) {
+                } else if (startTime.contains("18")) {
                     CalendarScheduleContentBean.DataBean dataBean = bean.getData().get(i);
                     LeftDateBean.DataBean leftDateBean = new LeftDateBean.DataBean();
                     leftDateBean.setEndTime(dataBean.getEndTime());
                     leftDateBean.setStartTime(dataBean.getStartTime());
+                    leftDateBean.setAddress(dataBean.getAddress());
                     leftDateBean.setId(dataBean.getId());
                     leftDateBean.setTaskType(dataBean.getTaskType());
                     leftDateBean.setStatus(dataBean.getStatus());
@@ -805,15 +849,22 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             intent.putExtra(Constants.CALENDARTYPE, mPopupData.get(i).getTaskType());
             intent.putExtra(Constants.CALENDARSTATUS, mPopupData.get(i).getStatus());
             intent.putExtra(Constants.SELECTEDTASTID, mPopupData.get(i).getTaskId());
+            intent.putExtra(Constants.CALENDARADDRESS, mPopupData.get(i).getAddress());
             intent.putExtra(Constants.SELECTEDPOSITION, i);
 
             try {
                 String startTime = mPopupData.get(i).getStartTime().substring(mPopupData.get(i).getStartTime().length() - 8, mPopupData.get(i).getStartTime().length());
-                int startTimeExtra = Integer.parseInt(startTime.substring(0, 2));
+                int startHourExtra = Integer.parseInt(startTime.substring(0, 2));
+                int startMinExtra = Integer.parseInt(startTime.substring(3, 5));
                 String endTime = mPopupData.get(i).getEndTime().substring(mPopupData.get(i).getEndTime().length() - 8, mPopupData.get(i).getEndTime().length());
-                int endTimeExtra = Integer.parseInt(endTime.substring(0, 2));
-                intent.putExtra(Constants.CALENDARSTARTTIME, startTimeExtra);
-                intent.putExtra(Constants.CALENDARENDTIME, endTimeExtra);
+                int endHourExtra = Integer.parseInt(endTime.substring(0, 2));
+                int endMinExtra = Integer.parseInt(endTime.substring(3, 5));
+
+                intent.putExtra(Constants.CALENDARSTARTHOUR, startHourExtra);
+                intent.putExtra(Constants.CALENDARENDHOUR, endHourExtra);
+
+                intent.putExtra(Constants.CALENDARSTARTMIN, startMinExtra);
+                intent.putExtra(Constants.CALENDARENDMIN, endMinExtra);
             } catch (Throwable e) {
                 e.printStackTrace();
             }
@@ -830,7 +881,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         super.onActivityResult(requestCode, resultCode, data);
         //刷新界面
         if (resultCode == -1) {
-            queryCalendar(mRefreshCalendar0, mRefreshCalendar1);
+            String startDate = mSelectedYear1 + "-" + mSelectedMonth1 + "-" + mSelectedDay1;
+            queryCalendar(startDate, startDate);
         }
     }
 

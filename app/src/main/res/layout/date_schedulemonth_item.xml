@@ -3,7 +3,7 @@
     android:id="@+id/ll_rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFAFAFA"
+    android:background="#FFFFFFFF"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -17,16 +17,17 @@
             android:layout_height="30dp"
             android:layout_marginLeft="5dp"
             android:scaleType="fitXY"
-            android:src="@drawable/date_pop_select_ring" />
+            android:src="@drawable/date_pop_select_ring"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/pop_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
             android:text="1"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <LinearLayout

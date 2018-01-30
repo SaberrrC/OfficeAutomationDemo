@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_selected_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="71dp"
+    android:background="#7dbedcf7"
     android:gravity="center"
     android:orientation="horizontal">
-
 
     <FrameLayout
         android:id="@+id/fl_container1"
@@ -14,37 +14,48 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/iv_icon1"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/date_pop_select_ring"
-            android:visibility="invisible" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_day1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center|bottom"
-                android:text="01"
-                android:textSize="14sp" />
-
-            <TextView
                 android:id="@+id/tv_week1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|top"
+                android:gravity="center"
                 android:text="一"
+                android:textColor="#FF898989"
                 android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center|top">
+
+                <ImageView
+                    android:id="@+id/iv_icon1"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/date_pop_select_ring"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/tv_day1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="01"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 
@@ -54,37 +65,48 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/iv_icon2"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/date_pop_select_ring"
-            android:visibility="invisible" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_day2"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center|bottom"
-                android:text="02"
-                android:textSize="14sp" />
-
-            <TextView
                 android:id="@+id/tv_week2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|top"
+                android:gravity="center"
                 android:text="二"
+                android:textColor="#FF898989"
                 android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center|top">
+
+                <ImageView
+                    android:id="@+id/iv_icon2"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/date_pop_select_ring"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/tv_day2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="02"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 
@@ -94,37 +116,51 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/iv_icon3"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/date_pop_select_ring"
-            android:visibility="invisible" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_day3"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center|bottom"
-                android:text="03"
-                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week3"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|top"
+                android:gravity="center"
                 android:text="三"
+                android:textColor="#FF898989"
                 android:textSize="14sp" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center|top">
+
+                <ImageView
+                    android:id="@+id/iv_icon3"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/date_pop_select_ring"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/tv_day3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="03"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
         </LinearLayout>
     </FrameLayout>
 
@@ -134,37 +170,50 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/iv_icon4"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/date_pop_select_ring"
-            android:visibility="invisible" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_day4"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center|bottom"
-                android:text="04"
-                android:textSize="14sp" />
-
-            <TextView
                 android:id="@+id/tv_week4"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|top"
+                android:gravity="center"
                 android:text="四"
+                android:textColor="#FF898989"
                 android:textSize="14sp" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center|top">
+
+                <ImageView
+                    android:id="@+id/iv_icon4"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/date_pop_select_ring"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/tv_day4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="04"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
         </LinearLayout>
     </FrameLayout>
 
@@ -174,37 +223,48 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/iv_icon5"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/date_pop_select_ring"
-            android:visibility="invisible" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_day5"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center|bottom"
-                android:text="05"
-                android:textSize="14sp" />
-
-            <TextView
                 android:id="@+id/tv_week5"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|top"
+                android:gravity="center"
                 android:text="五"
+                android:textColor="#FF898989"
                 android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center|top">
+
+                <ImageView
+                    android:id="@+id/iv_icon5"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/date_pop_select_ring"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/tv_day5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="05"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 
@@ -214,37 +274,50 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/iv_icon6"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/date_pop_select_ring"
-            android:visibility="invisible" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_day6"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center|bottom"
-                android:text="06"
-                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week6"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|top"
+                android:gravity="center"
                 android:text="六"
+                android:textColor="#FF898989"
                 android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center|top">
+
+                <ImageView
+                    android:id="@+id/iv_icon6"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/date_pop_select_ring"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/tv_day6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="06"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 
@@ -254,37 +327,51 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/iv_icon7"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/date_pop_select_ring"
-            android:visibility="invisible" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_day7"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center|bottom"
-                android:text="07"
-                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_week7"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|top"
+                android:gravity="center"
                 android:text="日"
+                android:textColor="#FF898989"
                 android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center|top">
+
+                <ImageView
+                    android:id="@+id/iv_icon7"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/date_pop_select_ring"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/tv_day7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="07"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
         </LinearLayout>
     </FrameLayout>
 

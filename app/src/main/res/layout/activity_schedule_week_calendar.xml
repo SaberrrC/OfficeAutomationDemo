@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         app:leftDrawable="@drawable/toolbar_back"
-        app:rightDrawable="@mipmap/month_right"
+        app:rightDrawable="@drawable/icon_calendar"
         app:topTitle="周历" />
 
     <View

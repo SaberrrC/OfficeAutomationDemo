@@ -78,8 +78,9 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
             }
             llContent.addView(linearLayout);
             TextView contentCount = new TextView(mContext);
-            contentCount.setWidth(ScreenUtils.dp2px(mContext, 30));
-            contentCount.setText("共" + content.getData().size());
+            contentCount.setWidth(ScreenUtils.dp2px(mContext, 45));
+            contentCount.setText("共" + content.getData().size() + "项");
+            contentCount.setTextSize(14);
             llContent.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
             llContent.addView(contentCount);
         }

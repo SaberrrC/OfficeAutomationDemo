@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="10dp"
-            android:src="@drawable/ease_blue_add" />
+            android:src="@drawable/week_calendar_add" />
 
         <View
             android:layout_width="match_parent"

@@ -13,167 +13,260 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
+
         app:rightText="取消"
         app:topTitle="发起任务" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
-        android:background="@color/grey" />
+        android:background="#EFEFEF" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <CheckBox
-            android:id="@+id/cb_completes"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tv_date"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/negative_button"
-            android:textSize="16sp"
-            tools:text="9月20日 今天" />
-
-        <View
-            android:id="@+id/view_completes"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/grey" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="15dp"
-            android:layout_height="wrap_content"
-            android:gravity="center|right"
-            android:text="*"
-            android:textColor="@color/red"
-            tools:ignore="RtlHardcoded" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="任务主题"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/ed_task_theme"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_weight="3.5"
-            android:background="@null"
-            android:gravity="center|left"
-            android:hint="请输入任务主题"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            tools:ignore="RtlHardcoded" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/grey" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="15dp"
-            android:layout_height="wrap_content"
-            android:gravity="center|right"
-            android:text="*"
-            android:textColor="@color/red"
-            tools:ignore="RtlHardcoded" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="任务时间"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tv_task_date"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="3.5"
-            android:gravity="center|left"
-            android:text="9:00-10:00"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/grey" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
-            android:text="任务详情"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/ed_task_details"
-            style="null"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@null"
-            android:gravity="top"
-            android:hint="请输入任务详情"
-            android:paddingLeft="15dp"
-            android:paddingStart="15dp"
-            android:textSize="14sp"
-            tools:ignore="RtlSymmetry" />
-    </LinearLayout>
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/btn_common_calendar"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="bottom"
-        android:background="#ffc400"
-        android:gravity="center"
-        android:text="发起"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cb_completes"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="#69B0F2"
+                    android:textSize="14sp"
+                    tools:text="9月20日 今天" />
+
+                <View
+                    android:id="@+id/view_completes"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#EFEFEF" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|right"
+                    android:text="* "
+                    android:textColor="@color/red"
+                    tools:ignore="RtlHardcoded" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="任务主题"
+                    android:textColor="#FF000000"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/ed_task_theme"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/edittext_input_square_bg"
+                    android:gravity="center|left"
+                    android:hint="请输入任务主题"
+                    android:paddingLeft="12dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|right"
+                    android:text="* "
+                    android:textColor="@color/red"
+                    tools:ignore="RtlHardcoded" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="开始时间"
+                    android:textColor="#FF000000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_task_start_date"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="3.5"
+                    android:background="@drawable/edittext_input_square_bg"
+                    android:gravity="center|left"
+                    android:paddingLeft="12dp"
+                    android:paddingStart="12dp"
+                    android:text="09:00"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:ignore="RtlSymmetry" />
+            </LinearLayout>  <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|right"
+                    android:text="* "
+                    android:textColor="@color/red"
+                    tools:ignore="RtlHardcoded" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="结束时间"
+                    android:textColor="#FF000000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_task_end_date"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="3.5"
+                    android:background="@drawable/edittext_input_square_bg"
+                    android:gravity="center|left"
+                    android:paddingLeft="12dp"
+                    android:paddingStart="12dp"
+                    android:text="10:00"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:ignore="RtlSymmetry" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|right"
+                    android:text=" "
+                    android:textColor="@color/red"
+                    tools:ignore="RtlHardcoded" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="任务地点"
+                    android:textColor="#FF000000"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/tv_task_address"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="3.5"
+                    android:background="@drawable/edittext_input_square_bg"
+                    android:gravity="center|left"
+                    android:hint="请输入任务地点"
+                    android:paddingLeft="12dp"
+                    android:paddingStart="12dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:ignore="RtlSymmetry" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="12dp"
+                android:text="任务详情"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/ed_task_details"
+                style="null"
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/edittext_input_square_bg"
+                android:gravity="top"
+                android:hint="请输入任务详情"
+                android:padding="12dp"
+                android:textSize="14sp"
+                tools:ignore="RtlSymmetry" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/btn_common_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#69B0F2"
+                    android:gravity="center"
+                    android:text="发起"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

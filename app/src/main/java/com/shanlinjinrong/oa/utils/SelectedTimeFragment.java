@@ -34,20 +34,23 @@ import butterknife.OnClick;
 
 public class SelectedTimeFragment extends DialogFragment {
 
-
-    @BindView(R.id.picker_start_time)
-    WheelPicker mPickerStartTime;
     @BindView(R.id.picker_empty)
     WheelPicker mPickerEmpty;
-    @BindView(R.id.picker_end_time)
-    WheelPicker mPickerEndTime;
+    @BindView(R.id.picker_hour_time)
+    WheelPicker mPickerHourTime;
+    @BindView(R.id.picker_min_time)
+    WheelPicker mPickerMinTime;
+
 
     private List<String> mStartTimes;
     private List<String> mEndTimes;
     private int          mStartTime;
     private int          mEndTime;
+    private boolean      mIsStart;
     private Context      mContext;
     private String       tag;
+    private String       mMinTime;
+    private String       mHourTime;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class SelectedTimeFragment extends DialogFragment {
         Bundle arguments = getArguments();
         mStartTime = arguments.getInt(Constants.CALENDARSTARTTIME);
         mEndTime = arguments.getInt(Constants.CALENDARENDTIME);
+        mIsStart = arguments.getBoolean("isStart", true);
         initWheelPicker();
 
         slideToUp(view);
@@ -72,33 +76,44 @@ public class SelectedTimeFragment extends DialogFragment {
 
         mStartTimes = new ArrayList<>();
         mEndTimes = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            mStartTimes.add(9 + i + "点");
+        if (mIsStart) {
+            for (int i = 0; i < 10; i++) {
+                if (i == 0) {
+                    mStartTimes.add("09点");
+                } else {
+                    mStartTimes.add(9 + i + "点");
+                }
+            }
+        } else {
+            for (int i = 0; i < 10; i++) {
+                mStartTimes.add(10 + i + "点");
+            }
+        }
+        for (int i = 0; i < 60; i++) {
+            if (i < 10) {
+                mEndTimes.add("0" + i + "分");
+            } else {
+                mEndTimes.add(i + "分");
+            }
         }
 
-        for (int i = 0; i < 10; i++) {
-            mEndTimes.add(10 + i + "点");
-        }
 
-//
-//        for (int i = 0; i < 50; i++) {
-//            mStartTimes.add( "0" + i + "月");
-//        }
-//
-//        for (int i = 0; i < 50; i++) {
-//            mEndTimes.add(i + "日");
-//        }
-
-        mPickerStartTime.setData(mStartTimes);
-        mPickerEndTime.setData(mEndTimes);
+        mPickerHourTime.setData(mStartTimes);
+        mPickerMinTime.setData(mEndTimes);
         mPickerEmpty.setData(new ArrayList());
 
         try {
-            int position1 = mStartTime - 9;
-            int position2 = mEndTime - 10;
-            mPickerStartTime.setSelectedItemPosition(position1);
-            mPickerEndTime.setSelectedItemPosition(position2);
+            //int position1 = mStartTime - 9;
+            //int position2 = mEndTime - 10;
+
+
+            if (mIsStart) {
+                mPickerHourTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARSTARTHOUR) -9);
+                mPickerMinTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARSTARTMIN));
+            } else {
+                mPickerHourTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARENDHOUR) -10);
+                mPickerMinTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARENDMIN));
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -175,14 +190,16 @@ public class SelectedTimeFragment extends DialogFragment {
                 dismiss();
                 break;
             case R.id.btn_affirm:
-                int currentStartTime = mPickerStartTime.getCurrentItemPosition();
-                int currentEndTime = mPickerEndTime.getCurrentItemPosition();
+                int currentHourTime = mPickerHourTime.getCurrentItemPosition();
+                int currentMinTime = mPickerMinTime.getCurrentItemPosition();
 
-                String startTime = mStartTimes.get(currentStartTime);
-                String endTime = mEndTimes.get(currentEndTime);
-
-                EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME,  currentStartTime + 9 +"" , currentEndTime + 10+""));
-                dismiss();
+                if (mIsStart) {
+                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, mIsStart, currentHourTime + 9, currentMinTime));
+                    dismiss();
+                } else {
+                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, currentHourTime + 10, currentMinTime, mIsStart));
+                    dismiss();
+                }
                 break;
             default:
                 dismiss();

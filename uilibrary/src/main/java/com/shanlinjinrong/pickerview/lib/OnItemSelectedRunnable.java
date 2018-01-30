@@ -1,9 +1,9 @@
 package com.shanlinjinrong.pickerview.lib;
 
 final class OnItemSelectedRunnable implements Runnable {
-    final WheelView loopView;
+    final ShanLinWheelView loopView;
 
-    OnItemSelectedRunnable(WheelView loopview) {
+    OnItemSelectedRunnable(ShanLinWheelView loopview) {
         loopView = loopview;
     }
 

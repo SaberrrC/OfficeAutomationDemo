@@ -59,7 +59,7 @@
         android:orientation="horizontal">
 
         <com.aigestudio.wheelpicker.WheelPicker
-            android:id="@+id/picker_start_time"
+            android:id="@+id/picker_hour_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -104,7 +104,7 @@
 
 
         <com.aigestudio.wheelpicker.WheelPicker
-            android:id="@+id/picker_end_time"
+            android:id="@+id/picker_min_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

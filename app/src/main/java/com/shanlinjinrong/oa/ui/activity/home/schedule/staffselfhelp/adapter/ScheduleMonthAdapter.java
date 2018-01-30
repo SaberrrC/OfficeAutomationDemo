@@ -53,24 +53,17 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
         holder.view.setLayoutParams(mLayoutParams);
 
         holder.item.setText(mData.get(position).getContent());
-        if (mData.get(position).isSelect()) {
-            holder.item.setTextColor(ResourcesCompat.getColor(mContext.getResources(), R.color.white, null));
-            holder.image.setVisibility(View.VISIBLE);
-            if (holder.item.getText().toString().length() > 2) {
-                ViewGroup.LayoutParams lp = holder.image.getLayoutParams();
-                lp.width = DeviceUtil.dip2px(mContext, 46);
-                lp.height = DeviceUtil.dip2px(mContext, 46);
-                holder.image.setLayoutParams(lp);
+        if (mData.get(position).isEnable()) {
+            if (!mData.get(position).isSelect()) {
+                holder.item.setTextColor(0xFF333333);
+                holder.view.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+
+            } else {
+                holder.item.setTextColor(0xFF333333);
+                holder.view.setBackgroundColor(mContext.getResources().getColor(R.color.bg_B269B0F2));
             }
         } else {
-            holder.image.setVisibility(View.GONE);
-        }
-
-        if (mData.get(position).isEnable()) {
-            if (!mData.get(position).isSelect())
-                holder.item.setTextColor(0xFF4A4A4A);
-        } else {
-            holder.item.setTextColor(0xFF999999);
+            holder.item.setTextColor(0xFFEFEFEF);
         }
 
         holder.view.setEnabled(mData.get(position).isEnable());
@@ -91,21 +84,21 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
                 for (int i = 0; i < mData.get(position).getData().size(); i++) {
                     TextView titleText = new TextView(mContext);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    lp.setMargins(5, 1, 5, 1);
+                    lp.setMargins(5, 5, 5, 5);
                     titleText.setLayoutParams(lp);
-                    titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
                     titleText.setMaxLines(1);
                     titleText.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
                     titleText.setGravity(Gravity.CENTER);
                     titleText.setText(mData.get(position).getData().get(i).getTaskTheme());
                     if (i < 2) {
-                        titleText.setBackgroundColor(mContext.getResources().getColor(R.color.btn_gray_pressed));
-                        titleText.setTextColor(mContext.getResources().getColor(R.color.btn_green_noraml));
+                        titleText.setBackgroundColor(mContext.getResources().getColor(R.color.bg_69B0F2));
+                        titleText.setTextColor(mContext.getResources().getColor(R.color.text_333333));
                         titleText.setText(mData.get(position).getData().get(i).getTaskTheme());
                         linearLayout.addView(titleText);
                     } else {
                         titleText.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-                        titleText.setTextColor(mContext.getResources().getColor(R.color.text_gray));
+                        titleText.setTextColor(mContext.getResources().getColor(R.color.text_333333));
                         titleText.setText("共" + mData.get(position).getData().size());
                         linearLayout.addView(titleText);
                         break;

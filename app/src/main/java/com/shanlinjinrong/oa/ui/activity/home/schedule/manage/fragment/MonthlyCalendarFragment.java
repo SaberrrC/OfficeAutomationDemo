@@ -16,7 +16,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -25,7 +24,6 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.CalendarRedactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.MonthContentAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.CalendarScheduleContentBean;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.LeftDateBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.MonthlyCalendarFragmentContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.MonthlyCalendarFragmentPresenter;
@@ -34,7 +32,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.Sch
 import com.shanlinjinrong.oa.ui.base.BaseHttpFragment;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
-import com.shanlinjinrong.oa.views.MonthSelectPopWindow;
+import com.shanlinjinrong.oa.views.MonthCalenderMonthSelectPopWindow;
 import com.shanlinjinrong.views.listview.decoration.GridItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,7 +57,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     private ScheduleMonthAdapter mScheduleMonthAdapter;
     private int mSelectedDay, mCurrentYear, mCurrentMonth, mCurrentDay, mSelectedMonth, mSelectedYear;
     private List<CalendarScheduleContentBean.DataBean> mPopupData;
-    private MonthSelectPopWindow monthSelectPopWindow;
+    private MonthCalenderMonthSelectPopWindow monthSelectPopWindow;
     private int mViewHeight;
     private int mViewWidth;
     private Dialog dialog;
@@ -91,18 +89,20 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     private void initData() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
+
+
         SimpleDateFormat currentFormat1 = new SimpleDateFormat("yyyy");
         String currentYear = currentFormat1.format(calendar.getTime());
         SimpleDateFormat currentFormat2 = new SimpleDateFormat("MM");
         String currentMonth = currentFormat2.format(calendar.getTime());
         SimpleDateFormat currentFormat3 = new SimpleDateFormat("dd");
-        String currentDay = currentFormat3.format(calendar.getTime());
-        //更新Title
-        EventBus.getDefault().post(new UpdateTitleBean(currentYear + "年" + currentMonth + "月" + currentDay + "日", "monthLUpdateTitle"));
+        String CurrentDay = currentFormat3.format(calendar.getTime());
+
         mData = new ArrayList<>();
-        mCurrentYear = calendar.get(Calendar.YEAR);
-        mCurrentDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mCurrentMonth = calendar.get(Calendar.MONTH) + 1;
+        mCurrentYear = Integer.parseInt(currentYear);
+        mCurrentDay = Integer.parseInt(CurrentDay);
+        mCurrentMonth = Integer.parseInt(currentMonth);
+
 
         mSelectedYear = mCurrentYear;
         mSelectedDay = mCurrentDay;
@@ -208,7 +208,10 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         List<MonthlyCalenderPopItem> date = DateUtils.getMonthlyScheduleCalendarDate(month, selectPos);
         mData.addAll(date);
         mScheduleMonthAdapter.notifyDataSetChanged();
-        String dateStr = mSelectedYear + "年" + month + "月" + selectPos + "日";
+
+        String monthStr = (month < 10) ? "0" + month : month + "";
+        String mDayStr = (selectPos < 10) ? "0" + selectPos : selectPos + "";
+        String dateStr = mSelectedYear + "年" + monthStr + "月" + mDayStr + "日";
         EventBus.getDefault().post(new UpdateTitleBean(dateStr, "monthLUpdateTitle"));
         startDate = mSelectedYear + "-" + month + "-" + "01";
         endDate = mSelectedYear + "-" + month + "-" + DateUtils.getDaysByYearMonth(mSelectedYear, month);
@@ -233,7 +236,18 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         String date = mSelectedYear + "年" + month + "月" + mDay + "日";
 
         EventBus.getDefault().post(new UpdateTitleBean(date, "monthLUpdateTitle"));
-        showPopWindow(v, mData.get(position).getData(), position + 1, mSelectedYear + "", month, mDay);
+        List<CalendarScheduleContentBean.DataBean> data = mData.get(position).getData();
+
+        if (data != null && data.size() >= 1) {
+            showPopWindow(v, data, position + 1, mSelectedYear + "", month, mDay);
+        } else {
+            Intent intent1 = new Intent(getContext(), CalendarRedactActivity.class);
+            intent1.putExtra(Constants.CALENDARYEAR, mSelectedYear + "");
+            intent1.putExtra(Constants.CALENDARMONTH, month);
+            intent1.putExtra(Constants.CALENDARDATE, mDay);
+            intent1.putExtra(Constants.CALENDARTYPE, Constants.WRITECALENDAR);
+            startActivityForResult(intent1, 101);
+        }
     }
 
     private void showPopWindow(View v, List<CalendarScheduleContentBean.DataBean> data, int clickPosition, String mSelectedYear1, String mSelectedMonth1, String mSelectedDay1) {
@@ -268,7 +282,14 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         Window dialog_window = dialog.getWindow();
         WindowManager.LayoutParams dialog_window_attributes = dialog_window.getAttributes();
 
-        dialog_window_attributes.width = mViewWidth * 3;
+        dialog_window_attributes.width = (int) (mViewWidth * 2.5);
+
+        int mViewHeightWrapcontent = dialog_window_attributes.height;
+        if (data.size() >= 5) {
+            dialog_window_attributes.height = (int) (mViewHeight * 3);
+        } else {
+            dialog_window_attributes.height = mViewHeightWrapcontent;
+        }
 
         if ((clickPosition - 1) % 7 >= 4) {
             dialog_window_attributes.x = mViewWidth * (7 - (clickPosition - 1) % 7);
@@ -276,7 +297,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
                 dialog_window.setGravity(Gravity.RIGHT | Gravity.BOTTOM);
                 if (((clickPosition - 1) / 7) == 3) {
                     dialog_window_attributes.y = mViewHeight * 2;
-                } else if (((clickPosition - 1) / 7) == 4) {
+                } else if (((clickPosition - 1) / 7) == 4 || ((clickPosition - 1) / 7) == 5) {
                     dialog_window_attributes.y = mViewHeight;
                 }
 
@@ -290,7 +311,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
                 dialog_window.setGravity(Gravity.LEFT | Gravity.BOTTOM);
                 if (((clickPosition - 1) / 7) == 3) {
                     dialog_window_attributes.y = mViewHeight * 2;
-                } else if (((clickPosition - 1) / 7) == 4) {
+                } else if (((clickPosition - 1) / 7) == 4 || ((clickPosition - 1) / 7) == 5) {
                     dialog_window_attributes.y = mViewHeight;
                 }
             } else {
@@ -303,7 +324,6 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     }
 
     public class ItemClick extends OnItemClickListener {
-
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             Intent intent = new Intent(getContext(), CalendarRedactActivity.class);
@@ -332,8 +352,8 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     }
 
     private void selectMonthPopwindow() {
-        monthSelectPopWindow = new MonthSelectPopWindow(getActivity(),
-                new MonthSelectPopWindow.PopListener() {
+        monthSelectPopWindow = new MonthCalenderMonthSelectPopWindow(getActivity(),
+                new MonthCalenderMonthSelectPopWindow.PopListener() {
                     @Override
                     public void cancle() {
                         monthSelectPopWindow.dismiss();

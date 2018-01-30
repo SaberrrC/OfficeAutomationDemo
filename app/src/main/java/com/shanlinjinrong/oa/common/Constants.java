@@ -144,38 +144,60 @@ public class Constants {
      * 周历 结束时间
      */
     public static final String CALENDARENDTIME   = "endTime";
+
+    /**
+     * 周历 开始 时
+     */
+    public static final String CALENDARSTARTHOUR = "startHour";
+    /**
+     * 周历 结束 时
+     */
+    public static final String CALENDARENDHOUR   = "endHour";
+
+    /**
+     * 周历 开始 分钟
+     */
+    public static final String CALENDARSTARTMIN = "startMin";
+    /**
+     * 周历 结束 分钟
+     */
+    public static final String CALENDARENDMIN   = "endMin";
     /**
      * 周历 日期
      */
-    public static final String CALENDARDATE      = "date";
+    public static final String CALENDARDATE     = "date";
+    /**
+     * 周历 地址
+     */
+    public static final String CALENDARADDRESS  = "address";
     /**
      * 周历 日期
      */
-    public static final String CALENDARID        = "id";
+    public static final String CALENDARID       = "id";
     /**
      * 周历 年
      */
-    public static final String CALENDARYEAR      = "year";
+    public static final String CALENDARYEAR     = "year";
     /**
      * 周历 年
      */
-    public static final String CALENDARMONTH     = "month";
+    public static final String CALENDARMONTH    = "month";
     /**
      * 周历 详情主题
      */
-    public static final String CALENDARTITLE     = "title";
+    public static final String CALENDARTITLE    = "title";
     /**
      * 周历 详情内容
      */
-    public static final String CALENDARCONTENT   = "content";
+    public static final String CALENDARCONTENT  = "content";
     /**
      * 周历 选择时间
      */
-    public static final String SELECTEDTIME      = "selectedTime";
+    public static final String SELECTEDTIME     = "selectedTime";
 
-    public static final String SELECTEDTASTID= "taskId";
+    public static final String SELECTEDTASTID = "taskId";
 
-    public static final String SELECTEDPOSITION= "position";
+    public static final String SELECTEDPOSITION = "position";
 
     /**
      * 编辑周历
