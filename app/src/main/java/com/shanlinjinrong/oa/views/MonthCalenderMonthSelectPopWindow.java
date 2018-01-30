@@ -24,22 +24,26 @@ import cn.qqtheme.framework.widget.WheelView;
 
 public class MonthCalenderMonthSelectPopWindow extends PopupWindow {
 
-    private View      mMenuView;
-    private TextView  tv_cancle;
-    private TextView  tv_confirm;
+    private View mMenuView;
+    private TextView tv_cancle;
+    private TextView tv_confirm;
     private WheelView mWheelView;
     PopListener popListener;
     private Context context;
     private List<DateItem> dataItems = new ArrayList<>();
-    private List<String>   strings   = new ArrayList<>();
+    private List<String> strings = new ArrayList<>();
     List<String> dataList;
-    private String selectedYear  = "";
+    private String selectedYear = "";
     private String selectedMonth = "";
 
-    public MonthCalenderMonthSelectPopWindow(Activity context, PopListener popListener) {
+    private String popwindowCurDataStr;
+
+
+    public MonthCalenderMonthSelectPopWindow(Activity context, PopListener popListener, String popwindowCurDataStr) {
         super(context);
         this.popListener = popListener;
         this.context = context;
+        this.popwindowCurDataStr = popwindowCurDataStr;
         mMenuView = LayoutInflater.from(context).inflate(R.layout.time_month_select_layout, null);
         initView();
         initData();
@@ -49,7 +53,7 @@ public class MonthCalenderMonthSelectPopWindow extends PopupWindow {
     private void initData() {
         dataList = getData();
         mWheelView.setItems(dataList);
-        mWheelView.setSelectedItem(dataList.get(0));
+        mWheelView.setSelectedItem(popwindowCurDataStr);
         mWheelView.setLineColor(context.getResources().getColor(R.color.pickerview_timebtn_pre));
         mWheelView.setTextColor(context.getResources().getColor(R.color.pickerview_timebtn_nor));
         mWheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
@@ -60,6 +64,10 @@ public class MonthCalenderMonthSelectPopWindow extends PopupWindow {
             }
         });
 
+    }
+
+    public void SetSelectedItemClick(String str) {
+        mWheelView.setSelectedItem(str);
     }
 
     public void initView() {
@@ -94,20 +102,9 @@ public class MonthCalenderMonthSelectPopWindow extends PopupWindow {
         ColorDrawable dw = new ColorDrawable(0xb0000000);
         //设置SelectPicPopupWindow弹出窗体的背景
         this.setBackgroundDrawable(dw);
+
         // 点击其他地方消失
         // mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框
-//        this.mMenuView.setOnTouchListener(new View.OnTouchListener() {
-//            public boolean onTouch(View v, MotionEvent event) {
-//                int height = mMenuView.findViewById(R.id.pop_layout).getTop();
-//                int y = (int) event.getY();
-//                if (event.getAction() == MotionEvent.ACTION_UP) {
-//                    if (y < height) {
-//                        dismiss();
-//                    }
-//                }
-//                return true;
-//            }
-//        });
         this.mMenuView.setOnTouchListener((v, event) -> false);
     }
 
@@ -129,7 +126,7 @@ public class MonthCalenderMonthSelectPopWindow extends PopupWindow {
                 year = curYear + "";
             } else {
                 month = Math.abs(curMonth - i) + "";
-                month = String.valueOf(12 - i +1);
+                month = String.valueOf(12 - i + 1);
                 year = curYear - 1 + "";
             }
             DateItem dateItem = new DateItem(year, month);
@@ -138,11 +135,27 @@ public class MonthCalenderMonthSelectPopWindow extends PopupWindow {
         return list;
     }
 
+    public List<DateItem> getDateItemListThreeYear() {
+        Calendar cal = Calendar.getInstance();
+        int curYear = cal.get(Calendar.YEAR);
+        int curMonth = cal.get(Calendar.MONTH) + 1;
+        List<DateItem> list = new ArrayList<>();
+        for (int i = curYear - 3; i < curYear + 4; i++) {
+            for (int m = 1; m < 13; m++) {
+                DateItem dateItem = new DateItem(i + "", m + "");
+                list.add(dateItem);
+            }
+        }
+        return list;
+    }
+
     public List<String> getData() {
-        dataItems = getDateItemList();
+        dataItems = getDateItemListThreeYear();
         List<String> strings = new ArrayList<>();
         for (DateItem dateItem : dataItems) {
-            strings.add(dateItem.year + "年" + dateItem.month + "月");
+            int intMon = Integer.parseInt(dateItem.month);
+            String month = (intMon < 10) ? "0" + intMon : intMon + "";
+            strings.add(dateItem.year + "年" + month + "月");
         }
         return strings;
     }

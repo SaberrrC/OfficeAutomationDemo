@@ -63,6 +63,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     private Dialog dialog;
     private String startDate;
     private String endDate;
+    private String popwindowCurDataStr;
 
 
     @Override
@@ -212,6 +213,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         String monthStr = (month < 10) ? "0" + month : month + "";
         String mDayStr = (selectPos < 10) ? "0" + selectPos : selectPos + "";
         String dateStr = mSelectedYear + "年" + monthStr + "月" + mDayStr + "日";
+        popwindowCurDataStr = mSelectedYear + "年" + monthStr + "月";
         EventBus.getDefault().post(new UpdateTitleBean(dateStr, "monthLUpdateTitle"));
         startDate = mSelectedYear + "-" + month + "-" + "01";
         endDate = mSelectedYear + "-" + month + "-" + DateUtils.getDaysByYearMonth(mSelectedYear, month);
@@ -347,11 +349,11 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getTitleViewClicked(UpdateTitleBean bean) {
         if ("MonthlyCalendarFragment".equals(bean.getEvent()) && "MonthlyCalendarFragment".equals(bean.getTitle())) {
-            selectMonthPopwindow();
+            selectMonthPopwindow(popwindowCurDataStr);
         }
     }
 
-    private void selectMonthPopwindow() {
+    private void selectMonthPopwindow(String popwindowCurDataStr) {
         monthSelectPopWindow = new MonthCalenderMonthSelectPopWindow(getActivity(),
                 new MonthCalenderMonthSelectPopWindow.PopListener() {
                     @Override
@@ -369,12 +371,12 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
                         } else {
                             setData(mSelectedMonth, 1);
                         }
+
                         mRecyclerView.requestLayout();
                         mScheduleMonthAdapter.notifyDataSetChanged();
                         monthSelectPopWindow.dismiss();
-
                     }
-                });
+                }, popwindowCurDataStr);
         monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
     }
 
