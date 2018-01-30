@@ -70,6 +70,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private int                  mId;
     private int                  mStatus;
     private String               mOldTheme;
+    private String               mOldStartTime;
+    private String               mOldEndTime;
+    private String               mOldAdress;
     private String               mOldDate;
     private String               mOldDetails;
     private boolean              mIsFirst, mIsCheckBox;
@@ -150,7 +153,6 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 //                if (mContent == null) {
 //                    mContent = "暂无";
 //                }
-
                 mTvDate.setText(mDate);
                 mTopView.setRightText("删除");
                 mBtnCommonCalendar.setText("编辑");
@@ -176,7 +178,6 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 //                if (mContent == null) {
 //                    mContent = "暂无";
 //                }
-
                 mTvDate.setText(mDate);
                 mBtnCommonCalendar.setText("查看详情");
                 mTopView.setAppTitle("普通会议");
@@ -364,60 +365,61 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                         break;
                     //查看周历
                     case Constants.LOOKCALENDAR:
-//                        if ("编辑".equals(mBtnCommonCalendar.getText().toString())) {
-//                            mEdTaskTheme.setEnabled(true);
-//                            mTvTaskDate.setEnabled(true);
-//                            mEdTaskDetails.setEnabled(true);
-//                            mTvTaskAddress.setEnabled(true);
-//
-//                            mBtnCommonCalendar.setText("更新");
-//
-//                            if (mIsFirst) {
-//                                mIsFirst = false;
-//                                mOldTheme = mEdTaskTheme.getText().toString();
-//                                mOldDate = mTvTaskDate.getText().toString();
-//                                mOldDetails = mEdTaskDetails.getText().toString();
-//                            }
-//                        } else {
-//                            try {
-//                                JSONObject jsonObject = new JSONObject();
-//
-//
-//                                if (!mOldTheme.equals(mEdTaskTheme.getText().toString().trim())) {
-//                                    jsonObject.put("taskTheme", mEdTaskTheme.getText().toString().trim());
-//                                }
-//
-//                                if (!mOldDate.equals(mTvTaskDate.getText().toString().trim())) {
-//                                    if ("9".equals(mTaskStartTime)) {
-//                                        mTaskStartTime = "09";
-//                                    }
-//                                    jsonObject.put("startTime", mTaskStartTime + ":00:00");
-//                                    jsonObject.put("endTime", mTaskEndTime + ":00:00");
-//                                }
-//
-//                                if (!mOldDetails.equals(mEdTaskDetails.getText().toString().trim())) {
-//                                    jsonObject.put("taskDetail", mEdTaskDetails.getText().toString().trim());
-//                                }
-//
-//                                String json = jsonObject.toString();
-//
-//                                if ("{}".equals(json)) {
-//                                    Toast.makeText(this, "日程无变更，更新失败", Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    jsonObject.put("id", mId);
-//                                    String calendar = jsonObject.toString();
-//                                    mPresenter.updateCalendarSchedule(calendar);
-//                                }
-//                            } catch (Throwable e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                            mEdTaskTheme.setEnabled(false);
-//                            mTvTaskDate.setEnabled(false);
-//                            mEdTaskDetails.setEnabled(false);
-//                            mTvTaskAddress.setEnabled(false);
-//                            mBtnCommonCalendar.setText("编辑");
-//                        }
+                        if ("编辑".equals(mBtnCommonCalendar.getText().toString())) {
+                            mEdTaskTheme.setEnabled(true);
+                            mTvTaskStartDate.setEnabled(true);
+                            mTvTaskEndDate.setEnabled(true);
+                            mTvTaskAddress.setEnabled(true);
+                            mEdTaskDetails.setEnabled(true);
+                            mCbCompletes.setVisibility(View.GONE);
+                            mViewCompletes.setVisibility(View.GONE);
+                            mBtnCommonCalendar.setText("完成");
+
+                            mOldTheme = mEdTaskTheme.getText().toString().trim();
+                            mOldStartTime = mTvTaskStartDate.getText().toString().trim();
+                            mOldEndTime = mTvTaskEndDate.getText().toString().trim();
+                            mOldAdress = mTvTaskAddress.getText().toString().trim();
+                            mOldDetails = mEdTaskDetails.getText().toString().trim();
+                        } else {
+
+                            try {
+                                boolean isTheme = mOldTheme.equals(mEdTaskTheme.getText().toString().trim());
+                                boolean isStart = mOldStartTime.equals(mTvTaskStartDate.getText().toString().trim());
+                                boolean isEnd = mOldEndTime.equals(mTvTaskEndDate.getText().toString().trim());
+                                boolean isAddress = mOldAdress.equals(mTvTaskAddress.getText().toString().trim());
+                                boolean isDetails = mOldDetails.equals(mEdTaskDetails.getText().toString().trim());
+                                if (isTheme && isStart && isEnd && isAddress && isDetails) {
+                                    showToast("内容无变更，完成失败");
+                                } else {
+                                    JSONObject jsonObject = new JSONObject();
+                                    if (!isTheme) {
+                                        jsonObject.put("taskTheme", mEdTaskTheme.getText().toString().trim());
+                                    }
+
+                                    if (!isStart) {
+                                        jsonObject.put("startTime", mDate + " " + mTvTaskStartDate.getText().toString().trim() + ":00");
+                                    }
+
+                                    if (!isEnd) {
+                                        jsonObject.put("endTime", mDate + " " + mTvTaskEndDate.getText().toString().trim() + ":00");
+                                    }
+
+                                    if (!isAddress) {
+                                        jsonObject.put("address", mTvTaskAddress.getText().toString().trim());
+                                    }
+
+                                    if (!isDetails) {
+                                        jsonObject.put("taskDetail", mEdTaskDetails.getText().toString().trim());
+                                    }
+
+                                    jsonObject.put("id", mId);
+                                    String calendar = jsonObject.toString();
+                                    mPresenter.updateCalendarSchedule(calendar);
+                                }
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                            }
+                        }
                         break;
                     //查看会议室
                     case Constants.MEETINGCALENDAR:
@@ -560,12 +562,22 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void updateCalendarScheduleSuccess() {
-        setResult(-1);
-        if (mIsCheckBox) {
-            finish();
-        }
-        showToast("更新日程成功");
+        mOldTheme = mEdTaskTheme.getText().toString().trim();
+        mOldStartTime = mTvTaskStartDate.getText().toString().trim();
+        mOldEndTime = mTvTaskEndDate.getText().toString().trim();
+        mOldAdress = mTvTaskAddress.getText().toString().trim();
+        mOldDetails = mEdTaskDetails.getText().toString().trim();
 
+        mEdTaskTheme.setEnabled(false);
+        mTvTaskStartDate.setEnabled(false);
+        mTvTaskEndDate.setEnabled(false);
+        mTvTaskAddress.setEnabled(false);
+        mEdTaskDetails.setEnabled(false);
+        mCbCompletes.setVisibility(View.VISIBLE);
+        mViewCompletes.setVisibility(View.VISIBLE);
+        mBtnCommonCalendar.setText("编辑");
+        showToast("更新日程成功");
+        setResult(-1);
     }
 
     @Override
