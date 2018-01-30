@@ -87,7 +87,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private List<LeftDateBean>          mLlContent;
     private LeftDateAdapter             mDateAdapter;
     private List<LeftDateBean>          mLeftDateList;
-    private SelectedWeekCalendarAdapter mSelectedAdapter;
     private RecyclerView                mLeftRecyclerView;
     private WheelPicker                 mRvEndDateSelected;
     private List<String>                mStartDate, mEndDate;
@@ -95,7 +94,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private RecyclerView mHeaderRecyclerView;
     private WheelPicker  mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
-    private int          mHeight, mIndex, mIndexTitle1, mIndexTitle2, mPosition, mViewHeight, mRefreshCalendar0, mRefreshCalendar1;
+    private int          mHeight,mViewHeight;
     private String mSelectedYear1;
     private String mSelectedMonth1;
     private String mSelectedDay1;
@@ -112,16 +111,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private String                      mCurrentDay;
     private DatePicker                  picker;
     //    private TextView                    mTvErrorView;
-
-
-    public Date getMondayOfThisWeek(Calendar calendar) {
-        int day_of_week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        if (day_of_week == 0) {
-            day_of_week = 7;
-        }
-        calendar.add(Calendar.DATE, -day_of_week + 1);
-        return calendar.getTime();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
