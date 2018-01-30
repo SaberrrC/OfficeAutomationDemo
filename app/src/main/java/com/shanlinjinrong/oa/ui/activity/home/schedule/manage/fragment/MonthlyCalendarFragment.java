@@ -196,6 +196,14 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
 
     @Override
     public void GetScheduleByDateFailure(int errorCode, String errorMsg) {
+        if ("auth error".equals(errorMsg)) {
+            catchWarningByCode(errorMsg);
+            return;
+        }
+        if (errorCode == -1) {
+            showToast(getString(R.string.net_no_connection));
+            return;
+        }
 
     }
 
@@ -238,7 +246,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
         String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
         String date = mSelectedYear + "年" + month + "月" + mDay + "日";
-        String dateStr2 = mSelectedYear + "-" + month + "-" + mDay ;
+        String dateStr2 = mSelectedYear + "-" + month + "-" + mDay;
         EventBus.getDefault().post(new SelectedWeekCalendarEvent(dateStr2, "slideRecyclerViewPosition"));
         EventBus.getDefault().post(new UpdateTitleBean(date, "monthLUpdateTitle"));
         List<CalendarScheduleContentBean.DataBean> data = mData.get(position).getData();

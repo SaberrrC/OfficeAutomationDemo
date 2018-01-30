@@ -569,6 +569,14 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void addCalendarScheduleFailure(int errorCode, String errorMsg) {
+        if ("auth error".equals(errorMsg)) {
+            catchWarningByCode(errorMsg);
+            return;
+        }
+        if (errorCode == -1) {
+            showToast(getString(R.string.net_no_connection));
+            return;
+        }
         showToast("新增日程失败!");
     }
 
@@ -582,7 +590,17 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void deleteCalendarScheduleFailure(int errorCode, String errorMsg) {
+
+        if ("auth error".equals(errorMsg)) {
+            catchWarningByCode(errorMsg);
+            return;
+        }
+        if (errorCode == -1) {
+            showToast(getString(R.string.net_no_connection));
+            return;
+        }
         showToast("删除日程失败，请稍后重试");
+
     }
 
     @Override
@@ -615,6 +633,14 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void updateCalendarScheduleFailure(int errorCode, String errorMsg) {
+        if ("auth error".equals(errorMsg)) {
+            catchWarningByCode(errorMsg);
+            return;
+        }
+        if (errorCode == -1) {
+            showToast(getString(R.string.net_no_connection));
+            return;
+        }
         showToast("更新日程失败，请稍后重试");
     }
 
