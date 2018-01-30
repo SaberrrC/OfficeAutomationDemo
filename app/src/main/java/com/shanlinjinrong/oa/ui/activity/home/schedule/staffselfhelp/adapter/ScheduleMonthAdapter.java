@@ -57,10 +57,12 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
             if (!mData.get(position).isSelect()) {
                 holder.item.setTextColor(0xFF333333);
                 holder.view.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                holder.view.setBackground(null);
 
             } else {
                 holder.item.setTextColor(0xFF333333);
-                holder.view.setBackgroundColor(mContext.getResources().getColor(R.color.bg_B269B0F2));
+//                holder.view.setBackgroundColor(mContext.getResources().getColor(R.color.bg_B269B0F2));
+                holder.view.setBackground(mContext.getResources().getDrawable(R.drawable.bg_calendar_selected));
             }
         } else {
             holder.item.setTextColor(0xFFEFEFEF);
