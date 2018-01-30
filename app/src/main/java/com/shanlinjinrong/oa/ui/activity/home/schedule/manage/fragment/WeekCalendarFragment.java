@@ -80,21 +80,19 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     /**
      * 周历
      */
-    private String[]                    mWeeks;
-    private CustomDialogUtils           mDialog;
-    private WriteContentAdapter         mAdapter;
-    private List<WeekCalendarBean>      mListDate;
-    private List<LeftDateBean>          mLlContent;
-    private LeftDateAdapter             mDateAdapter;
-    private List<LeftDateBean>          mLeftDateList;
-    private RecyclerView                mLeftRecyclerView;
-    private WheelPicker                 mRvEndDateSelected;
-    private List<String>                mStartDate, mEndDate;
+    private CustomDialogUtils   mDialog;
+    private WriteContentAdapter mAdapter;
+    private List<LeftDateBean>  mLlContent;
+    private LeftDateAdapter     mDateAdapter;
+    private List<LeftDateBean>  mLeftDateList;
+    private RecyclerView        mLeftRecyclerView;
+    private WheelPicker         mRvEndDateSelected;
+    private List<String>        mStartDate, mEndDate;
     private String mStartTime, mEndTime;
     private RecyclerView mHeaderRecyclerView;
     private WheelPicker  mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
-    private int          mHeight,mViewHeight;
+    private int          mHeight, mViewHeight;
     private String mSelectedYear1;
     private String mSelectedMonth1;
     private String mSelectedDay1;
@@ -110,6 +108,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private List<WeekCalendarBean>      mWeekCalendarBeans;
     private String                      mCurrentDay;
     private DatePicker                  picker;
+    private String                      mCurrentYear;
+    private String                      mCurrentMonth;
     //    private TextView                    mTvErrorView;
 
     @Override
@@ -134,21 +134,19 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     }
 
     private void initDta() {
-        mWeeks = new String[]{"日", "一", "二", "三", "四", "五", "六"};
-        mListDate = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
 
         int year = calendar.get(Calendar.YEAR);
         SimpleDateFormat currentFormat1 = new SimpleDateFormat("yyyy");
-        String currentYear = currentFormat1.format(calendar.getTime());
+        mCurrentYear = currentFormat1.format(calendar.getTime());
         SimpleDateFormat currentFormat2 = new SimpleDateFormat("MM");
-        String currentMonth = currentFormat2.format(calendar.getTime());
+        mCurrentMonth = currentFormat2.format(calendar.getTime());
         SimpleDateFormat currentFormat3 = new SimpleDateFormat("dd");
         mCurrentDay = currentFormat3.format(calendar.getTime());
         int lastYear = year - 1;
         calendar.set(lastYear, 0, 1);
         //更新Title
-        EventBus.getDefault().post(new UpdateTitleBean(currentYear + "年" + currentMonth + "月" + mCurrentDay + "日", "updateTitle"));
+        EventBus.getDefault().post(new UpdateTitleBean(mCurrentYear + "年" + mCurrentMonth + "月" + mCurrentDay + "日", "updateTitle"));
         Observable.create(e -> {
             //时间 数据
             mLeftDateList = new ArrayList<>();
@@ -177,9 +175,9 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
                 }, Throwable::printStackTrace, () -> {
-                    String initDate = currentYear + currentMonth + mCurrentDay;
-                    mSelectedYear1 = currentYear;
-                    mSelectedMonth1 = currentMonth;
+                    String initDate = mCurrentYear + mCurrentMonth + mCurrentDay;
+                    mSelectedYear1 = mCurrentYear;
+                    mSelectedMonth1 = mCurrentMonth;
                     mSelectedDay1 = mCurrentDay;
                     queryCalendar(initDate, initDate);
                     initView();
@@ -241,8 +239,13 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         //中间时间选择List
         mHeaderRecyclerView = new RecyclerView(getContext());
 
-        DateTime StartTime = new DateTime("1970-01-01");
-        mIntervalWeek = CalendarUtils.getIntervalWeek(StartTime, new DateTime("2099-12-31"), 1);
+        int year = Integer.parseInt(mCurrentYear);
+        int initStartYear = year - 3;
+        String initStartDate = initStartYear + "-" + mCurrentMonth + "-" + mCurrentDay;
+        int initEndYear = year + 3;
+        String initEndDate = initEndYear + "-" + mCurrentMonth + "-" + mCurrentDay;
+
+        mIntervalWeek = CalendarUtils.getIntervalWeek(new DateTime(initStartDate), new DateTime(initEndDate), 1);
         mWeekCalendarBeans = new ArrayList<>();
 
         for (int i = 0; i < mIntervalWeek; i++) {
@@ -257,7 +260,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
         //今天
         mInitialDateTime = new DateTime().withTimeAtStartOfDay();
-        int mCurrPage = CalendarUtils.getIntervalWeek(StartTime, mInitialDateTime, 1);
+        int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime(initStartDate), mInitialDateTime, 1);
         mTestAdapter = new TestAdapter(mWeekCalendarBeans, mCurrentDay, mInitialDateTime, mCurrPage);
         mHeaderRecyclerView.setAdapter(mTestAdapter);
         mHeaderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.HORIZONTAL, false));
