@@ -41,32 +41,33 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_date)
-    TextView      mTvDate;
+    TextView mTvDate;
     @BindView(R.id.ed_task_theme)
-    EditText      mEdTaskTheme;
+    EditText mEdTaskTheme;
     @BindView(R.id.ed_task_details)
-    EditText      mEdTaskDetails;
+    EditText mEdTaskDetails;
     @BindView(R.id.btn_common_calendar)
-    TextView      mBtnCommonCalendar;
+    TextView mBtnCommonCalendar;
     @BindView(R.id.cb_completes)
-    CheckBox      mCbCompletes;
+    CheckBox mCbCompletes;
     @BindView(R.id.view_completes)
-    View          mViewCompletes;
+    View mViewCompletes;
     @BindView(R.id.tv_task_address)
-    EditText      mTvTaskAddress;
+    EditText mTvTaskAddress;
     @BindView(R.id.tv_task_end_date)
-    TextView      mTvTaskEndDate;
+    TextView mTvTaskEndDate;
     @BindView(R.id.tv_task_start_date)
-    TextView      mTvTaskStartDate;
+    TextView mTvTaskStartDate;
 
-    private String               mDate;
-    private String               mTitle;
-    private String               mContent;
-    private String               mYear;
-    private String               mMonth;
-    private int                  mItemType;
-    private OptionsPickerView    beginTimeView;
+    private String mDate;
+    private String mTitle;
+    private String mContent;
+    private String mYear;
+    private String mMonth;
+    private int mItemType;
+    private OptionsPickerView beginTimeView;
     private SelectedTimeFragment mSelectedTimeFragment;
+
     private int                  mId;
     private int                  mStatus;
     private String               mOldTheme;
@@ -80,10 +81,10 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private String       mAddress;
     private StringBuffer mTaskStartTime;
     private StringBuffer mTaskEndTime;
-    private int          mStartHour;
-    private int          mStartMin;
-    private int          mEndHour;
-    private int          mEndMin;
+    private int mStartHour;
+    private int mStartMin;
+    private int mEndHour;
+    private int mEndMin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -539,6 +540,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     @Override
     public void addCalendarScheduleSuccess() {
         showToast("新增日程成功");
+        EventBus.getDefault().post(new SelectedWeekCalendarEvent("", "upDateCalendarScheduleSuccess"));
         setResult(-1);
         finish();
     }
@@ -551,6 +553,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     @Override
     public void deleteCalendarScheduleSuccess() {
         showToast("删除日程成功");
+        EventBus.getDefault().post(new SelectedWeekCalendarEvent("", "upDateCalendarScheduleSuccess"));
         setResult(-1);
         finish();
     }
@@ -562,6 +565,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void updateCalendarScheduleSuccess() {
+
+        EventBus.getDefault().post(new SelectedWeekCalendarEvent("", "upDateCalendarScheduleSuccess"));
+
         mOldTheme = mEdTaskTheme.getText().toString().trim();
         mOldStartTime = mTvTaskStartDate.getText().toString().trim();
         mOldEndTime = mTvTaskEndDate.getText().toString().trim();

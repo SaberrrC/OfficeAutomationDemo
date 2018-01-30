@@ -24,6 +24,7 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.CalendarRedactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.MonthContentAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.CalendarScheduleContentBean;
+import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.MonthlyCalendarFragmentContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.MonthlyCalendarFragmentPresenter;
@@ -69,15 +70,15 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!EventBus.getDefault().isRegistered(getActivity())) {
-            EventBus.getDefault().register(getActivity());
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_mothly_calendar, container, false);
         ButterKnife.bind(this, mRootView);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         return mRootView;
     }
 
@@ -206,7 +207,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         if (mData != null) {
             mData.clear();
         }
-        List<MonthlyCalenderPopItem> date = DateUtils.getMonthlyScheduleCalendarDate(month, selectPos);
+        List<MonthlyCalenderPopItem> date = DateUtils.getMonthlyScheduleCalendarDate(mSelectedYear, month, selectPos);
         mData.addAll(date);
         mScheduleMonthAdapter.notifyDataSetChanged();
 
@@ -236,7 +237,8 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
         String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
         String date = mSelectedYear + "年" + month + "月" + mDay + "日";
-
+        String dateStr2 = mSelectedYear + "-" + month + "-" + mDay ;
+        EventBus.getDefault().post(new SelectedWeekCalendarEvent(dateStr2, "slideRecyclerViewPosition"));
         EventBus.getDefault().post(new UpdateTitleBean(date, "monthLUpdateTitle"));
         List<CalendarScheduleContentBean.DataBean> data = mData.get(position).getData();
 
@@ -353,6 +355,13 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void RefreshData(SelectedWeekCalendarEvent bean) {
+        if (bean.getEvent().equals("upDateCalendarScheduleSuccess")) {
+            mPresenter.getScheduleByDate(startDate, endDate);
+        }
+    }
+
     private void selectMonthPopwindow(String popwindowCurDataStr) {
         monthSelectPopWindow = new MonthCalenderMonthSelectPopWindow(getActivity(),
                 new MonthCalenderMonthSelectPopWindow.PopListener() {
@@ -378,13 +387,5 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
                     }
                 }, popwindowCurDataStr);
         monthSelectPopWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == -1) {
-            mPresenter.getScheduleByDate(startDate, endDate);
-        }
     }
 }

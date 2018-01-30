@@ -92,8 +92,14 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
                     titleText.setGravity(Gravity.CENTER);
                     titleText.setText(mData.get(position).getData().get(i).getTaskTheme());
                     if (i < 2) {
-                        titleText.setBackgroundColor(mContext.getResources().getColor(R.color.bg_69B0F2));
-                        titleText.setTextColor(mContext.getResources().getColor(R.color.text_333333));
+                        if (mData.get(position).getData().get(i).getStatus() == 1) { //完成
+                            titleText.setBackgroundColor(mContext.getResources().getColor(R.color.bg_F5F5F5));
+                            titleText.setTextColor(mContext.getResources().getColor(R.color.tab_bar_text_gray));
+                        } else {
+                            titleText.setBackgroundColor(mContext.getResources().getColor(R.color.bg_69B0F2));
+                            titleText.setTextColor(mContext.getResources().getColor(R.color.text_333333));
+                        }
+
                         titleText.setText(mData.get(position).getData().get(i).getTaskTheme());
                         linearLayout.addView(titleText);
                     } else {

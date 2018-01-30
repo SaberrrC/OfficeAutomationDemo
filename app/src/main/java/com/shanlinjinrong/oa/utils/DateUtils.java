@@ -526,7 +526,7 @@ public class DateUtils {
         return data;
     }
 
-    public static List<MonthlyCalenderPopItem> getMonthlyScheduleCalendarDate(int month, int select) {
+    public static List<MonthlyCalenderPopItem> getMonthlyScheduleCalendarDate(int year, int month, int select) {
         List<MonthlyCalenderPopItem> data = new ArrayList<>();
         if (month < 1 || month > 12) {
             return null;
@@ -542,11 +542,27 @@ public class DateUtils {
         } else {
             lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
         }
-
+        if (month == 1) {
+            month = 12;
+            year = year - 1;
+        } else {
+            month = month - 1;
+        }
+        cal.set(Calendar.YEAR, year);
         //设置月份
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, 0);
-        int col = cal.get(Calendar.DAY_OF_WEEK);   //获取该天在本星期的第几天 ，也就是第几列
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        //获取该天在本星期的第几天 ，也就是第几列
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String format1 = format.format(cal.getTime());
+
+        int col = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        if (cal.getFirstDayOfWeek() == Calendar.SUNDAY) {
+            if (col == 0) {
+                col = 7;
+            }
+        }
+
 
         for (int i = col - 2; i >= 0; i--) {
             item = new MonthlyCalenderPopItem("" + (lastMonthDays - i), false, false);
