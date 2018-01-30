@@ -41,33 +41,32 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_date)
-    TextView mTvDate;
+    TextView      mTvDate;
     @BindView(R.id.ed_task_theme)
-    EditText mEdTaskTheme;
+    EditText      mEdTaskTheme;
     @BindView(R.id.ed_task_details)
-    EditText mEdTaskDetails;
+    EditText      mEdTaskDetails;
     @BindView(R.id.btn_common_calendar)
-    TextView mBtnCommonCalendar;
+    TextView      mBtnCommonCalendar;
     @BindView(R.id.cb_completes)
-    CheckBox mCbCompletes;
+    CheckBox      mCbCompletes;
     @BindView(R.id.view_completes)
-    View mViewCompletes;
+    View          mViewCompletes;
     @BindView(R.id.tv_task_address)
-    EditText mTvTaskAddress;
+    EditText      mTvTaskAddress;
     @BindView(R.id.tv_task_end_date)
-    TextView mTvTaskEndDate;
+    TextView      mTvTaskEndDate;
     @BindView(R.id.tv_task_start_date)
-    TextView mTvTaskStartDate;
+    TextView      mTvTaskStartDate;
 
-    private String mDate;
-    private String mTitle;
-    private String mContent;
-    private String mYear;
-    private String mMonth;
-    private int mItemType;
-    private OptionsPickerView beginTimeView;
+    private String               mDate;
+    private String               mTitle;
+    private String               mContent;
+    private String               mYear;
+    private String               mMonth;
+    private int                  mItemType;
+    private OptionsPickerView    beginTimeView;
     private SelectedTimeFragment mSelectedTimeFragment;
-
     private int                  mId;
     private int                  mStatus;
     private String               mOldTheme;
@@ -81,10 +80,10 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private String       mAddress;
     private StringBuffer mTaskStartTime;
     private StringBuffer mTaskEndTime;
-    private int mStartHour;
-    private int mStartMin;
-    private int mEndHour;
-    private int mEndMin;
+    private int          mStartHour;
+    private int          mStartMin;
+    private int          mEndHour;
+    private int          mEndMin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -565,24 +564,29 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
     @Override
     public void updateCalendarScheduleSuccess() {
-
         EventBus.getDefault().post(new SelectedWeekCalendarEvent("", "upDateCalendarScheduleSuccess"));
+        if (mCbCompletes.isChecked()) {
+            mCbCompletes.setEnabled(false);
+            mBtnCommonCalendar.setEnabled(false);
+            mBtnCommonCalendar.setBackgroundColor(getResources().getColor(R.color.FFDBDBDB));
+            showToast("日程已完成");
+        } else {
+            mOldTheme = mEdTaskTheme.getText().toString().trim();
+            mOldStartTime = mTvTaskStartDate.getText().toString().trim();
+            mOldEndTime = mTvTaskEndDate.getText().toString().trim();
+            mOldAdress = mTvTaskAddress.getText().toString().trim();
+            mOldDetails = mEdTaskDetails.getText().toString().trim();
 
-        mOldTheme = mEdTaskTheme.getText().toString().trim();
-        mOldStartTime = mTvTaskStartDate.getText().toString().trim();
-        mOldEndTime = mTvTaskEndDate.getText().toString().trim();
-        mOldAdress = mTvTaskAddress.getText().toString().trim();
-        mOldDetails = mEdTaskDetails.getText().toString().trim();
-
-        mEdTaskTheme.setEnabled(false);
-        mTvTaskStartDate.setEnabled(false);
-        mTvTaskEndDate.setEnabled(false);
-        mTvTaskAddress.setEnabled(false);
-        mEdTaskDetails.setEnabled(false);
-        mCbCompletes.setVisibility(View.VISIBLE);
-        mViewCompletes.setVisibility(View.VISIBLE);
-        mBtnCommonCalendar.setText("编辑");
-        showToast("更新日程成功");
+            mEdTaskTheme.setEnabled(false);
+            mTvTaskStartDate.setEnabled(false);
+            mTvTaskEndDate.setEnabled(false);
+            mTvTaskAddress.setEnabled(false);
+            mEdTaskDetails.setEnabled(false);
+            mCbCompletes.setVisibility(View.VISIBLE);
+            mViewCompletes.setVisibility(View.VISIBLE);
+            mBtnCommonCalendar.setText("编辑");
+            showToast("日程更新成功");
+        }
         setResult(-1);
     }
 
