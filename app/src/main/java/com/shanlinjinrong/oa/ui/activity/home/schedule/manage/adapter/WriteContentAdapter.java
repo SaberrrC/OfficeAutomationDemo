@@ -40,9 +40,10 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
         LinearLayout llContent = baseViewHolder.getView(R.id.ll_week_calendar_content);
         llContent.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight));
         if (content.isSelected()) {
-            llContent.setBackgroundColor(mContext.getResources().getColor(R.color.FFF9F9F9));
+            llContent.setBackground(mContext.getResources().getDrawable(R.drawable.bg_calendar_selected));
         } else {
             llContent.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            llContent.setBackground(null);
         }
 
         if (content.getData().size() == 0) {

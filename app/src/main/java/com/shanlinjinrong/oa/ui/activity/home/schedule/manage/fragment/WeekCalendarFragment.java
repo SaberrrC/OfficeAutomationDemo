@@ -444,7 +444,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 int position = (event.getPosition() + 1) * mViewHeight;
 
                 dialog_window_attributes.height = 350;
-                dialog_window_attributes.y = (position - (ScreenUtils.getScreenHeight(getContext()) / 2 - (ScreenUtils.getStatusHeight(getContext()) + ScreenUtils.dp2px(getContext(), 56))));
+                dialog_window_attributes.y = (position - (ScreenUtils.getScreenHeight(getContext()) / 2 - (ScreenUtils.getStatusHeight(getContext()) + ScreenUtils.dp2px(getContext(), 71))));
 
                 dialog_window_attributes.x = ScreenUtils.dp2px(getContext(), 19);
 
