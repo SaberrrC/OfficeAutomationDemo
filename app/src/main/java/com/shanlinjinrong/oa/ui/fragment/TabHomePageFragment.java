@@ -209,7 +209,7 @@ public class TabHomePageFragment extends BaseFragment {
         if (connected) {
             checkUserLimit();
         } else {
-            showToast("当前无网络");
+            showToast("网络不通，请检查网络连接！");
             mLlWorkReportContainer.setVisibility(View.GONE);
             mLlApprovalContainer.setVisibility(View.GONE);
             mLlApprovalChecking.setVisibility(View.GONE);
@@ -243,6 +243,7 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
     private void checkUserLimit() {
+        showLoadingView();
         LimitResponseBody userLimitBean = AppConfig.getAppConfig(getActivity()).getUserLimitBean();
         if (userLimitBean == null) {
             getUserLimitFromNet();
@@ -252,6 +253,7 @@ public class TabHomePageFragment extends BaseFragment {
     }
 
     private void setUserLimit(LimitResponseBody userLimitBean) {
+        hideLoadingView();
         if (userLimitBean == null) {
             showToast("没有任何权限");
             mLlWorkReportContainer.setVisibility(View.GONE);
@@ -259,8 +261,6 @@ public class TabHomePageFragment extends BaseFragment {
             mLlApprovalChecking.setVisibility(View.GONE);
             mLlApprovalDate.setVisibility(View.GONE);
             mToolbarShadow.setVisibility(View.GONE);
-            //            mRlScheduleManage.setVisibility(View.VISIBLE);
-            //            mLlApprovalDate.setVisibility(View.VISIBLE);
             return;
         }
         List<LimitResponseBody.DataBean> dataList = userLimitBean.getData();
@@ -417,6 +417,7 @@ public class TabHomePageFragment extends BaseFragment {
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 showToast("获取用户权限失败");
+                hideLoadingView();
             }
         });
     }

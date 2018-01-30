@@ -8,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.SparseArray;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aigestudio.wheelpicker.WheelPicker;
@@ -29,7 +26,6 @@ import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.CalendarRedactActivity;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.LeftDateAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.LookContentAdapter;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.SelectedWeekCalendarAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.TestAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter.WriteContentAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.CalendarScheduleContentBean;
@@ -52,7 +48,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.joda.time.DateTime;
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,11 +58,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -436,7 +427,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mPopupData = new ArrayList<>();
                 mPopupData.addAll(data);
 
-                LookContentAdapter adapter = new LookContentAdapter(mPopupData);
+                LookContentAdapter adapter = new LookContentAdapter(mPopupData,getContext());
 
                 rvContent.setAdapter(adapter);
                 rvContent.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.VERTICAL, false));
