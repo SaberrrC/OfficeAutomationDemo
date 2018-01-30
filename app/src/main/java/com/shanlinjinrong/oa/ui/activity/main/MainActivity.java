@@ -3,11 +3,16 @@ package com.shanlinjinrong.oa.ui.activity.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +53,7 @@ import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
+import com.shanlinjinrong.oa.ui.activity.main.event.IsNetConnectEvent;
 import com.shanlinjinrong.oa.ui.activity.main.event.UnReadMessageEvent;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.MainControllerPresenter;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
@@ -210,7 +216,29 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
         }
+        registerNetReceiver();
     }
+
+    private void registerNetReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(connectionReceiver, intentFilter);
+    }
+
+    BroadcastReceiver connectionReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //            ConnectivityManager connectMgr = (ConnectivityManager) AppManager.mContext.getSystemService(CONNECTIVITY_SERVICE);
+            ConnectivityManager connectMgr = (ConnectivityManager) AppManager.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
+            }else {
+                EventBus.getDefault().post(new IsNetConnectEvent());
+            }
+        }
+    };
 
     @Override
     protected void initInject() {
@@ -520,10 +548,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     protected void onResume() {
         super.onResume();
         judeIsInitPwd();
-        Observable.create(e ->
-                EMClient.getInstance().chatManager()
-                        .addMessageListener(messageListener))
-                .subscribeOn(Schedulers.io()).subscribe();
+        Observable.create(e -> EMClient.getInstance().chatManager().addMessageListener(messageListener)).subscribeOn(Schedulers.io()).subscribe();
         if (tabCommunicationFragment != null) {
             if (tabCommunicationFragment.myConversationListFragment != null) {
                 tabCommunicationFragment.myConversationListFragment.refresh();
@@ -638,8 +663,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         } else {
             message.setText("是否更新至最新版本");
         }
-        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this,
-                R.style.AppTheme_Dialog).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_Dialog).create();
         alertDialog.setView(dialogView);
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
@@ -654,13 +678,12 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         };
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "更新", listener);
         if (!iosIsForceUpdate) {
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         alertDialog.show();
 
@@ -677,14 +700,11 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 }
             });
             alertDialog.setCancelable(false);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
         } else {
             alertDialog.setCancelable(true);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    getResources().getColor(R.color.btn_text_logout));
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
         }
 
     }
@@ -716,6 +736,9 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
+        }
+        if (connectionReceiver != null) {
+            unregisterReceiver(connectionReceiver);
         }
     }
 

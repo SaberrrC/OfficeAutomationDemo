@@ -31,9 +31,13 @@ import com.shanlinjinrong.oa.ui.activity.home.weeklynewspaper.WriteWeeklyNewspap
 import com.shanlinjinrong.oa.ui.activity.home.workreport.MyLaunchWorkReportActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportCheckActivity;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.WorkReportLaunchActivity;
+import com.shanlinjinrong.oa.ui.activity.main.event.IsNetConnectEvent;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
@@ -44,6 +48,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ren.yale.android.cachewebviewlib.utils.NetworkUtils;
 
 /**
  * <h3>Description: 首页消息页面</h3>
@@ -200,8 +205,27 @@ public class TabHomePageFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        checkUserLimit();
+        boolean connected = NetworkUtils.isConnected(getActivity());
+        if (connected) {
+            checkUserLimit();
+        } else {
+            showToast("当前无网络");
+            mLlWorkReportContainer.setVisibility(View.GONE);
+            mLlApprovalContainer.setVisibility(View.GONE);
+            mLlApprovalChecking.setVisibility(View.GONE);
+            mLlApprovalDate.setVisibility(View.GONE);
+            mToolbarShadow.setVisibility(View.GONE);
+        }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshUserLimit(IsNetConnectEvent event) {
+        LimitResponseBody userLimitBean = AppConfig.getAppConfig(getActivity()).getUserLimitBean();
+        if (userLimitBean == null) {
+            checkUserLimit();
+        }
+    }
+
 
     @Override
     protected void lazyLoadData() {
@@ -326,21 +350,30 @@ public class TabHomePageFragment extends BaseFragment {
         }
         if (!checkLineLimit(dataList, "2")) {//工作汇报
             mLlWorkReportContainer.setVisibility(View.GONE);
+        } else {
+            mLlWorkReportContainer.setVisibility(View.VISIBLE);
         }
         if (!checkLineLimit(dataList, "3")) {//流程审批
             mLlApprovalContainer.setVisibility(View.GONE);
+        } else {
+            mLlApprovalContainer.setVisibility(View.VISIBLE);
         }
         if (!checkLineLimit(dataList, "11")) {//考勤管理
             mLlApprovalChecking.setVisibility(View.GONE);
+        } else {
+            mLlApprovalChecking.setVisibility(View.VISIBLE);
         }
         if (!checkLineLimit(dataList, "10")) {//日程管理
             mLlApprovalDate.setVisibility(View.GONE);
+        } else {
+            mLlApprovalDate.setVisibility(View.VISIBLE);
         }
     }
 
     public boolean checkLineLimit(List<LimitResponseBody.DataBean> dataList, String limits) {
         for (LimitResponseBody.DataBean dataBean : dataList) {
-            if (TextUtils.equals(dataBean.getId(), limits)) {
+            String id = dataBean.getId();
+            if (TextUtils.equals(id, limits)) {
                 return true;
             }
         }
@@ -398,6 +431,7 @@ public class TabHomePageFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
     }
+
 
     private void refreshDot() {
         SharedPreferences sp = getActivity().getSharedPreferences(AppConfig.getAppConfig(mContext).getPrivateUid() + DOT_STATUS, Context.MODE_PRIVATE);
@@ -502,5 +536,17 @@ public class TabHomePageFragment extends BaseFragment {
         if (intent != null) {
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -254,7 +254,7 @@ public abstract class BaseFragment extends Fragment {
     public void showToast(
             String content) {
         if (toast == null) {
-            toast = Toast.makeText(mContext,
+            toast = Toast.makeText(getActivity(),
                     content,
                     Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
