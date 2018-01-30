@@ -17,6 +17,7 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.contract.CalendarR
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.presenter.CalendarRedactActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
+import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.SelectedTimeFragment;
 import com.shanlinjinrong.pickerview.OptionsPickerView;
 import com.shanlinjinrong.views.common.CommonTopView;
@@ -147,13 +148,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
 
                 break;
             case Constants.LOOKCALENDAR:
-//                if (mAddress == null) {
-//                    mAddress = " ";
-//                }
-//                if (mContent == null) {
-//                    mContent = "暂无";
-//                }
-                mTvDate.setText(mDate);
+                long time = DateUtils.getTimestampFromString(mDate,"yyyy-MM-dd");
+                String lookDate = DateUtils.getDisplayMonthDay(time);
+                mTvDate.setText(lookDate);
                 mTopView.setRightText("删除");
                 mBtnCommonCalendar.setText("编辑");
                 mCbCompletes.setVisibility(View.VISIBLE);
@@ -172,13 +169,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mEdTaskDetails.setText(mContent);
                 break;
             case Constants.MEETINGCALENDAR:
-//                if (mAddress == null) {
-//                    mAddress = " ";
-//                }
-//                if (mContent == null) {
-//                    mContent = "暂无";
-//                }
-                mTvDate.setText(mDate);
+                long time1 = DateUtils.getTimestampFromString(mDate,"yyyy-MM-dd");
+                String meetingDate = DateUtils.getDisplayMonthDay(time1);
+                mTvDate.setText(meetingDate);
                 mBtnCommonCalendar.setText("查看详情");
                 mTopView.setAppTitle("普通会议");
                 mBtnCommonCalendar.setBackgroundColor(getResources().getColor(R.color.blue_69B0F2));

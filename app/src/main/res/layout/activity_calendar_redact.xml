@@ -41,10 +41,13 @@
 
                 <CheckBox
                     android:id="@+id/cb_completes"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone" />
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:gravity="center"
+                    android:background="@drawable/meeting_enable_checkbox_selected"
+                    android:button="@null"
+                    android:layout_marginLeft="12dp"
+                    android:layout_gravity="center" />
 
                 <TextView
                     android:id="@+id/tv_date"

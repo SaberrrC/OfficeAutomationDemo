@@ -119,6 +119,18 @@ public class DateUtils {
      * @param timestamp 时间戳
      * @return 2016-01-01
      */
+    public static String getDisplayMonthDay(long timestamp) {
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat sdf = new SimpleDateFormat("MM月dd日");
+        return sdf.format(new Date(timestamp));
+    }
+
+    /**
+     * 格式化日期显示 <br/>
+     *
+     * @param timestamp 时间戳
+     * @return 2016-01-01
+     */
     public static String getDisplayDateByTimestamp(long timestamp) {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
