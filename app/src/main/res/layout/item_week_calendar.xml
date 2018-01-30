@@ -37,8 +37,8 @@
 
                 <ImageView
                     android:id="@+id/iv_icon1"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
@@ -88,8 +88,8 @@
 
                 <ImageView
                     android:id="@+id/iv_icon2"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
@@ -141,8 +141,8 @@
 
                 <ImageView
                     android:id="@+id/iv_icon3"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
@@ -194,8 +194,8 @@
 
                 <ImageView
                     android:id="@+id/iv_icon4"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
@@ -246,8 +246,8 @@
 
                 <ImageView
                     android:id="@+id/iv_icon5"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
@@ -299,8 +299,8 @@
 
                 <ImageView
                     android:id="@+id/iv_icon6"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
@@ -352,8 +352,8 @@
 
                 <ImageView
                     android:id="@+id/iv_icon7"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"

@@ -72,8 +72,11 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
                 titleText.setGravity(Gravity.CENTER);
 
                 titleText.setText(content.getData().get(i).getTaskTheme());
-                titleText.setBackgroundColor(mContext.getResources().getColor(R.color.blue_69B0F2));
-
+                if (content.getData().get(i).getStatus() == 1){
+                    titleText.setBackgroundColor(mContext.getResources().getColor(R.color.F5F5F5));
+                }else {
+                    titleText.setBackgroundColor(mContext.getResources().getColor(R.color.blue_69B0F2));
+                }
                 linearLayout.addView(titleText);
             }
             llContent.addView(linearLayout);
