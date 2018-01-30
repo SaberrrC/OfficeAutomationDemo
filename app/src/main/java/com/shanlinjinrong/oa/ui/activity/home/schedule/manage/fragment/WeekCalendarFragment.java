@@ -436,7 +436,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mPopupData = new ArrayList<>();
                 mPopupData.addAll(data);
 
-                LookContentAdapter adapter = new LookContentAdapter(mPopupData);
+                LookContentAdapter adapter = new LookContentAdapter(mPopupData,getContext());
 
                 rvContent.setAdapter(adapter);
                 rvContent.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.VERTICAL, false));
