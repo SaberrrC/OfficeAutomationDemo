@@ -88,7 +88,7 @@ public class DatePicker extends WheelPicker {
 //            years.add(String.valueOf(i));
 //        }
 
-        for (int i = getCurrentYear() - 1; i <= (maxIsCurrentDate ? getCurrentYear() : getCurrentYear() + 1); i++) {
+        for (int i = getCurrentYear() - 3; i <= (maxIsCurrentDate ? getCurrentYear() : getCurrentYear() + 3); i++) {
             years.add(String.valueOf(i));
         }
         createMonth(12);
