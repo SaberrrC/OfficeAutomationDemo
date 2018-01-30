@@ -180,6 +180,8 @@ public class TabHomePageFragment extends BaseFragment {
     LinearLayout   mToolbarShadow;
     @BindView(R.id.fl_work_report_send_to_me)
     FrameLayout    mFlWorkReportSendToMe;
+    @BindView(R.id.tv_empty_view)
+    TextView       mTvEmptyView;
     private RelativeLayout mRootView;
 
     private static int    TYPE_SEND_TO_ME       = 0;//发送我的
@@ -207,6 +209,7 @@ public class TabHomePageFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         boolean connected = NetworkUtils.isConnected(getActivity());
         if (connected) {
+            mTvEmptyView.setVisibility(View.GONE);
             checkUserLimit();
         } else {
             showToast("网络不通，请检查网络连接！");
@@ -215,6 +218,8 @@ public class TabHomePageFragment extends BaseFragment {
             mLlApprovalChecking.setVisibility(View.GONE);
             mLlApprovalDate.setVisibility(View.GONE);
             mToolbarShadow.setVisibility(View.GONE);
+            mTvEmptyView.setVisibility(View.VISIBLE);
+            mTvEmptyView.setText("网络不通，请检查网络连接！");
         }
     }
 
@@ -225,7 +230,6 @@ public class TabHomePageFragment extends BaseFragment {
             checkUserLimit();
         }
     }
-
 
     @Override
     protected void lazyLoadData() {
@@ -249,6 +253,7 @@ public class TabHomePageFragment extends BaseFragment {
             getUserLimitFromNet();
             return;
         }
+        mTvEmptyView.setVisibility(View.GONE);
         setUserLimit(userLimitBean);
     }
 
@@ -261,6 +266,8 @@ public class TabHomePageFragment extends BaseFragment {
             mLlApprovalChecking.setVisibility(View.GONE);
             mLlApprovalDate.setVisibility(View.GONE);
             mToolbarShadow.setVisibility(View.GONE);
+            mTvEmptyView.setVisibility(View.VISIBLE);
+            mTvEmptyView.setText("没有任何权限");
             return;
         }
         List<LimitResponseBody.DataBean> dataList = userLimitBean.getData();
@@ -270,8 +277,11 @@ public class TabHomePageFragment extends BaseFragment {
             mLlApprovalChecking.setVisibility(View.GONE);
             mLlApprovalDate.setVisibility(View.GONE);
             mToolbarShadow.setVisibility(View.GONE);
+            mTvEmptyView.setVisibility(View.VISIBLE);
+            mTvEmptyView.setText("没有任何权限");
             return;
         }
+        mTvEmptyView.setVisibility(View.GONE);
         for (LimitResponseBody.DataBean data : dataList) {
             if (TextUtils.equals("203", data.getId())) {//我发起的
                 mRlWorkReportLaunch.setVisibility(View.VISIBLE);
@@ -405,7 +415,6 @@ public class TabHomePageFragment extends BaseFragment {
                     showToast("获取用户权限失败");
                     setUserLimit(null);
                 }
-
             }
 
             @Override
@@ -418,6 +427,8 @@ public class TabHomePageFragment extends BaseFragment {
                 super.onFailure(errorNo, strMsg);
                 showToast("获取用户权限失败");
                 hideLoadingView();
+                mTvEmptyView.setVisibility(View.VISIBLE);
+                mTvEmptyView.setText("获取用户权限失败");
             }
         });
     }
