@@ -101,11 +101,11 @@ public class TestAdapter extends BaseQuickAdapter<WeekCalendarBean> {
             if (weekCalendarBean.getIsSelected().get(i)) {
                 textIcon.get(i).setVisibility(View.VISIBLE);
                 textDays.get(i).setTextColor(mContext.getResources().getColor(R.color.white));
-                //textWeeks.get(i).setTextColor(mContext.getResources().getColor(R.color.white));
+
             } else {
                 textIcon.get(i).setVisibility(View.INVISIBLE);
                 textDays.get(i).setTextColor(mContext.getResources().getColor(R.color.gray_normal));
-                //textWeeks.get(i).setTextColor(mContext.getResources().getColor(R.color.gray_normal));
+
             }
             int finalI = i;
             frameLayouts.get(i).setOnClickListener(view -> {

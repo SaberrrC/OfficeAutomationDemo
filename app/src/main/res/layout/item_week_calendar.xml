@@ -4,7 +4,7 @@
     android:id="@+id/ll_selected_container"
     android:layout_width="match_parent"
     android:layout_height="71dp"
-    android:background="#7dbedcf7"
+    android:background="#56cae6ff"
     android:gravity="center"
     android:orientation="horizontal">
 

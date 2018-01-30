@@ -72,18 +72,20 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
                 titleText.setGravity(Gravity.CENTER);
 
                 titleText.setText(content.getData().get(i).getTaskTheme());
-                if (content.getData().get(i).getStatus() == 1){
+                if (content.getData().get(i).getStatus() == 1) {
                     titleText.setBackgroundColor(mContext.getResources().getColor(R.color.F5F5F5));
-                }else {
+                } else {
                     titleText.setBackgroundColor(mContext.getResources().getColor(R.color.blue_69B0F2));
                 }
                 linearLayout.addView(titleText);
             }
             llContent.addView(linearLayout);
             TextView contentCount = new TextView(mContext);
-            contentCount.setWidth(ScreenUtils.dp2px(mContext, 45));
+            contentCount.setWidth(ScreenUtils.dp2px(mContext, 50));
             contentCount.setText("共" + content.getData().size() + "项");
             contentCount.setTextSize(14);
+            contentCount.setGravity(Gravity.CENTER);
+            contentCount.setSingleLine();
             llContent.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
             llContent.addView(contentCount);
         }

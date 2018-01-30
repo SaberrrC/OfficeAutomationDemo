@@ -327,7 +327,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             mEndDate.add(i + 10 + ":" + "00");
         }
 
-        showToast(mIntervalWeek + "");
         mRvStartDateSelected.setData(mStartDate);
         mRvEndDateSelected.setData(mEndDate);
         rvEmptyWheelPicker.setData(emptyDate);
