@@ -72,36 +72,36 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     /**
      * 周历
      */
-    private CustomDialogUtils mDialog;
+    private CustomDialogUtils   mDialog;
     private WriteContentAdapter mAdapter;
-    private List<LeftDateBean> mLlContent;
-    private LeftDateAdapter mDateAdapter;
-    private List<LeftDateBean> mLeftDateList;
-    private RecyclerView mLeftRecyclerView;
-    private WheelPicker mRvEndDateSelected;
-    private List<String> mStartDate, mEndDate;
+    private List<LeftDateBean>  mLlContent;
+    private LeftDateAdapter     mDateAdapter;
+    private List<LeftDateBean>  mLeftDateList;
+    private RecyclerView        mLeftRecyclerView;
+    private WheelPicker         mRvEndDateSelected;
+    private List<String>        mStartDate, mEndDate;
     private String mStartTime, mEndTime;
     private RecyclerView mHeaderRecyclerView;
-    private WheelPicker mRvStartDateSelected;
+    private WheelPicker  mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
-    private int mHeight, mViewHeight;
+    private int          mHeight, mViewHeight;
     private String mSelectedYear1;
     private String mSelectedMonth1;
     private String mSelectedDay1;
-    private int mSelectedStartHour;
-    private int mSelectedEndHour;
+    private int    mSelectedStartHour;
+    private int    mSelectedEndHour;
 
 
     private List<LeftDateBean.DataBean> mPopupData;
-    private Dialog mPopupDialog;
-    private int mIntervalWeek;
-    private DateTime mInitialDateTime;
-    private TestAdapter mTestAdapter;
-    private List<WeekCalendarBean> mWeekCalendarBeans;
-    private String mCurrentDay;
-    private DatePicker picker;
-    private String mCurrentYear;
-    private String mCurrentMonth;
+    private Dialog                      mPopupDialog;
+    private int                         mIntervalWeek;
+    private DateTime                    mInitialDateTime;
+    private TestAdapter                 mTestAdapter;
+    private List<WeekCalendarBean>      mWeekCalendarBeans;
+    private String                      mCurrentDay;
+    private DatePicker                  picker;
+    private String                      mCurrentYear;
+    private String                      mCurrentMonth;
     //    private TextView                    mTvErrorView;
 
     @Override
@@ -825,7 +825,19 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
     @Override
     public void QueryCalendarScheduleFailure(int errorCode, String errorMsg) {
-
+        if ("auth error".equals(errorMsg)) {
+            catchWarningByCode(errorMsg);
+            return;
+        }
+        if (errorCode == -1) {
+            showToast(getString(R.string.net_no_connection));
+            for (int i = 0; i < mLlContent.size(); i++) {
+                mLlContent.get(i).getData().clear();
+            }
+            mAdapter.notifyDataSetChanged();
+        }else {
+            showToast(errorMsg);
+        }
 
 //        mContentRecyclerView.setVisibility(View.GONE);
 //        mTvErrorView.setVisibility(View.VISIBLE);
