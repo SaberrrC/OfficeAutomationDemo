@@ -16,7 +16,7 @@ import okhttp3.Response;
 public class HeaderInterceptor implements Interceptor {
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
-    private static final String TAG = "Retrofit";
+    private static final String  TAG  = "Retrofit";
 
 
     public HeaderInterceptor() {
@@ -38,6 +38,7 @@ public class HeaderInterceptor implements Interceptor {
         return request.newBuilder()
                 .addHeader("token", RetrofitConfig.getAuthToken())
                 .addHeader("uid", RetrofitConfig.getUserId())
+                .addHeader("X-Source", "android")
                 .build();
     }
 

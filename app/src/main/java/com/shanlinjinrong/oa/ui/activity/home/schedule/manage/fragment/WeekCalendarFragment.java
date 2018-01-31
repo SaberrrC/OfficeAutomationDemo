@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,7 +109,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private String                      mCurrentMonth;
     private String                      mInitStartDate;
     private String                      mInitEndDate;
-    //    private TextView                    mTvErrorView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -223,20 +223,10 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         mContentRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.MATCH_PARENT));
         mLlContainerLayout.addView(mContentRecyclerView);
 
-
-//        mTvErrorView = new TextView(getContext());
-//        mTvErrorView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        mTvErrorView.setGravity(Gravity.CENTER);
-//        mTvErrorView.setTextSize(14);
-//        mContentRecyclerView.setVisibility(View.GONE);
-//        mLlContainerLayout.addView(mTvErrorView);
-
-
         mAdapter = new WriteContentAdapter(mLlContent, getContext(), mViewHeight);
 
         //中间时间选择List
         mHeaderRecyclerView = new RecyclerView(getContext());
-
         int year = Integer.parseInt(mCurrentYear);
         int initStartYear = year - 3;
         mInitStartDate = initStartYear + "-" + mCurrentMonth + "-" + mCurrentDay;
@@ -447,10 +437,37 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 //设置宽度
                 dialog_window_attributes.width = ScreenUtils.getScreenWidth(getContext()) - ScreenUtils.dp2px(getContext(), 45);
                 //设置高度
-                int position = (event.getPosition() + 1) * mViewHeight;
+                int position = (event.getPosition() - 1) * mViewHeight;
 
-                dialog_window_attributes.height = 350;
-                dialog_window_attributes.y = (position - (ScreenUtils.getScreenHeight(getContext()) / 2 - (ScreenUtils.getStatusHeight(getContext()) + ScreenUtils.dp2px(getContext(), 71))));
+                switch (data.size()) {
+                    case 0:
+                    case 1:
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 1) + ScreenUtils.dp2px(getContext(), 67);
+                    case 2:
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 2) + ScreenUtils.dp2px(getContext(), 72);
+                        break;
+                    case 3:
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 3) + ScreenUtils.dp2px(getContext(), 77);
+                        break;
+                    case 4:
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 4) + ScreenUtils.dp2px(getContext(), 82);
+                        break;
+                    case 5:
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 4) + ScreenUtils.dp2px(getContext(), 92);
+                        break;
+                    default:
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 4) + ScreenUtils.dp2px(getContext(), 92);
+                        break;
+                }
+
+                if (event.getPosition() - 1 < 6) {
+                    dialog_window.setGravity(Gravity.TOP);
+                    dialog_window_attributes.y = ScreenUtils.dp2px(getContext(), 71) + ScreenUtils.dp2px(getContext(), 57) + position;
+                } else {
+                    dialog_window.setGravity(Gravity.BOTTOM);
+                    dialog_window_attributes.y = (10 - event.getPosition()) * mViewHeight + ScreenUtils.dp2px(getContext(), 10) ;
+                }
+
 
                 dialog_window_attributes.x = ScreenUtils.dp2px(getContext(), 19);
 
@@ -663,12 +680,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         if (bean.getData() == null) {
             return;
         }
-
-//        if (mContentRecyclerView.getVisibility() == View.GONE) {
-//            mContentRecyclerView.setVisibility(View.VISIBLE);
-//            mTvErrorView.setVisibility(View.GONE);
-//        }
-
         try {
             for (int i = 0; i < mLlContent.size(); i++) {
                 mLlContent.get(i).getData().clear();
@@ -839,10 +850,6 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         } else {
             showToast(errorMsg);
         }
-
-//        mContentRecyclerView.setVisibility(View.GONE);
-//        mTvErrorView.setVisibility(View.VISIBLE);
-//        mTvErrorView.setText(errorMsg);
     }
 
     public class ItemClick extends OnItemClickListener {
