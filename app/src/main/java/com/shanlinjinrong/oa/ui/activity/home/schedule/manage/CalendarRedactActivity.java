@@ -418,6 +418,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                         Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
                         intent.putExtra("isWriteMeetingInfo", false);
                         intent.putExtra("id", mTaskId);
+                        intent.putExtra("isCalendar",true);
                         startActivity(intent);
                         break;
                     default:
