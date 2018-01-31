@@ -700,6 +700,7 @@
                         android:id="@+id/rl_schedule_manage"
                         android:layout_width="0dp"
                         android:layout_height="84dp"
+                        android:visibility="gone"
                         android:layout_weight="1"
                         android:gravity="center">
 
@@ -731,7 +732,6 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:visibility="gone">
-
 
                         <ImageView
                             android:id="@+id/iv_homepage_schedule_me_launch"
@@ -810,14 +810,14 @@
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color"
-                        android:visibility="gone"/>
+                        android:visibility="visible"/>
 
                     <FrameLayout
                         android:id="@+id/fl_blank41"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:visibility="gone"/>
+                        android:visibility="visible"/>
 
                     <View
                         android:id="@+id/stork_blank42"
@@ -828,6 +828,7 @@
                     <FrameLayout
                         android:id="@+id/fl_blank42"
                         android:layout_width="0dp"
+                        android:visibility="visible"
                         android:layout_height="match_parent"
                         android:layout_weight="1"/>
 
@@ -836,24 +837,26 @@
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color"
-                        android:visibility="gone"/>
+                        android:visibility="visible"/>
 
                     <FrameLayout
                         android:id="@+id/fl_blank43"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:visibility="gone"/>
+                        android:visibility="visible"/>
 
                     <View
                         android:id="@+id/stork_blank44"
                         android:layout_width="0.5dp"
+                        android:visibility="visible"
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color"/>
 
                     <FrameLayout
                         android:id="@+id/fl_blank44"
                         android:layout_width="0dp"
+                        android:visibility="visible"
                         android:layout_height="match_parent"
                         android:layout_weight="1"/>
                 </LinearLayout>
