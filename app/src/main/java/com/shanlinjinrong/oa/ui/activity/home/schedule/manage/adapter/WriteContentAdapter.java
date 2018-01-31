@@ -26,8 +26,9 @@ import java.util.List;
  */
 
 public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
-    private int     mHeight;
-    private Context mContext;
+    private int                       mHeight;
+    private Context                   mContext;
+    private LinearLayout.LayoutParams mLp;
 
     public WriteContentAdapter(List<LeftDateBean> data, Context context, int height) {
         super(R.layout.item_week_calendaer_content, data);
@@ -55,7 +56,7 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
             LinearLayout linearLayout = new LinearLayout(mContext);
             for (int i = 0; i < content.getData().size(); i++) {
                 if (i > 1) {
-                    continue;
+                    break;
                 }
                 linearLayout.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1));
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -63,14 +64,26 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
                 linearLayout.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
 
                 TextView titleText = new TextView(mContext);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(15, 5, 15, 5);
+                if (mHeight > 100) {
+                    mLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    mLp.setMargins(15, 5, 15, 5);
+                    titleText.setTextSize(12);
+                } else if (mHeight > 80 && mHeight < 100) {
+                    mLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ((mHeight / 2) - 15));
+                    mLp.setMargins(15, 5, 15, 5);
+                    titleText.setTextSize(12);
+                } else {
+                    mLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ((mHeight / 2) - 10));
+                    mLp.setMargins(15, 3, 15, 3);
+                    titleText.setTextSize(10);
+                }
 
-                titleText.setLayoutParams(lp);
+                titleText.setLayoutParams(mLp);
                 titleText.setFocusable(false);
                 titleText.setClickable(true);
                 titleText.setPressed(false);
                 titleText.setGravity(Gravity.CENTER);
+
 
                 titleText.setText(content.getData().get(i).getTaskTheme());
                 if (content.getData().get(i).getStatus() == 1) {

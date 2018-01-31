@@ -435,7 +435,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 Window dialog_window = mPopupDialog.getWindow();
                 WindowManager.LayoutParams dialog_window_attributes = dialog_window.getAttributes();
                 //设置宽度
-                dialog_window_attributes.width = ScreenUtils.getScreenWidth(getContext()) - ScreenUtils.dp2px(getContext(), 45);
+                dialog_window_attributes.width = ScreenUtils.getScreenWidth(getContext()) - ScreenUtils.dp2px(getContext(), 36);
                 //设置高度
                 int position = (event.getPosition() - 1) * mViewHeight;
 
@@ -443,29 +443,35 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     case 0:
                     case 1:
                         dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20)) + ScreenUtils.dp2px(getContext(), 67);
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20)) + ScreenUtils.dp2px(getContext(), 77);
                     case 2:
                         dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 2) + ScreenUtils.dp2px(getContext(), 72);
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 2) + ScreenUtils.dp2px(getContext(), 82);
                         break;
                     case 3:
                         dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 3) + ScreenUtils.dp2px(getContext(), 77);
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 3) + ScreenUtils.dp2px(getContext(), 87);
                         break;
                     case 4:
                         dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 4) + ScreenUtils.dp2px(getContext(), 82);
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 4) + ScreenUtils.dp2px(getContext(), 92);
                         break;
                     case 5:
                         dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 4) + ScreenUtils.dp2px(getContext(), 92);
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 4) + ScreenUtils.dp2px(getContext(), 102);
                         break;
                     default:
                         dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 4) + ScreenUtils.dp2px(getContext(), 92);
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 4) + ScreenUtils.dp2px(getContext(), 102);
                         break;
                 }
 
                 if (event.getPosition() - 1 < 6) {
                     dialog_window.setGravity(Gravity.TOP);
-                    dialog_window_attributes.y = ScreenUtils.dp2px(getContext(), 71) + ScreenUtils.dp2px(getContext(), 57) + position;
+                    dialog_window_attributes.y = ScreenUtils.dp2px(getContext(), 71) + ScreenUtils.dp2px(getContext(), 52) + position;
                 } else {
                     dialog_window.setGravity(Gravity.BOTTOM);
-                    dialog_window_attributes.y = (10 - event.getPosition()) * mViewHeight + ScreenUtils.dp2px(getContext(), 10) ;
+                    dialog_window_attributes.y = (10 - event.getPosition()) * mViewHeight + ScreenUtils.dp2px(getContext(), 5) ;
                 }
 
 
