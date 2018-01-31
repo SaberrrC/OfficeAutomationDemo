@@ -442,7 +442,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 switch (data.size()) {
                     case 0:
                     case 1:
-                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 1) + ScreenUtils.dp2px(getContext(), 67);
+                        dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20)) + ScreenUtils.dp2px(getContext(), 67);
                     case 2:
                         dialog_window_attributes.height = (ScreenUtils.dp2px(getContext(), 20) * 2) + ScreenUtils.dp2px(getContext(), 72);
                         break;
