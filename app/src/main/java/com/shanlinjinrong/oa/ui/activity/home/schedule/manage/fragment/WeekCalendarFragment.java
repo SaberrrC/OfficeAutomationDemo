@@ -106,8 +106,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private DatePicker                  picker;
     private String                      mCurrentYear;
     private String                      mCurrentMonth;
-    private String mInitStartDate;
-    private String mInitEndDate;
+    private String                      mInitStartDate;
+    private String                      mInitEndDate;
     //    private TextView                    mTvErrorView;
 
     @Override
@@ -260,6 +260,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime(mInitStartDate), mInitialDateTime, 1);
         mTestAdapter = new TestAdapter(mWeekCalendarBeans, mCurrentDay, mInitialDateTime, mCurrPage);
         mHeaderRecyclerView.setAdapter(mTestAdapter);
+        mHeaderRecyclerView.setBackgroundColor(getResources().getColor(R.color.work_report_button_enable));
         mHeaderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.HORIZONTAL, false));
         mHeaderRecyclerView.setBackgroundColor(getResources().getColor(R.color.gray_99EFEFEF));
         mHeaderRecyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, ScreenUtils.dp2px(getContext(), 71)));
@@ -416,8 +417,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     intent1.putExtra(Constants.SELECTEDPOSITION, event.getPosition());
 
                     intent1.putExtra(Constants.CALENDARSTARTHOUR, mSelectedStartHour);
-                    intent1.putExtra(Constants.CALENDARENDHOUR, 0);
-                    intent1.putExtra(Constants.CALENDARSTARTMIN, mSelectedEndHour);
+                    intent1.putExtra(Constants.CALENDARENDHOUR, mSelectedEndHour);
+                    intent1.putExtra(Constants.CALENDARSTARTMIN, 0);
                     intent1.putExtra(Constants.CALENDARENDMIN, 0);
                     startActivityForResult(intent1, 101);
                     if (mPopupDialog.isShowing()) {
@@ -530,6 +531,9 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             //TODO  日期滑动
             case "slideRecyclerViewPosition":
                 String dataStr = event.getDate();
+                String date = DateUtils.getBiDisplayDateByTimestamp(DateUtils.getTimestampFromString(dataStr, "yyyy-MM-dd"));
+                //更新 Title
+                EventBus.getDefault().post(new UpdateTitleBean(date, "updateTitle"));
                 ScrowTimeView(dataStr);
                 break;
             default:
@@ -832,7 +836,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mLlContent.get(i).getData().clear();
             }
             mAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             showToast(errorMsg);
         }
 
