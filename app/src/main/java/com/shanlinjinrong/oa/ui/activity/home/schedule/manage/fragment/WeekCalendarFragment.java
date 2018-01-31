@@ -55,11 +55,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -102,6 +106,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     private DatePicker                  picker;
     private String                      mCurrentYear;
     private String                      mCurrentMonth;
+    private String mInitStartDate;
+    private String mInitEndDate;
     //    private TextView                    mTvErrorView;
 
     @Override
@@ -233,11 +239,10 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
         int year = Integer.parseInt(mCurrentYear);
         int initStartYear = year - 3;
-        String initStartDate = initStartYear + "-" + mCurrentMonth + "-" + mCurrentDay;
+        mInitStartDate = initStartYear + "-" + mCurrentMonth + "-" + mCurrentDay;
         int initEndYear = year + 3;
-        String initEndDate = initEndYear + "-" + mCurrentMonth + "-" + mCurrentDay;
-
-        mIntervalWeek = CalendarUtils.getIntervalWeek(new DateTime(initStartDate), new DateTime(initEndDate), 1);
+        mInitEndDate = initEndYear + "-" + mCurrentMonth + "-" + mCurrentDay;
+        mIntervalWeek = CalendarUtils.getIntervalWeek(new DateTime(mInitStartDate), new DateTime(mInitEndDate), 1);
         mWeekCalendarBeans = new ArrayList<>();
 
         for (int i = 0; i < mIntervalWeek; i++) {
@@ -252,7 +257,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
         //今天
         mInitialDateTime = new DateTime().withTimeAtStartOfDay();
-        int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime(initStartDate), mInitialDateTime, 1);
+        int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime(mInitStartDate), mInitialDateTime, 1);
         mTestAdapter = new TestAdapter(mWeekCalendarBeans, mCurrentDay, mInitialDateTime, mCurrPage);
         mHeaderRecyclerView.setAdapter(mTestAdapter);
         mHeaderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.HORIZONTAL, false));
@@ -525,17 +530,9 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             //TODO  日期滑动
             case "slideRecyclerViewPosition":
                 String dataStr = event.getDate();
-
+                ScrowTimeView(dataStr);
                 break;
             default:
-                for (int i = 0; i < mWeekCalendarBeans.size(); i++) {
-                    for (int j = 0; j < 7; j++) {
-                        mWeekCalendarBeans.get(i).getIsSelected().set(j, false);
-                    }
-                }
-                int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime("1970-01-01"), new DateTime(event.getTitleDate()), 1);
-                mHeaderRecyclerView.scrollToPosition(mCurrPage);
-
                 break;
         }
     }
@@ -638,7 +635,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             }
         }
 
-        int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime("1970-01-01"), new DateTime(startDate), 1);
+        int mCurrPage = CalendarUtils.getIntervalWeek(new DateTime(mInitStartDate), new DateTime(startDate), 1);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();

@@ -244,7 +244,8 @@
                 android:id="@+id/ed_task_details"
                 style="null"
                 android:layout_width="match_parent"
-                android:layout_height="260dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
@@ -257,7 +258,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="45dp">
 
                 <TextView
                     android:id="@+id/btn_common_calendar"
