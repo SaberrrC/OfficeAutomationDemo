@@ -2,6 +2,7 @@ package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.SelectedWeekCalendarEvent;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.bean.UpdateTitleBean;
@@ -9,9 +10,11 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.MonthlyCa
 import com.shanlinjinrong.oa.ui.activity.home.schedule.manage.fragment.WeekCalendarFragment;
 import com.shanlinjinrong.oa.utils.SelectedTimeFragment;
 import com.shanlinjinrong.views.common.CommonTopView;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,9 +26,9 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
     @BindView(R.id.topView)
     CommonTopView mTopView;
 
-    private WeekCalendarFragment    mWeekCalendarFragment;
+    private WeekCalendarFragment mWeekCalendarFragment;
     private MonthlyCalendarFragment mMonthlyCalendarFragment;
-    private String weekLastTitle  = "";
+    private String weekLastTitle = "";
     private String monthLastTitle = "";
 
     @Override
@@ -48,10 +51,6 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
                     EventBus.getDefault().register(mWeekCalendarFragment);
                 }
                 EventBus.getDefault().post(new SelectedWeekCalendarEvent(mTopView.getTitleView().getText().toString(), "mWeekCalendarFragment"));
-//                    TimePickerView pvTime = new TimePickerView(this, TimePickerView.Type.YEAR_MONTH_DAY);
-//                    pvTime.setRange(1970, 2099);
-//                    pvTime.setOnTimeSelectListener(this);
-//                    pvTime.show();
             }
 
         });
@@ -83,8 +82,13 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
             weekLastTitle = event.getTitle();
             mTopView.setAppTitle(weekLastTitle);
         } else if ("monthLUpdateTitle".equals(event.getEvent())) {
-            monthLastTitle = event.getTitle();
-            mTopView.setAppTitle(monthLastTitle);
+            try {
+                monthLastTitle = event.getTitle();
+                monthLastTitle = monthLastTitle.substring(0, 8);
+                mTopView.setAppTitle(monthLastTitle);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -61,7 +61,6 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
 
             } else {
                 holder.item.setTextColor(0xFF333333);
-//                holder.view.setBackgroundColor(mContext.getResources().getColor(R.color.bg_B269B0F2));
                 holder.view.setBackground(mContext.getResources().getDrawable(R.drawable.bg_calendar_selected));
             }
         } else {
@@ -83,6 +82,7 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
                 linearLayout.setGravity(Gravity.CENTER);
                 linearLayout.setDescendantFocusability(LinearLayout.FOCUS_BLOCK_DESCENDANTS);
+
                 for (int i = 0; i < mData.get(position).getData().size(); i++) {
                     TextView titleText = new TextView(mContext);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -111,6 +111,20 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
                         linearLayout.addView(titleText);
                         break;
                     }
+                }
+                if (mData.get(position).getData().size() > 0 && mData.get(position).getData().size() <= 2) {
+                    TextView titleText = new TextView(mContext);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(5, 5, 5, 5);
+                    titleText.setLayoutParams(lp);
+                    titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                    titleText.setMaxLines(1);
+                    titleText.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
+                    titleText.setGravity(Gravity.CENTER);
+                    titleText.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                    titleText.setTextColor(mContext.getResources().getColor(R.color.text_333333));
+                    titleText.setText("共" + mData.get(position).getData().size());
+                    linearLayout.addView(titleText);
                 }
                 holder.llcontent.addView(linearLayout);
             } else {
