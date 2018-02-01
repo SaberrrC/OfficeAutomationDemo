@@ -76,17 +76,11 @@ public class SelectedTimeFragment extends DialogFragment {
 
         mStartTimes = new ArrayList<>();
         mEndTimes = new ArrayList<>();
-        if (mIsStart) {
-            for (int i = 0; i < 10; i++) {
-                if (i == 0) {
-                    mStartTimes.add("09点");
-                } else {
-                    mStartTimes.add(9 + i + "点");
-                }
-            }
-        } else {
-            for (int i = 0; i < 10; i++) {
-                mStartTimes.add(10 + i + "点");
+        for (int i = 0; i < 10; i++) {
+            if (i == 0) {
+                mStartTimes.add("09点");
+            } else {
+                mStartTimes.add(9 + i + "点");
             }
         }
         for (int i = 0; i < 60; i++) {
@@ -108,10 +102,10 @@ public class SelectedTimeFragment extends DialogFragment {
 
 
             if (mIsStart) {
-                mPickerHourTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARSTARTHOUR) -9);
+                mPickerHourTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARSTARTHOUR) - 9);
                 mPickerMinTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARSTARTMIN));
             } else {
-                mPickerHourTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARENDHOUR) -10);
+                mPickerHourTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARENDHOUR) - 9);
                 mPickerMinTime.setSelectedItemPosition(getArguments().getInt(Constants.CALENDARENDMIN));
             }
         } catch (Throwable e) {
@@ -197,7 +191,7 @@ public class SelectedTimeFragment extends DialogFragment {
                     EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, mIsStart, currentHourTime + 9, currentMinTime));
                     dismiss();
                 } else {
-                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, currentHourTime + 10, currentMinTime, mIsStart));
+                    EventBus.getDefault().post(new SelectedWeekCalendarEvent(Constants.SELECTEDTIME, currentHourTime + 9, currentMinTime, mIsStart));
                     dismiss();
                 }
                 break;
