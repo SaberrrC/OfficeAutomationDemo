@@ -237,6 +237,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             }
             WeekCalendarBean weekCalendarBean = new WeekCalendarBean();
             weekCalendarBean.setIsSelected(isSelected);
+            weekCalendarBean.setFirst(true);
             mWeekCalendarBeans.add(weekCalendarBean);
         }
 
@@ -466,7 +467,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                     dialog_window_attributes.y = ScreenUtils.dp2px(getContext(), 71) + ScreenUtils.dp2px(getContext(), 52) + position;
                 } else {
                     dialog_window.setGravity(Gravity.BOTTOM);
-                    dialog_window_attributes.y = (10 - event.getPosition()) * mViewHeight + ScreenUtils.dp2px(getContext(), 5) ;
+                    dialog_window_attributes.y = (10 - event.getPosition()) * mViewHeight + ScreenUtils.dp2px(getContext(), 5);
                 }
 
 
@@ -488,6 +489,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                             for (int i = 0; i < mWeekCalendarBeans.size(); i++) {
                                 for (int j = 0; j < 7; j++) {
                                     mWeekCalendarBeans.get(i).getIsSelected().set(j, false);
+                                    mWeekCalendarBeans.get(i).setFirst(false);
                                 }
                             }
                             e.onComplete();
@@ -543,6 +545,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             //刷新页面
             case "upDateCalendarScheduleSuccess":
                 String startDate = mSelectedYear1 + "-" + mSelectedMonth1 + "-" + mSelectedDay1;
+
                 queryCalendar(startDate, startDate);
                 break;
 
@@ -550,9 +553,14 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             case "slideRecyclerViewPosition":
                 String dataStr = event.getDate();
                 String date = DateUtils.getBiDisplayDateByTimestamp(DateUtils.getTimestampFromString(dataStr, "yyyy-MM-dd"));
+                mSelectedYear1 = date.substring(0, 4);
+                mSelectedMonth1 = date.substring(5,7);
+                mSelectedDay1 = date.substring(8,10);
+
                 //更新 Title
                 EventBus.getDefault().post(new UpdateTitleBean(date, "updateTitle"));
                 ScrowTimeView(dataStr);
+                queryCalendar(dataStr, dataStr);
                 break;
             default:
                 break;
@@ -654,6 +662,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         for (int i = 0; i < mWeekCalendarBeans.size(); i++) {
             for (int j = 0; j < 7; j++) {
                 mWeekCalendarBeans.get(i).getIsSelected().set(j, false);
+                mWeekCalendarBeans.get(i).setFirst(false);
             }
         }
 
@@ -673,6 +682,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             mWeekCalendarBeans.get(mCurrPage).getIsSelected().set(i - 2, true);
         }
         mHeaderRecyclerView.scrollToPosition(mCurrPage);
+        mTestAdapter.setNewData(mWeekCalendarBeans);
         mTestAdapter.notifyItemChanged(mCurrPage);
     }
 

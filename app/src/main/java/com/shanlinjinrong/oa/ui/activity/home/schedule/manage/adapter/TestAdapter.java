@@ -28,7 +28,6 @@ public class TestAdapter extends BaseQuickAdapter<WeekCalendarBean> {
     private DateTime mInitialDateTime;
     private int mCurrPage;
     private String mCurrentDay;
-    private boolean mIsFirst;
     private List<WeekCalendarBean> mData;
 
     public TestAdapter(List<WeekCalendarBean> data, String currentDay, DateTime initialDateTime, int currPage) {
@@ -92,8 +91,7 @@ public class TestAdapter extends BaseQuickAdapter<WeekCalendarBean> {
             textDays.get(i).setText(dateTimeList.get(i).toLocalDate().toString().substring(dateTimeList.get(i).toLocalDate().toString().length() - 2, dateTimeList.get(i).toLocalDate().toString().length()));
             textWeeks.get(i).setText(weeks[i]);
 
-            if (dateTimeList.get(i).toLocalDate().toString().substring(dateTimeList.get(i).toLocalDate().toString().length() - 2, dateTimeList.get(i).toLocalDate().toString().length()).equals(mCurrentDay) && !mIsFirst) {
-                mIsFirst = true;
+            if (dateTimeList.get(i).toLocalDate().toString().substring(dateTimeList.get(i).toLocalDate().toString().length() - 2, dateTimeList.get(i).toLocalDate().toString().length()).equals(mCurrentDay) && weekCalendarBean.isFirst()) {
                 weekCalendarBean.getIsSelected().set(i, true);
             }
 

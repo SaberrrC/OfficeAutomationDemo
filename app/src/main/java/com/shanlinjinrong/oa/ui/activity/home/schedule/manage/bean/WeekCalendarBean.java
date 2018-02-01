@@ -18,15 +18,26 @@ public class WeekCalendarBean implements Serializable {
     private List<String>  year;
     private List<Boolean> isSelected;
 
+    private boolean mIsFirst;
+
     public WeekCalendarBean() {
     }
 
-    public WeekCalendarBean(List<String> week, List<String> day, List<String> month, List<String> year, List<Boolean> isSelected) {
+    public WeekCalendarBean(List<String> week, List<String> day, List<String> month, List<String> year, List<Boolean> isSelected, boolean isFirst) {
         this.week = week;
         Day = day;
         this.month = month;
         this.year = year;
         this.isSelected = isSelected;
+        mIsFirst = isFirst;
+    }
+
+    public boolean isFirst() {
+        return mIsFirst;
+    }
+
+    public void setFirst(boolean first) {
+        mIsFirst = first;
     }
 
     public List<String> getWeek() {
