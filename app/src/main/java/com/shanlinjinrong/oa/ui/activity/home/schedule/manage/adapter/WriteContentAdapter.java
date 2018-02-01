@@ -82,7 +82,7 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
                 titleText.setFocusable(false);
                 titleText.setClickable(true);
                 titleText.setPressed(false);
-                titleText.setGravity(Gravity.CENTER);
+                titleText.setGravity(Gravity.CENTER_VERTICAL);
 
 
                 titleText.setText(content.getData().get(i).getTaskTheme());

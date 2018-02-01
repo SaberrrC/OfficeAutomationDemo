@@ -1,8 +1,12 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -110,7 +114,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                     break;
                 //删除 日程
                 case Constants.LOOKCALENDAR:
-                    mPresenter.deleteCalendarSchedule(mId);
+                    showDeleteTip("是否删除当前日程","确认","取消");
                     break;
                 case Constants.MEETINGCALENDAR:
                     break;
@@ -373,6 +377,10 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                             mOldDetails = mEdTaskDetails.getText().toString().trim();
                         } else {
 
+                            if ("".equals(mEdTaskTheme.getText().toString())) {
+                                Toast.makeText(this, "任务主题不能为空！", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             try {
                                 boolean isTheme = mOldTheme.equals(mEdTaskTheme.getText().toString().trim());
                                 boolean isStart = mOldStartTime.equals(mTvTaskStartDate.getText().toString().trim());
@@ -643,6 +651,32 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
             return;
         }
         showToast("更新日程失败，请稍后重试");
+    }
+
+    public void showDeleteTip(String msg, final String posiStr, String negaStr) {
+        @SuppressLint("InflateParams")
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
+        TextView title = (TextView) dialogView.findViewById(R.id.title);
+        title.setText("提示");
+        TextView message = (TextView) dialogView.findViewById(R.id.message);
+        message.setText(msg);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this,
+                R.style.AppTheme_Dialog).create();
+        alertDialog.setView(dialogView);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, posiStr,
+                (dialog, which) -> {
+                    mPresenter.deleteCalendarSchedule(mId);
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr,
+                (dialog, which) -> {
+
+                });
+        alertDialog.show();
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                getResources().getColor(R.color.btn_text_logout));
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                getResources().getColor(R.color.btn_text_logout));
     }
 
     @Override
