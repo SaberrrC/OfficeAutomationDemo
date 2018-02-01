@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,7 +66,7 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
 
                 TextView titleText = new TextView(mContext);
                 if (mHeight > 100) {
-                    mLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    mLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     mLp.setMargins(15, 5, 15, 5);
                     titleText.setTextSize(12);
                 } else if (mHeight > 80 && mHeight < 100) {
@@ -82,6 +83,9 @@ public class WriteContentAdapter extends BaseQuickAdapter<LeftDateBean> {
                 titleText.setFocusable(false);
                 titleText.setClickable(true);
                 titleText.setPressed(false);
+                titleText.setSingleLine();
+                titleText.setEllipsize(TextUtils.TruncateAt.END);
+                titleText.setMaxLines(1);
                 titleText.setGravity(Gravity.CENTER_VERTICAL);
 
 
