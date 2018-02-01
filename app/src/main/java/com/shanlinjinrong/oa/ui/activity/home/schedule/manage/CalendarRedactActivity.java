@@ -154,6 +154,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 String lookDate = DateUtils.getDisplayMonthDay(time);
                 mTvDate.setText(lookDate);
                 mTopView.setRightText("删除");
+                mTopView.setAppTitle("任务详情");
                 mBtnCommonCalendar.setText("编辑");
                 mCbCompletes.setVisibility(View.VISIBLE);
                 mViewCompletes.setVisibility(View.VISIBLE);
@@ -324,6 +325,13 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 break;
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTvTaskAddress.setTextColor(getResources().getColor(R.color.black));
+        mEdTaskDetails.setTextColor(getResources().getColor(R.color.black));
     }
 
     @OnClick({R.id.tv_task_end_date, R.id.btn_common_calendar, R.id.tv_task_start_date})

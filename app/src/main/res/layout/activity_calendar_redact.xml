@@ -15,7 +15,7 @@
         app:leftDrawable="@drawable/toolbar_back"
 
         app:rightText="取消"
-        app:topTitle="任务详情" />
+        app:topTitle="发起任务" />
 
     <View
         android:layout_width="match_parent"
