@@ -114,7 +114,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                     break;
                 //删除 日程
                 case Constants.LOOKCALENDAR:
-                    showDeleteTip("是否删除当前日程","确认","取消");
+                    showDeleteTip("是否删除当前日程", "确认", "取消");
                     break;
                 case Constants.MEETINGCALENDAR:
                     break;
@@ -426,7 +426,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                         Intent intent = new Intent(this, MeetingInfoFillOutActivity.class);
                         intent.putExtra("isWriteMeetingInfo", false);
                         intent.putExtra("id", mTaskId);
-                        intent.putExtra("isCalendar",true);
+                        intent.putExtra("isCalendar", true);
                         startActivity(intent);
                         break;
                     default:
@@ -638,6 +638,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
             showToast("日程更新成功");
         }
         setResult(-1);
+        finish();
     }
 
     @Override
@@ -679,6 +680,42 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 getResources().getColor(R.color.btn_text_logout));
     }
 
+    public void showCompleteTip(String msg, final String posiStr, String negaStr) {
+        @SuppressLint("InflateParams")
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_editor, null);
+        TextView title = (TextView) dialogView.findViewById(R.id.title);
+        title.setText("提示");
+        TextView message = (TextView) dialogView.findViewById(R.id.message);
+        message.setText(msg);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this,
+                R.style.AppTheme_Dialog).create();
+        alertDialog.setView(dialogView);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, posiStr,
+                (dialog, which) -> {
+                    try {
+                        mIsCheckBox = true;
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("id", mId);
+                        jsonObject.put("status", 1);
+                        String calendar = jsonObject.toString();
+                        mPresenter.updateCalendarSchedule(calendar);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negaStr,
+                (dialog, which) -> {
+                    mCbCompletes.setChecked(false);
+                });
+        alertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                getResources().getColor(R.color.btn_text_logout));
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                getResources().getColor(R.color.btn_text_logout));
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -691,12 +728,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         if (b) {
             try {
-                mIsCheckBox = true;
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", mId);
-                jsonObject.put("status", 1);
-                String calendar = jsonObject.toString();
-                mPresenter.updateCalendarSchedule(calendar);
+                showCompleteTip("是否完成此次日程安排", "确认", "取消");
             } catch (Throwable e) {
                 e.printStackTrace();
             }
