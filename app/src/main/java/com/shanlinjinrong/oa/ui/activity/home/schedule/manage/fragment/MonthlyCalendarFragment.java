@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 
@@ -165,11 +169,23 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
             for (int i = 0; i < mData.size(); i++) {
                 String taskDate = getPopItemDataString(mData.get(i));
                 List<CalendarScheduleContentBean.DataBean> data = new ArrayList<>();
+                List<CalendarScheduleContentBean.DataBean> dataSort = new ArrayList<>();
                 for (int j = 0; j < DataBeanLists.size(); j++) {
                     if (taskDate.equals(DataBeanLists.get(j).getTaskDate())) {
                         data.add(DataBeanLists.get(j));
                     }
                 }
+                Collections.sort(data, new Comparator<CalendarScheduleContentBean.DataBean>() {
+                    @Override
+                    public int compare(CalendarScheduleContentBean.DataBean o1, CalendarScheduleContentBean.DataBean o2) {
+                        if (DateUtils.getTimestampFromString(o1.getStartTime(), "yyyy-MM-dd HH:mm:ss") >= DateUtils.getTimestampFromString(o2.getStartTime(), "yyyy-MM-dd HH:mm:ss")) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    }
+                });
+
                 mData.get(i).setData(data);
             }
             mScheduleMonthAdapter.notifyDataSetChanged();
@@ -336,20 +352,38 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         dialog.show();
     }
 
+
     public class ItemClick extends OnItemClickListener {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             Intent intent = new Intent(getContext(), CalendarRedactActivity.class);
             intent.putExtra(Constants.CALENDARTITLE, mPopupData.get(i).getTaskTheme());
             intent.putExtra(Constants.CALENDARCONTENT, mPopupData.get(i).getTaskDetail());
-            intent.putExtra(Constants.CALENDARSTARTTIME, mPopupData.get(i).getStartTime());
-            intent.putExtra(Constants.CALENDARENDTIME, mPopupData.get(i).getEndTime());
             intent.putExtra(Constants.CALENDARDATE, mPopupData.get(i).getTaskDate());
             intent.putExtra(Constants.CALENDARID, mPopupData.get(i).getId());
             intent.putExtra(Constants.CALENDARTYPE, mPopupData.get(i).getTaskType());
-            intent.putExtra(Constants.CALENDARTYPE, Constants.LOOKCALENDAR);
             intent.putExtra(Constants.CALENDARSTATUS, mPopupData.get(i).getStatus());
+            intent.putExtra(Constants.SELECTEDTASTID, mPopupData.get(i).getTaskId());
+            intent.putExtra(Constants.CALENDARADDRESS, mPopupData.get(i).getAddress());
             intent.putExtra(Constants.SELECTEDPOSITION, i);
+
+            try {
+                String startTime = mPopupData.get(i).getStartTime().substring(mPopupData.get(i).getStartTime().length() - 8, mPopupData.get(i).getStartTime().length());
+                int startHourExtra = Integer.parseInt(startTime.substring(0, 2));
+                int startMinExtra = Integer.parseInt(startTime.substring(3, 5));
+                String endTime = mPopupData.get(i).getEndTime().substring(mPopupData.get(i).getEndTime().length() - 8, mPopupData.get(i).getEndTime().length());
+                int endHourExtra = Integer.parseInt(endTime.substring(0, 2));
+                int endMinExtra = Integer.parseInt(endTime.substring(3, 5));
+
+                intent.putExtra(Constants.CALENDARSTARTHOUR, startHourExtra);
+                intent.putExtra(Constants.CALENDARENDHOUR, endHourExtra);
+
+                intent.putExtra(Constants.CALENDARSTARTMIN, startMinExtra);
+                intent.putExtra(Constants.CALENDARENDMIN, endMinExtra);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+
             startActivityForResult(intent, 101);
             if (dialog.isShowing()) {
                 dialog.dismiss();
