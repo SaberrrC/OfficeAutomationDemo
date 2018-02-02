@@ -67,6 +67,7 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
             webView.removeJavascriptInterface("accessibility");
             webView.removeJavascriptInterface("accessibilityTraversal");
             webView.getSettings().setAllowFileAccess(false);
+            webView.getSettings().setSavePassword(false);
         }
         mWebViewClient = new WebViewClient() {
             @Override
@@ -96,7 +97,6 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 rlloadding.setVisibility(View.GONE);
-
             }
 
             @Override

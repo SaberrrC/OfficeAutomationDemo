@@ -249,7 +249,6 @@ public abstract class BaseFragment extends Fragment {
         if (loadingDialog.isShowing()) {
             loadingDialog.cancel();
         }
-
     }
 
     public void showToast(
