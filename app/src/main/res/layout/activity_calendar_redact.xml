@@ -43,11 +43,11 @@
                     android:id="@+id/cb_completes"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="12dp"
                     android:background="@drawable/meeting_enable_checkbox_selected"
                     android:button="@null"
-                    android:layout_marginLeft="12dp"
-                    android:layout_gravity="center" />
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/tv_date"
@@ -101,6 +101,7 @@
                     android:background="@drawable/edittext_input_square_bg"
                     android:gravity="center|left"
                     android:hint="请输入任务主题"
+                    android:maxLength="10"
                     android:paddingLeft="12dp"
                     android:singleLine="true"
                     android:textColor="@color/black"
@@ -148,7 +149,9 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     tools:ignore="RtlSymmetry" />
-            </LinearLayout>  <LinearLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:orientation="horizontal">
@@ -245,14 +248,14 @@
                 style="null"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:minHeight="150dp"
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
+                android:layout_weight="1"
                 android:background="@drawable/edittext_input_square_bg"
                 android:gravity="top"
                 android:hint="请输入任务详情"
+                android:minHeight="150dp"
                 android:padding="12dp"
                 android:textSize="14sp"
                 tools:ignore="RtlSymmetry" />
