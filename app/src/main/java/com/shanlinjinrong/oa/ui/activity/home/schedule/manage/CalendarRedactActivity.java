@@ -342,7 +342,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                     //编辑周历
                     case Constants.WRITECALENDAR:
                         try {
-                            if ("".equals(mEdTaskTheme.getText().toString())) {
+                            if ("".equals(mEdTaskTheme.getText().toString().trim())) {
                                 Toast.makeText(this, "任务主题不能为空！", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -385,7 +385,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                             mOldDetails = mEdTaskDetails.getText().toString().trim();
                         } else {
 
-                            if ("".equals(mEdTaskTheme.getText().toString())) {
+                            if ("".equals(mEdTaskTheme.getText().toString().trim())) {
                                 Toast.makeText(this, "任务主题不能为空！", Toast.LENGTH_SHORT).show();
                                 return;
                             }
