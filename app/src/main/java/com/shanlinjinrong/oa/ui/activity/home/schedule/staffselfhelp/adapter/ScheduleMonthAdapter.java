@@ -65,6 +65,7 @@ public class ScheduleMonthAdapter extends RecyclerView.Adapter<ScheduleMonthAdap
             }
         } else {
             holder.item.setTextColor(0xFFEFEFEF);
+            holder.view.setBackground(null);
         }
 
         holder.view.setEnabled(mData.get(position).isEnable());

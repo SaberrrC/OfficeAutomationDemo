@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -23,7 +22,6 @@ import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInf
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.SelectedTimeFragment;
-import com.shanlinjinrong.pickerview.OptionsPickerView;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,47 +44,53 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_date)
-    TextView      mTvDate;
+    TextView mTvDate;
     @BindView(R.id.ed_task_theme)
-    EditText      mEdTaskTheme;
+    EditText mEdTaskTheme;
     @BindView(R.id.ed_task_details)
-    EditText      mEdTaskDetails;
+    EditText mEdTaskDetails;
     @BindView(R.id.btn_common_calendar)
-    TextView      mBtnCommonCalendar;
+    TextView mBtnCommonCalendar;
     @BindView(R.id.cb_completes)
-    CheckBox      mCbCompletes;
+    CheckBox mCbCompletes;
     @BindView(R.id.view_completes)
-    View          mViewCompletes;
+    View mViewCompletes;
     @BindView(R.id.tv_task_address)
-    EditText      mTvTaskAddress;
+    EditText mTvTaskAddress;
     @BindView(R.id.tv_task_end_date)
-    TextView      mTvTaskEndDate;
+    TextView mTvTaskEndDate;
     @BindView(R.id.tv_task_start_date)
-    TextView      mTvTaskStartDate;
+    TextView mTvTaskStartDate;
+    @BindView(R.id.tv_task_theme)
+    TextView tvTaskTheme;
+    @BindView(R.id.tv_task_addresss)
+    TextView tvTaskAddresss;
+    @BindView(R.id.tv_task_details)
+    TextView tvTaskDetails;
 
-    private String               mDate;
-    private String               mTitle;
-    private String               mContent;
-    private String               mYear;
-    private String               mMonth;
-    private int                  mItemType;
+    private String mDate;
+    private String mTitle;
+    private String mContent;
+    private String mYear;
+    private String mMonth;
+    private int mItemType;
     private SelectedTimeFragment mSelectedTimeFragment;
-    private int                  mId;
-    private int                  mStatus;
-    private String               mOldTheme;
-    private String               mOldStartTime;
-    private String               mOldEndTime;
-    private String               mOldAddress;
-    private String               mOldDetails;
-    private boolean              mIsFirst, mIsCheckBox;
-    private int          mTaskId;
-    private String       mAddress;
+    private int mId;
+    private int mStatus;
+    private String mOldTheme;
+    private String mOldStartTime;
+    private String mOldEndTime;
+    private String mOldAddress;
+    private String mOldDetails;
+    private boolean mIsFirst, mIsCheckBox;
+    private int mTaskId;
+    private String mAddress;
     private StringBuffer mTaskStartTime;
     private StringBuffer mTaskEndTime;
-    private int          mStartHour;
-    private int          mStartMin;
-    private int          mEndHour;
-    private int          mEndMin;
+    private int mStartHour;
+    private int mStartMin;
+    private int mEndHour;
+    private int mEndMin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +181,10 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 mTvDate.setText(meetingDate);
                 mBtnCommonCalendar.setText("查看详情");
                 mTopView.setAppTitle("普通会议");
+                tvTaskTheme.setText("会议主题");
+                tvTaskAddresss.setText("会议地点");
+                tvTaskDetails.setText("会议详情");
+
                 mBtnCommonCalendar.setBackgroundColor(getResources().getColor(R.color.blue_69B0F2));
                 mCbCompletes.setVisibility(View.GONE);
                 mTopView.setRightText("");

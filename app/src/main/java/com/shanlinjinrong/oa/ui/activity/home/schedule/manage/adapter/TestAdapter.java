@@ -93,6 +93,7 @@ public class TestAdapter extends BaseQuickAdapter<WeekCalendarBean> {
 
             if (dateTimeList.get(i).toLocalDate().toString().substring(dateTimeList.get(i).toLocalDate().toString().length() - 2, dateTimeList.get(i).toLocalDate().toString().length()).equals(mCurrentDay) && weekCalendarBean.isFirst()) {
                 weekCalendarBean.getIsSelected().set(i, true);
+                weekCalendarBean.setFirst(false);
             }
 
 

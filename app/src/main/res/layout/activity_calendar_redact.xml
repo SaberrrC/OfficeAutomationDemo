@@ -85,6 +85,7 @@
                     tools:ignore="RtlHardcoded" />
 
                 <TextView
+                    android:id="@+id/tv_task_theme"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -205,6 +206,7 @@
                     tools:ignore="RtlHardcoded" />
 
                 <TextView
+                    android:id="@+id/tv_task_addresss"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -233,6 +235,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_task_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
