@@ -1,12 +1,15 @@
 package com.shanlinjinrong.oa.ui.activity.home.schedule.manage;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -91,6 +94,7 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     private int mStartMin;
     private int mEndHour;
     private int mEndMin;
+    InputMethodManager inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,11 +114,12 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
     }
 
     private void initView() {
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mTopView.getRightView().setOnClickListener(view -> {
             switch (mItemType) {
                 //删除 返回
                 case Constants.WRITECALENDAR:
-                    finish();
+                    hideSoftKeyboard();
                     break;
                 //删除 日程
                 case Constants.LOOKCALENDAR:
@@ -125,6 +130,9 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 default:
                     break;
             }
+        });
+        mTopView.getLeftView().setOnClickListener(view -> {
+            hideSoftKeyboard();
         });
 
         if (mStatus == 1) {
@@ -212,7 +220,10 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
             default:
                 break;
         }
+
+
     }
+
 
     private void initData() {
         mIsFirst = true;
@@ -749,5 +760,17 @@ public class CalendarRedactActivity extends HttpBaseActivity<CalendarRedactActiv
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 隐藏软键盘 finish页面
+     */
+    protected void hideSoftKeyboard() {
+        if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (getCurrentFocus() != null)
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+        finish();
     }
 }

@@ -72,38 +72,38 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
     /**
      * 周历
      */
-    private CustomDialogUtils   mDialog;
+    private CustomDialogUtils mDialog;
     private WriteContentAdapter mAdapter;
-    private List<LeftDateBean>  mLlContent;
-    private LeftDateAdapter     mDateAdapter;
-    private List<LeftDateBean>  mLeftDateList;
-    private RecyclerView        mLeftRecyclerView;
-    private WheelPicker         mRvEndDateSelected;
-    private List<String>        mStartDate, mEndDate;
+    private List<LeftDateBean> mLlContent;
+    private LeftDateAdapter mDateAdapter;
+    private List<LeftDateBean> mLeftDateList;
+    private RecyclerView mLeftRecyclerView;
+    private WheelPicker mRvEndDateSelected;
+    private List<String> mStartDate, mEndDate;
     private String mStartTime, mEndTime;
     private RecyclerView mHeaderRecyclerView;
-    private WheelPicker  mRvStartDateSelected;
+    private WheelPicker mRvStartDateSelected;
     private RecyclerView mContentRecyclerView;
-    private int          mHeight, mViewHeight;
+    private int mHeight, mViewHeight;
     private String mSelectedYear1;
     private String mSelectedMonth1;
     private String mSelectedDay1;
-    private int    mSelectedStartHour;
-    private int    mSelectedEndHour;
+    private int mSelectedStartHour;
+    private int mSelectedEndHour;
 
 
     private List<LeftDateBean.DataBean> mPopupData;
-    private Dialog                      mPopupDialog;
-    private int                         mIntervalWeek;
-    private DateTime                    mInitialDateTime;
-    private TestAdapter                 mTestAdapter;
-    private List<WeekCalendarBean>      mWeekCalendarBeans;
-    private String                      mCurrentDay;
-    private DatePicker                  picker;
-    private String                      mCurrentYear;
-    private String                      mCurrentMonth;
-    private String                      mInitStartDate;
-    private String                      mInitEndDate;
+    private Dialog mPopupDialog;
+    private int mIntervalWeek;
+    private DateTime mInitialDateTime;
+    private TestAdapter mTestAdapter;
+    private List<WeekCalendarBean> mWeekCalendarBeans;
+    private String mCurrentDay;
+    private DatePicker picker;
+    private String mCurrentYear;
+    private String mCurrentMonth;
+    private String mInitStartDate;
+    private String mInitEndDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -554,8 +554,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 String dataStr = event.getDate();
                 String date = DateUtils.getBiDisplayDateByTimestamp(DateUtils.getTimestampFromString(dataStr, "yyyy-MM-dd"));
                 mSelectedYear1 = date.substring(0, 4);
-                mSelectedMonth1 = date.substring(5,7);
-                mSelectedDay1 = date.substring(8,10);
+                mSelectedMonth1 = date.substring(5, 7);
+                mSelectedDay1 = date.substring(8, 10);
 
                 //更新 Title
                 EventBus.getDefault().post(new UpdateTitleBean(date, "updateTitle"));

@@ -78,17 +78,22 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void RefreshTitle(UpdateTitleBean event) {
-        if ("updateTitle".equals(event.getEvent())) {
-            weekLastTitle = event.getTitle();
-            mTopView.setAppTitle(weekLastTitle);
-        } else if ("monthLUpdateTitle".equals(event.getEvent())) {
-            try {
+        try {
+            if ("updateTitle".equals(event.getEvent())) {
+                weekLastTitle = event.getTitle();
+                if (!mMonthlyCalendarFragment.isHidden() && mWeekCalendarFragment.isHidden()) {
+                    mTopView.setAppTitle(weekLastTitle.substring(0, 8));
+                } else {
+                    mTopView.setAppTitle(weekLastTitle);
+                }
+            } else if ("monthLUpdateTitle".equals(event.getEvent())) {
+
                 monthLastTitle = event.getTitle();
                 monthLastTitle = monthLastTitle.substring(0, 8);
                 mTopView.setAppTitle(monthLastTitle);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

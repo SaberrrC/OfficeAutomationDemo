@@ -239,8 +239,10 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         String monthStr = (month < 10) ? "0" + month : month + "";
         String mDayStr = (selectPos < 10) ? "0" + selectPos : selectPos + "";
         String dateStr = mSelectedYear + "年" + monthStr + "月" + mDayStr + "日";
+        String dateStr2 = mSelectedYear + "-" + monthStr + "-" + mDayStr;
         popwindowCurDataStr = mSelectedYear + "年" + monthStr + "月";
         EventBus.getDefault().post(new UpdateTitleBean(dateStr, "monthLUpdateTitle"));
+        EventBus.getDefault().post(new SelectedWeekCalendarEvent(dateStr2, "slideRecyclerViewPosition"));
         startDate = mSelectedYear + "-" + month + "-" + "01";
         endDate = mSelectedYear + "-" + month + "-" + DateUtils.getDaysByYearMonth(mSelectedYear, month);
         mPresenter.getScheduleByDate(startDate, endDate);
@@ -395,7 +397,20 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     public void getTitleViewClicked(UpdateTitleBean bean) {
         if ("MonthlyCalendarFragment".equals(bean.getEvent()) && "MonthlyCalendarFragment".equals(bean.getTitle())) {
             selectMonthPopwindow(popwindowCurDataStr);
+        } else if (bean.getEvent().equals("updateTitle")) {
+            String dateStr = bean.getTitle() + "xxxx";
+            int year = Integer.parseInt(dateStr.substring(0, 4));
+            int mSelectedMonth = Integer.parseInt(dateStr.substring(5, 7));
+            int day = Integer.parseInt(dateStr.substring(8, 10));
+            mSelectedYear = year;
+            popwindowCurDataStr = mSelectedYear + "年" + mSelectedMonth + "月";
+//            if (mSelectedMonth == mCurrentMonth) {
+//                setData(mSelectedMonth, day);
+//            } else {
+//                setData(mSelectedMonth, 1);
+//            }
         }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -417,13 +432,11 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
                     public void confirm(String year, String month) {
                         mSelectedYear = Integer.parseInt(year);
                         mSelectedMonth = Integer.parseInt(month);
-
                         if (mSelectedMonth == mCurrentMonth) {
                             setData(mSelectedMonth, mCurrentDay);
                         } else {
                             setData(mSelectedMonth, 1);
                         }
-
                         mRecyclerView.requestLayout();
                         mScheduleMonthAdapter.notifyDataSetChanged();
                         monthSelectPopWindow.dismiss();
