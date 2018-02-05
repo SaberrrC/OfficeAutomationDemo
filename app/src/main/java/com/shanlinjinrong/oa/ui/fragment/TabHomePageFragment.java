@@ -413,7 +413,12 @@ public class TabHomePageFragment extends BaseFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                     showToast("获取用户权限失败");
-                    setUserLimit(null);
+                    mLlWorkReportContainer.setVisibility(View.GONE);
+                    mLlApprovalContainer.setVisibility(View.GONE);
+                    mLlApprovalChecking.setVisibility(View.GONE);
+                    mLlApprovalDate.setVisibility(View.GONE);
+                    mToolbarShadow.setVisibility(View.GONE);
+                    mTvEmptyView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -426,8 +431,13 @@ public class TabHomePageFragment extends BaseFragment {
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 showToast("获取用户权限失败");
-                hideLoadingView();
+                mLlWorkReportContainer.setVisibility(View.GONE);
+                mLlApprovalContainer.setVisibility(View.GONE);
+                mLlApprovalChecking.setVisibility(View.GONE);
+                mLlApprovalDate.setVisibility(View.GONE);
+                mToolbarShadow.setVisibility(View.GONE);
                 mTvEmptyView.setVisibility(View.VISIBLE);
+                hideLoadingView();
                 mTvEmptyView.setText("获取用户权限失败");
             }
         });

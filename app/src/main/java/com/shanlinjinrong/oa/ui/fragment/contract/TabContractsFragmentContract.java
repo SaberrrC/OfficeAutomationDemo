@@ -27,7 +27,6 @@ public interface TabContractsFragmentContract {
         void loadDataFinish();
 
         void loadDataTokenNoMatch(String code);
-
     }
 
     interface Presenter extends BasePresenter<View> {
