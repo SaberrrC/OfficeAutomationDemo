@@ -60,7 +60,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_work_report_tips"
@@ -280,7 +281,8 @@
                 android:layout_below="@+id/ll_work_report_container"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
@@ -501,7 +503,8 @@
                 android:layout_below="@+id/ll_approval_container"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
@@ -663,7 +666,8 @@
                 android:layout_below="@+id/ll_approval_container"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
@@ -700,9 +704,9 @@
                         android:id="@+id/rl_schedule_manage"
                         android:layout_width="0dp"
                         android:layout_height="84dp"
-                        android:visibility="gone"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_homepage_schedule_manage"
@@ -828,9 +832,9 @@
                     <FrameLayout
                         android:id="@+id/fl_blank42"
                         android:layout_width="0dp"
-                        android:visibility="visible"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:visibility="visible"/>
 
                     <View
                         android:id="@+id/stork_blank43"
@@ -849,16 +853,16 @@
                     <View
                         android:id="@+id/stork_blank44"
                         android:layout_width="0.5dp"
-                        android:visibility="visible"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color"/>
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="visible"/>
 
                     <FrameLayout
                         android:id="@+id/fl_blank44"
                         android:layout_width="0dp"
-                        android:visibility="visible"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:visibility="visible"/>
                 </LinearLayout>
 
                 <View
