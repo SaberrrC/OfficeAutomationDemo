@@ -403,12 +403,15 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
             int mSelectedMonth = Integer.parseInt(dateStr.substring(5, 7));
             int day = Integer.parseInt(dateStr.substring(8, 10));
             mSelectedYear = year;
+            if (mSelectedMonth == mCurrentMonth) {
+                mCurrentDay = day;
+            } else {
+                mCurrentMonth = mSelectedMonth;
+                mCurrentDay = 1;
+            }
             popwindowCurDataStr = mSelectedYear + "年" + mSelectedMonth + "月";
-//            if (mSelectedMonth == mCurrentMonth) {
-//                setData(mSelectedMonth, day);
-//            } else {
-//                setData(mSelectedMonth, 1);
-//            }
+        } else if (bean.getEvent().equals("changeMonthlyCalendarFragment")) {
+            setData(mSelectedMonth, mCurrentDay);
         }
 
     }

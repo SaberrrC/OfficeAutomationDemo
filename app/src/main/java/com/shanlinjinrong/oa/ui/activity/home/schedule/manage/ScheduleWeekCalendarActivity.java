@@ -67,6 +67,7 @@ public class ScheduleWeekCalendarActivity extends AppCompatActivity {
             if (mMonthlyCalendarFragment.isHidden()) {
                 getSupportFragmentManager().beginTransaction().show(mMonthlyCalendarFragment).commit();
                 getSupportFragmentManager().beginTransaction().hide(mWeekCalendarFragment).commit();
+                EventBus.getDefault().post(new UpdateTitleBean("", "changeMonthlyCalendarFragment"));
                 mTopView.setAppTitle(monthLastTitle);
             } else {
                 getSupportFragmentManager().beginTransaction().show(mWeekCalendarFragment).commit();
