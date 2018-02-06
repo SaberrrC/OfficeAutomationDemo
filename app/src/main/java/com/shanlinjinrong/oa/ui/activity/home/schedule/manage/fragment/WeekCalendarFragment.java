@@ -678,18 +678,19 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         Calendar c = Calendar.getInstance();
         try {
             c.setTime(format.parse(startDate));
+
+            int i = c.get(Calendar.DAY_OF_WEEK);
+            if (i == 1) {
+                mWeekCalendarBeans.get(mCurrPage).getIsSelected().set(6, true);
+            } else {
+                mWeekCalendarBeans.get(mCurrPage).getIsSelected().set(i - 2, true);
+            }
+            mHeaderRecyclerView.scrollToPosition(mCurrPage);
+            mTestAdapter.setNewData(mWeekCalendarBeans);
+            mTestAdapter.notifyItemChanged(mCurrPage);
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        int i = c.get(Calendar.DAY_OF_WEEK);
-        if (i == 1) {
-            mWeekCalendarBeans.get(mCurrPage).getIsSelected().set(6, true);
-        } else {
-            mWeekCalendarBeans.get(mCurrPage).getIsSelected().set(i - 2, true);
-        }
-        mHeaderRecyclerView.scrollToPosition(mCurrPage);
-        mTestAdapter.setNewData(mWeekCalendarBeans);
-        mTestAdapter.notifyItemChanged(mCurrPage);
     }
 
     @Override
