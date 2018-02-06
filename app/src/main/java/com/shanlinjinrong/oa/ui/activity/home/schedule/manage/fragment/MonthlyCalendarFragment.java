@@ -398,6 +398,7 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
         if ("MonthlyCalendarFragment".equals(bean.getEvent()) && "MonthlyCalendarFragment".equals(bean.getTitle())) {
             selectMonthPopwindow(popwindowCurDataStr);
         } else if (bean.getEvent().equals("updateTitle")) {
+            EventBus.getDefault().post(new UpdateTitleBean( bean.getTitle(), "monthLUpdateTitle"));
             String dateStr = bean.getTitle() + "xxxx";
             int year = Integer.parseInt(dateStr.substring(0, 4));
             int mSelectedMonth = Integer.parseInt(dateStr.substring(5, 7));
