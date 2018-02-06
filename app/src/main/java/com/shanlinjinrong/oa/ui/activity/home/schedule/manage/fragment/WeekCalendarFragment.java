@@ -140,6 +140,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
         calendar.set(lastYear, 0, 1);
         //更新Title
         EventBus.getDefault().post(new UpdateTitleBean(mCurrentYear + "年" + mCurrentMonth + "月" + mCurrentDay + "日", "updateTitle"));
+        EventBus.getDefault().post(new UpdateTitleBean(mCurrentYear + "年" + mCurrentMonth + "月" + mCurrentDay + "日", "changeMonthlyData"));
         Observable.create(e -> {
             //时间 数据
             mLeftDateList = new ArrayList<>();
@@ -360,6 +361,8 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                 mPresenter.QueryCalendarSchedule(day, day);
                 //更新 Title
                 EventBus.getDefault().post(new UpdateTitleBean(event.getDate(), "updateTitle"));
+                //点击滑动栏
+                EventBus.getDefault().post(new UpdateTitleBean(event.getDate(), "changeMonthlyData"));
 
                 mWeekCalendarBeans.get(event.getPosition()).getIsSelected().set(event.getIndex(), true);
                 mTestAdapter.setNewData(mWeekCalendarBeans);
@@ -500,6 +503,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
                                     String currentTime = event.getStartTime();
                                     String TitleDate = DateUtils.getBiDisplayDateByTimestamp(DateUtils.getTimestampFromString(currentTime, "yyyy-MM-dd"));
                                     EventBus.getDefault().post(new UpdateTitleBean(TitleDate, "updateTitle"));
+                                    EventBus.getDefault().post(new UpdateTitleBean(TitleDate, "changeMonthlyData"));
                                     DateTime StartTime = new DateTime("1901-01-01");
                                     DateTime currentItem = new DateTime(currentTime);
                                     int intervalWeek = CalendarUtils.getIntervalWeek(StartTime, currentItem, 1);
@@ -559,6 +563,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
 
                 //更新 Title
                 EventBus.getDefault().post(new UpdateTitleBean(date, "updateTitle"));
+                EventBus.getDefault().post(new UpdateTitleBean(date, "changeMonthlyData"));
                 ScrowTimeView(dataStr);
                 queryCalendar(dataStr, dataStr);
                 break;
@@ -645,6 +650,7 @@ public class WeekCalendarFragment extends BaseHttpFragment<WeekCalendarFragmentP
             picker.setOnDatePickListener((DatePicker.OnYearMonthDayPickListener) (year, month, day) -> {
                 String mSelectedDay = year + "年" + month + "月" + day + "日";
                 EventBus.getDefault().post(new UpdateTitleBean(mSelectedDay, "updateTitle"));
+                EventBus.getDefault().post(new UpdateTitleBean(mSelectedDay, "changeMonthlyData"));
                 String startDate = year + "-" + month + "-" + day;
 
                 ScrowTimeView(startDate);

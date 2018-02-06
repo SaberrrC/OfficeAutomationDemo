@@ -397,22 +397,20 @@ public class MonthlyCalendarFragment extends BaseHttpFragment<MonthlyCalendarFra
     public void getTitleViewClicked(UpdateTitleBean bean) {
         if ("MonthlyCalendarFragment".equals(bean.getEvent()) && "MonthlyCalendarFragment".equals(bean.getTitle())) {
             selectMonthPopwindow(popwindowCurDataStr);
-        } else if (bean.getEvent().equals("updateTitle")) {
-            EventBus.getDefault().post(new UpdateTitleBean( bean.getTitle(), "monthLUpdateTitle"));
+        } else if (bean.getEvent().equals("changeMonthlyData")) {
             String dateStr = bean.getTitle() + "xxxx";
             int year = Integer.parseInt(dateStr.substring(0, 4));
             int mSelectedMonth = Integer.parseInt(dateStr.substring(5, 7));
             int day = Integer.parseInt(dateStr.substring(8, 10));
             mSelectedYear = year;
-            if (mSelectedMonth == mCurrentMonth) {
+            if (mCurrentMonth == mSelectedMonth) {
                 mCurrentDay = day;
             } else {
                 mCurrentMonth = mSelectedMonth;
-                mCurrentDay = 1;
+                mCurrentDay = day;
             }
-            popwindowCurDataStr = mSelectedYear + "年" + mSelectedMonth + "月";
         } else if (bean.getEvent().equals("changeMonthlyCalendarFragment")) {
-            setData(mSelectedMonth, mCurrentDay);
+            setData(mCurrentMonth, mCurrentDay);
         }
 
     }
