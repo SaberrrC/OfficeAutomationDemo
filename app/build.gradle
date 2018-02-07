@@ -17,7 +17,7 @@ android {
         resConfigs "en", "zh-rCN"
 
         //pwd:13579
-        versionCode 27
+        versionCode 20
         versionName "v1.7.1.0"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'

@@ -121,7 +121,7 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
             R.id.btn_feedback, R.id.btn_update, R.id.btn_about_us, R.id.btn_clear_cache})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 1000) {
+        if (currentTime - lastClickTime < 200) {
             lastClickTime = currentTime;
             return;
         }
