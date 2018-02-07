@@ -19,7 +19,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.retrofit.model.responsebody.LimitResponseBody;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
@@ -239,7 +238,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
         LogUtils.e("user->" + user);
         AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
-        mPresenter.getUserLimit();
+        goToLogin();
     }
 
     @Override
@@ -270,29 +269,17 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     public void requestFinish() {
     }
 
-    @Override
-    public void onGetUserLimitSuccess(LimitResponseBody bean) {
-        hideLoadingView();
-        AppConfig.getAppConfig(LoginActivity.this).setUserLimit(bean);
-        goToLogin();
-    }
-
-    @Override
-    public void onGetUserLimitFailure(String code, String message) {
-        hideLoadingView();
-        catchWarningByCode(code);
-    }
 
     @Override
     public void uidNull(String code) {
         hideLoadingView();
     }
 
+
     private void goToLogin() {
         showToast("登录成功");
         hideLoadingView();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
 
