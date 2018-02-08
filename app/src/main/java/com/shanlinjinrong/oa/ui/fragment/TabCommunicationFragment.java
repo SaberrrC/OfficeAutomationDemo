@@ -186,7 +186,7 @@ public class TabCommunicationFragment extends BaseFragment {
 
     @Override
     public void onResume() {
-        LogUtils.e("刷新下主界面消息的数量");
+//        LogUtils.e("刷新下主界面消息的数量");
         //刷新下主界面消息的数量
         MainActivity mainController = (MainActivity) getActivity();
         super.onResume();

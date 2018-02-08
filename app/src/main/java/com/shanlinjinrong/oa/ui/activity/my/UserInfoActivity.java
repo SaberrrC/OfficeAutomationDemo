@@ -48,7 +48,6 @@ import com.shanlinjinrong.oa.ui.activity.my.contract.UserInfoActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.UserInfoActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.FileUtils;
-import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.views.BaseBottomPushPopupWindow;
 
 import java.io.BufferedOutputStream;
@@ -377,7 +376,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 }
                 //将要保存图片的路径
                 File file = new File(Constants.FileUrl.TEMP + "Cut_image_" + Calendar.getInstance().getTimeInMillis() + ".jpg");
-                LogUtils.e("file->" + file.getAbsolutePath());
+//                LogUtils.e("file->" + file.getAbsolutePath());
                 try {
                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                     assert bitmap != null;
@@ -476,7 +475,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
             try {
                 popupWindow.dismiss();
                 //退出环信登录
-                LogUtils.e("退出环信");
+//                LogUtils.e("退出环信");
                 showLoadingView();
                 DemoHelper.getInstance().logout(true, new EMCallBack() {
                     @Override
@@ -511,7 +510,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                     hideLoadingView();
                     showToast("退出失败，请重试");
                 });
-                LogUtils.e("退出环信抛出异常" + e.toString());
+//                LogUtils.e("退出环信抛出异常" + e.toString());
                 //exitToLogin();
             }
         });

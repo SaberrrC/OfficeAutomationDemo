@@ -236,7 +236,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     public void loginSuccess(UserInfo.DataBean user) {
         //登录成功后清空原来的信息
         AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
-        LogUtils.e("user->" + user);
         AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
         goToLogin();
     }

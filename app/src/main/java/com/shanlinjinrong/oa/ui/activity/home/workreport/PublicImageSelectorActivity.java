@@ -64,9 +64,9 @@ public class PublicImageSelectorActivity extends BaseActivity implements
         String size = filesSize.substring(0, filesSize.indexOf("."));
         String unit = filesSize.substring(filesSize.length() - 2, filesSize.length());
         //17.76KB  2.32MB
-        LogUtils.e("filesSize->" + filesSize);
-        LogUtils.e("文件大小->" + size);
-        LogUtils.e("文件单位->" + unit);
+//        LogUtils.e("filesSize->" + filesSize);
+//        LogUtils.e("文件大小->" + size);
+//        LogUtils.e("文件单位->" + unit);
         if (unit.equals("MB")) {
             if (Integer.parseInt(size)<20) {
                 onSuccess(Uri.fromFile(new File(path)));

@@ -67,6 +67,7 @@ public class MyMailActivity extends BaseActivity {
             webView.removeJavascriptInterface("accessibility");
             webView.removeJavascriptInterface("accessibilityTraversal");
             webView.getSettings().setAllowFileAccess(false);
+            webView.getSettings().setSavePassword(false);
         }
         mWebViewClient = new WebViewClient() {
             @Override

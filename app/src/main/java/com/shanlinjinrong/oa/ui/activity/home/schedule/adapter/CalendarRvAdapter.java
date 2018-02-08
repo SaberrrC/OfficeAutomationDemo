@@ -27,7 +27,7 @@ public class CalendarRvAdapter extends BaseQuickAdapter<ScheduleRvItemData> {
     @Override
     protected void convert(BaseViewHolder holder, ScheduleRvItemData schedule) {
         if (type.equals("3")) {
-            LogUtils.e("type.equals(\"3\")");
+//            LogUtils.e("type.equals(\"3\")");
             holder.getView(R.id.tv_date).setVisibility(View.GONE);
             holder.getView(R.id.tv_room).setVisibility(View.GONE);
             holder.setText(R.id.tv_theme, schedule.getTheme());

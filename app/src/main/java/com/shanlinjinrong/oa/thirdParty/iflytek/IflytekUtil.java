@@ -14,7 +14,6 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
-import com.shanlinjinrong.oa.utils.LogUtils;
 
 /**
  * ProjectName: dev-beta-v1.0.1
@@ -84,13 +83,13 @@ public class IflytekUtil {
             } else {
                 showToast("recognizer result : null");
             }
-            LogUtils.e("识别结果：" + recognizerResult.getResultString());
+//            LogUtils.e("识别结果：" + recognizerResult.getResultString());
         }
 
         @Override
         public void onError(SpeechError speechError) {
             iatDialog.dismiss();
-            LogUtils.e(speechError.toString());
+//            LogUtils.e(speechError.toString());
         }
     };
 

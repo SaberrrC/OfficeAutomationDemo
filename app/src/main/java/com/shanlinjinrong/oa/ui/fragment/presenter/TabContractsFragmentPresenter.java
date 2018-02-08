@@ -47,7 +47,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                LogUtils.e("联系人返回数据-》" + t);
+//                LogUtils.e("联系人返回数据-》" + t);
                 List<User> users = new ArrayList<>();
                 try {
                     JSONObject jo = new JSONObject(t);

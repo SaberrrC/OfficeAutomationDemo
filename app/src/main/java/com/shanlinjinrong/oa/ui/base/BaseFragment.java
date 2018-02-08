@@ -86,7 +86,6 @@ public abstract class BaseFragment extends Fragment {
     public void showLoadingView() {
         if (loadingDialog != null && !loadingDialog.isShowing()) {
             loadingDialog.show();
-            LogUtils.e("showLoadingView " + getActivity());
         }
 
     }
@@ -157,7 +156,6 @@ public abstract class BaseFragment extends Fragment {
                 JPushInterface.setTags(getContext(), null, null);
                 toLoginActivity();
             } catch (Exception e) {
-                LogUtils.e("退出环信抛出异常" + e.toString());
                 toLoginActivity();
             }
         }
@@ -238,14 +236,11 @@ public abstract class BaseFragment extends Fragment {
                 }
             }
         } catch (Exception e) {
-            LogUtils.e("当前没有空的View");
         }
 
     }
 
     public void hideLoadingView() {
-        LogUtils.e("hideLoadingView");
-        LogUtils.e("getClass " + getClass());
         if (loadingDialog.isShowing()) {
             loadingDialog.cancel();
         }

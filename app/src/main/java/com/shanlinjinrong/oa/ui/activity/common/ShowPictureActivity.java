@@ -33,7 +33,7 @@ public class ShowPictureActivity extends BaseActivity {
         initData();
     }
     protected void initData() {
-        LogUtils.e("picUrl--->"+getIntent().getStringExtra("picUrl"));
+//        LogUtils.e("picUrl--->"+getIntent().getStringExtra("picUrl"));
         sdSinglePicture.setPhotoUri(Uri.parse(getIntent().getStringExtra("picUrl")));
         sdSinglePicture.setOnPhotoTapListener(new OnPhotoTapListener() {
             @Override

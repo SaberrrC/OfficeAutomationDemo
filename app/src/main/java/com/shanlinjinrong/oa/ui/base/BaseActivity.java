@@ -15,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +38,6 @@ import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.activity.login.LoginActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
-import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.ScreenUtils;
 
 import org.kymjs.kjframe.KJHttp;
@@ -150,17 +148,17 @@ public class BaseActivity extends AppCompatActivity {
         if (EMClient.getInstance().isConnected()) {
             try {
                 //退出环信登录
-                LogUtils.e("退出环信");
+//                LogUtils.e("退出环信");
 
                 DemoHelper.getInstance().logout(true, new EMCallBack() {
                     @Override
                     public void onSuccess() {
-                        Log.d("退出环信成功！！", "退出环信成功！！");
+//                        Log.d("退出环信成功！！", "退出环信成功！！");
                     }
 
                     @Override
                     public void onError(int i, String s) {
-                        Log.d("退出环信抛出异常", i + s);
+//                        Log.d("退出环信抛出异常", i + s);
                     }
 
                     @Override
@@ -179,7 +177,7 @@ public class BaseActivity extends AppCompatActivity {
                 toLoginActivity();
 
             } catch (Exception e) {
-                LogUtils.e("退出环信抛出异常" + e.toString());
+//                LogUtils.e("退出环信抛出异常" + e.toString());
                 toLoginActivity();
             }
         }
@@ -332,7 +330,7 @@ public class BaseActivity extends AppCompatActivity {
             View emptyView = view.findViewById(R.id.rl_empty_view);
             view.removeView(emptyView);
         } catch (Exception e) {
-            LogUtils.e("当前没有空的View");
+//            LogUtils.e("当前没有空的View");
         }
 
     }
@@ -380,7 +378,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param listener
      */
     public void requestRunTimePermission(String[] permissions, PermissionListener listener) {
-        LogUtils.e("requestRunTimePermission。。。");
+//        LogUtils.e("requestRunTimePermission。。。");
         mlistener = listener;
         List<String> permissionList = new ArrayList<>();
         for (String permission : permissions) {

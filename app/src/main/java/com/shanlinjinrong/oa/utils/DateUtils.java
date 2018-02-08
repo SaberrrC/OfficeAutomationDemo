@@ -266,9 +266,9 @@ public class DateUtils {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
             Date date1 = sdf.parse(beginTime);
             Date date2 = sdf.parse(EndTime);
-            LogUtils.e("date1：" + date1);
-            LogUtils.e("date2：" + date2);
-            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
+//            LogUtils.e("date1：" + date1);
+//            LogUtils.e("date2：" + date2);
+//            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
             if (date2.getTime() - date1.getTime() > 0) {
                 return true;
             } else {
@@ -284,14 +284,14 @@ public class DateUtils {
      * @return 精确到天，判断时间先后顺序 True,是正确的先后时间,
      */
     public static boolean judeDateOrderByDay(String beginTime, String EndTime) {
-        LogUtils.e("judeDateOrderByDay->beginTime:" + beginTime + "endTime:" + EndTime);
+//        LogUtils.e("judeDateOrderByDay->beginTime:" + beginTime + "endTime:" + EndTime);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date1 = sdf.parse(beginTime);
             Date date2 = sdf.parse(EndTime);
-            LogUtils.e("date1：" + date1);
-            LogUtils.e("date2：" + date2);
-            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
+//            LogUtils.e("date1：" + date1);
+//            LogUtils.e("date2：" + date2);
+//            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
             if (date2.getTime() - date1.getTime() >= 0) {
                 return true;
             } else {

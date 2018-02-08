@@ -36,7 +36,6 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 System.out.println(t);
-                LogUtils.e("登录返回数据-》" + t);
                 try {
                     UserInfo user = new Gson().fromJson(t, new TypeToken<UserInfo>() {
                     }.getType());

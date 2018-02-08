@@ -50,7 +50,7 @@ public class Report {
             createTime = jsonObject.getString("createtime");
             type = jsonObject.getString("type");
             status = jsonObject.getString("status");
-            LogUtils.e("report的构造方法执行了");
+//            LogUtils.e("report的构造方法执行了");
         } catch (JSONException e) {
         }
     }
