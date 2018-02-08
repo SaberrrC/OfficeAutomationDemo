@@ -480,7 +480,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 DemoHelper.getInstance().logout(true, new EMCallBack() {
                     @Override
                     public void onSuccess() {
-                        Log.d("退出环信", "退出环信成功！！");
+//                        Log.d("退出环信", "退出环信成功！！");
                         runOnUiThread(() -> {
                             hideLoadingView();
                             JPushInterface.setAlias(UserInfoActivity.this, "", (i, s, set) -> {
@@ -492,7 +492,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
 
                     @Override
                     public void onError(int i, String s) {
-                        Log.d("退出环信", i + s);
+//                        Log.d("退出环信", i + s);
                         runOnUiThread(() -> {
                             hideLoadingView();
                             showToast("退出失败，请重试");

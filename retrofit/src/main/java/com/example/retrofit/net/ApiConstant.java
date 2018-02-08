@@ -9,7 +9,7 @@ public class ApiConstant {
     /**
      * 预发布环境  testoa
      */
-    //    public final static String BASE_PIC_URL = "http://public.testoa.shanlinjinrong.com";
+        public final static String BASE_PIC_URL = "http://public.testoa.shanlinjinrong.com";
 
     /**
      * 开发环境
@@ -19,7 +19,7 @@ public class ApiConstant {
     /**
      * 测试环境
      */
-    public final static String BASE_PIC_URL = "http://10.5.202.122:9105";
+//    public final static String BASE_PIC_URL = "http://10.5.202.122:9105";
 
 
     //TODO   接口地址
@@ -31,7 +31,7 @@ public class ApiConstant {
     /**
      *  预发布环境  testoa
      */
-    //    public static final String JAVA_TEST_HOST = "http://testoa.shanlinjinrong.com/oa-api/";
+        public static final String JAVA_TEST_HOST = "http://testoa.shanlinjinrong.com/oa-api/";
 
 
     /**
@@ -42,7 +42,7 @@ public class ApiConstant {
     /**
      * 测试环境
      */
-    public static final String JAVA_TEST_HOST = "http://10.5.202.122:9105/";
+//    public static final String JAVA_TEST_HOST = "http://10.5.202.122:9105/";
 
     /**
      * 新外网

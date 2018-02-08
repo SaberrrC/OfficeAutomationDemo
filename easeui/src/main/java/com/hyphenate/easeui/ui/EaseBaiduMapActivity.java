@@ -21,7 +21,6 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -148,7 +147,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 				if (progressDialog.isShowing()) {
 					progressDialog.dismiss();
 				}
-				Log.d("map", "cancel retrieve location");
+//				Log.d("map", "cancel retrieve location");
 				finish();
 			}
 		});
@@ -209,8 +208,8 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 			if (location == null) {
 				return;
 			}
-			Log.d("map", "On location change received:" + location);
-			Log.d("map", "addr:" + location.getAddrStr());
+//			Log.d("map", "On location change received:" + location);
+//			Log.d("map", "addr:" + location.getAddrStr());
 			sendButton.setEnabled(true);
 			if (progressDialog != null) {
 				progressDialog.dismiss();
@@ -218,7 +217,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 
 			if (lastLocation != null) {
 				if (lastLocation.getLatitude() == location.getLatitude() && lastLocation.getLongitude() == location.getLongitude()) {
-					Log.d("map", "same location, skip refresh");
+//					Log.d("map", "same location, skip refresh");
 					// mMapView.refresh(); //need this refresh?
 					return;
 				}

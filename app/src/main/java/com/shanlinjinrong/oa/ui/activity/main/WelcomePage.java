@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -12,7 +11,6 @@ import android.view.animation.Animation;
 import com.huawei.hms.api.ConnectionResult;
 import com.huawei.hms.api.HuaweiApiClient;
 import com.huawei.hms.support.api.push.HuaweiPush;
-import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
@@ -49,7 +47,7 @@ public class WelcomePage extends Activity {
                 .addConnectionCallbacks(new HuaweiApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected() {
-                        Log.d("TAG", "HuaweiApiClient 连接成功");
+//                        Log.d("TAG", "HuaweiApiClient 连接成功");
                     }
 
                     @Override

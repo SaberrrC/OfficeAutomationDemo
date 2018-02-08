@@ -13,7 +13,6 @@ import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.WebView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -55,21 +54,20 @@ public class AppManager extends MultiDexApplication {
     private WebView mWebView;
 
     private static Stack<Activity> activityStack;
-    private static AppManager instance;
-    public static Context mContext;
-    public static ToastManager sToastManager;
+    private static AppManager      instance;
+    public static  Context         mContext;
+    public static  ToastManager    sToastManager;
 
     private AppComponent appComponent;
 
     //内存检测start
     public static RefWatcher getRefWatcher(Context context) {
-        AppManager application = (AppManager) context
-                .getApplicationContext();
+        AppManager application = (AppManager) context.getApplicationContext();
         return application.refWatcher;
     }
 
     private RefWatcher refWatcher;
-//    内存检测end
+    //    内存检测end
 
     public AppManager() {
         if (sToastManager == null) {
@@ -81,7 +79,7 @@ public class AppManager extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        mContext= this;
+        mContext = this;
 
         //注册Crash接口（必选）
         // PgyCrashManager.register(this);
@@ -95,12 +93,10 @@ public class AppManager extends MultiDexApplication {
         // SpeechUtility.createUtility(AppManager.mContext, SpeechConstant.APPID + "=59ae7651");
 
         //极光初始化+
-        BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(
-                AppManager.mContext);
+        BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(AppManager.mContext);
         builder.statusBarDrawable = R.drawable.login_logo;
         builder.notificationFlags = Notification.FLAG_AUTO_CANCEL;  //设置为自动消失
-        builder.notificationDefaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE |
-                Notification.DEFAULT_LIGHTS;
+        builder.notificationDefaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS;
         JPushInterface.setPushNotificationBuilder(1, builder);
 
         // 设置为铃声与震动都要
@@ -139,8 +135,7 @@ public class AppManager extends MultiDexApplication {
 
         initAppComponent();
         File cacheFile = new File(this.getCacheDir(), "cache_path_name");
-        CacheWebView.getCacheConfig().init(this, cacheFile.getAbsolutePath(), 1024 * 1024 * 20, 1024 * 1024 * 5)
-                .enableDebug(true);//20M 磁盘缓存空间,5M 内存缓存空间
+        CacheWebView.getCacheConfig().init(this, cacheFile.getAbsolutePath(), 1024 * 1024 * 20, 1024 * 1024 * 5).enableDebug(true);//20M 磁盘缓存空间,5M 内存缓存空间
     }
 
     private void initCrash() {
@@ -160,7 +155,7 @@ public class AppManager extends MultiDexApplication {
                     public void run() {
                         try {
                             //建议使用下面方式在控制台打印异常，这样就可以在Error级别看到红色log
-                            Log.e("AndroidRuntime", "--->CockroachException:" + thread + "<---", throwable);
+//                            Log.e("AndroidRuntime", "--->CockroachException:" + thread + "<---", throwable);
                             //                        throw new RuntimeException("..."+(i++));
                         } catch (Throwable e) {
 
@@ -216,11 +211,7 @@ public class AppManager extends MultiDexApplication {
     }
 
     private void initAppComponent() {
-        appComponent = DaggerAppComponent
-                .builder()
-                .appManagerModule(new AppManagerModule(this))
-                .kjHttpModule(new KjHttpModule())
-                .build();
+        appComponent = DaggerAppComponent.builder().appManagerModule(new AppManagerModule(this)).kjHttpModule(new KjHttpModule()).build();
     }
 
     /**
@@ -317,7 +308,7 @@ public class AppManager extends MultiDexApplication {
             finishAllActivity();
             //杀死该应用进程
             android.os.Process.killProcess(android.os.Process.myPid());
-//            System.exit(0);
+            //            System.exit(0);
         } catch (Exception e) {
         }
     }
