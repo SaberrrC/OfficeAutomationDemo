@@ -245,14 +245,20 @@ public interface ApiJava {
      */
     String PHONENUMBER_UPDATE = "user/changePhone";
 
-
+    /**
+     * 修改电话
+     */
     String MODIFICATION_PHONE="user/modifyPhone";
 
     /**
      * 发送验证码到手机
      */
-
     String REQUEST_VERIFYCODE ="user/sendVerifyCode";
+
+    /**
+     * 发送验证码到手机
+     */
+    String REQUEST_EMAIL_VERIFY_CODE ="user/sendVerifyCode";
 
     /**
      * 用户反馈

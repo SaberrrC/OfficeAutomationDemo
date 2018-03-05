@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.Text;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.ApiJava;
@@ -21,6 +22,7 @@ import com.shanlinjinrong.oa.ui.activity.my.contract.ModificationEmailContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.ModificationEmailPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
+import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,15 +46,19 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.et_email_redact)
-    EditText mEtEmailRedact;
+    EditText      mEtEmailRedact;
     @BindView(R.id.tv_email_selected)
-    TextView mTvEmailSelected;
-    @BindView(R.id.tv_tips)
-    TextView mTvTips;
+    TextView      mTvEmailSelected;
+    //    @BindView(R.id.tv_tips)
+//    TextView      mTvTips;
+    @BindView(R.id.et_verify_code)
+    EditText      mEtVerifyCode;
+    @BindView(R.id.btn_verify_code)
+    TextView      mBtnVerifyCode;
 
-    private List<String> mData;
+    private List<String>      mData;
     private CustomDialogUtils mDialog;
-    private HolidayAdapter mTypeAdapter;
+    private HolidayAdapter    mTypeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,34 +87,44 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     private void initView() {
         mTvEmailSelected.setText(mData.get(0));
         mTopView.getRightView().setOnClickListener(view -> {
-            if (check()) {
-                mPresenter.modificationEmail(mEtEmailRedact.getText().toString().trim() + mTvEmailSelected.getText().toString());
+
+            if (TextUtils.isEmpty(mEtVerifyCode.getText().toString().trim())) {
+                showToast("请输入验证码");
+                return;
             }
+
+            if (check()) {
+                mPresenter.modificationEmail(mEtEmailRedact.getText().toString().trim() + mTvEmailSelected.getText().toString(), mEtVerifyCode.getText().toString().trim());
+            }
+
+
         });
 
-        try {
-            //EditText 自动搜索,间隔->输入停止1秒后自动搜索
-            RxTextView.textChanges(mEtEmailRedact)
-                    .debounce(500, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(charSequence -> {
-                        check();
-                    });
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+//        try {
+//            //EditText 自动搜索,间隔->输入停止1秒后自动搜索
+//            RxTextView.textChanges(mEtEmailRedact)
+//                    .debounce(500, TimeUnit.MILLISECONDS)
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeOn(Schedulers.io())
+//                    .subscribe(charSequence -> {
+//                        check();
+//                    });
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
     }
 
     private boolean check() {
         if (TextUtils.isEmpty(mEtEmailRedact.getText().toString().trim()) && mEtEmailRedact.getText().toString().length() > 0) {
-            mTvTips.setText("邮箱名不能为空！");
+            showToast("邮箱名不能为空！");
+//            mTvTips.setText("邮箱名不能为空！");
             return false;
         }
 
         for (int i = 0; i < mEtEmailRedact.getText().toString().length(); i++) {
-            if (mEtEmailRedact.getText().toString().substring(i, i + 1).equals(" ")) {
-                mTvTips.setText("邮箱名不能含有空格！");
+            if (TextUtils.isEmpty(mEtEmailRedact.getText().toString().substring(i, i + 1))) {
+                showToast("邮箱名不能含有空格！");
+//                mTvTips.setText("邮箱名不能含有空格！");
                 return false;
             }
         }
@@ -116,19 +132,30 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
         for (int i = 0; i < mEtEmailRedact.getText().toString().length(); i++) {
             String str = mEtEmailRedact.getText().toString().substring(i, i + 1);
             if (Pattern.matches("[\u4E00-\u9FA5]", str)) {
-                mTvTips.setText("邮箱名不能含有中文！");
+                showToast("邮箱名不能含有中文！");
+//                mTvTips.setText("邮箱名不能含有中文！");
                 return false;
             }
         }
-        mTvTips.setText("");
+//        mTvTips.setText("");
         return true;
     }
 
-    @OnClick(R.id.tv_email_selected)
+    @OnClick({R.id.tv_email_selected, R.id.btn_verify_code})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_email_selected:
                 selectedDialog();
+                break;
+            case R.id.btn_verify_code:
+                if (TextUtils.isEmpty(mEtEmailRedact.getText().toString().trim())) {
+                    showToast("请输入邮箱");
+                    return;
+                }
+                Utils.countDown(mBtnVerifyCode);
+                if (check()) {
+                    mPresenter.requestVerifyCode(mEtEmailRedact.getText().toString().trim());
+                }
                 break;
             default:
                 break;
