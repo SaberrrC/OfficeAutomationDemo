@@ -87,17 +87,17 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     private void initView() {
         mTvEmailSelected.setText(mData.get(0));
         mTopView.getRightView().setOnClickListener(view -> {
-
-            if (TextUtils.isEmpty(mEtVerifyCode.getText().toString().trim())) {
-                showToast("请输入验证码");
+            if (TextUtils.isEmpty(mEtEmailRedact.getText().toString().trim())) {
+                showToast("请输入邮箱");
                 return;
             }
-
             if (check()) {
+                if (TextUtils.isEmpty(mEtVerifyCode.getText().toString().trim())) {
+                    showToast("请输入验证码");
+                    return;
+                }
                 mPresenter.modificationEmail(mEtEmailRedact.getText().toString().trim() + mTvEmailSelected.getText().toString(), mEtVerifyCode.getText().toString().trim());
             }
-
-
         });
 
 //        try {
@@ -154,7 +154,7 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
                 }
                 Utils.countDown(mBtnVerifyCode);
                 if (check()) {
-                    mPresenter.requestVerifyCode(mEtEmailRedact.getText().toString().trim());
+                    mPresenter.requestVerifyCode(mEtEmailRedact.getText().toString().trim() + mTvEmailSelected.getText().toString());
                 }
                 break;
             default:
