@@ -10,6 +10,8 @@ public interface ModificationEmailContract {
         void modificationEmailSuccess(); // 成功
 
         void modificationEmailFailed(int errorNo, String strMsg); //失败
+
+        void requestVerifyCodeSuccess(); // 成功
     }
 
     interface Presenter extends BasePresenter<ModificationEmailContract.View> {

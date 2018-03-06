@@ -171,7 +171,7 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
 
     @Override
     public void RequestVerifyCodeSuccess() {
-        showToast("发送验证码成功！");
+        showToast("发送成功！");
     }
 
     @Override

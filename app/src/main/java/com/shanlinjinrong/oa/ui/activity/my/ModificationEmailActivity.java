@@ -248,6 +248,11 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
     }
 
     @Override
+    public void requestVerifyCodeSuccess() {
+        showToast("发送成功！");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {

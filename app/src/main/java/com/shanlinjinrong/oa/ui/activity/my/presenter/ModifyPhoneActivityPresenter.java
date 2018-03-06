@@ -140,7 +140,29 @@ public class ModifyPhoneActivityPresenter extends HttpPresenter<ModifyPhoneActiv
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                mView.RequestVerifyCodeSuccess();
+                try {
+                    CommonRequestBean requestStatus = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
+                    switch (requestStatus.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            if (mView != null) {
+                                mView.RequestVerifyCodeSuccess();
+                            }
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null) {
+                                mView.uidNull(requestStatus.getCode());
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override

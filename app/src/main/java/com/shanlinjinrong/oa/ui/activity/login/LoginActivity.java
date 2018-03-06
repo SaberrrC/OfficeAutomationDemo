@@ -1,5 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.login;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -62,6 +63,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     TextView       mTvFindPwd;
     private DoubleClickExitHelper doubleClickExitHelper;
     private int     UPDATE_RECYCLERVIEW_POSITION = 11;
+
     private Handler mHandler                     = new Handler() {
         @Override
         public void handleMessage(Message msg) {

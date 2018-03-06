@@ -1,6 +1,9 @@
 package com.shanlinjinrong.oa.ui.activity.my.presenter;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModificationEmailContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
@@ -80,11 +83,35 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                try {
+                    CommonRequestBean requestStatus = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {
+                    }.getType());
+                    switch (requestStatus.getCode()) {
+                        case ApiJava.REQUEST_CODE_OK:
+                            if (mView != null) {
+                                mView.requestVerifyCodeSuccess();
+                            }
+                            break;
+                        case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                        case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                        case ApiJava.ERROR_TOKEN:
+                            if (mView != null) {
+                                mView.uidNull(requestStatus.getCode());
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
+
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
             }
+
             @Override
             public void onFinish() {
                 super.onFinish();
