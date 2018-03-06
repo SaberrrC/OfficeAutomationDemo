@@ -81,12 +81,10 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
             public void onSuccess(String t) {
                 super.onSuccess(t);
             }
-
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
             }
-
             @Override
             public void onFinish() {
                 super.onFinish();

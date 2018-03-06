@@ -205,7 +205,7 @@ public interface ApiJava {
     /**
      * 修改邮箱
      */
-    String CHANGE_EMAIL = "user/updateEmail";
+    String CHANGE_EMAIL = "user/newUpdateEmail";
 
 
     String RESPONSES_KEY_CODE = "code";
@@ -258,7 +258,7 @@ public interface ApiJava {
     /**
      * 发送验证码到手机
      */
-    String REQUEST_EMAIL_VERIFY_CODE ="user/sendVerifyCode";
+    String REQUEST_EMAIL_VERIFY_CODE ="user/sendEmailCode";
 
     /**
      * 用户反馈
