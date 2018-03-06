@@ -255,6 +255,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mTolbarTextBtn.setVisibility(View.VISIBLE);
         mToolbar.setNavigationIcon(R.drawable.toolbar_back);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 if (isShowCheck) {
@@ -621,7 +622,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 setTextChecked(mTvMouth);
                 mTime = "4";
                 break;
-            case R.id.tv_all_type:
+            case R.id.tv_all_type://改为办公用品
                 setTypeTextDefault();
                 setTextChecked(mTvAllType);
                 mBillType = "";
