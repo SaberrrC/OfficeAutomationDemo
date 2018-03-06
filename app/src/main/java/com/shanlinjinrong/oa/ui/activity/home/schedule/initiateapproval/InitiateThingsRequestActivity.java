@@ -910,7 +910,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             catchWarningByCode(msg);
             return;
         }
-        showToast(msg.trim());
+        if (TextUtils.isEmpty(msg.trim())) {
+            showToast("服务器异常，请稍后重试！");
+        } else {
+            showToast(msg.trim());
+        }
     }
 
     @Override
@@ -919,7 +923,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             catchWarningByCode(str);
             return;
         }
-        showToast(str);
+        if (TextUtils.isEmpty(str)) {
+            showToast("服务器异常，请稍后重试！");
+        } else {
+            showToast(str);
+        }
         mTvNotNetwork.setText(str);
     }
 
@@ -1021,6 +1029,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             catchWarningByCode(str);
             return;
         }
+        if (TextUtils.isEmpty(str)) {
+            showToast( "服务器异常，请稍后重试！");
+            return;
+        }
         showToast(str);
     }
 
@@ -1037,11 +1049,17 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             return;
         }
         if (errorCode == -1) {
-            showToast(getString(R.string.string_not_network));
+            if (TextUtils.isEmpty(getString(R.string.string_not_network))) {
+                showToast("服务器异常，请稍后重试！");
+            } else {
+                showToast(getString(R.string.string_not_network));
+            }
             return;
         }
         if (!TextUtils.isEmpty(str)) {
             showToast(str);
+        } else {
+            showToast("服务器异常，请稍后重试！");
         }
     }
 
@@ -1062,7 +1080,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast(getString(R.string.string_not_network));
                 return;
         }
-        showToast(str);
+        if (TextUtils.isEmpty(str)) {
+            showToast("服务器异常，请稍后重试！");
+        } else {
+            showToast(str);
+        }
     }
 
     @Override
@@ -1109,7 +1131,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast(getString(R.string.string_not_network));
                 return;
         }
-        showToast(str);
+        if (TextUtils.isEmpty(str)) {
+            showToast("服务器异常，请稍后重试！");
+        } else {
+            showToast(str);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
