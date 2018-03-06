@@ -13,6 +13,10 @@ public interface ModificationEmailContract {
     }
 
     interface Presenter extends BasePresenter<ModificationEmailContract.View> {
-        void modificationEmail(String email);
+//        void modificationEmail(String email);
+
+        void modificationEmail(String email,String verifyCode);
+
+        void requestVerifyCode(String email);
     }
 }

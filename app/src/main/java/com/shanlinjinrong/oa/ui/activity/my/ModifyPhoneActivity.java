@@ -9,23 +9,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.my.contract.ModifyPhoneActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.ModifyPhoneActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.Utils;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * <h3>Description: 修改电话 </h3>
@@ -39,10 +33,12 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
     Toolbar  toolbar;
     @BindView(R.id.toolbar_text_btn)
     TextView toolbarTextBtn;
-    @BindView(R.id.tv_tips)
-    TextView tvTips;
     @BindView(R.id.user_phone)
     EditText userPhone;
+    @BindView(R.id.ed_verify_code)
+    EditText mEdVerifyCode;
+    @BindView(R.id.request_verify_code)
+    TextView mRequestVerifyCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +49,16 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
         setTranslucentStatus(this);
         userPhone.setText(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PHONE));
         userPhone.setSelection(userPhone.getText().length());
-        try {
-            //EditText 自动搜索,间隔->输入停止1秒后自动搜索
-            RxTextView.textChanges(userPhone)
-                    .debounce(500, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(charSequence -> check());
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+//        try {
+//            //EditText 自动搜索,间隔->输入停止1秒后自动搜索
+//            RxTextView.textChanges(userPhone)
+//                    .debounce(500, TimeUnit.MILLISECONDS)
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeOn(Schedulers.io())
+//                    .subscribe(charSequence -> check());
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -71,36 +67,60 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
         getActivityComponent().inject(this);
     }
 
-    @OnClick(R.id.toolbar_text_btn)
-    public void onClick() {
-        tvTips.setText("");
-        final String newNumber = userPhone.getText().toString();
-        //如果号码与之前的一样，不去访问网络
-        if (newNumber.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PHONE))) {
-            showToast("不能与之前的电话号码相同");
-            return;
+    @OnClick({R.id.toolbar_text_btn, R.id.request_verify_code})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.toolbar_text_btn:
+                if (TextUtils.isEmpty(mEdVerifyCode.getText().toString().trim())) {
+                    showToast("请输入验证码！");
+                }
+                if (!check()) {
+                    return;
+                }
+                mPresenter.modifyPhone(userPhone.getText().toString().trim(), mEdVerifyCode.getText().toString().trim());
+//                tvTips.setText("");
+//                final String newNumber = userPhone.getText().toString();
+//                //如果号码与之前的一样，不去访问网络
+//                if (newNumber.equals(AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_PHONE))) {
+//                    showToast("不能与之前的电话号码相同");
+//                    return;
+//                }
+//                //修改按钮
+//                if (check()) {
+//                    showLoadingView();
+//                    mPresenter.modifyPhone(newNumber);
+//                }
+                break;
+            case R.id.request_verify_code:
+                if (!check()) {
+                    return;
+                }
+                Utils.countDown(mRequestVerifyCode);
+                mPresenter.RequestVerifyCode(userPhone.getText().toString().trim());
+                break;
+            default:
+
+                break;
         }
-        //修改按钮
-        if (check()) {
-            showLoadingView();
-            mPresenter.modifyPhone(newNumber);
-        }
+
     }
 
     private boolean check() {
-        if (userPhone.getText().toString().equals("")) {
-            tvTips.setText("请输入您的电话号码");
+        if (TextUtils.isEmpty(userPhone.getText().toString().trim())) {
+            showToast("请输入您的电话号码！");
+            //tvTips.setText("请输入您的电话号码");
             return false;
         }
         if (!Utils.isRegex(Constants.Regex.REGEX_PHONE, (userPhone.getText()).toString())) {
-            tvTips.setText("手机号码格式不正确");
+            showToast("手机号码格式不正确！");
+            //tvTips.setText("手机号码格式不正确");
             return false;
         }
 
         if (userPhone.getText().toString().trim().length() != 11) {
             return false;
         }
-        tvTips.setText("");
+        //tvTips.setText("");
         return true;
     }
 
@@ -108,7 +128,8 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
         if (toolbar == null) {
             return;
         }
-        setTitle("");//必须在setSupportActionBar之前调用
+        //必须在setSupportActionBar之前调用
+        setTitle("");
         toolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(toolbar);
         tvTitle.setText("资料修改");
@@ -146,6 +167,11 @@ public class ModifyPhoneActivity extends HttpBaseActivity<ModifyPhoneActivityPre
     public void modifyFailed(int errorCode, String msg) {
         hideLoadingView();
         showToast(msg);
+    }
+
+    @Override
+    public void RequestVerifyCodeSuccess() {
+        showToast("发送验证码成功！");
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.TextView;
 
 import com.shanlinjinrong.oa.manager.AppManager;
 
@@ -14,8 +15,15 @@ import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * 概述：工具类
@@ -158,5 +166,48 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 验证码倒计
+     *
+     * @param tv
+     */
+    public static Subscription countDown(final TextView tv) {
+        final long[] currentTime = {60000 - 1000};
+        tv.setText(currentTime[0] / 1000 + "s");
+        Subscription subscribe = Observable.interval(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Long>() {
+                    @Override
+                    public void onCompleted() {
+                        this.unsubscribe();
+                        tv.setEnabled(true);
+                        tv.setText("重新发送");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        this.unsubscribe();
+                        tv.setEnabled(true);
+                        tv.setText("重新发送");
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        tv.setEnabled(false);
+                        currentTime[0] -= 1000;
+                        if (currentTime[0] < 0) {
+                            tv.setText("重新发送");
+                            tv.setEnabled(true);
+                            this.unsubscribe();
+                        } else {
+                            tv.setEnabled(false);
+                            tv.setText(currentTime[0] / 1000 + "s");
+                        }
+                    }
+                });
+        return subscribe;
     }
 }

@@ -19,10 +19,11 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
     }
 
     @Override
-    public void modificationEmail(String email) {
+    public void modificationEmail(String email, String verifyCode) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         httpParams.put("email", email);
+        httpParams.put("verifyCode", verifyCode);
         mKjHttp.post(ApiJava.CHANGE_EMAIL, httpParams, new HttpCallBack() {
             @Override
             public void onFailure(int errorNo, String strMsg) {
@@ -55,8 +56,9 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
                             if (mView != null)
                                 mView.uidNull(code);
                         default:
-                            if (mView != null)
+                            if (mView != null) {
                                 mView.modificationEmailFailed(0, jsonObject.getString("message"));
+                            }
                             break;
                     }
                 } catch (Throwable e) {
@@ -65,5 +67,30 @@ public class ModificationEmailPresenter extends HttpPresenter<ModificationEmailC
             }
         });
 
+    }
+
+    @Override
+    public void requestVerifyCode(String email) {
+        mKjHttp.cleanCache();
+
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("email", email);
+
+        mKjHttp.post(ApiJava.REQUEST_EMAIL_VERIFY_CODE, httpParams, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
     }
 }
