@@ -26,6 +26,8 @@ public interface UpcomingTasksContract {
         void onApproveSuccess(AgreeDisagreeResultBean resultBean, List<ApporveBodyItemBean> list);
 
         void onSearchFailure(int i, String message);
+
+//        void onOfficeSuppliesApproveSuccess();
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -34,5 +36,7 @@ public interface UpcomingTasksContract {
         void getSelectData(String privateCode, String noCheck, String pageNum, String pageSize, String time, String billType, String userName);
 
         void postAgreeDisagree(List<ApporveBodyItemBean> approveBeanList);
+
+        void getOfficeSuppliesApproveData(String timeCode,String loableStatus);
     }
 }

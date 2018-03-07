@@ -34,13 +34,15 @@ public class OfficeSuppliesActivity extends BaseActivity {
         initWebView();
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void initWebView() {
         if (mWebView != null) {
             mWebView.getSettings().setJavaScriptEnabled(true);
             // 设置允许JS弹窗
             mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
             mWebView.addJavascriptInterface(this,"native");
+
             mWebView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
             mWebView.setEnableCache(true);
             mWebView.setUserAgent("Android");

@@ -203,7 +203,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                     AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
                     if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
                         if (mView != null) {
-                            mView.onApproveSuccess(resultBean,list);
+                            mView.onApproveSuccess(resultBean, list);
                         }
                         return;
                     }
@@ -215,6 +215,28 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+
+    @Override
+    public void getOfficeSuppliesApproveData(String timeCode, String loableStatus) {
+        mKjHttp.cleanCache();
+        HttpParams httpParams = new HttpParams();
+        mKjHttp.get(ApiJava.REQUEST_OFFICE_PPLIE + "?timeCode=0&gloableStatus=-100", httpParams, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
             }
         });
     }

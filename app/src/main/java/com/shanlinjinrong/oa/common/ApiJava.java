@@ -339,6 +339,12 @@ public interface ApiJava {
      */
 //    String USER_LIMIT = "auth/findRightByUserId";
     String USER_LIMIT = "auth/getAppRight";
+
+
+    /**
+     *  办公用品 我的申请
+     */
+    String REQUEST_OFFICE_PPLIE ="workflow/getApplyComplete";
     //*****************************************************************//
 
     /**

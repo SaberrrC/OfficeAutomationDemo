@@ -102,13 +102,15 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private boolean isShowCheck = false;
     private View mStork;
     private String  mTime         = "0";
-    private String  mBillType     = "";
+    //默认签卡申请
+    private String  mBillType     = "6402";
     private String  mApproveState = "";
     private boolean isSearch      = false;
     private AlertDialog mAlertDialog;
     private TextView    mTvStateApproving;
     private TextView    mTvStateTackback;
     private TextView    mTvStateDisagree;
+    private boolean isOfficeSupplies = false;
 
     @Override
     protected void initInject() {
@@ -218,12 +220,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void getData() {
-        mSrRefresh.post(new Runnable() {
-            @Override
-            public void run() {
-                mSrRefresh.setRefreshing(true);
-                getListData();
-            }
+        mSrRefresh.post(() -> {
+            mSrRefresh.setRefreshing(true);
+            getListData();
         });
     }
 
@@ -339,6 +338,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 showLoadingView();
                 mPresenter.postAgreeDisagree(disApproveBeanList);
                 break;
+            default:
+                break;
         }
     }
 
@@ -439,7 +440,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvThree = (TextView) dialogView.findViewById(R.id.tv_three);
             mTvWeek = (TextView) dialogView.findViewById(R.id.tv_week);
             mTvMouth = (TextView) dialogView.findViewById(R.id.tv_mouth);
-            mTvAllType = (TextView) dialogView.findViewById(R.id.tv_all_type);
             mTvOfficeSupplies = (TextView) dialogView.findViewById(R.id.tv_office_supplies);
             mTvTravel = (TextView) dialogView.findViewById(R.id.tv_travel);
             mTvOvertime = (TextView) dialogView.findViewById(R.id.tv_overtime);
@@ -466,7 +466,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvThree.setOnClickListener(this);
             mTvWeek.setOnClickListener(this);
             mTvMouth.setOnClickListener(this);
-            mTvAllType.setOnClickListener(this);
             mTvOfficeSupplies.setOnClickListener(this);
             mTvTravel.setOnClickListener(this);
             mTvOvertime.setOnClickListener(this);
@@ -622,34 +621,39 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 setTextChecked(mTvMouth);
                 mTime = "4";
                 break;
-            case R.id.tv_all_type://改为办公用品
-                setTypeTextDefault();
-                setTextChecked(mTvAllType);
-                mBillType = "";
-                break;
+//            case R.id.tv_all_type://改为办公用品
+//                setTypeTextDefault();
+//                setTextChecked(mTvAllType);
+//                mBillType = "";
+//                break;
             case R.id.tv_office_supplies:
                 setTypeTextDefault();
                 setTextChecked(mTvOfficeSupplies);
+                isOfficeSupplies = true;
                 break;
             case R.id.tv_travel:
                 setTypeTextDefault();
                 setTextChecked(mTvTravel);
                 mBillType = "6403";
+                isOfficeSupplies = false;
                 break;
             case R.id.tv_overtime:
                 setTypeTextDefault();
                 setTextChecked(mTvOvertime);
                 mBillType = "6405";
+                isOfficeSupplies = false;
                 break;
             case R.id.tv_rest:
                 setTypeTextDefault();
                 setTextChecked(mTvRest);
                 mBillType = "6404";
+                isOfficeSupplies = false;
                 break;
             case R.id.tv_sign:
                 setTypeTextDefault();
                 setTextChecked(mTvSign);
                 mBillType = "6402";
+                isOfficeSupplies = false;
                 break;
             case R.id.tv_all_state:
                 setStateTextDefault();
@@ -684,7 +688,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             case R.id.tv_ok:
                 initRefreshMode();
                 if (TextUtils.equals(mWhichList, "1")) {
-                    mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+                    if (isOfficeSupplies){
+                        mPresenter.getOfficeSuppliesApproveData("","");
+                    }else {
+                        mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+                    }
                     mChooseDialog.dismiss();
                     return;
                 }
@@ -698,6 +706,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
                 }
                 mChooseDialog.dismiss();
+                break;
+            default:
                 break;
         }
     }
@@ -721,13 +731,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void setTypeTextDefault() {
-        mTvAllType.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvOfficeSupplies.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvTravel.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvOvertime.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvRest.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvSign.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
-        mTvAllType.setTextColor(getResources().getColor(R.color.black_333333));
         mTvOfficeSupplies.setTextColor(getResources().getColor(R.color.black_333333));
         mTvTravel.setTextColor(getResources().getColor(R.color.black_333333));
         mTvOvertime.setTextColor(getResources().getColor(R.color.black_333333));
