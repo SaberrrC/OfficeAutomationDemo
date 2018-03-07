@@ -40,7 +40,7 @@ public class ApiConstant {
             public static final String JAVA_TEST_HOST = "http://10.255.232.234/oa-api/";
 
     /**
-     * 测试环境
+//     * 测试环境
      */
 //        public static final String JAVA_TEST_HOST = "http://10.5.202.122:9105/";
 

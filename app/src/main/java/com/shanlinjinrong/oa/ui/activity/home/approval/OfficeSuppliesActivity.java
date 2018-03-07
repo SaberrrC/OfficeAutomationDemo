@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -37,6 +38,9 @@ public class OfficeSuppliesActivity extends BaseActivity {
     private void initWebView() {
         if (mWebView != null) {
             mWebView.getSettings().setJavaScriptEnabled(true);
+            // 设置允许JS弹窗
+            mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+            mWebView.addJavascriptInterface(this,"native");
             mWebView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
             mWebView.setEnableCache(true);
             mWebView.setUserAgent("Android");
@@ -91,9 +95,14 @@ public class OfficeSuppliesActivity extends BaseActivity {
 
         mWebView.setWebViewClient(mWebViewClient);
 
-        mWebView.loadUrl("http://10.0.2.2:8080/#/ReadAppraiseDetails");
+        mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails");
 
         mWebView.setWebViewClient(mWebViewClient);
+    }
+
+    @JavascriptInterface
+    public void nativeBack() {
+        runOnUiThread(this::finish);
     }
 
     @Override
