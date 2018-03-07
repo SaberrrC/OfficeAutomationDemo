@@ -216,7 +216,7 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
     @Override
     public void QueryVerifyCode() {
         mKjHttp.cleanCache();
-        mKjHttp.get(ApiJava.SENDS_CAPTCHA, new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(ApiJava.SENDS_CAPTCHA+"?channel=1", new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
