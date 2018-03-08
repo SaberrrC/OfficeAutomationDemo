@@ -1,106 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.shanlinjinrong.oa">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.shanlinjinrong.oa">
 
     <!-- 极光requried -->
     <permission
         android:name="com.shanlinjinrong.oa.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
 
     <!-- 小米推送 -->
     <permission
         android:name="com.shanlinjinrong.oa.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.shanlinjinrong.oa.permission.MIPUSH_RECEIVE"/>
-    <uses-permission android:name="android.permission.DEVICE_POWER"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="com.shanlinjinrong.oa.permission.JPUSH_MESSAGE"/>
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="com.shanlinjinrong.oa.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="android.permission.DEVICE_POWER" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.shanlinjinrong.oa.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <!-- Optional. Required for location feature -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
-    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <!-- 腾讯bugly required -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- 讯飞required -->
     <!-- 连接网络权限，用于执行云端语音能力 -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- 获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- 允许程序改变网络连接状态 -->
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <!-- 读取手机信息权限 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 读取联系人权限，上传联系人需要用到此权限 -->
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- Base Permission -->
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 修改图标角标 -->
-    <uses-permission android:name="com.sec.android.provider.badge.permission.READ"/>
-    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE"/>
-    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE"/>
+    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
     <uses-permission
         android:name="android.permission.WRITE_APN_SETTINGS"
-        tools:ignore="ProtectedPermissions"/>
+        tools:ignore="ProtectedPermissions" />
 
     <!-- 环信Required -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <!-- 可选 -->
-    <uses-permission android:name="android.permission.READ_LOGS"/> <!-- 获取logcat日志 -->
+    <uses-permission android:name="android.permission.READ_LOGS" /> <!-- 获取logcat日志 -->
 
 
     <!-- 网易云信Required -->
     <!-- 控制呼吸灯，振动器等，用于新消息提醒 -->
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
+        android:required="true" />
     <!-- SDK 权限申明, 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
     <permission
         android:name="com.shanlinjinrong.oa.permission.RECEIVE_MSG"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
     <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
-    <uses-permission android:name="com.shanlinjinrong.oa.permission.RECEIVE_MSG"/>
+    <uses-permission android:name="com.shanlinjinrong.oa.permission.RECEIVE_MSG" />
 
     <application
         android:name=".manager.AppManager"
@@ -115,19 +115,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/WeclomeActivityTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!-- 蒲公英 -->
         <!-- 可选 -->
-        <activity android:name="com.pgyersdk.activity.FeedbackActivity"/>
+        <activity android:name="com.pgyersdk.activity.FeedbackActivity" />
 
         <!-- 必选 -->
         <meta-data
             android:name="PGYER_APPID"
-            android:value="b07458d0d3dfe475646ddb480b2ec930"/>
+            android:value="b07458d0d3dfe475646ddb480b2ec930" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -136,7 +136,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
         <!-- 蒲公英 END -->
 
@@ -144,23 +144,23 @@
         <!-- 环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
-            android:value="1149161031178682#ezhitongoasl"/>
+            android:value="1149161031178682#ezhitongoasl" />
 
         <!-- 声明SDK所需的service SDK核心功能 -->
         <service
             android:name="com.hyphenate.chat.EMChatService"
-            android:exported="true"/>
+            android:exported="true" />
         <!-- 声明SDK所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
-                <data android:scheme="package"/>
+                <data android:scheme="package" />
             </intent-filter>
             <!-- 可选filter -->
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
 
@@ -173,23 +173,23 @@
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
-                <category android:name="com.hyphenate.chatuidemo"/>
+                <category android:name="com.hyphenate.chatuidemo" />
             </intent-filter>
         </receiver>
 
         <service
             android:name="com.hyphenate.chat.EMGCMListenerService"
-            android:exported="false"/>
+            android:exported="false" />
 
         <receiver
             android:name=".thirdParty.huanxin.receiver.GCMPushBroadCast"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.hyphenate.sdk.push"/>
+                <action android:name="com.hyphenate.sdk.push" />
 
-                <category android:name="com.hyphenate.chatuidemo"/>
+                <category android:name="com.hyphenate.chatuidemo" />
             </intent-filter>
         </receiver>
         <!-- gcm end -->
@@ -200,23 +200,23 @@
             android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true"
             android:exported="true"
-            tools:ignore="ExportedService"/>
+            tools:ignore="ExportedService" />
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
-            android:enabled="true"/>
+            android:enabled="true" />
 
         <receiver
             android:name="com.hyphenate.chat.EMMipushReceiver"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE"/>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED"/>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.xiaomi.mipush.ERROR"/>
+                <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
         <!-- mi push end -->
@@ -225,22 +225,22 @@
         <!-- 华为 HMS Config -->
         <meta-data
             android:name="com.huawei.hms.client.appid"
-            android:value="100071247"/>
+            android:value="100071247" />
         <!-- 华为推送 start -->
         <receiver android:name="com.hyphenate.chat.EMHWPushReceiver">
             <intent-filter>
 
                 <!-- 必须,用于接收 TOKEN -->
-                <action android:name="com.huawei.android.push.intent.REGISTRATION"/>
+                <action android:name="com.huawei.android.push.intent.REGISTRATION" />
                 <!-- 必须，用于接收消息 -->
-                <action android:name="com.huawei.android.push.intent.RECEIVE"/>
+                <action android:name="com.huawei.android.push.intent.RECEIVE" />
                 <!-- 可选，用于点击通知栏或通知栏上的按钮后触发 onEvent 回调 -->
-                <action android:name="com.huawei.android.push.intent.CLICK"/>
+                <action android:name="com.huawei.android.push.intent.CLICK" />
             </intent-filter>
 
             <meta-data
                 android:name="CS_cloud_ablitity"
-                android:value="successRateAnalytics"/>
+                android:value="successRateAnalytics" />
         </receiver>
         <receiver
             android:name="com.huawei.hms.support.api.push.PushEventReceiver"
@@ -248,10 +248,10 @@
             <intent-filter>
 
                 <!-- 接收通道发来的通知栏消息，兼容老版本 PUSH -->
-                <action android:name="com.huawei.android.push.intent.REFRESH_PUSH_CHANNEL"/>
-                <action android:name="com.huawei.intent.action.PUSH"/>
-                <action android:name="com.huawei.intent.action.PUSH_ON"/>
-                <action android:name="com.huawei.android.push.PLUGIN"/>
+                <action android:name="com.huawei.android.push.intent.REFRESH_PUSH_CHANNEL" />
+                <action android:name="com.huawei.intent.action.PUSH" />
+                <action android:name="com.huawei.intent.action.PUSH_ON" />
+                <action android:name="com.huawei.android.push.PLUGIN" />
             </intent-filter>
         </receiver>
 
@@ -264,14 +264,14 @@
             android:theme="@android:style/Theme.Translucent">
             <meta-data
                 android:name="hwc-theme"
-                android:value="androidhwext:style/Theme.Emui.Translucent"/>
+                android:value="androidhwext:style/Theme.Emui.Translucent" />
         </activity>
 
         <provider
             android:name="com.huawei.hms.update.provider.UpdateProvider"
             android:authorities="com.shanlinjinrong.oa.hms.update.provider"
             android:exported="false"
-            android:grantUriPermissions="true"/>
+            android:grantUriPermissions="true" />
         <!-- huawei push end -->
 
 
@@ -279,23 +279,23 @@
         <service
             android:name="com.hyphenate.chat.EMChatService"
             android:exported="true"
-            tools:ignore="ExportedService"/>
+            tools:ignore="ExportedService" />
         <service
             android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <!-- 声明sdk所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
-                <data android:scheme="package"/>
+                <data android:scheme="package" />
             </intent-filter>
             <!-- 可选filter -->
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
 
@@ -306,17 +306,17 @@
         <activity
             android:name=".ui.activity.login.LoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 极光推送 开始 -->
         <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTER"/>
-                <action android:name="cn.jpush.android.intent.REPORT"/>
-                <action android:name="cn.jpush.android.intent.PushService"/>
-                <action android:name="cn.jpush.android.intent.PUSH_TIME"/>
+                <action android:name="cn.jpush.android.intent.REGISTER" />
+                <action android:name="cn.jpush.android.intent.REPORT" />
+                <action android:name="cn.jpush.android.intent.PushService" />
+                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
             </intent-filter>
         </service>
 
@@ -325,118 +325,118 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter android:priority="1000">
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
 
-                <category android:name="com.shanlinjinrong.oa"/>
+                <category android:name="com.shanlinjinrong.oa" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT"/>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
-                <data android:scheme="package"/>
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
         <receiver
             android:name="cn.jpush.android.service.AlarmReceiver"
-            android:exported="false"/>
+            android:exported="false" />
         <receiver
             android:name=".thirdParty.push.receiver.MyJpushReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION"/>
-                <action android:name="cn.jpush.android.intent.UNREGISTRATION"/>
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/>
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/>
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/>
-                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK"/>
-                <action android:name="cn.jpush.android.intent.CONNECTION"/>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <action android:name="cn.jpush.android.intent.UNREGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" />
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
 
-                <category android:name="com.shanlinjinrong.oa"/>
+                <category android:name="com.shanlinjinrong.oa" />
             </intent-filter>
         </receiver>
         <!-- 极光推送 结束 -->
 
         <meta-data
             android:name="com.netease.cosine.target"
-            android:value=""/>
+            android:value="" />
 
         <!-- 首页控制器 -->
         <activity
             android:name=".ui.activity.main.MainActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 首页名片页面二级一下界面 -->
         <activity
             android:name=".ui.activity.contracts.ContactsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 用户信息 -->
         <activity
             android:name=".ui.activity.my.UserInfoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 修改密码 -->
         <activity
             android:name=".ui.activity.my.ModifyPwdActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 找回密码 -->
         <!-- 用户反馈 -->
         <activity
             android:name=".ui.activity.my.FeedbackActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 关于我们 -->
         <activity
             android:name=".ui.activity.my.AboutUsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 修改电话 -->
         <activity
             android:name=".ui.activity.my.ModifyPhoneActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 工作汇报列表 -->
         <!-- 工作汇报详情页 -->
         <!-- 发起工作汇报 -->
         <activity
             android:name=".ui.activity.home.workreport.WorkReportLaunchActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".ui.activity.home.workreport.WriteWorkReportActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- 我的邮箱 -->
         <activity
             android:name=".ui.activity.home.schedule.MyMailActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 选择联系人 -->
         <activity
             android:name=".ui.activity.home.workreport.SelectContactActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <!-- 公用选择头像 -->
         <activity
             android:name=".ui.activity.home.workreport.PublicImageSelectorActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 使用帮助 -->
         <activity
             android:name=".ui.activity.my.UsingHelpActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 单个公告通知 -->
         <activity
             android:name=".ui.activity.notice.NoticesSingleInfoActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 工作汇报回复 -->
         <!-- 审批列表 -->
         <!-- 发起审批 -->
         <activity
             android:name=".ui.activity.home.approval.LaunchApprovalActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 差旅申请 -->
         <!-- 公出申请申请 -->
         <!-- 请假申请 -->
@@ -455,7 +455,7 @@
         <!-- 单个图片activity -->
         <activity
             android:name=".ui.activity.common.ShowPictureActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 名片(联系人) -->
         <!-- 推送列表 -->
         <!-- 日程安排 -->
@@ -473,16 +473,16 @@
         <activity
             android:name=".ui.activity.message.EaseChatMessageActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <!-- 语音聊天activity -->
         <!-- 上传图片的 activity -->
         <activity
             android:name=".ui.activity.home.workreport.AffirmPictureActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 选择会议室 activity -->
-        <activity android:name=".ui.activity.contracts.Contact_Details_Activity"/>
+        <activity android:name=".ui.activity.contracts.Contact_Details_Activity" />
         <!-- 正常点击部门列表的联系人详情页 -->
-        <activity android:name=".ui.activity.contracts.Contact_Details_Activity2"/>
+        <activity android:name=".ui.activity.contracts.Contact_Details_Activity2" />
         <!-- 创建视频会议——新版 -->
         <!-- 创建视频会议——完成 -->
         <!-- 请选择会议室 -->
@@ -493,215 +493,215 @@
         <!-- 点击聊天图片进入大图片查看 -->
         <activity
             android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 点击聊天图片进入大图片查看 -->
         <activity
             android:name=".ui.activity.message.VoiceCallActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 发起周报界面 -->
         <activity
             android:name=".ui.activity.home.weeklynewspaper.WriteWeeklyNewspaperActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- 发起周报、下周计划 内容界面 -->
         <activity
             android:name=".ui.activity.home.weeklynewspaper.WeeklyWorkContentActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <receiver
             android:name=".thirdParty.huanxin.receiver.GCMPushBroadCast"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.hyphenate.sdk.push"/>
+                <action android:name="com.hyphenate.sdk.push" />
 
-                <category android:name="com.hyphenate.chatuidemo"/>
+                <category android:name="com.hyphenate.chatuidemo" />
             </intent-filter>
         </receiver>
 
         <!-- 发给我的 -->
         <activity
             android:name=".ui.activity.home.workreport.WorkReportCheckActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 我发起的 -->
         <activity
             android:name=".ui.activity.home.workreport.MyLaunchWorkReportActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 审核日报 -->
         <activity
             android:name=".ui.activity.home.workreport.CheckDailyReportActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 日报更新 -->
         <activity
             android:name=".ui.activity.home.workreport.WorkReportUpdateActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 新 获取会议室 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingDetailsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- 新 获取会议室预约时间 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingPredetermineRecordActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- 新 会议室完善 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingInfoFillOutActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- 新 会议室预订成功 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingReservationSucceedActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 新 会议室预订记录 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingReservationRecordActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 找回密码填写工号 -->
         <activity
             android:name=".ui.activity.login.WriteJobNumberActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 找回密码 确认邮箱1 -->
         <activity
             android:name=".ui.activity.login.ConfirmCompanyEmailActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <!-- 找回密码 确认邮箱2 -->
         <activity
             android:name=".ui.activity.login.EmailConfirmFinishActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 会议邀请 -->
         <activity
             android:name=".ui.activity.home.schedule.meetingdetails.MeetingInviteActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!--  -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.ClockingInMonthlyCalendarActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 出差申请 -->
         <activity
             android:name=".ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- 会议邀请 -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.AttandenceMonthActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.upcomingtasks.MyUpcomingTasksActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activity.upcomingtasks.UpcomingTasksInfoActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 统计人员 -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.CountPeopleActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 我的考勤 -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.MyAttendenceActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 考勤记录 -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.AttandenceRecorderActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.calendar.MouthCalenderActivity"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.calendar.MouthCalenderActivity" />
 
         <!-- 薪资查询 -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.PayQueryActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 假期查询 -->
         <activity
             android:name=".ui.activity.home.schedule.staffselfhelp.HolidaySearchActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- 修改邮箱 -->
         <activity
             android:name=".ui.activity.my.ModificationEmailActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 聊天详情界面 -->
         <activity
             android:name=".ui.activity.message.EaseChatDetailsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 修改群组名称界面 -->
         <activity
             android:name=".ui.activity.message.chatgroup.ModificationGroupNameActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 查看消息记录界面 -->
         <activity
             android:name=".ui.activity.message.LookMessageRecordActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 选择管理员界面 -->
         <activity
             android:name=".ui.activity.message.SelectedChatAdminActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 群组列表界面 -->
         <activity
             android:name=".ui.activity.message.GroupChatListActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.activity.message.SelectedGroupContactActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.activity.message.GroupCommonControlActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.message.MessageSearchActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 下载文件 -->
         <activity
             android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"/>
-        <activity android:name=".ui.activity.message.LookGroupMemberActivity"/>
+            android:theme="@style/horizontal_slide" />
+        <activity android:name=".ui.activity.message.LookGroupMemberActivity" />
 
         <!-- 月历 -->
         <activity
             android:name=".ui.activity.home.schedule.manage.ScheduleWeekCalendarActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.activity.home.schedule.manage.CalendarRedactActivity"
             android:configChanges="orientation|keyboardHidden|locale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.activity.home.approval.OfficeSuppliesActivity"
             android:configChanges="orientation|keyboardHidden|locale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".ui.activity.upcomingtasks.web.OfficeSuppliesDetailsActivity"></activity>
     </application>
 
 </manifest>

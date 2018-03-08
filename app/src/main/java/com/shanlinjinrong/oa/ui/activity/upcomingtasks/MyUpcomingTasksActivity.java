@@ -31,12 +31,16 @@ import android.widget.TextView;
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
+import com.shanlinjinrong.oa.ui.activity.home.approval.OfficeSuppliesActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OfficeSuppliesListBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksPresenter;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.web.OfficeSuppliesDetailsActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.ThreadUtils;
 
@@ -48,6 +52,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.shanlinjinrong.oa.R.id.default_activity_button;
+import static com.shanlinjinrong.oa.R.id.swipe_content;
+import static com.shanlinjinrong.oa.R.id.tv;
 import static com.shanlinjinrong.oa.R.id.tv_state_checked;
 
 public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
@@ -167,16 +174,22 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void getListData() {
-        if (TextUtils.equals(mWhichList, "1")) {
-            mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
-            return;
-        }
-        String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
-        if (TextUtils.equals(mWhichList, "2")) {
-            mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
-        }
-        if (TextUtils.equals(mWhichList, "3")) {
-            mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+        if (isOfficeSupplies) {
+            if (TextUtils.equals(mWhichList, "1")) {
+                mPresenter.getOfficeSuppliesApproveData("", "");
+            }
+        } else {
+            if (TextUtils.equals(mWhichList, "1")) {
+                mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+                return;
+            }
+            String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
+            if (TextUtils.equals(mWhichList, "2")) {
+                mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+            }
+            if (TextUtils.equals(mWhichList, "3")) {
+                mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+            }
         }
     }
 
@@ -192,6 +205,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         Map<Class, Integer> map = FinalRecycleAdapter.getMap();
         map.put(UpcomingTaskItemBean.DataBean.DataListBean.class, R.layout.layout_item_upcoming_task);
         map.put(UpcomingSearchResultBean.DataBeanX.DataBean.class, R.layout.layout_item_upcoming_task);
+        map.put(OfficeSuppliesListBean.DataBean.ListBean.class, R.layout.layout_item_upcoming_task);
         getData();
         mFinalRecycleAdapter = new FinalRecycleAdapter(mDatas, map, this);
         mRvList.setAdapter(mFinalRecycleAdapter);
@@ -493,7 +507,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onBindViewHolder(FinalRecycleAdapter.ViewHolder holder, int position, Object itemData) {
-        if (itemData instanceof UpcomingTaskItemBean.DataBean.DataListBean || itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+        if (itemData instanceof UpcomingTaskItemBean.DataBean.DataListBean || itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean || itemData instanceof OfficeSuppliesListBean.DataBean.ListBean) {
             CheckBox cbCheck = (CheckBox) holder.getViewById(R.id.cb_check);
             ImageView ivIcon = (ImageView) holder.getViewById(R.id.iv_icon);
             TextView tvName = (TextView) holder.getViewById(R.id.tv_name);
@@ -533,8 +547,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         startActivityToInfo(bundle);
                     }
                 });
-            }
-            if (itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+            } else if (itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
                 UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) itemData;
                 String pkBillType = bean.getPkBillType();
                 setItemIcon(ivIcon, pkBillType);
@@ -567,7 +580,38 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         startActivityToInfo(bundle);
                     }
                 });
+            } else if (itemData instanceof OfficeSuppliesListBean.DataBean.ListBean) {
+                OfficeSuppliesListBean.DataBean.ListBean bean = (OfficeSuppliesListBean.DataBean.ListBean) itemData;
+
+                tvReason.setText(bean.getTypeName());
+                tvTime.setText(bean.getStartTime());
+                switch (bean.getGlobalStatus()) {
+                    case "3":
+                        tvState.setText("未审批");
+                        break;
+                    case "2":
+                        tvState.setText("审批中");
+                        break;
+                    case "1":
+                        tvState.setText("已通过");
+                        break;
+                    case "0":
+                        tvState.setText("已驳回");
+                        break;
+                    case "-1":
+                        tvState.setText("已收回");
+                        break;
+                    default:
+                        tvState.setText("未审批");
+                        break;
+                }
+
+                holder.getRootView().setOnClickListener(view -> {
+                    Intent intent = new Intent(MyUpcomingTasksActivity.this, OfficeSuppliesDetailsActivity.class);
+                    startActivity(intent);
+                });
             }
+
         }
     }
 
@@ -688,9 +732,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             case R.id.tv_ok:
                 initRefreshMode();
                 if (TextUtils.equals(mWhichList, "1")) {
-                    if (isOfficeSupplies){
-                        mPresenter.getOfficeSuppliesApproveData("","");
-                    }else {
+                    if (isOfficeSupplies) {
+                        mPresenter.getOfficeSuppliesApproveData("", "");
+                    } else {
                         mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
                     }
                     mChooseDialog.dismiss();
@@ -790,6 +834,59 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             return;
         }
         List<UpcomingTaskItemBean.DataBean.DataListBean> dataList = bean.getData().getDataList();
+        if (dataList == null) {
+            mRvList.setVisibility(View.VISIBLE);
+            mRvList.requestLayout();
+            mFinalRecycleAdapter.notifyDataSetChanged();
+            return;
+        }
+        if (dataList.size() < Integer.parseInt(PAGE_SIZE)) {
+            isLoadOver = true;
+        }
+        mDatas.addAll(dataList);
+        mRvList.requestLayout();
+        mRvList.setVisibility(View.VISIBLE);
+        mRvList.requestLayout();
+        mFinalRecycleAdapter.notifyDataSetChanged();
+        if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
+            if (mFinalRecycleAdapter.getItemCount() - 1 >= 0) {
+                mRvList.scrollToPosition(0);
+            }
+        }
+    }
+
+    @Override
+    public void onGetApproveDataSuccess(OfficeSuppliesListBean bean) {
+        mRvList.setVisibility(View.VISIBLE);
+        mTvErrorShow.setVisibility(View.GONE);
+        mSrRefresh.setRefreshing(false);
+        if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
+            if (mDatas.size() > 0) {
+                mDatas.clear();
+            }
+            if (bean.getData() == null) {
+                mRvList.setVisibility(View.GONE);
+                mTvErrorShow.setVisibility(View.VISIBLE);
+                mTvErrorShow.setText("暂无内容");
+                return;
+            }
+            if (bean.getData().getList() == null || bean.getData().getList().size() == 0) {
+                mRvList.setVisibility(View.GONE);
+                mTvErrorShow.setVisibility(View.VISIBLE);
+                mTvErrorShow.setText("暂无内容");
+                return;
+            }
+            if (mDatas.size() > 0) {
+                mDatas.clear();
+            }
+        }
+        if (bean.getData() == null) {
+            mRvList.setVisibility(View.VISIBLE);
+            mRvList.requestLayout();
+            mFinalRecycleAdapter.notifyDataSetChanged();
+            return;
+        }
+        List<OfficeSuppliesListBean.DataBean.ListBean> dataList = bean.getData().getList();
         if (dataList == null) {
             mRvList.setVisibility(View.VISIBLE);
             mRvList.requestLayout();

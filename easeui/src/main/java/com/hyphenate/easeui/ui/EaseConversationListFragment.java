@@ -395,6 +395,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                     HttpParams httpParams = new HttpParams();
                     httpParams.putHeaders("token", token);
                     httpParams.putHeaders("uid", uid);
+                    httpParams.putHeaders("X-Source", "android");
                     httpParams.put("codeList", code);
                     //TODO 生产
                     kjHttp.post(ApiConstant.JAVA_TEST_HOST + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {

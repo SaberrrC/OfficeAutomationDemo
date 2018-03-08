@@ -1,7 +1,9 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract;
 
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OfficeSuppliesListBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
@@ -16,6 +18,8 @@ import java.util.List;
 public interface UpcomingTasksContract {
     interface View extends BaseView {
         void onGetApproveDataSuccess(UpcomingTaskItemBean bean);
+
+        void onGetApproveDataSuccess(OfficeSuppliesListBean bean);
 
         void onGetApproveDataFailure(int errorNo, String strMsg);
 

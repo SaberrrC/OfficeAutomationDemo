@@ -1,13 +1,17 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter;
 
 import android.text.TextUtils;
+import android.util.JsonToken;
 
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.ApiJava;
+import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
+import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OfficeSuppliesListBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
@@ -227,6 +231,21 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
+                try {
+                    OfficeSuppliesListBean bean = new Gson().fromJson(t, new TypeToken<OfficeSuppliesListBean>() {
+                    }.getType());
+                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        if (mView != null) {
+                            mView.onGetApproveDataSuccess(bean);
+                        }
+                        return;
+                    }
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
