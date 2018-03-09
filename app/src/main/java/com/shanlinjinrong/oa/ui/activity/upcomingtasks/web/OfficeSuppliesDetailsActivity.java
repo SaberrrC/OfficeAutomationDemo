@@ -12,6 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +26,8 @@ public class OfficeSuppliesDetailsActivity extends AppCompatActivity {
     CacheWebView mWebView;
 
     private WebViewClient mWebViewClient;
+
+    private int mWhichState = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class OfficeSuppliesDetailsActivity extends AppCompatActivity {
             // 设置允许JS弹窗
             mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-            mWebView.addJavascriptInterface(this,"android");
+            mWebView.addJavascriptInterface(this, "android");
 
             mWebView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
             mWebView.setEnableCache(true);
@@ -98,7 +101,10 @@ public class OfficeSuppliesDetailsActivity extends AppCompatActivity {
 
         mWebView.setWebViewClient(mWebViewClient);
 
-        mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails");
+        String which = getIntent().getStringExtra("which");
+        mWhichState = Integer.parseInt(which);
+
+        mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails?which=" + mWhichState + "&Token" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid" + AppConfig.getAppConfig(this).getPrivateUid());
 
         mWebView.setWebViewClient(mWebViewClient);
     }

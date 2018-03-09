@@ -177,6 +177,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         if (isOfficeSupplies) {
             if (TextUtils.equals(mWhichList, "1")) {
                 mPresenter.getOfficeSuppliesApproveData("", "");
+            } else if(TextUtils.equals(mWhichList, "2")) {
+                mPresenter.getOfficeSuppliesApproveData("", "");
             }
         } else {
             if (TextUtils.equals(mWhichList, "1")) {
@@ -608,6 +610,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
                 holder.getRootView().setOnClickListener(view -> {
                     Intent intent = new Intent(MyUpcomingTasksActivity.this, OfficeSuppliesDetailsActivity.class);
+                    intent.putExtra("which", mWhichList);
                     startActivity(intent);
                 });
             }

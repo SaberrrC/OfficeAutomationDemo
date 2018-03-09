@@ -97,7 +97,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
 
         mWebView.setWebViewClient(mWebViewClient);
 
-        mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails");
+        mWebView.loadUrl("http://10.0.2.2:8080/#/ApplyLaunch");
 
         mWebView.setWebViewClient(mWebViewClient);
     }
