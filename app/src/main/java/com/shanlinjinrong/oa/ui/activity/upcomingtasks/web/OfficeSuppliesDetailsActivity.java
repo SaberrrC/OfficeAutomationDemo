@@ -5,21 +5,24 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
+import com.shanlinjinrong.oa.ui.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ren.yale.android.cachewebviewlib.CacheWebView;
 import ren.yale.android.cachewebviewlib.WebViewCache;
 
-public class OfficeSuppliesDetailsActivity extends AppCompatActivity {
+public class OfficeSuppliesDetailsActivity extends BaseActivity {
 
 
     @BindView(R.id.web_view)
@@ -48,7 +51,7 @@ public class OfficeSuppliesDetailsActivity extends AppCompatActivity {
             mWebView.addJavascriptInterface(this, "android");
 
             mWebView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
-            mWebView.setEnableCache(true);
+            mWebView.setEnableCache(false);
             mWebView.setUserAgent("Android");
             mWebView.removeJavascriptInterface("searchBoxJavaBridge_");
             mWebView.removeJavascriptInterface("accessibility");
@@ -98,13 +101,25 @@ public class OfficeSuppliesDetailsActivity extends AppCompatActivity {
                 //tvErrorLayout.setText(getString(R.string.net_no_connection));
             }
         };
-
         mWebView.setWebViewClient(mWebViewClient);
-
+        String id = getIntent().getStringExtra("id");
         String which = getIntent().getStringExtra("which");
+        String state = getIntent().getStringExtra("state");
+        String taskId = getIntent().getStringExtra("taskId");
         mWhichState = Integer.parseInt(which);
-
-        mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails?which=" + mWhichState + "&Token" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid" + AppConfig.getAppConfig(this).getPrivateUid());
+        switch (mWhichState) {
+            case 1:
+                mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&isExamine=" + mWhichState + "&id=" + id + "&state=" + state);
+                break;
+            case 2:
+                mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state);
+                break;
+            case 3:
+                mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid());
+                break;
+            default:
+                break;
+        }
 
         mWebView.setWebViewClient(mWebViewClient);
     }
@@ -112,6 +127,15 @@ public class OfficeSuppliesDetailsActivity extends AppCompatActivity {
     @JavascriptInterface
     public void toBack() {
         runOnUiThread(this::finish);
+    }
+
+    @JavascriptInterface
+    public void toBackRefresh(String msg) {
+        runOnUiThread(() -> {
+            showToast(msg);
+            setResult(-100);
+            finish();
+        });
     }
 
     @Override

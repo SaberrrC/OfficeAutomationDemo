@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 
 import butterknife.BindView;
@@ -44,7 +45,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
             mWebView.addJavascriptInterface(this,"native");
 
             mWebView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
-            mWebView.setEnableCache(true);
+            mWebView.setEnableCache(false);
             mWebView.setUserAgent("Android");
             mWebView.removeJavascriptInterface("searchBoxJavaBridge_");
             mWebView.removeJavascriptInterface("accessibility");
@@ -97,7 +98,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
 
         mWebView.setWebViewClient(mWebViewClient);
 
-        mWebView.loadUrl("http://10.0.2.2:8080/#/ApplyLaunch");
+        mWebView.loadUrl("http://10.0.2.2:8080/#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid());
 
         mWebView.setWebViewClient(mWebViewClient);
     }

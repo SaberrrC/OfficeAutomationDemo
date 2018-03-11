@@ -17,7 +17,7 @@ public class OfficeSuppliesListBean {
      * data : {"pageSize":"10","total":"0","list":[{"typeName":"办公用品申请","globalStatus":"3","startTime":"2018-03-08 10:44:54","id":"187748"},{"typeName":"办公用品申请","globalStatus":"3","startTime":"2018-03-08 11:04:43","id":"187806"},{"typeName":"办公用品申请","globalStatus":"3","startTime":"2018-03-08 11:10:37","id":"187828"},{"typeName":"办公用品申请","globalStatus":"3","startTime":"2018-03-08 11:19:41","id":"187852"}],"pageNum":"0"}
      */
 
-    private String code;
+    private String   code;
     private String   message;
     private DataBean data;
 
@@ -53,7 +53,7 @@ public class OfficeSuppliesListBean {
          * pageNum : 0
          */
 
-        private String pageSize;
+        private String         pageSize;
         private String         total;
         private String         pageNum;
         private List<ListBean> list;
@@ -102,6 +102,11 @@ public class OfficeSuppliesListBean {
             private String globalStatus;
             private String startTime;
             private String id;
+            private String startedBy;
+            private String taskId;
+            private int    totalCount;
+            private String processInstanceId;
+            private String processDefinitionName;
 
             public String getTypeName() {
                 return typeName;
@@ -133,6 +138,46 @@ public class OfficeSuppliesListBean {
 
             public void setId(String id) {
                 this.id = id;
+            }
+
+            public String getStartedBy() {
+                return startedBy;
+            }
+
+            public void setStartedBy(String startedBy) {
+                this.startedBy = startedBy;
+            }
+
+            public String getTaskId() {
+                return taskId;
+            }
+
+            public void setTaskId(String taskId) {
+                this.taskId = taskId;
+            }
+
+            public int getTotalCount() {
+                return totalCount;
+            }
+
+            public void setTotalCount(int totalCount) {
+                this.totalCount = totalCount;
+            }
+
+            public String getProcessInstanceId() {
+                return processInstanceId;
+            }
+
+            public void setProcessInstanceId(String processInstanceId) {
+                this.processInstanceId = processInstanceId;
+            }
+
+            public String getProcessDefinitionName() {
+                return processDefinitionName;
+            }
+
+            public void setProcessDefinitionName(String processDefinitionName) {
+                this.processDefinitionName = processDefinitionName;
             }
         }
     }

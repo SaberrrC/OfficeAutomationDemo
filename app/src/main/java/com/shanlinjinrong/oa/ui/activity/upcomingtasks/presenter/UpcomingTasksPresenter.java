@@ -3,8 +3,10 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter;
 import android.text.TextUtils;
 import android.util.JsonToken;
 
+import com.alibaba.fastjson.JSON;
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.ApiJava;
@@ -17,6 +19,7 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingTaskItemBean
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
+import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -224,10 +227,12 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
     }
 
     @Override
-    public void getOfficeSuppliesApproveData(String timeCode, String loableStatus) {
+    public void getOfficeSuppliesApproveData(String timeCode, String gloableStatus, String pageNum, String pageSize) {
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
-        mKjHttp.get(ApiJava.REQUEST_OFFICE_PPLIE + "?timeCode=0&gloableStatus=-100", httpParams, new HttpCallBack() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("?timeCode=").append(timeCode).append("&gloableStatus=").append(gloableStatus).append("&pageNum=" + pageNum).append("&pageSize=" + pageSize);
+        mKjHttp.get(ApiJava.REQUEST_OFFICE_PPLIE + stringBuilder, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -251,6 +256,14 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
+                        mView.onGetApproveDataFailure(errorNo, strMsg);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -259,4 +272,57 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             }
         });
     }
+
+    @Override
+    public void getOfficeSuppliesManage(String finished, String processInstanceBegin, String pageNum, String pageSize) {
+        mKjHttp.cleanCache();
+        HttpParams httpParams = new HttpParams();
+        StringBuilder stringBuffer = new StringBuilder();
+        stringBuffer.append("?finished=").append(finished).append("&processInstanceBegin=").append(processInstanceBegin).append("&pageNum=").append(pageNum).append("&pageSize=").append(pageSize);
+        mKjHttp.get(ApiJava.REQUEST_OFFICE_MANAGE + stringBuffer, httpParams, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    JSONObject jsonObject = new JSONObject(t);
+                    String data = jsonObject.getString("data");
+                    OfficeSuppliesListBean.DataBean bean = new Gson().fromJson(data, new TypeToken< OfficeSuppliesListBean.DataBean>() {
+                    }.getType());
+                    if (TextUtils.equals(jsonObject.getString("code"), ApiJava.REQUEST_CODE_OK)) {
+                        if (mView != null) {
+                            mView.onGetApproveDataSuccess(bean);
+                        }
+                        return;
+                    }
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(Integer.parseInt(jsonObject.getString("code")),jsonObject.getString("message"));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
+                        mView.onGetApproveDataFailure(errorNo, strMsg);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
+    }
+
+
 }

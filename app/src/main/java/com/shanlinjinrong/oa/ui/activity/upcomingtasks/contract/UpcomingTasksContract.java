@@ -1,7 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract;
 
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
-import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OfficeSuppliesListBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.UpcomingSearchResultBean;
@@ -18,6 +17,8 @@ import java.util.List;
 public interface UpcomingTasksContract {
     interface View extends BaseView {
         void onGetApproveDataSuccess(UpcomingTaskItemBean bean);
+
+        void onGetApproveDataSuccess(OfficeSuppliesListBean.DataBean bean);
 
         void onGetApproveDataSuccess(OfficeSuppliesListBean bean);
 
@@ -41,6 +42,10 @@ public interface UpcomingTasksContract {
 
         void postAgreeDisagree(List<ApporveBodyItemBean> approveBeanList);
 
-        void getOfficeSuppliesApproveData(String timeCode,String loableStatus);
+        void getOfficeSuppliesApproveData(String timeCode,String loableStatus,String pageNum, String pageSize);
+
+        void getOfficeSuppliesManage(String finished,String processInstanceBegin,String pageNum, String pageSize);
+
+
     }
 }

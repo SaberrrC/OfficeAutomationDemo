@@ -345,6 +345,11 @@ public interface ApiJava {
      *  办公用品 我的申请
      */
     String REQUEST_OFFICE_PPLIE ="workflow/getApplyComplete";
+
+    /**
+     *  办公用品 我的申请
+     */
+    String REQUEST_OFFICE_MANAGE ="workflow/getBusinessAffairs";
     //*****************************************************************//
 
     /**
