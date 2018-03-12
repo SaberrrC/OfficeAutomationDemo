@@ -588,6 +588,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
                 switch (mWhichList) {
                     case "1":
+                        tvName.setText(AppConfig.getAppConfig(this).getPrivateName());
                         tvReason.setText(bean.getTypeName());
                         tvTime.setText(bean.getStartTime());
                         break;

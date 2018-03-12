@@ -42,7 +42,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
             // 设置允许JS弹窗
             mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-            mWebView.addJavascriptInterface(this,"native");
+            mWebView.addJavascriptInterface(this, "android");
 
             mWebView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
             mWebView.setEnableCache(false);
@@ -104,10 +104,13 @@ public class OfficeSuppliesActivity extends BaseActivity {
     }
 
     @JavascriptInterface
-    public void nativeBack() {
-        runOnUiThread(this::finish);
+    public void toBackRefresh(String msg) {
+        runOnUiThread(() -> {
+            showToast(msg);
+            setResult(-100);
+            finish();
+        });
     }
-
     @Override
     public void onBackPressed() {
         if (mWebView.canGoBack()) {
