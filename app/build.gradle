@@ -18,7 +18,7 @@ android {
 
         //pwd:13579
         versionCode 50
-        versionName "v1.7.1.0"
+        versionName "v1.7.1.1"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
@@ -48,7 +48,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             // Zipalign优化
             zipAlignEnabled true
             // 移除无用的resource文件
