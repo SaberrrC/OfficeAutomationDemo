@@ -3,15 +3,16 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.web;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.retrofit.net.ApiConstant;
 import com.shanlinjinrong.oa.R;
@@ -25,9 +26,15 @@ import ren.yale.android.cachewebviewlib.WebViewCache;
 
 public class OfficeSuppliesDetailsActivity extends BaseActivity {
 
-
     @BindView(R.id.web_view)
     CacheWebView mWebView;
+    @BindView(R.id.tv_error_layout)
+    TextView     tvErrorLayout;
+
+    @BindView(R.id.rl_loadding)
+    RelativeLayout rlloadding;
+    @BindView(R.id.progress_bar)
+    ProgressBar    progress_bar;
 
     private WebViewClient mWebViewClient;
 
@@ -65,10 +72,10 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                //rlloadding.setVisibility(View.VISIBLE);
-                //tvErrorLayout.setVisibility(View.VISIBLE);
-                //tvErrorLayout.setText(getString(R.string.loadding));
-                //progress_bar.setVisibility(View.VISIBLE);
+                rlloadding.setVisibility(View.VISIBLE);
+                tvErrorLayout.setVisibility(View.VISIBLE);
+                tvErrorLayout.setText(getString(R.string.loadding));
+                progress_bar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -95,11 +102,11 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                // hideLoadingView();
-                //rlloadding.setVisibility(View.VISIBLE);
-                //progress_bar.setVisibility(View.GONE);
-                //tvErrorLayout.setVisibility(View.VISIBLE);
-                //tvErrorLayout.setText(getString(R.string.net_no_connection));
+                hideLoadingView();
+                rlloadding.setVisibility(View.VISIBLE);
+                progress_bar.setVisibility(View.GONE);
+                tvErrorLayout.setVisibility(View.VISIBLE);
+                tvErrorLayout.setText(getString(R.string.net_no_connection));
             }
         };
         mWebView.setWebViewClient(mWebViewClient);
