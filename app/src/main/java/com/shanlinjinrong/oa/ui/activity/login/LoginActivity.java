@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Base64;
 import android.util.Log;
@@ -25,6 +27,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
@@ -54,28 +57,28 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View, View.OnKeyListener {
     @BindView(R.id.user_email)
-    EditText       userEmail;
+    EditText userEmail;
     @BindView(R.id.user_pwd)
-    EditText       userPwd;
+    EditText userPwd;
     @BindView(R.id.layout_root)
     KeyboardLayout mRootView;
     @BindView(R.id.login_scroll_view)
-    ScrollView     mScrollView;
+    ScrollView mScrollView;
     @BindView(R.id.cb_auto_login)
-    CheckBox       mCbAutoLogin;
+    CheckBox mCbAutoLogin;
     @BindView(R.id.tv_find_pwd)
-    TextView       mTvFindPwd;
+    TextView mTvFindPwd;
     @BindView(R.id.ed_verify_code)
-    EditText       mEdVerifyCode;
+    EditText mEdVerifyCode;
     @BindView(R.id.iv_identifying_code)
-    ImageView      mIvIdentifyingCode;
+    ImageView mIvIdentifyingCode;
     @BindView(R.id.ll_verify_code)
-    LinearLayout   mLlVerifyCode;
+    LinearLayout mLlVerifyCode;
     private DoubleClickExitHelper doubleClickExitHelper;
     private int UPDATE_RECYCLERVIEW_POSITION = 11;
     private String mKeyCode;
 
-    private Handler mHandler      = new Handler() {
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -84,8 +87,8 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             }
         }
     };
-    private boolean isAutoLogin   = true;
-    private long    lastClickTime = 0;
+    private boolean isAutoLogin = true;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -182,7 +185,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
                 } else {
                     mPresenter.login(userEmail.getText().toString(), userPwd.getText().toString(), mKeyCode, mEdVerifyCode.getText().toString().trim());
                 }
-               // mLlVerifyCode.setVisibility(View.GONE);
+                // mLlVerifyCode.setVisibility(View.GONE);
                 break;
             case R.id.iv_identifying_code:
                 mPresenter.QueryVerifyCode();
@@ -204,13 +207,15 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(userEmail.getWindowToken(), 0);
             showLoadingView();
-            mPresenter.login(userEmail.getText().toString(), userPwd.getText().toString());
+            mPresenter.Test(userEmail.getText().toString(), userPwd.getText().toString());
+
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private boolean check() {
         if (userEmail.getText().toString().equals("")) {
-            showToast("请输入您的邮箱帐号或员工号");
+          //  showToast("请输入您的邮箱帐号或员工号");
             return false;
         }
         if (!Utils.isRegex(Constants.Regex.REGEX_EMAIL, userEmail.getText().toString())) {

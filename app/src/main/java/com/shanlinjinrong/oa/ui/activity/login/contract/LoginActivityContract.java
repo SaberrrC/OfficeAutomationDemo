@@ -42,5 +42,7 @@ public interface LoginActivityContract {
         void login(String account, String psw, String keyCode, String code);
 
         void QueryVerifyCode();
+
+        void Test(String account, String psw);
     }
 }
