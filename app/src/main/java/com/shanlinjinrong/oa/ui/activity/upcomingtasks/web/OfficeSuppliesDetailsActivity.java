@@ -95,7 +95,7 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                //rlloadding.setVisibility(View.GONE);
+                rlloadding.setVisibility(View.GONE);
 
             }
 
