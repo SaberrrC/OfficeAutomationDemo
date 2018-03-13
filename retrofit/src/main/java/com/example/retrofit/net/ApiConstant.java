@@ -5,7 +5,7 @@ public class ApiConstant {
     /**
      * 生产环境
      */
-       public final static String BASE_PIC_URL = "https://public.oa.shanlinjinrong.com/";
+//       public final static String BASE_PIC_URL = "https://public.oa.shanlinjinrong.com/";
     /**
      * 预发布环境  testoa
      */
@@ -14,7 +14,7 @@ public class ApiConstant {
     /**
      * 开发环境
      */
-//    public final static String BASE_PIC_URL = "http://10.255.232.234:96";
+    public final static String BASE_PIC_URL = "http://10.255.232.234:96";
     /**
      * 测试环境
      */
@@ -25,7 +25,7 @@ public class ApiConstant {
     /**
      * 生产环境
      */
-    public static final String JAVA_TEST_HOST = "https://oa.shanlinjinrong.com/oa-api/";
+//    public static final String JAVA_TEST_HOST = "https://oa.shanlinjinrong.com/oa-api/";
 
     /**
      * 预发布环境  testoa
@@ -36,7 +36,7 @@ public class ApiConstant {
     /**
      * 开发环境
      */
-//    public static final String JAVA_TEST_HOST = "http://10.255.232.234/oa-api/";
+    public static final String JAVA_TEST_HOST = "http://10.255.232.234/oa-api/";
 
     /**
      * 测试环境
@@ -52,7 +52,7 @@ public class ApiConstant {
     /**
      * h5 请求地址
      */
-    public static final String HTML5_URL_HOST = "http://10.255.233.185/oa-api/";
+    public static final String HTML5_URL_HOST = "http://10.255.233.185:9105/";
 }
 
 //

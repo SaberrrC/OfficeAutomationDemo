@@ -615,6 +615,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                             tvReason.setText(bean.getProcessDefinitionName());
                             break;
                         case "3":
+                            tvName.setText(bean.getStartedBy());
+                            tvTime.setText(bean.getStartTime());
+                            tvReason.setText(bean.getProcessDefinitionName());
                             break;
                         default:
                             break;
@@ -663,6 +666,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                                 intent.putExtra("id", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getProcessInstanceId());
                                 intent.putExtra("taskId", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getTaskId());
                             case "3":
+                                intent.putExtra("id", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getProcessInstanceId());
+                                intent.putExtra("taskId", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getTaskId());
                                 break;
                             default:
                                 break;
