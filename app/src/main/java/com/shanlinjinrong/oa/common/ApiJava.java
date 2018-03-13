@@ -198,6 +198,11 @@ public interface ApiJava {
     String ARGEE_DISAGREE_APPROVE = "Approve/allApprove";
 
     /**
+     *  办公用品 同意和驳回 Approve/allApprove
+     */
+    String OFFICE_SUPPLIES_APPROVE = "workflow/agree";
+
+    /**
      * 同意和驳回 Approve/allApprove
      */
     String DELETE_APPROVEL = "nchrSign/deleteBillByCode";

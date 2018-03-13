@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
+import com.google.gson.Gson;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.model.CommonRequestBean;
@@ -54,6 +55,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.shanlinjinrong.oa.R.id.bottom;
 import static com.shanlinjinrong.oa.R.id.default_activity_button;
 import static com.shanlinjinrong.oa.R.id.swipe_content;
 import static com.shanlinjinrong.oa.R.id.tv;
@@ -349,7 +351,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     return;
                 }
                 showLoadingView();
-                mPresenter.postAgreeDisagree(approveBeanList);
+
+
+                mPresenter.postAgreeDisagree(approveBeanList, isOfficeSupplies);
                 break;
             case R.id.iv_disagree:
             case R.id.tv_disagree:
@@ -359,7 +363,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     return;
                 }
                 showLoadingView();
-                mPresenter.postAgreeDisagree(disApproveBeanList);
+                mPresenter.postAgreeDisagree(disApproveBeanList, isOfficeSupplies);
                 break;
             default:
                 break;
@@ -381,6 +385,17 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) mDatas.get(i);
                 if (bean.getIsChecked()) {
                     approveBeanList.add(new ApporveBodyItemBean(bean.getBillCode(), approve, bean.getBillType()));
+                }
+            }
+            if (mDatas.get(i) instanceof OfficeSuppliesListBean.DataBean.ListBean) {
+                OfficeSuppliesListBean.DataBean.ListBean bean = (OfficeSuppliesListBean.DataBean.ListBean) mDatas.get(i);
+                if (bean.isChecked()) {
+                    if (approve) {
+
+                        approveBeanList.add(new ApporveBodyItemBean("0", "1", bean.getTaskId(), bean.getProcessInstanceId()));
+                    } else {
+                        approveBeanList.add(new ApporveBodyItemBean("1", "1onApproveFailure", bean.getTaskId(), bean.getProcessInstanceId()));
+                    }
                 }
             }
         }
@@ -433,10 +448,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
                         UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
                         bean.setIsChecked(false);
-                    }
-                    if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                    } else if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
                         UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
                         bean.setIsChecked(false);
+                    } else if (data instanceof OfficeSuppliesListBean.DataBean.ListBean) {
+                        OfficeSuppliesListBean.DataBean.ListBean bean = (OfficeSuppliesListBean.DataBean.ListBean) data;
+                        bean.setChecked(false);
                     }
                 }
                 ThreadUtils.runMain(new Runnable() {
@@ -584,63 +601,77 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     startActivityToInfo(bundle);
                 });
             } else if (itemData instanceof OfficeSuppliesListBean.DataBean.ListBean) {
-                OfficeSuppliesListBean.DataBean.ListBean bean = (OfficeSuppliesListBean.DataBean.ListBean) itemData;
-
-                switch (mWhichList) {
-                    case "1":
-                        tvName.setText(AppConfig.getAppConfig(this).getPrivateName());
-                        tvReason.setText(bean.getTypeName());
-                        tvTime.setText(bean.getStartTime());
-                        break;
-                    case "2":
-                        tvName.setText(bean.getStartedBy());
-                        tvTime.setText(DateUtils.getBiDisplayDateByTimestamp(Long.parseLong(bean.getStartTime())));
-                        tvReason.setText(bean.getProcessDefinitionName());
-                        break;
-                    case "3":
-                        break;
-                    default:
-                        break;
-                }
-                switch (bean.getGlobalStatus()) {
-                    case "3":
-                        tvState.setText("未审批");
-                        break;
-                    case "2":
-                        tvState.setText("审批中");
-                        break;
-                    case "1":
-                        tvState.setText("已通过");
-                        break;
-                    case "0":
-                        tvState.setText("已驳回");
-                        break;
-                    case "-1":
-                        tvState.setText("已收回");
-                        break;
-                    default:
-                        tvState.setText("未审批");
-                        break;
-                }
-
-                holder.getRootView().setOnClickListener(view -> {
-                    Intent intent = new Intent(MyUpcomingTasksActivity.this, OfficeSuppliesDetailsActivity.class);
-                    intent.putExtra("which", mWhichList);
-                    intent.putExtra("state", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getGlobalStatus());
+                try {
+                    OfficeSuppliesListBean.DataBean.ListBean bean = (OfficeSuppliesListBean.DataBean.ListBean) itemData;
                     switch (mWhichList) {
                         case "1":
-                            intent.putExtra("id", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getId());
+                            tvName.setText(AppConfig.getAppConfig(this).getPrivateName());
+                            tvReason.setText(bean.getTypeName());
+                            tvTime.setText(bean.getStartTime());
                             break;
                         case "2":
-                            intent.putExtra("id", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getProcessInstanceId());
-                            intent.putExtra("taskId", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getTaskId());
+                            tvName.setText(bean.getStartedBy());
+                            tvTime.setText(bean.getStartTime());
+                            tvReason.setText(bean.getProcessDefinitionName());
+                            break;
                         case "3":
                             break;
                         default:
                             break;
                     }
-                    startActivityForResult(intent, 101);
-                });
+                    switch (bean.getGlobalStatus()) {
+                        case "3":
+                            tvState.setText("未审批");
+                            break;
+                        case "2":
+                            tvState.setText("审批中");
+                            break;
+                        case "1":
+                            tvState.setText("已通过");
+                            break;
+                        case "0":
+                            tvState.setText("已驳回");
+                            break;
+                        case "-1":
+                            tvState.setText("已收回");
+                            break;
+                        default:
+                            tvState.setText("未审批");
+                            break;
+                    }
+                    if (isShowCheck) {
+                        cbCheck.setVisibility(View.VISIBLE);
+                        cbCheck.setChecked(bean.isChecked());
+                    } else {
+                        cbCheck.setVisibility(View.GONE);
+                    }
+
+                    holder.getRootView().setOnClickListener(view -> {
+                        if (isShowCheck) {
+                            bean.isChecked = !bean.isChecked;
+                            cbCheck.setChecked(bean.isChecked());
+                            return;
+                        }
+                        Intent intent = new Intent(MyUpcomingTasksActivity.this, OfficeSuppliesDetailsActivity.class);
+                        intent.putExtra("which", mWhichList);
+                        intent.putExtra("state", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getGlobalStatus());
+                        switch (mWhichList) {
+                            case "1":
+                                intent.putExtra("id", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getId());
+                                break;
+                            case "2":
+                                intent.putExtra("id", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getProcessInstanceId());
+                                intent.putExtra("taskId", ((OfficeSuppliesListBean.DataBean.ListBean) itemData).getTaskId());
+                            case "3":
+                                break;
+                            default:
+                                break;
+                        }
+                        startActivityForResult(intent, 101);
+                    });
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -1182,6 +1213,15 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     @Override
+    public void onApproveSuccess(String str) {
+        hideLoadingView();
+        showToast(str);
+        initRefreshMode();
+        mSrRefresh.setRefreshing(true);
+        mSrRefresh.post(() -> ThreadUtils.runMainDelayed(() -> getListData(), 0));
+    }
+
+    @Override
     public void onSearchFailure(int errorNo, String strMsg) {
         hideLoadingView();
         mSrRefresh.setRefreshing(false);
@@ -1244,6 +1284,15 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mTvErrorShow.setVisibility(View.GONE);
         mSrRefresh.setRefreshing(false);
         showToast(strMsg);
+    }
+
+    @Override
+    public void onSearchFailure(String message) {
+        hideLoadingView();
+        showToast(message);
+        initRefreshMode();
+        mSrRefresh.setRefreshing(true);
+        mSrRefresh.post(() -> ThreadUtils.runMainDelayed(() -> getListData(), 0));
     }
 
     private void showDetailDialog(List<AgreeDisagreeResultBean.DataBean> beanList) {
@@ -1391,6 +1440,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     bean.setIsChecked(false);
                 }
             }
+            mTvErrorShow.setVisibility(View.GONE);
             mRvList.setVisibility(View.VISIBLE);
             mRvList.requestLayout();
             mFinalRecycleAdapter.notifyDataSetChanged();

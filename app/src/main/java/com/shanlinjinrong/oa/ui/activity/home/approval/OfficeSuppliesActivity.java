@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -82,7 +83,6 @@ public class OfficeSuppliesActivity extends BaseActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 //rlloadding.setVisibility(View.GONE);
-
             }
 
             @Override
@@ -98,7 +98,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
 
         mWebView.setWebViewClient(mWebViewClient);
 
-        mWebView.loadUrl("http://10.0.2.2:8080/#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid());
+        mWebView.loadUrl("http://10.0.2.2:8080/#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid()+"&date=2018-03-14"+"&userName="+AppConfig.getAppConfig(this).getPrivateName()+"&department="+AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
 
         mWebView.setWebViewClient(mWebViewClient);
     }
@@ -106,7 +106,9 @@ public class OfficeSuppliesActivity extends BaseActivity {
     @JavascriptInterface
     public void toBackRefresh(String msg) {
         runOnUiThread(() -> {
-            showToast(msg);
+            if (!TextUtils.isEmpty(msg)){
+                showToast(msg);
+            }
             setResult(-100);
             finish();
         });

@@ -58,6 +58,7 @@ public class OfficeSuppliesListBean {
         private String         pageNum;
         private List<ListBean> list;
 
+
         public String getPageSize() {
             return pageSize;
         }
@@ -107,6 +108,16 @@ public class OfficeSuppliesListBean {
             private int    totalCount;
             private String processInstanceId;
             private String processDefinitionName;
+            public boolean isChecked = false;
+
+
+            public boolean isChecked() {
+                return isChecked;
+            }
+
+            public void setChecked(boolean checked) {
+                isChecked = checked;
+            }
 
             public String getTypeName() {
                 return typeName;

@@ -183,47 +183,92 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
         });
     }
 
+
+    // 批量审批 行政 加 工作流
     @Override
-    public void postAgreeDisagree(List<ApporveBodyItemBean> list) {
+    public void postAgreeDisagree(List<ApporveBodyItemBean> list, boolean isOfficeSupplies) {
         mKjHttp.cleanCache();
         String json = new Gson().toJson(list);
         HttpParams httpParams = new HttpParams();
         httpParams.putJsonParams(json);
-        mKjHttp.jsonPost(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                super.onFailure(errorNo, strMsg);
-                try {
-                    if (mView != null) {
-                        mView.uidNull(strMsg);
-                        mView.onApproveFailure(errorNo, strMsg);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onSuccess(String t) {
-                super.onSuccess(t);
-                try {
-                    AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
-                    if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
-                        if (mView != null) {
-                            mView.onApproveSuccess(resultBean, list);
+        if (isOfficeSupplies) {
+            mKjHttp.jsonPost(ApiJava.OFFICE_SUPPLIES_APPROVE, httpParams, new HttpCallBack() {
+                @Override
+                public void onSuccess(String t) {
+                    super.onSuccess(t);
+                    try {
+                        AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
+                        if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                            if (mView != null) {
+                                mView.onApproveSuccess("操作成功");
+                            }
+                            return;
                         }
-                        return;
+                        if (mView != null) {
+                            mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
+                        }
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
                     }
-                    if (mView != null) {
-                        mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
-                    }
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+
+                @Override
+                public void onFailure(int errorNo, String strMsg) {
+                    super.onFailure(errorNo, strMsg);
+                    try {
+                        if (mView != null) {
+                            mView.uidNull(strMsg);
+                            mView.onApproveFailure(errorNo, strMsg);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+                    super.onFinish();
+                }
+            });
+        } else {
+            mKjHttp.jsonPost(ApiJava.ARGEE_DISAGREE_APPROVE, httpParams, new HttpCallBack() {
+                @Override
+                public void onFailure(int errorNo, String strMsg) {
+                    super.onFailure(errorNo, strMsg);
+                    try {
+                        if (mView != null) {
+                            mView.uidNull(strMsg);
+                            mView.onApproveFailure(errorNo, strMsg);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onSuccess(String t) {
+                    super.onSuccess(t);
+                    try {
+                        AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
+                        if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                            if (mView != null) {
+                                mView.onApproveSuccess(resultBean, list);
+                            }
+                            return;
+                        }
+                        if (mView != null) {
+                            mView.onApproveFailure(Integer.parseInt(resultBean.getCode()), resultBean.getMessage());
+                        }
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -284,24 +329,21 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 try {
-                    JSONObject jsonObject = new JSONObject(t);
-                    String data = jsonObject.getString("data");
-                    OfficeSuppliesListBean.DataBean bean = new Gson().fromJson(data, new TypeToken< OfficeSuppliesListBean.DataBean>() {
+                    OfficeSuppliesListBean bean = new Gson().fromJson(t, new TypeToken<OfficeSuppliesListBean>() {
                     }.getType());
-                    if (TextUtils.equals(jsonObject.getString("code"), ApiJava.REQUEST_CODE_OK)) {
+                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
                         if (mView != null) {
                             mView.onGetApproveDataSuccess(bean);
                         }
                         return;
                     }
                     if (mView != null) {
-                        mView.onGetApproveDataFailure(Integer.parseInt(jsonObject.getString("code")),jsonObject.getString("message"));
+                        mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
 
 
             @Override

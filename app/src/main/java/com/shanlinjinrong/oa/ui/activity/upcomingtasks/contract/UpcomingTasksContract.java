@@ -30,7 +30,11 @@ public interface UpcomingTasksContract {
 
         void onApproveSuccess(AgreeDisagreeResultBean resultBean, List<ApporveBodyItemBean> list);
 
+        void onApproveSuccess(String str);
+
         void onSearchFailure(int i, String message);
+
+        void onSearchFailure(String message);
 
 //        void onOfficeSuppliesApproveSuccess();
     }
@@ -40,11 +44,11 @@ public interface UpcomingTasksContract {
 
         void getSelectData(String privateCode, String noCheck, String pageNum, String pageSize, String time, String billType, String userName);
 
-        void postAgreeDisagree(List<ApporveBodyItemBean> approveBeanList);
+        void postAgreeDisagree(List<ApporveBodyItemBean> approveBeanList, boolean isOfficeSupplies);
 
-        void getOfficeSuppliesApproveData(String timeCode,String loableStatus,String pageNum, String pageSize);
+        void getOfficeSuppliesApproveData(String timeCode, String loableStatus, String pageNum, String pageSize);
 
-        void getOfficeSuppliesManage(String finished,String processInstanceBegin,String pageNum, String pageSize);
+        void getOfficeSuppliesManage(String finished, String processInstanceBegin, String pageNum, String pageSize);
 
 
     }
