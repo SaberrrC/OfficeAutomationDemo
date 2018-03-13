@@ -394,6 +394,7 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                     kjHttp.cleanCache();
                     HttpParams httpParams = new HttpParams();
                     httpParams.putHeaders("token", token);
+                    httpParams.putHeaders("X-Source", "android");
                     httpParams.putHeaders("uid", uid);
                     httpParams.putHeaders("X-Source", "android");
                     httpParams.put("codeList", code);

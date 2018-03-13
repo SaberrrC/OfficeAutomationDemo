@@ -21,6 +21,7 @@
 #
 #############################################
 # 代码混淆压缩比，在0~7之间，默认为5，一般不做修改
+
 -optimizationpasses 5
 # 混合时不使用大小写混合，混合后的类名为小写
 -dontusemixedcaseclassnames
@@ -236,10 +237,26 @@
 -keep interface com.j256.**{ *; }
 -keepclassmembers interface com.j256.** { *; }
 -keep class com.example.bean.** { *; }
+
+
+
+
+#### -- Picasso --
+ -dontwarn com.squareup.picasso.**
+ #### -- OkHttp --
+ -dontwarn com.squareup.okhttp.internal.**
+ #### -- Apache Commons --
+ -dontwarn org.apache.commons.logging.**
+-ignorewarnings
+-keep class * {
+    public private *;
+}
+
 #蒲公英混淆
--libraryjars libs/pgyer_sdk_x.x.jar
--dontwarn com.pgyersdk.**
--keep class com.pgyersdk.** { *; }
+#-libraryjars libs/pgyer_sdk_x.x.jar
+#-dontwarn com.pgyersdk.**
+#-keep class com.pgyersdk.** { *; }
+
 
 ## ProGuard configurations for mmtrix agent
 #-keep class com.mmtrix.** { *; }
