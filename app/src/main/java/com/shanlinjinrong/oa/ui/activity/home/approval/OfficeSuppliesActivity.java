@@ -14,6 +14,7 @@ import android.webkit.WebViewClient;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
+import com.shanlinjinrong.oa.utils.DateUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,7 +99,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
 
         mWebView.setWebViewClient(mWebViewClient);
 
-        mWebView.loadUrl("http://10.0.2.2:8080/#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid()+"&date=2018-03-14"+"&userName="+AppConfig.getAppConfig(this).getPrivateName()+"&department="+AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
+        mWebView.loadUrl("http://10.0.2.2:8080/#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&date=" + DateUtils.getCurrentDate("yyyy-MM-dd)+" + "&userName=" + AppConfig.getAppConfig(this).getPrivateName() + "&department=" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME)));
 
         mWebView.setWebViewClient(mWebViewClient);
     }
@@ -106,13 +107,14 @@ public class OfficeSuppliesActivity extends BaseActivity {
     @JavascriptInterface
     public void toBackRefresh(String msg) {
         runOnUiThread(() -> {
-            if (!TextUtils.isEmpty(msg)){
+            if (!TextUtils.isEmpty(msg)) {
                 showToast(msg);
             }
             setResult(-100);
             finish();
         });
     }
+
     @Override
     public void onBackPressed() {
         if (mWebView.canGoBack()) {
