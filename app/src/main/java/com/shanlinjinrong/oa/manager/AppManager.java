@@ -15,11 +15,15 @@ import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.webkit.WebView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
 import com.hyphenate.easeui.crash.Cockroach;
 import com.shanlinjinrong.oa.BuildConfig;
 import com.shanlinjinrong.oa.R;
+import com.shanlinjinrong.oa.net.https.ProvideOkhttpClientTrust;
 import com.shanlinjinrong.oa.thirdParty.huanxin.DemoHelper;
 import com.shanlinjinrong.oa.ui.base.dagger.component.AppComponent;
 import com.shanlinjinrong.oa.ui.base.dagger.component.DaggerAppComponent;
@@ -33,6 +37,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.List;
@@ -80,7 +85,8 @@ public class AppManager extends MultiDexApplication {
         super.onCreate();
         instance = this;
         mContext = this;
-
+        //glide https
+        Glide.get(this).register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(ProvideOkhttpClientTrust.getInstance().getOkhttpClient()));
         //注册Crash接口（必选）
         // PgyCrashManager.register(this);
         //查看数据库插件
