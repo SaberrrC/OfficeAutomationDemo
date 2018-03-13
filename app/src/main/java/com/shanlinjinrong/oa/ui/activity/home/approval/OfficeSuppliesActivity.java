@@ -99,7 +99,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
 
         mWebView.setWebViewClient(mWebViewClient);
 
-        mWebView.loadUrl("http://10.0.2.2:8080/#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&date=" + DateUtils.getCurrentDate("yyyy-MM-dd)+" + "&userName=" + AppConfig.getAppConfig(this).getPrivateName() + "&department=" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME)));
+        mWebView.loadUrl("http://10.0.2.2:8080/#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&date=" + DateUtils.getCurrentDate("yyyy-MM-dd") + "&userName=" + AppConfig.getAppConfig(this).getPrivateName() + "&department=" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
 
         mWebView.setWebViewClient(mWebViewClient);
     }
