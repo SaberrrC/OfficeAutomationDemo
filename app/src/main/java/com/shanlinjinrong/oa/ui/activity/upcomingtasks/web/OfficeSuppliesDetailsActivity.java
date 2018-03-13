@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.example.retrofit.net.ApiConstant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
@@ -109,13 +110,13 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
         mWhichState = Integer.parseInt(which);
         switch (mWhichState) {
             case 1:
-                mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&isExamine=" + mWhichState + "&id=" + id + "&state=" + state);
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&isExamine=" + mWhichState + "&id=" + id + "&state=" + state);
                 break;
             case 2:
-                mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state);
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state);
                 break;
             case 3:
-                mWebView.loadUrl("http://10.0.2.2:8080/#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid());
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid());
                 break;
             default:
                 break;
@@ -143,7 +144,7 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
 //        if (mWebView.canGoBack()) {
 //            mWebView.goBack();
 //        } else {
-            finish();
+        finish();
 //        }
     }
 }
