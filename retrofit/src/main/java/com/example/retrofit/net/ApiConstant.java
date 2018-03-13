@@ -48,6 +48,11 @@ public class ApiConstant {
      */
     //    public static final String JAVA_TEST_HOST = "http://116.62.216.129:9105/";
 
+
+    /**
+     * h5 请求地址
+     */
+    public static final String HTML5_URL_HOST = "http://10.0.2.2:8080/";
 }
 
 //
