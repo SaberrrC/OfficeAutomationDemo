@@ -102,7 +102,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
         };
 
         mWebView.setWebViewClient(mWebViewClient);
-        mWebView.loadUrl(ApiConstant.HTML5_URL_HOST+"#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid());
+        mWebView.loadUrl(ApiConstant.HTML5_URL_HOST+"#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&date=" + DateUtils.getCurrentDate("yyyy-MM-dd") + "&userName=" + AppConfig.getAppConfig(this).getPrivateName() + "&department=" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
         Log.i("====url", ApiConstant.HTML5_URL_HOST+"#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid());
         mWebView.setWebViewClient(mWebViewClient);
     }
