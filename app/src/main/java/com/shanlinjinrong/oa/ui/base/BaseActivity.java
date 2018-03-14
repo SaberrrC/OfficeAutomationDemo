@@ -340,9 +340,13 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void hideLoadingView() {
-        if (loadingDialog != null) {
-            if (loadingDialog.isShowing())
-                loadingDialog.dismiss();
+        try {
+            if (loadingDialog != null) {
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 

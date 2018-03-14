@@ -145,6 +145,13 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
         });
     }
 
+    @JavascriptInterface
+    public void toLogin() {
+        runOnUiThread(() -> {
+            catchWarningByCode("401");
+        });
+    }
+
     @Override
     public void onBackPressed() {
 //        if (mWebView.canGoBack()) {
