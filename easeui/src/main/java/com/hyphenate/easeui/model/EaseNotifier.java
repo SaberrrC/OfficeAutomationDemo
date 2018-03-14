@@ -39,12 +39,15 @@ import com.hyphenate.easeui.EaseUI.EaseSettingsProvider;
 import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.utils.AESUtils;
+import com.hyphenate.easeui.utils.DateUtils;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EncryptionUtil;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 
+import org.json.JSONObject;
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpConfig;
@@ -293,6 +296,18 @@ public class EaseNotifier {
                                 httpParams.putHeaders("token", token);
                                 httpParams.putHeaders("uid", uid);
                                 httpParams.put("codeList", userCode);
+
+                                try {
+                                    String pattern = "yyyy-MM-dd HH:mm:ss";
+                                    JSONObject jsonObject = new JSONObject();
+                                    jsonObject.put("codeList", userCode);
+                                    String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+                                    jsonObject.put("time", time);
+                                    httpParams.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+                                } catch (Throwable e) {
+                                    e.printStackTrace();
+                                }
+
                                 //TODO 生产
                                 kjHttp.post(ApiConstant.JAVA_TEST_HOST + EaseConstant.SEARCHUSERINFO, httpParams, new HttpCallBack() {
 
