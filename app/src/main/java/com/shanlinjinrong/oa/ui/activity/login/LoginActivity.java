@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Base64;
 import android.util.Log;
@@ -27,7 +26,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
@@ -183,6 +181,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
                 if (mLlVerifyCode.getVisibility() != View.VISIBLE) {
                     SubmitLogin();
                 } else {
+                    showLoadingView();
                     mPresenter.login(userEmail.getText().toString(), userPwd.getText().toString(), mKeyCode, mEdVerifyCode.getText().toString().trim());
                 }
                 // mLlVerifyCode.setVisibility(View.GONE);
@@ -207,6 +206,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(userEmail.getWindowToken(), 0);
             showLoadingView();
+            mPresenter.login(userEmail.getText().toString(), userPwd.getText().toString());
         }
     }
 

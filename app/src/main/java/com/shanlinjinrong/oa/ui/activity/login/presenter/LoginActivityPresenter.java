@@ -1,8 +1,6 @@
 package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
-import com.alibaba.fastjson.JSONPObject;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.common.ApiJava;
@@ -37,22 +35,19 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
         HttpParams params = new HttpParams();
         params.put("email", account);
         params.put("pwd", psw);
-//        try {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("email", account);
-//            jsonObject.put("pwd", psw);
-//            String currentDate = DateUtils.getCurrentDate("yyyy-MM-dd HH:mm:ss");
-//            long l = DateUtils.dateToLong(currentDate, "yyyy-MM-dd HH:mm:ss");
-//            String s = String.valueOf(l);
-//            String substring = s.substring(0, 13);
-//            jsonObject.put("time", substring);
-//
-//            params.putHeaders("sign",  AESUtils.Encrypt(jsonObject.toString()));
-//            params.put("email", account);
-//            params.put("pwd", psw);
-//        } catch (Throwable e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("email", account);
+            jsonObject.put("pwd", psw);
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            params.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+            params.put("email", account);
+            params.put("pwd", psw);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         mKjHttp.post(ApiJava.LOGIN, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
@@ -146,6 +141,19 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
         params.put("pwd", psw);
         params.put("keyCode", keyCode);
         params.put("code", code);
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("email", account);
+            jsonObject.put("pwd", psw);
+            jsonObject.put("keyCode", keyCode);
+            jsonObject.put("code", code);
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            params.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         mKjHttp.post(ApiJava.LOGIN, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
@@ -237,7 +245,18 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
     @Override
     public void QueryVerifyCode() {
         mKjHttp.cleanCache();
-        mKjHttp.get(ApiJava.SENDS_CAPTCHA + "?channel=1", new HttpParams(), new HttpCallBack() {
+        HttpParams httpParams = new HttpParams();
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("channel", "1");
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            httpParams.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        mKjHttp.get(ApiJava.SENDS_CAPTCHA + "?channel=1", httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

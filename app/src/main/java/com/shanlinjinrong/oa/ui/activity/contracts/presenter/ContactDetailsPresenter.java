@@ -3,13 +3,16 @@ package com.shanlinjinrong.oa.ui.activity.contracts.presenter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
+import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.contracts.bean.ContactDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.contracts.contract.ContactDetailsContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+import com.shanlinjinrong.oa.utils.DateUtils;
 
+import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -48,6 +51,18 @@ public class ContactDetailsPresenter extends HttpPresenter<ContactDetailsContrac
 //                    @Override
 //                    public void run() throws Exception {
         HttpParams httpParams = new HttpParams();
+
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            jsonObject.put("uid", code);
+            httpParams.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
         mKjHttp.get(ApiJava.ID_SEARCH_USER_DETAILS + "?uid=" + code, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {

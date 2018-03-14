@@ -1,11 +1,13 @@
 package com.shanlinjinrong.oa.ui.fragment.presenter;
 
 import com.google.gson.Gson;
+import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.TabMeGetVersionInfo;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+import com.shanlinjinrong.oa.utils.DateUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +27,17 @@ public class TabMeGetVersionPresenter extends HttpPresenter<TabMeGetVersionInfo.
      */
     @Override
     public void getAppEdition() {
-        mKjHttp.get(ApiJava.APP_GETAPPEDITION, new HttpParams(), new HttpCallBack() {
+        HttpParams httpParams = new HttpParams();
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            httpParams.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        mKjHttp.get(ApiJava.APP_GETAPPEDITION, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

@@ -44,6 +44,7 @@ public class AESUtils {
             System.out.print("加密向量iv为空null");
             return null;
         }
+
         byte[] dataBytes = sSrc.getBytes("utf-8");
 
         SecretKeySpec keyspec = new SecretKeySpec(sKey.getBytes("utf-8"), "AES");
@@ -53,8 +54,7 @@ public class AESUtils {
         int plaintextLength = dataBytes.length;
         int blockSize = cipher.getBlockSize();
         if (plaintextLength % blockSize != 0) {
-            plaintextLength = plaintextLength
-                    + (blockSize - (plaintextLength % blockSize));
+            plaintextLength = plaintextLength + (blockSize - (plaintextLength % blockSize));
         }
 
         byte[] plaintext = new byte[plaintextLength];
@@ -75,9 +75,9 @@ public class AESUtils {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static String PadRight(String targetStr)
-            throws UnsupportedEncodingException {
+    public static String PadRight(String targetStr) throws UnsupportedEncodingException {
         int curLength = targetStr.getBytes().length;
+
         if (targetStr != null && curLength > STR_LENGTH) {
             targetStr = SubStringByte(targetStr);
         }
