@@ -1,15 +1,20 @@
 package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
+import com.alibaba.fastjson.JSONPObject;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.login.bean.RequestCodeBean;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.LogUtils;
 
+import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -32,6 +37,22 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
         HttpParams params = new HttpParams();
         params.put("email", account);
         params.put("pwd", psw);
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("email", account);
+//            jsonObject.put("pwd", psw);
+//            String currentDate = DateUtils.getCurrentDate("yyyy-MM-dd HH:mm:ss");
+//            long l = DateUtils.dateToLong(currentDate, "yyyy-MM-dd HH:mm:ss");
+//            String s = String.valueOf(l);
+//            String substring = s.substring(0, 13);
+//            jsonObject.put("time", substring);
+//
+//            params.putHeaders("sign",  AESUtils.Encrypt(jsonObject.toString()));
+//            params.put("email", account);
+//            params.put("pwd", psw);
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
         mKjHttp.post(ApiJava.LOGIN, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
@@ -72,7 +93,7 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                                                     mView.showVerifyCode(user.getMessage());
                                                 }
                                             }
-                                        }else {
+                                        } else {
                                             mView.accountOrPswError(user.getCode(), user.getMessage());
                                         }
                                     } catch (Throwable e) {
@@ -154,7 +175,7 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
                             }
                             break;
                         case "300001":
-                            if (mView!=null){
+                            if (mView != null) {
                                 mView.refreshVerifyCode(user.getMessage());
                             }
                             break;
@@ -216,7 +237,7 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
     @Override
     public void QueryVerifyCode() {
         mKjHttp.cleanCache();
-        mKjHttp.get(ApiJava.SENDS_CAPTCHA+"?channel=1", new HttpParams(), new HttpCallBack() {
+        mKjHttp.get(ApiJava.SENDS_CAPTCHA + "?channel=1", new HttpParams(), new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
