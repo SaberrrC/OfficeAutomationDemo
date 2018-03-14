@@ -85,18 +85,18 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
         httpParams.put("code", userCode);
         httpParams.put("imgCode", imgCode);
         httpParams.put("keyCode", keyCode);
-//        try {
-//            String pattern = "yyyy-MM-dd HH:mm:ss";
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("code", imgCode);
-//            jsonObject.put("imgCode", keyCode);
-//            jsonObject.put("keyCode", keyCode);
-//            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
-//            jsonObject.put("time", time);
-//            httpParams.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
-//        } catch (Throwable e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", imgCode);
+            jsonObject.put("imgCode", keyCode);
+            jsonObject.put("keyCode", keyCode);
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            httpParams.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         mKjHttp.post(ApiJava.USERS_SEARCH, httpParams, new HttpCallBack() {
             @Override
             public void onPreStart() {

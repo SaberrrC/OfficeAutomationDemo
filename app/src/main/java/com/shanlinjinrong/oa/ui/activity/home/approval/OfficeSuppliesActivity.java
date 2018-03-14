@@ -39,6 +39,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
     @BindView(R.id.progress_bar)
     ProgressBar    progress_bar;
 
+
     private WebViewClient mWebViewClient;
 
     @Override
