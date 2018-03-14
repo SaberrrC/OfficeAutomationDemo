@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/page_bg"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <ren.yale.android.cachewebviewlib.CacheWebView
-        android:id="@+id/web_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <RelativeLayout
-        android:id="@+id/rl_loadding"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/AppTheme.Dialog.Loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tv_error_layout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv_error_layout"
+        <ren.yale.android.cachewebviewlib.CacheWebView
+            android:id="@+id/web_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:visibility="visible"/>
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/rl_loadding"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/AppTheme.Dialog.Loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tv_error_layout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_error_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <include layout="@layout/toolbar_shadow" />
     </RelativeLayout>
 
-    <include layout="@layout/toolbar_shadow"/>
 </LinearLayout>
