@@ -474,6 +474,20 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            if (mDialog != null) {
+                if (mDialog.isShowing()) {
+                    mDialog.dismiss();
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         initKjHttp().cancelAll();
