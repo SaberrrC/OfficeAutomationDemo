@@ -207,19 +207,15 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(userEmail.getWindowToken(), 0);
             showLoadingView();
-            mPresenter.Test(userEmail.getText().toString(), userPwd.getText().toString());
-
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private boolean check() {
         if (userEmail.getText().toString().equals("")) {
-          //  showToast("请输入您的邮箱帐号或员工号");
+            showToast("请输入您的邮箱帐号或员工号");
             return false;
         }
         if (!Utils.isRegex(Constants.Regex.REGEX_EMAIL, userEmail.getText().toString())) {
-
             //判断是不是工号
             if (!Utils.isRegex(Constants.Regex.REGEX_CODE, userEmail.getText().toString())) {
                 showToast("请您输入正确的邮箱帐号或者工号");

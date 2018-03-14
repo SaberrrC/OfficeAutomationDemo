@@ -37,6 +37,22 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
         HttpParams params = new HttpParams();
         params.put("email", account);
         params.put("pwd", psw);
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("email", account);
+//            jsonObject.put("pwd", psw);
+//            String currentDate = DateUtils.getCurrentDate("yyyy-MM-dd HH:mm:ss");
+//            long l = DateUtils.dateToLong(currentDate, "yyyy-MM-dd HH:mm:ss");
+//            String s = String.valueOf(l);
+//            String substring = s.substring(0, 13);
+//            jsonObject.put("time", substring);
+//
+//            params.putHeaders("sign",  AESUtils.Encrypt(jsonObject.toString()));
+//            params.put("email", account);
+//            params.put("pwd", psw);
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
         mKjHttp.post(ApiJava.LOGIN, params, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
@@ -257,46 +273,4 @@ public class LoginActivityPresenter extends HttpPresenter<LoginActivityContract.
             }
         });
     }
-
-    @Override
-    public void Test(String account, String psw) {
-        mKjHttp.cleanCache();
-        HttpParams params = new HttpParams();
-
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("email", account);
-            jsonObject.put("pwd", psw);
-            String currentDate = DateUtils.getCurrentDate("yyyy-MM-dd HH:mm:ss");
-            long l = DateUtils.dateToLong(currentDate, "yyyy-MM-dd HH:mm:ss");
-            String s = String.valueOf(l);
-            String substring = s.substring(0, 13);
-            jsonObject.put("time", substring);
-
-            params.putHeaders("sign",  AESUtils.Encrypt(jsonObject.toString()));
-            params.put("email", account);
-            params.put("pwd", psw);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        mKjHttp.post(ApiJava.LOGIN, params, new HttpCallBack() {
-            @Override
-            public void onSuccess(String t) {
-                LogUtils.e(t);
-            }
-
-            @Override
-            public void onFailure(int errorNo, String strMsg) {
-                LogUtils.e(errorNo + "--" + strMsg);
-
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
-        });
-    }
-
-
 }

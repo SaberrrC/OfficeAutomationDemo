@@ -36,10 +36,10 @@ public class ApiConstant {
     /**
      * 开发环境
      */
-    public static final String JAVA_TEST_HOST = "http://10.255.232.234/oa-api/";
+//    public static final String JAVA_TEST_HOST = "http://10.255.232.234/oa-api/";
 
 //    http://10.5.203.168:8084
-//    public static final String JAVA_TEST_HOST = "http://10.5.203.168:8084/";
+    public static final String JAVA_TEST_HOST = "http://10.5.203.168:8084/";
 
     /**
      * 测试环境
