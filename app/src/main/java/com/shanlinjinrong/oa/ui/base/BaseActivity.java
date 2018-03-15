@@ -340,9 +340,13 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void hideLoadingView() {
-        if (loadingDialog != null) {
-            if (loadingDialog.isShowing())
-                loadingDialog.dismiss();
+        try {
+            if (loadingDialog != null) {
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
@@ -464,6 +468,20 @@ public class BaseActivity extends AppCompatActivity {
             mDialog.setCanceledOnTouchOutside(false);
             mDialog.setCancelable(false);
             mDialog.show();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            if (mDialog != null) {
+                if (mDialog.isShowing()) {
+                    mDialog.dismiss();
+                }
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
