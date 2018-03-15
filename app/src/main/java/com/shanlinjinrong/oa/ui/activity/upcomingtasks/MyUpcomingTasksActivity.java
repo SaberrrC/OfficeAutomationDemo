@@ -27,14 +27,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
-import com.google.gson.Gson;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.model.CommonRequestBean;
-import com.shanlinjinrong.oa.ui.activity.home.approval.OfficeSuppliesActivity;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.adpter.FinalRecycleAdapter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.AgreeDisagreeResultBean;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.bean.OfficeSuppliesListBean;
@@ -44,22 +39,14 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.contract.UpcomingTasksCon
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksPresenter;
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.web.OfficeSuppliesDetailsActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
-import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.ThreadUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.shanlinjinrong.oa.R.id.bottom;
-import static com.shanlinjinrong.oa.R.id.default_activity_button;
-import static com.shanlinjinrong.oa.R.id.swipe_content;
-import static com.shanlinjinrong.oa.R.id.tv;
-import static com.shanlinjinrong.oa.R.id.tv_name;
 import static com.shanlinjinrong.oa.R.id.tv_state_checked;
 
 public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPresenter> implements UpcomingTasksContract.View, FinalRecycleAdapter.OnViewAttachListener, View.OnClickListener {
@@ -133,6 +120,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void uidNull(String code) {
+        catchWarningByCode(code);
     }
 
     @Override

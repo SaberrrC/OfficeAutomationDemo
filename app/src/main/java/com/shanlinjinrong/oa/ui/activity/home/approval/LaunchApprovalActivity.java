@@ -146,11 +146,19 @@ public class LaunchApprovalActivity extends BaseActivity {
             switch (i) {
                 case 0:
                     Intent intent = new Intent(LaunchApprovalActivity.this, OfficeSuppliesActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,101);
                     break;
                 default:
                     break;
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == -100){
+            finish();
         }
     }
 }
