@@ -43,6 +43,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
 
 
     private WebViewClient mWebViewClient;
+    private boolean isError = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,9 @@ public class OfficeSuppliesActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                if (isError){
+                    return;
+                }
                 rlloadding.setVisibility(View.GONE);
             }
 
@@ -106,8 +110,10 @@ public class OfficeSuppliesActivity extends BaseActivity {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
                 hideLoadingView();
-                rlloadding.setVisibility(View.VISIBLE);
+                isError = true;
                 progress_bar.setVisibility(View.GONE);
+                mWebView.setVisibility(View.GONE);
+                rlloadding.setVisibility(View.VISIBLE);
                 tvErrorLayout.setVisibility(View.VISIBLE);
                 tvErrorLayout.setText(getString(R.string.net_no_connection));
             }
