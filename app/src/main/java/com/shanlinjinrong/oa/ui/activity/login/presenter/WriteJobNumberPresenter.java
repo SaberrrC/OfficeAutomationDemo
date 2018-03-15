@@ -88,8 +88,8 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
         try {
             String pattern = "yyyy-MM-dd HH:mm:ss";
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", imgCode);
-            jsonObject.put("imgCode", keyCode);
+            jsonObject.put("code", userCode);
+            jsonObject.put("imgCode", imgCode);
             jsonObject.put("keyCode", keyCode);
             String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
             jsonObject.put("time", time);
