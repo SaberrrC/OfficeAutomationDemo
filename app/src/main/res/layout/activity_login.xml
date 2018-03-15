@@ -162,7 +162,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="下次自动登录"
+                        android:text="记住账号"
                         android:textColor="@color/text_common_dark_color"
                         android:textSize="@dimen/text_common_dp" />
 
