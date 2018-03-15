@@ -137,6 +137,7 @@ public class WriteJobNumberPresenter extends HttpPresenter<WriteJobNumberContrac
             @Override
             public void onFinish() {
                 super.onFinish();
+
                 try {
                     if (mView != null) {
                         mView.hideLoading();
