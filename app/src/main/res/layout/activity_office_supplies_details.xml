@@ -40,7 +40,6 @@
                 android:visibility="visible" />
         </RelativeLayout>
 
-        <include layout="@layout/toolbar_shadow" />
     </RelativeLayout>
 
 </LinearLayout>
