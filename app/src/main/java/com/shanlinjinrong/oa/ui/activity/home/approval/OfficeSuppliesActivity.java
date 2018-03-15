@@ -125,12 +125,11 @@ public class OfficeSuppliesActivity extends BaseActivity {
             if (!TextUtils.isEmpty(msg)) {
                 showToast(msg);
             }
-
-            Intent intent = new Intent(this, MyUpcomingTasksActivity.class);
-            intent.putExtra("whichList", "1");
-            intent.putExtra("isLaunchApproval", true);
-            startActivity(intent);
-            setResult(-100);
+//            Intent intent = new Intent(this, MyUpcomingTasksActivity.class);
+//            intent.putExtra("whichList", "1");
+//            intent.putExtra("isLaunchApproval", true);
+//            startActivity(intent);
+//            setResult(-100);
             finish();
         });
     }
