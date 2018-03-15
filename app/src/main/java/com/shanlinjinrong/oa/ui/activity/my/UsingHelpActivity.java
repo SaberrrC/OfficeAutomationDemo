@@ -115,8 +115,9 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
             }
         };
         webView.setWebViewClient(mWebViewClient);
-        webView.loadUrl("http://api.oa.shanlinjinrong.com/helper/index" + "?time=" + System.currentTimeMillis());
+//        webView.loadUrl("http://api.oa.shanlinjinrong.com/helper/index" + "?time=" + System.currentTimeMillis());
 //        webView.loadUrl("http://10.5.203.123:8081/#/UsingHelp" + "?time=" + System.currentTimeMillis());
+        webView.loadUrl("file:///android_asset/UsingHelp.html");
         webView.setWebViewClient(mWebViewClient);
     }
 

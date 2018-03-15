@@ -8,7 +8,7 @@
 
     <include
         layout="@layout/toolbar"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,6 +46,6 @@
 
         <include
             layout="@layout/toolbar_shadow"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </RelativeLayout>
 </LinearLayout>
