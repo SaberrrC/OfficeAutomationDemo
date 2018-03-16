@@ -18,6 +18,7 @@ public class ApiConstant {
     /**
      * 测试环境
      */
+
     public final static String BASE_PIC_URL = "http://10.5.202.122:9105";
 
 
@@ -43,16 +44,14 @@ public class ApiConstant {
      */
     public static final String JAVA_TEST_HOST = "http://10.5.202.122:9105/";
 
-    /**
-     * 新外网
-     */
-    //    public static final String JAVA_TEST_HOST = "http://116.62.216.129:9105/";
-
 
     /**
-     * h5 请求地址
      */
     public static final String HTML5_URL_HOST = "http://10.255.233.185:9105/";
+
+    //黄海宾
+//    public static final String JAVA_TEST_HOST = "http://10.5.203.123:8084/";
+//    public static final String HTML5_URL_HOST = "http://10.5.203.123:8081/";
 }
 
 //

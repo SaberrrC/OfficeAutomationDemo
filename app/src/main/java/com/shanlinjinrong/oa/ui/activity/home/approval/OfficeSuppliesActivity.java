@@ -3,10 +3,13 @@ package com.shanlinjinrong.oa.ui.activity.home.approval;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceError;
@@ -35,12 +38,14 @@ public class OfficeSuppliesActivity extends BaseActivity {
     CacheWebView mWebView;
     @BindView(R.id.tv_error_layout)
     TextView     tvErrorLayout;
-
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     @BindView(R.id.rl_loadding)
     RelativeLayout rlloadding;
     @BindView(R.id.progress_bar)
     ProgressBar    progress_bar;
-
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private WebViewClient mWebViewClient;
     private boolean isError = false;
@@ -51,6 +56,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
         setContentView(R.layout.activity_office_supplies);
         ButterKnife.bind(this);
         //setTranslucentStatus(this);
+        initToolBar();
         initWebView();
     }
 
@@ -116,6 +122,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
                 rlloadding.setVisibility(View.VISIBLE);
                 tvErrorLayout.setVisibility(View.VISIBLE);
                 tvErrorLayout.setText(getString(R.string.net_no_connection));
+                toolbar.setVisibility(View.VISIBLE);
             }
         };
 
@@ -154,5 +161,25 @@ public class OfficeSuppliesActivity extends BaseActivity {
         } else {
             finish();
         }
+}
+
+
+
+    private void initToolBar() {
+        if (toolbar == null) {
+            return;
+        }
+        setTitle("");//必须在setSupportActionBar之前调用
+        toolbar.setTitleTextColor(Color.parseColor("#000000"));
+        setSupportActionBar(toolbar);
+        tvTitle.setText("办公品申请");
+        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
+                Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        lp.gravity = Gravity.CENTER_HORIZONTAL;
+        tvTitle.setLayoutParams(lp);
+
+        toolbar.setNavigationIcon(R.drawable.toolbar_back);
+        toolbar.setNavigationOnClickListener(view -> finish());
+        toolbar.setVisibility(View.GONE);
     }
 }

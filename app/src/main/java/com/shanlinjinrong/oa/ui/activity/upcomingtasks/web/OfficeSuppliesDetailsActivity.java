@@ -2,8 +2,11 @@ package com.shanlinjinrong.oa.ui.activity.upcomingtasks.web;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceError;
@@ -29,13 +32,15 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
     @BindView(R.id.web_view)
     CacheWebView mWebView;
     @BindView(R.id.tv_error_layout)
-    TextView     tvErrorLayout;
-
+    TextView tvErrorLayout;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     @BindView(R.id.rl_loadding)
     RelativeLayout rlloadding;
     @BindView(R.id.progress_bar)
-    ProgressBar    progress_bar;
-
+    ProgressBar progress_bar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     private WebViewClient mWebViewClient;
 
     private int mWhichState = 0;
@@ -47,6 +52,7 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
         setContentView(R.layout.activity_office_supplies_details);
         ButterKnife.bind(this);
         //setTranslucentStatus(this);
+        initToolBar();
         initWebView();
     }
 
@@ -96,7 +102,7 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (isError){
+                if (isError) {
                     return;
                 }
                 rlloadding.setVisibility(View.GONE);
@@ -113,6 +119,7 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
                 rlloadding.setVisibility(View.VISIBLE);
                 tvErrorLayout.setVisibility(View.VISIBLE);
                 tvErrorLayout.setText(getString(R.string.net_no_connection));
+                toolbar.setVisibility(View.VISIBLE);
             }
         };
         mWebView.setWebViewClient(mWebViewClient);
@@ -129,7 +136,7 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
                 mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state);
                 break;
             case 3:
-                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid()+ "&id=" + id + "&taskId=" + taskId + "&state=" + state);
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state);
                 break;
             default:
                 break;
@@ -165,5 +172,24 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
 //        } else {
         finish();
 //        }
+    }
+
+
+    private void initToolBar() {
+        if (toolbar == null) {
+            return;
+        }
+        setTitle("");//必须在setSupportActionBar之前调用
+        toolbar.setTitleTextColor(Color.parseColor("#000000"));
+        setSupportActionBar(toolbar);
+        tvTitle.setText("办公用品详情");
+        Toolbar.LayoutParams lp = new Toolbar.LayoutParams(
+                Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        lp.gravity = Gravity.CENTER_HORIZONTAL;
+        tvTitle.setLayoutParams(lp);
+
+        toolbar.setNavigationIcon(R.drawable.toolbar_back);
+        toolbar.setNavigationOnClickListener(view -> finish());
+        toolbar.setVisibility(View.GONE);
     }
 }
