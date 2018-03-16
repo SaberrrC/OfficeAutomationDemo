@@ -5,7 +5,9 @@
     android:background="@color/page_bg"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
-
+    <include
+        layout="@layout/toolbar"
+        android:visibility="gone" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
