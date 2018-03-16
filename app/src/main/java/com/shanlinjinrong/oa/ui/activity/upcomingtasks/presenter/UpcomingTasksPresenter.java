@@ -366,5 +366,54 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
         });
     }
 
+    @Override
+    public void getOfficeSuppliesManage(String finished, String processInstanceBegin, String pageNum, String pageSize, String name) {
+        mKjHttp.cleanCache();
+        HttpParams httpParams = new HttpParams();
+        StringBuilder stringBuffer = new StringBuilder();
+        stringBuffer.append("?finished=").append(finished).append("&processInstanceBegin=").append(processInstanceBegin).append("&pageNum=").append(pageNum).append("&pageSize=").append(pageSize);
+        if (!TextUtils.isEmpty(name)) {
+            stringBuffer.append("&startedByLike=").append(name);
+        }
+        mKjHttp.get(ApiJava.REQUEST_OFFICE_MANAGE + stringBuffer, httpParams, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                try {
+                    OfficeSuppliesListBean bean = new Gson().fromJson(t, new TypeToken<OfficeSuppliesListBean>() {
+                    }.getType());
+                    if (TextUtils.equals(bean.getCode(), ApiJava.REQUEST_CODE_OK)) {
+                        if (mView != null) {
+                            mView.onGetApproveDataSuccess(bean);
+                        }
+                        return;
+                    }
+                    if (mView != null) {
+                        mView.onGetApproveDataFailure(Integer.parseInt(bean.getCode()), bean.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                try {
+                    if (mView != null) {
+                        mView.uidNull(strMsg);
+                        mView.onGetApproveDataFailure(errorNo, strMsg);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
+    }
 }

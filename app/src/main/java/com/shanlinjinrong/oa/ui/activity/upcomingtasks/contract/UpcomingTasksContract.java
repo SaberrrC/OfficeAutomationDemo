@@ -48,6 +48,6 @@ public interface UpcomingTasksContract {
 
         void getOfficeSuppliesManage(String finished, String processInstanceBegin, String pageNum, String pageSize);
 
-
+        void getOfficeSuppliesManage(String finished, String processInstanceBegin, String pageNum, String pageSize,String name);
     }
 }

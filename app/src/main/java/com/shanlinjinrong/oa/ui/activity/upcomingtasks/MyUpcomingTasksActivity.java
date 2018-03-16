@@ -403,11 +403,19 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
         isSearch = true;
         String privateCode = AppConfig.getAppConfig(this).getPrivateCode();
+        if (!isOfficeSupplies){
         if (TextUtils.equals(mWhichList, "2")) {
             mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
         }
         if (TextUtils.equals(mWhichList, "3")) {
             mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+        }}else {
+            if (TextUtils.equals(mWhichList, "2")) {
+                mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE,trim);
+            }
+            if (TextUtils.equals(mWhichList, "3")) {
+                mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE,trim);
+            }
         }
     }
 
@@ -936,6 +944,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onGetApproveDataSuccess(OfficeSuppliesListBean.DataBean bean) {
+        hideLoadingView();
         mRvList.setVisibility(View.VISIBLE);
         mTvErrorShow.setVisibility(View.GONE);
         mSrRefresh.setRefreshing(false);
@@ -989,6 +998,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onGetApproveDataSuccess(OfficeSuppliesListBean bean) {
+        hideLoadingView();
         mRvList.setVisibility(View.VISIBLE);
         mTvErrorShow.setVisibility(View.GONE);
         mSrRefresh.setRefreshing(false);
