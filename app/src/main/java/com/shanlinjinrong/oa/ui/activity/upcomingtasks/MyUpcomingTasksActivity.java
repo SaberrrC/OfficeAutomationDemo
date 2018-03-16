@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.example.retrofit.model.responsebody.ApporveBodyItemBean;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -40,9 +41,11 @@ import com.shanlinjinrong.oa.ui.activity.upcomingtasks.presenter.UpcomingTasksPr
 import com.shanlinjinrong.oa.ui.activity.upcomingtasks.web.OfficeSuppliesDetailsActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.ThreadUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -679,15 +682,15 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private void setItemIcon(ImageView ivIcon, String billType) {
         if (TextUtils.equals(billType, "6402")) {//签卡申请
             ivIcon.setBackgroundResource(R.mipmap.upcoming_card);
-        }
-        if (TextUtils.equals(billType, "6405")) {//加班申请
+        } else if (TextUtils.equals(billType, "6405")) {//加班申请
             ivIcon.setBackgroundResource(R.mipmap.upcoming_overtime);
-        }
-        if (TextUtils.equals(billType, "6403")) {//出差申请
+        } else if (TextUtils.equals(billType, "6403")) {//出差申请
             ivIcon.setBackgroundResource(R.mipmap.upcoming_travel);
-        }
-        if (TextUtils.equals(billType, "6404")) {//休假申请
+        } else if (TextUtils.equals(billType, "6404")) {//休假申请
             ivIcon.setBackgroundResource(R.mipmap.upcoming_holiday);
+        }else {
+            //办公片申请
+            ivIcon.setBackgroundResource(R.drawable.icon_launch_approval_supplies);
         }
     }
 
