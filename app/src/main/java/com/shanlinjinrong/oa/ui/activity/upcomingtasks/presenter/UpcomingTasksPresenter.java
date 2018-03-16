@@ -200,7 +200,7 @@ public class UpcomingTasksPresenter extends HttpPresenter<UpcomingTasksContract.
                         AgreeDisagreeResultBean resultBean = new Gson().fromJson(t, AgreeDisagreeResultBean.class);
                         if (TextUtils.equals(resultBean.getCode(), ApiJava.REQUEST_CODE_OK)) {
                             if (mView != null) {
-                                mView.onApproveSuccess("操作成功");
+                                mView.onApproveSuccess(resultBean, list);
                             }
                             return;
                         }

@@ -30,8 +30,6 @@ public interface UpcomingTasksContract {
 
         void onApproveSuccess(AgreeDisagreeResultBean resultBean, List<ApporveBodyItemBean> list);
 
-        void onApproveSuccess(String str);
-
         void onSearchFailure(int i, String message);
 
         void onSearchFailure(String message);

@@ -1210,15 +1210,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     @Override
-    public void onApproveSuccess(String str) {
-        hideLoadingView();
-        showToast(str);
-        initRefreshMode();
-        mSrRefresh.setRefreshing(true);
-        mSrRefresh.post(() -> ThreadUtils.runMainDelayed(() -> getListData(), 0));
-    }
-
-    @Override
     public void onSearchFailure(int errorNo, String strMsg) {
         hideLoadingView();
         mSrRefresh.setRefreshing(false);
