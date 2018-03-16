@@ -1206,7 +1206,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         showToast("操作成功");
         initRefreshMode();
         mSrRefresh.setRefreshing(true);
-        mSrRefresh.post(() -> ThreadUtils.runMainDelayed(() -> getListData(), 0));
+        mSrRefresh.post(() -> ThreadUtils.runMainDelayed(() -> getListData(), 1000));
     }
 
     @Override
