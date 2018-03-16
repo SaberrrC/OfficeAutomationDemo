@@ -594,6 +594,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             } else if (itemData instanceof OfficeSuppliesListBean.DataBean.ListBean) {
                 try {
                     OfficeSuppliesListBean.DataBean.ListBean bean = (OfficeSuppliesListBean.DataBean.ListBean) itemData;
+                    setItemIcon(ivIcon, "");
                     switch (mWhichList) {
                         case "1":
                             tvName.setText(AppConfig.getAppConfig(this).getPrivateName());
