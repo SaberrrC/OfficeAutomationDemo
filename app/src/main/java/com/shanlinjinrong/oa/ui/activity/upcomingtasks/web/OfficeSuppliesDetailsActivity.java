@@ -30,21 +30,21 @@ import ren.yale.android.cachewebviewlib.WebViewCache;
 public class OfficeSuppliesDetailsActivity extends BaseActivity {
 
     @BindView(R.id.web_view)
-    CacheWebView mWebView;
+    CacheWebView   mWebView;
     @BindView(R.id.tv_error_layout)
-    TextView tvErrorLayout;
+    TextView       tvErrorLayout;
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TextView       tvTitle;
     @BindView(R.id.rl_loadding)
     RelativeLayout rlloadding;
     @BindView(R.id.progress_bar)
-    ProgressBar progress_bar;
+    ProgressBar    progress_bar;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar        toolbar;
     private WebViewClient mWebViewClient;
 
-    private int mWhichState = 0;
-    private boolean isError = false;
+    private int     mWhichState = 0;
+    private boolean isError     = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,13 +130,13 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
         mWhichState = Integer.parseInt(which);
         switch (mWhichState) {
             case 1:
-                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&isExamine=" + mWhichState + "&id=" + id + "&state=" + state);
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&isExamine=" + mWhichState + "&id=" + id + "&state=" + state + "&baseUrl=" + ApiConstant.baseUrl);
                 break;
             case 2:
-                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state);
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state + "&baseUrl=" + ApiConstant.baseUrl);
                 break;
             case 3:
-                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state);
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state + "&baseUrl=" + ApiConstant.baseUrl);
                 break;
             default:
                 break;
