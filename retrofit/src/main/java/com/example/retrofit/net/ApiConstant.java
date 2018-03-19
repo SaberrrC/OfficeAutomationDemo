@@ -26,28 +26,28 @@ public class ApiConstant {
     /**
      * 生产环境
      */
-//    public static final String JAVA_TEST_HOST = "https://oa.shanlinjinrong.com/oa-api/";
+    //public static final String JAVA_TEST_HOST = "https://oa.shanlinjinrong.com/oa-api/";  public static final String baseUrl= "0";
 
     /**
      * 预发布环境  testoa
      */
-//    public static final String JAVA_TEST_HOST = "http://testoa.shanlinjinrong.com/oa-api/";
+    //public static final String JAVA_TEST_HOST = "http://testoa.shanlinjinrong.com/oa-api/";  public static final String baseUrl= "1";
 
 
     /**
      * 开发环境
      */
-//    public static final String JAVA_TEST_HOST = "http://10.255.232.234/oa-api/";
+    //public static final String JAVA_TEST_HOST = "http://10.255.232.234/oa-api/";  public static final String baseUrl= "2";
 
     /**
      * 测试环境
      */
-    public static final String JAVA_TEST_HOST = "http://10.5.202.122:9105/";
+    public static final String JAVA_TEST_HOST = "http://10.5.202.122:9105/";  public static final String baseUrl= "3";
 
 
     /**
      */
-    public static final String HTML5_URL_HOST = "http://10.255.233.185:9105/";
+    public static final String HTML5_URL_HOST = "http://testoa.shanlinjinrong.com/oa-h5/";
 
     //黄海宾
 //    public static final String JAVA_TEST_HOST = "http://10.5.203.123:8084/";
