@@ -275,4 +275,8 @@ public class AppConfig {
     public LimitResponseBody getUserLimitBean() {
         return mUserLimitBean;
     }
+
+    public void clearUserLimit() {
+        mUserLimitBean = null;
+    }
 }

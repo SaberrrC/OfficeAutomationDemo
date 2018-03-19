@@ -536,6 +536,8 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         AppConfig.getAppConfig(UserInfoActivity.this).clearLoginInfo();
         startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
         AppManager.sharedInstance().finishAllActivity();
+        //清除用户权限
+        AppConfig.getAppConfig(this).clearUserLimit();
     }
 
     private void initToolBar() {
