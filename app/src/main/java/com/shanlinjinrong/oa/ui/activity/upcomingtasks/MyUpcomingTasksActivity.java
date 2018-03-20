@@ -823,16 +823,20 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 if (TextUtils.equals(mWhichList, "2")) {
                     if (isOfficeSupplies) {
                         //待办
+                        mEtContent.setHint("请输入发起人姓名");
                         mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
                     } else {
+                        mEtContent.setHint("请输入发起人姓名或单号");
                         mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
                     }
                 }
                 if (TextUtils.equals(mWhichList, "3")) {
                     if (isOfficeSupplies) {
                         //已办
+                        mEtContent.setHint("请输入发起人姓名");
                         mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
                     } else {
+                        mEtContent.setHint("请输入发起人姓名或单号");
                         mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
                     }
                 }
