@@ -43,6 +43,7 @@ import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.ThreadUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -115,6 +116,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private TextView    mTvStateTackback;
     private TextView    mTvStateDisagree;
     private boolean isOfficeSupplies = false;
+    private       long lastClickTime = 0;
 
     @Override
     protected void initInject() {
@@ -199,6 +201,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
         isLoadOver = false;
         pageNum = 1;
+        mTvErrorShow.setVisibility(View.GONE);
+        mTvErrorShow.setText("");
     }
 
     private void initList() {
@@ -319,12 +323,21 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @OnClick({R.id.toolbar_image_btn, R.id.iv_search, R.id.tv_approval, R.id.iv_agree, R.id.tv_agree, R.id.iv_disagree, R.id.tv_disagree})
     public void onViewClicked(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.toolbar_image_btn:
                 hideKeyBoard();
                 showChooseDialog();
                 break;
             case R.id.iv_search:
+                initRefreshMode();
+                showLoadingView();
+                hideKeyBoard();
                 searchItem();
                 break;
             case R.id.tv_approval:
@@ -398,8 +411,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         String trim = mEtContent.getText().toString().trim();
         if (TextUtils.isEmpty(trim)) {
             isSearch = false;
-            hideLoadingView();
-            mSrRefresh.setRefreshing(false);
+            getListData();
             return;
         }
         isSearch = true;
@@ -709,6 +721,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @Override
     public void onClick(View view) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return;
+        }
+        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.tv_all:
                 setTimeTextDefault();
@@ -841,6 +859,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     }
                 }
                 mChooseDialog.dismiss();
+                showLoadingView();
                 break;
             default:
                 break;
@@ -897,6 +916,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     public void onGetApproveDataSuccess(UpcomingTaskItemBean bean) {
         mRvList.setVisibility(View.VISIBLE);
         mTvErrorShow.setVisibility(View.GONE);
+        hideLoadingView();
         mSrRefresh.setRefreshing(false);
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mDatas.size() > 0) {
@@ -1003,9 +1023,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     @Override
     public void onGetApproveDataSuccess(OfficeSuppliesListBean bean) {
         hideLoadingView();
+        mSrRefresh.setRefreshing(false);
         mRvList.setVisibility(View.VISIBLE);
         mTvErrorShow.setVisibility(View.GONE);
-        mSrRefresh.setRefreshing(false);
         if (mFinalRecycleAdapter.currentAction == FinalRecycleAdapter.REFRESH) {
             if (mDatas.size() > 0) {
                 mDatas.clear();
