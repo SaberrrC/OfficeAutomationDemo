@@ -399,6 +399,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         if (TextUtils.isEmpty(trim)) {
             isSearch = false;
             hideLoadingView();
+            mSrRefresh.setRefreshing(false);
             return;
         }
         isSearch = true;
