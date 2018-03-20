@@ -397,25 +397,29 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private void searchItem() {
         String trim = mEtContent.getText().toString().trim();
         if (TextUtils.isEmpty(trim)) {
-            showToast("请输入搜索内容");
             isSearch = false;
+            hideLoadingView();
+            mSrRefresh.setRefreshing(false);
             return;
         }
         isSearch = true;
+        mFinalRecycleAdapter.currentAction = FinalRecycleAdapter.REFRESH;
         String privateCode = AppConfig.getAppConfig(this).getPrivateCode();
-        if (!isOfficeSupplies){
-        if (TextUtils.equals(mWhichList, "2")) {
-            mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
-        }
-        if (TextUtils.equals(mWhichList, "3")) {
-            mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
-        }}else {
+        if (!isOfficeSupplies) {
             if (TextUtils.equals(mWhichList, "2")) {
-                mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE,trim);
+                mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
             }
             if (TextUtils.equals(mWhichList, "3")) {
-                mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE,trim);
+                mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
             }
+            return;
+        }
+        if (TextUtils.equals(mWhichList, "2")) {
+            mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE, trim);
+            return;
+        }
+        if (TextUtils.equals(mWhichList, "3")) {
+            mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE, trim);
         }
     }
 
@@ -697,7 +701,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             ivIcon.setBackgroundResource(R.mipmap.upcoming_travel);
         } else if (TextUtils.equals(billType, "6404")) {//休假申请
             ivIcon.setBackgroundResource(R.mipmap.upcoming_holiday);
-        }else {
+        } else {
             //办公片申请
             ivIcon.setBackgroundResource(R.drawable.icon_launch_approval_supplies);
         }
@@ -736,11 +740,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mTime = "4";
                 mTimeCode = "4";
                 break;
-//            case R.id.tv_all_type://改为办公用品
-//                setTypeTextDefault();
-//                setTextChecked(mTvAllType);
-//                mBillType = "";
-//                break;
+            //            case R.id.tv_all_type://改为办公用品
+            //                setTypeTextDefault();
+            //                setTextChecked(mTvAllType);
+            //                mBillType = "";
+            //                break;
             case R.id.tv_office_supplies:
                 setTypeTextDefault();
                 setTextChecked(mTvOfficeSupplies);
