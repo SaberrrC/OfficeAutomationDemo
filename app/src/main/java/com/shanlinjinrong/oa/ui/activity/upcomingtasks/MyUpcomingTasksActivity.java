@@ -847,7 +847,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         mEtContent.setHint("请输入发起人姓名");
                         mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
                     } else {
-                        mEtContent.setHint("请输入发起人姓名或单号");
+                        mEtContent.setHint("请输入发起人姓名");
                         mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
                     }
                 }
@@ -857,7 +857,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         mEtContent.setHint("请输入发起人姓名");
                         mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
                     } else {
-                        mEtContent.setHint("请输入发起人姓名或单号");
+                        mEtContent.setHint("请输入发起人姓名");
                         mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
                     }
                 }
