@@ -397,8 +397,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private void searchItem() {
         String trim = mEtContent.getText().toString().trim();
         if (TextUtils.isEmpty(trim)) {
-            showToast("请输入搜索内容");
             isSearch = false;
+            hideLoadingView();
             return;
         }
         isSearch = true;
