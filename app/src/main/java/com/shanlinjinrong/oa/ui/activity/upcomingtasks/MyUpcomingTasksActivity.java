@@ -395,10 +395,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 OfficeSuppliesListBean.DataBean.ListBean bean = (OfficeSuppliesListBean.DataBean.ListBean) mDatas.get(i);
                 if (bean.isChecked()) {
                     if (approve) {
-
-                        approveBeanList.add(new ApporveBodyItemBean("0", "1", bean.getTaskId(), bean.getProcessInstanceId()));
+                        approveBeanList.add(new ApporveBodyItemBean("0", "同意", bean.getTaskId(), bean.getProcessInstanceId()));
                     } else {
-                        approveBeanList.add(new ApporveBodyItemBean("1", "1onApproveFailure", bean.getTaskId(), bean.getProcessInstanceId()));
+                        approveBeanList.add(new ApporveBodyItemBean("1", "驳回", bean.getTaskId(), bean.getProcessInstanceId()));
                     }
                 }
             }
