@@ -1,19 +1,23 @@
 package com.shanlinjinrong.oa.ui.activity.login;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -34,10 +38,12 @@ import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
+import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.AndroidAdjustResizeBugFix;
 import com.shanlinjinrong.oa.utils.NetWorkUtils;
 import com.shanlinjinrong.oa.utils.Utils;
+import com.shanlinjinrong.oa.utils.VersionManagementUtil;
 import com.shanlinjinrong.oa.views.KeyboardLayout;
 
 import org.json.JSONObject;
@@ -99,6 +105,7 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         setListenerForWidget(); //cxp添加
         setTranslucentStatus(this);
         doubleClickExitHelper = new DoubleClickExitHelper(this);
+        mPresenter.getAppEdition();
     }
 
     @Override
@@ -366,4 +373,93 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         }
         return false;
     }
+
+
+    @Override
+    public void getAppEditionSuccess(AppVersionBean mAppVersionBean) {
+        String androidVersion = mAppVersionBean.getData().getAndroidVersion();
+        if (androidVersion.startsWith("v")) {
+            androidVersion = androidVersion.substring(1);
+        }
+        String androidUrl = mAppVersionBean.getData().getAndroidUrl();
+        mAppVersionBean.getData().getAndroidUrl();
+        String isForceUpdate = mAppVersionBean.getData().getAndroidIsForceUpdate();
+        try {
+            String appVersionName = VersionManagementUtil.getVersion(LoginActivity.this);
+            if (appVersionName.startsWith("v")) {
+                appVersionName = appVersionName.substring(1);
+            }
+            int i = VersionManagementUtil.VersionComparison(androidVersion, appVersionName);
+            if (i == 1) {//有更新
+                if (isForceUpdate.equals("1")) {//强制更新
+                    showUpdateDialog(true, androidUrl);
+                } else {
+                    showUpdateDialog(false, androidUrl);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
+    private void showUpdateDialog(boolean iosIsForceUpdate, String androidUrl) {
+        View dialogView = LayoutInflater.from(LoginActivity.this).inflate(R.layout.public_dialog, null);
+        TextView title = (TextView) dialogView.findViewById(R.id.title);
+        title.setText("版本更新");
+        TextView message = (TextView) dialogView.findViewById(R.id.message);
+        if (iosIsForceUpdate) {
+            message.setText("请更新至最新版本");
+        } else {
+            message.setText("是否更新至最新版本");
+        }
+        final AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this, R.style.AppTheme_Dialog).create();
+        alertDialog.setView(dialogView);
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse(androidUrl);
+                intent.setData(content_url);
+                startActivity(intent);
+            }
+        };
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "更新", listener);
+        if (!iosIsForceUpdate) {
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }
+        alertDialog.show();
+
+        if (iosIsForceUpdate) {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction("android.intent.action.VIEW");
+                    Uri content_url = Uri.parse(androidUrl);
+                    intent.setData(content_url);
+                    startActivity(intent);
+
+                }
+            });
+            alertDialog.setCancelable(false);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+        } else {
+            alertDialog.setCancelable(true);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+        }
+
+    }
+
 }
