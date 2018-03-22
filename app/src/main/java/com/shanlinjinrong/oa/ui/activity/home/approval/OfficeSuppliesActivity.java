@@ -1,11 +1,11 @@
 package com.shanlinjinrong.oa.ui.activity.home.approval;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.example.retrofit.net.ApiConstant;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.ui.activity.upcomingtasks.MyUpcomingTasksActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.utils.DateUtils;
 
@@ -112,11 +111,15 @@ public class OfficeSuppliesActivity extends BaseActivity {
                 rlloadding.setVisibility(View.GONE);
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
                 hideLoadingView();
                 isError = true;
+                if (error.getErrorCode() == -9) {
+                    return;
+                }
                 progress_bar.setVisibility(View.GONE);
                 mWebView.setVisibility(View.GONE);
                 rlloadding.setVisibility(View.VISIBLE);
@@ -138,11 +141,11 @@ public class OfficeSuppliesActivity extends BaseActivity {
             if (!TextUtils.isEmpty(msg)) {
                 showToast(msg);
             }
-//            Intent intent = new Intent(this, MyUpcomingTasksActivity.class);
-//            intent.putExtra("whichList", "1");
-//            intent.putExtra("isLaunchApproval", true);
-//            startActivity(intent);
-//            setResult(-100);
+            //            Intent intent = new Intent(this, MyUpcomingTasksActivity.class);
+            //            intent.putExtra("whichList", "1");
+            //            intent.putExtra("isLaunchApproval", true);
+            //            startActivity(intent);
+            //            setResult(-100);
             finish();
         });
     }
@@ -161,7 +164,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
         } else {
             finish();
         }
-}
+    }
 
 
 
