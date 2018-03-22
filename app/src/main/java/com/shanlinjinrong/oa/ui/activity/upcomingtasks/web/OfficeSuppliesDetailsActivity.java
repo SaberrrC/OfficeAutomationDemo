@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
@@ -110,10 +111,14 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
                 hideLoadingView();
+                if (error.getErrorCode() == -9) {
+                    return;
+                }
                 isError = true;
                 mWebView.setVisibility(View.GONE);
                 progress_bar.setVisibility(View.GONE);
