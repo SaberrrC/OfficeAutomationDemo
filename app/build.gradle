@@ -18,7 +18,7 @@ android {
 
         //pwd:13579
         versionCode 50
-        versionName "v1.7.2.0"
+        versionName "v1.7.2.1"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
