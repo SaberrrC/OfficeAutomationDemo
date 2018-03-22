@@ -45,11 +45,11 @@ import butterknife.OnClick;
 public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPresenter> implements TabContractsFragmentContract.View {
 
     @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    RecyclerView   recyclerView;
     @BindView(R.id.btn_back)
-    ImageView btnBack;
+    ImageView      btnBack;
     @BindView(R.id.title)
-    TextView title;
+    TextView       title;
     @BindView(R.id.layout_root)
     RelativeLayout mRootView;
     @BindView(R.id.rl_top2)
@@ -57,31 +57,30 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
 
     private List<Contacts> items = new ArrayList<>();
     private List<Map<String, String>> pageMap;
-    private TabContactsAdapter adapter;
-    private RelativeLayout view;
+    private TabContactsAdapter        adapter;
+    private RelativeLayout            view;
     @BindView(R.id.rl_recycler_view_container)
-    RelativeLayout mRlRecyclerViewContainer;
+    RelativeLayout     mRlRecyclerViewContainer;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * 页面加载数据所需部门ID
      */
-    public static final String PAGE_MAP_DID = "pageMapDid";
+    public static final String PAGE_MAP_DID   = "pageMapDid";
     /**
      * 页面标题
      */
     public static final String PAGE_MAP_TITLE = "pageMapTitle";
-    private String phoneStr;
-    private PopupWindow popupWindow;
+    private String         phoneStr;
+    private PopupWindow    popupWindow;
     private List<Contacts> mContacts;
 
     @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = (RelativeLayout) LayoutInflater.from(this).inflate(
-                R.layout.tab_contacts_fragment, null);
+        view = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.tab_contacts_fragment, null);
         setContentView(view);
         ButterKnife.bind(this);
         setTranslucentStatus(this);
@@ -168,10 +167,8 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             switch (items.get(i).getItemType()) {
                 case Contacts.DEPARTMENT:
-                    if (!pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID).equals(
-                            items.get(i).getDepartmentId())) {
-                        pageMap.add(getPageParam(items.get(i).getDepartmentId(),
-                                items.get(i).getDepartmentName()));
+                    if (!pageMap.get(pageMap.size() - 1).get(PAGE_MAP_DID).equals(items.get(i).getDepartmentId())) {
+                        pageMap.add(getPageParam(items.get(i).getDepartmentId(), items.get(i).getDepartmentName()));
                     }
                     loadData(items.get(i).getDepartmentId());
                     break;
@@ -264,7 +261,7 @@ public class ContactsActivity extends HttpBaseActivity<TabContractsFragmentPrese
 
     @Override
     public void autoSearchOther(String msg) {
-
+        showToast(msg);
     }
 
     @Override

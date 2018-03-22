@@ -17,6 +17,8 @@
     <!--灰色-->
     <color name="gray_d5d5d5">#d5d5d5</color>
     <color name="gray_9b9b9b">#9B9B9B</color>
+    <color name="FFDBDBDB">#FFDBDBDB</color>
+    <color name="cae6ff">#56cae6ff</color>
 
 
     <!--pickerview颜色-->

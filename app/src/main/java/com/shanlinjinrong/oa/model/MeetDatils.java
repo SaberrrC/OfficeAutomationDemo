@@ -36,7 +36,7 @@ public class MeetDatils implements MultiItemEntity,Serializable {
 
         }catch (JSONException e) {
             e.printStackTrace();
-            LogUtils.e("user解析异常-》"+e.toString());
+//            LogUtils.e("user解析异常-》"+e.toString());
         }
     }
     @Override

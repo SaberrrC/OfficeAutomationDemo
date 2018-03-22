@@ -42,58 +42,58 @@ import butterknife.ButterKnife;
 public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPresenter> implements AttandanceMonthContract.View, View.OnClickListener, DatePopAttandanceAdapter.OnItemClick {
 
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TextView     tvTitle;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar      toolbar;
     @BindView(R.id.ll_chose_time)
     LinearLayout mLlChoseTime;
     @BindView(R.id.ll_count_people)
     LinearLayout ll_count_people;
     @BindView(R.id.tv_time)
-    TextView tv_time;
+    TextView     tv_time;
     @BindView(R.id.ll_month)
     LinearLayout mDateLayout;
     @BindView(R.id.iv_divider)
-    ImageView iv_divider;
+    ImageView    iv_divider;
     @BindView(R.id.tv_people)
-    TextView tv_people;
+    TextView     tv_people;
     @BindView(R.id.layout_root)
     LinearLayout mRootView;
     @BindView(R.id.tv_date)
-    TextView tv_date;
+    TextView     tv_date;
     @BindView(R.id.tv_name)
-    TextView tv_name;
+    TextView     tv_name;
     @BindView(R.id.tv_gowork_time)
-    TextView tv_gowork_time;
+    TextView     tv_gowork_time;
     @BindView(R.id.tv_off_gowork_time)
-    TextView tv_off_gowork_time;
+    TextView     tv_off_gowork_time;
     @BindView(R.id.tv_state)
-    TextView mTvState;
+    TextView     mTvState;
     @BindView(R.id.tv_empty_layout)
-    TextView mTvEmptyLayout;
+    TextView     mTvEmptyLayout;
     @BindView(R.id.ll_currentday_state)
     LinearLayout mLlCurrentdayState;
     @BindView(R.id.tv_sign_in)
-    ImageView tvsignin;
+    ImageView    tvsignin;
 
-    private String mDay;
+    private String   mDay;
     private Calendar cal;
-    private View rootView;
-    private int mSelectedDay;
-    private int mCurrentDay;
-    private int mCurrentYear;
-    private int mCurrentMonth;
-    private int mSelectedYear;
-    private int mSelectedMonth;
-    private boolean isSelectedDay;
+    private View     rootView;
+    private int      mSelectedDay;
+    private int      mCurrentDay;
+    private int      mCurrentYear;
+    private int      mCurrentMonth;
+    private int      mSelectedYear;
+    private int      mSelectedMonth;
+    private boolean  isSelectedDay;
     private String mPrivateCode = "";
-    private RecyclerView mRecyclerView;
+    private RecyclerView             mRecyclerView;
     private DatePopAttandanceAdapter mAdapter;
     private List<PopItem> mData = new ArrayList<>();
     private MonthSelectPopWindow monthSelectPopWindow;
-    private List<String> mDateTypeList = new ArrayList<>();
-    private HashMap<String, String> mDataTypeMap = new HashMap<>();
-    private MyAttandanceResponse myAttandanceResponse = new MyAttandanceResponse();
+    private List<String>                                         mDateTypeList          = new ArrayList<>();
+    private HashMap<String, String>                              mDataTypeMap           = new HashMap<>();
+    private MyAttandanceResponse                                 myAttandanceResponse   = new MyAttandanceResponse();
     private List<MyAttandanceResponse.AllWorkAttendanceListBean> mAllWorkAttendanceList = new ArrayList<>();
 
     @Override
@@ -123,7 +123,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         rootView = View.inflate(AttandenceMonthActivity.this, R.layout.date_select_attandance, null);
         mDateLayout.addView(rootView);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.top_data_list);
-        setData(true, mSelectedMonth, mSelectedDay);
+        setData(mSelectedYear, true, mSelectedMonth, mSelectedDay);
         mPrivateCode = AppConfig.getAppConfig(AppManager.mContext).getPrivateCode();
         doHttp();
 
@@ -139,12 +139,12 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         }
     }
 
-    public void setData(final boolean isDay, int month, int selectPos) {
+    public void setData(int year, final boolean isDay, int month, int selectPos) {
         if (mData != null) {
             mData.clear();
         }
         if (isDay) {
-            List<PopItem> date = DateUtils.getAttandenceDate(month, selectPos);
+            List<PopItem> date = DateUtils.getAttandenceDate(year, month, selectPos);
             mData.addAll(date);
         } else {
             creatMonth(selectPos);
@@ -283,6 +283,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
             isSelectedDay = true;
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String date = format.format(new Date());
+
             mPresenter.queryDayAttendance(mPrivateCode, date);
         } else {
             String year = tv_time.getText().toString().substring(0, tv_time.getText().toString().indexOf("年"));
@@ -447,7 +448,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                     }
                 }
             } else {
-//                mTvEmptyLayout.setText("暂无日考勤信息！");
+                mTvEmptyLayout.setText("暂无日考勤信息！");
                 mTvEmptyLayout.setVisibility(View.VISIBLE);
                 mLlCurrentdayState.setVisibility(View.GONE);
             }
@@ -473,6 +474,7 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
                 case "[加班]":
                     return 2;
                 case "[出差]":
+                case "[外出]":
                     return 3;
                 case "[早退]":
                 case "[旷工]":
@@ -501,8 +503,8 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
         mSelectedDay = Integer.parseInt(content);
         String mDay = (mSelectedDay < 10) ? "0" + mSelectedDay : mSelectedDay + "";
         String month = (mSelectedMonth < 10) ? "0" + mSelectedMonth : mSelectedMonth + "";
-
-        String date = mCurrentYear + "-" + month + "-" + mDay;
+        String year = tv_time.getText().toString().substring(0, tv_time.getText().toString().indexOf("年"));
+        String date = year + "-" + month + "-" + mDay;
         mPresenter.queryDayAttendance(mPrivateCode, date);
     }
 
@@ -526,9 +528,9 @@ public class AttandenceMonthActivity extends HttpBaseActivity<AttandanceMonthPre
 
                                 tv_time.setText(year + "年" + month + "月");
                                 if (mSelectedMonth == mCurrentMonth) {
-                                    setData(true, mSelectedMonth, mCurrentDay);
+                                    setData(mSelectedYear, true, mSelectedMonth, mCurrentDay);
                                 } else {
-                                    setData(true, mSelectedMonth, 1);
+                                    setData(mSelectedYear, true, mSelectedMonth, 1);
                                 }
                                 mRecyclerView.requestLayout();
                                 mAdapter.notifyDataSetChanged();

@@ -198,6 +198,11 @@ public interface ApiJava {
     String ARGEE_DISAGREE_APPROVE = "Approve/allApprove";
 
     /**
+     *  办公用品 同意和驳回 Approve/allApprove
+     */
+    String OFFICE_SUPPLIES_APPROVE = "workflow/agree";
+
+    /**
      * 同意和驳回 Approve/allApprove
      */
     String DELETE_APPROVEL = "nchrSign/deleteBillByCode";
@@ -205,7 +210,7 @@ public interface ApiJava {
     /**
      * 修改邮箱
      */
-    String CHANGE_EMAIL = "user/updateEmail";
+    String CHANGE_EMAIL = "user/newUpdateEmail";
 
 
     String RESPONSES_KEY_CODE = "code";
@@ -244,6 +249,21 @@ public interface ApiJava {
      * 修改电话
      */
     String PHONENUMBER_UPDATE = "user/changePhone";
+
+    /**
+     * 修改电话
+     */
+    String MODIFICATION_PHONE="user/modifyPhone";
+
+    /**
+     * 发送验证码到手机
+     */
+    String REQUEST_VERIFYCODE ="user/sendVerifyCode";
+
+    /**
+     * 发送验证码到手机
+     */
+    String REQUEST_EMAIL_VERIFY_CODE ="user/sendEmailCode";
 
     /**
      * 用户反馈
@@ -318,6 +338,23 @@ public interface ApiJava {
     String CODE_SEARCH_USER_DETAILS = "user/queryUserByCodes";
     //移动端获取版本号
      String  APP_GETAPPEDITION = "app/getAppEdition";
+
+    /**
+     * 获取用户权限
+     */
+//    String USER_LIMIT = "auth/findRightByUserId";
+    String USER_LIMIT = "auth/getAppRight";
+
+
+    /**
+     *  办公用品 我的申请
+     */
+    String REQUEST_OFFICE_PPLIE ="workflow/getApplyComplete";
+
+    /**
+     *  办公用品 我的申请
+     */
+    String REQUEST_OFFICE_MANAGE ="workflow/getBusinessAffairs";
     //*****************************************************************//
 
     /**

@@ -29,7 +29,7 @@
                     android:layout_width="79dp"
                     android:layout_height="79dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="180dp"
+                    android:layout_marginTop="150dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/login_logo" />
 
@@ -67,7 +67,6 @@
 
                     <EditText
                         android:id="@+id/user_pwd"
-                        android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_below="@+id/part_line"
@@ -79,10 +78,51 @@
                         android:inputType="textPassword"
                         android:paddingLeft="20dp"
                         android:paddingRight="2dp"
+                        android:singleLine="true"
                         android:textColor="#333333"
                         android:textColorHint="@color/text_common_dark_color"
                         android:textSize="@dimen/text_common_dp" />
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/user_pwd"
+                        android:background="@color/text_common_blue_color" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_verify_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/user_pwd"
+                        android:visibility="gone"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/ed_verify_code"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_below="@+id/user_pwd"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawablePadding="10dp"
+                            android:gravity="center_vertical"
+                            android:hint="请输入验证码"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="2dp"
+                            android:singleLine="true"
+                            android:textColor="#333333"
+                            android:textColorHint="@color/text_common_dark_color"
+                            android:textSize="@dimen/text_common_dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_identifying_code"
+                            android:layout_width="88dp"
+                            android:layout_height="@dimen/common_height44"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="3dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/user_code_default" />
+                    </LinearLayout>
                 </RelativeLayout>
 
 
@@ -122,7 +162,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="下次自动登录"
+                        android:text="记住账号"
                         android:textColor="@color/text_common_dark_color"
                         android:textSize="@dimen/text_common_dp" />
 

@@ -172,7 +172,12 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                     mRlTackBack.setVisibility(View.VISIBLE);
                     mTvTackBack.setBackgroundResource(R.drawable.shape_upcoming_dialog_ok);
                 }
-                if (TextUtils.equals(mBean.getApproveState(), "0") || TextUtils.equals(mBean.getApproveState(), "1") || TextUtils.equals(mBean.getApproveState(), "2")) {
+                if (TextUtils.equals(mBean.getApproveState(), "0")) {//驳回的显示删除
+                    mTvTackBack.setText("删除");
+                    mRlTackBack.setVisibility(View.VISIBLE);
+                    mTvTackBack.setBackgroundResource(R.drawable.shape_upcominginfo_disagree);
+                }
+                if (TextUtils.equals(mBean.getApproveState(), "1") || TextUtils.equals(mBean.getApproveState(), "2")) {
                     mRlTackBack.setVisibility(View.GONE);
                 }
                 mTvTitle.setText(mBean.getUserName() + "的" + mBean.getBillTypeName());

@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.model.User;
+import com.example.retrofit.model.responsebody.LimitResponseBody;
 import com.shanlinjinrong.oa.model.UserInfo;
 
 
@@ -33,7 +32,8 @@ public class AppConfig {
      */
     public static final String USER_TYPE_BI = "1";
 
-    /**Mal
+    /**
+     * Mal
      * 网络请求baseUrl
      */
     public static final String BASE_URL = "base_url";
@@ -90,6 +90,7 @@ public class AppConfig {
      * 部门ID
      */
     public static final  String PREF_KEY_DEPARTMENT_ID = "pref_key_department_id";
+    private static LimitResponseBody mUserLimitBean;
 
     public static AppConfig getAppConfig(Context context) {
         if (appConfig == null) {
@@ -106,11 +107,16 @@ public class AppConfig {
      * @return 参数值
      */
     public String get(String key) {
-        String string = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString(key, DEFAULT_ARGUMENTS_VALUE);
-        if (TextUtils.equals("null", string)) {
+        try {
+            String string = context.getSharedPreferences(APP_CONFIG, Context.MODE_PRIVATE).getString(key, DEFAULT_ARGUMENTS_VALUE);
+            if (TextUtils.equals("null", string)) {
+                return "";
+            }
+            return string;
+        } catch (Exception e) {
+            e.printStackTrace();
             return "";
         }
-        return string;
     }
 
     /**
@@ -260,5 +266,17 @@ public class AppConfig {
         editor.putString(PREF_KEY_YX_TOKEN, DEFAULT_ARGUMENTS_VALUE);
         editor.putBoolean(IS_AUTO_LOGIN, false);
         editor.apply();
+    }
+
+    public void setUserLimit(LimitResponseBody bean) {
+        mUserLimitBean = bean;
+    }
+
+    public LimitResponseBody getUserLimitBean() {
+        return mUserLimitBean;
+    }
+
+    public void clearUserLimit() {
+        mUserLimitBean = null;
     }
 }

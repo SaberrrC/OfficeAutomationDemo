@@ -3,21 +3,21 @@ package com.shanlinjinrong.oa.ui.activity.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AppOpsManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Binder;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -35,7 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retrofit.net.RetrofitConfig;
-import com.facebook.stetho.common.LogUtil;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
@@ -47,15 +46,14 @@ import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.event.OnCountRefreshEvent;
-import com.hyphenate.easeui.event.OnMessagesRefreshEvent;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
-import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
+import com.shanlinjinrong.oa.ui.activity.main.event.IsNetConnectEvent;
 import com.shanlinjinrong.oa.ui.activity.main.event.UnReadMessageEvent;
 import com.shanlinjinrong.oa.ui.activity.main.presenter.MainControllerPresenter;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
@@ -74,7 +72,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -85,9 +82,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
-import ezy.assist.compat.SettingsCompat;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import q.rorbin.badgeview.QBadgeView;
@@ -217,11 +212,34 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         judeIsInitPwd();//判断是否是初始密码
         mPresenter.getAppEdition();
         mPresenter.applyPermission(this);//判断是否有更新
+
         ShortcutBadger.removeCount(MainActivity.this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
         }
+        registerNetReceiver();
     }
+
+    private void registerNetReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(connectionReceiver, intentFilter);
+    }
+
+    BroadcastReceiver connectionReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //            ConnectivityManager connectMgr = (ConnectivityManager) AppManager.mContext.getSystemService(CONNECTIVITY_SERVICE);
+            ConnectivityManager connectMgr = (ConnectivityManager) AppManager.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
+            }else {
+                EventBus.getDefault().post(new IsNetConnectEvent());
+            }
+        }
+    };
 
     @Override
     protected void initInject() {
@@ -266,10 +284,10 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
      */
     private void judeIsInitPwd() {
         //1初始密码，2已修改
-//        String isInitPwd = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_IS_INIT_PWD);
-//        if (isInitPwd.equals("1")) {
-//            showSetPwdDialog();
-//        }
+        //        String isInitPwd = AppConfig.getAppConfig(AppManager.mContext).get(AppConfig.PREF_KEY_IS_INIT_PWD);
+        //        if (isInitPwd.equals("1")) {
+        //            showSetPwdDialog();
+        //        }
     }
 
     private void showSetPwdDialog() {
@@ -531,10 +549,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
     protected void onResume() {
         super.onResume();
         judeIsInitPwd();
-        Observable.create(e ->
-                EMClient.getInstance().chatManager()
-                        .addMessageListener(messageListener))
-                .subscribeOn(Schedulers.io()).subscribe();
+        Observable.create(e -> EMClient.getInstance().chatManager().addMessageListener(messageListener)).subscribeOn(Schedulers.io()).subscribe();
         if (tabCommunicationFragment != null) {
             if (tabCommunicationFragment.myConversationListFragment != null) {
                 tabCommunicationFragment.myConversationListFragment.refresh();
@@ -649,8 +664,7 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         } else {
             message.setText("是否更新至最新版本");
         }
-        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this,
-                R.style.AppTheme_Dialog).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_Dialog).create();
         alertDialog.setView(dialogView);
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
@@ -665,13 +679,12 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         };
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "更新", listener);
         if (!iosIsForceUpdate) {
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         alertDialog.show();
 
@@ -688,14 +701,11 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
                 }
             });
             alertDialog.setCancelable(false);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
         } else {
             alertDialog.setCancelable(true);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    getResources().getColor(R.color.btn_text_logout));
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
         }
 
     }
@@ -728,6 +738,9 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        if (connectionReceiver != null) {
+            unregisterReceiver(connectionReceiver);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -757,10 +770,10 @@ public class MainActivity extends HttpBaseActivity<MainControllerPresenter> impl
 
         @Override
         public void onDisconnected(final int error) {
-//            OnCountRefreshEvent onCountRefreshEvent = new WeakReference<>(new OnCountRefreshEvent()).get();
-//            onCountRefreshEvent.setEvent(1);
-//            onCountRefreshEvent.setErrorCode(error);
-//            EventBus.getDefault().post(onCountRefreshEvent);
+            //            OnCountRefreshEvent onCountRefreshEvent = new WeakReference<>(new OnCountRefreshEvent()).get();
+            //            onCountRefreshEvent.setEvent(1);
+            //            onCountRefreshEvent.setErrorCode(error);
+            //            EventBus.getDefault().post(onCountRefreshEvent);
         }
     }
 }

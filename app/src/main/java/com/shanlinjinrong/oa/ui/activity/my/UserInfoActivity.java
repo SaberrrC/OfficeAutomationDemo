@@ -34,7 +34,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hyphenate.EMCallBack;
-import com.hyphenate.easeui.Constant;
 import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.GlideRoundTransformUtils;
@@ -49,7 +48,6 @@ import com.shanlinjinrong.oa.ui.activity.my.contract.UserInfoActivityContract;
 import com.shanlinjinrong.oa.ui.activity.my.presenter.UserInfoActivityPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.FileUtils;
-import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.views.BaseBottomPushPopupWindow;
 
 import java.io.BufferedOutputStream;
@@ -378,7 +376,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                 }
                 //将要保存图片的路径
                 File file = new File(Constants.FileUrl.TEMP + "Cut_image_" + Calendar.getInstance().getTimeInMillis() + ".jpg");
-                LogUtils.e("file->" + file.getAbsolutePath());
+//                LogUtils.e("file->" + file.getAbsolutePath());
                 try {
                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                     assert bitmap != null;
@@ -477,12 +475,12 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
             try {
                 popupWindow.dismiss();
                 //退出环信登录
-                LogUtils.e("退出环信");
+//                LogUtils.e("退出环信");
                 showLoadingView();
                 DemoHelper.getInstance().logout(true, new EMCallBack() {
                     @Override
                     public void onSuccess() {
-                        Log.d("退出环信", "退出环信成功！！");
+//                        Log.d("退出环信", "退出环信成功！！");
                         runOnUiThread(() -> {
                             hideLoadingView();
                             JPushInterface.setAlias(UserInfoActivity.this, "", (i, s, set) -> {
@@ -494,7 +492,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
 
                     @Override
                     public void onError(int i, String s) {
-                        Log.d("退出环信", i + s);
+//                        Log.d("退出环信", i + s);
                         runOnUiThread(() -> {
                             hideLoadingView();
                             showToast("退出失败，请重试");
@@ -512,7 +510,7 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
                     hideLoadingView();
                     showToast("退出失败，请重试");
                 });
-                LogUtils.e("退出环信抛出异常" + e.toString());
+//                LogUtils.e("退出环信抛出异常" + e.toString());
                 //exitToLogin();
             }
         });
@@ -538,6 +536,8 @@ public class UserInfoActivity extends HttpBaseActivity<UserInfoActivityPresenter
         AppConfig.getAppConfig(UserInfoActivity.this).clearLoginInfo();
         startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
         AppManager.sharedInstance().finishAllActivity();
+        //清除用户权限
+        AppConfig.getAppConfig(this).clearUserLimit();
     }
 
     private void initToolBar() {

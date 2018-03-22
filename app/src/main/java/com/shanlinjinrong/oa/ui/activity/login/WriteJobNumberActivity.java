@@ -17,11 +17,9 @@ import android.widget.ImageView;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
-import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.ui.activity.login.contract.WriteJobNumberContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.WriteJobNumberPresenter;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
-import com.shanlinjinrong.oa.utils.ToastManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

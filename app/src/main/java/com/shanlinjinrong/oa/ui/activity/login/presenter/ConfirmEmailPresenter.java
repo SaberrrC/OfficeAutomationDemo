@@ -2,12 +2,15 @@ package com.shanlinjinrong.oa.ui.activity.login.presenter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.CommonRequestBean;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.login.contract.ConfirmEmailContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+import com.shanlinjinrong.oa.utils.DateUtils;
 
+import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -29,6 +32,18 @@ public class ConfirmEmailPresenter extends HttpPresenter<ConfirmEmailContract.Vi
         mKjHttp.cleanCache();
         HttpParams params = new HttpParams();
         params.put("code", code);
+
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", code);
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            params.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
         mKjHttp.post(ApiJava.USERS_REPWD, params, new HttpCallBack() {
 
             @Override

@@ -2,36 +2,40 @@ package com.shanlinjinrong.oa.ui.activity.login;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
+import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.Constants;
 import com.shanlinjinrong.oa.helper.DoubleClickExitHelper;
 import com.shanlinjinrong.oa.manager.AppConfig;
-import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.ui.activity.login.contract.LoginActivityContract;
 import com.shanlinjinrong.oa.ui.activity.login.presenter.LoginActivityPresenter;
 import com.shanlinjinrong.oa.ui.activity.main.MainActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.AndroidAdjustResizeBugFix;
-import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.oa.utils.NetWorkUtils;
 import com.shanlinjinrong.oa.utils.Utils;
 import com.shanlinjinrong.oa.views.KeyboardLayout;
@@ -51,20 +55,28 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> implements LoginActivityContract.View, View.OnKeyListener {
     @BindView(R.id.user_email)
-    EditText       userEmail;
+    EditText userEmail;
     @BindView(R.id.user_pwd)
-    EditText       userPwd;
+    EditText userPwd;
     @BindView(R.id.layout_root)
     KeyboardLayout mRootView;
     @BindView(R.id.login_scroll_view)
-    ScrollView     mScrollView;
+    ScrollView mScrollView;
     @BindView(R.id.cb_auto_login)
-    CheckBox       mCbAutoLogin;
+    CheckBox mCbAutoLogin;
     @BindView(R.id.tv_find_pwd)
-    TextView       mTvFindPwd;
+    TextView mTvFindPwd;
+    @BindView(R.id.ed_verify_code)
+    EditText mEdVerifyCode;
+    @BindView(R.id.iv_identifying_code)
+    ImageView mIvIdentifyingCode;
+    @BindView(R.id.ll_verify_code)
+    LinearLayout mLlVerifyCode;
     private DoubleClickExitHelper doubleClickExitHelper;
-    private int     UPDATE_RECYCLERVIEW_POSITION = 11;
-    private Handler mHandler                     = new Handler() {
+    private int UPDATE_RECYCLERVIEW_POSITION = 11;
+    private String mKeyCode;
+
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -73,8 +85,8 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             }
         }
     };
-    private boolean isAutoLogin                  = true;
-    private long    lastClickTime                = 0;
+    private boolean isAutoLogin = true;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,17 +115,14 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mTvFindPwd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                long currentTime = Calendar.getInstance().getTimeInMillis();
-                if (currentTime - lastClickTime < 1000) {
-                    lastClickTime = currentTime;
-                    return;
-                }
+        mTvFindPwd.setOnClickListener(view -> {
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (currentTime - lastClickTime < 1000) {
                 lastClickTime = currentTime;
-                startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class));
+                return;
             }
+            lastClickTime = currentTime;
+            startActivity(new Intent(LoginActivity.this, WriteJobNumberActivity.class));
         });
     }
 
@@ -151,26 +160,38 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             }
         });
 
-        mCbAutoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //TODO isChecked
-                if (isChecked) {
-                    AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_CODE, true);
-                    AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, true);
-                    isAutoLogin = true;
-                } else {
-                    AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, false);
-                    isAutoLogin = false;
+        mCbAutoLogin.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            //TODO isChecked
+            if (isChecked) {
+                AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_CODE, true);
+                AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, true);
+                isAutoLogin = true;
+            } else {
+                AppConfig.getAppConfig(LoginActivity.this).set(AppConfig.PREF_KEY_PASSWORD_FLAG, false);
+                isAutoLogin = false;
 
-                }
             }
         });
     }
 
-    @OnClick(R.id.btn_login)
-    public void onClick() {
-        SubmitLogin();
+    @OnClick({R.id.btn_login, R.id.iv_identifying_code})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_login:
+                if (mLlVerifyCode.getVisibility() != View.VISIBLE) {
+                    SubmitLogin();
+                } else {
+                    showLoadingView();
+                    mPresenter.login(userEmail.getText().toString(), userPwd.getText().toString(), mKeyCode, mEdVerifyCode.getText().toString().trim());
+                }
+                // mLlVerifyCode.setVisibility(View.GONE);
+                break;
+            case R.id.iv_identifying_code:
+                mPresenter.QueryVerifyCode();
+                break;
+            default:
+                break;
+        }
     }
 
     private void SubmitLogin() {
@@ -195,7 +216,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
             return false;
         }
         if (!Utils.isRegex(Constants.Regex.REGEX_EMAIL, userEmail.getText().toString())) {
-
             //判断是不是工号
             if (!Utils.isRegex(Constants.Regex.REGEX_CODE, userEmail.getText().toString())) {
                 showToast("请您输入正确的邮箱帐号或者工号");
@@ -238,7 +258,6 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     public void loginSuccess(UserInfo.DataBean user) {
         //登录成功后清空原来的信息
         AppConfig.getAppConfig(LoginActivity.this).clearLoginInfo();
-        LogUtils.e("user->" + user);
         AppConfig.getAppConfig(LoginActivity.this).set(user, isAutoLogin);
         goToLogin();
     }
@@ -256,8 +275,28 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     }
 
     @Override
-    public void accountOrPswError(int errorCode, String msg) {
+    public void accountOrPswError(String errorCode, String msg) {
         hideLoadingView();
+        if ("100169".equals(errorCode)) {
+            mPresenter.QueryVerifyCode();
+            mLlVerifyCode.setVisibility(View.VISIBLE);
+            hideLoadingView();
+            showToast(msg);
+        }
+        showToast(msg);
+    }
+
+    @Override
+    public void showVerifyCode(String msg) {
+        hideLoadingView();
+        showToast(msg);
+        mLlVerifyCode.setVisibility(View.VISIBLE);
+        mPresenter.QueryVerifyCode();
+    }
+
+    @Override
+    public void refreshVerifyCode(String msg) {
+        mPresenter.QueryVerifyCode();
         showToast(msg);
     }
 
@@ -271,6 +310,32 @@ public class LoginActivity extends HttpBaseActivity<LoginActivityPresenter> impl
     public void requestFinish() {
     }
 
+    @Override
+    public void getIdentifyingCodeSuccess(String picUrl, String keyCode) {
+        mKeyCode = keyCode;
+        picUrl = "data:image/gif;base64," + picUrl;
+        mIvIdentifyingCode.setImageBitmap(base64ToBitmap(picUrl));
+    }
+
+    /**
+     * base64转为bitmap
+     */
+    public static Bitmap base64ToBitmap(String base64Data) {
+        Bitmap bitmap = null;
+        try {
+            byte[] bytes = Base64.decode(base64Data.split(",")[1], Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    @Override
+    public void getIdentifyingCodeFailed(int error) {
+        Log.i("WriteJobNumberActivity", "失败 : " + error);
+        mIvIdentifyingCode.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.user_code_default, null));
+    }
 
     @Override
     public void uidNull(String code) {

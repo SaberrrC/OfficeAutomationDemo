@@ -81,7 +81,9 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
             if (!TextUtils.isEmpty(e.getMessage()) && e.getMessage().length() > 25) {
 
             } else {
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                if (!TextUtils.isEmpty(e.getMessage())) {
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         }
         dismissProgressDialog();

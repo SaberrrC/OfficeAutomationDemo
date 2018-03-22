@@ -37,7 +37,7 @@ import butterknife.OnClick;
 
 //时间选择器
 public class TimeDialogFragment extends DialogFragment {
-    Context context;
+    Context      context;
     List<String> mDayList, hoursList, minList, timeFrameList;
     @BindView(R.id.wheelDayPickerYear)
     WheelPicker mWheelDayPickerMonth;
@@ -45,13 +45,11 @@ public class TimeDialogFragment extends DialogFragment {
     WheelPicker mWheelMinPickerHour;
     @BindView(R.id.wheelHoursPickerMinutes)
     WheelPicker mWheelHoursPickerMinutes;
-//    @BindView(R.id.wheelTimePicker)
-//    WheelPicker mWheelTimePicker;
     @BindView(R.id.tv_title)
-    TextView mTvTitle;
+    TextView    mTvTitle;
     private String mWeek;
     private String mSelectedDate;
-    private int mSelectTime;
+    private int    mSelectTime;
     private String tag;
     private String mHour;
 
@@ -180,17 +178,17 @@ public class TimeDialogFragment extends DialogFragment {
                 int currentItemPosition0 = mWheelDayPickerMonth.getCurrentItemPosition();
                 int currentItemPosition1 = mWheelMinPickerHour.getCurrentItemPosition();
                 int currentItemPosition2 = mWheelHoursPickerMinutes.getCurrentItemPosition();
-//                int currentItemPosition3 = mWheelTimePicker.getCurrentItemPosition();
+                //int currentItemPosition3 = mWheelTimePicker.getCurrentItemPosition();
                 String day = mDayList.get(currentItemPosition0);
                 String hour = hoursList.get(currentItemPosition1);
                 String min = minList.get(currentItemPosition2);
-//                String time = timeFrameList.get(currentItemPosition3);
+                //String time = timeFrameList.get(currentItemPosition3);
                 int number = Integer.parseInt(hour);
-//                if (time.equals("下午")) {
-//                    mSelectTime = number + 12;
-//                } else {
-//                    mSelectTime = number;
-//                }
+                //if (time.equals("下午")) {
+                // mSelectTime = number + 12;
+                //} else {
+                // mSelectTime = number;
+                //}
                 if (number < 10) {
                     mHour = "0" + number;
                 } else if (number == 24) {
@@ -227,13 +225,19 @@ public class TimeDialogFragment extends DialogFragment {
                 EventBus.getDefault().post(event);
                 dismiss();
                 break;
+            default:
+                break;
         }
     }
 
     class TimePickerBean {
-        //格式：yyyy-MM-dd HH:mm:ss
+        /**
+         * 格式：yyyy-MM-dd HH:mm:ss
+         */
         public String postTime;
-        //格式：今天 18:30
+        /**
+         * 格式：今天 18:30
+         */
         public String showTime;
     }
 

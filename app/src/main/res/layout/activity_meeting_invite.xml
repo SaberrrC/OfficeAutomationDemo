@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.shanlinjinrong.oa.ui.activity.home.schedule.MeetingInviteActivity">
+    tools:context="com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.MeetingInviteActivity">
 
     <com.shanlinjinrong.views.common.CommonTopView
         android:layout_width="match_parent"

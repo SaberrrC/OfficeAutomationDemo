@@ -45,7 +45,7 @@ public class FeedbackActivityPresenter extends HttpPresenter<FeedbackActivityCon
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                LogUtils.d("data-->" + t);
+//                LogUtils.d("data-->" + t);
                 try {
                     CommonRequestBean requestStatus = new Gson().fromJson(t, new TypeToken<CommonRequestBean>() {}.getType());
                     switch (requestStatus.getCode()) {
@@ -65,7 +65,7 @@ public class FeedbackActivityPresenter extends HttpPresenter<FeedbackActivityCon
                             break;
                     }
                 } catch (Throwable e) {
-                    LogUtils.e(e.toString());
+                    e.printStackTrace();
                 }
             }
 

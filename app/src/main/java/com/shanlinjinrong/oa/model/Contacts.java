@@ -3,7 +3,6 @@ package com.shanlinjinrong.oa.model;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
-import com.shanlinjinrong.oa.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -152,7 +151,7 @@ public class Contacts implements MultiItemEntity, Serializable {
                 setIsshow(AppConfig.getAppConfig(AppManager.mContext).getDepartmentId().equals(postId) ? "1" : "0");
             } catch (Throwable e1) {
                 e1.printStackTrace();
-                LogUtils.e("获取部门和员工异常：" + e1.toString());
+//                LogUtils.e("获取部门和员工异常：" + e1.toString());
             }
         }
     }
@@ -183,7 +182,7 @@ public class Contacts implements MultiItemEntity, Serializable {
                 setIsshow(AppConfig.getAppConfig(AppManager.mContext).getDepartmentId().equals(postId) ? "1" : "0");
             } catch (Throwable e1) {
                 e1.printStackTrace();
-                LogUtils.e("获取部门和员工异常：" + e1.toString());
+//                LogUtils.e("获取部门和员工异常：" + e1.toString());
             }
         }
     }

@@ -256,7 +256,7 @@ public class User implements MultiItemEntity, Serializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtils.e("user解析异常-》" + e.toString());
+//            LogUtils.e("user解析异常-》" + e.toString());
         }
     }
 

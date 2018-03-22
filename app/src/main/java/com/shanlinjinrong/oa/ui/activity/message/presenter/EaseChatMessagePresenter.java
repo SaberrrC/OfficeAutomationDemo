@@ -2,12 +2,15 @@ package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
 
 import com.google.gson.Gson;
+import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.bean.UserDetailsBean;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatMessageContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+import com.shanlinjinrong.oa.utils.DateUtils;
 
+import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpParams;
 
@@ -25,7 +28,17 @@ public class EaseChatMessagePresenter extends HttpPresenter<EaseChatMessageContr
         mKjHttp.cleanCache();
         HttpParams httpParams = new HttpParams();
         httpParams.put("codeList", code);
-        mKjHttp.get(ApiJava.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("codeList", code);
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            httpParams.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        mKjHttp.post(ApiJava.CODE_SEARCH_USER_DETAILS, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);

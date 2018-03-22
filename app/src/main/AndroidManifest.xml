@@ -105,11 +105,11 @@
     <application
         android:name=".manager.AppManager"
         android:allowBackup="false"
-        tools:replace="android:allowBackup"
         android:icon="@mipmap/oa_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
         <activity
             android:name=".ui.activity.main.WelcomePage"
             android:screenOrientation="portrait"
@@ -271,7 +271,7 @@
             android:name="com.huawei.hms.update.provider.UpdateProvider"
             android:authorities="com.shanlinjinrong.oa.hms.update.provider"
             android:exported="false"
-            android:grantUriPermissions="true"></provider>
+            android:grantUriPermissions="true" />
         <!-- huawei push end -->
 
 
@@ -432,7 +432,6 @@
         <meta-data android:name="JPUSH_APPKEY" android:value="50d12d9432e476ed5a6a0352"/>
         <!-- 极光推送 结束 -->
 
-
         <meta-data
             android:name="com.netease.cosine.target"
             android:value="" />
@@ -482,6 +481,7 @@
         <!-- 我的邮箱 -->
         <activity
             android:name=".ui.activity.home.schedule.MyMailActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <!-- 选择联系人 -->
         <activity
@@ -495,6 +495,7 @@
         <!-- 使用帮助 -->
         <activity
             android:name=".ui.activity.my.UsingHelpActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <!-- 单个公告通知 -->
         <activity
@@ -534,11 +535,11 @@
         <!-- 记事本详情 -->
         <!-- 选择抄送人 -->
         <!-- 聊天activity -->
-        <!--<activity-->
-        <!--android:name=".ui.activity.message.EaseChatMessageActivity"-->
-        <!--android:launchMode="singleTask"-->
-        <!--android:screenOrientation="portrait"-->
-        <!--android:windowSoftInputMode="adjustResize" /> -->
+        <!-- <activity -->
+        <!-- android:name=".ui.activity.message.EaseChatMessageActivity" -->
+        <!-- android:launchMode="singleTask" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:windowSoftInputMode="adjustResize" /> -->
         <!-- 聊天activity -->
         <activity
             android:name=".ui.activity.message.EaseChatMessageActivity"
@@ -558,6 +559,7 @@
         <!-- 请选择会议室 -->
         <!-- 今日安排 -->
         <!-- 创建普通会议 -->
+
 
         <!-- 点击聊天图片进入大图片查看 -->
         <activity
@@ -658,7 +660,7 @@
 
         <!-- 会议邀请 -->
         <activity
-            android:name=".ui.activity.home.schedule.MeetingInviteActivity"
+            android:name=".ui.activity.home.schedule.meetingdetails.MeetingInviteActivity"
             android:screenOrientation="portrait" />
 
         <!--  -->
@@ -683,7 +685,7 @@
         <activity
             android:name=".ui.activity.upcomingtasks.UpcomingTasksInfoActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 统计人员 -->
         <activity
@@ -754,6 +756,27 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
         <activity android:name=".ui.activity.message.LookGroupMemberActivity" />
+
+        <!-- 月历 -->
+        <activity
+            android:name=".ui.activity.home.schedule.manage.ScheduleWeekCalendarActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.activity.home.schedule.manage.CalendarRedactActivity"
+            android:configChanges="orientation|keyboardHidden|locale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.activity.home.approval.OfficeSuppliesActivity"
+            android:configChanges="orientation|keyboardHidden|locale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.activity.upcomingtasks.web.OfficeSuppliesDetailsActivity"
+            android:configChanges="orientation|keyboardHidden|locale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

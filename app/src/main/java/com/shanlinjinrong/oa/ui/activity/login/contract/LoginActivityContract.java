@@ -1,6 +1,5 @@
 package com.shanlinjinrong.oa.ui.activity.login.contract;
 
-import com.shanlinjinrong.oa.model.User;
 import com.shanlinjinrong.oa.model.UserInfo;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
@@ -21,15 +20,27 @@ public interface LoginActivityContract {
 
         void loginOtherError(); // 登录出现的其他错误
 
-        void accountOrPswError(int errorCode, String msg); //账号或密码错误
+        void accountOrPswError(String errorCode, String msg); //账号或密码错误
 
         void accountOrPswError(String msg); //账号或密码错误
 
         void requestFinish(); //登录请求结束
 
+        void getIdentifyingCodeSuccess(String picUrl, String keyCode);
+
+        void getIdentifyingCodeFailed(int error);
+
+        void showVerifyCode(String msg);
+
+        void refreshVerifyCode(String msg);
+
     }
 
     interface Presenter extends BasePresenter<View> {
         void login(String account, String psw); //登录
+
+        void login(String account, String psw, String keyCode, String code);
+
+        void QueryVerifyCode();
     }
 }

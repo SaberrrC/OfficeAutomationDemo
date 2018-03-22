@@ -66,6 +66,7 @@ public class UserInfo implements Serializable{
          * company_name : 善林（上海）金融信息服务有限公司
          */
 
+        private String needYzm;
         private String uid;
         private String token;
         private String isleader;
@@ -245,6 +246,14 @@ public class UserInfo implements Serializable{
 
         public void setCompany_name(String company_name) {
             this.company_name = company_name;
+        }
+
+        public String getNeedYzm() {
+            return needYzm;
+        }
+
+        public void setNeedYzm(String needYzm) {
+            this.needYzm = needYzm;
         }
     }
 }

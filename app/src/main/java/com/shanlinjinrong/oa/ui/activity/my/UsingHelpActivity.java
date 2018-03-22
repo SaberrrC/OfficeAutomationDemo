@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -56,17 +57,22 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
         initWebView();
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface"})
     private void initWebView() {
         if (webView != null) {
             webView.getSettings().setJavaScriptEnabled(true);
+            // 设置允许JS弹窗
+            webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+            webView.addJavascriptInterface(this, "android");
             webView.setCacheStrategy(WebViewCache.CacheStrategy.FORCE);
-            webView.setEnableCache(true);
+            webView.setEnableCache(false);
             webView.setUserAgent("Android");
             webView.removeJavascriptInterface("searchBoxJavaBridge_");
             webView.removeJavascriptInterface("accessibility");
             webView.removeJavascriptInterface("accessibilityTraversal");
             webView.getSettings().setAllowFileAccess(false);
+            webView.getSettings().setSavePassword(false);
         }
         mWebViewClient = new WebViewClient() {
             @Override
@@ -96,7 +102,6 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 rlloadding.setVisibility(View.GONE);
-
             }
 
             @Override
@@ -110,7 +115,9 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
             }
         };
         webView.setWebViewClient(mWebViewClient);
-        webView.loadUrl("http://api.oa.shanlinjinrong.com/helper/index" + "?time=" + System.currentTimeMillis());
+//        webView.loadUrl("http://api.oa.shanlinjinrong.com/helper/index" + "?time=" + System.currentTimeMillis());
+//        webView.loadUrl("http://10.5.203.123:8081/#/UsingHelp" + "?time=" + System.currentTimeMillis());
+        webView.loadUrl("file:///android_asset/UsingHelp.html");
         webView.setWebViewClient(mWebViewClient);
     }
 
@@ -122,6 +129,11 @@ public class UsingHelpActivity extends BaseActivity {// extends BaseActivity
         } else {
             finish();
         }
+    }
+
+    @JavascriptInterface
+    public void toBack() {
+        finish();
     }
 
     private void initToolBar() {

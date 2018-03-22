@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="#333333"
-            android:textSize="18dp" />
+            android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/tv_appoint"
@@ -29,7 +29,7 @@
             android:text="指派"
             android:textColor="#333333"
             android:textSize="16dp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <include
@@ -37,17 +37,19 @@
         layout="@layout/toolbar_shadow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tab_homepage_top" />
+        android:layout_below="@+id/tab_homepage_top"/>
 
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbarshadow"
         android:fadingEdge="none"
-        android:overScrollMode="never">
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,7 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_work_report_tips"
@@ -69,13 +72,13 @@
                     android:layout_marginTop="10dp"
                     android:text="工作汇报"
                     android:textColor="#333333"
-                    android:textSize="@dimen/text_sixteen_dp" />
+                    android:textSize="@dimen/text_sixteen_dp"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="10dp"
-                    android:background="#E3E3E3" />
+                    android:background="#E3E3E3"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -86,12 +89,13 @@
                         android:layout_width="0dp"
                         android:layout_height="84dp"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_homepage_wr_me_launch"
                             style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_work_report_me_launch" />
+                            android:src="@drawable/icon_homepage_work_report_me_launch"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -99,28 +103,30 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="我发起的"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
 
 
                     </RelativeLayout>
 
                     <View
+                        android:id="@+id/stork11"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_work_report_launch_report"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_homepage_wr_launch_work_report"
                             style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_work_report_launch" />
+                            android:src="@drawable/icon_homepage_work_report_launch"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -128,27 +134,30 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="@string/launch_work_report"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
 
 
                     </RelativeLayout>
 
                     <View
+                        android:id="@+id/stork12"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_work_report_copy_to_me"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_homepage_wr_copy_to_me"
                             style="@style/home_page_icon_style"
-                            android:src="@mipmap/send_weekly_newspaper" />
+                            android:src="@mipmap/send_weekly_newspaper"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -156,20 +165,24 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="发起周报"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
 
 
                     </RelativeLayout>
 
                     <View
+                        android:id="@+id/stork13"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <FrameLayout
+                        android:id="@+id/fl_work_report_send_to_me"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:visibility="gone">
 
                         <RelativeLayout
                             android:id="@+id/rl_work_report_send_to_me"
@@ -180,7 +193,7 @@
                             <ImageView
                                 android:id="@+id/iv_homepage_wr_send_to_me"
                                 style="@style/home_page_icon_style"
-                                android:src="@mipmap/work_content_send_me" />
+                                android:src="@mipmap/work_content_send_me"/>
 
                             <TextView
                                 style="@style/common_text_style"
@@ -188,7 +201,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="8dp"
                                 android:text="发给我的"
-                                android:textSize="@dimen/text_common_icon_tips" />
+                                android:textSize="@dimen/text_common_icon_tips"/>
 
                         </RelativeLayout>
 
@@ -200,15 +213,66 @@
                             android:layout_marginRight="@dimen/horizontal_spacing12"
                             android:layout_marginTop="@dimen/horizontal_spacing12"
                             android:src="@drawable/ring_red"
-                            android:visibility="invisible" />
+                            android:visibility="invisible"/>
 
                     </FrameLayout>
+
+                    <View
+                        android:id="@+id/stork_blank11"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank11"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                    <View
+                        android:id="@+id/stork_blank12"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank12"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                    <View
+                        android:id="@+id/stork_blank13"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank13"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                    <View
+                        android:id="@+id/stork_blank14"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="visible"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank14"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="visible"/>
+
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
             </LinearLayout>
 
             <LinearLayout
@@ -218,12 +282,13 @@
                 android:layout_below="@+id/ll_work_report_container"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
 
                 <TextView
                     android:id="@+id/tv_approval_tips"
@@ -233,13 +298,13 @@
                     android:layout_marginTop="10dp"
                     android:text="流程审批"
                     android:textColor="#333333"
-                    android:textSize="@dimen/text_sixteen_dp" />
+                    android:textSize="@dimen/text_sixteen_dp"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="10dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -250,12 +315,13 @@
                         android:layout_width="0dp"
                         android:layout_height="84dp"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_approval_me_launch"
                             style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_approval_me_launch" />
+                            android:src="@drawable/icon_homepage_approval_me_launch"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -263,20 +329,24 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="我的申请"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
 
 
                     </RelativeLayout>
 
                     <View
+                        android:id="@+id/stork21"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <FrameLayout
+                        android:id="@+id/fl_approval_wait_me_approval"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:visibility="gone">
 
                         <RelativeLayout
                             android:id="@+id/rl_approval_wait_me_approval"
@@ -287,7 +357,7 @@
                             <ImageView
                                 android:id="@+id/iv_homepage_approval_wait_me_approval"
                                 style="@style/home_page_icon_style"
-                                android:src="@drawable/icon_homepage_approval_wait_me_approval" />
+                                android:src="@drawable/icon_homepage_approval_wait_me_approval"/>
 
                             <TextView
                                 style="@style/common_text_style"
@@ -295,7 +365,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="8dp"
                                 android:text="待办事宜"
-                                android:textSize="@dimen/text_common_icon_tips" />
+                                android:textSize="@dimen/text_common_icon_tips"/>
 
 
                         </RelativeLayout>
@@ -308,26 +378,28 @@
                             android:layout_marginRight="@dimen/horizontal_spacing12"
                             android:layout_marginTop="@dimen/horizontal_spacing12"
                             android:src="@drawable/ring_red"
-                            android:visibility="invisible" />
+                            android:visibility="invisible"/>
                     </FrameLayout>
 
-
                     <View
+                        android:id="@+id/stork22"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_approval_me_approvaled"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_homepage_approval_me_approval"
                             style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_approval_me_approvaled" />
+                            android:src="@drawable/icon_homepage_approval_me_approvaled"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -335,27 +407,30 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="已办事宜"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
 
 
                     </RelativeLayout>
 
                     <View
+                        android:id="@+id/stork23"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_approval_launch_approval"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_homepage_approval_launch_approval"
                             style="@style/home_page_icon_style"
-                            android:src="@drawable/icon_homepage_approval_launch_approval" />
+                            android:src="@drawable/icon_homepage_approval_launch_approval"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -363,30 +438,79 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="发起申请"
-                            android:textSize="@dimen/text_common_icon_tips" />
-
+                            android:textSize="@dimen/text_common_icon_tips"/>
 
                     </RelativeLayout>
+
+                    <View
+                        android:id="@+id/stork_blank21"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank21"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                    <View
+                        android:id="@+id/stork_blank22"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank22"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                    <View
+                        android:id="@+id/stork_blank23"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank23"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                    <View
+                        android:id="@+id/stork_blank24"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank24"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_approval_checking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_approval_container"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -395,19 +519,18 @@
                     android:layout_marginTop="10dp"
                     android:text="考勤管理"
                     android:textColor="#333333"
-                    android:textSize="@dimen/text_sixteen_dp" />
+                    android:textSize="@dimen/text_sixteen_dp"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="10dp"
-                    android:background="@color/grid_layout_line_color" />
-
+                    android:background="@color/grid_layout_line_color"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -419,12 +542,13 @@
                         android:layout_width="0dp"
                         android:layout_height="84dp"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_my_attandance"
                             style="@style/home_page_icon_style"
-                            android:src="@mipmap/my_attandance" />
+                            android:src="@mipmap/my_attandance"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -432,25 +556,28 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="我的考勤"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
                     </RelativeLayout>
 
                     <View
+                        android:id="@+id/stork31"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_holiday_search"
                         android:layout_width="0dp"
                         android:layout_height="84dp"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_holiday_search"
                             style="@style/home_page_icon_style"
-                            android:background="@mipmap/history_search" />
+                            android:background="@mipmap/history_search"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -458,13 +585,15 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="假期查询"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
                     </RelativeLayout>
 
                     <View
+                        android:id="@+id/stork32"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="visible"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_pay_search"
@@ -487,46 +616,64 @@
                         <!--android:textSize="@dimen/text_common_icon_tips"/>-->
                     </RelativeLayout>
 
-
                     <View
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
-
-
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_test"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center" />
+                        android:gravity="center"/>
 
+                    <View
+                        android:id="@+id/stork_blank31"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank31"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                    <View
+                        android:id="@+id/stork_blank32"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank32"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_approval_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_approval_container"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -535,19 +682,19 @@
                     android:layout_marginTop="10dp"
                     android:text="日程管理"
                     android:textColor="#333333"
-                    android:textSize="@dimen/text_sixteen_dp" />
+                    android:textSize="@dimen/text_sixteen_dp"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="10dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
 
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -555,17 +702,46 @@
                     <!---->
 
                     <RelativeLayout
+                        android:id="@+id/rl_schedule_manage"
+                        android:layout_width="0dp"
+                        android:layout_height="84dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/iv_homepage_schedule_manage"
+                            style="@style/home_page_icon_style"
+                            android:background="@drawable/icon_schedule_calendar"/>
+
+                        <TextView
+                            style="@style/common_text_style"
+                            android:layout_below="@+id/iv_homepage_schedule_manage"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="8dp"
+                            android:text="日程管理"
+                            android:textSize="@dimen/text_common_icon_tips"/>
+                    </RelativeLayout>
+
+                    <View
+                        android:id="@+id/stork41"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
+
+                    <RelativeLayout
                         android:id="@+id/rl_schedule_book_meeting"
                         android:layout_width="0dp"
                         android:layout_height="84dp"
                         android:layout_weight="1"
-                        android:gravity="center">
-
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_homepage_schedule_me_launch"
                             style="@style/home_page_icon_style"
-                            android:background="@drawable/meeting_room_book" />
+                            android:background="@drawable/meeting_room_book"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -573,25 +749,28 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="会议室预定"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
                     </RelativeLayout>
 
                     <View
+                        android:id="@+id/stork42"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="visible"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_schedule_my_mail"
                         android:layout_width="0dp"
                         android:layout_height="84dp"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_schedule_administration"
                             style="@style/home_page_icon_style"
-                            android:background="@drawable/mail_img" />
+                            android:background="@drawable/mail_img"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -599,14 +778,15 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="@string/str_home_my_email"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
                     </RelativeLayout>
 
-
                     <View
+                        android:id="@+id/stork43"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grid_layout_line_color" />
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_schedule_administration"
@@ -614,12 +794,12 @@
                         android:layout_height="84dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:visibility="invisible">
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_homepage_schedule_my_mail"
                             style="@style/home_page_icon_style"
-                            android:src="@drawable/mail_img" />
+                            android:src="@drawable/mail_img"/>
 
                         <TextView
                             style="@style/common_text_style"
@@ -627,30 +807,81 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
                             android:text="我的邮箱"
-                            android:textSize="@dimen/text_common_icon_tips" />
+                            android:textSize="@dimen/text_common_icon_tips"/>
                     </RelativeLayout>
 
-
                     <View
+                        android:id="@+id/stork_blank41"
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
                         android:background="@color/grid_layout_line_color"
-                         />
+                        android:visibility="visible"/>
 
-                    <RelativeLayout
+                    <FrameLayout
+                        android:id="@+id/fl_blank41"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center" />
+                        android:visibility="visible"/>
 
+                    <View
+                        android:id="@+id/stork_blank42"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"/>
 
+                    <FrameLayout
+                        android:id="@+id/fl_blank42"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="visible"/>
+
+                    <View
+                        android:id="@+id/stork_blank43"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"
+<<<<<<< HEAD
+                         />
+=======
+                        android:visibility="visible"/>
+>>>>>>> release/v1.7.2
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank43"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="visible"/>
+
+                    <View
+                        android:id="@+id/stork_blank44"
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grid_layout_line_color"
+                        android:visibility="visible"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_blank44"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="visible"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/grid_layout_line_color" />
+                    android:background="@color/grid_layout_line_color"/>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

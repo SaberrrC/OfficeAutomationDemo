@@ -37,7 +37,6 @@ import com.shanlinjinrong.oa.ui.activity.my.FeedbackActivity;
 import com.shanlinjinrong.oa.ui.activity.my.ModifyPwdActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UserInfoActivity;
 import com.shanlinjinrong.oa.ui.activity.my.UsingHelpActivity;
-import com.shanlinjinrong.oa.ui.base.BaseFragment;
 import com.shanlinjinrong.oa.ui.base.BaseHttpFragment;
 import com.shanlinjinrong.oa.ui.fragment.presenter.TabMeGetVersionPresenter;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
@@ -122,7 +121,7 @@ public class TabMeFragment extends BaseHttpFragment<TabMeGetVersionPresenter> im
             R.id.btn_feedback, R.id.btn_update, R.id.btn_about_us, R.id.btn_clear_cache})
     public void onClick(View view) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 1000) {
+        if (currentTime - lastClickTime < 200) {
             lastClickTime = currentTime;
             return;
         }

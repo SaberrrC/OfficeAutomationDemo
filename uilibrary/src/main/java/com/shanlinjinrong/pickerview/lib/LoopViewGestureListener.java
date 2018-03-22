@@ -4,9 +4,9 @@ import android.view.MotionEvent;
 
 final class LoopViewGestureListener extends android.view.GestureDetector.SimpleOnGestureListener {
 
-    final WheelView loopView;
+    final ShanLinWheelView loopView;
 
-    LoopViewGestureListener(WheelView loopview) {
+    LoopViewGestureListener(ShanLinWheelView loopview) {
         loopView = loopview;
     }
 

@@ -3,6 +3,7 @@ package com.shanlinjinrong.oa.utils;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
+import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.MonthlyCalenderPopItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.meetingdetails.bean.PopItem;
 
 import java.text.ParseException;
@@ -109,6 +110,18 @@ public class DateUtils {
     public static String getBiDisplayDateByTimestamp(long timestamp) {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+        return sdf.format(new Date(timestamp));
+    }
+
+    /**
+     * 格式化日期显示 <br/>
+     *
+     * @param timestamp 时间戳
+     * @return 2016-01-01
+     */
+    public static String getDisplayMonthDay(long timestamp) {
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat sdf = new SimpleDateFormat("MM月dd日");
         return sdf.format(new Date(timestamp));
     }
 
@@ -253,9 +266,9 @@ public class DateUtils {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
             Date date1 = sdf.parse(beginTime);
             Date date2 = sdf.parse(EndTime);
-            LogUtils.e("date1：" + date1);
-            LogUtils.e("date2：" + date2);
-            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
+//            LogUtils.e("date1：" + date1);
+//            LogUtils.e("date2：" + date2);
+//            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
             if (date2.getTime() - date1.getTime() > 0) {
                 return true;
             } else {
@@ -271,14 +284,14 @@ public class DateUtils {
      * @return 精确到天，判断时间先后顺序 True,是正确的先后时间,
      */
     public static boolean judeDateOrderByDay(String beginTime, String EndTime) {
-        LogUtils.e("judeDateOrderByDay->beginTime:" + beginTime + "endTime:" + EndTime);
+//        LogUtils.e("judeDateOrderByDay->beginTime:" + beginTime + "endTime:" + EndTime);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date1 = sdf.parse(beginTime);
             Date date2 = sdf.parse(EndTime);
-            LogUtils.e("date1：" + date1);
-            LogUtils.e("date2：" + date2);
-            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
+//            LogUtils.e("date1：" + date1);
+//            LogUtils.e("date2：" + date2);
+//            LogUtils.e("时间差：" + String.valueOf(date2.getTime() - date1.getTime()));
             if (date2.getTime() - date1.getTime() >= 0) {
                 return true;
             } else {
@@ -321,20 +334,26 @@ public class DateUtils {
         List<String> bigList = Arrays.asList(bigMonths);
         List<String> littleList = Arrays.asList(littleMonths);
         // 判断大小月及是否闰年,用来确定"日"的数据
-        if (bigList.contains(String.valueOf(month))) {
-            return 31;
-        } else if (littleList.contains(String.valueOf(month))) {
-            return 30;
+        for (int i = 0; i < bigList.size(); i++) {
+            if (bigList.get(i).equals(String.valueOf(month))) {
+                return 31;
+            }
+        }
+
+        for (int i = 0; i < littleList.size(); i++) {
+            if (littleList.get(i).equals(String.valueOf(month))) {
+                return 30;
+            }
+        }
+
+        if (year <= 0) {
+            return 29;
+        }
+        // 是否闰年
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+            return 29;
         } else {
-            if (year <= 0) {
-                return 29;
-            }
-            // 是否闰年
-            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-                return 29;
-            } else {
-                return 28;
-            }
+            return 28;
         }
     }
 
@@ -449,7 +468,7 @@ public class DateUtils {
         return data;
     }
 
-    public static List<PopItem> getAttandenceDate(int month, int select) {
+    public static List<PopItem> getAttandenceDate(int year, int month, int select) {
         List<PopItem> data = new ArrayList<>();
         if (month < 1 || month > 12) {
             return null;
@@ -460,16 +479,37 @@ public class DateUtils {
         int curMonth = cal.get(Calendar.MONTH);
         int monthDays = calculateDaysInMonth(Calendar.YEAR, month); //获取当月天数
         int lastMonthDays;//上个月的天数
+
         if (month == 1) {
             lastMonthDays = calculateDaysInMonth(Calendar.YEAR - 1, 11);
         } else {
             lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
         }
 
+        if (month == 1) {
+            month = 12;
+            year = year - 1;
+        } else {
+            month = month - 1;
+        }
+
+        cal.set(Calendar.YEAR, year);
         //设置月份
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, 0);
-        int col = cal.get(Calendar.DAY_OF_WEEK);   //获取该天在本星期的第几天 ，也就是第几列
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        //获取该天在本星期的第几天 ，也就是第几列
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String format1 = format.format(cal.getTime());
+
+        int col = cal.get(Calendar.DAY_OF_WEEK) - 1;
+
+        if (cal.getFirstDayOfWeek() == Calendar.SUNDAY) {
+            if (col == 0) {
+                col = 7;
+            }
+        }
+
+
         for (int i = col - 2; i >= 0; i--) {
             item = new PopItem("" + (lastMonthDays - i), false, false);
             data.add(item);
@@ -492,6 +532,72 @@ public class DateUtils {
             int size = 7 - data.size() % 7;
             for (int i = 1; i <= size; i++) {
                 item = new PopItem("" + i, false, false);
+                data.add(item);
+            }
+        }
+        return data;
+    }
+
+    public static List<MonthlyCalenderPopItem> getMonthlyScheduleCalendarDate(int year, int month, int select) {
+        List<MonthlyCalenderPopItem> data = new ArrayList<>();
+        if (month < 1 || month > 12) {
+            return null;
+        }
+        MonthlyCalenderPopItem item;
+        Calendar cal = Calendar.getInstance();
+        int curDay = cal.get(Calendar.DAY_OF_MONTH);
+        int curMonth = cal.get(Calendar.MONTH);
+        int monthDays = calculateDaysInMonth(Calendar.YEAR, month); //获取当月天数
+        int lastMonthDays;//上个月的天数
+        if (month == 1) {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR - 1, 11);
+        } else {
+            lastMonthDays = calculateDaysInMonth(Calendar.YEAR, month - 1);
+        }
+        if (month == 1) {
+            month = 12;
+            year = year - 1;
+        } else {
+            month = month - 1;
+        }
+        cal.set(Calendar.YEAR, year);
+        //设置月份
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        //获取该天在本星期的第几天 ，也就是第几列
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String format1 = format.format(cal.getTime());
+
+        int col = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        if (cal.getFirstDayOfWeek() == Calendar.SUNDAY) {
+            if (col == 0) {
+                col = 7;
+            }
+        }
+
+
+        for (int i = col - 2; i >= 0; i--) {
+            item = new MonthlyCalenderPopItem("" + (lastMonthDays - i), false, false);
+            data.add(item);
+        }
+
+        for (int i = 1; i <= monthDays; i++) {
+            if (i < curDay && month == curMonth + 1) {
+                item = new MonthlyCalenderPopItem("" + i, true, false);
+            } else {
+                item = new MonthlyCalenderPopItem("" + i, true, false);
+            }
+            if (select == i) {
+                item.setSelect(true);
+            }
+            data.add(item);
+        }
+
+
+        if (data.size() % 7 != 0) {
+            int size = 7 - data.size() % 7;
+            for (int i = 1; i <= size; i++) {
+                item = new MonthlyCalenderPopItem("" + i, false, false);
                 data.add(item);
             }
         }
@@ -784,5 +890,19 @@ public class DateUtils {
     // data Date类型的时间
     public static String dateToString(Date data, String formatType) {
         return new SimpleDateFormat(formatType).format(data);
+    }
+
+
+    /**
+     * 根据 年、月 获取对应的月份 的 天数
+     */
+    public static int getDaysByYearMonth(int year, int month) {
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.YEAR, year);
+        a.set(Calendar.MONTH, month - 1);
+        a.set(Calendar.DATE, 1);
+        a.roll(Calendar.DATE, -1);
+        int maxDate = a.get(Calendar.DATE);
+        return maxDate;
     }
 }

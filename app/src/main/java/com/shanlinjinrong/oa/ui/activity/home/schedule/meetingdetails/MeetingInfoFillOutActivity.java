@@ -56,73 +56,73 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_meeting_date)
-    TextView mTvMeetingDate;
+    TextView      mTvMeetingDate;
     @BindView(R.id.tv_meeting_name)
-    TextView mTvMeetingName;
+    TextView      mTvMeetingName;
     @BindView(R.id.tv_meeting_person_number)
-    TextView mTvMeetingPersonNumber;
+    TextView      mTvMeetingPersonNumber;
     @BindView(R.id.tv_meeting_receive_person)
-    TextView mTvMeetingReceivePerson;
+    TextView      mTvMeetingReceivePerson;
     @BindView(R.id.tv_meeting_device)
-    TextView mTvMeetingDevice;
+    TextView      mTvMeetingDevice;
     @BindView(R.id.rb_is_meeting_invite)
-    RadioButton mRbIsMeetingInvite;
+    RadioButton   mRbIsMeetingInvite;
     @BindView(R.id.ed_meeting_content)
-    EditText mEdMeetingContent;
+    EditText      mEdMeetingContent;
     @BindView(R.id.ed_meeting_theme)
-    EditText mEdMeetingTheme;
+    EditText      mEdMeetingTheme;
     @BindView(R.id.ed_meeting_person)
-    EditText mEdMeetingPerson;
+    EditText      mEdMeetingPerson;
     @BindView(R.id.cb_email)
-    CheckBox mCbEmail;
+    CheckBox      mCbEmail;
     @BindView(R.id.cb_messages)
-    CheckBox mCbMessages;
+    CheckBox      mCbMessages;
     @BindView(R.id.btn_meeting_info_complete)
-    TextView mBtnMeetingInfoComplete;
+    TextView      mBtnMeetingInfoComplete;
     @BindView(R.id.tv_receive_person)
-    TextView mTvReceivePerson;
+    TextView      mTvReceivePerson;
     @BindView(R.id.tv_meeting_invite)
-    TextView mTvMeetingInvite;
+    TextView      mTvMeetingInvite;
     @BindView(R.id.tv_is_meeting_invite)
-    TextView mTvIsMeetingInvite;
+    TextView      mTvIsMeetingInvite;
     @BindView(R.id.tv_meeting_theme)
-    TextView mTvMeetingTheme;
+    TextView      mTvMeetingTheme;
     @BindView(R.id.tv_meeting_person)
-    TextView mTvMeetingPerson;
+    TextView      mTvMeetingPerson;
     @BindView(R.id.ll_meeting_person)
-    LinearLayout mLlMeetingPerson;
+    LinearLayout  mLlMeetingPerson;
     @BindView(R.id.ll_meeting_theme)
-    LinearLayout mLlMeetingTheme;
+    LinearLayout  mLlMeetingTheme;
     @BindView(R.id.tv_red_dot1)
-    TextView mTvRedDot1;
+    TextView      mTvRedDot1;
     @BindView(R.id.tv_red_dot2)
-    TextView mTvRedDot2;
+    TextView      mTvRedDot2;
     @BindView(R.id.tv_red_dot3)
-    TextView mTvRedDot3;
+    TextView      mTvRedDot3;
     @BindView(R.id.iv_add_contacts)
-    ImageView mAddContacts;
+    ImageView     mAddContacts;
     @BindView(R.id.ll_meeting_title)
-    LinearLayout mLlMeetingTitle;
+    LinearLayout  mLlMeetingTitle;
     @BindView(R.id.ll_invite_mode)
-    LinearLayout mLlInviteMode;
+    LinearLayout  mLlInviteMode;
     @BindView(R.id.ll_meeting_personnel)
-    LinearLayout mLlMeetingPersonnel;
+    LinearLayout  mLlMeetingPersonnel;
     @BindView(R.id.ll_is_launch_meeting)
-    LinearLayout mLlIsLaunchMeeting;
+    LinearLayout  mLlIsLaunchMeeting;
     @BindView(R.id.tv_rb_is_meeting_invite)
-    TextView mTvRbIsMeetingInvite;
+    TextView      mTvRbIsMeetingInvite;
 
-    private String mEndDate;
-    private String mBeginDate;
-    private String mMeetingName;
-    private String mSendType;
-    private int mRoomId;
-    private String mHoursOfUse;
+    private String  mEndDate;
+    private String  mBeginDate;
+    private String  mMeetingName;
+    private String  mSendType;
+    private int     mRoomId;
+    private String  mHoursOfUse;
     private boolean isWriteMeetingInfo;
     private ArrayList<Child> contactsList = new ArrayList<>(); //邀请人参会人
     private String mStartTime;
     private String mEndTime;
-    private int mId;
+    private int    mId;
     private String mUid = "";
     private boolean mModifyMeeting;
 
@@ -172,6 +172,12 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
     }
 
     private void initView() {
+        //日程查看 禁止调期功能
+        boolean isCalendar = getIntent().getBooleanExtra("isCalendar", false);
+        if (isCalendar) {
+            mBtnMeetingInfoComplete.setVisibility(View.GONE);
+        }
+
         isWriteMeetingInfo = getIntent().getBooleanExtra("isWriteMeetingInfo", true);
         if (isWriteMeetingInfo) {
             initWriteView();
@@ -342,8 +348,8 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             }
             if ("null".equals(mSendType) || mSendType == null) {
                 httpParams.put("send_type", "");
-            }else{
-                httpParams.put("send_type", mSendType +"");
+            } else {
+                httpParams.put("send_type", mSendType + "");
             }
             mPresenter.addMeetingRooms(httpParams);
         } catch (UnsupportedEncodingException e) {
@@ -493,7 +499,7 @@ public class MeetingInfoFillOutActivity extends HttpBaseActivity<MeetingInfoFill
             }
             mEdMeetingContent.setText(info.getData().getContent());
             mSendType = info.getData().getSend_type();
-            Log.e("mSendType",mSendType);
+            Log.e("mSendType", mSendType);
         } catch (Throwable e) {
             e.printStackTrace();
         }

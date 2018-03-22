@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:background="@color/F5F5F5"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:text="取消"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:gravity="center"
+            android:text="时间选择"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/btn_affirm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:text="确定"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/picker_hour_time"
+            android:layout_width="0dp"
+            android:background="@color/white"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="visible"
+            app:wheel_curved="false"
+            app:wheel_cyclic="false"
+            app:wheel_indicator="true"
+            app:wheel_indicator_color="@color/gray_d5d5d5"
+            app:wheel_indicator_size="1dp"
+            app:wheel_item_space="20dp"
+            app:wheel_item_text_size="18sp"
+            app:wheel_selected_item_text_color="@color/black_333333"
+            app:wheel_visible_item_count="5" />
+
+        <RelativeLayout
+            android:layout_width="8dp"
+            android:layout_height="match_parent">
+
+            <com.aigestudio.wheelpicker.WheelPicker
+                android:id="@+id/picker_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                app:wheel_curved="false"
+                app:wheel_cyclic="false"
+                android:background="@color/white"
+                app:wheel_indicator="true"
+                app:wheel_indicator_color="@color/gray_d5d5d5"
+                app:wheel_indicator_size="1dp"
+                app:wheel_item_space="20dp"
+                app:wheel_item_text_size="18sp"
+                app:wheel_selected_item_text_color="@color/black_333333"
+                app:wheel_visible_item_count="5" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"
+                android:background="@color/black" />
+
+        </RelativeLayout>
+
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/picker_min_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:visibility="visible"
+            app:wheel_curved="false"
+            app:wheel_cyclic="false"
+            app:wheel_indicator="true"
+            app:wheel_indicator_color="@color/gray_d5d5d5"
+            app:wheel_indicator_size="1dp"
+            app:wheel_item_space="20dp"
+            app:wheel_item_text_size="18sp"
+            app:wheel_selected_item_text_color="@color/black_333333"
+            app:wheel_visible_item_count="5" />
+    </LinearLayout>
+</LinearLayout>

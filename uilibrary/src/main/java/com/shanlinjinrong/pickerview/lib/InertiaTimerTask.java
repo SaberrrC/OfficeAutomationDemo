@@ -5,10 +5,10 @@ import java.util.TimerTask;
 final class InertiaTimerTask extends TimerTask {
 
     float a;
-    final float velocityY;
-    final WheelView loopView;
+    final float            velocityY;
+    final ShanLinWheelView loopView;
 
-    InertiaTimerTask(WheelView loopview, float velocityY) {
+    InertiaTimerTask(ShanLinWheelView loopview, float velocityY) {
         super();
         loopView = loopview;
         this.velocityY = velocityY;

@@ -9,11 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shanlinjinrong.oa.R;
-import com.shanlinjinrong.oa.ui.activity.home.approval.adapter.LaunchApprovalListAdapter;
+import com.shanlinjinrong.oa.ui.activity.home.approval.adapter.LaunchApprovalAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.approval.bean.LaunchApprovalItem;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity;
 import com.shanlinjinrong.oa.ui.base.BaseActivity;
@@ -26,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //发起审批
-public class LaunchApprovalActivity extends BaseActivity implements LaunchApprovalListAdapter.OnItemClickListener {
+public class LaunchApprovalActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView mTvTitle;
 
@@ -34,11 +35,17 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
     Toolbar mToolbar;
 
     @BindView(R.id.rv_launch_approval)
-    RecyclerView mLaunchApprovalList;//发起审批列表
+    RecyclerView mLaunchApprovalList;
+
     @BindView(R.id.toolbar_image_btn)
     ImageView toolbarImageBtn;
 
+    @BindView(R.id.rv_launch_office_supplies)
+    RecyclerView mRvLaunchOfficeSupplies;
+
     private List<LaunchApprovalItem> mListData;
+    private List<LaunchApprovalItem> mOfficeSupplies;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +60,17 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
         initToolBar();
         initListData();
 
-        mLaunchApprovalList.setLayoutManager(new GridLayoutManager(LaunchApprovalActivity.this, 3));
+        mLaunchApprovalList.setLayoutManager(new GridLayoutManager(LaunchApprovalActivity.this, 4));
         mLaunchApprovalList.addItemDecoration(new GridItemDecoration(LaunchApprovalActivity.this, R.drawable.driver_line));
-        LaunchApprovalListAdapter approvalListAdapter = new LaunchApprovalListAdapter(mListData);
-        approvalListAdapter.setOnItemClickListener(this);
+        LaunchApprovalAdapter approvalListAdapter = new LaunchApprovalAdapter(mListData);
+        mLaunchApprovalList.addOnItemTouchListener(new OnHRClick());
         mLaunchApprovalList.setAdapter(approvalListAdapter);
+
+        mRvLaunchOfficeSupplies.setLayoutManager(new GridLayoutManager(LaunchApprovalActivity.this, 4));
+        mRvLaunchOfficeSupplies.addItemDecoration(new GridItemDecoration(LaunchApprovalActivity.this, R.drawable.driver_line));
+        LaunchApprovalAdapter mOfficeSuppliesAdapter = new LaunchApprovalAdapter(mOfficeSupplies);
+        mRvLaunchOfficeSupplies.addOnItemTouchListener(new OnAdministrationClick());
+        mRvLaunchOfficeSupplies.setAdapter(mOfficeSuppliesAdapter);
     }
 
     private void initListData() {
@@ -66,15 +79,17 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
         mListData.add(new LaunchApprovalItem("加班申请", R.drawable.icon_over_time_work_request));
         mListData.add(new LaunchApprovalItem("休假申请", R.drawable.icon_annual_leave_request));
         mListData.add(new LaunchApprovalItem("签卡申请", R.drawable.icon_registration_card_request));
-    }
 
+        mOfficeSupplies = new ArrayList<>();
+        mOfficeSupplies.add(new LaunchApprovalItem("办公品申请", R.drawable.icon_launch_approval_supplies));
+    }
 
     private void initToolBar() {
         if (mToolbar == null) {
             return;
         }
         toolbarImageBtn.setVisibility(View.GONE);
-        setTitle("");//必须在setSupportActionBar之前调用
+        setTitle("");
         mToolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(mToolbar);
         mTvTitle.setText("发起申请");
@@ -91,34 +106,59 @@ public class LaunchApprovalActivity extends BaseActivity implements LaunchApprov
         super.onDestroy();
     }
 
-    @Override
-    public void onItemClicked(int position) {
+    class OnHRClick extends OnItemClickListener {
+        @Override
+        public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+            switch (i) {
+                case 0:
+                    //出差申请
+                    Intent intent1 = new Intent(LaunchApprovalActivity.this, InitiateThingsRequestActivity.class);
+                    intent1.putExtra("type", 0);
+                    startActivity(intent1);
+                    break;
+                case 1:
+                    //加班申请
+                    Intent intent2 = new Intent(LaunchApprovalActivity.this, InitiateThingsRequestActivity.class);
+                    intent2.putExtra("type", 1);
+                    startActivity(intent2);
+                    break;
+                case 2:
+                    //休假申请
+                    Intent intent3 = new Intent(LaunchApprovalActivity.this, InitiateThingsRequestActivity.class);
+                    intent3.putExtra("type", 2);
+                    startActivity(intent3);
+                    break;
+                case 3:
+                    //签卡申请
+                    Intent intent4 = new Intent(LaunchApprovalActivity.this, InitiateThingsRequestActivity.class);
+                    intent4.putExtra("type", 3);
+                    startActivity(intent4);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
-        switch (position) {
-            case 0:
-                //出差申请
-                Intent intent1 = new Intent(this, InitiateThingsRequestActivity.class);
-                intent1.putExtra("type", 0);
-                startActivity(intent1);
-                break;
-            case 1:
-                //加班申请
-                Intent intent2 = new Intent(this, InitiateThingsRequestActivity.class);
-                intent2.putExtra("type", 1);
-                startActivity(intent2);
-                break;
-            case 2:
-                //休假申请
-                Intent intent3 = new Intent(this, InitiateThingsRequestActivity.class);
-                intent3.putExtra("type", 2);
-                startActivity(intent3);
-                break;
-            case 3:
-                //签卡申请
-                Intent intent4 = new Intent(this, InitiateThingsRequestActivity.class);
-                intent4.putExtra("type", 3);
-                startActivity(intent4);
-                break;
+    class OnAdministrationClick extends OnItemClickListener {
+        @Override
+        public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+            switch (i) {
+                case 0:
+                    Intent intent = new Intent(LaunchApprovalActivity.this, OfficeSuppliesActivity.class);
+                    startActivityForResult(intent,101);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == -100){
+            finish();
         }
     }
 }

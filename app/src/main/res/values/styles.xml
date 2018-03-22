@@ -49,10 +49,24 @@
         <item name="android:textSize">12dp</item>
     </style>
 
-    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog"/>
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog" />
 
     <style name="AppTheme.CustomDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!-- 月历 -->
+    <style name="CustomDialog" parent="android:style/Theme.Dialog">
+        <!-- 背景颜色及透明程度 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 是否有标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否模糊 -->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!--<item name="android:windowFrame">@null</item>-->
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="approvalCustomDialog" parent="Theme.AppCompat.Light.Dialog">
@@ -120,17 +134,16 @@
         <item name="android:textColor">@color/black_333333</item>
     </style>
 
-    <!--发起工作汇报页面左侧字体样式-->
-    <style name="work_report_launch_right_text_style">
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginLeft">@dimen/common_margin_right</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:drawablePadding">6dp</item>
-        <item name="android:textColor">@color/work_report_launch_activity_right_text_color</item>
-    </style>
+    <!--发起工作汇报页面左侧字体样式--><style name="work_report_launch_right_text_style">
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_alignParentRight">true</item>
+    <item name="android:layout_marginLeft">@dimen/common_margin_right</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:drawablePadding">6dp</item>
+    <item name="android:textColor">@color/work_report_launch_activity_right_text_color</item>
+</style>
 
     <style name="meeting_checkbox_style" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/meeting_checkbox_style</item>

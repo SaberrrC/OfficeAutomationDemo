@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 3d滚轮控件
  */
-public class WheelView extends View {
+public class ShanLinWheelView extends View {
 
     public enum ACTION {
         // 点击，滑翔(滑到尽头)，拖拽事件
@@ -106,11 +106,11 @@ public class WheelView extends View {
     private static final float SCALECONTENT = 0.8F;//非中间文字则用此控制高度，压扁形成3d错觉
     private static final float CENTERCONTENTOFFSET = 6;//中间文字文字居中需要此偏移值
 
-    public WheelView(Context context) {
+    public ShanLinWheelView(Context context) {
         this(context, null);
     }
 
-    public WheelView(Context context, AttributeSet attrs) {
+    public ShanLinWheelView(Context context, AttributeSet attrs) {
         super(context, attrs);
         textColorOut = getResources().getColor(R.color.pickerview_wheelview_textcolor_out);
         textColorCenter = getResources().getColor(R.color.pickerview_wheelview_textcolor_center);
@@ -264,7 +264,8 @@ public class WheelView extends View {
 
     public final void setCurrentItem(int currentItem) {
         this.initPosition = currentItem;
-        totalScrollY = 0;//回归顶部，不然重设setCurrentItem的话位置会偏移的，就会显示出不对位置的数据
+        //回归顶部，不然重设setCurrentItem的话位置会偏移的，就会显示出不对位置的数据
+        totalScrollY = 0;
         invalidate();
     }
 

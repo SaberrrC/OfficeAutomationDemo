@@ -315,7 +315,7 @@ public class TabContactsFragment extends BaseHttpFragment<TabContractsFragmentPr
 
     @Override
     public void autoSearchOther(String msg) {
-
+        showToast(msg);
     }
 
     @Override

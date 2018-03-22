@@ -20,16 +20,11 @@ import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.manager.AppConfig;
 import com.shanlinjinrong.oa.manager.AppManager;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.InitiateThingsRequestActivity;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.widget.ApproveDecorationLine;
-import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.adapter.HolidayAdapter;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.contract.AttandenceRecorderContract;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.staffselfhelp.presenter.AttandenceRecorderPresenter;
-import com.shanlinjinrong.oa.ui.base.BaseActivity;
 import com.shanlinjinrong.oa.ui.base.HttpBaseActivity;
 import com.shanlinjinrong.oa.utils.CustomDialogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,18 +39,18 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
     @BindView(R.id.top_view)
     CommonTopView mTopView;
     @BindView(R.id.tv_calendar_year)
-    TextView mTvCalendarYear;
+    TextView      mTvCalendarYear;
     @BindView(R.id.recycler_view1)
-    RecyclerView mRecyclerView;
+    RecyclerView  mRecyclerView;
     @BindView(R.id.tv_empty_attendence)
-    TextView mTvEmptyAttendence;
+    TextView      mTvEmptyAttendence;
 
-    private AttandenceRecorderAdapter mAdapter;
+    private AttandenceRecorderAdapter                            mAdapter;
     private List<MyAttandanceResponse.AllWorkAttendanceListBean> mAllWorkAttendanceList;
     private List<MyAttandanceResponse.AllWorkAttendanceListBean> mData = new ArrayList<>();
     private HashMap<String, CommonAttendanceBean> mHashMap;
-    private CustomDialogUtils mDialog;
-    private MyAttandanceResponse mAttandance;
+    private CustomDialogUtils                     mDialog;
+    private MyAttandanceResponse                  mAttandance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +89,7 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                         bean.setPsname(mAllWorkAttendanceList.get(i).getPsname());
                         bean.setSignCause(mAllWorkAttendanceList.get(i).getSignCause());
                         bean.setTbmstatus(mAllWorkAttendanceList.get(i).getTbmstatus());
-                        bean.setOnebegintime(mAllWorkAttendanceList.get(i).getOnebegintime());
+                        bean.setTwoendtime(mAllWorkAttendanceList.get(i).getTwoendtime());
                         mHashMap.put(mAllWorkAttendanceList.get(i).getCalendar(), bean);
                     }
 
@@ -110,7 +105,7 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                             bean.setPsname(cdWorkAttendanceList.get(i).getPsname());
                             bean.setSignCause(cdWorkAttendanceList.get(i).getSignCause());
                             bean.setTbmstatus(cdWorkAttendanceList.get(i).getTbmstatus());
-                            bean.setOnebegintime(cdWorkAttendanceList.get(i).getOnebegintime());
+                            bean.setTwoendtime(cdWorkAttendanceList.get(i).getTwoendtime());
                             mHashMap.put(cdWorkAttendanceList.get(i).getCalendar(), bean);
                         }
                     }
@@ -127,7 +122,7 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                             bean.setPsname(kgWorkAttendanceList.get(i).getPsname());
                             bean.setSignCause(kgWorkAttendanceList.get(i).getSignCause());
                             bean.setTbmstatus(kgWorkAttendanceList.get(i).getTbmstatus());
-                            bean.setOnebegintime(kgWorkAttendanceList.get(i).getOnebegintime());
+                            bean.setTwoendtime(kgWorkAttendanceList.get(i).getTwoendtime());
                             mHashMap.put(kgWorkAttendanceList.get(i).getCalendar(), bean);
                         }
                     }
@@ -144,7 +139,7 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                             bean.setPsname(ztWorkAttendanceList.get(i).getPsname());
                             bean.setSignCause(ztWorkAttendanceList.get(i).getSignCause());
                             bean.setTbmstatus(ztWorkAttendanceList.get(i).getTbmstatus());
-                            bean.setOnebegintime(ztWorkAttendanceList.get(i).getOnebegintime());
+                            bean.setTwoendtime(ztWorkAttendanceList.get(i).getTwoendtime());
                             mHashMap.put(ztWorkAttendanceList.get(i).getCalendar(), bean);
                         }
                     }
@@ -161,7 +156,7 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                             bean.setPsname(jbWorkAttendanceList.get(i).getPsname());
                             bean.setSignCause(jbWorkAttendanceList.get(i).getSignCause());
                             bean.setTbmstatus(jbWorkAttendanceList.get(i).getTbmstatus());
-                            bean.setOnebegintime(jbWorkAttendanceList.get(i).getOnebegintime());
+                            bean.setTwoendtime(jbWorkAttendanceList.get(i).getTwoendtime());
                             mHashMap.put(jbWorkAttendanceList.get(i).getCalendar(), bean);
                         }
                     }
@@ -178,7 +173,7 @@ public class AttandenceRecorderActivity extends HttpBaseActivity<AttandenceRecor
                             bean.setPsname(xjWorkAttendanceList.get(i).getPsname());
                             bean.setSignCause(xjWorkAttendanceList.get(i).getSignCause());
                             bean.setTbmstatus(xjWorkAttendanceList.get(i).getTbmstatus());
-                            bean.setOnebegintime(xjWorkAttendanceList.get(i).getOnebegintime());
+                            bean.setTwoendtime(xjWorkAttendanceList.get(i).getTwoendtime());
                             mHashMap.put(xjWorkAttendanceList.get(i).getCalendar(), bean);
                         }
                     }

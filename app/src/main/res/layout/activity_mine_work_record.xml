@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_height_48"
         app:leftDrawable="@drawable/toolbar_back"
-        app:topTitle="@string/str_mine_work_record"/>
+        app:topTitle="@string/str_mine_work_record" />
 
 
     <View

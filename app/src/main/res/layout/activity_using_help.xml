@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/page_bg"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include
+        layout="@layout/toolbar"
+        android:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
         <ren.yale.android.cachewebviewlib.CacheWebView
             android:id="@+id/web_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <RelativeLayout
             android:id="@+id/rl_loadding"
@@ -32,7 +33,7 @@
                 android:layout_above="@+id/tv_error_layout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="15dp"
-                android:gravity="center"/>
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/tv_error_layout"
@@ -40,9 +41,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:visibility="visible"/>
+                android:visibility="visible" />
         </RelativeLayout>
 
-        <include layout="@layout/toolbar_shadow"/>
+        <include
+            layout="@layout/toolbar_shadow"
+            android:visibility="visible" />
     </RelativeLayout>
 </LinearLayout>

@@ -128,7 +128,7 @@ public class NoticesSingleInfoActivity extends HttpBaseActivity<NoticesSingleInf
                         startActivity(intent);
                     }
                 });
-                LogUtils.e("url->" + Uri.parse(picUrl));
+//                LogUtils.e("url->" + Uri.parse(picUrl));
                 pic.setImageURI(Uri.parse(picUrl));
                 llPictures.addView(picView, picParams);
             }

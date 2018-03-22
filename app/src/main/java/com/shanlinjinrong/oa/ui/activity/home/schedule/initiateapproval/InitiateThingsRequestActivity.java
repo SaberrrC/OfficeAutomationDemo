@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.ui.activity.home.schedule.initiateapproval.adapter.InitiateThingsTypeAdapter;
@@ -911,7 +910,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             catchWarningByCode(msg);
             return;
         }
-        Toast.makeText(this, msg.trim(), Toast.LENGTH_LONG).show();
+        if (TextUtils.isEmpty(msg.trim())) {
+            showToast("服务器异常，请稍后重试！");
+        } else {
+            showToast(msg.trim());
+        }
     }
 
     @Override
@@ -920,7 +923,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             catchWarningByCode(str);
             return;
         }
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(str)) {
+            showToast("服务器异常，请稍后重试！");
+        } else {
+            showToast(str);
+        }
         mTvNotNetwork.setText(str);
     }
 
@@ -1022,6 +1029,10 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
             catchWarningByCode(str);
             return;
         }
+        if (TextUtils.isEmpty(str)) {
+            showToast( "服务器异常，请稍后重试！");
+            return;
+        }
         showToast(str);
     }
 
@@ -1033,16 +1044,23 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
 
     @Override
     public void addWorkApplyFailure(int errorCode, String str) {
-        if ("auth error".equals(str)) {
+        if (TextUtils.equals("auth error",str)) {
             catchWarningByCode(str);
             return;
         }
-        switch (errorCode) {
-            case -1:
+        if (errorCode == -1) {
+            if (TextUtils.isEmpty(getString(R.string.string_not_network))) {
+                showToast("服务器异常，请稍后重试！");
+            } else {
                 showToast(getString(R.string.string_not_network));
-                return;
+            }
+            return;
         }
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        if (!TextUtils.isEmpty(str)) {
+            showToast(str);
+        } else {
+            showToast("服务器异常，请稍后重试！");
+        }
     }
 
     @Override
@@ -1062,7 +1080,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast(getString(R.string.string_not_network));
                 return;
         }
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(str)) {
+            showToast("服务器异常，请稍后重试！");
+        } else {
+            showToast(str);
+        }
     }
 
     @Override
@@ -1109,7 +1131,11 @@ public class InitiateThingsRequestActivity extends HttpBaseActivity<InitiateThin
                 showToast(getString(R.string.string_not_network));
                 return;
         }
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(str)) {
+            showToast("服务器异常，请稍后重试！");
+        } else {
+            showToast(str);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

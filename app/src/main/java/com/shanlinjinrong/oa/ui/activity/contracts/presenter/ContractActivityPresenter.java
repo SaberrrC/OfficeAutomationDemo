@@ -51,7 +51,7 @@ public class ContractActivityPresenter extends HttpPresenter<ContractActivityCon
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                LogUtils.e(t.toString());
+//                LogUtils.e(t.toString());
                 List<Contacts> items = new ArrayList<>();
                 try {
                     JSONObject jo = new JSONObject(t);

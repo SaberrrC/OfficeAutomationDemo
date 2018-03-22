@@ -47,7 +47,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                LogUtils.e("联系人返回数据-》" + t);
+//                LogUtils.e("联系人返回数据-》" + t);
                 List<User> users = new ArrayList<>();
                 try {
                     JSONObject jo = new JSONObject(t);
@@ -57,16 +57,7 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                             JSONArray jDepartment = jo.getJSONArray("data");
                             for (int i = 0; i < jDepartment.length(); i++) {
                                 JSONObject jsonObject = jDepartment.getJSONObject(i);
-                                User user = new User(jsonObject.getString("username"),
-                                        jsonObject.getString("phone"),
-                                        jsonObject.getString("portraits"),
-                                        jsonObject.getString("sex"),
-                                        jsonObject.getString("post_id"),
-                                        jsonObject.getString("code"),
-                                        jsonObject.getString("department_id"),
-                                        jsonObject.getString("post_title"),
-                                        jsonObject.getString("department_name"),
-                                        jsonObject.getString("email"));
+                                User user = new User(jsonObject.getString("username"), jsonObject.getString("phone"), jsonObject.getString("portraits"), jsonObject.getString("sex"), jsonObject.getString("post_id"), jsonObject.getString("code"), jsonObject.getString("department_id"), jsonObject.getString("post_title"), jsonObject.getString("department_name"), jsonObject.getString("email"));
                                 users.add(user);
                             }
                             if (mView != null) {
@@ -79,7 +70,8 @@ public class TabContractsFragmentPresenter extends HttpPresenter<TabContractsFra
                             break;
                         default:
                             if (mView != null) {
-                                mView.autoSearchOther(ApiJava.getInfo(jo));
+                                String msg = jo.getString("message");
+                                mView.autoSearchOther(msg);
                             }
                             break;
                     }

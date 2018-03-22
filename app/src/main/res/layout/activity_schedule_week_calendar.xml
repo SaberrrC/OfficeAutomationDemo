@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.shanlinjinrong.oa.ui.activity.home.schedule.manage.ScheduleWeekCalendarActivity">
+
+    <com.shanlinjinrong.views.common.CommonTopView
+        android:id="@+id/topView"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:leftDrawable="@drawable/toolbar_back"
+        app:rightDrawable="@drawable/icon_calendar"
+        app:topTitle="周历" />
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_below="@+id/topView"
+        android:background="@color/gray_d5d5d5" />
+
+    <FrameLayout
+        android:id="@+id/fl_container_layout"
+        android:layout_width="match_parent"
+        android:layout_below="@id/view_line"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

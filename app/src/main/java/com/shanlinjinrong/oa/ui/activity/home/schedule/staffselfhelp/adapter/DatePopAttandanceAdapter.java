@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttandanceAdapter.ItemHolder> {
     private List<PopItem> mData;
-    private Context mContext;
+    private Context       mContext;
 
     private OnItemClick mOnItemClick;
 
@@ -69,6 +69,8 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
                 case 1:
                     holder.imageState.setImageResource(R.drawable.circle_green);
                     break;
+                default:
+                    break;
             }
 
 
@@ -76,7 +78,7 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
                 holder.item.setTextColor(0xFF4A4A4A);
         } else {
             holder.item.setTextColor(0xFF999999);
-            holder.imageState.setVisibility(View.GONE);
+            holder.imageState.setVisibility(View.INVISIBLE);
         }
 
 
@@ -107,7 +109,7 @@ public class DatePopAttandanceAdapter extends RecyclerView.Adapter<DatePopAttand
     }
 
     class ItemHolder extends RecyclerView.ViewHolder {
-        TextView item;
+        TextView  item;
         ImageView image;
         ImageView imageState;
 

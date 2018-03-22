@@ -1,6 +1,7 @@
 package com.example.retrofit.net;
 
 import com.example.retrofit.model.HttpResult;
+import com.example.retrofit.model.ScheduleBean;
 import com.example.retrofit.model.UpLoadPortraitsBean;
 import com.example.retrofit.model.responsebody.CountResponse1;
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
@@ -94,6 +95,26 @@ public class HttpMethods {
 
     public void uploadPortraits(MultipartBody.Part file, Subscriber<UpLoadPortraitsBean> subscriber) {
         Observable<UpLoadPortraitsBean> map = ApiFactory.getJavaApi().uploadPortraits(file).map(new HttpResultFuncTypeJava<UpLoadPortraitsBean>());
+        toSubscribe(map, subscriber);
+    }
+
+
+    //    //出差申请
+    //    public void submitEvectionApply(EvectionBody body, Subscriber<String> subscriber) {
+    //        Observable map1 = ApiFactory.getJavaApi().submitEvectionApply(body).map(new HttpResultFuncTypeJava());
+    //        toSubscribe(map1, subscriber);
+    //    }
+
+
+    //    //加班申请
+    //    public void addWorkApply(AddWorkBody body, Subscriber<String> subscriber) {
+    //        Observable map1 = ApiFactory.getJavaApi().addWorkApply(body).();
+    //        toSubscribe(map1, subscriber);
+    //    }
+  //---------------------- 日程管理 上传-----------------------
+
+    public void calendarSchedule(ScheduleBean scheduleBean, Subscriber<String> subscriber) {
+        Observable map = ApiFactory.getJavaApi().calendarSchedule(scheduleBean).map(new HttpResultFuncTypeJava());
         toSubscribe(map, subscriber);
     }
 

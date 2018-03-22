@@ -10,13 +10,13 @@ import android.util.Pair;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
-import com.pgyersdk.update.PgyUpdateManager;
-
+import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.activity.main.contract.MainControllerContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+import com.shanlinjinrong.oa.utils.DateUtils;
 import com.shanlinjinrong.oa.utils.SharedPreferenceUtils;
 
 import org.json.JSONException;
@@ -60,7 +60,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
 
         } else {
             //            PgyUpdateManager.setIsForced(true);
-           // PgyUpdateManager.register(context, "com.shanlinjinrong.oa.fileprovider");
+            // PgyUpdateManager.register(context, "com.shanlinjinrong.oa.fileprovider");
         }
     }
 
@@ -69,7 +69,17 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
      * 获取版本号信息
      */
     public void getAppEdition() {
-        mKjHttp.get(ApiJava.APP_GETAPPEDITION, new HttpParams(), new HttpCallBack() {
+        HttpParams httpParams = new HttpParams();
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            httpParams.putHeaders("sign", AESUtils.Encrypt(jsonObject.toString()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        mKjHttp.get(ApiJava.APP_GETAPPEDITION, httpParams, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
@@ -133,7 +143,7 @@ public class MainControllerPresenter extends HttpPresenter<MainControllerContrac
             int size = list.get(i).getUnreadMsgCount();
             tempCount = tempCount + size;
         }
-//        mView.bindBadgeView(tempCount);
+        //        mView.bindBadgeView(tempCount);
         return list;
     }
 }

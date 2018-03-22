@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -124,4 +125,124 @@
         </ScrollView>
     </RelativeLayout>
 
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include
+        layout="@layout/toolbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar" />
+
+    <ImageView
+        android:id="@+id/iv_notice_detail_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:layout_below="@+id/toolbar_shadow"
+        android:scaleType="centerCrop"
+        android:src="@drawable/notice_detail_top_bar" />
+
+    <View
+        android:id="@+id/part_line_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/iv_notice_detail_top_bar"
+        android:background="#e3e3e3" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/part_line_bottom"
+        android:layout_marginBottom="19dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="18dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_notice_detail_single_title_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:gravity="center_vertical"
+            android:textColor="#548ee9"
+            android:textSize="14dp" />
+
+
+        <TextView
+            android:id="@+id/tv_notice_detail_single_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_notice_detail_single_title_top"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#686868"
+            android:textSize="14dp" />
+
+        <View
+            android:id="@+id/tv_notice_detail_single_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/tv_notice_detail_single_time"
+            android:layout_marginTop="12dp"
+            android:background="#e3e3e3" />
+
+        <TextView
+            android:id="@+id/tv_notice_detail_single_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_notice_detail_single_view"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:textColor="#686868"
+            android:textSize="14dp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_notice_detail_single_title"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="9dp"
+            android:background="#ffffff"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_notice_detail_single_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:lineSpacingExtra="5dp"
+                    android:paddingBottom="20dp"
+                    android:textColor="#6f6f70"
+                    android:textSize="14dp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_pictures"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+>>>>>>> release/v1.7.2
 </RelativeLayout>

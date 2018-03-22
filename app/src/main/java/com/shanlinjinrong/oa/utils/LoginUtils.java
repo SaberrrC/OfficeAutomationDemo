@@ -23,7 +23,6 @@ public class LoginUtils {
                 public void onSuccess() {
                     EMClient.getInstance().groupManager().loadAllGroups();
                     EMClient.getInstance().chatManager().loadAllConversations();
-                    LogUtils.e("登录聊天服务器成功！");
                     String u_id = Constants.CID + "_" + AppConfig.getAppConfig(context).getPrivateCode();
                     String uid =  AppConfig.getAppConfig(context).getPrivateUid();
                     String u_name = AppConfig.getAppConfig(context).get(AppConfig.PREF_KEY_USERNAME);
