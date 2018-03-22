@@ -9,7 +9,7 @@ public class ApiConstant {
     /**
      * 预发布环境  testoa
      */
-//    public final static String BASE_PIC_URL = "http://public.testoa.shanlinjinrong.com";
+//    public final static String BASE_PIC_URL = "https://public.testoa.shanlinjinrong.com";
 
     /**
      * 开发环境
@@ -31,7 +31,7 @@ public class ApiConstant {
     /**
      * 预发布环境  testoa
      */
-//    public static final String JAVA_TEST_HOST = "http://testoa.shanlinjinrong.com/oa-api/";  public static final String baseUrl= "1";
+//    public static final String JAVA_TEST_HOST = "https://testoa.shanlinjinrong.com/oa-api/";  public static final String baseUrl= "1";
 
 
     /**
@@ -47,7 +47,7 @@ public class ApiConstant {
 
     /**
      */
-    public static final String HTML5_URL_HOST = "http://testoa.shanlinjinrong.com/oa-h5/";
+    public static final String HTML5_URL_HOST = "https://oa.shanlinjinrong.com/oa-h5/";
 
     //黄海宾
 //    public static final String JAVA_TEST_HOST = "http://10.5.203.123:8084/";

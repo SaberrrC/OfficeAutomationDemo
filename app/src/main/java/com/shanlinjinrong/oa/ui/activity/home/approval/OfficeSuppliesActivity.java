@@ -35,17 +35,17 @@ import ren.yale.android.cachewebviewlib.WebViewCache;
 public class OfficeSuppliesActivity extends BaseActivity {
 
     @BindView(R.id.web_view)
-    CacheWebView mWebView;
+    CacheWebView   mWebView;
     @BindView(R.id.tv_error_layout)
-    TextView     tvErrorLayout;
+    TextView       tvErrorLayout;
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TextView       tvTitle;
     @BindView(R.id.rl_loadding)
     RelativeLayout rlloadding;
     @BindView(R.id.progress_bar)
     ProgressBar    progress_bar;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar        toolbar;
 
     private WebViewClient mWebViewClient;
     private boolean isError = false;
@@ -106,7 +106,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (isError){
+                if (isError) {
                     return;
                 }
                 rlloadding.setVisibility(View.GONE);
@@ -127,8 +127,8 @@ public class OfficeSuppliesActivity extends BaseActivity {
         };
 
         mWebView.setWebViewClient(mWebViewClient);
-        mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&date=" + DateUtils.getCurrentDate("yyyy-MM-dd") + "&userName=" + AppConfig.getAppConfig(this).getPrivateName() + "&department=" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME)+"&baseUrl=" +ApiConstant.baseUrl);
-        Log.i("====url", ApiConstant.HTML5_URL_HOST + "#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid());
+        mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&baseUrl=" + ApiConstant.baseUrl + "&date=" + DateUtils.getCurrentDate("yyyy-MM-dd") + "&userName=" + AppConfig.getAppConfig(this).getPrivateName() + "&department=" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME));
+        Log.i("====url", ApiConstant.HTML5_URL_HOST + "#/ApplyLaunch?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&date=" + DateUtils.getCurrentDate("yyyy-MM-dd") + "&userName=" + AppConfig.getAppConfig(this).getPrivateName() + "&department=" + AppConfig.getAppConfig(this).get(AppConfig.PREF_KEY_DEPARTMENT_NAME) + "&baseUrl=" + ApiConstant.baseUrl);
         mWebView.setWebViewClient(mWebViewClient);
     }
 
@@ -161,8 +161,7 @@ public class OfficeSuppliesActivity extends BaseActivity {
         } else {
             finish();
         }
-}
-
+    }
 
 
     private void initToolBar() {

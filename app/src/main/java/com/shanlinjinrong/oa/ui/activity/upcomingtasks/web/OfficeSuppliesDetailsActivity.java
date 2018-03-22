@@ -72,6 +72,7 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
             mWebView.removeJavascriptInterface("accessibility");
             mWebView.removeJavascriptInterface("accessibilityTraversal");
             mWebView.getSettings().setAllowFileAccess(false);
+            mWebView.getSettings().setDomStorageEnabled(true);
         }
 
 
@@ -130,13 +131,13 @@ public class OfficeSuppliesDetailsActivity extends BaseActivity {
         mWhichState = Integer.parseInt(which);
         switch (mWhichState) {
             case 1:
-                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&isExamine=" + mWhichState + "&id=" + id + "&state=" + state + "&baseUrl=" + ApiConstant.baseUrl);
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&baseUrl=" + ApiConstant.baseUrl + "&isExamine=" + mWhichState + "&id=" + id + "&state=" + state);
                 break;
             case 2:
-                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state + "&baseUrl=" + ApiConstant.baseUrl);
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&baseUrl=" + ApiConstant.baseUrl + "&id=" + id + "&taskId=" + taskId + "&state=" + state);
                 break;
             case 3:
-                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&id=" + id + "&taskId=" + taskId + "&state=" + state + "&baseUrl=" + ApiConstant.baseUrl);
+                mWebView.loadUrl(ApiConstant.HTML5_URL_HOST + "#/TodoDetails?isExamine=" + mWhichState + "&token=" + AppConfig.getAppConfig(this).getPrivateToken() + "&uid=" + AppConfig.getAppConfig(this).getPrivateUid() + "&baseUrl=" + ApiConstant.baseUrl + "&id=" + id + "&taskId=" + taskId + "&state=" + state);
                 break;
             default:
                 break;
