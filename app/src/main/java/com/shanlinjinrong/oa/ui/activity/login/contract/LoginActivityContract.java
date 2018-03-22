@@ -1,6 +1,7 @@
 package com.shanlinjinrong.oa.ui.activity.login.contract;
 
 import com.shanlinjinrong.oa.model.UserInfo;
+import com.shanlinjinrong.oa.ui.activity.main.bean.AppVersionBean;
 import com.shanlinjinrong.oa.ui.base.BasePresenter;
 import com.shanlinjinrong.oa.ui.base.BaseView;
 
@@ -33,6 +34,8 @@ public interface LoginActivityContract {
         void showVerifyCode(String msg);
 
         void refreshVerifyCode(String msg);
+
+        void getAppEditionSuccess(AppVersionBean mAppVersionBean);
 
     }
 
