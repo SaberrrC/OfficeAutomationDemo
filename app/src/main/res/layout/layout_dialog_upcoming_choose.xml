@@ -175,6 +175,7 @@
             android:textSize="14sp"/>
 
         <LinearLayout
+            android:id="@+id/ll_personal_line1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="14dp"
@@ -201,6 +202,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_personal_line2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="14dp"
@@ -217,25 +219,41 @@
                 style="@style/textview_upcoming_dialog"
                 android:text="休假申请"/>
 
+
+            <TextView
+                android:id="@+id/tv_stork1"
+                style="@style/textview_upcoming_dialog"
+                android:background="@color/white"
+                android:text=""/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_office_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_type_all2"
+                style="@style/textview_upcoming_dialog"
+                android:background="@drawable/shape_upcoming_dialog_item_bg_checked"
+                android:text="全部"
+                android:textColor="@color/color_white"/>
+
             <TextView
                 android:id="@+id/tv_office_supplies"
                 style="@style/textview_upcoming_dialog"
                 android:text="办公用品申请"/>
 
             <TextView
-                android:id="@+id/tv_stork1"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="1"
-                android:visibility="gone"/>
-
-            <TextView
                 android:id="@+id/tv_stork2"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="1"
-                android:visibility="gone"/>
-
+                style="@style/textview_upcoming_dialog"
+                android:background="@color/white"
+                android:text=""/>
         </LinearLayout>
 
         <TextView

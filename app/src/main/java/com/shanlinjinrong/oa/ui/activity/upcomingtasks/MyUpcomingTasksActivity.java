@@ -123,9 +123,13 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private TextView    mTvStateDisagree;
     private boolean isOfficeSupplies = false;
     private long    lastClickTime    = 0;
-    private TextView    mTvStork1;
-    private TextView    mTvStork2;
-    private TextView    mTvCard;
+    private TextView     mTvStork1;
+    private TextView     mTvStork2;
+    private TextView     mTvCard;
+    private LinearLayout mLlPersonalLine1;
+    private LinearLayout mLlPersonalLine2;
+    private LinearLayout mLlOfficeLine;
+    private TextView     mTvTypeAll2;
 
     @Override
     protected void initInject() {
@@ -393,15 +397,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mTvTypeCheckPersonal.setBackgroundResource(R.drawable.shape_upcomingtask_top_left_checked);
                 mTvTypeCheckAdministration.setBackgroundResource(R.drawable.shape_upcomingtask_top_right_normal);
                 isOfficeSupplies = false;
+                mRvList.setVisibility(View.GONE);
+                initRefreshMode();
                 if (mChooseDialog != null) {
-                    mTvOfficeSupplies.setVisibility(View.GONE);
-                    mTvStork1.setVisibility(View.VISIBLE);
-                    mTvStork2.setVisibility(View.GONE);
-                    mTvTravel.setVisibility(View.VISIBLE);
-                    mTvTypeAll.setVisibility(View.VISIBLE);
-                    mTvCard.setVisibility(View.VISIBLE);
-                    mTvOvertime.setVisibility(View.VISIBLE);
-                    mTvRest.setVisibility(View.VISIBLE);
+                    mLlPersonalLine1.setVisibility(View.VISIBLE);
+                    mLlPersonalLine2.setVisibility(View.VISIBLE);
+                    mLlOfficeLine.setVisibility(View.GONE);
                 }
                 showLoadingView();
                 getListData();
@@ -410,15 +411,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mTvTypeCheckPersonal.setBackgroundResource(R.drawable.shape_upcomingtask_top_left_normal);
                 mTvTypeCheckAdministration.setBackgroundResource(R.drawable.shape_upcomingtask_top_right_checked);
                 isOfficeSupplies = true;
+                mRvList.setVisibility(View.GONE);
+                initRefreshMode();
                 if (mChooseDialog != null) {
-                    mTvOfficeSupplies.setVisibility(View.VISIBLE);
-                    mTvStork1.setVisibility(View.VISIBLE);
-                    mTvStork2.setVisibility(View.VISIBLE);
-                    mTvTravel.setVisibility(View.GONE);
-                    mTvTypeAll.setVisibility(View.GONE);
-                    mTvCard.setVisibility(View.GONE);
-                    mTvOvertime.setVisibility(View.GONE);
-                    mTvRest.setVisibility(View.GONE);
+                    mLlPersonalLine1.setVisibility(View.GONE);
+                    mLlPersonalLine2.setVisibility(View.GONE);
+                    mLlOfficeLine.setVisibility(View.VISIBLE);
                 }
                 showLoadingView();
                 getListData();
@@ -569,11 +567,15 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvTypeAll = (TextView) dialogView.findViewById(R.id.tv_type_all);
             mTvOk = (TextView) dialogView.findViewById(R.id.tv_ok);
             mTvAllState = (TextView) dialogView.findViewById(R.id.tv_all_state);
-            mTvStateChecked = (TextView) dialogView.findViewById(tv_state_checked);
+            mTvStateChecked = (TextView) dialogView.findViewById(R.id.tv_state_checked);
+            mTvTypeAll2 = (TextView) dialogView.findViewById(R.id.tv_type_all2);
             mTvStateUnchecked = (TextView) dialogView.findViewById(R.id.tv_state_unchecked);
             mTvStateApproving = (TextView) dialogView.findViewById(R.id.tv_state_approving);
             mTvStateTackback = (TextView) dialogView.findViewById(R.id.tv_state_tackback);
             mTvStateDisagree = (TextView) dialogView.findViewById(R.id.tv_state_disagree);
+            mLlPersonalLine1 = (LinearLayout) dialogView.findViewById(R.id.ll_personal_line1);
+            mLlPersonalLine2 = (LinearLayout) dialogView.findViewById(R.id.ll_personal_line2);
+            mLlOfficeLine = (LinearLayout) dialogView.findViewById(R.id.ll_office_line);
             mTvStork1 = (TextView) dialogView.findViewById(R.id.tv_stork1);
             mTvStork2 = (TextView) dialogView.findViewById(R.id.tv_stork2);
             mLlState = (LinearLayout) dialogView.findViewById(R.id.ll_state);
@@ -606,24 +608,15 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvStateTackback.setOnClickListener(this);
             mTvStateDisagree.setOnClickListener(this);
             mTvCard.setOnClickListener(this);
+            mTvTypeAll2.setOnClickListener(this);
             if (isOfficeSupplies) {
-                mTvOfficeSupplies.setVisibility(View.VISIBLE);
-                mTvStork1.setVisibility(View.VISIBLE);
-                mTvStork2.setVisibility(View.VISIBLE);
-                mTvTravel.setVisibility(View.GONE);
-                mTvTypeAll.setVisibility(View.GONE);
-                mTvCard.setVisibility(View.GONE);
-                mTvOvertime.setVisibility(View.GONE);
-                mTvRest.setVisibility(View.GONE);
+                mLlPersonalLine1.setVisibility(View.GONE);
+                mLlPersonalLine2.setVisibility(View.GONE);
+                mLlOfficeLine.setVisibility(View.VISIBLE);
             } else {
-                mTvOfficeSupplies.setVisibility(View.GONE);
-                mTvStork1.setVisibility(View.VISIBLE);
-                mTvStork2.setVisibility(View.GONE);
-                mTvTravel.setVisibility(View.VISIBLE);
-                mTvTypeAll.setVisibility(View.VISIBLE);
-                mTvCard.setVisibility(View.VISIBLE);
-                mTvOvertime.setVisibility(View.VISIBLE);
-                mTvRest.setVisibility(View.VISIBLE);
+                mLlPersonalLine1.setVisibility(View.VISIBLE);
+                mLlPersonalLine2.setVisibility(View.VISIBLE);
+                mLlOfficeLine.setVisibility(View.GONE);
             }
             mChooseDialog.setContentView(dialogView);
             Window dialogWindow = mChooseDialog.getWindow();
@@ -885,10 +878,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 setTextChecked(mTvRest);
                 mBillType = "6404";
                 break;
-            case R.id.tv_type_all://全部
+            case R.id.tv_type_all://人事类全部
                 setTypeTextDefault();
                 setTextChecked(mTvTypeAll);
                 mBillType = "6401";
+                break;
+            case R.id.tv_type_all2://行政类全部
+                setTypeTextDefault();
+                setTextChecked(mTvTypeAll2);
                 break;
             case R.id.tv_all_state:
                 setStateTextDefault();
