@@ -992,11 +992,13 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mTvOvertime.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvRest.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvTypeAll.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        mTvTypeAll2.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvOfficeSupplies.setTextColor(getResources().getColor(R.color.black_333333));
         mTvTravel.setTextColor(getResources().getColor(R.color.black_333333));
         mTvOvertime.setTextColor(getResources().getColor(R.color.black_333333));
         mTvRest.setTextColor(getResources().getColor(R.color.black_333333));
         mTvTypeAll.setTextColor(getResources().getColor(R.color.black_333333));
+        mTvTypeAll2.setTextColor(getResources().getColor(R.color.black_333333));
     }
 
     private void setStateTextDefault() {
