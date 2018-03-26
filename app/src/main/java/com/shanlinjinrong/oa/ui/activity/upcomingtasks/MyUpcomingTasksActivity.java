@@ -23,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -78,6 +79,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     EditText           mEtContent;
     @BindView(R.id.tv_error_show)
     TextView           mTvErrorShow;
+    @BindView(R.id.tv_type_check_personal)
+    TextView           mTvTypeCheckPersonal;
+    @BindView(R.id.tv_type_check_administration)
+    TextView           mTvTypeCheckAdministration;
+    @BindView(R.id.fl_type_check)
+    FrameLayout        mFlTypeCheck;
     private List<Object> mDatas = new ArrayList<>();
     private FinalRecycleAdapter mFinalRecycleAdapter;
     private int lastVisibleItem = 0;
@@ -88,12 +95,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private TextView            mTvThree;
     private TextView            mTvWeek;
     private TextView            mTvMouth;
-    private TextView            mTvAllType;
     private TextView            mTvOfficeSupplies;
     private TextView            mTvTravel;
     private TextView            mTvOvertime;
     private TextView            mTvRest;
-    private TextView            mTvSign;
+    private TextView            mTvTypeAll;
     private TextView            mTvOk;
     private TextView            mTvAllState;
     private TextView            mTvStateChecked;
@@ -104,10 +110,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private LinearLayout mLlState;
     private boolean isShowCheck = false;
     private View mStork;
-    private String  mTime          = "0";
-    private String  mTimeCode      = "0";
-    //默认签卡申请
-    private String  mBillType      = "6402";
+    private String mTime     = "0";
+    private String mTimeCode = "0";
+
+    private String  mBillType      = "6401";
     private String  mApproveState  = "";
     private String  mGloableStatus = "-100";
     private boolean isSearch       = false;
@@ -117,6 +123,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private TextView    mTvStateDisagree;
     private boolean isOfficeSupplies = false;
     private long    lastClickTime    = 0;
+    private TextView    mTvStork1;
+    private TextView    mTvStork2;
+    private TextView    mTvCard;
 
     @Override
     protected void initInject() {
@@ -174,15 +183,21 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void getListData() {
-        //        if (isOfficeSupplies) {
-        //            if (TextUtils.equals(mWhichList, "1")) {
-        //                mPresenter.getOfficeSuppliesApproveData(mTimeCode, mGloableStatus, String.valueOf(pageNum), PAGE_SIZE);
-        //            } else if (TextUtils.equals(mWhichList, "2")) {
-        //                mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
-        //            } else if (TextUtils.equals(mWhichList, "3")) {
-        //                mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
-        //            }
-        //        } else {
+        if (isOfficeSupplies) {
+            if (TextUtils.equals(mWhichList, "1")) {
+                mPresenter.getOfficeSuppliesApproveData(mTimeCode, mGloableStatus, String.valueOf(pageNum), PAGE_SIZE);
+                return;
+            }
+            if (TextUtils.equals(mWhichList, "2")) {
+                mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
+                return;
+            }
+            if (TextUtils.equals(mWhichList, "3")) {
+                mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
+                return;
+            }
+            return;
+        }
         if (TextUtils.equals(mWhichList, "1")) {
             mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
             return;
@@ -190,6 +205,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
         if (TextUtils.equals(mWhichList, "2")) {
             mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+            return;
         }
         if (TextUtils.equals(mWhichList, "3")) {
             mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
@@ -321,26 +337,26 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         }
     }
 
-    @OnClick({R.id.toolbar_image_btn, R.id.iv_search, R.id.tv_approval, R.id.iv_agree, R.id.tv_agree, R.id.iv_disagree, R.id.tv_disagree})
+    @OnClick({R.id.toolbar_image_btn, R.id.iv_search, R.id.tv_approval, R.id.iv_agree, R.id.tv_agree, R.id.iv_disagree, R.id.tv_disagree, R.id.tv_type_check_personal, R.id.tv_type_check_administration})
     public void onViewClicked(View view) {
-        long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
-            lastClickTime = currentTime;
-            return;
-        }
-        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.toolbar_image_btn:
                 hideKeyBoard();
                 showChooseDialog();
                 break;
             case R.id.iv_search:
+                if (checkDoubleClick()) {
+                    return;
+                }
                 initRefreshMode();
                 showLoadingView();
                 hideKeyBoard();
                 searchItem();
                 break;
             case R.id.tv_approval:
+                if (checkDoubleClick()) {
+                    return;
+                }
                 if (mDatas.size() == 0) {
                     showToast("无单据");
                     return;
@@ -349,6 +365,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 break;
             case R.id.iv_agree:
             case R.id.tv_agree:
+                if (checkDoubleClick()) {
+                    return;
+                }
                 List<ApporveBodyItemBean> approveBeanList = getApporveBodyItemBeenList(true);
                 if (approveBeanList.size() == 0) {
                     showToast("请选择单据");
@@ -359,6 +378,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 break;
             case R.id.iv_disagree:
             case R.id.tv_disagree:
+                if (checkDoubleClick()) {
+                    return;
+                }
                 List<ApporveBodyItemBean> disApproveBeanList = getApporveBodyItemBeenList(false);
                 if (disApproveBeanList.size() == 0) {
                     showToast("请选择单据");
@@ -367,9 +389,53 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 showLoadingView();
                 mPresenter.postAgreeDisagree(disApproveBeanList, isOfficeSupplies);
                 break;
+            case R.id.tv_type_check_personal:
+                mTvTypeCheckPersonal.setBackgroundResource(R.drawable.shape_upcomingtask_top_left_checked);
+                mTvTypeCheckAdministration.setBackgroundResource(R.drawable.shape_upcomingtask_top_right_normal);
+                isOfficeSupplies = false;
+                if (mChooseDialog != null) {
+                    mTvOfficeSupplies.setVisibility(View.GONE);
+                    mTvStork1.setVisibility(View.VISIBLE);
+                    mTvStork2.setVisibility(View.GONE);
+                    mTvTravel.setVisibility(View.VISIBLE);
+                    mTvTypeAll.setVisibility(View.VISIBLE);
+                    mTvCard.setVisibility(View.VISIBLE);
+                    mTvOvertime.setVisibility(View.VISIBLE);
+                    mTvRest.setVisibility(View.VISIBLE);
+                }
+                showLoadingView();
+                getListData();
+                break;
+            case R.id.tv_type_check_administration:
+                mTvTypeCheckPersonal.setBackgroundResource(R.drawable.shape_upcomingtask_top_left_normal);
+                mTvTypeCheckAdministration.setBackgroundResource(R.drawable.shape_upcomingtask_top_right_checked);
+                isOfficeSupplies = true;
+                if (mChooseDialog != null) {
+                    mTvOfficeSupplies.setVisibility(View.VISIBLE);
+                    mTvStork1.setVisibility(View.VISIBLE);
+                    mTvStork2.setVisibility(View.VISIBLE);
+                    mTvTravel.setVisibility(View.GONE);
+                    mTvTypeAll.setVisibility(View.GONE);
+                    mTvCard.setVisibility(View.GONE);
+                    mTvOvertime.setVisibility(View.GONE);
+                    mTvRest.setVisibility(View.GONE);
+                }
+                showLoadingView();
+                getListData();
+                break;
             default:
                 break;
         }
+    }
+
+    private boolean checkDoubleClick() {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime < 500) {
+            lastClickTime = currentTime;
+            return true;
+        }
+        lastClickTime = currentTime;
+        return false;
     }
 
     @NonNull
@@ -459,10 +525,14 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     if (data instanceof UpcomingTaskItemBean.DataBean.DataListBean) {
                         UpcomingTaskItemBean.DataBean.DataListBean bean = (UpcomingTaskItemBean.DataBean.DataListBean) data;
                         bean.setIsChecked(false);
-                    } else if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                        continue;
+                    }
+                    if (data instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
                         UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) data;
                         bean.setIsChecked(false);
-                    } else if (data instanceof OfficeSuppliesListBean.DataBean.ListBean) {
+                        continue;
+                    }
+                    if (data instanceof OfficeSuppliesListBean.DataBean.ListBean) {
                         OfficeSuppliesListBean.DataBean.ListBean bean = (OfficeSuppliesListBean.DataBean.ListBean) data;
                         bean.setChecked(false);
                     }
@@ -481,11 +551,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     private void showChooseDialog() {
         if (mChooseDialog == null) {
+            View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_dialog_upcoming_choose, null, false);
             mChooseDialog = new Dialog(this, R.style.DialogChoose);
             //点击其他地方消失
             mChooseDialog.setCanceledOnTouchOutside(true);
             //填充对话框的布局
-            View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_dialog_upcoming_choose, null, false);
             mTvAll = (TextView) dialogView.findViewById(R.id.tv_all);
             mTvToday = (TextView) dialogView.findViewById(R.id.tv_today);
             mTvThree = (TextView) dialogView.findViewById(R.id.tv_three);
@@ -493,9 +563,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvMouth = (TextView) dialogView.findViewById(R.id.tv_mouth);
             mTvOfficeSupplies = (TextView) dialogView.findViewById(R.id.tv_office_supplies);
             mTvTravel = (TextView) dialogView.findViewById(R.id.tv_travel);
+            mTvCard = (TextView) dialogView.findViewById(R.id.tv_card);
             mTvOvertime = (TextView) dialogView.findViewById(R.id.tv_overtime);
             mTvRest = (TextView) dialogView.findViewById(R.id.tv_rest);
-            mTvSign = (TextView) dialogView.findViewById(R.id.tv_sign);
+            mTvTypeAll = (TextView) dialogView.findViewById(R.id.tv_type_all);
             mTvOk = (TextView) dialogView.findViewById(R.id.tv_ok);
             mTvAllState = (TextView) dialogView.findViewById(R.id.tv_all_state);
             mTvStateChecked = (TextView) dialogView.findViewById(tv_state_checked);
@@ -503,6 +574,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvStateApproving = (TextView) dialogView.findViewById(R.id.tv_state_approving);
             mTvStateTackback = (TextView) dialogView.findViewById(R.id.tv_state_tackback);
             mTvStateDisagree = (TextView) dialogView.findViewById(R.id.tv_state_disagree);
+            mTvStork1 = (TextView) dialogView.findViewById(R.id.tv_stork1);
+            mTvStork2 = (TextView) dialogView.findViewById(R.id.tv_stork2);
             mLlState = (LinearLayout) dialogView.findViewById(R.id.ll_state);
             mStork = dialogView.findViewById(R.id.stork);
             if (TextUtils.equals(mWhichList, "1")) {
@@ -521,7 +594,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvTravel.setOnClickListener(this);
             mTvOvertime.setOnClickListener(this);
             mTvRest.setOnClickListener(this);
-            mTvSign.setOnClickListener(this);
+            mTvTypeAll.setOnClickListener(this);
             mTvOk.setOnClickListener(this);
             mTvOk.setOnClickListener(this);
             mTvOk.setOnClickListener(this);
@@ -532,6 +605,26 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             mTvStateApproving.setOnClickListener(this);
             mTvStateTackback.setOnClickListener(this);
             mTvStateDisagree.setOnClickListener(this);
+            mTvCard.setOnClickListener(this);
+            if (isOfficeSupplies) {
+                mTvOfficeSupplies.setVisibility(View.VISIBLE);
+                mTvStork1.setVisibility(View.VISIBLE);
+                mTvStork2.setVisibility(View.VISIBLE);
+                mTvTravel.setVisibility(View.GONE);
+                mTvTypeAll.setVisibility(View.GONE);
+                mTvCard.setVisibility(View.GONE);
+                mTvOvertime.setVisibility(View.GONE);
+                mTvRest.setVisibility(View.GONE);
+            } else {
+                mTvOfficeSupplies.setVisibility(View.GONE);
+                mTvStork1.setVisibility(View.VISIBLE);
+                mTvStork2.setVisibility(View.GONE);
+                mTvTravel.setVisibility(View.VISIBLE);
+                mTvTypeAll.setVisibility(View.VISIBLE);
+                mTvCard.setVisibility(View.VISIBLE);
+                mTvOvertime.setVisibility(View.VISIBLE);
+                mTvRest.setVisibility(View.VISIBLE);
+            }
             mChooseDialog.setContentView(dialogView);
             Window dialogWindow = mChooseDialog.getWindow();
             dialogWindow.setGravity(Gravity.CENTER);
@@ -539,6 +632,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             dialogWindow.setAttributes(lp);
         }
+        //        if (isOfficeSupplies) {
+        //            mTvOfficeSupplies.setVisibility(View.VISIBLE);
+        //        } else {
+        //            mTvOfficeSupplies.setVisibility(View.GONE);
+        //        }
         mChooseDialog.show();
     }
 
@@ -581,7 +679,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     bundle.putSerializable("UPCOMING_INFO", bean);
                     startActivityToInfo(bundle);
                 });
-            } else if (itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
+                return;
+            }
+            if (itemData instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {
                 UpcomingSearchResultBean.DataBeanX.DataBean bean = (UpcomingSearchResultBean.DataBeanX.DataBean) itemData;
                 String pkBillType = bean.getPkBillType();
                 setItemIcon(ivIcon, pkBillType);
@@ -611,7 +711,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     bundle.putSerializable("UPCOMING_INFO", bean);
                     startActivityToInfo(bundle);
                 });
-            } else if (itemData instanceof OfficeSuppliesListBean.DataBean.ListBean) {
+                return;
+            }
+            if (itemData instanceof OfficeSuppliesListBean.DataBean.ListBean) {
                 try {
                     OfficeSuppliesListBean.DataBean.ListBean bean = (OfficeSuppliesListBean.DataBean.ListBean) itemData;
                     setItemIcon(ivIcon, "");
@@ -703,26 +805,26 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private void setItemIcon(ImageView ivIcon, String billType) {
         if (TextUtils.equals(billType, "6402")) {//签卡申请
             ivIcon.setBackgroundResource(R.mipmap.upcoming_card);
-        } else if (TextUtils.equals(billType, "6405")) {//加班申请
-            ivIcon.setBackgroundResource(R.mipmap.upcoming_overtime);
-        } else if (TextUtils.equals(billType, "6403")) {//出差申请
-            ivIcon.setBackgroundResource(R.mipmap.upcoming_travel);
-        } else if (TextUtils.equals(billType, "6404")) {//休假申请
-            ivIcon.setBackgroundResource(R.mipmap.upcoming_holiday);
-        } else {
-            //办公片申请
-            ivIcon.setBackgroundResource(R.drawable.icon_launch_approval_supplies);
+            return;
         }
+        if (TextUtils.equals(billType, "6405")) {//加班申请
+            ivIcon.setBackgroundResource(R.mipmap.upcoming_overtime);
+            return;
+        }
+        if (TextUtils.equals(billType, "6403")) {//出差申请
+            ivIcon.setBackgroundResource(R.mipmap.upcoming_travel);
+            return;
+        }
+        if (TextUtils.equals(billType, "6404")) {//休假申请
+            ivIcon.setBackgroundResource(R.mipmap.upcoming_holiday);
+            return;
+        }
+        //办公片申请
+        ivIcon.setBackgroundResource(R.drawable.icon_launch_approval_supplies);
     }
 
     @Override
     public void onClick(View view) {
-        long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime < 500) {
-            lastClickTime = currentTime;
-            return;
-        }
-        lastClickTime = currentTime;
         switch (view.getId()) {
             case R.id.tv_all:
                 setTimeTextDefault();
@@ -754,39 +856,39 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mTime = "4";
                 mTimeCode = "4";
                 break;
-            //            case R.id.tv_all_type://改为办公用品
-            //                setTypeTextDefault();
-            //                setTextChecked(mTvAllType);
-            //                mBillType = "";
-            //                break;
+            //                        case R.id.tv_all_type://改为办公用品
+            //                            setTypeTextDefault();
+            //                            setTextChecked(mTvAllType);
+            //                            mBillType = "";
+            //                            break;
             case R.id.tv_office_supplies:
                 setTypeTextDefault();
                 setTextChecked(mTvOfficeSupplies);
-                isOfficeSupplies = true;
                 break;
             case R.id.tv_travel:
                 setTypeTextDefault();
                 setTextChecked(mTvTravel);
                 mBillType = "6403";
-                isOfficeSupplies = false;
+                break;
+            case R.id.tv_card:
+                setTypeTextDefault();
+                setTextChecked(mTvCard);
+                mBillType = "6402";
                 break;
             case R.id.tv_overtime:
                 setTypeTextDefault();
                 setTextChecked(mTvOvertime);
                 mBillType = "6405";
-                isOfficeSupplies = false;
                 break;
             case R.id.tv_rest:
                 setTypeTextDefault();
                 setTextChecked(mTvRest);
                 mBillType = "6404";
-                isOfficeSupplies = false;
                 break;
-            case R.id.tv_sign:
+            case R.id.tv_type_all://全部
                 setTypeTextDefault();
-                setTextChecked(mTvSign);
-                mBillType = "6402";
-                isOfficeSupplies = false;
+                setTextChecked(mTvTypeAll);
+                mBillType = "6401";
                 break;
             case R.id.tv_all_state:
                 setStateTextDefault();
@@ -825,6 +927,9 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mGloableStatus = "0";
                 break;
             case R.id.tv_ok:
+                if (checkDoubleClick()) {
+                    return;
+                }
                 initRefreshMode();
                 if (TextUtils.equals(mWhichList, "1")) {
                     if (isOfficeSupplies) {
@@ -838,9 +943,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mEtContent.setText("");
                 isSearch = false;
                 String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
-                if (TextUtils.equals(mWhichList, "2")) {
+                if (TextUtils.equals(mWhichList, "2")) {//待办
                     if (isOfficeSupplies) {
-                        //待办
                         mEtContent.setHint("请输入发起人姓名");
                         mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
                     } else {
@@ -848,9 +952,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
                     }
                 }
-                if (TextUtils.equals(mWhichList, "3")) {
+                if (TextUtils.equals(mWhichList, "3")) {//已办
                     if (isOfficeSupplies) {
-                        //已办
                         mEtContent.setHint("请输入发起人姓名");
                         mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
                     } else {
@@ -889,12 +992,12 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mTvTravel.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvOvertime.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvRest.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
-        mTvSign.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        mTvTypeAll.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvOfficeSupplies.setTextColor(getResources().getColor(R.color.black_333333));
         mTvTravel.setTextColor(getResources().getColor(R.color.black_333333));
         mTvOvertime.setTextColor(getResources().getColor(R.color.black_333333));
         mTvRest.setTextColor(getResources().getColor(R.color.black_333333));
-        mTvSign.setTextColor(getResources().getColor(R.color.black_333333));
+        mTvTypeAll.setTextColor(getResources().getColor(R.color.black_333333));
     }
 
     private void setStateTextDefault() {
