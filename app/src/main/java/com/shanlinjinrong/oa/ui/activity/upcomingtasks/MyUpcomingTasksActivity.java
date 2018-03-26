@@ -162,6 +162,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    hideLoadingView();
                     showLoadingView();
                     searchItem();
                 }
@@ -354,6 +355,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     return;
                 }
                 initRefreshMode();
+                hideLoadingView();
                 showLoadingView();
                 hideKeyBoard();
                 searchItem();
@@ -378,6 +380,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     showToast("请选择单据");
                     return;
                 }
+                hideLoadingView();
                 showLoadingView();
                 mPresenter.postAgreeDisagree(approveBeanList, isOfficeSupplies);
                 break;
@@ -391,6 +394,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     showToast("请选择单据");
                     return;
                 }
+                hideLoadingView();
                 showLoadingView();
                 mPresenter.postAgreeDisagree(disApproveBeanList, isOfficeSupplies);
                 break;
@@ -405,6 +409,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     mLlPersonalLine2.setVisibility(View.VISIBLE);
                     mLlOfficeLine.setVisibility(View.GONE);
                 }
+                hideLoadingView();
+                mSrRefresh.setRefreshing(false);
                 showLoadingView();
                 getListData();
                 break;
@@ -419,6 +425,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     mLlPersonalLine2.setVisibility(View.GONE);
                     mLlOfficeLine.setVisibility(View.VISIBLE);
                 }
+                hideLoadingView();
+                mSrRefresh.setRefreshing(false);
                 showLoadingView();
                 getListData();
                 break;
@@ -850,11 +858,11 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 mTime = "4";
                 mTimeCode = "4";
                 break;
-            //                        case R.id.tv_all_type://改为办公用品
-            //                            setTypeTextDefault();
-            //                            setTextChecked(mTvAllType);
-            //                            mBillType = "";
-            //                            break;
+            //case R.id.tv_all_type://改为办公用品
+            //    setTypeTextDefault();
+            //    setTextChecked(mTvAllType);
+            //    mBillType = "";
+            //    break;
             case R.id.tv_office_supplies:
                 setTypeTextDefault();
                 setTextChecked(mTvOfficeSupplies);
@@ -961,6 +969,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     }
                 }
                 mChooseDialog.dismiss();
+                hideLoadingView();
                 showLoadingView();
                 break;
             default:

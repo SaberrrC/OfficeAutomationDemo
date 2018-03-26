@@ -19,6 +19,7 @@ import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -72,7 +73,7 @@ public interface JavaApi {
     //----------------------聊天 群组-----------------------
 
     @POST("user/queryUserByCodes")
-    Observable<HttpResult<ArrayList<GroupUserInfoResponse>>> queryUserListInfo(@QueryMap Map<String, String> map);
+    Observable<HttpResult<ArrayList<GroupUserInfoResponse>>> queryUserListInfo(@QueryMap Map<String, String> map, @HeaderMap Map<String,String> headerMap);
 
 
     //----------------------头像 上传-----------------------

@@ -86,8 +86,8 @@ public class HttpMethods {
 
     //----------------------群组 聊天-----------------------
 
-    public void queryUserListInfo(Map<String, String> map, Subscriber<ArrayList<GroupUserInfoResponse>> subscriber) {
-        Observable<ArrayList<GroupUserInfoResponse>> map1 = ApiFactory.getJavaApi().queryUserListInfo(map).map(new HttpResultFuncTypeJava<ArrayList<GroupUserInfoResponse>>());
+    public void queryUserListInfo(Map<String, String> map, Subscriber<ArrayList<GroupUserInfoResponse>> subscriber, Map<String, String> headerMap) {
+        Observable<ArrayList<GroupUserInfoResponse>> map1 = ApiFactory.getJavaApi().queryUserListInfo(map,headerMap).map(new HttpResultFuncTypeJava<ArrayList<GroupUserInfoResponse>>());
         toSubscribe(map1, subscriber);
     }
 

@@ -2,17 +2,21 @@ package com.shanlinjinrong.oa.ui.activity.message.presenter;
 
 import com.example.retrofit.model.responsebody.GroupUserInfoResponse;
 import com.example.retrofit.net.HttpMethods;
+import com.hyphenate.easeui.utils.AESUtils;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.net.MyKjHttp;
 import com.shanlinjinrong.oa.ui.activity.message.contract.EaseChatDetailsContact;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
+import com.shanlinjinrong.oa.utils.DateUtils;
 
+import org.json.JSONObject;
 
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -36,6 +40,17 @@ public class EaseChatDetailsPresenter extends HttpPresenter<EaseChatDetailsConta
     public void searchUserListInfo(String codeList) {
         HashMap<String, String> map = new HashMap<>(16);
         map.put("codeList", codeList);
+        Map<String, String> headerMap = new HashMap<>();
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("codeList", codeList);
+            String time = String.valueOf(DateUtils.dateToLong(DateUtils.getCurrentDate(pattern), pattern)).substring(0, 13);
+            jsonObject.put("time", time);
+            headerMap.put("sign", AESUtils.Encrypt(jsonObject.toString()));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         HttpMethods.getInstance().queryUserListInfo(map, new Subscriber<ArrayList<GroupUserInfoResponse>>() {
 
             @Override
@@ -91,6 +106,6 @@ public class EaseChatDetailsPresenter extends HttpPresenter<EaseChatDetailsConta
                     e.printStackTrace();
                 }
             }
-        });
+        }, headerMap);
     }
 }
