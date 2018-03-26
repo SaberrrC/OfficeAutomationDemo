@@ -113,7 +113,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private String mTime     = "0";
     private String mTimeCode = "0";
 
-    private String  mBillType      = "6401";
+//    private String  mBillType      = "6401";
+    private String  mBillType      = "";
     private String  mApproveState  = "";
     private String  mGloableStatus = "-100";
     private boolean isSearch       = false;
@@ -881,7 +882,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
             case R.id.tv_type_all://人事类全部
                 setTypeTextDefault();
                 setTextChecked(mTvTypeAll);
-                mBillType = "6401";
+//                mBillType = "6401";
+                mBillType = "";
                 break;
             case R.id.tv_type_all2://行政类全部
                 setTypeTextDefault();
