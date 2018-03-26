@@ -116,7 +116,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     private TextView    mTvStateTackback;
     private TextView    mTvStateDisagree;
     private boolean isOfficeSupplies = false;
-    private       long lastClickTime = 0;
+    private long    lastClickTime    = 0;
 
     @Override
     protected void initInject() {
@@ -174,27 +174,27 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
     }
 
     private void getListData() {
-        if (isOfficeSupplies) {
-            if (TextUtils.equals(mWhichList, "1")) {
-                mPresenter.getOfficeSuppliesApproveData(mTimeCode, mGloableStatus, String.valueOf(pageNum), PAGE_SIZE);
-            } else if (TextUtils.equals(mWhichList, "2")) {
-                mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
-            } else if (TextUtils.equals(mWhichList, "3")) {
-                mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
-            }
-        } else {
-            if (TextUtils.equals(mWhichList, "1")) {
-                mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
-                return;
-            }
-            String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
-            if (TextUtils.equals(mWhichList, "2")) {
-                mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
-            }
-            if (TextUtils.equals(mWhichList, "3")) {
-                mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
-            }
+        //        if (isOfficeSupplies) {
+        //            if (TextUtils.equals(mWhichList, "1")) {
+        //                mPresenter.getOfficeSuppliesApproveData(mTimeCode, mGloableStatus, String.valueOf(pageNum), PAGE_SIZE);
+        //            } else if (TextUtils.equals(mWhichList, "2")) {
+        //                mPresenter.getOfficeSuppliesManage("1", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
+        //            } else if (TextUtils.equals(mWhichList, "3")) {
+        //                mPresenter.getOfficeSuppliesManage("2", mTimeCode, String.valueOf(pageNum), PAGE_SIZE);
+        //            }
+        //        } else {
+        if (TextUtils.equals(mWhichList, "1")) {
+            mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
+            return;
         }
+        String privateCode = AppConfig.getAppConfig(MyUpcomingTasksActivity.this).getPrivateCode();
+        if (TextUtils.equals(mWhichList, "2")) {
+            mPresenter.getSelectData(privateCode, NO_CHECK, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+        }
+        if (TextUtils.equals(mWhichList, "3")) {
+            mPresenter.getSelectData(privateCode, IS_CHECKED, String.valueOf(pageNum), PAGE_SIZE, mTime, mBillType, isSearch ? mEtContent.getText().toString().trim() : "");
+        }
+        //        }
     }
 
     private void initRefreshMode() {
@@ -355,8 +355,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                     return;
                 }
                 showLoadingView();
-
-
                 mPresenter.postAgreeDisagree(approveBeanList, isOfficeSupplies);
                 break;
             case R.id.iv_disagree:
@@ -376,7 +374,6 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
 
     @NonNull
     private List<ApporveBodyItemBean> getApporveBodyItemBeenList(boolean approve) {
-
         List<ApporveBodyItemBean> approveBeanList = new ArrayList<>();
         for (int i = 0; i < mDatas.size(); i++) {
             if (mDatas.get(i) instanceof UpcomingSearchResultBean.DataBeanX.DataBean) {

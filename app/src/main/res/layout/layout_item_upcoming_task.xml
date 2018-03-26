@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
@@ -53,24 +53,36 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="24dp"
                 android:layout_toRightOf="@+id/iv_icon"
-                tools:text="朱展宏"
                 android:textAllCaps="false"
                 android:textColor="#898989"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                tools:text="朱展宏"/>
 
             <TextView
                 android:id="@+id/tv_reason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_name"
-                android:layout_marginBottom="24dp"
                 android:layout_marginLeft="34dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@+id/iv_icon"
-                tools:text="出差申请"
                 android:textAllCaps="false"
                 android:textColor="#898989"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                tools:text="出差申请"/>
+
+            <TextView
+                android:id="@+id/tv_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_reason"
+                android:layout_below="@+id/tv_reason"
+                android:layout_marginBottom="14dp"
+                android:layout_marginTop="5dp"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                tools:text="未审批"/>
 
             <TextView
                 android:id="@+id/tv_time"
@@ -79,22 +91,11 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/tv_name"
                 android:layout_marginRight="12dp"
-                tools:text="2017-09-28 21:08"
                 android:textAllCaps="false"
                 android:textColor="#898989"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                tools:text="2017-09-28 21:08"/>
 
-            <TextView
-                android:id="@+id/tv_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/tv_reason"
-                android:layout_marginRight="12dp"
-                tools:text="未审批"
-                android:textAllCaps="false"
-                android:textColor="#000000"
-                android:textSize="14sp"/>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
