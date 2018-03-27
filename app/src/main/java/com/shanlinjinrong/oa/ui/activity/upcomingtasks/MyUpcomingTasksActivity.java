@@ -945,6 +945,10 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                         mPresenter.getApproveData(mApproveState, mBillType, String.valueOf(pageNum), PAGE_SIZE, mTime);
                     }
                     mChooseDialog.dismiss();
+                    mRvList.setVisibility(View.GONE);
+                    mTvErrorShow.setVisibility(View.GONE);
+                    hideLoadingView();
+                    showLoadingView();
                     return;
                 }
                 mEtContent.setText("");
@@ -970,6 +974,8 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
                 }
                 mChooseDialog.dismiss();
                 hideLoadingView();
+                mRvList.setVisibility(View.GONE);
+                mTvErrorShow.setVisibility(View.GONE);
                 showLoadingView();
                 break;
             default:
