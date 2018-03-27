@@ -142,6 +142,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
     }
 
     private void initData() {
+        showLoadingView();
         if (TextUtils.equals(mWhichList, "1")) {
             mPresenter.getInfoData(mBean.getBillType(), mBean.getBillCode());
             return;
@@ -636,6 +637,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 }
                 break;
             case R.id.tv_agree:
+                hideLoadingView();
+                showLoadingView();
                 List<ApporveBodyItemBean> list = new ArrayList<>();
                 ApporveBodyItemBean apporveBodyItemBean = null;
                 if (TextUtils.equals("1", mWhichList)) {
@@ -653,6 +656,8 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mPresenter.postApproval(list);
                 break;
             case R.id.tv_disagree:
+                hideLoadingView();
+                showLoadingView();
                 List<ApporveBodyItemBean> list2 = new ArrayList<>();
                 ApporveBodyItemBean disApporveBodyItemBean = null;
                 if (TextUtils.equals("1", mWhichList)) {
@@ -670,6 +675,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
                 mPresenter.postApproval(list2);
                 break;
             case R.id.tv_tack_back:
+                hideLoadingView();
                 showLoadingView();
                 String billCode = "";
                 String billType = "";
@@ -728,6 +734,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onGetApproveInfoSuccess(String json) {
+        hideLoadingView();
         mRecyclerView.setVisibility(View.VISIBLE);
         String billType = "";
         Gson gson = new Gson();
@@ -840,6 +847,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onApproveSuccess(AgreeDisagreeResultBean resultBean) {
+        hideLoadingView();
         mRecyclerView.setVisibility(View.VISIBLE);
         List<AgreeDisagreeResultBean.DataBean> beanList = resultBean.getData();
         StringBuilder stringBuilder = new StringBuilder();
@@ -860,6 +868,7 @@ public class UpcomingTasksInfoActivity extends HttpBaseActivity<UpcomingTasksInf
 
     @Override
     public void onApproveFailure(int errorNo, String strMsg) {
+        hideLoadingView();
         if (errorNo == -1) {
             mRecyclerView.setVisibility(View.GONE);
             mTvErrorShow.setVisibility(View.VISIBLE);
