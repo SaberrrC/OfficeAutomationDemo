@@ -234,23 +234,32 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="14dp"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_type_all2"
                 style="@style/textview_upcoming_dialog"
                 android:background="@drawable/shape_upcoming_dialog_item_bg_checked"
                 android:text="全部"
-                android:textColor="@color/color_white"/>
+                android:textColor="@color/color_white"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_office_supplies"
                 style="@style/textview_upcoming_dialog"
+                android:background="@drawable/shape_upcoming_dialog_item_bg_checked"
+                android:textColor="@color/color_white"
                 android:text="办公用品申请"/>
 
             <TextView
                 android:id="@+id/tv_stork2"
+                style="@style/textview_upcoming_dialog"
+                android:background="@color/white"
+                android:text=""/>
+
+            <TextView
+                android:id="@+id/tv_stork3"
                 style="@style/textview_upcoming_dialog"
                 android:background="@color/white"
                 android:text=""/>
