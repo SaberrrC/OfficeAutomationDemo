@@ -145,8 +145,9 @@ public class LaunchApprovalActivity extends BaseActivity {
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
             switch (i) {
                 case 0:
-                    Intent intent = new Intent(LaunchApprovalActivity.this, OfficeSuppliesActivity.class);
-                    startActivityForResult(intent,101);
+                    showToast("功能暂未开放");
+//                    Intent intent = new Intent(LaunchApprovalActivity.this, OfficeSuppliesActivity.class);
+//                    startActivityForResult(intent,101);
                     break;
                 default:
                     break;

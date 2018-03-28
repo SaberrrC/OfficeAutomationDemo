@@ -25,7 +25,6 @@ import android.os.Build;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.retrofit.net.ApiConstant;
 import com.google.gson.Gson;
@@ -36,7 +35,6 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.EaseUI.EaseSettingsProvider;
-import com.hyphenate.easeui.UserDetailsBean;
 import com.hyphenate.easeui.db.Friends;
 import com.hyphenate.easeui.db.FriendsInfoCacheSvc;
 import com.hyphenate.easeui.utils.AESUtils;
@@ -58,7 +56,6 @@ import java.util.List;
 import java.util.Locale;
 
 import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
@@ -261,10 +258,20 @@ public class EaseNotifier {
                         if (message.conversationId().contains("admin")) {
                             mNickName = "会议邀请";
                             return;
-                        } else if (message.conversationId().contains("notice")) {
+                        }
+                        if (message.conversationId().contains("notice")) {
                             mNickName = "公告通知";
                             return;
-                        } else if (message.getChatType() == EMMessage.ChatType.GroupChat) {
+                        }
+                        if (message.conversationId().contains("SL_daily")) {
+                            mNickName = "日报";
+                            return;
+                        }
+                        if (message.conversationId().contains("SL_approval")) {
+                            mNickName = "审批";
+                            return;
+                        }
+                        if (message.getChatType() == EMMessage.ChatType.GroupChat) {
                             mNickName = FriendsInfoCacheSvc.getInstance(appContext).getNickName(message.conversationId());
                             if (TextUtils.isEmpty(mNickName)) {
                                 try {
@@ -276,7 +283,9 @@ public class EaseNotifier {
                                     mNickName = "匿名群组";
                                 }
                             }
-                        } else if (message.getChatType() == EMMessage.ChatType.Chat) {
+                            return;
+                        }
+                        if (message.getChatType() == EMMessage.ChatType.Chat) {
                             try {
                                 conversationId = message.conversationId().substring(0, 12);
                             } catch (Throwable e) {

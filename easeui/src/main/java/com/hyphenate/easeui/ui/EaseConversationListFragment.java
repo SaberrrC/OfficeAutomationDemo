@@ -320,7 +320,10 @@ public class EaseConversationListFragment extends EaseBaseFragment {
                             }
 
                         } else if (lastMessage.getChatType() == EMMessage.ChatType.Chat) {
-                            if (lastMessage.conversationId().contains("admin") || lastMessage.conversationId().contains("notice")) {
+                            if (lastMessage.conversationId().contains("admin")
+                                    || lastMessage.conversationId().contains("notice")
+                                    || lastMessage.conversationId().contains("SL_daily")
+                                    || lastMessage.conversationId().contains("SL_approval")) {
                                 continue;
                             }
 

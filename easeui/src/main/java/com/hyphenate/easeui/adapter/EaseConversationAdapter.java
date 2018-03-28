@@ -51,15 +51,15 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     private static final String TAG = "ChatAllHistoryAdapter";
     private List<EMConversation> conversationList;
     private List<EMConversation> copyConversationList;
-    private ConversationFilter conversationFilter;
-    private boolean notiyfyByFilter;
+    private ConversationFilter   conversationFilter;
+    private boolean              notiyfyByFilter;
 
-    protected int primaryColor;
-    protected int secondaryColor;
-    protected int timeColor;
-    protected int primarySize;
-    protected int secondarySize;
-    protected float timeSize;
+    protected int     primaryColor;
+    protected int     secondaryColor;
+    protected int     timeColor;
+    protected int     primarySize;
+    protected int     secondarySize;
+    protected float   timeSize;
     protected Context mContext;
     EMMessage lastMessage;
     private String conversationId;
@@ -203,16 +203,12 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
                 holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
                 holder.motioned.setVisibility(View.GONE);
-            } else if (!TextUtils.isEmpty(mUsername) && !lastMessage.conversationId().contains("admin") && !lastMessage.conversationId().contains("notice")) {
+            } else if (!TextUtils.isEmpty(mUsername) && !lastMessage.conversationId().contains("admin")
+                    && !lastMessage.conversationId().contains("notice")
+                    && !lastMessage.conversationId().contains("SL_daily")
+                    && !lastMessage.conversationId().contains("SL_approval")) {
                 try {
-                    Glide.with(mContext)
-                            .load(mPortrait)
-                            .dontAnimate()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .placeholder(R.drawable.ease_user_portraits)
-                            .error(R.drawable.ease_user_portraits)
-                            .transform(new CenterCrop(mContext), new GlideRoundTransformUtils(mContext, 5))
-                            .into(holder.avatar);
+                    Glide.with(mContext).load(mPortrait).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_user_portraits).error(R.drawable.ease_user_portraits).transform(new CenterCrop(mContext), new GlideRoundTransformUtils(mContext, 5)).into(holder.avatar);
                     holder.name.setText(mUsername);
                     holder.motioned.setVisibility(View.GONE);
                 } catch (Throwable throwable) {
@@ -223,6 +219,13 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                 holder.avatar.setImageResource(R.drawable.meeting_invite_icon);
             } else if (lastMessage.conversationId().contains("notice")) {
                 holder.name.setText("公告通知");
+                holder.avatar.setImageResource(R.drawable.notice_message_icon);
+            } else if (lastMessage.conversationId().contains("SL_daily")) {
+                holder.name.setText("日报");
+                // TODO: 2018-3-28 等头像
+                holder.avatar.setImageResource(R.drawable.notice_message_icon);
+            } else if (lastMessage.conversationId().contains("SL_approval")) {
+                holder.name.setText("审批");
                 holder.avatar.setImageResource(R.drawable.notice_message_icon);
             }
         } catch (Throwable e) {
@@ -329,8 +332,8 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
                     } else {
                         EaseUser user = EaseUserUtils.getUserInfo(username);
                         // TODO: not support Nick anymore
-//                        if(user != null && user.getNick() != null)
-//                            username = user.getNick();
+                        //                        if(user != null && user.getNick() != null)
+                        //                            username = user.getNick();
                     }
 
                     // First match against the whole ,non-splitted value

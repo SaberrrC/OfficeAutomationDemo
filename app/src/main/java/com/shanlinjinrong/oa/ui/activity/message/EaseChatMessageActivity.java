@@ -42,7 +42,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -51,31 +50,31 @@ import io.reactivex.schedulers.Schedulers;
 public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePresenter> implements EaseChatMessageContract.View, onEaseUIFragmentListener {
 
     @BindView(R.id.tv_count)
-    TextView mTvCount;
+    TextView     mTvCount;
     @BindView(R.id.tv_title)
-    TextView mTvTitle;
+    TextView     mTvTitle;
     @BindView(R.id.iv_detail)
     LinearLayout mIvDetail;
     @BindView(R.id.img_details_icon)
-    ImageView imgDetailsIcon;
+    ImageView    imgDetailsIcon;
 
-    private String mTitle;
-    private int mChatType;
-    private Bundle mExtras;
-    private String mNike;
-    private String mCode;
-    private String mSex;
-    private String mPhone;
-    private String mEmail;
-    private String mPortrait;
+    private String  mTitle;
+    private int     mChatType;
+    private Bundle  mExtras;
+    private String  mNike;
+    private String  mCode;
+    private String  mSex;
+    private String  mPhone;
+    private String  mEmail;
+    private String  mPortrait;
     private boolean mIsResume;
-    private String mPost_name;
+    private String  mPost_name;
     private long lastClickTime = 0;
-    private String mDepartment_name;
+    private String           mDepartment_name;
     private EaseChatFragment chatFragment;
     private final int REQUEST_CODE = 101, DELETESUCCESS = -2, RESULTMODIFICATIONNAME = -3, DISSOLVEGROUP = 600, LISTENERGROUPAME = -1;
     private EMGroup mGroup;
-    private String mGroupName;
+    private String  mGroupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,33 +95,31 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
             //TODO 存在bug
             Observable.create(e -> {
                 EMClient.getInstance().groupManager().getGroupFromServer(getIntent().getStringExtra("u_id"));
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                    .subscribe(o -> {
-                    }, throwable -> {
-                        try {
-                            if (throwable instanceof HyphenateException) {
-                                int errorCode = ((HyphenateException) throwable).getErrorCode();
-                                if (errorCode >= 600 && errorCode <= 700) {
-                                    if (mIsResume) {
-                                        if (Utils.isActivityRunning(this, getClass().getName())) {
-                                            EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
-                                                EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
-                                                if (mChatType == EaseConstant.CHATTYPE_GROUP) {
-                                                    setResult(DELETESUCCESS);
-                                                }
-                                                finish();
-                                            }, false);
-                                            alertDialog.setCancelable(false);
-                                            alertDialog.show();
+            }).subscribeOn(Schedulers.io()).observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread()).subscribe(o -> {
+            }, throwable -> {
+                try {
+                    if (throwable instanceof HyphenateException) {
+                        int errorCode = ((HyphenateException) throwable).getErrorCode();
+                        if (errorCode >= 600 && errorCode <= 700) {
+                            if (mIsResume) {
+                                if (Utils.isActivityRunning(this, getClass().getName())) {
+                                    EaseAlertDialog alertDialog = new EaseAlertDialog(this, null, "群组已经解散", null, (confirmed, bundle) -> {
+                                        EMClient.getInstance().chatManager().deleteConversation(getIntent().getStringExtra("u_id"), true);
+                                        if (mChatType == EaseConstant.CHATTYPE_GROUP) {
+                                            setResult(DELETESUCCESS);
                                         }
-                                    }
+                                        finish();
+                                    }, false);
+                                    alertDialog.setCancelable(false);
+                                    alertDialog.show();
                                 }
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 
@@ -210,22 +207,19 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                     mGroupName = group.getGroupName();
                 }
                 e.onComplete();
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                    .subscribe(s -> {
-                            }, Throwable::printStackTrace, () -> {
-                                try {
-                                    if (mGroupName != null) {
-                                        if (mGroupName.length() > 10) {
-                                            mGroupName = mGroupName.substring(0, 10) + "...";
-                                        }
-                                        mTvTitle.setText(mGroupName);
-                                    }
-                                } catch (Throwable e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                    );
+            }).subscribeOn(Schedulers.io()).observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread()).subscribe(s -> {
+            }, Throwable::printStackTrace, () -> {
+                try {
+                    if (mGroupName != null) {
+                        if (mGroupName.length() > 10) {
+                            mGroupName = mGroupName.substring(0, 10) + "...";
+                        }
+                        mTvTitle.setText(mGroupName);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -284,24 +278,10 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                     mEmail = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getEmail(getIntent().getStringExtra("u_id"));
                     mDepartment_name = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getDepartment(getIntent().getStringExtra("u_id"));
                     e.onComplete();
-                }).subscribeOn(Schedulers.io())
-                        .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                        .subscribe(o -> {
-                        }, throwable -> throwable.printStackTrace(), () -> startActivity(new Intent(EaseChatMessageActivity.this, VoiceCallActivity.class)
-                                .putExtra("nike", mNike)
-                                .putExtra("CODE", mCode)
-                                .putExtra("portrait", mPortrait)
-                                .putExtra("post_name", mPost_name)
-                                .putExtra("sex", mSex)
-                                .putExtra("phone", mPhone)
-                                .putExtra("email", mEmail)
-                                .putExtra("department_name", mDepartment_name)
-                                .putExtra("username", toChatUsername)
-                                .putExtra("isomingCall", false)));
+                }).subscribeOn(Schedulers.io()).observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread()).subscribe(o -> {
+                }, throwable -> throwable.printStackTrace(), () -> startActivity(new Intent(EaseChatMessageActivity.this, VoiceCallActivity.class).putExtra("nike", mNike).putExtra("CODE", mCode).putExtra("portrait", mPortrait).putExtra("post_name", mPost_name).putExtra("sex", mSex).putExtra("phone", mPhone).putExtra("email", mEmail).putExtra("department_name", mDepartment_name).putExtra("username", toChatUsername).putExtra("isomingCall", false)));
             } else {
-                startActivity(new Intent(this, VoiceCallActivity.class)
-                        .putExtra("username", toChatUsername)
-                        .putExtra("isomingCall", false));
+                startActivity(new Intent(this, VoiceCallActivity.class).putExtra("username", toChatUsername).putExtra("isomingCall", false));
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -310,7 +290,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Override
     public void clickUserInfo(String userinfo, EMMessage emMessage) {
-        if (userinfo.contains("admin") || userinfo.contains("notice")) {
+        if (userinfo.contains("admin") || userinfo.contains("notice") || userinfo.contains("SL_daily") || userinfo.contains("SL_approval")) {
             return;
         }
         Intent intent = new Intent(this, Contact_Details_Activity.class);
@@ -353,8 +333,8 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
                 setResult(DELETESUCCESS);
                 break;
             case LISTENERGROUPAME:
-//                final String groupTitle = "群聊(" + mGroup.getMemberCount() + ")";
-//                mTvTitle.setText(groupTitle);
+                //                final String groupTitle = "群聊(" + mGroup.getMemberCount() + ")";
+                //                mTvTitle.setText(groupTitle);
                 break;
             default:
                 break;
@@ -365,9 +345,9 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
     protected void onResume() {
         super.onResume();
         mIsResume = true;
-        try{
-           chatFragment.messageList.refresh();
-        }catch (Throwable e){
+        try {
+            chatFragment.messageList.refresh();
+        } catch (Throwable e) {
             e.printStackTrace();
         }
 
@@ -405,10 +385,7 @@ public class EaseChatMessageActivity extends HttpBaseActivity<EaseChatMessagePre
 
     @Override
     public void searchUserDetailsSuccess(UserDetailsBean.DataBean userDetailsBean) {
-        Observable.create(e -> FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new
-                Friends(userDetailsBean.getUid(), "sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(),
-                userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(),
-                userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()))).subscribeOn(Schedulers.io());
+        Observable.create(e -> FriendsInfoCacheSvc.getInstance(AppManager.mContext).addOrUpdateFriends(new Friends(userDetailsBean.getUid(), "sl_" + userDetailsBean.getCode(), userDetailsBean.getUsername(), "http://" + userDetailsBean.getImg(), userDetailsBean.getSex(), userDetailsBean.getPhone(), userDetailsBean.getPostname(), userDetailsBean.getOrgan(), userDetailsBean.getEmail(), userDetailsBean.getOid()))).subscribeOn(Schedulers.io());
         mTvTitle.setText(userDetailsBean.getUsername());
     }
 

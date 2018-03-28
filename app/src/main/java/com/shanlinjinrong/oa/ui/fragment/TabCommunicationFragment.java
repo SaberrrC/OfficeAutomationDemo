@@ -2,7 +2,6 @@ package com.shanlinjinrong.oa.ui.fragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,7 +23,6 @@ import com.shanlinjinrong.oa.ui.activity.message.EaseChatMessageActivity;
 import com.shanlinjinrong.oa.ui.activity.message.GroupChatListActivity;
 import com.shanlinjinrong.oa.ui.activity.message.bean.GroupEventListener;
 import com.shanlinjinrong.oa.ui.base.BaseFragment;
-import com.shanlinjinrong.oa.utils.LogUtils;
 import com.shanlinjinrong.views.common.CommonTopView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -110,22 +108,17 @@ public class TabCommunicationFragment extends BaseFragment {
             TextView message = (TextView) dialogView.findViewById(R.id.message);
             message.setText("请开启悬浮窗权限设置，支持通知栏消息推送");
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(getContext(),
-                    R.style.AppTheme_Dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(getContext(), R.style.AppTheme_Dialog).create();
             alertDialog.setView(dialogView);
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "确认",
-                    (dialog, which) -> {
-                        dialog.dismiss();
-                        //跳转到悬浮窗权限设置页
-                        SettingsCompat.manageDrawOverlays(new WeakReference<Context>(getContext()).get());
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消",
-                    (dialog, which) -> dialog.dismiss());
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "确认", (dialog, which) -> {
+                dialog.dismiss();
+                //跳转到悬浮窗权限设置页
+                SettingsCompat.manageDrawOverlays(new WeakReference<Context>(getContext()).get());
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", (dialog, which) -> dialog.dismiss());
             alertDialog.show();
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    getResources().getColor(R.color.btn_text_logout));
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.btn_text_logout));
             //设置授权状态
             SettingsCompat.setDrawOverlays(new WeakReference<Context>(getContext()).get(), true);
         }
@@ -148,21 +141,13 @@ public class TabCommunicationFragment extends BaseFragment {
             lastClickTime = currentTime;
             if (conversation.isGroup()) {
                 String groupName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversation.conversationId());
-                startActivity(new Intent(getActivity(), EaseChatMessageActivity.class)
-                        .putExtra("u_id", conversation.conversationId())
-                        .putExtra("groupTitle", groupName)
-                        .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP));
+                startActivity(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("u_id", conversation.conversationId()).putExtra("groupTitle", groupName).putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP));
             } else {
                 EMMessage lastMessage = conversation.getLastMessage();
                 if (conversation.conversationId().length() > 11) {
                     String conversationId = conversation.conversationId().substring(0, 12);
                     mNickName = FriendsInfoCacheSvc.getInstance(AppManager.mContext).getNickName(conversationId);
-                    startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
-                            .putExtra("u_id", conversation.conversationId())
-                            .putExtra("title", mNickName)
-                            .putExtra("message_to", lastMessage.getTo())
-                            .putExtra("message_from", lastMessage.getFrom())
-                            .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE), REQUESTCODE);
+                    startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("u_id", conversation.conversationId()).putExtra("title", mNickName).putExtra("message_to", lastMessage.getTo()).putExtra("message_from", lastMessage.getFrom()).putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE), REQUESTCODE);
                 } else {
                     // 公告特殊处理
                     if (lastMessage.getFrom().contains("admin") || conversation.conversationId().contains("admin")) {
@@ -171,14 +156,14 @@ public class TabCommunicationFragment extends BaseFragment {
                     } else if (lastMessage.getFrom().contains("notice") || conversation.conversationId().contains("notice")) {
                         mNickName = "公告通知";
                         isAdmin = true;
+                    } else if (lastMessage.getFrom().contains("SL_daily") || conversation.conversationId().contains("SL_daily")) {
+                        mNickName = "日报";
+                        isAdmin = true;
+                    } else if (lastMessage.getFrom().contains("SL_approval") || conversation.conversationId().contains("SL_approval")) {
+                        mNickName = "审批";
+                        isAdmin = true;
                     }
-                    startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class)
-                            .putExtra("u_id", conversation.conversationId())
-                            .putExtra("title", mNickName)
-                            .putExtra("admin", isAdmin)
-                            .putExtra("message_to", lastMessage.getTo())
-                            .putExtra("message_from", lastMessage.getFrom())
-                            .putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE), REQUESTCODE);
+                    startActivityForResult(new Intent(getActivity(), EaseChatMessageActivity.class).putExtra("u_id", conversation.conversationId()).putExtra("title", mNickName).putExtra("admin", isAdmin).putExtra("message_to", lastMessage.getTo()).putExtra("message_from", lastMessage.getFrom()).putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE), REQUESTCODE);
                 }
             }
         });
@@ -186,7 +171,7 @@ public class TabCommunicationFragment extends BaseFragment {
 
     @Override
     public void onResume() {
-//        LogUtils.e("刷新下主界面消息的数量");
+        //        LogUtils.e("刷新下主界面消息的数量");
         //刷新下主界面消息的数量
         MainActivity mainController = (MainActivity) getActivity();
         super.onResume();

@@ -36,20 +36,20 @@ public abstract class EaseChatRow extends LinearLayout {
     protected static final String TAG = EaseChatRow.class.getSimpleName();
 
     protected LayoutInflater inflater;
-    protected Context context;
-    protected BaseAdapter adapter;
-    protected EMMessage message;
-    protected int position;
+    protected Context        context;
+    protected BaseAdapter    adapter;
+    protected EMMessage      message;
+    protected int            position;
 
-    protected TextView timeStampView;
+    protected TextView  timeStampView;
     protected ImageView userAvatarView;
-    protected View bubbleLayout;
-    protected TextView usernickView;
+    protected View      bubbleLayout;
+    protected TextView  usernickView;
 
-    protected TextView percentageView;
+    protected TextView    percentageView;
     protected ProgressBar progressBar;
-    protected ImageView statusView;
-    protected Activity activity;
+    protected ImageView   statusView;
+    protected Activity    activity;
 
     protected TextView ackedView;
     protected TextView deliveredView;
@@ -58,17 +58,17 @@ public abstract class EaseChatRow extends LinearLayout {
     protected EMCallBack messageReceiveCallback;
 
     protected MessageListItemClickListener itemClickListener;
-    protected EaseMessageListItemStyle itemStyle;
-//    DisplayImageOptions options = new DisplayImageOptions.Builder()
-//            .showImageForEmptyUri(R.drawable.ease_user_portraits)
-//            .showImageOnFail(R.drawable.ease_user_portraits)
-//            .resetViewBeforeLoading(true)
-//            .cacheOnDisk(true)
-//            .imageScaleType(ImageScaleType.EXACTLY)
-//            .bitmapConfig(Bitmap.Config.RGB_565)
-//            .considerExifParams(true)
-//            .displayer(new FadeInBitmapDisplayer(0))
-//            .build();
+    protected EaseMessageListItemStyle     itemStyle;
+    //    DisplayImageOptions options = new DisplayImageOptions.Builder()
+    //            .showImageForEmptyUri(R.drawable.ease_user_portraits)
+    //            .showImageOnFail(R.drawable.ease_user_portraits)
+    //            .resetViewBeforeLoading(true)
+    //            .cacheOnDisk(true)
+    //            .imageScaleType(ImageScaleType.EXACTLY)
+    //            .bitmapConfig(Bitmap.Config.RGB_565)
+    //            .considerExifParams(true)
+    //            .displayer(new FadeInBitmapDisplayer(0))
+    //            .build();
 
     public EaseChatRow(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context);
@@ -144,12 +144,17 @@ public abstract class EaseChatRow extends LinearLayout {
                     userAvatarView.setImageResource(R.drawable.meeting_invite_icon);
                 } else if (message.getFrom().contains("notice") || message.getTo().contains("notice")) {
                     userAvatarView.setImageResource(R.drawable.notice_message_icon);
+                } else if (message.getFrom().contains("SL_daily") || message.getTo().contains("SL_daily")) {
+                    // TODO: 2018-3-28
+                    userAvatarView.setImageResource(R.drawable.notice_message_icon);
+                } else if (message.getFrom().contains("SL_approval") || message.getTo().contains("SL_approval")) {
+                    userAvatarView.setImageResource(R.drawable.notice_message_icon);
                 }
 
                 if (message.direct() == Direct.SEND) {
                     if (message.getUserName().equals(FriendsInfoCacheSvc.getInstance(context).getUserId(message.getTo()))) {
                         Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_user_portraits).error(R.drawable.ease_user_portraits).into(userAvatarView);
-                    } else if ((message.getUserName().contains("admin") || message.getUserName().contains("notice"))) {
+                    } else if ((message.getUserName().contains("admin") || message.getUserName().contains("notice") || message.getUserName().contains("SL_daily")) || message.getUserName().contains("SL_approval")) {
                         if (!message.getUserName().equals(message.getFrom())) {
                             Glide.with(context).load(FriendsInfoCacheSvc.getInstance(context).getPortrait(message.getFrom())).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_user_portraits).error(R.drawable.ease_user_portraits).into(userAvatarView);
                         } else {
@@ -201,7 +206,7 @@ public abstract class EaseChatRow extends LinearLayout {
             //单聊 群聊 展示处理
             if (message.getChatType() == EMMessage.ChatType.GroupChat) {
                 if (message.direct() == Direct.RECEIVE) {
-                    String nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(message.getFrom() );
+                    String nickName = FriendsInfoCacheSvc.getInstance(context).getNickName(message.getFrom());
                     usernickView.setText(nickName);
                     //EaseUserUtils.setUserNick(nickName, usernickView);
                 }
