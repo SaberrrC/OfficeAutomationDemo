@@ -1006,6 +1006,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mTvTravel.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvOvertime.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvRest.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
+        mTvCard.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvTypeAll.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvTypeAll2.setBackgroundResource(R.drawable.shape_upcoming_dialog_item_bg_normal);
         mTvOfficeSupplies.setTextColor(getResources().getColor(R.color.black_333333));
@@ -1014,6 +1015,7 @@ public class MyUpcomingTasksActivity extends HttpBaseActivity<UpcomingTasksPrese
         mTvRest.setTextColor(getResources().getColor(R.color.black_333333));
         mTvTypeAll.setTextColor(getResources().getColor(R.color.black_333333));
         mTvTypeAll2.setTextColor(getResources().getColor(R.color.black_333333));
+        mTvCard.setTextColor(getResources().getColor(R.color.black_333333));
     }
 
     private void setStateTextDefault() {
