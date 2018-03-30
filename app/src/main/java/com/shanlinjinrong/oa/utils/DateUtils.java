@@ -803,8 +803,7 @@ public class DateUtils {
 
     public static String stringToDateTransform(String time, String pattern) {
         SimpleDateFormat sdr = new SimpleDateFormat(pattern);
-        @SuppressWarnings("unused")
-        long lcc = Long.valueOf(time);
+        @SuppressWarnings("unused") long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
         String times = sdr.format(new Date(i * 1000L));
         return times;
@@ -812,8 +811,7 @@ public class DateUtils {
 
     public static String stringToDateTransform(int time, String pattern) {
         SimpleDateFormat sdr = new SimpleDateFormat(pattern);
-        @SuppressWarnings("unused")
-        long lcc = time;
+        @SuppressWarnings("unused") long lcc = time;
         int i = time;
         String times = sdr.format(new Date(i * 1000L));
         return times;
@@ -878,8 +876,7 @@ public class DateUtils {
 
     // currentTime要转换的long类型的时间
     // formatType要转换的时间格式yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日 HH时mm分ss秒
-    public static Date longToDate(long currentTime, String formatType)
-            throws ParseException {
+    public static Date longToDate(long currentTime, String formatType) throws ParseException {
         Date dateOld = new Date(currentTime); // 根据long类型的毫秒数生命一个date类型的时间
         String sDateTime = dateToString(dateOld, formatType); // 把date类型的时间转换为string
         Date date = stringToDate(sDateTime, formatType); // 把String类型转换为Date类型
