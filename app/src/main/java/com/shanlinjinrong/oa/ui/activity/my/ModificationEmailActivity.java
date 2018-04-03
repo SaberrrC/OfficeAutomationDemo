@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.Text;
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.shanlinjinrong.oa.R;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.manager.AppConfig;
@@ -31,14 +29,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 //修改邮箱
 public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmailPresenter> implements ModificationEmailContract.View {
@@ -82,6 +77,7 @@ public class ModificationEmailActivity extends HttpBaseActivity<ModificationEmai
         mData.add("@shanlinjinrong.com");
         mData.add("@shanlinbao.com");
         mData.add("@shanlincaifu.com");
+        mData.add("@youkecomputer.com");
     }
 
     private void initView() {
