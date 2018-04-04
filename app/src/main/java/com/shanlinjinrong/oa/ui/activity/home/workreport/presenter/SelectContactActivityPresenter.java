@@ -1,9 +1,12 @@
 package com.shanlinjinrong.oa.ui.activity.home.workreport.presenter;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shanlinjinrong.oa.common.ApiJava;
 import com.shanlinjinrong.oa.model.selectContacts.Child;
 import com.shanlinjinrong.oa.model.selectContacts.Group;
 import com.shanlinjinrong.oa.net.MyKjHttp;
+import com.shanlinjinrong.oa.ui.activity.home.workreport.bean.SearchName;
 import com.shanlinjinrong.oa.ui.activity.home.workreport.contract.SelectContactActivityContract;
 import com.shanlinjinrong.oa.ui.base.HttpPresenter;
 
@@ -226,6 +229,51 @@ public class SelectContactActivityPresenter extends HttpPresenter<SelectContactA
             @Override
             public void onFinish() {
                 super.onFinish();
+            }
+        });
+    }
+
+    @Override
+    public void loadData(String searchName) {
+        mKjHttp.cleanCache();
+        mKjHttp.get(ApiJava.REQUEST_SEARCHNAME+"?name="+searchName, new HttpParams(), new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                SearchName searchName = new Gson().fromJson(t, new TypeToken<SearchName>() {
+                }.getType());
+                switch (searchName.getCode()) {
+                    case ApiJava.REQUEST_CODE_OK:
+                        Child selectChild = null;
+                        List<Child> data = new ArrayList<Child>();
+                        for (int j = 0; j < searchName.getData().size(); j++) {
+                            Child child = new Child("","",
+                                    searchName.getData().get(j).getPost_title(),
+                                    searchName.getData().get(j).getUid(),
+                                    searchName.getData().get(j).getUsername(),
+                                    "","","",
+                                    false);
+                            data.add(child);
+                        }
+                        mView.loadRequestDataSuccess(data, selectChild);
+                        break;
+                    case ApiJava.REQUEST_NO_RESULT:
+                        mView.loadDataEmpty();
+                        break;
+                    case ApiJava.REQUEST_TOKEN_NOT_EXIST:
+                    case ApiJava.REQUEST_TOKEN_OUT_TIME:
+                    case ApiJava.ERROR_TOKEN:
+                        mView.uidNull(searchName.getCode());
+                        break;
+                    default:
+                        mView.loadDataFailed(0, searchName.getMessage());
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
             }
         });
     }

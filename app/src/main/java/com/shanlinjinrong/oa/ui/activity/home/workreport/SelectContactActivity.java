@@ -207,7 +207,11 @@ public class SelectContactActivity extends HttpBaseActivity<SelectContactActivit
                     .subscribe(new Consumer<CharSequence>() {
                         @Override
                         public void accept(CharSequence charSequence) throws Exception {
-                            loadData(mSearchEdit.getText().toString().trim());
+                            if(mSearchEdit.getText().toString().trim().equals("")){
+                                loadData(mSearchEdit.getText().toString().trim());
+                            }else {
+                                mPresenter.loadData(mSearchEdit.getText().toString().trim());
+                            }
                         }
                     });
         } catch (Throwable e) {

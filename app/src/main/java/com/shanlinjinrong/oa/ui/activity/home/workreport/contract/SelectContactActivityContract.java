@@ -31,5 +31,7 @@ public interface SelectContactActivityContract {
         void loadData(String departmentId, String searchName, String selectChildId);
 
         void loadRequestData();
+
+        void loadData(String searchName);
     }
 }

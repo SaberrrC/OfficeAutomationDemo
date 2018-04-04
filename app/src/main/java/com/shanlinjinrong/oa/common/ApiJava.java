@@ -355,6 +355,10 @@ public interface ApiJava {
      *  办公用品 我的申请
      */
     String REQUEST_OFFICE_MANAGE ="workflow/getBusinessAffairs";
+    /**
+     *  根据姓名全局搜索
+     */
+    String REQUEST_SEARCHNAME="organization/queryUserByName";
     //*****************************************************************//
 
     /**
