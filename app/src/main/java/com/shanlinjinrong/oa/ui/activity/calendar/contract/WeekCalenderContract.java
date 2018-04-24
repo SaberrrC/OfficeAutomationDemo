@@ -13,4 +13,5 @@ public interface WeekCalenderContract {
 
     interface Presenter extends BasePresenter<View> {
     }
+
 }
